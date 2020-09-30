@@ -1,0 +1,84 @@
+%-------------------------------------------------------------------------------
+\section{FM Radio}
+
+Die Masterarbeit soll sich mit der Entwicklung eines FM Radios beschäftigen.
+Die Implementierung soll in High Level Synthesis (HLS), als auch direkt in VHDL umgesetzt werden. Die jeweiligen Ergebnisse werden anhand verschiedener Metriken verglichen.
+Die Implementierung umfasst sowohl Sender, als auch Empfänger.
+
+%-------------------------------------------------------------------------------
+\subsection{Idee}
+
+Die Idee hinter dem Thema liegt darin, dass in einem FM Radio sämtliche Konzepte der digitalen Signalverarbeitung stecken. Im Studium HSD/ESD werden diese Inhalte in der Theorie vermittelt, jedoch nie wirklich in Software, bzw. Hardware umgesetzt.\\
+\\
+Die Arbeit soll sich aus diesem Grund mit digitaler Signalverarbeitung (DSP) in der Praxis beschäftigen. Anhand von FM lässt sich dies aufgrund der relativ geringem Komplexität des Signales vergleichsweise einfach umsetzen, wobei trotzdem noch die meisten DSP Prinzipien vorkommen.\\
+\\
+Ein HLS Tool kann beispielsweise high-level C\texttt{++} Code in low-level VHDL Code transformieren. Hier ergibt sich die Fragestellung, ob HLS in Zukunft das händische Schreiben von VHDL ersetzen könnte. Diese Frage soll anhand verschiedener Metriken, wie Implementierungsaufwand und -dauer, oder Hardwareverbrauch beantwortet werden.
+
+%-------------------------------------------------------------------------------
+\subsection{Hardware}
+
+\textit{\underline{Hinweis:} Hier gilt es noch zu evaluieren, wie und ob HLS in Intel Quartus unterstützt wird. Möglicherweise muss hierfür auf ein Xilinx Development Board umgestiegen werden. Sinngemäß gilt folgender Absatz jedoch für beide Umgebungen gleichermaßen.}\\
+\\
+Als Hardware Plattform wird vorerst das DE1-SoC Board angestrebt, da dort vieles an benötigter Hardware bereits vorhanden ist, welche auf anderen Development Boards erst zusätzlich angebracht werden müsste.\\
+\\
+Die wichtigsten Hardware Elemente hierfür sind in folgender Liste angeführt.
+
+\begin{itemize}
+  \item User Interface (Switches, Buttons, 7-Segments)
+  \item Line In/Out Buchsen
+  \item Audio Codec für Line In/Out
+  \item externer ADC Chip (Details noch zu evaluieren)
+  \item externer DAC Chip (Details noch zu evaluieren)
+\end{itemize}
+
+Das Ziel für die Sender- und Empfängerarchitektur ist es, möglichst wenig, oder keine externe Hardware zu brauchen. Die Architektur soll möglichst ohne analoge externe Schaltungen auskommen. Hierbei gilt es zu evaluieren, ob Signale im FM Frequenzbereich im FPGA zum Senden erzeugt werden können, beziehungsweise ob der VGA DAC Chip dafür geeignet ist. Dieselbe Überlegung gilt für den Empfängerteil, beziehungsweise die Eigenschaften des externen ADCs.
+
+\includepicture [0.9] [0] {DE1-SoC Board} {img/de1soc}
+
+%-------------------------------------------------------------------------------
+\subsection{Geplantes System}
+
+Im Zuge der Arbeit sollen FM Sender und Empfänger entwickelt werden.
+Ein grober Entwurf der geplanten Anwendung ist im folgenden Blockdiagramm dargestellt. Die blau markierten Blöcke sind jene, die in HLS und VHDL verglichen werden sollen.
+
+\includepicture [0.9] [0] {Blockdiagramm der geplanten Anwendung} {img/fmradio-block-diagram}
+
+%-------------------------------------------------------------------------------
+\subsection{Matlab}
+
+Alle Prinzipien sollen vorerst in Matlab erarbeitet werden.\\
+\\
+Das dient einerseits dazu, mit der Materie vertraut zu werden. Andererseits werden so die Architektur und sämtliche Parameter bereits in Simulation festgelegt, was die spätere Implementierung im FPGA deutlich beschleunigen wird.
+
+%-------------------------------------------------------------------------------
+\subsection{Theorie}
+
+Die folgende Themen könnten in der theoretischen Ausarbeitung behandelt werden.
+
+\begin{itemize}
+  \item FM Modulation
+  \item FM De-Modulation
+  \item ADC / DAC Sampling (Quantisierung, Rauschen, etc.)
+  \item Funktionsweise von HLS (Datenabhängigkeit, Scheduling, etc)
+  \item ...
+\end{itemize}
+
+
+
+%-------------------------------------------------------------------------------
+\section{Referenzen / Recherche}
+
+\subsection{Rechtliches}
+
+\url{https://www.conrad.at/de/o/fm-transmitter-1310051.html#faq} (Conrad FAQ)\\
+\url{https://de.wikipedia.org/wiki/Minisender} (Wikipedia Minisender)
+
+\subsection{Ähnliche Projekte}
+Links to similar projects are listed here.\\
+\\
+\url{https://marsohod.org/projects/marsohod2/246-fmradio} (Project Documentation)
+\\
+\url{https://www.youtube.com/watch?v=PDdIK5zrPTY} (Receiver with analog antenna circuit)
+\\
+\url{https://www.youtube.com/watch?v=9Udbidwqr3s} (DE1-SoC Sender)
+

@@ -1,0 +1,50 @@
+
+\include{define}
+
+\author{Michael Wurm}
+
+\begin{document}
+
+	%ANGABE
+%	\newcommand{\MichaelTimeNeeded}  {18 h}
+
+%	\thispagestyle{empty}  % deletes page format
+	                       % (to disable page number at title page)
+%	\includepdf[pages=1,pagecommand={
+%		\begin{tikzpicture}[remember picture, overlay]\node at (4.6, -2.1)
+%		{Michael Wurm};
+%		\end{tikzpicture}
+%		\begin{tikzpicture}[remember picture, overlay]\node at (4.2, -2.9)
+%		{1910567011};
+%		\end{tikzpicture}
+%		\begin{tikzpicture}[remember picture, overlay]\node at (3.5, -3.8)
+%		{\MichaelTimeNeeded};
+%		\end{tikzpicture}
+%	}]{../SAV_ESD_Uebung05.pdf}
+%	\includepdf[pages=2-]{../SAV_ESD_Uebung05.pdf}
+
+	% TITLEPAGE
+	\newcommand{\UebungNr}{FM Radio}
+	\newcommand{\UebungTopic}{Vergleich von HLS mit direkter VHDL Implementierung anhand eines FM Radio}
+	\input{titlepage.tex}
+	\clearpage
+
+	\newpage
+	\thispagestyle{empty}
+	\tableofcontents
+	\newpage
+	\setcounter{page}{1}  % start counting pages here
+
+	% HEADER AND FOOTER
+	\pagestyle{fancy}     % eigener Seitenstil
+	\lhead{Masterarbeit}
+	\chead{Themenentwurf}
+	\rhead{Michael Wurm}
+	\lfoot{}
+	\cfoot{-\thepage-}
+	\rfoot{}
+
+	% BEGINNING OF ELABORATION
+	\input{main.tex}
+
+\end{document}

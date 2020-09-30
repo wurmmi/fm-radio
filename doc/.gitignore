@@ -1,0 +1,16 @@
+################################################################################
+# File        : .gitignore
+# Author      : Michael Wurm <wurm.michael95@gmail.com>
+# Description : Local gitignore file for doc
+################################################################################
+
+*.aux
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.fdb_latexmk
+*.pdf
+
+!img/*.pdf
