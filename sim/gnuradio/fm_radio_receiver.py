@@ -34,6 +34,7 @@ import signal
 from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
+from gnuradio.qtgui import Range, RangeWidget
 import osmosdr
 import time
 
@@ -75,12 +76,17 @@ class fm_radio_receiver(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
-        self.samp_rate = samp_rate = 5e6
+        self.volume_gain = volume_gain = 1
+        self.samp_rate = samp_rate = 1.8e6
+        self.decimate_factor = decimate_factor = 4
         self.center_freq = center_freq = 88.8e6
 
         ##################################################
         # Blocks
         ##################################################
+        self._volume_gain_range = Range(1, 100, 1, 1, 100)
+        self._volume_gain_win = RangeWidget(self._volume_gain_range, self.set_volume_gain, 'volume_gain', "counter_slider", float)
+        self.top_grid_layout.addWidget(self._volume_gain_win)
         self.rtlsdr_source_0 = osmosdr.source(
             args="numchan=" + str(1) + " " + ""
         )
@@ -88,14 +94,17 @@ class fm_radio_receiver(gr.top_block, Qt.QWidget):
         self.rtlsdr_source_0.set_sample_rate(samp_rate)
         self.rtlsdr_source_0.set_center_freq(center_freq, 0)
         self.rtlsdr_source_0.set_freq_corr(0, 0)
-        self.rtlsdr_source_0.set_gain(10, 0)
+        self.rtlsdr_source_0.set_dc_offset_mode(0, 0)
+        self.rtlsdr_source_0.set_iq_balance_mode(0, 0)
+        self.rtlsdr_source_0.set_gain_mode(False, 0)
+        self.rtlsdr_source_0.set_gain(40, 0)
         self.rtlsdr_source_0.set_if_gain(20, 0)
         self.rtlsdr_source_0.set_bb_gain(20, 0)
         self.rtlsdr_source_0.set_antenna('', 0)
         self.rtlsdr_source_0.set_bandwidth(0, 0)
         self.rational_resampler_xxx_0 = filter.rational_resampler_fff(
-                interpolation=250,
-                decimation=96,
+                interpolation=48,
+                decimation=50,
                 taps=None,
                 fractional_bw=None)
         self.qtgui_freq_sink_x_1 = qtgui.freq_sink_f(
@@ -180,18 +189,19 @@ class fm_radio_receiver(gr.top_block, Qt.QWidget):
         self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.pyqwidget(), Qt.QWidget)
         self.top_grid_layout.addWidget(self._qtgui_freq_sink_x_0_win)
         self.low_pass_filter_0 = filter.fir_filter_ccf(
-            20,
+            decimate_factor,
             firdes.low_pass(
                 1,
                 samp_rate,
-                100e3,
-                10e3,
+                108e3,
+                1e6,
                 firdes.WIN_HAMMING,
                 6.76))
-        self.blocks_wavfile_sink_0 = blocks.wavfile_sink('fm_record.wav', 1, 96000, 8)
-        self.audio_sink_0 = audio.sink(96000, '', True)
+        self.blocks_wavfile_sink_0 = blocks.wavfile_sink('fm_record.wav', 1, int(48e3), 8)
+        self.blocks_multiply_const_vxx_0 = blocks.multiply_const_ff(volume_gain)
+        self.audio_sink_0 = audio.sink(int(48e3), '', True)
         self.analog_wfm_rcv_0 = analog.wfm_rcv(
-        	quad_rate=5e6/20,
+        	quad_rate=samp_rate/decimate_factor,
         	audio_decimation=1,
         )
 
@@ -202,9 +212,10 @@ class fm_radio_receiver(gr.top_block, Qt.QWidget):
         ##################################################
         self.connect((self.analog_wfm_rcv_0, 0), (self.qtgui_freq_sink_x_1, 0))
         self.connect((self.analog_wfm_rcv_0, 0), (self.rational_resampler_xxx_0, 0))
+        self.connect((self.blocks_multiply_const_vxx_0, 0), (self.audio_sink_0, 0))
+        self.connect((self.blocks_multiply_const_vxx_0, 0), (self.blocks_wavfile_sink_0, 0))
         self.connect((self.low_pass_filter_0, 0), (self.analog_wfm_rcv_0, 0))
-        self.connect((self.rational_resampler_xxx_0, 0), (self.audio_sink_0, 0))
-        self.connect((self.rational_resampler_xxx_0, 0), (self.blocks_wavfile_sink_0, 0))
+        self.connect((self.rational_resampler_xxx_0, 0), (self.blocks_multiply_const_vxx_0, 0))
         self.connect((self.rtlsdr_source_0, 0), (self.low_pass_filter_0, 0))
         self.connect((self.rtlsdr_source_0, 0), (self.qtgui_freq_sink_x_0, 0))
 
@@ -214,14 +225,27 @@ class fm_radio_receiver(gr.top_block, Qt.QWidget):
         self.settings.setValue("geometry", self.saveGeometry())
         event.accept()
 
+    def get_volume_gain(self):
+        return self.volume_gain
+
+    def set_volume_gain(self, volume_gain):
+        self.volume_gain = volume_gain
+        self.blocks_multiply_const_vxx_0.set_k(self.volume_gain)
+
     def get_samp_rate(self):
         return self.samp_rate
 
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
-        self.low_pass_filter_0.set_taps(firdes.low_pass(1, self.samp_rate, 100e3, 10e3, firdes.WIN_HAMMING, 6.76))
+        self.low_pass_filter_0.set_taps(firdes.low_pass(1, self.samp_rate, 108e3, 1e6, firdes.WIN_HAMMING, 6.76))
         self.qtgui_freq_sink_x_0.set_frequency_range(self.center_freq, self.samp_rate)
         self.rtlsdr_source_0.set_sample_rate(self.samp_rate)
+
+    def get_decimate_factor(self):
+        return self.decimate_factor
+
+    def set_decimate_factor(self, decimate_factor):
+        self.decimate_factor = decimate_factor
 
     def get_center_freq(self):
         return self.center_freq

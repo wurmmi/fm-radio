@@ -41,14 +41,26 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [8, 228]
+    coordinate: [8, 228.0]
+    rotation: 0
+    state: enabled
+- name: decimate_factor
+  id: variable
+  parameters:
+    comment: ''
+    value: '4'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 292.0]
     rotation: 0
     state: enabled
 - name: samp_rate
   id: variable
   parameters:
     comment: ''
-    value: 5e6
+    value: 1.8e6
   states:
     bus_sink: false
     bus_source: false
@@ -56,6 +68,27 @@ blocks:
     coordinate: [8, 160]
     rotation: 0
     state: enabled
+- name: volume_gain
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: ''
+    min_len: '100'
+    orient: Qt.Horizontal
+    rangeType: float
+    start: '1'
+    step: '1'
+    stop: '100'
+    value: '1'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1072, 236.0]
+    rotation: 0
+    state: true
 - name: analog_wfm_rcv_0
   id: analog_wfm_rcv
   parameters:
@@ -65,7 +98,7 @@ blocks:
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    quad_rate: 5e6/20
+    quad_rate: samp_rate/decimate_factor
   states:
     bus_sink: false
     bus_source: false
@@ -73,6 +106,23 @@ blocks:
     coordinate: [640, 148]
     rotation: 0
     state: enabled
+- name: analog_wfm_rcv_pll_0
+  id: analog_wfm_rcv_pll
+  parameters:
+    affinity: ''
+    alias: ''
+    audio_decimation: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    quad_rate: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [640, 72.0]
+    rotation: 0
+    state: disabled
 - name: audio_sink_0
   id: audio_sink
   parameters:
@@ -82,14 +132,32 @@ blocks:
     device_name: ''
     num_inputs: '1'
     ok_to_block: 'True'
-    samp_rate: '96000'
+    samp_rate: int(48e3)
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1088, 156]
+    coordinate: [1264, 156.0]
     rotation: 0
     state: enabled
+- name: blocks_multiply_const_vxx_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: volume_gain
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1072, 156.0]
+    rotation: 0
+    state: true
 - name: blocks_wavfile_sink_0
   id: blocks_wavfile_sink
   parameters:
@@ -99,12 +167,12 @@ blocks:
     comment: ''
     file: fm_record.wav
     nchan: '1'
-    samp_rate: '96000'
+    samp_rate: int(48e3)
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1088, 76]
+    coordinate: [1264, 76.0]
     rotation: 0
     state: enabled
 - name: low_pass_filter_0
@@ -114,15 +182,15 @@ blocks:
     alias: ''
     beta: '6.76'
     comment: ''
-    cutoff_freq: 100e3
-    decim: '20'
+    cutoff_freq: 108e3
+    decim: decimate_factor
     gain: '1'
     interp: '1'
     maxoutbuf: '0'
     minoutbuf: '0'
     samp_rate: samp_rate
     type: fir_filter_ccf
-    width: 10e3
+    width: 1e6
     win: firdes.WIN_HAMMING
   states:
     bus_sink: false
@@ -288,7 +356,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [880, 288.0]
+    coordinate: [840, 288.0]
     rotation: 0
     state: enabled
 - name: rational_resampler_xxx_0
@@ -297,9 +365,9 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    decim: '96'
+    decim: '50'
     fbw: '0'
-    interp: '250'
+    interp: '48'
     maxoutbuf: '0'
     minoutbuf: '0'
     taps: ''
@@ -518,7 +586,7 @@ blocks:
     freq7: 100e6
     freq8: 100e6
     freq9: 100e6
-    gain0: '10'
+    gain0: '40'
     gain1: '10'
     gain10: '10'
     gain11: '10'
@@ -1043,9 +1111,10 @@ blocks:
 connections:
 - [analog_wfm_rcv_0, '0', qtgui_freq_sink_x_1, '0']
 - [analog_wfm_rcv_0, '0', rational_resampler_xxx_0, '0']
+- [blocks_multiply_const_vxx_0, '0', audio_sink_0, '0']
+- [blocks_multiply_const_vxx_0, '0', blocks_wavfile_sink_0, '0']
 - [low_pass_filter_0, '0', analog_wfm_rcv_0, '0']
-- [rational_resampler_xxx_0, '0', audio_sink_0, '0']
-- [rational_resampler_xxx_0, '0', blocks_wavfile_sink_0, '0']
+- [rational_resampler_xxx_0, '0', blocks_multiply_const_vxx_0, '0']
 - [rtlsdr_source_0, '0', low_pass_filter_0, '0']
 - [rtlsdr_source_0, '0', qtgui_freq_sink_x_0, '0']
 - [uhd_usrp_source_0, '0', low_pass_filter_0, '0']
