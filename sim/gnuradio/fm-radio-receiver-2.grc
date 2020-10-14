@@ -53,7 +53,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [8, 288.0]
+    coordinate: [456, 44.0]
     rotation: 0
     state: enabled
 - name: gain
@@ -81,7 +81,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: 1.8e6
+    value: 1.0e6
   states:
     bus_sink: false
     bus_source: false
@@ -94,11 +94,11 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    audio_decimation: '9'
+    audio_decimation: '5'
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    quad_rate: 450e3
+    quad_rate: 250e3
   states:
     bus_sink: false
     bus_source: false
@@ -148,7 +148,7 @@ blocks:
     alias: ''
     beta: '6.76'
     comment: ''
-    cutoff_freq: 100e3
+    cutoff_freq: 108e3
     decim: decimate_factor
     gain: '1'
     interp: '1'
@@ -156,7 +156,7 @@ blocks:
     minoutbuf: '0'
     samp_rate: samp_rate
     type: fir_filter_ccf
-    width: 1e6
+    width: 10e5
     win: firdes.WIN_HAMMING
   states:
     bus_sink: false
@@ -312,9 +312,9 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    decim: '48'
+    decim: '50'
     fbw: '0'
-    interp: '45'
+    interp: '48'
     maxoutbuf: '0'
     minoutbuf: '0'
     taps: ''
@@ -332,9 +332,9 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    decim: '48'
+    decim: '50'
     fbw: '0'
-    interp: '45'
+    interp: '48'
     maxoutbuf: '0'
     minoutbuf: '0'
     taps: ''
@@ -553,7 +553,7 @@ blocks:
     freq7: 100e6
     freq8: 100e6
     freq9: 100e6
-    gain0: '40'
+    gain0: '50'
     gain1: '10'
     gain10: '10'
     gain11: '10'

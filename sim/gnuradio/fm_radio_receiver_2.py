@@ -77,7 +77,7 @@ class fm_radio_receiver_2(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
-        self.samp_rate = samp_rate = 1.8e6
+        self.samp_rate = samp_rate = 1.0e6
         self.gain = gain = 1
         self.decimate_factor = decimate_factor = 4
         self.center_freq = center_freq = 88.8e6
@@ -98,19 +98,19 @@ class fm_radio_receiver_2(gr.top_block, Qt.QWidget):
         self.rtlsdr_source_0.set_dc_offset_mode(0, 0)
         self.rtlsdr_source_0.set_iq_balance_mode(0, 0)
         self.rtlsdr_source_0.set_gain_mode(False, 0)
-        self.rtlsdr_source_0.set_gain(40, 0)
+        self.rtlsdr_source_0.set_gain(50, 0)
         self.rtlsdr_source_0.set_if_gain(20, 0)
         self.rtlsdr_source_0.set_bb_gain(20, 0)
         self.rtlsdr_source_0.set_antenna('', 0)
         self.rtlsdr_source_0.set_bandwidth(0, 0)
         self.rational_resampler_xxx_0_0 = filter.rational_resampler_fff(
-                interpolation=45,
-                decimation=48,
+                interpolation=48,
+                decimation=50,
                 taps=None,
                 fractional_bw=None)
         self.rational_resampler_xxx_0 = filter.rational_resampler_fff(
-                interpolation=45,
-                decimation=48,
+                interpolation=48,
+                decimation=50,
                 taps=None,
                 fractional_bw=None)
         self.qtgui_waterfall_sink_x_0 = qtgui.waterfall_sink_c(
@@ -191,15 +191,15 @@ class fm_radio_receiver_2(gr.top_block, Qt.QWidget):
             firdes.low_pass(
                 1,
                 samp_rate,
-                100e3,
-                1e6,
+                108e3,
+                10e5,
                 firdes.WIN_HAMMING,
                 6.76))
         self.blocks_multiply_const_vxx_0 = blocks.multiply_const_cc(gain)
         self.audio_sink_0 = audio.sink(int(48e3), '', True)
         self.analog_wfm_rcv_pll_0 = analog.wfm_rcv_pll(
-        	demod_rate=450e3,
-        	audio_decimation=9,
+        	demod_rate=250e3,
+        	audio_decimation=5,
         )
 
 
@@ -228,7 +228,7 @@ class fm_radio_receiver_2(gr.top_block, Qt.QWidget):
 
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
-        self.low_pass_filter_0.set_taps(firdes.low_pass(1, self.samp_rate, 100e3, 1e6, firdes.WIN_HAMMING, 6.76))
+        self.low_pass_filter_0.set_taps(firdes.low_pass(1, self.samp_rate, 108e3, 10e5, firdes.WIN_HAMMING, 6.76))
         self.qtgui_freq_sink_x_0.set_frequency_range(self.center_freq, self.samp_rate)
         self.qtgui_waterfall_sink_x_0.set_frequency_range(0, self.samp_rate)
         self.rtlsdr_source_0.set_sample_rate(self.samp_rate)
