@@ -210,7 +210,7 @@ blocks:
     bus_structure: null
     coordinate: [456, 288.0]
     rotation: 0
-    state: true
+    state: enabled
 - name: qtgui_freq_sink_x_1
   id: qtgui_freq_sink_x
   parameters:
@@ -290,7 +290,7 @@ blocks:
     bus_structure: null
     coordinate: [880, 288.0]
     rotation: 0
-    state: true
+    state: disabled
 - name: rational_resampler_xxx_0
   id: rational_resampler_xxx
   parameters:
@@ -486,7 +486,7 @@ blocks:
     dc_offset_mode7: '0'
     dc_offset_mode8: '0'
     dc_offset_mode9: '0'
-    freq0: 100e6
+    freq0: center_freq
     freq1: 100e6
     freq10: 100e6
     freq11: 100e6
@@ -667,7 +667,7 @@ blocks:
     bus_structure: null
     coordinate: [144, 300.0]
     rotation: 0
-    state: true
+    state: disabled
 - name: uhd_usrp_source_0
   id: uhd_usrp_source
   parameters:
@@ -1038,7 +1038,7 @@ blocks:
     bus_structure: null
     coordinate: [176, 132]
     rotation: 0
-    state: disabled
+    state: enabled
 
 connections:
 - [analog_wfm_rcv_0, '0', qtgui_freq_sink_x_1, '0']
