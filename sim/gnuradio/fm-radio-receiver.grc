@@ -229,7 +229,7 @@ blocks:
     autoscale: 'False'
     average: '1.0'
     axislabels: 'True'
-    bw: 5e6/20
+    bw: 250e3
     color1: '"blue"'
     color10: '"dark blue"'
     color2: '"red"'
@@ -242,7 +242,7 @@ blocks:
     color9: '"dark green"'
     comment: ''
     ctrlpanel: 'False'
-    fc: ''
+    fc: 250e3
     fftsize: '1024'
     freqhalf: 'True'
     grid: 'False'
@@ -290,12 +290,12 @@ blocks:
     bus_structure: null
     coordinate: [880, 288.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: rational_resampler_xxx_0
   id: rational_resampler_xxx
   parameters:
     affinity: ''
-    alias: asdf
+    alias: ''
     comment: ''
     decim: '96'
     fbw: '0'
@@ -667,7 +667,7 @@ blocks:
     bus_structure: null
     coordinate: [144, 300.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: uhd_usrp_source_0
   id: uhd_usrp_source
   parameters:
@@ -1038,7 +1038,7 @@ blocks:
     bus_structure: null
     coordinate: [176, 132]
     rotation: 0
-    state: enabled
+    state: disabled
 
 connections:
 - [analog_wfm_rcv_0, '0', qtgui_freq_sink_x_1, '0']
