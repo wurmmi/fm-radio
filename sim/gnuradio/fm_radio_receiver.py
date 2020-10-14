@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: GPL-3.0
 #
 # GNU Radio Python Flow Graph
-# Title: Fm Radio Receiver
+# Title: fm_radio_receiver
 # GNU Radio version: 3.8.2.0
 
 from distutils.version import StrictVersion
@@ -43,9 +43,9 @@ from gnuradio import qtgui
 class fm_radio_receiver(gr.top_block, Qt.QWidget):
 
     def __init__(self):
-        gr.top_block.__init__(self, "Fm Radio Receiver")
+        gr.top_block.__init__(self, "fm_radio_receiver")
         Qt.QWidget.__init__(self)
-        self.setWindowTitle("Fm Radio Receiver")
+        self.setWindowTitle("fm_radio_receiver")
         qtgui.util.check_set_qss()
         try:
             self.setWindowIcon(Qt.QIcon.fromTheme('gnuradio-grc'))
@@ -84,8 +84,8 @@ class fm_radio_receiver(gr.top_block, Qt.QWidget):
         ##################################################
         # Blocks
         ##################################################
-        self._volume_gain_range = Range(1, 100, 1, 1, 100)
-        self._volume_gain_win = RangeWidget(self._volume_gain_range, self.set_volume_gain, 'volume_gain', "counter_slider", float)
+        self._volume_gain_range = Range(0, 10, 1, 1, 10)
+        self._volume_gain_win = RangeWidget(self._volume_gain_range, self.set_volume_gain, 'Volume Gain', "counter_slider", float)
         self.top_grid_layout.addWidget(self._volume_gain_win)
         self.rtlsdr_source_0 = osmosdr.source(
             args="numchan=" + str(1) + " " + ""
@@ -103,15 +103,15 @@ class fm_radio_receiver(gr.top_block, Qt.QWidget):
         self.rtlsdr_source_0.set_antenna('', 0)
         self.rtlsdr_source_0.set_bandwidth(0, 0)
         self.rational_resampler_xxx_0 = filter.rational_resampler_fff(
-                interpolation=48,
-                decimation=50,
+                interpolation=16,
+                decimation=150,
                 taps=None,
                 fractional_bw=None)
         self.qtgui_freq_sink_x_1 = qtgui.freq_sink_f(
             1024, #size
             firdes.WIN_BLACKMAN_hARRIS, #wintype
-            250e3, #fc
-            250e3, #bw
+            center_freq, #fc
+            samp_rate/decimate_factor, #bw
             "", #name
             1
         )
@@ -239,6 +239,7 @@ class fm_radio_receiver(gr.top_block, Qt.QWidget):
         self.samp_rate = samp_rate
         self.low_pass_filter_0.set_taps(firdes.low_pass(1, self.samp_rate, 108e3, 1e6, firdes.WIN_HAMMING, 6.76))
         self.qtgui_freq_sink_x_0.set_frequency_range(self.center_freq, self.samp_rate)
+        self.qtgui_freq_sink_x_1.set_frequency_range(self.center_freq, self.samp_rate/self.decimate_factor)
         self.rtlsdr_source_0.set_sample_rate(self.samp_rate)
 
     def get_decimate_factor(self):
@@ -246,6 +247,7 @@ class fm_radio_receiver(gr.top_block, Qt.QWidget):
 
     def set_decimate_factor(self, decimate_factor):
         self.decimate_factor = decimate_factor
+        self.qtgui_freq_sink_x_1.set_frequency_range(self.center_freq, self.samp_rate/self.decimate_factor)
 
     def get_center_freq(self):
         return self.center_freq
@@ -253,6 +255,7 @@ class fm_radio_receiver(gr.top_block, Qt.QWidget):
     def set_center_freq(self, center_freq):
         self.center_freq = center_freq
         self.qtgui_freq_sink_x_0.set_frequency_range(self.center_freq, self.samp_rate)
+        self.qtgui_freq_sink_x_1.set_frequency_range(self.center_freq, self.samp_rate/self.decimate_factor)
         self.rtlsdr_source_0.set_center_freq(self.center_freq, 0)
 
 

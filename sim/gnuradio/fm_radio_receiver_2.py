@@ -116,7 +116,7 @@ class fm_radio_receiver_2(gr.top_block, Qt.QWidget):
         self.qtgui_waterfall_sink_x_0 = qtgui.waterfall_sink_c(
             1024, #size
             firdes.WIN_BLACKMAN_hARRIS, #wintype
-            0, #fc
+            center_freq, #fc
             samp_rate, #bw
             "", #name
             1 #number of inputs
@@ -198,7 +198,7 @@ class fm_radio_receiver_2(gr.top_block, Qt.QWidget):
         self.blocks_multiply_const_vxx_0 = blocks.multiply_const_cc(gain)
         self.audio_sink_0 = audio.sink(int(48e3), '', True)
         self.analog_wfm_rcv_pll_0 = analog.wfm_rcv_pll(
-        	demod_rate=250e3,
+        	demod_rate=samp_rate/decimate_factor,
         	audio_decimation=5,
         )
 
@@ -230,7 +230,7 @@ class fm_radio_receiver_2(gr.top_block, Qt.QWidget):
         self.samp_rate = samp_rate
         self.low_pass_filter_0.set_taps(firdes.low_pass(1, self.samp_rate, 108e3, 10e5, firdes.WIN_HAMMING, 6.76))
         self.qtgui_freq_sink_x_0.set_frequency_range(self.center_freq, self.samp_rate)
-        self.qtgui_waterfall_sink_x_0.set_frequency_range(0, self.samp_rate)
+        self.qtgui_waterfall_sink_x_0.set_frequency_range(self.center_freq, self.samp_rate)
         self.rtlsdr_source_0.set_sample_rate(self.samp_rate)
 
     def get_gain(self):
@@ -252,6 +252,7 @@ class fm_radio_receiver_2(gr.top_block, Qt.QWidget):
     def set_center_freq(self, center_freq):
         self.center_freq = center_freq
         self.qtgui_freq_sink_x_0.set_frequency_range(self.center_freq, self.samp_rate)
+        self.qtgui_waterfall_sink_x_0.set_frequency_range(self.center_freq, self.samp_rate)
         self.rtlsdr_source_0.set_center_freq(self.center_freq, 0)
 
 

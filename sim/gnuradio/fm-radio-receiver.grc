@@ -73,13 +73,13 @@ blocks:
   parameters:
     comment: ''
     gui_hint: ''
-    label: ''
-    min_len: '100'
+    label: Volume Gain
+    min_len: '10'
     orient: Qt.Horizontal
     rangeType: float
-    start: '1'
+    start: '0'
     step: '1'
-    stop: '100'
+    stop: '10'
     value: '1'
     widget: counter_slider
   states:
@@ -106,23 +106,6 @@ blocks:
     coordinate: [640, 148]
     rotation: 0
     state: enabled
-- name: analog_wfm_rcv_pll_0
-  id: analog_wfm_rcv_pll
-  parameters:
-    affinity: ''
-    alias: ''
-    audio_decimation: ''
-    comment: ''
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    quad_rate: ''
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [640, 72.0]
-    rotation: 0
-    state: disabled
 - name: audio_sink_0
   id: audio_sink
   parameters:
@@ -297,7 +280,7 @@ blocks:
     autoscale: 'False'
     average: '1.0'
     axislabels: 'True'
-    bw: 250e3
+    bw: samp_rate/decimate_factor
     color1: '"blue"'
     color10: '"dark blue"'
     color2: '"red"'
@@ -310,7 +293,7 @@ blocks:
     color9: '"dark green"'
     comment: ''
     ctrlpanel: 'False'
-    fc: 250e3
+    fc: center_freq
     fftsize: '1024'
     freqhalf: 'True'
     grid: 'False'
@@ -356,7 +339,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [840, 288.0]
+    coordinate: [856, 288.0]
     rotation: 0
     state: enabled
 - name: rational_resampler_xxx_0
@@ -365,9 +348,9 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    decim: '50'
+    decim: '150'
     fbw: '0'
-    interp: '48'
+    interp: '16'
     maxoutbuf: '0'
     minoutbuf: '0'
     taps: ''

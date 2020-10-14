@@ -98,7 +98,7 @@ blocks:
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    quad_rate: 250e3
+    quad_rate: samp_rate/decimate_factor
   states:
     bus_sink: false
     bus_source: false
@@ -273,7 +273,7 @@ blocks:
     color8: '0'
     color9: '0'
     comment: ''
-    fc: '0'
+    fc: center_freq
     fftsize: '1024'
     freqhalf: 'True'
     grid: 'False'
