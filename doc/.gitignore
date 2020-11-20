@@ -11,6 +11,12 @@
 *.synctex.gz
 *.toc
 *.fdb_latexmk
-*.pdf
+*.bbl
+*.blg
+*.bcf
+*.run.xml
+*.synctex
+*.tps
 
+*.pdf
 !img/*.pdf
