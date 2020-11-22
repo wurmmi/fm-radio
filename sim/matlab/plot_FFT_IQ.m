@@ -16,8 +16,8 @@ function plot_FFT_IQ(x,n0,nf,fs,f0,title_of_plot)
 %
 
 % transform from Hz to MHz
-fs = fs/1e6
-f0 = f0/1e6
+fs = fs/1e6;
+f0 = f0/1e6;
 
 figure();
 x_segment=x(n0:(n0+nf-1)); %extracts a small segment of data from signal
@@ -43,7 +43,6 @@ if nargin==6
 else
     title({'Spectrum',['Center frequency = ' num2str(f0) ' MHz'] },'FontSize', 14)
 end
-title({'Spectrum',['Center frequency = ' num2str(f0) ' MHz'] },'FontSize', 14)
 
 %Add vertical line
 y1=get(gca,'ylim');
