@@ -65,11 +65,6 @@ fs_dec_audio = fs_dec / dec_factor_audio;
 
 y_fm_demod_dec = decimate(y_fm_demod,dec_factor_audio,'fir');
 
-%Here I decimated the sampling rate by 8, which
-%results in a new sampling rate equal to (312.5 kHz)/10
-%= 31.25 KHz, which is in the range of my sound card while capturing the
-%mono audio channel only.
-
 plot_FFT_IQ(y_fm_demod_dec,1,10*range_s*fs_dec_audio,fs_dec_audio,0,'Spectrum of demod+dec signal');
 
 sound(y_fm_demod_dec, fs_dec_audio);
