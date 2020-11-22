@@ -8,6 +8,8 @@
 %% Prepare environment
 clear; close all; clc;
 
+addpath(genpath('./helpers/auto-arrange-figs/'));
+
 %% FM station info
 fc_oe3 = 98.1e6;
 
@@ -44,13 +46,33 @@ y_shifted = y .* exp(-1j*2*pi*delta_f*[1:1:length(y)]/fs)';
 
 plot_FFT_IQ(y_shifted,1,range_s*fs,fs,fc_oe3);
 
-%% Decimate
+%% Decimate (low-pass filter + decimate)
 dec_factor = 4;
 fs_dec = fs / dec_factor;
-d = decimate(y_shifted,dec_factor,'fir');
+y_dec = decimate(y_shifted,dec_factor,'fir');
 
-plot_FFT_IQ(d,1,range_s*fs/dec_factor,fs/dec_factor,fc_oe3,'Spectrum of decimated signal');
+plot_FFT_IQ(y_dec,1,10*range_s*fs_dec,fs_dec,fc_oe3,'Spectrum of decimated signal');
+
+%% Demodulate
+
+[y_fm_demod] = FM_IQ_Demod(y_dec);
+plot_FFT_IQ(y_fm_demod,1,20*range_s*fs_dec,fs_dec,0,'Spectrum of demodulated signal');
 
 
+%% Decimate again for replay on PCs' audio sound card
+dec_factor_audio = 10;
+fs_dec_audio = fs_dec / dec_factor_audio;
+
+y_fm_demod_dec = decimate(y_fm_demod,dec_factor_audio,'fir');
+
+%Here I decimated the sampling rate by 8, which
+%results in a new sampling rate equal to (312.5 kHz)/10
+%= 31.25 KHz, which is in the range of my sound card while capturing the
+%mono audio channel only.
+
+plot_FFT_IQ(y_fm_demod_dec,1,10*range_s*fs_dec_audio,fs_dec_audio,0,'Spectrum of demod+dec signal');
+
+sound(y_fm_demod_dec, fs_dec_audio);
 
 
+autoArrangeFigures(4,4,1);

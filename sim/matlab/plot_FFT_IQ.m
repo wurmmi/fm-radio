@@ -33,7 +33,7 @@ freq=[0:1:N-1]*(fs)/N+Low_freq;
 
 plot(freq,z);
 axis tight
-xlabel('Freqency [MHz]','FontSize', 14)
+xlabel('Frequency [MHz]','FontSize', 14)
 ylabel('Relative amplitude [dB down from max]','FontSize', 14)
 grid on
 set(gcf,'color','white');
