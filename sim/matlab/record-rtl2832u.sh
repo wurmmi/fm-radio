@@ -9,7 +9,7 @@
 # NOTE:
 #   Saalfelden: OE3 98.1 MHz
 
-center_freq=97.0e6
+center_freq=98.0e6
 sample_freq=1000000
 n_seconds=10
 out_file="./fm_record.bin"

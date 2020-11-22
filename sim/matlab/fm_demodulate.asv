@@ -1,0 +1,27 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%FM-Radio Thesis
+%%Topic : FM-Radio Demodulator
+%%Name  : Michael Wurm
+%%Date  : 11/2020
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Prepare environment
+clear; close all; clc;
+
+%% Recording
+center_freq = 97.0e6;
+sample_freq = 1e6;
+n_seconds = 10;
+
+y = loadFile('fm_record.bin');
+size(y)(1)
+assert(size(y(:,1)) == n_seconds*sample_freq, ...
+    'Recording is corrupted. Expected %d samples, but the file only contains %d.', n_seconds*sample_freq, size(y(:,1)))
+
+%% Plot the entire recorded spectrum
+figure();
+freqz(y(1:5000),1,[-4E6:.01E6:4E6],2.5E6);
+
+%% Plot 2ms of data, at the recorder-center_freq of 97 MHz
+plot_FFT_IQ(y,1,.002*2.5E6,2.5,100.122);
+
