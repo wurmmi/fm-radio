@@ -5,4 +5,21 @@
 # Description : Records IQ data from RTL2832u to file.
 ################################################################################
 
-rtl_sdr -f 93.3e6 -s 1e6 -n 5e6 fm_record.bin
+# Record 10s of IQ signal data.
+# NOTE:
+#   Saalfelden: OE3 98.1 MHz
+
+center_freq=97.0e6
+sample_freq=1000000
+n_seconds=10
+out_file="./fm_record.bin"
+
+n_samples=$(( $sample_freq * $n_seconds))
+echo "Recording $n_samples @ $sample_freq SPS ($n_seconds seconds)."
+
+cmd="rtl_sdr -f $center_freq -s $sample_freq -n $n_samples $out_file"
+
+echo "Using this command:"
+echo -e "$cmd \n"
+
+eval $cmd
