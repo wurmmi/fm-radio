@@ -57,7 +57,7 @@ y_dec = decimate(y_shifted,dec_factor,'fir');
 plot_FFT_IQ(y_dec,1,10*range_s*fs_dec,fs_dec,fc_oe3,'Spectrum of decimated signal');
 
 %% Demodulate FM
-[y_fm_demod] = FM_IQ_Demod(y_dec);
+y_fm_demod = FM_IQ_Demod(y_dec);
 plot_FFT_IQ(y_fm_demod,1,20*range_s*fs_dec,fs_dec,0,'Spectrum of demodulated signal');
 
 %% Decimate again for replay on PCs' audio sound card

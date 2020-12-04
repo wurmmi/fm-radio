@@ -1,8 +1,6 @@
 function plot_FFT_IQ(x, n0, nf, fs, f0, title_of_plot)
 
 %
-%  plot_FFT_IQ(x,n0,nf)
-%
 %  Plots the FFT of sampled IQ data
 %
 %                x  -- input signal
