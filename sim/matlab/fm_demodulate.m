@@ -14,35 +14,38 @@ addpath(genpath('./helpers/auto-arrange-figs/'));
 fc_oe3 = 98.1e6;
 
 %% Load recording
-f_center = 98.0e6;
-fs = 1e6;
-n_seconds = 10;
+fc    = 98.0e6;
+fs    = 1e6;
+n_sec = 10;
 
 y = loadFile('fm_record.bin');
 
-assert(size(y,1) == n_seconds*fs, ...
-    'Recording is corrupted. Expected %d samples, but the file only contains %d.', n_seconds*fs, size(y(:,1)))
+assert(size(y,1) == n_sec*fs, ...
+    'Recording is corrupted. Expected %d samples, but the file only contains %d.', ...
+    n_sec*fs, size(y(:,1)))
 n_samples = size(y,1);
 
 %% Plot the entire recorded spectrum
 range_s = 0.001;
 
 figure();
-freqz(y(1:round(n_samples*range_s)),1,[-4E6:.01E6:4E6],fs);
+freqz(y(1:round(n_samples*range_s)),1,(-4e6:.01e6:4e6),fs);
+title('Periodic spectrum')
 
 %% Plot closer around the recorded center frequency
-plot_FFT_IQ(y,1,range_s*fs,fs,f_center);
+plot_FFT_IQ(y,1,range_s*fs,fs,fc);
 
 len_section = 200000;
-n_overlap = 1500;
-%figure();
-%spectrogram(y,len_section,n_overlap,[-1.25E6:.02E6:1.25E6],fs,'yaxis');
-%title('Power Spectrum')
+n_overlap   = 1500;
+
+figure();
+spectrogram(y,len_section,n_overlap,(-1.25E6:.02E6:1.25E6),fs,'yaxis');
+title('Power Spectrum')
 
 %% Shift the recording from IF down to baseband
-delta_f = f_center - fc_oe3;
-
-y_shifted = y .* exp(-1j*2*pi*delta_f*[1:1:length(y)]/fs)';
+delta_f = fc - fc_oe3;
+t = (1:length(y))/fs;
+y_shifted = y .* exp(-1j*2*pi*delta_f*t)';
 
 plot_FFT_IQ(y_shifted,1,range_s*fs,fs,fc_oe3);
 
@@ -53,11 +56,9 @@ y_dec = decimate(y_shifted,dec_factor,'fir');
 
 plot_FFT_IQ(y_dec,1,10*range_s*fs_dec,fs_dec,fc_oe3,'Spectrum of decimated signal');
 
-%% Demodulate
-
+%% Demodulate FM
 [y_fm_demod] = FM_IQ_Demod(y_dec);
 plot_FFT_IQ(y_fm_demod,1,20*range_s*fs_dec,fs_dec,0,'Spectrum of demodulated signal');
-
 
 %% Decimate again for replay on PCs' audio sound card
 dec_factor_audio = 10;
@@ -69,5 +70,5 @@ plot_FFT_IQ(y_fm_demod_dec,1,10*range_s*fs_dec_audio,fs_dec_audio,0,'Spectrum of
 
 sound(y_fm_demod_dec, fs_dec_audio);
 
-
+%% Arrange all plots on the display
 autoArrangeFigures(4,4,1);

@@ -1,11 +1,15 @@
 function y = loadFile(filename)
-  %  y = loadFile(filename)
-  %
-  % reads  complex samples from the rtlsdr file
-  %
+%  y = loadFile(filename)
+%
+% reads complex samples from the RTL-SDR file
+%
 
-  fid = fopen(filename,'rb');
-  y = fread(fid,'uint8=>double');
+% Read binary
+fid = fopen(filename,'rb');
 
-  y = y-127.5;
-  y = y(1:2:end) + i*y(2:2:end);
+% Convert from uint8 to double in signed range
+y = fread(fid,'uint8=>double');
+y = y-127.5;
+
+% Convert interleaved I/Q values to complex values
+y = y(1:2:end) + 1j*y(2:2:end);
