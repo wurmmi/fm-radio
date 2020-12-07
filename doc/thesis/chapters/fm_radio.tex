@@ -2,11 +2,14 @@
 \chapter{Signal Processing Theory}
 \label{cha:TheThesis}
 
-  \section{Up-Downconversion to/from RF}
+  \section{Modulation from Baseband to RF}
+  \section{Modulation from RF to Baseband}
 
-  \section{Frequency Modulation}
+  \section{Frequency Modulation (FM)}
   see literature/Present\_lec6\_AM\_FM.pdf\\
   see lectures out of HSD/ESD
+    \subsection{Mathematical description}
+    \subsection{Frequency Band, Channel allocation/distribution}
 
   \section{Algorithms for Digital FM Demodulation}
     see literature/FmDemodulator.pdf (Sect. 3.3)
@@ -21,16 +24,22 @@
 %%%%%%%%%%%%%%%%%%%%
 \chapter{High-Level Synthesis}
   \section{Introduction / State of the Art}
-  \section{Functionality (high level code to HDL)}
-  \section{Variants}
+  \section{Functionality (transform high-level code to HDL)}
+  \section{Language Support}
     \subsection{C++}
     \subsection{SystemC}
+  \section{Coding}
+    \subsection{Compiler Directives (\#pragma's)}
+    \subsection{Data types}
+    \subsection{Functions}
+    \subsection{Loops}
+    \subsection{Conditional statements}
   \section{Advantages / Disadvantages}
-
+    easy and much faster to get complex HDL code, such as image/video processing, through libraries like OpenCV. However, it is less optimized, and a developer still needs to have a strong hardware background, to be able to understand what is being generated in hardware from x lines of code in HLS/Cpp.
 
 %%%%%%%%%%%%%%%%%%%%
 \chapter{Implementation}
-  \section{Matlab Simulation}
+  \section{Matlab/Python Model}
   in fixed point, close to hardware level algorithm
 
   \section{VHDL}
@@ -47,6 +56,17 @@
     \subsection{Implementation effort/time}
     \subsection{Hardware Utilization}
     \subsection{Others}
+
+  \section{Common Testbench}
+    \subsection{Architecture (same tb for VHDL and HLS-generated HDL)}
+    \subsection{Framework cocotb, with ghdl compiler}
+        Instantiate both HDL models in the testbench.\\
+        Display a direct comparison of outputs in graphs. This is practical, since the cocotb framework runs in python and graphs can be generated using Python's matplotlib.
+
+  \section{Develop HLS compiler independent code (optional)}
+    \subsection{Challenges}
+     Different compilers use different \#pragmas, etc.\\
+     The \#pragmas need to be within the code, at the appropriate positions, which makes it difficult to write compiler independent code....
 
 
 %%%%%%%%%%%%%%%%%%%%
