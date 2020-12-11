@@ -381,15 +381,19 @@ Email: michael.wurm@students.fh-hagenberg.at}
 % As a general rule, do not put math, special symbols or citations
 % in the abstract
 \begin{abstract}
-
-
+  This paper describes the necessary parts of digital signal processing, in order to be able to listen to a radio station that is broadcast in the FM frequency band.
+  Fundamental knowledge about digital signal processing is presented.
+  The processes of signal modulation up to radio frequency and down to baseband are described, as well as frequency modulation as a modulation type to transmit data.
+  A single FM radio channel in the FM radio band consists of multiple parts in the frequency spectrum, which is an important factor to be able to demodulate an audio stream correctly.
+  This demodulation itself can be done in different algorithms, of which a selection is presented.
+  The entire demodulation chain is implemented in a Matlab simulation script, to demonstrate the functionality of an FM radio receiver.
 
   %The aim of this master thesis is to compare an FM radio receiver implementation in HLS versus manual VHDL. Multiple metrics, such as time effort in implementation, hardware utilization in the FPGA, or efficiency are taken into account. As a first step, the receiver structure is simulated using Matlab to evaluate different architectures and techniques to demodulate a FM radio signal. This evaluation is especially targeting a setup that requires the least possible amount of analog hardware. Once a suitable strategy is found, a prototype is implemented in hardware on a FPGA.\\
 \end{abstract}
 
 \begin{IEEEkeywords}
 %  Audio signal processing, FM radio frequency, FPGA, HLS, VHDL, Matlab
-  Audio signal processing, FM radio frequency, Matlab, Simulation
+  Audio signal processing, FM radio frequency, Demodulation, Matlab, Simulation
 \end{IEEEkeywords}
 
 
@@ -406,12 +410,18 @@ Email: michael.wurm@students.fh-hagenberg.at}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-  This paper describes the necessary parts of signal processing, in order to listen to a radio station that is broadcast in the FM frequency band. Frequency modulation (FM) is a widely used standard to provide [...]
-
-  \subsection{Motivation}
+  Frequency modulation (FM) is a widely used standard to transmit data streams.
+  The probably best known usecase therefore is commercial broadcast radio, where an audio stream is transmitted.
+  Devices to receive these streams are available starting from affordable low prices to the public.
+  Since this is such a common technology which so many people are using on a daily basis, and which is included in all vehicles, a more detailed look into the system is very interesting.
+  Multiple courses in the program Embedded Systems Design at the University of Applied Sciences Upper Austria, Campus Hagenberg, cover the topic of digital signal processing.
+  This paper tries to accumulate all this knowledge in a single paper and give an overview about the FM radio technology.
+  A thesis for the Masters' program will be elaborated based on this topic.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Signal Processing Theory}
+
+
 
   \subsection{Modulation from Baseband to RF}
 
@@ -420,10 +430,10 @@ Email: michael.wurm@students.fh-hagenberg.at}
 
   \subsection{Frequency Modulation (FM)}
 
+  \subsection{Mathematical Description of FM}
+
   \subsection{Frequency Band}
   %may be used freely, with limited power
-
-  \subsection{Mathematical Description of FM}
 
   \subsubsection{FM Channel Allocation}
 
