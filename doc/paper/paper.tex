@@ -428,14 +428,45 @@ Email: michael.wurm@students.fh-hagenberg.at}
 
   \subsection{Modulation from RF to Baseband}
 
-  \subsection{Frequency Modulation (FM)}
+  \subsection{Frequency Modulation}
+    Frequency modulation (FM) is a modulation method, in which the information content is encoded in the frequency of a signal.
+    To be exact, the information is encoded in the frequencies' deviation from the carrier frequency.
+    The technology is widely used in FM broadcast radio.
+    One of its main advantages over amplitude modulation (AM) is the better signal-to-noise ration (SNR).
+    This is achieved, because of the constant amplitude in FM, which makes it less sensitive to additive noise in the transmission channel.
+    Additionally, this fact makes it easier for a receiver to synchronize on the received signal.
 
   \subsection{Mathematical Description of FM}
 
+
+
   \subsection{Frequency Band}
-  %may be used freely, with limited power
+    The frequency band that is used for FM sound broadcasting spans from 87.5 to 108 MHz in Europe. %https://www.itu.int/en/ITU-R/terrestrial/broadcast/Pages/FMTV.aspx
+    This range is located within the so-called Very-High-Frequency (VHF) band.
+    Anyone may use the specified frequency range freely, with a limited transmission power, as long as neighboring receivers are not disturbed in receiving an existing channel.
+    Austria allowed the legal usage in 2006. %CHECK
+    As an example, the German Federal Network Agency specifies the power limit as 50 nW, or -43 dBm, of effective radiated power (ERP).
+    In a practical usecase, this means that a transmitter needs to select a channel that is not already occupied by an official sender.
+    If a free channel is found, the transmitter may start sending a FM signal with the mentioned power limitations.
+    %check Wikipedias' sources for my source references/links
+    %https://www.conrad.at/de/o/fm-transmitter-1310051.html
+    %https://de.wikipedia.org/wiki/FM-Transmitter
+    %https://www.ris.bka.gv.at/GeltendeFassung.wxe?Abfrage=Bundesnormen&Gesetzesnummer=20008807
+    %https://www.rtr.at/medien/was_wir_tun/frequenzverwaltung/Frequenzen.en.html
 
   \subsubsection{FM Channel Allocation}
+    %each channel:
+    % spacing
+    % bandwidth
+    % specific part of spectrum (see Fig.1)
+    % TODO: make Fig1 smaller (cut top/bottom)
+    \begin{figure}[!h]
+      \centering
+        \includegraphics[width=7cm]{img/fm-channel-freqs.png}
+      \caption{Block diagram of the entire system.}
+      \label{fig_sim}
+    \end{figure}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{FM Signal Demodulation}
