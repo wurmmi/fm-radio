@@ -441,11 +441,12 @@ Email: michael.wurm@students.fh-hagenberg.at}
 
 
   \subsection{Frequency Band}
-    The frequency band that is used for FM sound broadcasting spans from 87.5 to 108 MHz in Europe. %https://www.itu.int/en/ITU-R/terrestrial/broadcast/Pages/FMTV.aspx
+    The frequency band that is used for FM sound broadcasting spans from 87.5 to 108 MHz in Austria.
+    This is also true worldwide, except that some countries only partially use the band. %http://search.itu.int/history/HistoryDigitalCollectionDocLibrary/1.43.48.en.101.pdf
     This range is located within the so-called Very-High-Frequency (VHF) band.
     Anyone may use the specified frequency range freely, with a limited transmission power, as long as neighboring receivers are not disturbed in receiving an existing channel.
     Austria allowed the legal usage in 2006. %CHECK
-    As an example, the German Federal Network Agency specifies the power limit as 50 nW, or -43 dBm, of effective radiated power (ERP).
+    As an example, the German Federal Network Agency specifies the power limit as 50 nW, or -43 dBm, of effective radiated power (ERP). %https://tech.ebu.ch/docs/r/r120.pdf
     In a practical usecase, this means that a transmitter needs to select a channel that is not already occupied by an official sender.
     If a free channel is found, the transmitter may start sending a FM signal with the mentioned power limitations.
     %check Wikipedias' sources for my source references/links
@@ -455,6 +456,14 @@ Email: michael.wurm@students.fh-hagenberg.at}
     %https://www.rtr.at/medien/was_wir_tun/frequenzverwaltung/Frequenzen.en.html
 
   \subsubsection{FM Channel Allocation}
+    %https://www.electronics-notes.com/articles/audio-video/broadcast-audio/vhf-fm-frequency-modulation-basics.php
+    The entire FM band frequency range divides into multiple channels which can be used.
+    In Europe, the European Telecommunications Standards Institute (ETSI) sets the respective standards for the usage of these frequencies.
+    The main specifications for a single FM broadcasting channels are explained in this section.
+    Each channel may allocate a bandwidth of 200 kHz.
+    Within a channel, the maximum deviation from the center frequency shall not exceed 75 kHz.
+    This leaves a guard band of 25 kHz on either side, to minimize interference with adjacent channels.
+    Center frequencies may be allocated on multiples of 100 kHz.
     %each channel:
     % spacing
     % bandwidth
@@ -462,8 +471,8 @@ Email: michael.wurm@students.fh-hagenberg.at}
     % TODO: make Fig1 smaller (cut top/bottom)
     \begin{figure}[!h]
       \centering
-        \includegraphics[width=7cm]{img/fm-channel-freqs.png}
-      \caption{Block diagram of the entire system.}
+        \includegraphics[width=7cm]{img/fm-channel-baseband.png}
+      \caption{Allocation of frequencies in an FM channel}
       \label{fig_sim}
     \end{figure}
 
