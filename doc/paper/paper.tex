@@ -92,7 +92,7 @@
 
 % *** CITATION PACKAGES ***
 %
-%\usepackage{cite}
+\usepackage{cite}
 % cite.sty was written by Donald Arseneau
 % V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
 % \cite{} output to follow that of the IEEE. Loading the cite package will
@@ -291,7 +291,7 @@
 
 % *** PDF, URL AND HYPERLINK PACKAGES ***
 %
-%\usepackage{url}
+\usepackage{url}
 % url.sty was written by Donald Arseneau. It provides better support for
 % handling and breaking URLs. url.sty is already installed on most LaTeX
 % systems. The latest version and documentation can be obtained at:
@@ -437,9 +437,41 @@ Email: michael.wurm@students.fh-hagenberg.at}
     Additionally, this fact makes it easier for a receiver to synchronize on the received signal.
 
   \subsection{Mathematical Description of FM}
+    The signal of an FM baseband signal can be described in the following formulas.
+    As already mentioned in earlier in this paper, FM encodes the information in the frequency. 
+    Since the frequency has a direct relationship to the angle, FM belongs to the group of angle modulated signals.
 
+    The instantanious frequency $f_i$ can be described as 
+    \begin{equation}
+      f_i = f_c + \Delta f \cdot m(t)
+    \end{equation}
+    where $f_c$ is the carrier frequency, $\Delta f$ is the maximum frequency deviation and $m(t)$ is the information or message signal that is to be transmitted.
+    Simply looking at this equation, the frequency deviation, which is also called the swing, varies in the range between $f_c \pm \Delta f$.
 
+    Considering the relationship between angular frequency and angle and after some simple substitutions, which will not be described into detail here, the equation for a generic frequency modulated wave is the following.
+    \begin{equation}
+      s(t) = A_c\ cos \Big( 2 \pi f_c t + 2 \pi k_f \int m(t) dt \Big)
+    \end{equation}
+    Where $A_c$ is the amplitude of the resulting FM signal and $k_f$ is the frequency sensitivity factor.
 
+    An example application of FM is transmitting audio streams. 
+    An audio stream can be described as a cosine wave.
+    If the information signal that is to be transmitted is a cosine wave in the form of 
+    \begin{equation}
+      m(t) = A_m\ cos(2 \pi f_m t)
+    \end{equation}
+    the final equation for an FM signal transforms into the following formula.
+    \begin{equation}
+      y(t) = A_c\ cos \Big(2 \pi f_c t + \beta\ sin(2 \pi f_m t)\Big )
+    \end{equation}
+
+    The variable $\beta$ is called the modulation index,
+    \begin{equation}
+      \beta = \frac{\Delta f}{f_m} = \frac{k_f A_m}{f_m}
+    \end{equation}
+    where $f_m$ is the highest existing frequency, or the bandwidth, of the information signal. 
+    Several formulas, as well as their derivations were described according to \cite{FMMaths1}\cite{FMMaths2}.
+    
   \subsection{Frequency Band}
     The frequency band that is used for FM sound broadcasting spans from 87.5 to 108 MHz in Austria.
     This is also true worldwide, except that some countries only partially use the band. %http://search.itu.int/history/HistoryDigitalCollectionDocLibrary/1.43.48.en.101.pdf
@@ -653,11 +685,17 @@ Email: michael.wurm@students.fh-hagenberg.at}
 % (used to reserve space for the reference number labels box)
 \begin{thebibliography}{1}
 
-\bibitem{IEEEhowto:kopka}
-H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
-  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
+  \bibitem{IEEEhowto:kopka}
+    H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
+      0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
 
-\end{thebibliography}
+  \bibitem{FMMaths1}
+    \url{https://fas.org/man/dod-101/navy/docs/es310/FM.htm}, opened on Dec. 12th, 2020
+
+    \bibitem{FMMaths2}
+    \url{https://www.tutorialspoint.com/analog_communication/analog_communication_angle_modulation.htm}
+
+  \end{thebibliography}
 
 
 
