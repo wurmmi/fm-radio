@@ -413,35 +413,38 @@ Email: michael.wurm@students.fh-hagenberg.at}
   Frequency modulation (FM) is a widely used standard to transmit data streams.
   The probably best known usecase therefore is commercial broadcast radio, where an audio stream is transmitted.
   Devices to receive these streams are available starting from affordable low prices to the public.
-  Since this is such a common technology which so many people are using on a daily basis, and which is included in all vehicles, a more detailed look into the system is very interesting.
+  Since this is such a common technology which so many people are using on a daily basis, and which is included in virtually every automobile, a more detailed look into this signal transmission system is very interesting.
+
   Multiple courses in the program Embedded Systems Design at the University of Applied Sciences Upper Austria, Campus Hagenberg, cover the topic of digital signal processing.
   This paper tries to accumulate all this knowledge in a single paper and give an overview about the FM radio technology.
   A thesis for the Masters' program will be elaborated based on this topic.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Signal Processing Theory}
+%\section{Signal Processing Theory}
+%
+%  A comprehensive set of signal processing techniques is required, in order to %achieve a data transmission with frequency modulation.
+%  In traditional commercial senders and receivers...
+%
+%  \subsection{Modulation from Baseband to RF}
+%
+%
+%  \subsection{Modulation from RF to Baseband}
+%  \subsection{Frequency Modulation}
 
-
-
-  \subsection{Modulation from Baseband to RF}
-
-
-  \subsection{Modulation from RF to Baseband}
-
-  \subsection{Frequency Modulation}
+  \section{Frequency Modulation}
     Frequency modulation (FM) is a modulation method, in which the information content is encoded in the frequency of a signal.
     To be exact, the information is encoded in the frequencies' deviation from the carrier frequency.
     The technology is widely used in FM broadcast radio.
-    One of its main advantages over amplitude modulation (AM) is the better signal-to-noise ration (SNR).
+    One of its main advantages over amplitude modulation (AM) is the higher signal-to-noise ration (SNR).
     This is achieved, because of the constant amplitude in FM, which makes it less sensitive to additive noise in the transmission channel.
-    Additionally, this fact makes it easier for a receiver to synchronize on the received signal.
+    Additionally, this fact makes it easier for a receiver to synchronize on the received signal \cite{FM_Maths_Info_1}.
 
-  \subsection{Mathematical Description of FM}
+  \subsection{Mathematical Description}
     The signal of an FM baseband signal can be described in the following formulas.
-    As already mentioned in earlier in this paper, FM encodes the information in the frequency. 
+    As already mentioned in earlier in this paper, FM encodes the information in the frequency.
     Since the frequency has a direct relationship to the angle, FM belongs to the group of angle modulated signals.
 
-    The instantanious frequency $f_i$ can be described as 
+    The instantanious frequency $f_i$ can be described as
     \begin{equation}
       f_i = f_c + \Delta f \cdot m(t)
     \end{equation}
@@ -454,9 +457,9 @@ Email: michael.wurm@students.fh-hagenberg.at}
     \end{equation}
     Where $A_c$ is the amplitude of the resulting FM signal and $k_f$ is the frequency sensitivity factor.
 
-    An example application of FM is transmitting audio streams. 
+    An example application of FM is transmitting audio streams.
     An audio stream can be described as a cosine wave.
-    If the information signal that is to be transmitted is a cosine wave in the form of 
+    If the information signal that is to be transmitted is a cosine wave in the form of
     \begin{equation}
       m(t) = A_m\ cos(2 \pi f_m t)
     \end{equation}
@@ -469,34 +472,35 @@ Email: michael.wurm@students.fh-hagenberg.at}
     \begin{equation}
       \beta = \frac{\Delta f}{f_m} = \frac{k_f A_m}{f_m}
     \end{equation}
-    where $f_m$ is the highest existing frequency, or the bandwidth, of the information signal. 
-    Several formulas, as well as their derivations were described according to \cite{FMMaths1}\cite{FMMaths2}.
-    
+    where $f_m$ is the highest existing frequency, or the bandwidth, of the information signal.
+    Several formulas, as well as their derivations were described according to \cite{FM_Maths_Info_1}\cite{FMMaths2}.
+
   \subsection{Frequency Band}
-    The frequency band that is used for FM sound broadcasting spans from 87.5 to 108 MHz in Austria.
-    This is also true worldwide, except that some countries only partially use the band. %http://search.itu.int/history/HistoryDigitalCollectionDocLibrary/1.43.48.en.101.pdf
-    This range is located within the so-called Very-High-Frequency (VHF) band.
-    Anyone may use the specified frequency range freely, with a limited transmission power, as long as neighboring receivers are not disturbed in receiving an existing channel.
-    Austria allowed the legal usage in 2006. %CHECK
-    As an example, the German Federal Network Agency specifies the power limit as 50 nW, or -43 dBm, of effective radiated power (ERP). %https://tech.ebu.ch/docs/r/r120.pdf
-    In a practical usecase, this means that a transmitter needs to select a channel that is not already occupied by an official sender.
-    If a free channel is found, the transmitter may start sending a FM signal with the mentioned power limitations.
-    %check Wikipedias' sources for my source references/links
-    %https://www.conrad.at/de/o/fm-transmitter-1310051.html
-    %https://de.wikipedia.org/wiki/FM-Transmitter
+    The frequency band that is used for FM broadcasting is defined worldwide and spans from 87.5 to 108 MHz.
+    However, some countries only partially use the band \cite{itu_regulations}.
+    The range is located within the so-called Very-High-Frequency (VHF) band.
+    In terms of usage, the band is open to anyone.
+    This means, that a transmitter may use the specified frequency range freely.
+    Austria allowed the legal usage in 2006.
+    However, the transmission power needs to be limited, so that neighboring receivers are not disturbed in receiving any existing channels.
+    As an example, the German Federal Network Agency specifies the power limit as 50 nW, or -43 dBm, of effective radiated power (ERP).
+    In a practical usecase, this means that a transmitter needs to select a channel, or frequency range that is not already occupied by an official sender.
+    If a free range is found, the transmitter may start sending an FM signal with the mentioned power limitations \cite{ebu_fm_modulators_in_europe_power_regulations}.
+
     %https://www.ris.bka.gv.at/GeltendeFassung.wxe?Abfrage=Bundesnormen&Gesetzesnummer=20008807
     %https://www.rtr.at/medien/was_wir_tun/frequenzverwaltung/Frequenzen.en.html
 
   \subsection{Channel Frequency Spectrum}
-    %https://www.electronics-notes.com/articles/audio-video/broadcast-audio/vhf-fm-frequency-modulation-basics.php
     The entire FM band frequency range divides into multiple channels which can be used.
     In Europe, the European Telecommunications Standards Institute (ETSI) sets the respective standards for the usage of these frequencies.
     The main specifications for a single FM broadcasting channels are explained in this section.
+
     Each channel may allocate a bandwidth of 200 kHz.
     Within a channel, the maximum deviation from the center frequency shall not exceed 75 kHz.
     This leaves a guard band of 25 kHz on either side, to minimize interference with adjacent channels.
     Center frequencies may be allocated on multiples of 100 kHz.
-    \ref{sec_fm_sig_demod} shows the upper half-bands' frequency spectrum of a single channel.
+
+    Fig.\ref{fig_channel_baseband_freqs} shows the upper half-bands' frequency spectrum of a single channel.
     A sum of the left and right audio channel is located starting from 30 Hz, up to 15 kHz.
     The summation of left and right audio channel resembles the mono audio stream.
     The lower limit at 30 Hz is to prevent the transmission of a direct current (DC) part, which would require a large amount of power in transmission. This effect is one of the downsides of amplitude modulation (AM), where the carrier is located at the channels' center frequeny and requires a high transmission power. % TODO: check this fact
@@ -512,15 +516,16 @@ Email: michael.wurm@students.fh-hagenberg.at}
     This signal is used to generate a stereo audio signal, in combination with the mono signal.
     This process is explained into more detail in chapter \ref{sec_fm_sig_demod}.
     Considering all these parts in the spectrum, there is still bandwidth free to use, up to the maximum channel bandwitdh 100 kHz in one sideband.
-    Because of that, additional services were added to the audio transmission, to provide additional data services and information.
+    Because of that, additional services were added to the pure audio transmission, to provide additional data services and information.
     Services that were implemented are the Data Radio Channel (DARC), which is mostly used in Japan and the USA, the Subsidary Communication Authorization (SCA) and the Radio Data System (RDS).
     Out of these, RDS is the most significant service in Europe.
     It is used to transmit additional information about the channel, such as the radio stations' name, currently playing songs' title or traffic information.
+    The information about the frequency spectrum was found in \cite{fm_broadcast_tutorial_and_basics}.
 
     \begin{figure}[!h]
       \centering
         \includegraphics[width=7cm]{img/fm-channel-baseband.png}
-      \caption{Allocation of frequencies in an FM channel}
+      \caption{Allocation of frequencies in an FM channel \cite{fig_channel_freqs}}
       \label{fig_channel_baseband_freqs}
     \end{figure}
 
@@ -684,18 +689,24 @@ Email: michael.wurm@students.fh-hagenberg.at}
 % set second argument of \begin to the number of references
 % (used to reserve space for the reference number labels box)
 \begin{thebibliography}{1}
+  \bibitem{itu_regulations}
+    International Telecommunication Union (ITU), \emph{Radio Regulation Articles, Edition of 2020}, Vol. I-EA5
 
-  \bibitem{IEEEhowto:kopka}
-    H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
-      0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
+  \bibitem{ebu_fm_modulators_in_europe_power_regulations}
+    European Broadcasting Union (EBU), \emph{Low-power FM modulators in Europe}, EBU-R120-2007, \url{https://tech.ebu.ch/docs/r/r120.pdf}, pg.5
 
-  \bibitem{FMMaths1}
+  \bibitem{fm_broadcast_tutorial_and_basics}
+    Electronics Notes, \emph{Broadcast VHF FM Tutorial \& Basics}, \url{https://www.electronics-notes.com/articles/audio-video/broadcast-audio/vhf-fm-frequency-modulation-basics.php}, opened Dec. 10th, 2020
+
+  \bibitem{FM_Maths_Info_1}
     \url{https://fas.org/man/dod-101/navy/docs/es310/FM.htm}, opened on Dec. 12th, 2020
 
-    \bibitem{FMMaths2}
-    \url{https://www.tutorialspoint.com/analog_communication/analog_communication_angle_modulation.htm}
+  \bibitem{FMMaths2}
+    \url{https://www.tutorialspoint.com/analog_communication/analog_communication_angle_modulation.htm}, opened on Dec. 12th, 2020
 
-  \end{thebibliography}
+  \bibitem{fig_channel_freqs}
+    Fig.\ref{fig_channel_baseband_freqs}, Baseband Signal of an FM channel, \url{https://de.wikipedia.org/wiki/UKW-Rundfunk#Technische_Details}, opened on Dec. 11th, 2020
+\end{thebibliography}
 
 
 
