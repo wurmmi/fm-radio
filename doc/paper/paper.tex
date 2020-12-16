@@ -454,6 +454,7 @@ Email: michael.wurm@students.fh-hagenberg.at}
     Considering the relationship between angular frequency and angle and after some simple substitutions, which will not be described into detail here, the equation for a generic frequency modulated wave is the following.
     \begin{equation}
       s(t) = A_c\ cos \Big( 2 \pi f_c t + 2 \pi k_f \int m(t) dt \Big)
+      \label{equ_fm_func}
     \end{equation}
     Where $A_c$ is the amplitude of the resulting FM signal and $k_f$ is the frequency sensitivity factor.
 
@@ -525,7 +526,7 @@ Email: michael.wurm@students.fh-hagenberg.at}
     \begin{figure}[!h]
       \centering
         \includegraphics[width=7cm]{img/fm-channel-baseband.png}
-      \caption{Allocation of frequencies in an FM channel \cite{fig_channel_freqs}}
+      \caption{Allocation of frequencies in an FM channel \cite{ref_fig_channel_freqs}}
       \label{fig_channel_baseband_freqs}
     \end{figure}
 
@@ -543,13 +544,51 @@ Email: michael.wurm@students.fh-hagenberg.at}
 
   In the following sections, two digital FM demodulator variants are described.
 
-  \subsection{Frequency Discriminator, Slope detector}
-    A frequency discriminator can be defined as a black box, with an output that is direclty proportional to the frequency of the input FM signal.
+  \subsection{Frequency Discriminator}
+    % TODO: check if this is also called a Slope Detector
+    %       --> check the frequency response of a differentiator for that
+    A frequency discriminator can be defined as a black box component, with an output that is directly proportional to the frequency of the input FM signal.
+    Different strategies can be implemented in this black box component, the discriminator.
+    Here, a differentiator with a subsequent envelope detector is used, which is shown in Fig.\ref{fig_freq_discriminator_bd}.
 
-    different strategies in the black box.
-    Here, the slope detector (differnetiator??) is used.
+    \begin{figure}[!h]
+      \centering
+        \includegraphics[width=8.7cm]{img/discrimination_method_bd2.png}
+      \caption{Frequency Discriminator Block Diagram \cite{ref_fig_freq_discriminator}}
+      \label{fig_freq_discriminator_bd}
+    \end{figure}
 
-    This type of demodulator converts the FM signal into an AM signal, which still has an FM content.
+    This type of demodulator converts the FM signal into an AM signal.
+    However, this signal still contains an FM content.
+    The transformation that happens here can be expressed in a formula, by simply differentiating equation \ref{equ_fm_func}.
+    This operation, with simple algebraic transformations, results in
+    \begin{equation}
+      \frac{d s(t)}{dt} = A_c 2 \pi \Big[f_c + k_f m(t) \Big] sin \Big(2 \pi f_c t + 2 \pi k_f \int m(t) dt -pi \Big)
+    \end{equation}
+    It can clearly be seen, that the signal now contains an AM and an FM content.
+    The FM part is described by the sine function.
+    More importantly the AM part, which resembles the envelope of the signal, is described by the term within the square brackets.
+    The resulting signal in time-domain is shown in the top left diagram in Fig.\ref{fig_time_domain_envelope_detect}.
+    This signal needs to be fed into an envelope detector, as shown in Fig.\ref{fig_freq_discriminator_bd}.
+    It extracts the envelope by removing the high frequency portion.
+    The method implemented here is one of the most simple ones and is usually referred to as 'Asynchronous Half-Wave Envelope Detector'\cite{ref_envelope_detector}.
+    It consists of a thresholding unit to remove negative values and a conventional lowpass filter.
+    In analog implementations, the thresholding unit is a diode.
+    The lowpass' cutoff frequency needs to be adapted to the envelope signals' maximum frequency, since it needs to be able to follow the signal, but also sufficiently smooth out the rectified signal.
+    Different methods may be implemented for the envelope detector.
+    For example, an 'Asynchronous Full-Wave Envelope Detector' can be used.
+    Therefore, the mentioned method only needs to swap the thresholding unit with an unit that calculates an absolut value.
+    In that architecture, a full-wave rectification is performed on the signal, which significantly improves the envelope detection accuracy \cite{ref_envelope_detector}.
+    The envelope is followed more exactly, because of the higher power that is available in the signal, since the entire signal is taken into account, and not only the positive half, as in the previous method.
+
+    %TODO: talk about normalization
+
+    \begin{figure}[!h]
+      \centering
+        \includegraphics[width=8.8cm]{img/envelope-detect-time-domain.jpg}
+      \caption{Time-Domain Signals in Envelope Detection \cite{ref_time_domain_envelope_detect}}
+      \label{fig_time_domain_envelope_detect}
+    \end{figure}
 
 
   %https://www.tutorialspoint.com/analog_communication/analog_communication_fm_demodulators.htm
@@ -728,8 +767,17 @@ Email: michael.wurm@students.fh-hagenberg.at}
   \bibitem{FMMaths2}
     \url{https://www.tutorialspoint.com/analog_communication/analog_communication_angle_modulation.htm}, opened on Dec. 12th, 2020
 
-  \bibitem{fig_channel_freqs}
-    Fig.\ref{fig_channel_baseband_freqs}, Baseband Signal of an FM channel, \url{https://de.wikipedia.org/wiki/UKW-Rundfunk#Technische_Details}, opened on Dec. 11th, 2020
+  \bibitem{ref_fig_channel_freqs}
+    Figure: Baseband Signal of an FM channel, \url{https://de.wikipedia.org/wiki/UKW-Rundfunk#Technische_Details}, opened on Dec. 11th, 2020
+
+  \bibitem{ref_fig_freq_discriminator}
+    Figure: Frequency Discriminator Block Diagram, \url{https://www.tutorialspoint.com/analog_communication/analog_communication_fm_demodulators.htm}, opened on Dec. 16th, 2020
+
+  \bibitem{ref_envelope_detector}
+    Rick Lyons, \emph{Digital Envelope Detection: The Good, the Bad, and the Ugly}, April 3, 2016, \url{https://www.dsprelated.com/showarticle/938.php}, opened on Dec. 16th, 2020
+
+  \bibitem{ref_time_domain_envelope_detect}
+    C.Roppel, \emph{Analoge Modulationsverfahren und Rundfunktechnik} Begleitmaterial zum Buch 'Grundlagen der digitalen Kommunikationstechnik, Übertragungstechnik - Signalverarbeitung - Netze', \url{https://www.hs-schmalkalden.de/fileadmin/portal/Dokumente/Fakult%C3%A4t_ET/Personal/Roppel/Buch/Analoge_Modulationsverfahren.pdf}, opened on Dec. 16th, 2020
 \end{thebibliography}
 
 
