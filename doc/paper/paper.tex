@@ -159,7 +159,7 @@
 
 % *** MATH PACKAGES ***
 %
-%\usepackage{amsmath}
+\usepackage{amsmath}
 % A popular package from the American Mathematical Society that provides
 % many useful and powerful commands for dealing with mathematics.
 %
@@ -543,17 +543,17 @@ Email: michael.wurm@students.fh-hagenberg.at}
   %https://www.veron.nl/wp-content/uploads/2014/01/FmDemodulator.pdf
 
   In the following sections, two digital FM demodulator variants are described.
+  In general, a FM demodulator serves the purpose to transform FM to AM, so that after the FM demodulator regular AM signal processing techniques can be applied.
+  % TODO: add img/discrimination_method_bd2.png here
 
   \subsection{Frequency Discriminator}
-    % TODO: check if this is also called a Slope Detector
-    %       --> check the frequency response of a differentiator for that
-    A frequency discriminator can be defined as a black box component, with an output that is directly proportional to the frequency of the input FM signal.
+    A frequency discriminator can be defined as a black box component, that generates an output that is directly proportional to the frequency of the input FM signal.
     Different strategies can be implemented in this black box component, the discriminator.
     Here, a differentiator with a subsequent envelope detector is used, which is shown in Fig.\ref{fig_freq_discriminator_bd}.
 
     \begin{figure}[!h]
       \centering
-        \includegraphics[width=8.7cm]{img/discrimination_method_bd2.png}
+        \includegraphics[width=7cm]{img/discrimination_method_bd1.jpg}
       \caption{Frequency Discriminator Block Diagram \cite{ref_fig_freq_discriminator}}
       \label{fig_freq_discriminator_bd}
     \end{figure}
@@ -563,8 +563,16 @@ Email: michael.wurm@students.fh-hagenberg.at}
     The transformation that happens here can be expressed in a formula, by simply differentiating equation \ref{equ_fm_func}.
     This operation, with simple algebraic transformations, results in
     \begin{equation}
-      \frac{d s(t)}{dt} = A_c 2 \pi \Big[f_c + k_f m(t) \Big] sin \Big(2 \pi f_c t + 2 \pi k_f \int m(t) dt -pi \Big)
+      \frac{d s(t)}{dt} = A_c 2 \pi \Big[f_c + k_f m(t) \Big] sin \Big(\omega_c t + 2 \pi k_f \int m(t) dt -pi \Big)
     \end{equation}
+
+    A differentiation in hardware is simply performed by substracting two consecutive samples, like
+    \begin{equation}
+      \frac{d s(t)}{dt} = s(t) - s(t-\Delta t)
+      \label{equ_differentiator_two_samples}
+    \end{equation}
+    where $\Delta t$ is the inverse of the sample frequency.
+
     It can clearly be seen, that the signal now contains an AM and an FM content.
     The FM part is described by the sine function.
     More importantly the AM part, which resembles the envelope of the signal, is described by the term within the square brackets.
@@ -581,8 +589,6 @@ Email: michael.wurm@students.fh-hagenberg.at}
     In that architecture, a full-wave rectification is performed on the signal, which significantly improves the envelope detection accuracy \cite{ref_envelope_detector}.
     The envelope is followed more exactly, because of the higher power that is available in the signal, since the entire signal is taken into account, and not only the positive half, as in the previous method.
 
-    %TODO: talk about normalization
-
     \begin{figure}[!h]
       \centering
         \includegraphics[width=8.8cm]{img/envelope-detect-time-domain.jpg}
@@ -590,11 +596,24 @@ Email: michael.wurm@students.fh-hagenberg.at}
       \label{fig_time_domain_envelope_detect}
     \end{figure}
 
+    An important requirement for the differentiator is, that the input signal is of a constant amplitude \cite{ref_schnyder_haller}.
+    The transmitted signal is subject to random additive noise on the transmission channel.
+    The differentiator would deliver wrong results because of this noise, when substracting two consecutive samples, as described in Equation \ref{equ_differentiator_two_samples}.
+    To achieve this, the complex signal $s(t)$ can be normalized to a value of one.
+    \begin{equation}
+      s_{norm} = \frac{s}{|s|} = \frac{A(n)\ e^{j\phi_{FM}(n)}}{|{A(n)\ e^{j\phi_{FM}(n)}|}} = e^{j\phi_{FM}(n)} = |1|
+    \end{equation}
 
-  %https://www.tutorialspoint.com/analog_communication/analog_communication_fm_demodulators.htm
-  %sect 3.3 : https://www.hs-schmalkalden.de/fileadmin/portal/Dokumente/Fakult%C3%A4t_ET/Personal/Roppel/Buch/Analoge_Modulationsverfahren.pdf
 
-  \subsection{Phase-Locked Loop (PLL)}
+
+  \subsection{Phase-Locked Loop}
+    A Phase-Locked Loop (PLL) can also be used to transform an FM signal to AM.
+    A PLL is a feedback loop that is usually used to generate an output signal that has a fixed phase reference to its input.
+    In the case of FM demodulation, the loop filter is configured to be able to follow the frequency variations on the input, which is directly related to the encoded information.
+    The output of the PLL directly delivers an AM signal, which corresponds to the transmitted information. \cite{ref_schnyder_haller}
+
+    Due to the limited space in this paper, FM demodulation with a PLL is not described into more detail.
+
 
 \section{Demodulation of Broadcast FM}
   % mono:   just LP on 15 kHz
@@ -778,6 +797,10 @@ Email: michael.wurm@students.fh-hagenberg.at}
 
   \bibitem{ref_time_domain_envelope_detect}
     C.Roppel, \emph{Analoge Modulationsverfahren und Rundfunktechnik} Begleitmaterial zum Buch 'Grundlagen der digitalen Kommunikationstechnik, Übertragungstechnik - Signalverarbeitung - Netze', \url{https://www.hs-schmalkalden.de/fileadmin/portal/Dokumente/Fakult%C3%A4t_ET/Personal/Roppel/Buch/Analoge_Modulationsverfahren.pdf}, opened on Dec. 16th, 2020
+
+  \bibitem{ref_schnyder_haller}
+    F.Schnyder, C.Haller, \emph{Implementation of FM Demodulator
+    Algorithms on a High Performance Digital Signal Processor}, 2002, \url{https://www.veron.nl/wp-content/uploads/2014/01/FmDemodulator.pdf}
 \end{thebibliography}
 
 
