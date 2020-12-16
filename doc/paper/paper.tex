@@ -531,28 +531,40 @@ Email: michael.wurm@students.fh-hagenberg.at}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{FM Signal Demodulation}
+\section{Demodulation of a Generic FM Signal}
 \label{sec_fm_sig_demod}
   An FM signal that is received by an antenna needs to be demodulated, in order to decode its actual data content.
   The radio-frequency antenna signal usually needs to be amplified, bandpass-filtered, and down-converted to baseband, using subsampling and quadrature-mixing, or similar strategies.
   This part of the signal processing chain is assumed to be working correctly and is out of the scope of this paper.
   The FM signal that is evaluated here, is assumed to be a quadrature-mixed signal in baseband, which means that inphase and quadrature (I/Q-) signals are available.
+
   %TODO: show downconversion path (maybe as a figure?)
   %https://www.veron.nl/wp-content/uploads/2014/01/FmDemodulator.pdf
 
-  % mono:   just LP on 15 kHz
-  % stereo: sum (L+R) + (L-R) = 2 L, (L+R) - (L-R) = 2R
-  % page 30: https://www.hs-schmalkalden.de/fileadmin/portal/Dokumente/Fakult%C3%A4t_ET/Personal/Roppel/Buch/Analoge_Modulationsverfahren.pdf
+  In the following sections, two digital FM demodulator variants are described.
+
+  \subsection{Frequency Discriminator, Slope detector}
+    A frequency discriminator can be defined as a black box, with an output that is direclty proportional to the frequency of the input FM signal.
+
+    different strategies in the black box.
+    Here, the slope detector (differnetiator??) is used.
+
+    This type of demodulator converts the FM signal into an AM signal, which still has an FM content.
 
 
-  \subsection{FM-AM-Demodulator}
-    convert FM to AM
-    %https://www.tutorialspoint.com/analog_communication/analog_communication_fm_demodulators.htm
-    %sect 3.3 : https://www.hs-schmalkalden.de/fileadmin/portal/Dokumente/Fakult%C3%A4t_ET/Personal/Roppel/Buch/Analoge_Modulationsverfahren.pdf
+  %https://www.tutorialspoint.com/analog_communication/analog_communication_fm_demodulators.htm
+  %sect 3.3 : https://www.hs-schmalkalden.de/fileadmin/portal/Dokumente/Fakult%C3%A4t_ET/Personal/Roppel/Buch/Analoge_Modulationsverfahren.pdf
 
   \subsection{Phase-Locked Loop (PLL)}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Demodulation of Broadcast FM}
+  % mono:   just LP on 15 kHz
+  % stereo: sum (L+R) + (L-R) = 2 L, (L+R) - (L-R) = 2R
+
+  % page 30: https://www.hs-schmalkalden.de/fileadmin/portal/Dokumente/Fakult%C3%A4t_ET/Personal/Roppel/Buch/Analoge_Modulationsverfahren.pdf
+
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Matlab Simulation}
 
   \subsection{Data Acquisition}
