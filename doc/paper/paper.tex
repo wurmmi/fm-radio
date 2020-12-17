@@ -689,11 +689,9 @@ Email: michael.wurm@students.fh-hagenberg.at}
       This is achieved by modulating with a complex signal with exactly that frequency.
 
     \subsubsection{Decimation}
-      The signal still has a sample rate of 1 MHz, which is an overkill for the application, since a channels' bandwith only ranges up to 100 kHz.
-      Keeping in mind the Nyquist theorem, the sample rate therefore needs to be at least 200 kHz.
-      Thus, the signal is decimated by an arbitrary factor of 4 % TODO: more? see Nyquist.. work this out in script
-      , which still leaves a rate of x M/kHz.
-
+      The signal still has a sample rate of 1 MHz at this point.
+      Keeping in mind the Nyquist theorem, and a single channels' bandwith of only up to 100 kHz, the sample rate therefore needs to be at least 200 kHz.
+      However, the final hardware implementation is targeting an FPGA, where processing of samples at 1 MHz is easily achievable. Therefore, a decimation is not done at this point.
     \subsubsection{Demodulation}
       Demodulation is done by normalizing the signal amplitude to one.
       A FIR filter is used as a differentiator.
