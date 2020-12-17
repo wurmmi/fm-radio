@@ -18,5 +18,4 @@
 *.synctex
 *.tps
 
-*.pdf
 !img/*.pdf
