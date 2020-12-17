@@ -382,10 +382,9 @@ Email: michael.wurm@students.fh-hagenberg.at}
 % in the abstract
 \begin{abstract}
   This paper describes the necessary parts of digital signal processing, in order to be able to listen to a radio station that is broadcast in the FM frequency band.
-  Fundamental knowledge about digital signal processing is presented.
-  The processes of signal modulation up to radio frequency and down to baseband are described, as well as frequency modulation as a modulation type to transmit data.
+  Fundamental knowledge about frequency modulation and its application in audio broadcast is presented.
   A single FM radio channel in the FM radio band consists of multiple parts in the frequency spectrum, which is an important factor to be able to demodulate an audio stream correctly.
-  This demodulation itself can be done in different algorithms, of which a selection is presented.
+  This demodulation itself can be done in different algorithms, of which a selection is introduced.
   The entire demodulation chain is implemented in a Matlab simulation script, to demonstrate the functionality of an FM radio receiver.
 
   %The aim of this master thesis is to compare an FM radio receiver implementation in HLS versus manual VHDL. Multiple metrics, such as time effort in implementation, hardware utilization in the FPGA, or efficiency are taken into account. As a first step, the receiver structure is simulated using Matlab to evaluate different architectures and techniques to demodulate a FM radio signal. This evaluation is especially targeting a setup that requires the least possible amount of analog hardware. Once a suitable strategy is found, a prototype is implemented in hardware on a FPGA.\\
@@ -393,7 +392,7 @@ Email: michael.wurm@students.fh-hagenberg.at}
 
 \begin{IEEEkeywords}
 %  Audio signal processing, FM radio frequency, FPGA, HLS, VHDL, Matlab
-  Audio signal processing, FM radio frequency, Demodulation, Matlab, Simulation
+  Audio signal processing, FM radio frequency, FM demodulation, Digital FM receiver, Matlab, Simulation
 \end{IEEEkeywords}
 
 
@@ -413,11 +412,12 @@ Email: michael.wurm@students.fh-hagenberg.at}
   Frequency modulation (FM) is a widely used standard to transmit data streams.
   The probably best known usecase therefore is commercial broadcast radio, where an audio stream is transmitted.
   Devices to receive these streams are available starting from affordable low prices to the public.
-  Since this is such a common technology which so many people are using on a daily basis, and which is included in virtually every automobile, a more detailed look into this signal transmission system is very interesting.
+  Since this is such a common technology that so many people are using on a daily basis - and which is included in virtually every automobile - a more detailed look into this signal transmission system is very interesting.
 
-  Multiple courses in the program Embedded Systems Design at the University of Applied Sciences Upper Austria, Campus Hagenberg, cover the topic of digital signal processing.
-  This paper tries to accumulate all this knowledge in a single paper and give an overview about the FM radio technology.
-  A thesis for the Masters' program will be elaborated based on this topic.
+%  Multiple courses in the program Embedded Systems Design at the University of Applied Sciences Upper Austria, Campus Hagenberg, cover the topic of digital signal processing.
+%  This paper tries to accumulate all this knowledge in a single paper and give an overview about the FM radio technology.
+  This paper tries to give an overview about the receivers' side of the FM radio technology.
+  A Masters' thesis will be elaborated based on this topic.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\section{Signal Processing Theory}
@@ -437,12 +437,11 @@ Email: michael.wurm@students.fh-hagenberg.at}
     The technology is widely used in FM broadcast radio.
     One of its main advantages over amplitude modulation (AM) is the higher signal-to-noise ration (SNR).
     This is achieved, because of the constant amplitude in FM, which makes it less sensitive to additive noise in the transmission channel.
-    Additionally, this fact makes it easier for a receiver to synchronize on the received signal \cite{FM_Maths_Info_1}.
+    Additionally, this fact makes it easier for a receiver to synchronize on the received signal \cite{ref_FM_Maths_Info_1}.
 
   \subsection{Mathematical Description}
-    The signal of an FM baseband signal can be described in the following formulas.
-    As already mentioned in earlier in this paper, FM encodes the information in the frequency.
-    Since the frequency has a direct relationship to the angle, FM belongs to the group of angle modulated signals.
+    The signal of an FM baseband signal can be described with the formulas presented in this section.
+    FM encodes the information content in its instantanious frequency, and since frequency has a direct relationship to an angle, FM belongs to the group of angle modulated signals.
 
     The instantanious frequency $f_i$ can be described as
     \begin{equation}
@@ -451,12 +450,12 @@ Email: michael.wurm@students.fh-hagenberg.at}
     where $f_c$ is the carrier frequency, $\Delta f$ is the maximum frequency deviation and $m(t)$ is the information or message signal that is to be transmitted.
     Simply looking at this equation, the frequency deviation, which is also called the swing, varies in the range between $f_c \pm \Delta f$.
 
-    Considering the relationship between angular frequency and angle and after some simple substitutions, which will not be described into detail here, the equation for a generic frequency modulated wave is the following.
+    Considering the relationship between angular frequency and angle and after some simple substitutions, which will not be described into detail here, the equation for a generic frequency modulated wave is the following
     \begin{equation}
       s(t) = A_c\ cos \Big( 2 \pi f_c t + 2 \pi k_f \int m(t) dt \Big)
       \label{equ_fm_func}
     \end{equation}
-    Where $A_c$ is the amplitude of the resulting FM signal and $k_f$ is the frequency sensitivity factor.
+    where $A_c$ is the amplitude of the resulting FM signal and $k_f$ is the frequency sensitivity factor.
 
     An example application of FM is transmitting audio streams.
     An audio stream can be described as a cosine wave.
@@ -468,33 +467,32 @@ Email: michael.wurm@students.fh-hagenberg.at}
     \begin{equation}
       y(t) = A_c\ cos \Big(2 \pi f_c t + \beta\ sin(2 \pi f_m t)\Big )
     \end{equation}
-
     The variable $\beta$ is called the modulation index,
     \begin{equation}
       \beta = \frac{\Delta f}{f_m} = \frac{k_f A_m}{f_m}
     \end{equation}
-    where $f_m$ is the highest existing frequency, or the bandwidth, of the information signal.
-    Several formulas, as well as their derivations were described according to \cite{FM_Maths_Info_1}\cite{FMMaths2}.
+    where $f_m$ is the highest existing frequency, or the bandwidth of the information signal.
+    Several formulas, as well as their derivations are described according to \cite{ref_FM_Maths_Info_1}\cite{ref_FMMaths2}.
 
   \subsection{Frequency Band}
     The frequency band that is used for FM broadcasting is defined worldwide and spans from 87.5 to 108 MHz.
-    However, some countries only partially use the band \cite{itu_regulations}.
+    However, some countries only partially use the band \cite{ref_itu_regulations}.
     The range is located within the so-called Very-High-Frequency (VHF) band.
-    In terms of usage, the band is open to anyone.
+    In terms of usage the band is open to the public.
     This means, that a transmitter may use the specified frequency range freely.
-    Austria allowed the legal usage in 2006.
+    Austria allowed the legal usage in 2006 \cite{ref_austria_rundfunkgesetz_2006}.
     However, the transmission power needs to be limited, so that neighboring receivers are not disturbed in receiving any existing channels.
-    As an example, the German Federal Network Agency specifies the power limit as 50 nW, or -43 dBm, of effective radiated power (ERP).
+    The European Commision specifies the power limit as 50 nW of effective radiated power (ERP) \cite{ref_eu_commision_radio_spectrum}.
     In a practical usecase, this means that a transmitter needs to select a channel, or frequency range that is not already occupied by an official sender.
-    If a free range is found, the transmitter may start sending an FM signal with the mentioned power limitations \cite{ebu_fm_modulators_in_europe_power_regulations}.
+    If a free range is found, the transmitter may start sending an FM signal with the mentioned power limitations \cite{ref_ebu_fm_modulators_in_europe_power_regulations}.
 
     %https://www.ris.bka.gv.at/GeltendeFassung.wxe?Abfrage=Bundesnormen&Gesetzesnummer=20008807
-    %https://www.rtr.at/medien/was_wir_tun/frequenzverwaltung/Frequenzen.en.html
 
   \subsection{Channel Frequency Spectrum}
+   % More info on modulation index: https://fas.org/man/dod-101/navy/docs/es310/FM.htm
     The entire FM band frequency range divides into multiple channels which can be used.
     In Europe, the European Telecommunications Standards Institute (ETSI) sets the respective standards for the usage of these frequencies.
-    The main specifications for a single FM broadcasting channels are explained in this section.
+    The main specifications for a single FM broadcasting channel are explained in this section.
 
     Each channel may allocate a bandwidth of 200 kHz.
     Within a channel, the maximum deviation from the center frequency shall not exceed 75 kHz.
@@ -502,26 +500,27 @@ Email: michael.wurm@students.fh-hagenberg.at}
     Center frequencies may be allocated on multiples of 100 kHz.
 
     Fig.\ref{fig_channel_baseband_freqs} shows the upper half-bands' frequency spectrum of a single channel.
-    A sum of the left and right audio channel is located starting from 30 Hz, up to 15 kHz.
-    The summation of left and right audio channel resembles the mono audio stream.
+    A sum of the left and right audio channel is located between 30 Hz and 15 kHz.
+    This summation of left and right audio channel resembles the mono audio stream.
     The lower limit at 30 Hz is to prevent the transmission of a direct current (DC) part, which would require a large amount of power in transmission. This effect is one of the downsides of amplitude modulation (AM), where the carrier is located at the channels' center frequeny and requires a high transmission power. % TODO: check this fact
     The upper limit at 15 kHz is chosen, to maintain a sufficient spacing to the first subcarrier.
     This subcarrier is allocated at an offset of 19 kHz from the carrier.
     It is also called the 'pilot tone', since it is a continuous signal.
-    The pilot tone is used to synchronize the left and right channel of an audio signal, to generate stereo audio.
-    The center frequency for stereo audio is located at 38 kHz, which is an integer multiple of 19 kHz for practical reasons.
+    The pilot tone is used to be able to demodulate the left and right channel of an audio signal correctly, to generate stereo audio.
+    A signal that is constructed by the difference between left and right audio channel is modulated on a 38 kHz subcarrier.
+    This subcarrier is an integer multiple of 19 kHz for practical reasons.
     However, the 38 kHz carrier is suppressed and thus not visible in the received spectrum.
     It can still be recovered, since it is phase coherent with the 19 kHz pilot tone per definition.
-    A signal that is constructed by the difference between left and right audio channel is modulated on a 38 kHz subcarrier.
     The bandwidth for this difference-signal spans 15 kHz on either side of the subcarrier.
-    This signal is used to generate a stereo audio signal, in combination with the mono signal.
+    It is used to generate a stereo audio signal, in combination with the mono signal.
     This process is explained into more detail in chapter \ref{sec_fm_sig_demod}.
-    Considering all these parts in the spectrum, there is still bandwidth free to use, up to the maximum channel bandwitdh 100 kHz in one sideband.
+
+    Considering all these parts in the spectrum, there is still bandwidth free to use, up to the maximum channel bandwitdh of 100 kHz in one sideband.
     Because of that, additional services were added to the pure audio transmission, to provide additional data services and information.
-    Services that were implemented are the Data Radio Channel (DARC), which is mostly used in Japan and the USA, the Subsidary Communication Authorization (SCA) and the Radio Data System (RDS).
+    Services that were implemented are the Data Radio Channel (DARC), which is mostly used in Japan and the USA, the Subsidary Communication Authorization (SCA) and the Radio Data System (RDS) \cite{ref_rohde_u_schwarz}.
     Out of these, RDS is the most significant service in Europe.
     It is used to transmit additional information about the channel, such as the radio stations' name, currently playing songs' title or traffic information.
-    The information about the frequency spectrum was found in \cite{fm_broadcast_tutorial_and_basics}.
+    The information about the frequency spectrum was found in \cite{ref_fm_broadcast_tutorial_and_basics}.
 
     \begin{figure}[!h]
       \centering
@@ -537,13 +536,13 @@ Email: michael.wurm@students.fh-hagenberg.at}
   An FM signal that is received by an antenna needs to be demodulated, in order to decode its actual data content.
   The radio-frequency antenna signal usually needs to be amplified, bandpass-filtered, and down-converted to baseband, using subsampling and quadrature-mixing, or similar strategies.
   This part of the signal processing chain is assumed to be working correctly and is out of the scope of this paper.
-  The FM signal that is evaluated here, is assumed to be a quadrature-mixed signal in baseband, which means that inphase and quadrature (I/Q-) signals are available.
+  The FM signal that is evaluated here is assumed to be a quadrature-mixed signal in baseband, which means that inphase and quadrature (I/Q) signals are available.
 
   %TODO: show downconversion path (maybe as a figure?)
   %https://www.veron.nl/wp-content/uploads/2014/01/FmDemodulator.pdf
 
   In the following sections, two digital FM demodulator variants are described.
-  In general, a FM demodulator serves the purpose to transform FM to AM, so that after the FM demodulator regular AM signal processing techniques can be applied.
+  In general, an FM demodulator serves the purpose to transform FM to AM, so that AM signal processing techniques can be applied afterwards.
   % TODO: add img/discrimination_method_bd2.png here
 
   \subsection{Frequency Discriminator}
@@ -558,8 +557,7 @@ Email: michael.wurm@students.fh-hagenberg.at}
       \label{fig_bd_freq_discriminator}
     \end{figure}
 
-    This type of demodulator converts the FM signal into an AM signal.
-    However, this signal still contains an FM content.
+    This type of demodulator converts the FM signal into an AM signal, but still leaves an FM content.
     The transformation that happens here can be expressed in a formula, by simply differentiating Eq.\ref{equ_fm_func}.
     This operation, with simple algebraic transformations, results in
     \begin{equation}
@@ -573,11 +571,11 @@ Email: michael.wurm@students.fh-hagenberg.at}
     \end{equation}
     where $\Delta t$ is the inverse of the sample frequency.
 
-    It can clearly be seen, that the signal now contains an AM and an FM content.
+    It can clearly be seen, that the differentiated signal consist of an AM and an FM content.
     The FM part is described by the sine function.
     More importantly the AM part, which resembles the envelope of the signal, is described by the term within the square brackets.
     The resulting signal in time-domain is shown in the top left diagram in Fig.\ref{fig_time_domain_envelope_detect}.
-    This signal needs to be fed into an envelope detector, as shown in Fig.\ref{fig_bd_freq_discriminator}.
+    This signal needs to be fed into an envelope detector, as seen in Fig.\ref{fig_bd_freq_discriminator}.
     It extracts the envelope by removing the high frequency portion.
     The method implemented here is one of the most simple ones and is usually referred to as 'Asynchronous Half-Wave Envelope Detector'\cite{ref_envelope_detector}.
     It consists of a thresholding unit to remove negative values and a conventional lowpass filter.
@@ -585,7 +583,7 @@ Email: michael.wurm@students.fh-hagenberg.at}
     The lowpass' cutoff frequency needs to be adapted to the envelope signals' maximum frequency, since it needs to be able to follow the signal, but also sufficiently smooth out the rectified signal.
     Different methods may be implemented for the envelope detector.
     For example, an 'Asynchronous Full-Wave Envelope Detector' can be used.
-    Therefore, the mentioned method only needs to swap the thresholding unit with an unit that calculates an absolut value.
+    Therefore, the previous method only needs to swap the thresholding unit with an unit that calculates an absolut value.
     In that architecture, a full-wave rectification is performed on the signal, which significantly improves the envelope detection accuracy \cite{ref_envelope_detector}.
     The envelope is followed more exactly, because of the higher power that is available in the signal, since the entire signal is taken into account, and not only the positive half, as in the previous method.
 
@@ -599,7 +597,7 @@ Email: michael.wurm@students.fh-hagenberg.at}
     An important requirement for the differentiator is, that the input signal is of a constant amplitude \cite{ref_schnyder_haller}.
     The transmitted signal is subject to random additive noise on the transmission channel.
     The differentiator would deliver wrong results because of this noise, when substracting two consecutive samples, as described in Eq.\ref{equ_differentiator_two_samples}.
-    To achieve this, the complex signal $s(t)$ can be normalized to a value of one.
+    To achieve a constant amplitude, the complex signal $s(t)$ can be normalized to a value of one.
     \begin{equation}
       s_{norm} = \frac{s}{|s|} = \frac{A(n)\ e^{j\phi_{FM}(n)}}{|{A(n)\ e^{j\phi_{FM}(n)}|}} = e^{j\phi_{FM}(n)} = |1|
     \end{equation}
@@ -625,13 +623,11 @@ Email: michael.wurm@students.fh-hagenberg.at}
   \label{demod_mono}
     The first part of the channel frequency spectrum is the summation signal of the left and right audio channel.
     A mono receiver can thus simply replay the so-called multiplex signal, which is generated by the FM demodulation described in chapter \ref{sec_fm_sig_demod}. The 19 kHz pilot tone will not be audible by most people, because it is outside of the range of a human ear. Besides that, any used speaker may also be unable to produce a frequency in this range. This explanation applies to several higher frequency components in the spectrum as well.
-    In order to be able to decimate the signal to a lower samplerate, for example to store it in a file with 44.1 kHz samplerate, a lowpass needs to be inserted before the decimation and output.
-    The lowpass' cutoff frequency needs to be configured after 15 kHz.
-    The filter needs to reach a sufficient attenuation before the pilot tone at 19 kHz.
+    In case the multiplex signal should be stored it in a file with 44.1 kHz samplerate, a lowpass with a cutoff frequency of 15 kHz and sufficient attenutation before 19 kHz needs to be inserted before the decimation and file output.
 
   \subsection{Stereo}
     Demodulating an FM channel to recover a stereo audio signal requires a more sophisticated approach.
-    In the channel frequency spectrum, there are two main parts of the audio signal - the sum and difference of the left and right channel audio signals.
+    In the channel frequency spectrum, there are two main parts of the audio signal - the sum and difference of the left and right audio channel signals.
     To combine these to a stereo signal, the following equations can be applied.
     \begin{equation*}
       L = (L+R) + (L-R) = (2)L
@@ -641,7 +637,7 @@ Email: michael.wurm@students.fh-hagenberg.at}
       \label{equ_stereo_from_sum_diff}
     \end{equation}
 
-    The block diagram in Fig.\ref{fig_bd_stereo_demod} illustrates the signal processing chain for stereo audio. In the block diagram, $x(t)$ represents the multiplex signal, which comes from the FM demodulator. Signals $x_l(t)$ and $x_r(t)$ describe the left and right audio signal, respectively.
+    The block diagram in Fig.\ref{fig_bd_stereo_demod} illustrates the signal processing chain for stereo audio. In the block diagram, $x(t)$ represents the multiplex signal from the FM demodulator. Signals $x_l(t)$ and $x_r(t)$ describe the left and right audio signal, respectively.
 
     \begin{figure}[!h]
       \centering
@@ -658,11 +654,11 @@ Email: michael.wurm@students.fh-hagenberg.at}
     It is then modulated to baseband by the previously generated 38 kHz subcarrier.
     Subsequently, a lowpass limits the signal to the audio signal bandwidth of 15 kHz.
     The lower branch lowpass-filters the summation signal.
-    The rightmost part in the diagram performs the combination of summation and difference signals, according to the Eq.\ref{equ_stereo_from_sum_diff}.
+    The rightmost part in the diagram performs the combination of summation and difference signals, according to Eq.\ref{equ_stereo_from_sum_diff}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Matlab Simulation}
-  Matlab is used to simulate an FM demodulator.
+  Matlab is used to simulate an FM receiver.
   The objective is to demodulate a previously recorded data stream, so that one can listen to a mono audio signal.
   Several steps that are required therefore are described briefly in the following sections.
 
@@ -670,7 +666,7 @@ Email: michael.wurm@students.fh-hagenberg.at}
   %       HF => abs() => discriminator => AM demod => audio
 
   \subsection{Data Acquisition}
-    A data stream is recorded, using a cheap RTL-SDR dongle.
+    A data stream is recorded, using a low priced RTL-SDR dongle.
     The device can be plugged into USB on a host computer.
     It features an RTL2832U chipset.
     In combination with a host software, this basically assembles a software defined radio (SDR).
@@ -681,28 +677,28 @@ Email: michael.wurm@students.fh-hagenberg.at}
     The aim is to listen to the Austrian radio station OE3, which is broadcasted at a center frequency of 98.1 MHz in the region of Saalfelden.
 
     \subsubsection{Recorded spectrum}
-      The file was recorded at a center frequency $f_c$ of 98 MHz, while the desired station is located at 98.1 MHz.
+      The file was recorded at a center frequency of 98 MHz, while the desired station is located at 98.1 MHz.
       This means, that the recorded spectrum is allocated at an intermediate frequency (IF) of 0.1 MHz.
 
     \subsubsection{Modulate to FM channel center frequency}
-      Because the signal needs to be in baseband, to be able to demodulate it, the spectrum needs to be shifted by 0.1 MHz.
-      This is achieved by modulating with a complex signal with exactly that frequency.
+      Because the signal needs to be in baseband to be able to demodulate it, the spectrum needs to be shifted by 0.1 MHz.
+      This is achieved by modulating with a complex signal with that exact frequency.
 
     \subsubsection{Decimation}
       The signal still has a sample rate of 1 MHz at this point.
-      Keeping in mind the Nyquist theorem, and a single channels' bandwith of only up to 100 kHz, the sample rate therefore needs to be at least 200 kHz.
+      Keeping in mind the Nyquist theorem, and a single channels' bandwith of only up to 100 kHz, the sample rate therefore only needs to be at least 200 kHz.
       However, the final hardware implementation is targeting an FPGA, where processing of samples at 1 MHz is easily achievable. Therefore, a decimation is not done at this point.
     \subsubsection{Demodulation}
       Demodulation is done by normalizing the signal amplitude to one.
-      A FIR filter is used as a differentiator.
-      Envelope detection is omitted for now, for simplicity and because of the mentioned effects in section \ref{demod_mono}.
+      Then, an FIR filter is used as a differentiator.
+      Envelope detection is omitted for now, for simplicity and because of the mentioned 'natural' filter effects in section \ref{demod_mono}.
     \subsubsection{Verification}
-      Verification of correct functionality is only done subjectively, by listening to the demodulated audio signal via the PCs' soundcard.
+      The correct functionality is only verified subjectively, by listening to the demodulated audio signal via the PCs' soundcard.
       The OE3 stations' signal can be heard clearly.
 
 \section{Conclusion}
-  FM is a well-known technology, that is established in anyones daily life.
-  Looking at it from a signal processing perspective is an interesting task, since it requires many principles of digital signal processing, but is still comparably simple to demodulate.
+  FM is a well-known technology, that is established in peoples' daily lifes.
+  Looking at it from a signal processing perspective is an interesting task, since it requires many principles of digital signal processing, but is still comparably simple to demodulate and implement.
 
   % An example of a floating figure using the graphicx package.
 % Note that \label must occur AFTER (or within) \caption.
@@ -833,19 +829,28 @@ Email: michael.wurm@students.fh-hagenberg.at}
 % set second argument of \begin to the number of references
 % (used to reserve space for the reference number labels box)
 \begin{thebibliography}{1}
-  \bibitem{itu_regulations}
+  \bibitem{ref_itu_regulations}
     International Telecommunication Union (ITU), \emph{Radio Regulation Articles, Edition of 2020}, Vol. I-EA5
 
-  \bibitem{ebu_fm_modulators_in_europe_power_regulations}
+  \bibitem{ref_ebu_fm_modulators_in_europe_power_regulations}
     European Broadcasting Union (EBU), \emph{Low-power FM modulators in Europe}, EBU-R120-2007, \url{https://tech.ebu.ch/docs/r/r120.pdf}, pg.5
 
-  \bibitem{fm_broadcast_tutorial_and_basics}
+  \bibitem{ref_eu_commision_radio_spectrum}
+    European Commision, \emph{Commission Decision on harmonisation of the radio spectrum for use by short-range devices}, 13.08.2019, 2006/771/EC, \url{https://eur-lex.europa.eu/eli/dec/2006/771(2)/2019-08-13}, pg.11
+
+  \bibitem{ref_austria_rundfunkgesetz_2006}
+    Bundesministerium für Verkehr, Innovation und Technologie, \emph{Frequenznutzungsverordnung 2013 - FNV 2013}, BGBl. II Nr. 63/2014, Anlage 2, \url{https://www.ris.bka.gv.at/Dokumente/Bundesnormen/NOR40219692/II_390_2016_Anlage_2.pdf}, pg.99
+
+  \bibitem{ref_rohde_u_schwarz}
+  Rohde\&Schwarz, \emph{Messungen an FM-Sendern für Abnahme, Inbetriebnahme oder Wartung}, \url{https://cdn.rohde-schwarz.com/pws/dl_downloads/dl_application/application_notes/7bm105/7BM105_0D.pdf}, opened Dec. 12th, 2020
+
+  \bibitem{ref_fm_broadcast_tutorial_and_basics}
     Electronics Notes, \emph{Broadcast VHF FM Tutorial \& Basics}, \url{https://www.electronics-notes.com/articles/audio-video/broadcast-audio/vhf-fm-frequency-modulation-basics.php}, opened Dec. 10th, 2020
 
-  \bibitem{FM_Maths_Info_1}
+  \bibitem{ref_FM_Maths_Info_1}
     \url{https://fas.org/man/dod-101/navy/docs/es310/FM.htm}, opened on Dec. 12th, 2020
 
-  \bibitem{FMMaths2}
+  \bibitem{ref_FMMaths2}
     \url{https://www.tutorialspoint.com/analog_communication/analog_communication_angle_modulation.htm}, opened on Dec. 12th, 2020
 
   \bibitem{ref_fig_channel_freqs}
