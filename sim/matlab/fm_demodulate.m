@@ -35,11 +35,11 @@ title('Periodic spectrum')
 %% Plot closer around the recorded center frequency
 plot_FFT_IQ(y,1,range_s*fs,fs,fc);
 
-len_section = 200000;
-n_overlap   = 1500;
+len_section = round( length(y)/100   ); % calculate 100 sections
+n_overlap   = round( len_section/100 ); % overlap 1%
 
 figure();
-spectrogram(y,len_section,n_overlap,(-1.25E6:.02E6:1.25E6),fs,'yaxis');
+spectrogram(y,len_section,n_overlap,(-1.25e6:.02e6:1.25e6),fs,'yaxis');
 title('Power Spectrum')
 
 %% Shift the recording from IF down to baseband
@@ -49,24 +49,17 @@ y_shifted = y .* exp(-1j*2*pi*delta_f*t)';
 
 plot_FFT_IQ(y_shifted,1,range_s*fs,fs,fc_oe3);
 
-%% Decimate (low-pass filter + decimate)
-dec_factor = 4;
-fs_dec = fs / dec_factor;
-y_dec = decimate(y_shifted,dec_factor,'fir');
-
-plot_FFT_IQ(y_dec,1,10*range_s*fs_dec,fs_dec,fc_oe3,'Spectrum of decimated signal');
-
 %% Demodulate FM
-y_fm_demod = FM_IQ_Demod(y_dec);
-plot_FFT_IQ(y_fm_demod,1,20*range_s*fs_dec,fs_dec,0,'Spectrum of demodulated signal');
+y_fm_demod = FM_IQ_Demod(y_shifted);
+plot_FFT_IQ(y_fm_demod,1,20*range_s*fs,fs,0,'Spectrum of demodulated signal');
 
 %% Decimate again for replay on PCs' audio sound card
-dec_factor_audio = 10;
-fs_dec_audio = fs_dec / dec_factor_audio;
+dec_factor_audio = 20;
+fs_dec_audio = fs / dec_factor_audio;
 
 y_fm_demod_dec = decimate(y_fm_demod,dec_factor_audio,'fir');
 
-plot_FFT_IQ(y_fm_demod_dec,1,10*range_s*fs_dec_audio,fs_dec_audio,0,'Spectrum of demod+dec signal');
+plot_FFT_IQ(y_fm_demod_dec,1,20*range_s*fs_dec_audio,fs_dec_audio,0,'Spectrum of demod+dec signal');
 
 sound(y_fm_demod_dec, fs_dec_audio);
 
