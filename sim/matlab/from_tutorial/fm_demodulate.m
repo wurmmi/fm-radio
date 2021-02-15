@@ -8,7 +8,7 @@
 %% Prepare environment
 clear; close all; clc;
 
-addpath(genpath('./helpers/auto-arrange-figs/'));
+addpath(genpath('../helpers/auto-arrange-figs/'));
 
 %% FM station info
 fc_oe3 = 98.1e6;
@@ -18,7 +18,7 @@ fc    = 98.0e6;
 fs    = 1e6;
 n_sec = 10;
 
-y = loadFile('fm_record.bin');
+y = loadFile('../recordings/fm_record.bin');
 
 assert(size(y,1) == n_sec*fs, ...
     'Recording is corrupted. Expected %d samples, but the file only contains %d.', ...
