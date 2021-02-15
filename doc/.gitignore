@@ -17,5 +17,3 @@
 *.run.xml
 *.synctex
 *.tps
-
-!img/*.pdf

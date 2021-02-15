@@ -2,7 +2,7 @@
 
 A master thesis project.
 
-The main focus is to compare key metrics of a FM Radio implementation in VHDL versus high-level synthesis (HLS).
+The main focus is to compare key metrics of an FM radio receiver implementation in VHDL versus high-level synthesis (HLS).
 
 This thesis and the accompanying project is being elaborated in the Master's degree programme "Embedded Systems Design" at the University of Applied Sciences Upper Austria, Campus Hagenberg.
 
