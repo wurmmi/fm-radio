@@ -17,6 +17,9 @@ fc_oe3 = 98.1e6;
 fs    = 1e6;
 n_sec = 1;
 
+% Options
+EnableTrafficInfoTrigger = false;
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Sender
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -47,16 +50,24 @@ audioDiffMod = audioDiff * 0.5; %TODO
 %% Radio Data Signal (RDS)
 % TODO
 
+%% Hinz-Triller (traffic info trigger)
+% TODO
+% https://de.wikipedia.org/wiki/Autofahrer-Rundfunk-Information#Hinz-Triller
+hinzTriller = 0;
+if EnableTrafficInfoTrigger
+    %TODO
+end
+
 %% FM channel
 % Sum up all signal parts
 
-fmChannel = audioData + pilotTone + audioDiffMod;
+fmChannel = audioData + pilotTone + audioDiffMod + hinzTriller;
 
 %% FM channel spectrum
 
+% FFT
 
-
-
+% Plot
 figure();
 
 
