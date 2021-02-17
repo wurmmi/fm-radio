@@ -13,7 +13,7 @@ addpath(genpath('./helpers/auto-arrange-figs/'));
 
 % Simulation Options
 EnableAudioReplay        = true;
-EnableTrafficInfoTrigger = false;
+EnableTrafficInfoTrigger = true;
 EnableAudioFromFile      = true;
 
 % Signal parameters
@@ -85,28 +85,31 @@ audioLRDiffMod = audioDiff .* carrier4Diff;
 % https://de.wikipedia.org/wiki/Autofahrer-Rundfunk-Information#Hinz-Triller
 hinz_triller = 0;
 if EnableTrafficInfoTrigger
-    fc_hinz = 2350;
-    f_deviation = 123;
-
-    hinz_tone = sin(2*pi*f_deviation/fs*tn);
+    fc_hinz             = 2350;
+    f_deviation         = 123;
+    hinz_duration_on_s  = 1.2;
+    hinz_duration_off_s = 0.5;
     
+    % Create the 123 Hz Hinz Triller tone and integrate it (for FM modulation)
+    t_hinz = (0:1:min(hinz_duration_off_s,n_sec)*fs-1)';
+    hinz_tone = sin(2*pi*f_deviation/fs*t_hinz);
     hinz_tone_int = cumsum(hinz_tone)/fs;
-    hinz_triller = cos(2*pi*fc_hinz/fs*tn + (2*pi*f_deviation*hinz_tone_int));
-
-    %hinzTriller = fmmod(hinz_Tone, fc_hinz, fs, f_deviation);
-
+    
+    % FM modulation with zero padding at the end
+    hinz_triller = zeros(1,length(tn))';
+    hinz_triller(t_hinz+1) = cos(2*pi*fc_hinz/fs*t_hinz + (2*pi*f_deviation*hinz_tone_int));
+    
     if false
+        hinzTriller2 = fmmod(hinz_tone, fc_hinz, fs, f_deviation);
+        
         figure();
-        subplot(3,1,1);
-        plot(tn,hinz_carr);
-        ylabel('amplitude');xlabel('time index');title('Carrier signal');
-        subplot(3,1,2);
-        plot(tn,hinz_tone); hold on;
-        plot(tn,hinz_tone_int, 'r');
+        subplot(2,1,1);
+        plot(t_hinz,hinz_tone); hold on;
+        plot(t_hinz,hinz_tone_int, 'r');
         ylabel('amplitude');xlabel('time index');title('Modulating signal');
-        subplot(3,1,3);
+        subplot(2,1,2);
         plot(tn,hinz_triller,       'DisplayName','hinzTriller'); hold on;
-        plot(tn,hinzTriller2, 'r', 'DisplayName','hinzTriller2');
+        plot(t_hinz,hinzTriller2, 'r', 'DisplayName','hinzTriller2');
         legend();
         ylabel('amplitude');xlabel('time index');title('Frequency modulated signal');
     end
@@ -158,7 +161,7 @@ if ~exist(outputDir, 'dir')
     mkdir(outputDir)
 end
 
-figure('Name','Audio file time domain signal');
+fig0 = figure('Name','Audio file time domain signal');
 subplot(2,1,1);
 title('Audio file time domain signal');
 plot(tn/fs, audioDataL, 'r', 'DisplayName', 'audioDataL');
@@ -169,21 +172,23 @@ plot(tn/fs, audioDataR, 'g', 'DisplayName', 'audioDataR');
 grid on;
 legend();
 
-figure('Name','TX Time domain signal');
+fig1 = figure('Name','TX Time domain signal');
 grid on; hold on;
 plot(tn/fs, tx_fmChannel,  'b','DisplayName', 'Total');
 plot(tn/fs, audioData,     'r', 'DisplayName', 'audioData');
 plot(tn/fs, pilotTone,     'm', 'DisplayName', 'pilotTone');
 plot(tn/fs, audioLRDiffMod,'k', 'DisplayName', 'audioLRDiffMod');
-plot(tn/fs, hinz_triller,  'g', 'DisplayName', 'hinzTriller');
+if EnableTrafficInfoTrigger
+    plot(tn/fs, hinz_triller,  'g', 'DisplayName', 'hinzTriller');
+end
 title('Time domain signal');
 xlabel('time [s]');
 ylabel('amplitude');
 legend();
 xlim([0 inf]);
-saveas(gcf, outputDir + "tx_time_domain.png");
+saveas(fig1, outputDir + "tx_time_domain.png");
 
-figure('Name','FM channel spectrum (linear)');
+fig2 = figure('Name','FM channel spectrum (linear)');
 grid on; hold on;
 xline(19e3,'r--','19 kHz');
 xline(38e3,'r--','38 kHz');
@@ -194,7 +199,7 @@ title('FM channel spectrum (linear)');
 xlabel('frequency [Hz]');
 ylabel('magnitude');
 xlim([0 65e3]);
-saveas(gcf, outputDir + "tx_freq_domain.png");
+saveas(fig2, outputDir + "tx_freq_domain.png");
 
 
 %% Arrange all plots on the display
