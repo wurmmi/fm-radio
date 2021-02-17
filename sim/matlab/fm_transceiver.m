@@ -19,7 +19,8 @@ EnableAudioFromFile      = true;
 % Signal parameters
 n_sec = 2;  % 1.7s is "left channel, right channel"
 osr   = 20;
-fs    = 44.1e3 * osr;
+%fs    = 44.1e3 * osr;
+fs = 1e6;
 
 % Channel
 fc_oe3 = 98.1e6;
@@ -89,6 +90,7 @@ if EnableTrafficInfoTrigger
     f_deviation         = 123;
     hinz_duration_on_s  = 1.2;
     hinz_duration_off_s = 0.5;
+    hinz_amplitude      = 1/16;
     
     % Create the 123 Hz Hinz Triller tone and integrate it (for FM modulation)
     t_hinz = (0:1:min(hinz_duration_off_s,n_sec)*fs-1)';
@@ -98,6 +100,7 @@ if EnableTrafficInfoTrigger
     % FM modulation with zero padding at the end
     hinz_triller = zeros(1,length(tn))';
     hinz_triller(t_hinz+1) = cos(2*pi*fc_hinz/fs*t_hinz + (2*pi*f_deviation*hinz_tone_int));
+    hinz_triller = hinz_amplitude * hinz_triller;
     
     if false
         hinzTriller2 = fmmod(hinz_tone, fc_hinz, fs, f_deviation);
@@ -115,40 +118,66 @@ if EnableTrafficInfoTrigger
     end
 end
 
-%% FM channel
-% Sum up all signal parts
+%% Combine all signal parts
 
-tx_fmChannel = audioData + pilotTone + audioLRDiffMod + hinz_triller;
+tx_FM = audioData + pilotTone + audioLRDiffMod + hinz_triller;
 
 %% FM channel spectrum
 
 % FFT
 n_fft = 4096;
-fmChannelSpec = ( abs( fftshift( fft(tx_fmChannel,n_fft) )));
+fmChannelSpec = ( abs( fftshift( fft(tx_FM,n_fft) )));
 fft_freqs = (-n_fft/2:1:n_fft/2-1)*fs/n_fft;
 
 % Welch PSD over entire audio file
 welch_size  = 4096;
 n_overlap   = welch_size / 4;
 n_fft_welch = welch_size;
+window      = hanning(welch_size);
 
-window = hanning(welch_size);
-[psxx, psxx_f] = pwelch(tx_fmChannel, window, n_overlap, n_fft_welch, fs);
-psxx_dB = 10*log10(psxx);
+[psxx_tx, psxx_tx_f] = pwelch(tx_FM, window, n_overlap, n_fft_welch, fs);
+psxx_tx_dB = 10*log10(psxx_tx);
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Channel
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TODO: (up-convert to RF, AWGN, down-convert from RF)
+
+tx_FM_channel = tx_FM;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Receiver
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%% Downsample
+
+fs_rx = 200e3;
+osr_rx = fs/fs_rx;
+rx_FM = resample(tx_FM_channel, 1, osr_rx);
+
+%% Filter the mono part
+
+% Load filter
+filter_lp_mono = load('filters/lowpass_mono.mat');
+
+% Filter
+audio_mono = filter(filter_lp_mono.Num,1,rx_FM);
 
 
+
+[psxx_rx_mono, psxx_rx_mono_f] = pwelch(audio_mono, window, n_overlap, n_fft_welch, fs_rx);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Audio replay
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if EnableAudioReplay
-    audioReplay = resample(tx_fmChannel, 1, osr);
+    fs_audioReplay = 40e3;
+    osr_replay = fs_rx/fs_audioReplay;
     
-    fs_audioReplay = fs/osr;
-    sound(audioReplay,fs_audioReplay);
+    audioReplay = resample(rx_FM, 1, osr_replay);
+    
+    sound(audioReplay, fs_audioReplay);
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -161,7 +190,7 @@ if ~exist(outputDir, 'dir')
     mkdir(outputDir)
 end
 
-fig0 = figure('Name','Audio file time domain signal');
+fig_audio_time = figure('Name','Audio file time domain signal');
 subplot(2,1,1);
 title('Audio file time domain signal');
 plot(tn/fs, audioDataL, 'r', 'DisplayName', 'audioDataL');
@@ -172,35 +201,46 @@ plot(tn/fs, audioDataR, 'g', 'DisplayName', 'audioDataR');
 grid on;
 legend();
 
-fig1 = figure('Name','TX Time domain signal');
+fig_tx_time = figure('Name','Tx time domain signal');
 grid on; hold on;
-plot(tn/fs, tx_fmChannel,  'b','DisplayName', 'Total');
+plot(tn/fs, tx_FM,  'b','DisplayName', 'Total');
 plot(tn/fs, audioData,     'r', 'DisplayName', 'audioData');
 plot(tn/fs, pilotTone,     'm', 'DisplayName', 'pilotTone');
 plot(tn/fs, audioLRDiffMod,'k', 'DisplayName', 'audioLRDiffMod');
 if EnableTrafficInfoTrigger
     plot(tn/fs, hinz_triller,  'g', 'DisplayName', 'hinzTriller');
 end
-title('Time domain signal');
+title('Tx time domain signal');
 xlabel('time [s]');
 ylabel('amplitude');
 legend();
 xlim([0 inf]);
-saveas(fig1, outputDir + "tx_time_domain.png");
+saveas(fig_tx_time, outputDir + "tx_time_domain.png");
 
-fig2 = figure('Name','FM channel spectrum (linear)');
+fig_tx_spec = figure('Name','Tx channel spectrum (linear)');
 grid on; hold on;
 xline(19e3,'r--','19 kHz');
 xline(38e3,'r--','38 kHz');
 xline(57e3,'r--','57 kHz');
 %plot(fft_freqs, fmChannelSpec, 'k--', 'DisplayName', 'FFT');
-plot(psxx_f, psxx,             'b', 'DisplayName', 'Welch PSD');
-title('FM channel spectrum (linear)');
+plot(psxx_tx_f, psxx_tx,             'b', 'DisplayName', 'Welch PSD');
+title('Tx FM channel spectrum (linear)');
 xlabel('frequency [Hz]');
 ylabel('magnitude');
 xlim([0 65e3]);
-saveas(fig2, outputDir + "tx_freq_domain.png");
+saveas(fig_tx_spec, outputDir + "tx_freq_domain.png");
 
+fig_rx_spec = figure('Name','Rx channel spectrum (linear)');
+grid on; hold on;
+xline(19e3,'r--','19 kHz');
+xline(38e3,'r--','38 kHz');
+xline(57e3,'r--','57 kHz');
+plot(psxx_rx_mono_f, psxx_rx_mono,             'b', 'DisplayName', 'Welch PSD');
+title('Rx FM channel spectrum (linear)');
+xlabel('frequency [Hz]');
+ylabel('magnitude');
+xlim([0 65e3]);
+saveas(fig_rx_spec, outputDir + "tx_freq_domain.png");
 
 %% Arrange all plots on the display
 autoArrangeFigures(2,2,1);
