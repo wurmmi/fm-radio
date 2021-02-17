@@ -82,6 +82,7 @@ audioLRDiffMod = audioDiff .* carrier4Diff;
 % TODO
 
 %% Hinz-Triller (traffic info trigger)
+
 % TODO
 % https://de.wikipedia.org/wiki/Autofahrer-Rundfunk-Information#Hinz-Triller
 hinz_triller = 0;
@@ -167,6 +168,10 @@ audio_mono = filter(filter_lp_mono.Num,1,rx_FM);
 
 [psxx_rx_mono, psxx_rx_mono_f] = pwelch(audio_mono, window, n_overlap, n_fft_welch, fs_rx);
 
+%% Combine received signal
+
+rx_audio = audio_mono;
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Audio replay
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -175,9 +180,10 @@ if EnableAudioReplay
     fs_audioReplay = 40e3;
     osr_replay = fs_rx/fs_audioReplay;
     
-    audioReplay = resample(rx_FM, 1, osr_replay);
+    rx_audioReplay = zeros(length(rx_audio)/osr_replay,2);
+    rx_audioReplay(:,1) = resample(rx_audio, 1, osr_replay);
     
-    sound(audioReplay, fs_audioReplay);
+    sound(rx_audioReplay, fs_audioReplay);
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -241,6 +247,7 @@ xlabel('frequency [Hz]');
 ylabel('magnitude');
 xlim([0 65e3]);
 saveas(fig_rx_spec, outputDir + "tx_freq_domain.png");
+
 
 %% Arrange all plots on the display
 autoArrangeFigures(2,2,1);
