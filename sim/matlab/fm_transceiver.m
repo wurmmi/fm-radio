@@ -17,7 +17,7 @@ EnableAudioReplay        = false;
 EnableAudioFromFile      = false;
 
 % Signal parameters
-n_sec = 0.1;
+n_sec = 2;
 osr   = 20;
 fs_Hz = 44.1e3 * osr;
 
@@ -29,32 +29,40 @@ fc_oe3_Hz = 98.1e6;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Audio stream data
-% TODO: read this from a file
-tn = 0:1:n_sec*fs_Hz-1;
 
 if EnableAudioFromFile
     fs_file = 44.1e3;
-    samples = [1, n_sec*fs_file];
-    [fileData,Fs] = audioread('./recordings/left-right-test.mp3', samples);
+    n_sec_offset = 0.15;
+    
+    [fileDataAll,Fs] = audioread('./recordings/left-right-test.mp3');
     if Fs ~= fs_file
         error("Unexpected sample frequency of file!");
     end
+    
+    % Select area of interest
+    fileData = fileDataAll(round(n_sec_offset*fs_file):round((n_sec_offset+n_sec)*fs_file)-1,:);
+    
+    % Upsample
+    fileData = resample(fileData, osr, 1);
+    
+    % Split/Combine left and right channel
     audioDataL = fileData(:,1);
     audioDataR = fileData(:,2);
     
     audioData = audioDataL + audioDataR;
+    
+    tn = (0:1:length(audioData)-1)';
 else
+    tn = (0:1:n_sec*fs_Hz-1)';
+
     audioFreqL_Hz = 400;
-    audioDataL    = 1 * sin(2*pi*audioFreqL_Hz/fs_Hz*tn)';
+    audioDataL    = 1 * sin(2*pi*audioFreqL_Hz/fs_Hz*tn);
     
     audioFreqR_Hz = 500;
-    audioDataR    = 1 * sin(2*pi*audioFreqR_Hz/fs_Hz*tn)';
+    audioDataR    = 1 * sin(2*pi*audioFreqR_Hz/fs_Hz*tn);
     
     audioData = audioDataL + audioDataR;
 end
-
-% Upsample
-audioData = resample(audioData, osr, 1);
 
 %% 19kHz pilot tone
 
@@ -87,15 +95,14 @@ tx_fmChannel = audioData + pilotTone + audioLRDiffMod + hinzTriller;
 
 %% FM channel spectrum
 
-% Downsample
-NDown = 1;
-tx_fmChannelDown = downsample(tx_fmChannel,NDown);
-
 % FFT
-Nfft = 4096*2;
-fmChannelSpec = ( abs( fftshift( fft(tx_fmChannelDown,Nfft) )));
+Nfft = 4096;
+fmChannelSpec = ( abs( fftshift( fft(tx_fmChannel,Nfft) )));
+fft_freqs = (-Nfft/2:1:Nfft/2-1)*fs_Hz/Nfft;
 
-fft_freqs = (-Nfft/2:1:Nfft/2-1)*fs_Hz/NDown/Nfft;
+% Welch PSD over entire audio file
+[psxx, psxx_f] = pwelch(tx_fmChannel, hanning(4096), 2048, 4096, fs_Hz);
+psxx_dB = 10*log10(psxx);
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -113,6 +120,17 @@ outputDir = "./matlab_output/";
 if ~exist(outputDir, 'dir')
     mkdir(outputDir)
 end
+
+figure('Name','Audio file time domain signal');
+subplot(2,1,1);
+title('Audio file time domain signal');
+plot(tn/fs_Hz, audioDataL, 'r', 'DisplayName', 'audioDataL');
+grid on;
+legend();
+subplot(2,1,2);
+plot(tn/fs_Hz, audioDataR, 'g', 'DisplayName', 'audioDataR');
+grid on;
+legend();
 
 figure('Name','TX Time domain signal');
 grid on; hold on;
@@ -132,7 +150,8 @@ grid on; hold on;
 xline(19e3,'r--','19 kHz');
 xline(38e3,'r--','38 kHz');
 xline(57e3,'r--','57 kHz');
-plot(fft_freqs, fmChannelSpec);
+%plot(fft_freqs, fmChannelSpec, 'k--', 'DisplayName', 'FFT');
+plot(psxx_f, psxx,           'b', 'DisplayName', 'Welch PSD');
 title('FM channel spectrum (linear)');
 xlabel('frequency [Hz]');
 ylabel('magnitude');
