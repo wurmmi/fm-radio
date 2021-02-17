@@ -12,8 +12,8 @@ addpath(genpath('./helpers/auto-arrange-figs/'));
 %% Settings
 
 % Simulation Options
-EnableTrafficInfoTrigger = true;
 EnableAudioReplay        = true;
+EnableTrafficInfoTrigger = false;
 EnableAudioFromFile      = true;
 
 % Signal parameters
@@ -83,37 +83,46 @@ audioLRDiffMod = audioDiff .* carrier4Diff;
 %% Hinz-Triller (traffic info trigger)
 % TODO
 % https://de.wikipedia.org/wiki/Autofahrer-Rundfunk-Information#Hinz-Triller
-hinzTriller = 0;
+hinz_triller = 0;
 if EnableTrafficInfoTrigger
     fc_hinz = 2350;
     f_deviation = 123;
 
-    modindex_fm = f_deviation/(fc_hinz + f_deviation);
+    hinz_tone = sin(2*pi*f_deviation/fs*tn);
+    
+    hinz_tone_int = cumsum(hinz_tone)/fs;
+    hinz_triller = cos(2*pi*fc_hinz/fs*tn + (2*pi*f_deviation*hinz_tone_int));
 
-    hinz_carr   = cos(2*pi*fc_hinz/fs*tn);
-    hinz_Tone   = sin(2*pi*f_deviation/fs*tn);
-    hinzTriller = cos(2*pi*fc_hinz/fs*tn + (modindex_fm.*hinz_Tone));
+    %hinzTriller = fmmod(hinz_Tone, fc_hinz, fs, f_deviation);
 
-    figure();
-    subplot(3,1,1);plot(tn,hinz_carr);
-    ylabel('amplitude');xlabel('time index');title('Carrier signal');
-    subplot(3,1,2);plot(tn,hinz_Tone);
-    ylabel('amplitude');xlabel('time index');title('Modulating signal');
-    subplot(3,1,3);plot(tn,hinzTriller);
-    ylabel('amplitude');xlabel('time index');title('Frequency modulated signal');
+    if false
+        figure();
+        subplot(3,1,1);
+        plot(tn,hinz_carr);
+        ylabel('amplitude');xlabel('time index');title('Carrier signal');
+        subplot(3,1,2);
+        plot(tn,hinz_tone); hold on;
+        plot(tn,hinz_tone_int, 'r');
+        ylabel('amplitude');xlabel('time index');title('Modulating signal');
+        subplot(3,1,3);
+        plot(tn,hinz_triller,       'DisplayName','hinzTriller'); hold on;
+        plot(tn,hinzTriller2, 'r', 'DisplayName','hinzTriller2');
+        legend();
+        ylabel('amplitude');xlabel('time index');title('Frequency modulated signal');
+    end
 end
 
 %% FM channel
 % Sum up all signal parts
 
-tx_fmChannel = audioData + pilotTone + audioLRDiffMod + hinzTriller;
+tx_fmChannel = audioData + pilotTone + audioLRDiffMod + hinz_triller;
 
 %% FM channel spectrum
 
 % FFT
-Nfft = 4096;
-fmChannelSpec = ( abs( fftshift( fft(tx_fmChannel,Nfft) )));
-fft_freqs = (-Nfft/2:1:Nfft/2-1)*fs/Nfft;
+n_fft = 4096;
+fmChannelSpec = ( abs( fftshift( fft(tx_fmChannel,n_fft) )));
+fft_freqs = (-n_fft/2:1:n_fft/2-1)*fs/n_fft;
 
 % Welch PSD over entire audio file
 welch_size  = 4096;
@@ -166,7 +175,7 @@ plot(tn/fs, tx_fmChannel,  'b','DisplayName', 'Total');
 plot(tn/fs, audioData,     'r', 'DisplayName', 'audioData');
 plot(tn/fs, pilotTone,     'm', 'DisplayName', 'pilotTone');
 plot(tn/fs, audioLRDiffMod,'k', 'DisplayName', 'audioLRDiffMod');
-plot(tn/fs, hinzTriller,   'g', 'DisplayName', 'hinzTriller');
+plot(tn/fs, hinz_triller,  'g', 'DisplayName', 'hinzTriller');
 title('Time domain signal');
 xlabel('time [s]');
 ylabel('amplitude');
