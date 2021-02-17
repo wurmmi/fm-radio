@@ -12,17 +12,17 @@ addpath(genpath('./helpers/auto-arrange-figs/'));
 %% Settings
 
 % Simulation Options
-EnableTrafficInfoTrigger = false;
-EnableAudioReplay        = false;
-EnableAudioFromFile      = false;
+EnableTrafficInfoTrigger = true;
+EnableAudioReplay        = true;
+EnableAudioFromFile      = true;
 
 % Signal parameters
-n_sec = 2;
+n_sec = 2;  % 1.7s is "left channel, right channel"
 osr   = 20;
-fs_Hz = 44.1e3 * osr;
+fs    = 44.1e3 * osr;
 
 % Channel
-fc_oe3_Hz = 98.1e6;
+fc_oe3 = 98.1e6;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Sender
@@ -53,28 +53,28 @@ if EnableAudioFromFile
     
     tn = (0:1:length(audioData)-1)';
 else
-    tn = (0:1:n_sec*fs_Hz-1)';
-
-    audioFreqL_Hz = 400;
-    audioDataL    = 1 * sin(2*pi*audioFreqL_Hz/fs_Hz*tn);
+    tn = (0:1:n_sec*fs-1)';
     
-    audioFreqR_Hz = 500;
-    audioDataR    = 1 * sin(2*pi*audioFreqR_Hz/fs_Hz*tn);
+    audioFreqL = 400;
+    audioDataL    = 1 * sin(2*pi*audioFreqL/fs*tn);
+    
+    audioFreqR = 500;
+    audioDataR    = 1 * sin(2*pi*audioFreqR/fs*tn);
     
     audioData = audioDataL + audioDataR;
 end
 
 %% 19kHz pilot tone
 
-pilotFreq_Hz = 19000;
-pilotTone = 0.25 * sin(2*pi*pilotFreq_Hz/fs_Hz*tn);
+pilotFreq = 19000;
+pilotTone = 0.25 * sin(2*pi*pilotFreq/fs*tn);
 
 %% Difference signal (for stereo)
 
 audioDiff = audioDataL - audioDataR;
 
 % Modulate it to 38 kHz
-carrier4Diff = 1 * sin(2*pi*38e3/fs_Hz*tn);
+carrier4Diff = 1 * sin(2*pi*38e3/fs*tn);
 audioLRDiffMod = audioDiff .* carrier4Diff;
 
 %% Radio Data Signal (RDS)
@@ -85,7 +85,22 @@ audioLRDiffMod = audioDiff .* carrier4Diff;
 % https://de.wikipedia.org/wiki/Autofahrer-Rundfunk-Information#Hinz-Triller
 hinzTriller = 0;
 if EnableTrafficInfoTrigger
-    %TODO
+    fc_hinz = 2350;
+    f_deviation = 123;
+
+    modindex_fm = f_deviation/(fc_hinz + f_deviation);
+
+    hinz_carr   = cos(2*pi*fc_hinz/fs*tn);
+    hinz_Tone   = sin(2*pi*f_deviation/fs*tn);
+    hinzTriller = cos(2*pi*fc_hinz/fs*tn + (modindex_fm.*hinz_Tone));
+
+    figure();
+    subplot(3,1,1);plot(tn,hinz_carr);
+    ylabel('amplitude');xlabel('time index');title('Carrier signal');
+    subplot(3,1,2);plot(tn,hinz_Tone);
+    ylabel('amplitude');xlabel('time index');title('Modulating signal');
+    subplot(3,1,3);plot(tn,hinzTriller);
+    ylabel('amplitude');xlabel('time index');title('Frequency modulated signal');
 end
 
 %% FM channel
@@ -98,10 +113,15 @@ tx_fmChannel = audioData + pilotTone + audioLRDiffMod + hinzTriller;
 % FFT
 Nfft = 4096;
 fmChannelSpec = ( abs( fftshift( fft(tx_fmChannel,Nfft) )));
-fft_freqs = (-Nfft/2:1:Nfft/2-1)*fs_Hz/Nfft;
+fft_freqs = (-Nfft/2:1:Nfft/2-1)*fs/Nfft;
 
 % Welch PSD over entire audio file
-[psxx, psxx_f] = pwelch(tx_fmChannel, hanning(4096), 2048, 4096, fs_Hz);
+welch_size  = 4096;
+n_overlap   = welch_size / 4;
+n_fft_welch = welch_size;
+
+window = hanning(welch_size);
+[psxx, psxx_f] = pwelch(tx_fmChannel, window, n_overlap, n_fft_welch, fs);
 psxx_dB = 10*log10(psxx);
 
 
@@ -110,6 +130,14 @@ psxx_dB = 10*log10(psxx);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+
+
+if EnableAudioReplay
+    audioReplay = resample(tx_fmChannel, 1, osr);
+    
+    fs_audioReplay = fs/osr;
+    sound(audioReplay,fs_audioReplay);
+end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Analysis
@@ -124,20 +152,21 @@ end
 figure('Name','Audio file time domain signal');
 subplot(2,1,1);
 title('Audio file time domain signal');
-plot(tn/fs_Hz, audioDataL, 'r', 'DisplayName', 'audioDataL');
+plot(tn/fs, audioDataL, 'r', 'DisplayName', 'audioDataL');
 grid on;
 legend();
 subplot(2,1,2);
-plot(tn/fs_Hz, audioDataR, 'g', 'DisplayName', 'audioDataR');
+plot(tn/fs, audioDataR, 'g', 'DisplayName', 'audioDataR');
 grid on;
 legend();
 
 figure('Name','TX Time domain signal');
 grid on; hold on;
-plot(tn/fs_Hz, audioData,     'r', 'DisplayName', 'audioData');
-plot(tn/fs_Hz, pilotTone,     'm', 'DisplayName', 'pilotTone');
-plot(tn/fs_Hz, audioLRDiffMod,'k', 'DisplayName', 'audioLRDiffMod');
-plot(tn/fs_Hz, tx_fmChannel,  'b','DisplayName', 'Total');
+plot(tn/fs, tx_fmChannel,  'b','DisplayName', 'Total');
+plot(tn/fs, audioData,     'r', 'DisplayName', 'audioData');
+plot(tn/fs, pilotTone,     'm', 'DisplayName', 'pilotTone');
+plot(tn/fs, audioLRDiffMod,'k', 'DisplayName', 'audioLRDiffMod');
+plot(tn/fs, hinzTriller,   'g', 'DisplayName', 'hinzTriller');
 title('Time domain signal');
 xlabel('time [s]');
 ylabel('amplitude');
@@ -151,7 +180,7 @@ xline(19e3,'r--','19 kHz');
 xline(38e3,'r--','38 kHz');
 xline(57e3,'r--','57 kHz');
 %plot(fft_freqs, fmChannelSpec, 'k--', 'DisplayName', 'FFT');
-plot(psxx_f, psxx,           'b', 'DisplayName', 'Welch PSD');
+plot(psxx_f, psxx,             'b', 'DisplayName', 'Welch PSD');
 title('FM channel spectrum (linear)');
 xlabel('frequency [Hz]');
 ylabel('magnitude');
