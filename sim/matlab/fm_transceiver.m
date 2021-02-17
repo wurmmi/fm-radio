@@ -158,19 +158,34 @@ rx_FM = resample(tx_FM_channel, 1, osr_rx);
 
 %% Filter the mono part
 
-% Load filter
+% Load lowpass filter
 filter_lp_mono = load('filters/lowpass_mono.mat');
 
 % Filter
-audio_mono = filter(filter_lp_mono.Num,1,rx_FM);
+rx_audio_mono = filter(filter_lp_mono.Num,1,rx_FM);
 
 
+%% Filter the LR-diff-part
 
-[psxx_rx_mono, psxx_rx_mono_f] = pwelch(audio_mono, window, n_overlap, n_fft_welch, fs_rx);
+% Load bandpass filter 
+
+% Filter
+
+% Modulate down to baseband
+% (create 38kHz carrier and multiply)
+
+% Filter (lowpass 15kHz)
+
+rx_audio_diff = 0;
+
+%% Rx Analysis
+[psxx_rx_mono, psxx_rx_mono_f] = pwelch(rx_audio_mono, window, n_overlap, n_fft_welch, fs_rx);
 
 %% Combine received signal
+% L = (L+R) + (L-R) = (2)L
+% R = (L+R) - (L-R) = (2)R
 
-rx_audio = audio_mono;
+rx_audio = rx_audio_mono + rx_audio_diff;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Audio replay
