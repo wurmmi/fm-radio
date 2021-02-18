@@ -13,14 +13,13 @@ addpath(genpath('./helpers/auto-arrange-figs/'));
 
 % Simulation Options
 EnableAudioReplay        = true;
-EnableTrafficInfoTrigger = true;
+EnableTrafficInfoTrigger = false;
 EnableAudioFromFile      = true;
 
 % Signal parameters
-n_sec = 2;  % 1.7s is "left channel, right channel"
-osr   = 20;
-%fs    = 44.1e3 * osr;
-fs = 1e6;
+n_sec = 1.7;  % 1.7s is "left channel, right channel"
+osr   = 22;
+fs    = 44.1e3 * osr;
 
 % Channel
 fc_oe3 = 98.1e6;
@@ -152,7 +151,7 @@ tx_FM_channel = tx_FM;
 
 %% Downsample
 
-fs_rx = 200e3;
+fs_rx = fs; %TODO: reduce sample rate here!!
 osr_rx = fs/fs_rx;
 rx_FM = resample(tx_FM_channel, 1, osr_rx);
 
@@ -171,20 +170,24 @@ rx_audio_mono = filter(filter_lp_mono.Num,1,rx_FM);
 filter_bp_lrdiff = load('filters/bandpass_lrdiff.mat');
 
 % Filter (Bandpass 23k..53kHz)
-rx_audio_lrdiff_0 = filter(filter_bp_lrdiff.Num,1, rx_FM);
+rx_audio_lrdiff_bpfilt = filter(filter_bp_lrdiff.Num,1, rx_FM);
 
 % Modulate down to baseband
-% (create 38kHz carrier and multiply)
-tnRx = (0:1:length(rx_audio_lrdiff_0)-1)';
+tnRx = (0:1:length(rx_audio_lrdiff_bpfilt)-1)';
 carrier38kHzRx = sin(2*pi*38e3/fs_rx*tnRx);
-rx_audio_lrdiff = rx_audio_lrdiff_0 .* carrier38kHzRx;
+rx_audio_lrdiff_mod = rx_audio_lrdiff_bpfilt .* carrier38kHzRx;
 
 % Filter (lowpass 15kHz)
-rx_audio_lrdiff = filter(filter_lp_mono.Num,1, rx_audio_lrdiff);
+rx_audio_lrdiff = filter(filter_lp_mono.Num,1, rx_audio_lrdiff_mod);
+
+% TODO: where does this come from?? Factor 2 = ~3 dB
+scalefactor = 2.25;
+rx_audio_lrdiff = rx_audio_lrdiff * scalefactor;
 
 %% Rx Analysis
 [psxx_rx_mono, psxx_rx_mono_f] = pwelch(rx_audio_mono, window, n_overlap, n_fft_welch, fs_rx);
-[psxx_rx_lrdiff_0, psxx_rx_lrdiff_0_f] = pwelch(rx_audio_lrdiff_0, window, n_overlap, n_fft_welch, fs_rx);
+[psxx_rx_lrdiff_bpfilt, psxx_rx_lrdiff_bpfilt_f] = pwelch(rx_audio_lrdiff_bpfilt, window, n_overlap, n_fft_welch, fs_rx);
+[psxx_rx_lrdiff_mod, psxx_rx_lrdiff_mod_f] = pwelch(rx_audio_lrdiff_mod, window, n_overlap, n_fft_welch, fs_rx);
 [psxx_rx_lrdiff, psxx_rx_lrdiff_f] = pwelch(rx_audio_lrdiff, window, n_overlap, n_fft_welch, fs_rx);
 
 %% Combine received signal
@@ -192,21 +195,32 @@ rx_audio_lrdiff = filter(filter_lp_mono.Num,1, rx_audio_lrdiff);
 % R = (L+R) - (L-R) = (2)R
 % where (L+R) = mono, and (L-R) is lrdiff
 
+% Delay the mono signal to match the lrdiff signal
+% NOTE: The mono signal only needs to pass through a single LP.
+%       The lrdiff signal passed through a BP and a LP. Thus, it needs to
+%       be delayed by the BP's groupdelay, since the LP is the same.
+bp_groupdelay = filtord(filter_bp_lrdiff.Num)/2+1;
+
+% Compensate the group delay
+rx_audio_mono = [zeros(bp_groupdelay,1); rx_audio_mono(1:end-bp_groupdelay)];
+
 rx_audio_L = rx_audio_mono + rx_audio_lrdiff;
 rx_audio_R = rx_audio_mono - rx_audio_lrdiff;
-
-rx_audio = rx_audio_mono + rx_audio_lrdiff;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Audio replay
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if EnableAudioReplay
-    fs_audioReplay = 40e3;
+    fs_audioReplay = 44.1e3;
     osr_replay = fs_rx/fs_audioReplay;
     
-    rx_audioReplay = zeros(length(rx_audio)/osr_replay,2);
-    rx_audioReplay(:,1) = resample(rx_audio, 1, osr_replay);
+    % Create LR audio signal for output
+    rx_audioReplay = zeros(length(rx_audio_L),2);
+    rx_audioReplay(:,1) = rx_audio_L;
+    rx_audioReplay(:,2) = rx_audio_R;
+    
+    rx_audioReplay = resample(rx_audioReplay, 1, osr_replay);
     
     sound(rx_audioReplay, fs_audioReplay);
 end
@@ -222,40 +236,53 @@ if ~exist(outputDir, 'dir')
 end
 
 fig_audio_time = figure('Name','Audio file time domain signal');
-subplot(4,1,1);
-title('Audio file time domain signal');
+subplot(6,1,1);
 plot(tn/fs, audioDataL, 'r', 'DisplayName', 'audioDataL');
-grid on;
-legend();
-subplot(4,1,2);
+title('Audio file time domain signal');
+grid on; legend();
+subplot(6,1,2);
 plot(tn/fs, audioDataR, 'g', 'DisplayName', 'audioDataR');
-grid on;
-legend();
-subplot(4,1,3);
-title('Rx time domain signal');
+grid on; legend();
+subplot(6,1,3); hold on;
+plot(tnRx/fs_rx, rx_audio_lrdiff, 'b', 'DisplayName', 'rx\_audio\_lrdiff');
+grid on; legend();
+subplot(6,1,4);
+plot(tnRx/fs_rx, rx_audio_mono, 'b', 'DisplayName', 'rx\_audio\_mono');
+grid on; legend();
+subplot(6,1,5);
 plot(tnRx/fs_rx, rx_audio_L, 'r', 'DisplayName', 'rx\_audio\_L');
-grid on;
-legend();
-subplot(4,1,4);
+grid on; legend();
+subplot(6,1,6);
 plot(tnRx/fs_rx, rx_audio_R, 'g', 'DisplayName', 'rx\_audio\_R');
-grid on;
-legend();
+xlabel('time [s]');
+ylabel('amplitude');
+grid on; legend();
 
-fig_tx_time = figure('Name','Tx time domain signal');
+fig_adapt_grpdelay_time = figure('Name','Audio time domain signal (adapt group delay)');
 grid on; hold on;
-plot(tn/fs, tx_FM,  'b','DisplayName', 'Total');
-plot(tn/fs, audioData,     'r', 'DisplayName', 'audioData');
-plot(tn/fs, pilotTone,     'm', 'DisplayName', 'pilotTone');
-plot(tn/fs, audioLRDiffMod,'k', 'DisplayName', 'audioLRDiffMod');
-if EnableTrafficInfoTrigger
-    plot(tn/fs, hinz_triller,  'g', 'DisplayName', 'hinzTriller');
-end
-title('Tx time domain signal');
+plot(tnRx/fs_rx, rx_audio_mono, 'r', 'DisplayName', 'rx\_audio\_mono');
+plot(tnRx/fs_rx, rx_audio_lrdiff, 'b', 'DisplayName', 'rx\_audio\_lrdiff');
 xlabel('time [s]');
 ylabel('amplitude');
 legend();
-xlim([0 inf]);
-saveas(fig_tx_time, outputDir + "tx_time_domain.png");
+
+if false
+    fig_tx_time = figure('Name','Tx time domain signal');
+    grid on; hold on;
+    plot(tn/fs, tx_FM,  'b','DisplayName', 'Total');
+    plot(tn/fs, audioData,     'r', 'DisplayName', 'audioData');
+    plot(tn/fs, pilotTone,     'm', 'DisplayName', 'pilotTone');
+    plot(tn/fs, audioLRDiffMod,'k', 'DisplayName', 'audioLRDiffMod');
+    if EnableTrafficInfoTrigger
+        plot(tn/fs, hinz_triller,  'g', 'DisplayName', 'hinzTriller');
+    end
+    title('Tx time domain signal');
+    xlabel('time [s]');
+    ylabel('amplitude');
+    legend();
+    xlim([0 inf]);
+    saveas(fig_tx_time, outputDir + "tx_time_domain.png");
+end
 
 fig_tx_spec = figure('Name','Tx channel spectrum (linear)');
 grid on; hold on;
@@ -263,11 +290,13 @@ xline(19e3,'r--','19 kHz');
 xline(38e3,'r--','38 kHz');
 xline(57e3,'r--','57 kHz');
 %plot(fft_freqs, fmChannelSpec, 'k--', 'DisplayName', 'FFT');
-plot(psxx_tx_f, psxx_tx,             'b', 'DisplayName', 'Welch PSD');
+h0 = plot(psxx_tx_f, psxx_tx,             'b', 'DisplayName', 'Total');
+legend([h0]);
 title('Tx FM channel spectrum (linear)');
 xlabel('frequency [Hz]');
 ylabel('magnitude');
 xlim([0 65e3]);
+ylimits = ylim();
 saveas(fig_tx_spec, outputDir + "tx_freq_domain.png");
 
 fig_rx_spec = figure('Name','Rx channel spectrum (linear)');
@@ -275,13 +304,16 @@ grid on; hold on;
 xline(19e3,'r--','19 kHz');
 xline(38e3,'r--','38 kHz');
 xline(57e3,'r--','57 kHz');
-plot(psxx_rx_mono_f, psxx_rx_mono,             'b', 'DisplayName', 'Mono');
-plot(psxx_rx_lrdiff_0_f, psxx_rx_lrdiff_0,   'r', 'DisplayName', 'LR Diff bp filtered');
-plot(psxx_rx_lrdiff_f, psxx_rx_lrdiff,   'g', 'DisplayName', 'LR Diff BB');
+h0 = plot(psxx_rx_mono_f, psxx_rx_mono,         'b', 'DisplayName', 'Mono');
+h1 = plot(psxx_rx_lrdiff_bpfilt_f, psxx_rx_lrdiff_bpfilt, 'r', 'DisplayName', 'LR Diff bp filtered');
+h2 = plot(psxx_rx_lrdiff_mod_f, psxx_rx_lrdiff_mod, 'r--', 'DisplayName', 'LR Diff bp filtered and mod');
+h3 = plot(psxx_rx_lrdiff_f, psxx_rx_lrdiff,     'g', 'DisplayName', 'LR Diff BB');
 title('Rx FM channel spectrum (linear)');
 xlabel('frequency [Hz]');
 ylabel('magnitude');
 xlim([0 65e3]);
+ylim(ylimits);
+legend([h0,h1,h2,h3]);
 saveas(fig_rx_spec, outputDir + "tx_freq_domain.png");
 
 
