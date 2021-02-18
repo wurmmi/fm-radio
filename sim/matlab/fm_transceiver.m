@@ -56,10 +56,12 @@ else
     tn = (0:1:n_sec*fs-1)';
     
     audioFreqL = 400;
-    audioDataL    = 1 * sin(2*pi*audioFreqL/fs*tn);
+    audioDataL = 1 * sin(2*pi*audioFreqL/fs*tn);
+    audioDataL(round(end/2):end) = 0; % mute second half
     
-    audioFreqR = 500;
-    audioDataR    = 1 * sin(2*pi*audioFreqR/fs*tn);
+    audioFreqR = 400;
+    audioDataR = 1 * sin(2*pi*audioFreqR/fs*tn);
+    audioDataR(1:round(end/2)) = 0;   % mute first half
     
     audioData = audioDataL + audioDataR;
 end
@@ -81,9 +83,8 @@ audioLRDiffMod = audioDiff .* carrier38kHzTx;
 % TODO
 
 %% Hinz-Triller (traffic info trigger)
-
-% TODO
 % https://de.wikipedia.org/wiki/Autofahrer-Rundfunk-Information#Hinz-Triller
+
 hinz_triller = 0;
 if EnableTrafficInfoTrigger
     fc_hinz             = 2350;
@@ -97,25 +98,10 @@ if EnableTrafficInfoTrigger
     hinz_tone = sin(2*pi*f_deviation/fs*t_hinz);
     hinz_tone_int = cumsum(hinz_tone)/fs;
     
-    % FM modulation with zero padding at the end
+    % FM modulation (with zero padding at the end, to match signal duration)
     hinz_triller = zeros(1,length(tn))';
     hinz_triller(t_hinz+1) = cos(2*pi*fc_hinz/fs*t_hinz + (2*pi*f_deviation*hinz_tone_int));
     hinz_triller = hinz_amplitude * hinz_triller;
-    
-    if false
-        hinzTriller2 = fmmod(hinz_tone, fc_hinz, fs, f_deviation);
-        
-        figure();
-        subplot(2,1,1);
-        plot(t_hinz,hinz_tone); hold on;
-        plot(t_hinz,hinz_tone_int, 'r');
-        ylabel('amplitude');xlabel('time index');title('Modulating signal');
-        subplot(2,1,2);
-        plot(tn,hinz_triller,       'DisplayName','hinzTriller'); hold on;
-        plot(t_hinz,hinzTriller2, 'r', 'DisplayName','hinzTriller2');
-        legend();
-        ylabel('amplitude');xlabel('time index');title('Frequency modulated signal');
-    end
 end
 
 %% Combine all signal parts
@@ -181,14 +167,8 @@ rx_audio_lrdiff_mod = rx_audio_lrdiff_bpfilt .* carrier38kHzRx;
 rx_audio_lrdiff = filter(filter_lp_mono.Num,1, rx_audio_lrdiff_mod);
 
 % TODO: where does this come from?? Factor 2 = ~3 dB
-scalefactor = 2.25;
+scalefactor = 2.33;
 rx_audio_lrdiff = rx_audio_lrdiff * scalefactor;
-
-%% Rx Analysis
-[psxx_rx_mono, psxx_rx_mono_f] = pwelch(rx_audio_mono, window, n_overlap, n_fft_welch, fs_rx);
-[psxx_rx_lrdiff_bpfilt, psxx_rx_lrdiff_bpfilt_f] = pwelch(rx_audio_lrdiff_bpfilt, window, n_overlap, n_fft_welch, fs_rx);
-[psxx_rx_lrdiff_mod, psxx_rx_lrdiff_mod_f] = pwelch(rx_audio_lrdiff_mod, window, n_overlap, n_fft_welch, fs_rx);
-[psxx_rx_lrdiff, psxx_rx_lrdiff_f] = pwelch(rx_audio_lrdiff, window, n_overlap, n_fft_welch, fs_rx);
 
 %% Combine received signal
 % L = (L+R) + (L-R) = (2)L
@@ -234,6 +214,16 @@ outputDir = "./matlab_output/";
 if ~exist(outputDir, 'dir')
     mkdir(outputDir)
 end
+
+%% Calculations
+
+% Rx PSDs
+[psxx_rx_mono, psxx_rx_mono_f] = pwelch(rx_audio_mono, window, n_overlap, n_fft_welch, fs_rx);
+[psxx_rx_lrdiff_bpfilt, psxx_rx_lrdiff_bpfilt_f] = pwelch(rx_audio_lrdiff_bpfilt, window, n_overlap, n_fft_welch, fs_rx);
+[psxx_rx_lrdiff_mod, psxx_rx_lrdiff_mod_f] = pwelch(rx_audio_lrdiff_mod, window, n_overlap, n_fft_welch, fs_rx);
+[psxx_rx_lrdiff, psxx_rx_lrdiff_f] = pwelch(rx_audio_lrdiff, window, n_overlap, n_fft_welch, fs_rx);
+
+%% Plots
 
 fig_audio_time = figure('Name','Audio file time domain signal');
 subplot(6,1,1);
@@ -290,7 +280,7 @@ xline(19e3,'r--','19 kHz');
 xline(38e3,'r--','38 kHz');
 xline(57e3,'r--','57 kHz');
 %plot(fft_freqs, fmChannelSpec, 'k--', 'DisplayName', 'FFT');
-h0 = plot(psxx_tx_f, psxx_tx,             'b', 'DisplayName', 'Total');
+h0 = plot(psxx_tx_f, psxx_tx, 'b', 'DisplayName', 'Total');
 legend([h0]);
 title('Tx FM channel spectrum (linear)');
 xlabel('frequency [Hz]');
@@ -304,10 +294,10 @@ grid on; hold on;
 xline(19e3,'r--','19 kHz');
 xline(38e3,'r--','38 kHz');
 xline(57e3,'r--','57 kHz');
-h0 = plot(psxx_rx_mono_f, psxx_rx_mono,         'b', 'DisplayName', 'Mono');
-h1 = plot(psxx_rx_lrdiff_bpfilt_f, psxx_rx_lrdiff_bpfilt, 'r', 'DisplayName', 'LR Diff bp filtered');
-h2 = plot(psxx_rx_lrdiff_mod_f, psxx_rx_lrdiff_mod, 'r--', 'DisplayName', 'LR Diff bp filtered and mod');
-h3 = plot(psxx_rx_lrdiff_f, psxx_rx_lrdiff,     'g', 'DisplayName', 'LR Diff BB');
+h0 = plot(psxx_rx_mono_f, psxx_rx_mono,                   'b',  'DisplayName', 'Mono');
+h1 = plot(psxx_rx_lrdiff_bpfilt_f, psxx_rx_lrdiff_bpfilt, 'r--','DisplayName', 'LR Diff bp filtered');
+h2 = plot(psxx_rx_lrdiff_mod_f, psxx_rx_lrdiff_mod,       'r',  'DisplayName', 'LR Diff bp filtered and mod');
+h3 = plot(psxx_rx_lrdiff_f, psxx_rx_lrdiff,               'g',  'DisplayName', 'LR Diff BB');
 title('Rx FM channel spectrum (linear)');
 xlabel('frequency [Hz]');
 ylabel('magnitude');
