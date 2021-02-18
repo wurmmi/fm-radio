@@ -11,11 +11,11 @@ addpath(genpath('./helpers/auto-arrange-figs/'));
 
 %% Settings
 
-% Simulation Options
+% Simulation options
 EnableAudioReplay        = true;
 EnableTrafficInfoTrigger = false;
 EnableAudioFromFile      = true;
-EnableFilterAnalyzeGUI   = true;
+EnableFilterAnalyzeGUI   = false;
 
 % Signal parameters
 n_sec = 1.7;  % 1.7s is "left channel, right channel"
@@ -33,14 +33,14 @@ fc_oe3 = 98.1e6;
 
 if EnableAudioFromFile
     fs_file = 44.1e3;
-    n_sec_offset = 0.15;
     
-    [fileDataAll,Fs] = audioread('./recordings/left-right-test.mp3');
-    if Fs ~= fs_file
+    [fileDataAll,fileFsRead] = audioread('./recordings/left-right-test.mp3');
+    if fileFsRead ~= fs_file
         error("Unexpected sample frequency of file!");
     end
     
-    % Select area of interest
+    % Select area of interest (skip silence at beginning of file)
+    n_sec_offset = 0.15; 
     fileData = fileDataAll(round(n_sec_offset*fs_file):round((n_sec_offset+n_sec)*fs_file)-1,:);
     
     % Upsample
@@ -122,11 +122,12 @@ tx_FM_channel = tx_FM;
 
 %% Downsample
 
-fs_rx = fs; %TODO: reduce sample rate here!!
-osr_rx = fs/fs_rx;
-rx_FM = resample(tx_FM_channel, 1, osr_rx);
+osr_rx = 4;
+fs_rx  = fs/osr_rx; %TODO: reduce sample rate here!!
+rx_FM  = resample(tx_FM_channel, 1, osr_rx);
 
 %% Filter the mono part
+%TODO: put the filter functions into separate files
 
 % Create lowpass filter (Equiripple FIR)
 rp  = 1;            % Passband ripple in dB
@@ -135,17 +136,17 @@ fco = [15e3 19e3];  % Cutoff frequencies
 m   = [1 0];        % Pass/Stop-band
 
 dev = [(10^(rp/20)-1)/(10^(rp/20)+1) 10^(-rs/20)];
-[n,fo,ao,wLp] = firpmord(fco,m,dev,fs_rx);
+[n_lp,fo,ao,wLp] = firpmord(fco,m,dev,fs_rx);
 
 % NOTE: Group delay needs to be an integer. Therefore, filter order needs to be odd.
-while mod(n,2) ~= 0
+while mod(n_lp,2) ~= 0
     % Increase filter order, which fixes the group delay.
     % The only side effect of this is positive - it increases
     % the filters' accuracy.
-    n = n + 1;
+    n_lp = n_lp + 1;
 end
 
-filter_lp_mono = firpm(n,fo,ao,wLp);
+filter_lp_mono = firpm(n_lp,fo,ao,wLp);
 if EnableFilterAnalyzeGUI fvtool(filter_lp_mono); end
 
 % Filter
@@ -160,12 +161,12 @@ fco = [19e3 23e3 53e3 57e3];  % Band frequencies (defined like slopes)
 m   = [0 1 0];                % Stop/Pass/Stop-band
 
 dev = [10^(-rs/20) (10^(rp/20)-1)/(10^(rp/20)+1) 10^(-rs/20)];
-[n,fo,ao,wLp] = firpmord(fco,m,dev,fs_rx);
-while mod(n,2) ~= 0
-    n = n + 1;
+[n_bp,fo,ao,wLp] = firpmord(fco,m,dev,fs_rx);
+while mod(n_bp,2) ~= 0
+    n_bp = n_bp + 1;
 end
 
-filter_bp_lrdiff = firpm(n,fo,ao,wLp);
+filter_bp_lrdiff = firpm(n_bp,fo,ao,wLp);
 if EnableFilterAnalyzeGUI fvtool(filter_bp_lrdiff); end
 
 % Filter (Bandpass 23k..53kHz)
@@ -180,6 +181,7 @@ rx_audio_lrdiff_mod = rx_audio_lrdiff_bpfilt .* carrier38kHzRx;
 rx_audio_lrdiff = filter(filter_lp_mono,1, rx_audio_lrdiff_mod);
 
 % TODO: where does this come from?? Factor 2 = ~3 dB
+% NOTE: normalize to 1 before the add/sub
 scalefactor = 2.33;
 rx_audio_lrdiff = rx_audio_lrdiff * scalefactor;
 
@@ -205,8 +207,8 @@ rx_audio_R = rx_audio_mono - rx_audio_lrdiff;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if EnableAudioReplay
-    fs_audioReplay = 44.1e3;
-    osr_replay = fs_rx/fs_audioReplay;
+    osr_replay = 5;
+    fs_audioReplay =fs_rx/osr_replay;
     
     % Create LR audio signal for output
     rx_audioReplay = zeros(length(rx_audio_L),2);
@@ -253,10 +255,10 @@ psxx_tx_dB = 10*log10(psxx_tx);
 
 %% Plots
 
-fig_audio_time = figure('Name','Audio file time domain signal');
+fig_audio_time = figure('Name','Time domain signal');
 subplot(6,1,1);
 plot(tn/fs, audioDataL, 'r', 'DisplayName', 'audioDataL');
-title('Audio file time domain signal');
+title('Time domain signal');
 grid on; legend();
 subplot(6,1,2);
 plot(tn/fs, audioDataR, 'g', 'DisplayName', 'audioDataR');
@@ -277,7 +279,7 @@ ylabel('amplitude');
 grid on; legend();
 
 if false
-    fig_adapt_grpdelay_time = figure('Name','Audio time domain signal (adapt group delay)');
+    fig_adapt_grpdelay_time = figure('Name','Time domain signal (to check group delay)');
     grid on; hold on;
     plot(tnRx/fs_rx, rx_audio_mono, 'r', 'DisplayName', 'rx\_audio\_mono');
     plot(tnRx/fs_rx, rx_audio_lrdiff, 'b', 'DisplayName', 'rx\_audio\_lrdiff');
