@@ -15,6 +15,7 @@ addpath(genpath('./helpers/auto-arrange-figs/'));
 EnableAudioReplay        = true;
 EnableTrafficInfoTrigger = false;
 EnableAudioFromFile      = true;
+EnableFilterAnalyzeGUI   = true;
 
 % Signal parameters
 n_sec = 1.7;  % 1.7s is "left channel, right channel"
@@ -108,22 +109,6 @@ end
 
 tx_FM = audioData + pilotTone + audioLRDiffMod + hinz_triller;
 
-%% FM channel spectrum
-
-% FFT
-n_fft = 4096;
-fmChannelSpec = ( abs( fftshift( fft(tx_FM,n_fft) )));
-fft_freqs = (-n_fft/2:1:n_fft/2-1)*fs/n_fft;
-
-% Welch PSD over entire audio file
-welch_size  = 4096;
-n_overlap   = welch_size / 4;
-n_fft_welch = welch_size;
-window      = hanning(welch_size);
-
-[psxx_tx, psxx_tx_f] = pwelch(tx_FM, window, n_overlap, n_fft_welch, fs);
-psxx_tx_dB = 10*log10(psxx_tx);
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Channel
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -143,29 +128,48 @@ rx_FM = resample(tx_FM_channel, 1, osr_rx);
 
 %% Filter the mono part
 
-% Create lowpass filter
-w_pass = 15e3/fs_rx;
-w_stop = 19e3/fs_rx;
+% Create lowpass filter (Equiripple FIR)
+rp  = 1;            % Passband ripple in dB
+rs  = 50;           % Stopband ripple in dB
+fco = [15e3 19e3];  % Cutoff frequencies
+m   = [1 0];        % Pass/Stop-band
 
-filter_lp_mono = designfilt('lowpassfir',                ...
-                            'PassbandFrequency', w_pass, ...
-                            'StopbandFrequency', w_stop, ...
-                            'PassbandRipple', 1,       ...
-                            'StopbandAttenuation', 50,   ...
-                            'DesignMethod','equiripple');
-%fvtool(filter_lp_mono);
+dev = [(10^(rp/20)-1)/(10^(rp/20)+1) 10^(-rs/20)];
+[n,fo,ao,wLp] = firpmord(fco,m,dev,fs_rx);
+
+% NOTE: Group delay needs to be an integer. Therefore, filter order needs to be odd.
+while mod(n,2) ~= 0
+    % Increase filter order, which fixes the group delay.
+    % The only side effect of this is positive - it increases
+    % the filters' accuracy.
+    n = n + 1;
+end
+
+filter_lp_mono = firpm(n,fo,ao,wLp);
+if EnableFilterAnalyzeGUI fvtool(filter_lp_mono); end
 
 % Filter
-rx_audio_mono = filter(filter_lp_mono,rx_FM);   
-
+rx_audio_mono = filter(filter_lp_mono,1, rx_FM);
 
 %% Filter the LR-diff-part
 
-% Load bandpass filter 
-filter_bp_lrdiff = load('filters/bandpass_lrdiff.mat');
+% Create bandpass filter
+rp  = 1;                      % Passband ripple in dB
+rs  = 50;                     % Stopband ripple in dB
+fco = [19e3 23e3 53e3 57e3];  % Band frequencies (defined like slopes)
+m   = [0 1 0];                % Stop/Pass/Stop-band
+
+dev = [10^(-rs/20) (10^(rp/20)-1)/(10^(rp/20)+1) 10^(-rs/20)];
+[n,fo,ao,wLp] = firpmord(fco,m,dev,fs_rx);
+while mod(n,2) ~= 0
+    n = n + 1;
+end
+
+filter_bp_lrdiff = firpm(n,fo,ao,wLp);
+if EnableFilterAnalyzeGUI fvtool(filter_bp_lrdiff); end
 
 % Filter (Bandpass 23k..53kHz)
-rx_audio_lrdiff_bpfilt = filter(filter_bp_lrdiff.Num,1, rx_FM);
+rx_audio_lrdiff_bpfilt = filter(filter_bp_lrdiff,1, rx_FM);
 
 % Modulate down to baseband
 tnRx = (0:1:length(rx_audio_lrdiff_bpfilt)-1)';
@@ -173,7 +177,7 @@ carrier38kHzRx = sin(2*pi*38e3/fs_rx*tnRx);
 rx_audio_lrdiff_mod = rx_audio_lrdiff_bpfilt .* carrier38kHzRx;
 
 % Filter (lowpass 15kHz)
-rx_audio_lrdiff = filter(filter_lp_mono, rx_audio_lrdiff_mod);
+rx_audio_lrdiff = filter(filter_lp_mono,1, rx_audio_lrdiff_mod);
 
 % TODO: where does this come from?? Factor 2 = ~3 dB
 scalefactor = 2.33;
@@ -188,7 +192,7 @@ rx_audio_lrdiff = rx_audio_lrdiff * scalefactor;
 % NOTE: The mono signal only needs to pass through a single LP.
 %       The lrdiff signal passed through a BP and a LP. Thus, it needs to
 %       be delayed by the BP's groupdelay, since the LP is the same.
-bp_groupdelay = filtord(filter_bp_lrdiff.Num)/2+1;
+bp_groupdelay = filtord(filter_bp_lrdiff)/2+1;
 
 % Compensate the group delay
 rx_audio_mono = [zeros(bp_groupdelay,1); rx_audio_mono(1:end-bp_groupdelay)];
@@ -226,7 +230,22 @@ end
 
 %% Calculations
 
-% Rx PSDs
+% Tx %%%%%%%%%%%%%%%%%%%%%
+% FFT
+n_fft = 4096;
+fmChannelSpec = ( abs( fftshift( fft(tx_FM,n_fft) )));
+fft_freqs = (-n_fft/2:1:n_fft/2-1)*fs/n_fft;
+
+% PSD over entire audio file
+welch_size  = 4096;
+n_overlap   = welch_size / 4;
+n_fft_welch = welch_size;
+window      = hanning(welch_size);
+
+[psxx_tx, psxx_tx_f] = pwelch(tx_FM, window, n_overlap, n_fft_welch, fs);
+psxx_tx_dB = 10*log10(psxx_tx);
+
+% Rx %%%%%%%%%%%%%%%%%%%%%
 [psxx_rx_mono, psxx_rx_mono_f] = pwelch(rx_audio_mono, window, n_overlap, n_fft_welch, fs_rx);
 [psxx_rx_lrdiff_bpfilt, psxx_rx_lrdiff_bpfilt_f] = pwelch(rx_audio_lrdiff_bpfilt, window, n_overlap, n_fft_welch, fs_rx);
 [psxx_rx_lrdiff_mod, psxx_rx_lrdiff_mod_f] = pwelch(rx_audio_lrdiff_mod, window, n_overlap, n_fft_welch, fs_rx);
@@ -265,7 +284,7 @@ if false
     xlabel('time [s]');
     ylabel('amplitude');
     legend();
-
+    
     fig_tx_time = figure('Name','Tx time domain signal');
     grid on; hold on;
     plot(tn/fs, tx_FM,  'b','DisplayName', 'Total');
