@@ -75,8 +75,8 @@ pilotTone = 0.25 * sin(2*pi*pilotFreq/fs*tn);
 audioDiff = audioDataL - audioDataR;
 
 % Modulate it to 38 kHz
-carrier4Diff = 1 * sin(2*pi*38e3/fs*tn);
-audioLRDiffMod = audioDiff .* carrier4Diff;
+carrier38kHzTx = 1 * sin(2*pi*38e3/fs*tn);
+audioLRDiffMod = audioDiff .* carrier38kHzTx;
 
 %% Radio Data Signal (RDS)
 % TODO
@@ -168,24 +168,34 @@ rx_audio_mono = filter(filter_lp_mono.Num,1,rx_FM);
 %% Filter the LR-diff-part
 
 % Load bandpass filter 
+filter_bp_lrdiff = load('filters/bandpass_lrdiff.mat');
 
-% Filter
+% Filter (Bandpass 23k..53kHz)
+rx_audio_lrdiff_0 = filter(filter_bp_lrdiff.Num,1, rx_FM);
 
 % Modulate down to baseband
 % (create 38kHz carrier and multiply)
+tnRx = (0:1:length(rx_audio_lrdiff_0)-1)';
+carrier38kHzRx = sin(2*pi*38e3/fs_rx*tnRx);
+rx_audio_lrdiff = rx_audio_lrdiff_0 .* carrier38kHzRx;
 
 % Filter (lowpass 15kHz)
-
-rx_audio_diff = 0;
+rx_audio_lrdiff = filter(filter_lp_mono.Num,1, rx_audio_lrdiff);
 
 %% Rx Analysis
 [psxx_rx_mono, psxx_rx_mono_f] = pwelch(rx_audio_mono, window, n_overlap, n_fft_welch, fs_rx);
+[psxx_rx_lrdiff_0, psxx_rx_lrdiff_0_f] = pwelch(rx_audio_lrdiff_0, window, n_overlap, n_fft_welch, fs_rx);
+[psxx_rx_lrdiff, psxx_rx_lrdiff_f] = pwelch(rx_audio_lrdiff, window, n_overlap, n_fft_welch, fs_rx);
 
 %% Combine received signal
 % L = (L+R) + (L-R) = (2)L
 % R = (L+R) - (L-R) = (2)R
+% where (L+R) = mono, and (L-R) is lrdiff
 
-rx_audio = rx_audio_mono + rx_audio_diff;
+rx_audio_L = rx_audio_mono + rx_audio_lrdiff;
+rx_audio_R = rx_audio_mono - rx_audio_lrdiff;
+
+rx_audio = rx_audio_mono + rx_audio_lrdiff;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Audio replay
@@ -212,13 +222,22 @@ if ~exist(outputDir, 'dir')
 end
 
 fig_audio_time = figure('Name','Audio file time domain signal');
-subplot(2,1,1);
+subplot(4,1,1);
 title('Audio file time domain signal');
 plot(tn/fs, audioDataL, 'r', 'DisplayName', 'audioDataL');
 grid on;
 legend();
-subplot(2,1,2);
+subplot(4,1,2);
 plot(tn/fs, audioDataR, 'g', 'DisplayName', 'audioDataR');
+grid on;
+legend();
+subplot(4,1,3);
+title('Rx time domain signal');
+plot(tnRx/fs_rx, rx_audio_L, 'r', 'DisplayName', 'rx\_audio\_L');
+grid on;
+legend();
+subplot(4,1,4);
+plot(tnRx/fs_rx, rx_audio_R, 'g', 'DisplayName', 'rx\_audio\_R');
 grid on;
 legend();
 
@@ -256,7 +275,9 @@ grid on; hold on;
 xline(19e3,'r--','19 kHz');
 xline(38e3,'r--','38 kHz');
 xline(57e3,'r--','57 kHz');
-plot(psxx_rx_mono_f, psxx_rx_mono,             'b', 'DisplayName', 'Welch PSD');
+plot(psxx_rx_mono_f, psxx_rx_mono,             'b', 'DisplayName', 'Mono');
+plot(psxx_rx_lrdiff_0_f, psxx_rx_lrdiff_0,   'r', 'DisplayName', 'LR Diff bp filtered');
+plot(psxx_rx_lrdiff_f, psxx_rx_lrdiff,   'g', 'DisplayName', 'LR Diff BB');
 title('Rx FM channel spectrum (linear)');
 xlabel('frequency [Hz]');
 ylabel('magnitude');
