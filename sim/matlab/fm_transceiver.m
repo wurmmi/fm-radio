@@ -143,11 +143,20 @@ rx_FM = resample(tx_FM_channel, 1, osr_rx);
 
 %% Filter the mono part
 
-% Load lowpass filter
-filter_lp_mono = load('filters/lowpass_mono.mat');
+% Create lowpass filter
+w_pass = 15e3/fs_rx;
+w_stop = 19e3/fs_rx;
+
+filter_lp_mono = designfilt('lowpassfir',                ...
+                            'PassbandFrequency', w_pass, ...
+                            'StopbandFrequency', w_stop, ...
+                            'PassbandRipple', 1,       ...
+                            'StopbandAttenuation', 50,   ...
+                            'DesignMethod','equiripple');
+%fvtool(filter_lp_mono);
 
 % Filter
-rx_audio_mono = filter(filter_lp_mono.Num,1,rx_FM);
+rx_audio_mono = filter(filter_lp_mono,rx_FM);   
 
 
 %% Filter the LR-diff-part
@@ -164,7 +173,7 @@ carrier38kHzRx = sin(2*pi*38e3/fs_rx*tnRx);
 rx_audio_lrdiff_mod = rx_audio_lrdiff_bpfilt .* carrier38kHzRx;
 
 % Filter (lowpass 15kHz)
-rx_audio_lrdiff = filter(filter_lp_mono.Num,1, rx_audio_lrdiff_mod);
+rx_audio_lrdiff = filter(filter_lp_mono, rx_audio_lrdiff_mod);
 
 % TODO: where does this come from?? Factor 2 = ~3 dB
 scalefactor = 2.33;
@@ -248,15 +257,15 @@ xlabel('time [s]');
 ylabel('amplitude');
 grid on; legend();
 
-fig_adapt_grpdelay_time = figure('Name','Audio time domain signal (adapt group delay)');
-grid on; hold on;
-plot(tnRx/fs_rx, rx_audio_mono, 'r', 'DisplayName', 'rx\_audio\_mono');
-plot(tnRx/fs_rx, rx_audio_lrdiff, 'b', 'DisplayName', 'rx\_audio\_lrdiff');
-xlabel('time [s]');
-ylabel('amplitude');
-legend();
-
 if false
+    fig_adapt_grpdelay_time = figure('Name','Audio time domain signal (adapt group delay)');
+    grid on; hold on;
+    plot(tnRx/fs_rx, rx_audio_mono, 'r', 'DisplayName', 'rx\_audio\_mono');
+    plot(tnRx/fs_rx, rx_audio_lrdiff, 'b', 'DisplayName', 'rx\_audio\_lrdiff');
+    xlabel('time [s]');
+    ylabel('amplitude');
+    legend();
+
     fig_tx_time = figure('Name','Tx time domain signal');
     grid on; hold on;
     plot(tn/fs, tx_FM,  'b','DisplayName', 'Total');
