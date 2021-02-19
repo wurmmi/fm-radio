@@ -4,6 +4,11 @@
 % Description : FM-Radio Sender and Receiver
 %-------------------------------------------------------------------------
 
+%TODO: find places, where power is attenuated --> Tx and Rx should be equal
+%      --> only amplify at a single place (at the receiver input)
+%TODO: check why left-right is swapped..
+%TODO: try to lower computation time 
+
 %% Prepare environment
 clear; close all; clc;
 
@@ -140,6 +145,7 @@ tx_fm_awgn = tx_fm + awgn;
 %% 'Analog' frontend
 % -- Direct down-conversion (DDC) to baseband with a complex mixer (IQ)
 % -- Lowpass filter the spectral replicas at multiple of fs
+% -- ADC: sample with fs
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Receive
@@ -163,17 +169,18 @@ filter_lp_mixer = getLPfilter(  ...
 % Filter
 rx_fm_bb = filter(filter_lp_mixer,1, rx_fm_bb);
 
+% ADC (downsample)
+rx_fm_bb = resample(rx_fm_bb, 1, osr_mod);
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% FM De-Modulator
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% TODO: downsample here
 
 % Normalize the amplitude (remove amplitude variations)
 rx_fm_bb_norm = rx_fm_bb ./ abs(rx_fm_bb);
 
 % Design differentiator
-filter_diff = firls(2000,[0 .9],[0 1],'differentiator');
+filter_diff = firls(30,[0 .9],[0 1],'differentiator');
 
 % Demodulate
 rx_fm_i = real(rx_fm_bb_norm);
@@ -185,7 +192,7 @@ rx_fm_demod =  ...
     (rx_fm_i.^2 + rx_fm_q.^2);
 
 % Amplify the demodulated signal
-rx_fm_demod = rx_fm_demod * 10; % TODO
+rx_fm_demod = rx_fm_demod * 5; % TODO
 
 rx_fmChannelData = rx_fm_demod;
 
@@ -196,8 +203,8 @@ rx_fmChannelData = rx_fm_demod;
 %% Downsample
 
 osr_rx = 4;
-fs_rx  = fs_mod/osr_mod/osr_rx;
-rx_fmChannelData = resample(rx_fmChannelData, 1, osr_mod*osr_rx);
+fs_rx  = fs/osr_rx;
+rx_fmChannelData = resample(rx_fmChannelData, 1, osr_rx);
 
 %% Filter the mono part
 
