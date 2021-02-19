@@ -19,7 +19,7 @@ EnableAudioFromFile      = true;
 EnableFilterAnalyzeGUI   = false;
 
 % Signal parameters
-n_sec = 1.7;  % 1.7s is "left channel, right channel"
+n_sec = 1.7;  % 1.7s is "left channel, right channel" in audio file
 osr   = 22;
 fs    = 44.1e3 * osr;
 
@@ -105,7 +105,7 @@ if EnableTrafficInfoTrigger
     hinz_triller(t_hinz+1) = cos(2*pi*fc_hinz/fs*t_hinz + (2*pi*f_deviation*hinz_tone_int));
     hinz_triller = hinz_amplitude * hinz_triller;
 end
-
+fmmod
 %% Combine all signal parts
 
 tx_FM = audioData + pilotTone + audioLRDiffMod + hinz_triller;
@@ -153,7 +153,7 @@ rx_audio_mono = filter(filter_lp_mono,1, rx_FM);
 
 %% Filter the LR-diff-part
 
-% Create bandpass filter
+% Create the bandpass filter
 ripple_pass_dB = 1;                     % Passband ripple in dB
 ripple_stop_db = 50;                    % Stopband ripple in dB
 cutoff_freqs   = [19e3 23e3 53e3 57e3]; % Band frequencies (defined like slopes)
