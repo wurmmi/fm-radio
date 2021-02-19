@@ -15,11 +15,11 @@ addpath(genpath('./filters/'));
 % Simulation options
 EnableAudioReplay        = true;
 EnableTrafficInfoTrigger = false;
-EnableAudioFromFile      = false;
+EnableAudioFromFile      = true;
 EnableFilterAnalyzeGUI   = false;
 
 % Signal parameters
-n_sec = 0.1;  % 1.7s is "left channel, right channel" in audio file
+n_sec = 1.7;  % 1.7s is "left channel, right channel" in audio file
 osr   = 22;
 fs    = 44.1e3 * osr;
 
@@ -115,7 +115,7 @@ fmChannelData = audioData + pilotTone + audioLRDiffMod + hinz_triller;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Upsample
-osr_mod = 100;
+osr_mod = 10;
 fmChannelDataUp = resample(fmChannelData, osr_mod, 1);
 fs_mod = fs*osr_mod;
 tn_mod = (0:1:n_sec*fs_mod-1).';
@@ -137,7 +137,9 @@ awgn = 0;
 tx_fm_awgn = tx_fm + awgn;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% FM De-Modulator
+%% 'Analog' frontend
+% -- Direct down-conversion (DDC) to baseband with a complex mixer (IQ)
+% -- Lowpass filter the spectral replicas at multiple of fs
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Receive
@@ -154,12 +156,18 @@ ripple_pass_dB = 1;             % Passband ripple in dB
 ripple_stop_db = 50;            % Stopband ripple in dB
 cutoff_freqs   = [120e3 250e3]; % Cutoff frequencies
 
-filter_lp_mixer = getLPfilter( ...
-    ripple_pass_dB, ripple_stop_db, ...
+filter_lp_mixer = getLPfilter(  ...
+    ripple_pass_dB, ripple_stop_db,  ...
     cutoff_freqs, fs_mod, EnableFilterAnalyzeGUI);
 
 % Filter
 rx_fm_bb = filter(filter_lp_mixer,1, rx_fm_bb);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% FM De-Modulator
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% TODO: downsample here
 
 % Normalize the amplitude (remove amplitude variations)
 rx_fm_bb_norm = rx_fm_bb ./ abs(rx_fm_bb);
@@ -177,7 +185,7 @@ rx_fm_demod =  ...
     (rx_fm_i.^2 + rx_fm_q.^2);
 
 % Amplify the demodulated signal
-rx_fm_demod = rx_fm_demod * 10;
+rx_fm_demod = rx_fm_demod * 10; % TODO
 
 rx_fmChannelData = rx_fm_demod;
 
@@ -229,7 +237,7 @@ rx_audio_lrdiff = filter(filter_lp_mono,1, rx_audio_lrdiff_mod);
 
 % TODO: where does this come from?? Factor 2 = ~3 dB
 % NOTE: normalize to 1 before the add/sub
-scalefactor = 2.33;
+scalefactor = 4.33;
 rx_audio_lrdiff = rx_audio_lrdiff * scalefactor;
 
 %% Combine received signal
@@ -377,8 +385,9 @@ xline(19e3,'r--','19 kHz');
 xline(38e3,'r--','38 kHz');
 xline(57e3,'r--','57 kHz');
 %plot(fft_freqs, fmChannelSpec, 'k--', 'DisplayName', 'FFT');
-h0 = plot(psxx_tx_f, psxx_tx, 'b', 'DisplayName', 'Total');
-legend(h0);
+h0 = plot(psxx_tx_f, psxx_tx, 'b', 'DisplayName', 'Tx');
+h1 = plot(psxx_rx_fm_demod_f, psxx_rx_fm_demod, 'r','DisplayName', 'Rx');
+legend([h0,h1]);
 title('Tx FM channel spectrum (linear)');
 xlabel('frequency [Hz]');
 ylabel('magnitude');
@@ -396,22 +405,9 @@ h1 = plot(psxx_rx_fm_bb_f, psxx_rx_fm_bb, 'r','DisplayName', 'RxFM BB');
 title('Rx channel spectrum complex mixer (linear)');
 xlabel('frequency [Hz]');
 ylabel('magnitude');
-xlim([0 18e5]);
+xlim([0 fc_oe3+fc_oe3/5]);
 legend([h0,h1]);
 saveas(fig_rx_mod, outputDir + "tx_freq_domain_bb_mixer.png");
-
-fig_rx_mod = figure('Name','Rx channel spectrum FM demod (linear)');
-grid on; hold on;
-xline(19e3,'r--','19 kHz');
-xline(38e3,'r--','38 kHz');
-xline(57e3,'r--','57 kHz');
-h0 = plot(psxx_rx_fm_demod_f, psxx_rx_fm_demod, 'b','DisplayName', 'RxFM demod');
-title('Rx channel spectrum FM demod (linear)');
-xlabel('frequency [Hz]');
-ylabel('magnitude');
-xlim([0 100e3]);
-legend(h0);
-saveas(fig_rx_mod, outputDir + "tx_freq_domain_bb_fm_demod.png");
 
 fig_rx_spec = figure('Name','Rx channel spectrum (linear)');
 grid on; hold on;
