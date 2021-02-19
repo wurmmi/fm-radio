@@ -64,4 +64,4 @@ plot_FFT_IQ(y_fm_demod_dec,1,20*range_s*fs_dec_audio,fs_dec_audio,0,'Spectrum of
 sound(y_fm_demod_dec, fs_dec_audio);
 
 %% Arrange all plots on the display
-autoArrangeFigures(4,4,1);
+autoArrangeFigures(2,3,1);
