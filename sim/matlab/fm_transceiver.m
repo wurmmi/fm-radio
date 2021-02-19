@@ -8,6 +8,7 @@
 clear; close all; clc;
 
 addpath(genpath('./helpers/auto-arrange-figs/'));
+addpath(genpath('./filters/'));
 
 %% Settings
 
@@ -136,10 +137,12 @@ osr_rx = 4;
 fs_rx  = fs/osr_rx;
 rx_FM  = resample(tx_FM_channel, 1, osr_rx);
 
-%% Create the low pass filter
-ripple_pass_dB = 1;            % Passband ripple in dB
-ripple_stop_db = 50;           % Stopband ripple in dB
-cutoff_freqs   = [15e3 19e3];  % Cutoff frequencies
+%% Filter the mono part
+
+% Create the low pass filter
+ripple_pass_dB = 1;           % Passband ripple in dB
+ripple_stop_db = 50;          % Stopband ripple in dB
+cutoff_freqs   = [15e3 19e3]; % Cutoff frequencies
 
 filter_lp_mono = getLPfilter( ...
     ripple_pass_dB, ripple_stop_db, ...
@@ -151,19 +154,13 @@ rx_audio_mono = filter(filter_lp_mono,1, rx_FM);
 %% Filter the LR-diff-part
 
 % Create bandpass filter
-rp  = 1;                      % Passband ripple in dB
-rs  = 50;                     % Stopband ripple in dB
-fco = [19e3 23e3 53e3 57e3];  % Band frequencies (defined like slopes)
-m   = [0 1 0];                % Stop/Pass/Stop-band
+ripple_pass_dB = 1;                     % Passband ripple in dB
+ripple_stop_db = 50;                    % Stopband ripple in dB
+cutoff_freqs   = [19e3 23e3 53e3 57e3]; % Band frequencies (defined like slopes)
 
-dev = [10^(-rs/20) (10^(rp/20)-1)/(10^(rp/20)+1) 10^(-rs/20)];
-[n_bp,fo,ao,wLp] = firpmord(fco,m,dev,fs_rx);
-while mod(n_bp,2) ~= 0
-    n_bp = n_bp + 1;
-end
-
-filter_bp_lrdiff = firpm(n_bp,fo,ao,wLp);
-if EnableFilterAnalyzeGUI fvtool(filter_bp_lrdiff); end
+filter_bp_lrdiff = getBPfilter( ...
+    ripple_pass_dB, ripple_stop_db, ...
+    cutoff_freqs, fs_rx, EnableFilterAnalyzeGUI);
 
 % Filter (Bandpass 23k..53kHz)
 rx_audio_lrdiff_bpfilt = filter(filter_bp_lrdiff,1, rx_FM);
