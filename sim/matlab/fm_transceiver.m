@@ -1,8 +1,8 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% File   : fm_transceiver.m
-% Author : Michael Wurm <wurm.michael95@gmail.com>
-% Topic  : FM-Radio Sender and Receiver
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%-------------------------------------------------------------------------
+% File        : fm_transceiver.m
+% Author      : Michael Wurm <wurm.michael95@gmail.com>
+% Description : FM-Radio Sender and Receiver
+%-------------------------------------------------------------------------
 
 %% Prepare environment
 clear; close all; clc;
@@ -110,11 +110,21 @@ end
 tx_FM = audioData + pilotTone + audioLRDiffMod + hinz_triller;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% FM Modulator
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TODO
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Channel
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TODO: (up-convert to RF, AWGN, down-convert from RF)
 
 tx_FM_channel = tx_FM;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% FM De-Modulator
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TODO
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Receiver
@@ -123,31 +133,16 @@ tx_FM_channel = tx_FM;
 %% Downsample
 
 osr_rx = 4;
-fs_rx  = fs/osr_rx; %TODO: reduce sample rate here!!
+fs_rx  = fs/osr_rx;
 rx_FM  = resample(tx_FM_channel, 1, osr_rx);
 
-%% Filter the mono part
-%TODO: put the filter functions into separate files
+%% Create the low pass filter
+ripple_pass_dB = 1;            % Passband ripple in dB
+ripple_stop_db = 50;           % Stopband ripple in dB
+cutoff_freqs   = [15e3 19e3];  % Cutoff frequencies
 
-% Create lowpass filter (Equiripple FIR)
-rp  = 1;            % Passband ripple in dB
-rs  = 50;           % Stopband ripple in dB
-fco = [15e3 19e3];  % Cutoff frequencies
-m   = [1 0];        % Pass/Stop-band
-
-dev = [(10^(rp/20)-1)/(10^(rp/20)+1) 10^(-rs/20)];
-[n_lp,fo,ao,wLp] = firpmord(fco,m,dev,fs_rx);
-
-% NOTE: Group delay needs to be an integer. Therefore, filter order needs to be odd.
-while mod(n_lp,2) ~= 0
-    % Increase filter order, which fixes the group delay.
-    % The only side effect of this is positive - it increases
-    % the filters' accuracy.
-    n_lp = n_lp + 1;
-end
-
-filter_lp_mono = firpm(n_lp,fo,ao,wLp);
-if EnableFilterAnalyzeGUI fvtool(filter_lp_mono); end
+filter_lp_mono = getLPfilter(ripple_pass_dB, ripple_stop_db, ...
+                             cutoff_freqs, fs_rx, EnableFilterAnalyzeGUI);
 
 % Filter
 rx_audio_mono = filter(filter_lp_mono,1, rx_FM);
