@@ -40,7 +40,7 @@ if EnableAudioFromFile
     end
     
     % Select area of interest (skip silence at beginning of file)
-    n_sec_offset = 0.15; 
+    n_sec_offset = 0.15;
     fileData = fileDataAll(round(n_sec_offset*fs_file):round((n_sec_offset+n_sec)*fs_file)-1,:);
     
     % Upsample
@@ -141,8 +141,9 @@ ripple_pass_dB = 1;            % Passband ripple in dB
 ripple_stop_db = 50;           % Stopband ripple in dB
 cutoff_freqs   = [15e3 19e3];  % Cutoff frequencies
 
-filter_lp_mono = getLPfilter(ripple_pass_dB, ripple_stop_db, ...
-                             cutoff_freqs, fs_rx, EnableFilterAnalyzeGUI);
+filter_lp_mono = getLPfilter( ...
+    ripple_pass_dB, ripple_stop_db, ...
+    cutoff_freqs, fs_rx, EnableFilterAnalyzeGUI);
 
 % Filter
 rx_audio_mono = filter(filter_lp_mono,1, rx_FM);
