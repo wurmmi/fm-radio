@@ -40,7 +40,7 @@ fc_oe3 = 98.1e4;
 if EnableAudioFromFile
     fs_file = 44.1e3;
     
-    [fileDataAll,fileFsRead] = audioread('./recordings/left-right-test.mp3');
+    [fileDataAll,fileFsRead] = audioread('./recordings/left-right-test.wav');
     if fileFsRead ~= fs_file
         error("Unexpected sample frequency of file!");
     end

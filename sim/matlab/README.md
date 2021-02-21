@@ -22,7 +22,7 @@ Install Matlab, or the free alternative GNU Octave.
 
 For Matlab, follow the instructions on the [official website](https://de.mathworks.com/help/install/).
 
-For GNU Octave, simply run `sudo apt install octave`.
+For GNU Octave, simply run `sudo apt install octave octave-signal`.
 
 ----
 
