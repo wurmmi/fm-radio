@@ -157,8 +157,9 @@ rx_fm_q  = rx_fm .* sin(2*pi*fc_oe3/fs_mod*tn_mod);
 
 rx_fm_bb = rx_fm_i + 1j * rx_fm_q;
 
-% Lowpass filter 
-ripple_pass_dB = 1;             % Passband ripple in dB
+%TODO filter iq separately?? -> i/q is swapped here maybe
+% Lowpass filter (for spectral replicas)
+ripple_pass_dB = 0.1;           % Passband ripple in dB
 ripple_stop_db = 50;            % Stopband ripple in dB
 cutoff_freqs   = [120e3 250e3]; % Cutoff frequencies
 
@@ -435,6 +436,6 @@ saveas(fig_rx_spec, outputDir + "tx_freq_domain.png");
 
 
 %% Arrange all plots on the display
-autoArrangeFigures(2,3,1);
+autoArrangeFigures(2,3,2);
 
 
