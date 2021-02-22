@@ -14,6 +14,11 @@ clear; close all; clc;
 addpath(genpath('./helpers/'));
 addpath(genpath('./filters/'));
 
+% Octave
+if isRunningInOctave()
+  xline = @(xval, varargin) line([xval xval], ylim, varargin{:});
+end
+
 %% Settings
 
 % Paths
@@ -161,9 +166,9 @@ rx_fm_q  = rx_fm .* -sin(2*pi*fc_oe3/fs_mod*tn_mod);
 rx_fm_bb = rx_fm_i + 1j * rx_fm_q;
 
 % Lowpass filter (for spectral replicas)
-filter_name = dir_filters + "lowpass_iq_mixer.mat";
+filter_name = sprintf("%s%s",dir_filters,"lowpass_iq_mixer.mat");
 if isRunningInOctave()
-    warning("Running in GNU Octave - loading lowpass filter from folder!");
+    disp("Running in GNU Octave - loading lowpass filter from folder!");
     filter_lp_mixer = load(filter_name);
 else
     ripple_pass_dB = 0.1;           % Passband ripple in dB
@@ -218,9 +223,9 @@ rx_fmChannelData = resample(rx_fmChannelData, 1, osr_rx);
 %% Filter the mono part
 
 % Create the low pass filter
-filter_name = dir_filters + "lowpass_mono.mat";
+filter_name = sprintf("%s%s",dir_filters,"lowpass_mono.mat");
 if isRunningInOctave()
-    warning("Running in GNU Octave - loading lowpass filter from folder!");
+    disp("Running in GNU Octave - loading lowpass filter from folder!");
     filter_lp_mono = load(filter_name);
 else
     ripple_pass_dB = 0.1;         % Passband ripple in dB
@@ -241,10 +246,10 @@ rx_audio_mono = filter(filter_lp_mono,1, rx_fmChannelData);
 %% Filter the LR-diff-part
 
 % Create the bandpass filter
-filter_name = dir_filters + "bandpass_lrdiff.mat";
+filter_name = sprintf("%s%s",dir_filters,"bandpass_lrdiff.mat");
 if isRunningInOctave()
-    warning("Running in GNU Octave - loading lowpass filter from folder!");
-    filter_lp_mono = load(filter_name);
+    disp("Running in GNU Octave - loading lowpass filter from folder!");
+    filter_bp_lrdiff = load(filter_name);
 else
     ripple_pass_dB = 0.1;                   % Passband ripple in dB
     ripple_stop_db = 50;                    % Stopband ripple in dB
@@ -283,7 +288,7 @@ rx_audio_lrdiff = rx_audio_lrdiff * scalefactor;
 % NOTE: The mono signal only needs to pass through a single LP.
 %       The lrdiff signal passed through a BP and a LP. Thus, it needs to
 %       be delayed by the BP's groupdelay, since the LP is the same.
-bp_groupdelay = filtord(filter_bp_lrdiff)/2+1;
+bp_groupdelay = (length(filter_bp_lrdiff)-1)/2;
 
 % Compensate the group delay
 rx_audio_mono = [zeros(bp_groupdelay,1); rx_audio_mono(1:end-bp_groupdelay)];
@@ -329,6 +334,9 @@ fft_freqs = (-n_fft/2:1:n_fft/2-1)*fs/n_fft;
 % PSD over entire audio file
 welch_size  = 4096*4;
 n_overlap   = welch_size / 4;
+if isRunningInOctave()
+    n_overlap = 1/4;
+end
 n_fft_welch = welch_size;
 window      = hanning(welch_size);
 
@@ -344,6 +352,9 @@ window      = hanning(welch_size);
 % Rx (RF) %%%%%%%%%%%%%%%%
 welch_size  = 4096*4*osr_mod;
 n_overlap   = welch_size / 4;
+if isRunningInOctave()
+    n_overlap = 1/4;
+end
 n_fft_welch = welch_size;
 window      = hanning(welch_size);
 
