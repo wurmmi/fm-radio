@@ -152,8 +152,8 @@ tx_fm_awgn = tx_fm + awgn;
 rx_fm = tx_fm_awgn;
 
 % Complex baseband mixer
-rx_fm_i  = rx_fm .* cos(2*pi*fc_oe3/fs_mod*tn_mod);
-rx_fm_q  = rx_fm .* sin(2*pi*fc_oe3/fs_mod*tn_mod);
+rx_fm_i  = rx_fm .*  cos(2*pi*fc_oe3/fs_mod*tn_mod);
+rx_fm_q  = rx_fm .* -sin(2*pi*fc_oe3/fs_mod*tn_mod);
 
 rx_fm_bb = rx_fm_i + 1j * rx_fm_q;
 
@@ -236,7 +236,7 @@ rx_audio_lrdiff_bpfilt = filter(filter_bp_lrdiff,1, rx_fmChannelData);
 
 % Modulate down to baseband
 tnRx = (0:1:n_sec*fs_rx-1)';
-carrier38kHzRx = sin(2*pi*38e3/fs_rx*tnRx);
+carrier38kHzRx = cos(2*pi*38e3/fs_rx*tnRx);
 rx_audio_lrdiff_mod = rx_audio_lrdiff_bpfilt .* carrier38kHzRx;
 
 % Filter (lowpass 15kHz)
