@@ -11,10 +11,14 @@
 %% Prepare environment
 clear; close all; clc;
 
-addpath(genpath('./helpers/auto-arrange-figs/'));
+addpath(genpath('./helpers/'));
 addpath(genpath('./filters/'));
 
 %% Settings
+
+% Paths
+dir_filters = "./filters/";
+dir_output = "./matlab_output/";
 
 % Simulation options
 EnableAudioReplay        = true;
@@ -157,13 +161,22 @@ rx_fm_q  = rx_fm .* -sin(2*pi*fc_oe3/fs_mod*tn_mod);
 rx_fm_bb = rx_fm_i + 1j * rx_fm_q;
 
 % Lowpass filter (for spectral replicas)
-ripple_pass_dB = 0.1;           % Passband ripple in dB
-ripple_stop_db = 50;            % Stopband ripple in dB
-cutoff_freqs   = [120e3 250e3]; % Cutoff frequencies
+filter_name = dir_filters + "lowpass_iq_mixer.mat";
+if isRunningInOctave()
+    warning("Running in GNU Octave - loading lowpass filter from folder!");
+    filter_lp_mixer = load(filter_name);
+else
+    ripple_pass_dB = 0.1;           % Passband ripple in dB
+    ripple_stop_db = 50;            % Stopband ripple in dB
+    cutoff_freqs   = [120e3 250e3]; % Cutoff frequencies
 
-filter_lp_mixer = getLPfilter(  ...
-    ripple_pass_dB, ripple_stop_db,  ...
-    cutoff_freqs, fs_mod, EnableFilterAnalyzeGUI);
+    filter_lp_mixer = getLPfilter(  ...
+        ripple_pass_dB, ripple_stop_db,  ...
+        cutoff_freqs, fs_mod, EnableFilterAnalyzeGUI);
+    
+    % Save the filter coefficients
+    save(filter_name,'filter_lp_mixer','-ascii');
+end
 
 % Filter
 rx_fm_bb = filter(filter_lp_mixer,1, rx_fm_bb);
@@ -179,11 +192,7 @@ rx_fm_bb = resample(rx_fm_bb, 1, osr_mod);
 rx_fm_bb_norm = rx_fm_bb ./ abs(rx_fm_bb);
 
 % Design differentiator
-%filter_diff = firls(31,[0 .9],[0 1],'differentiator');
-%fvtool(filter_diff)
-
 filter_diff = [1,0,-1];
-%fvtool(filter_diff);
 
 % Demodulate
 rx_fm_i = real(rx_fm_bb_norm);
@@ -209,13 +218,22 @@ rx_fmChannelData = resample(rx_fmChannelData, 1, osr_rx);
 %% Filter the mono part
 
 % Create the low pass filter
-ripple_pass_dB = 0.1;         % Passband ripple in dB
-ripple_stop_db = 50;          % Stopband ripple in dB
-cutoff_freqs   = [15e3 19e3]; % Cutoff frequencies
+filter_name = dir_filters + "lowpass_mono.mat";
+if isRunningInOctave()
+    warning("Running in GNU Octave - loading lowpass filter from folder!");
+    filter_lp_mono = load(filter_name);
+else
+    ripple_pass_dB = 0.1;         % Passband ripple in dB
+    ripple_stop_db = 50;          % Stopband ripple in dB
+    cutoff_freqs   = [15e3 19e3]; % Cutoff frequencies
 
-filter_lp_mono = getLPfilter( ...
-    ripple_pass_dB, ripple_stop_db, ...
-    cutoff_freqs, fs_rx, EnableFilterAnalyzeGUI);
+    filter_lp_mono = getLPfilter( ...
+        ripple_pass_dB, ripple_stop_db, ...
+        cutoff_freqs, fs_rx, EnableFilterAnalyzeGUI);
+    
+    % Save the filter coefficients
+    save(filter_name,'filter_lp_mono','-ascii');
+end
 
 % Filter
 rx_audio_mono = filter(filter_lp_mono,1, rx_fmChannelData);
@@ -223,13 +241,22 @@ rx_audio_mono = filter(filter_lp_mono,1, rx_fmChannelData);
 %% Filter the LR-diff-part
 
 % Create the bandpass filter
-ripple_pass_dB = 0.1;                   % Passband ripple in dB
-ripple_stop_db = 50;                    % Stopband ripple in dB
-cutoff_freqs   = [19e3 23e3 53e3 57e3]; % Band frequencies (defined like slopes)
+filter_name = dir_filters + "bandpass_lrdiff.mat";
+if isRunningInOctave()
+    warning("Running in GNU Octave - loading lowpass filter from folder!");
+    filter_lp_mono = load(filter_name);
+else
+    ripple_pass_dB = 0.1;                   % Passband ripple in dB
+    ripple_stop_db = 50;                    % Stopband ripple in dB
+    cutoff_freqs   = [19e3 23e3 53e3 57e3]; % Band frequencies (defined like slopes)
 
-filter_bp_lrdiff = getBPfilter( ...
-    ripple_pass_dB, ripple_stop_db, ...
-    cutoff_freqs, fs_rx, EnableFilterAnalyzeGUI);
+    filter_bp_lrdiff = getBPfilter( ...
+        ripple_pass_dB, ripple_stop_db, ...
+        cutoff_freqs, fs_rx, EnableFilterAnalyzeGUI);
+    
+    % Save the filter coefficients
+    save(filter_name,'filter_bp_lrdiff','-ascii');
+end
 
 % Filter (Bandpass 23k..53kHz)
 rx_audio_lrdiff_bpfilt = filter(filter_bp_lrdiff,1, rx_fmChannelData);
@@ -287,9 +314,8 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Create output folder to save figures
-outputDir = "./matlab_output/";
-if ~exist(outputDir, 'dir')
-    mkdir(outputDir)
+if ~exist(dir_output, 'dir')
+    mkdir(dir_output)
 end
 
 %% Calculations
@@ -400,7 +426,7 @@ if false
     ylabel('amplitude');
     legend();
     xlim([0 inf]);
-    saveas(fig_tx_time, outputDir + "time_tx.png");
+    saveas(fig_tx_time, dir_output + "time_tx.png");
 end
 
 fig_title = 'Rx channel spectrum complex IQ mixer (linear)';
@@ -417,7 +443,7 @@ xlabel('frequency [Hz]');
 ylabel('magnitude');
 legend([h0,h1],'Location','east');
 xlim([0 fc_oe3+fc_oe3/5]);
-saveas(fig_rx_mod, outputDir + "psd_iq_mixer.png");
+saveas(fig_rx_mod, dir_output + "psd_iq_mixer.png");
 
 fig_title = 'FM channel spectrum (linear)';
 fig_tx_spec = figure('Name',fig_title);
@@ -434,7 +460,7 @@ ylabel('magnitude');
 legend([h0,h1],'Location','east');
 xlim([0 65e3]);
 ylimits = ylim();
-saveas(fig_tx_spec, outputDir + "psd_rx_tx.png");
+saveas(fig_tx_spec, dir_output + "psd_rx_tx.png");
 
 fig_title = 'Rx spectrum parts (linear)';
 fig_rx_spec = figure('Name',fig_title);
@@ -452,7 +478,7 @@ ylabel('magnitude');
 legend([h0,h1,h2,h3],'Location','east');
 xlim([0 65e3]);
 ylim(ylimits);
-saveas(fig_rx_spec, outputDir + "psd_rx_parts.png");
+saveas(fig_rx_spec, dir_output + "psd_rx_parts.png");
 
 
 %% Arrange all plots on the display
