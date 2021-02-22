@@ -157,7 +157,6 @@ rx_fm_q  = rx_fm .* sin(2*pi*fc_oe3/fs_mod*tn_mod);
 
 rx_fm_bb = rx_fm_i + 1j * rx_fm_q;
 
-%TODO filter iq separately?? -> i/q is swapped here maybe
 % Lowpass filter (for spectral replicas)
 ripple_pass_dB = 0.1;           % Passband ripple in dB
 ripple_stop_db = 50;            % Stopband ripple in dB
@@ -181,7 +180,7 @@ rx_fm_bb = resample(rx_fm_bb, 1, osr_mod);
 rx_fm_bb_norm = rx_fm_bb ./ abs(rx_fm_bb);
 
 % Design differentiator
-filter_diff = firls(30,[0 .9],[0 1],'differentiator');
+filter_diff = firls(31,[0 .9],[0 1],'differentiator');
 
 % Demodulate
 rx_fm_i = real(rx_fm_bb_norm);
@@ -210,7 +209,7 @@ rx_fmChannelData = resample(rx_fmChannelData, 1, osr_rx);
 %% Filter the mono part
 
 % Create the low pass filter
-ripple_pass_dB = 1;           % Passband ripple in dB
+ripple_pass_dB = 0.1;         % Passband ripple in dB
 ripple_stop_db = 50;          % Stopband ripple in dB
 cutoff_freqs   = [15e3 19e3]; % Cutoff frequencies
 
@@ -224,7 +223,7 @@ rx_audio_mono = filter(filter_lp_mono,1, rx_fmChannelData);
 %% Filter the LR-diff-part
 
 % Create the bandpass filter
-ripple_pass_dB = 1;                     % Passband ripple in dB
+ripple_pass_dB = 0.1;                   % Passband ripple in dB
 ripple_stop_db = 50;                    % Stopband ripple in dB
 cutoff_freqs   = [19e3 23e3 53e3 57e3]; % Band frequencies (defined like slopes)
 
