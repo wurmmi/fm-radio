@@ -6,7 +6,6 @@
 
 %TODO: find places, where power is attenuated --> Tx and Rx should be equal
 %      --> only amplify at a single place (at the receiver input)
-%TODO: check why left-right is swapped..
 %TODO: try to lower computation time 
 
 %% Prepare environment
@@ -144,7 +143,7 @@ tx_fm_awgn = tx_fm + awgn;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 'Analog' frontend
 % -- Direct down-conversion (DDC) to baseband with a complex mixer (IQ)
-% -- Lowpass filter the spectral replicas at multiple of fs
+% -- Lowpass filter the spectral replicas at multiple of fc
 % -- ADC: sample with fs
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -180,7 +179,11 @@ rx_fm_bb = resample(rx_fm_bb, 1, osr_mod);
 rx_fm_bb_norm = rx_fm_bb ./ abs(rx_fm_bb);
 
 % Design differentiator
-filter_diff = firls(31,[0 .9],[0 1],'differentiator');
+%filter_diff = firls(31,[0 .9],[0 1],'differentiator');
+%fvtool(filter_diff)
+
+filter_diff = [1,0,-1];
+%fvtool(filter_diff);
 
 % Demodulate
 rx_fm_i = real(rx_fm_bb_norm);
@@ -190,9 +193,6 @@ rx_fm_demod =  ...
     (rx_fm_i .* conv(rx_fm_q,filter_diff,'same') -   ...
     rx_fm_q .* conv(rx_fm_i,filter_diff,'same')) ./  ...
     (rx_fm_i.^2 + rx_fm_q.^2);
-
-% Amplify the demodulated signal
-rx_fm_demod = rx_fm_demod * 5; % TODO
 
 rx_fmChannelData = rx_fm_demod;
 
@@ -268,15 +268,15 @@ rx_audio_R = rx_audio_mono - rx_audio_lrdiff;
 %% Audio replay
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-if EnableAudioReplay
-    osr_replay = 5;
-    fs_audioReplay = fs_rx/osr_replay;
-    
+if EnableAudioReplay    
     % Create LR audio signal for output
     rx_audioReplay = zeros(length(rx_audio_L),2);
     rx_audioReplay(:,1) = rx_audio_L;
     rx_audioReplay(:,2) = rx_audio_R;
-    
+
+    % Downsample for PC soundcard
+    osr_replay = 5;
+    fs_audioReplay = fs_rx/osr_replay;
     rx_audioReplay = resample(rx_audioReplay, 1, osr_replay);
     
     sound(rx_audioReplay, fs_audioReplay);
@@ -301,28 +301,27 @@ fmChannelSpec = ( abs( fftshift( fft(fmChannelData,n_fft) )));
 fft_freqs = (-n_fft/2:1:n_fft/2-1)*fs/n_fft;
 
 % PSD over entire audio file
-welch_size  = 4096;
+welch_size  = 4096*4;
 n_overlap   = welch_size / 4;
 n_fft_welch = welch_size;
 window      = hanning(welch_size);
 
-[psxx_tx, psxx_tx_f] = pwelch(fmChannelData, window, n_overlap, n_fft_welch, fs);
-psxx_tx_dB = 10*log10(psxx_tx);
+[psxx_tx, psxx_tx_f]             = pwelch(fmChannelData, window, n_overlap, n_fft_welch, fs);
+[psxx_rx_fm_bb, psxx_rx_fm_bb_f] = pwelch(rx_fm_bb, window, n_overlap, n_fft_welch, fs);
 
 % Rx %%%%%%%%%%%%%%%%%%%%%
-[psxx_rx_mono, psxx_rx_mono_f] = pwelch(rx_audio_mono, window, n_overlap, n_fft_welch, fs_rx);
+[psxx_rx_mono, psxx_rx_mono_f]                   = pwelch(rx_audio_mono, window, n_overlap, n_fft_welch, fs_rx);
 [psxx_rx_lrdiff_bpfilt, psxx_rx_lrdiff_bpfilt_f] = pwelch(rx_audio_lrdiff_bpfilt, window, n_overlap, n_fft_welch, fs_rx);
-[psxx_rx_lrdiff_mod, psxx_rx_lrdiff_mod_f] = pwelch(rx_audio_lrdiff_mod, window, n_overlap, n_fft_welch, fs_rx);
-[psxx_rx_lrdiff, psxx_rx_lrdiff_f] = pwelch(rx_audio_lrdiff, window, n_overlap, n_fft_welch, fs_rx);
+[psxx_rx_lrdiff_mod, psxx_rx_lrdiff_mod_f]       = pwelch(rx_audio_lrdiff_mod, window, n_overlap, n_fft_welch, fs_rx);
+[psxx_rx_lrdiff, psxx_rx_lrdiff_f]               = pwelch(rx_audio_lrdiff, window, n_overlap, n_fft_welch, fs_rx);
 
-welch_size  = 4096*20;
+% Rx (RF) %%%%%%%%%%%%%%%%
+welch_size  = 4096*4*osr_mod;
 n_overlap   = welch_size / 4;
 n_fft_welch = welch_size;
 window      = hanning(welch_size);
 
 [psxx_rx_fm, psxx_rx_fm_f] = pwelch(rx_fm, window, n_overlap, n_fft_welch, fs_mod);
-[psxx_rx_fm_bb, psxx_rx_fm_bb_f] = pwelch(rx_fm_bb, window, n_overlap, n_fft_welch, fs_mod);
-[psxx_rx_fm_demod, psxx_rx_fm_demod_f] = pwelch(rx_fm_demod, window, n_overlap, n_fft_welch, fs_mod);
 
 %% Plots
 
@@ -359,6 +358,18 @@ ylabel('amplitude');
 legend();
 
 if false
+    fig_time_fm_demodulator = figure('Name','FM demodulator');
+    grid on; hold on;
+    plot(tn/fs, rx_fm_bb,        'r', 'DisplayName', 'rx\_fm\_bb');
+    plot(tn/fs, rx_fm_bb_norm,   'g', 'DisplayName', 'rx\_fm\_bb\_norm');
+    plot(tn/fs, rx_fm_demod_raw, 'b', 'DisplayName', 'rx\_fm\_demod\_raw');
+    title('FM demodulator');
+    xlabel('time [s]');
+    ylabel('amplitude');
+    legend();
+end
+
+if false
     fig_adapt_grpdelay_time = figure('Name','Time domain signal (to check group delay)');
     grid on; hold on;
     plot(tnRx/fs_rx, rx_audio_mono, 'r', 'DisplayName', 'rx\_audio\_mono');
@@ -386,28 +397,13 @@ if false
     saveas(fig_tx_time, outputDir + "tx_time_domain.png");
 end
 
-fig_tx_spec = figure('Name','Tx channel spectrum (linear)');
-grid on; hold on;
-xline(19e3,'r--','19 kHz');
-xline(38e3,'r--','38 kHz');
-xline(57e3,'r--','57 kHz');
-%plot(fft_freqs, fmChannelSpec, 'k--', 'DisplayName', 'FFT');
-h0 = plot(psxx_tx_f, psxx_tx, 'b', 'DisplayName', 'Tx');
-h1 = plot(psxx_rx_fm_demod_f, psxx_rx_fm_demod, 'r','DisplayName', 'Rx');
-legend([h0,h1]);
-title('Tx FM channel spectrum (linear)');
-xlabel('frequency [Hz]');
-ylabel('magnitude');
-xlim([0 65e3]);
-ylimits = ylim();
-saveas(fig_tx_spec, outputDir + "tx_freq_domain.png");
-
 fig_rx_mod = figure('Name','Rx channel spectrum complex mixer (linear)');
 grid on; hold on;
-xline(19e3,'r--','19 kHz');
-xline(38e3,'r--','38 kHz');
-xline(57e3,'r--','57 kHz');
-h0 = plot(psxx_rx_fm_f, psxx_rx_fm,       'b',  'DisplayName', 'RxFM');
+xline(19e3,'k--','19 kHz');
+xline(38e3,'k--','38 kHz');
+xline(57e3,'k--','57 kHz');
+xline(fc_oe3, 'k--', 'fc');
+h0 = plot(psxx_rx_fm_f, psxx_rx_fm,       'b','DisplayName', 'RxFM');
 h1 = plot(psxx_rx_fm_bb_f, psxx_rx_fm_bb, 'r','DisplayName', 'RxFM BB');
 title('Rx channel spectrum complex mixer (linear)');
 xlabel('frequency [Hz]');
@@ -416,13 +412,29 @@ xlim([0 fc_oe3+fc_oe3/5]);
 legend([h0,h1]);
 saveas(fig_rx_mod, outputDir + "tx_freq_domain_bb_mixer.png");
 
+fig_tx_spec = figure('Name','FM channel spectrum (linear)');
+grid on; hold on;
+xline(19e3,'k--','19 kHz');
+xline(38e3,'k--','38 kHz');
+xline(57e3,'k--','57 kHz');
+%plot(fft_freqs, fmChannelSpec, 'k--', 'DisplayName', 'FFT');
+h0 = plot(psxx_tx_f, psxx_tx,             'b','DisplayName', 'Tx');
+h1 = plot(psxx_rx_fm_bb_f, psxx_rx_fm_bb, 'r','DisplayName', 'Rx');
+legend([h0,h1]);
+title('FM channel spectrum (linear)');
+xlabel('frequency [Hz]');
+ylabel('magnitude');
+xlim([0 65e3]);
+ylimits = ylim();
+saveas(fig_tx_spec, outputDir + "tx_freq_domain.png");
+
 fig_rx_spec = figure('Name','Rx channel spectrum (linear)');
 grid on; hold on;
-xline(19e3,'r--','19 kHz');
-xline(38e3,'r--','38 kHz');
-xline(57e3,'r--','57 kHz');
+xline(19e3,'k--','19 kHz');
+xline(38e3,'k--','38 kHz');
+xline(57e3,'k--','57 kHz');
 h0 = plot(psxx_rx_mono_f, psxx_rx_mono,                   'b',  'DisplayName', 'Mono');
-h1 = plot(psxx_rx_lrdiff_bpfilt_f, psxx_rx_lrdiff_bpfilt, 'r--','DisplayName', 'LR Diff bp filtered');
+h1 = plot(psxx_rx_lrdiff_bpfilt_f, psxx_rx_lrdiff_bpfilt, 'r-.','DisplayName', 'LR Diff bp filtered');
 h2 = plot(psxx_rx_lrdiff_mod_f, psxx_rx_lrdiff_mod,       'r',  'DisplayName', 'LR Diff bp filtered and mod');
 h3 = plot(psxx_rx_lrdiff_f, psxx_rx_lrdiff,               'g',  'DisplayName', 'LR Diff BB');
 title('Rx FM channel spectrum (linear)');
