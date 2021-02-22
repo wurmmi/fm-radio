@@ -325,16 +325,18 @@ window      = hanning(welch_size);
 
 %% Plots
 
-fig_audio_time = figure('Name','Time domain signal');
+fig_title = 'Time domain signal';
+fig_audio_time = figure('Name',fig_title);
 subplot(6,1,1);
 plot(tn/fs, audioDataL, 'r', 'DisplayName', 'audioDataL');
-title('Time domain signal');
+title(fig_title);
 grid on; legend();
 subplot(6,1,2);
 plot(tn/fs, audioDataR, 'g', 'DisplayName', 'audioDataR');
 grid on; legend();
-subplot(6,1,3); hold on;
+subplot(6,1,3);
 plot(tnRx/fs_rx, rx_audio_lrdiff, 'b', 'DisplayName', 'rx\_audio\_lrdiff');
+ylabel('amplitude');
 grid on; legend();
 subplot(6,1,4);
 plot(tnRx/fs_rx, rx_audio_mono, 'b', 'DisplayName', 'rx\_audio\_mono');
@@ -345,59 +347,64 @@ grid on; legend();
 subplot(6,1,6);
 plot(tnRx/fs_rx, rx_audio_R, 'g', 'DisplayName', 'rx\_audio\_R');
 xlabel('time [s]');
-ylabel('amplitude');
 grid on; legend();
 
-fig_time_mod = figure('Name','Time domain signal (modulated and de-modulated)');
+fig_title = 'Time domain signal (modulated and de-modulated)';
+fig_time_mod = figure('Name',fig_title);
 grid on; hold on;
-plot(tn/fs, fmChannelData, 'b', 'DisplayName', 'fmChannelData (pre-mod)');
-plot(tnRx/fs_rx, rx_fmChannelData, 'r', 'DisplayName', 'rx\_fmChannelData (demod)');
-title('Time domain signal (modulated and de-modulated)');
+plot(tn/fs, fmChannelData,        'b', 'DisplayName', 'fmChannelData (pre-mod)');
+plot(tnRx/fs_rx, rx_fmChannelData,'r', 'DisplayName', 'rx\_fmChannelData (demod)');
+title(fig_title);
 xlabel('time [s]');
 ylabel('amplitude');
 legend();
 
 if false
-    fig_time_fm_demodulator = figure('Name','FM demodulator');
+    fig_title = 'FM demodulator';
+    fig_time_fm_demodulator = figure('Name',fig_title);
     grid on; hold on;
     plot(tn/fs, rx_fm_bb,        'r', 'DisplayName', 'rx\_fm\_bb');
     plot(tn/fs, rx_fm_bb_norm,   'g', 'DisplayName', 'rx\_fm\_bb\_norm');
     plot(tn/fs, rx_fm_demod_raw, 'b', 'DisplayName', 'rx\_fm\_demod\_raw');
-    title('FM demodulator');
+    title(fig_title);
     xlabel('time [s]');
     ylabel('amplitude');
     legend();
 end
 
 if false
-    fig_adapt_grpdelay_time = figure('Name','Time domain signal (to check group delay)');
+    fig_title = 'Time domain signal (to check group delay)';
+    fig_adapt_grpdelay_time = figure('Name',fig_title);
     grid on; hold on;
-    plot(tnRx/fs_rx, rx_audio_mono, 'r', 'DisplayName', 'rx\_audio\_mono');
+    plot(tnRx/fs_rx, rx_audio_mono,   'r', 'DisplayName', 'rx\_audio\_mono');
     plot(tnRx/fs_rx, rx_audio_lrdiff, 'b', 'DisplayName', 'rx\_audio\_lrdiff');
+    title(fig_title);
     xlabel('time [s]');
     ylabel('amplitude');
     legend();
 end
 
 if false
-    fig_tx_time = figure('Name','Tx time domain signal');
+    fig_title = 'Tx time domain signal';
+    fig_tx_time = figure('Name',fig_title);
     grid on; hold on;
-    plot(tn/fs, fmChannelData, 'b','DisplayName', 'Total');
+    plot(tn/fs, fmChannelData, 'b', 'DisplayName', 'Total');
     plot(tn/fs, audioData,     'r', 'DisplayName', 'audioData');
     plot(tn/fs, pilotTone,     'm', 'DisplayName', 'pilotTone');
     plot(tn/fs, audioLRDiffMod,'k', 'DisplayName', 'audioLRDiffMod');
     if EnableTrafficInfoTrigger
-        plot(tn/fs, hinz_triller,  'g', 'DisplayName', 'hinzTriller');
+        plot(tn/fs, hinz_triller,'g', 'DisplayName', 'hinzTriller');
     end
-    title('Tx time domain signal');
+    title(fig_title);
     xlabel('time [s]');
     ylabel('amplitude');
     legend();
     xlim([0 inf]);
-    saveas(fig_tx_time, outputDir + "tx_time_domain.png");
+    saveas(fig_tx_time, outputDir + "time_tx.png");
 end
 
-fig_rx_mod = figure('Name','Rx channel spectrum complex mixer (linear)');
+fig_title = 'Rx channel spectrum complex IQ mixer (linear)';
+fig_rx_mod = figure('Name',fig_title);
 grid on; hold on;
 xline(19e3,'k--','19 kHz');
 xline(38e3,'k--','38 kHz');
@@ -405,14 +412,15 @@ xline(57e3,'k--','57 kHz');
 xline(fc_oe3, 'k--', 'fc');
 h0 = plot(psxx_rx_fm_f, psxx_rx_fm,       'b','DisplayName', 'RxFM');
 h1 = plot(psxx_rx_fm_bb_f, psxx_rx_fm_bb, 'r','DisplayName', 'RxFM BB');
-title('Rx channel spectrum complex mixer (linear)');
+title(fig_title);
 xlabel('frequency [Hz]');
 ylabel('magnitude');
+legend([h0,h1],'Location','east');
 xlim([0 fc_oe3+fc_oe3/5]);
-legend([h0,h1]);
-saveas(fig_rx_mod, outputDir + "tx_freq_domain_bb_mixer.png");
+saveas(fig_rx_mod, outputDir + "psd_iq_mixer.png");
 
-fig_tx_spec = figure('Name','FM channel spectrum (linear)');
+fig_title = 'FM channel spectrum (linear)';
+fig_tx_spec = figure('Name',fig_title);
 grid on; hold on;
 xline(19e3,'k--','19 kHz');
 xline(38e3,'k--','38 kHz');
@@ -420,15 +428,16 @@ xline(57e3,'k--','57 kHz');
 %plot(fft_freqs, fmChannelSpec, 'k--', 'DisplayName', 'FFT');
 h0 = plot(psxx_tx_f, psxx_tx,             'b','DisplayName', 'Tx');
 h1 = plot(psxx_rx_fm_bb_f, psxx_rx_fm_bb, 'r','DisplayName', 'Rx');
-legend([h0,h1]);
-title('FM channel spectrum (linear)');
+title(fig_title);
 xlabel('frequency [Hz]');
 ylabel('magnitude');
+legend([h0,h1],'Location','east');
 xlim([0 65e3]);
 ylimits = ylim();
-saveas(fig_tx_spec, outputDir + "tx_freq_domain.png");
+saveas(fig_tx_spec, outputDir + "psd_rx_tx.png");
 
-fig_rx_spec = figure('Name','Rx channel spectrum (linear)');
+fig_title = 'Rx spectrum parts (linear)';
+fig_rx_spec = figure('Name',fig_title);
 grid on; hold on;
 xline(19e3,'k--','19 kHz');
 xline(38e3,'k--','38 kHz');
@@ -437,13 +446,13 @@ h0 = plot(psxx_rx_mono_f, psxx_rx_mono,                   'b',  'DisplayName', '
 h1 = plot(psxx_rx_lrdiff_bpfilt_f, psxx_rx_lrdiff_bpfilt, 'r-.','DisplayName', 'LR Diff bp filtered');
 h2 = plot(psxx_rx_lrdiff_mod_f, psxx_rx_lrdiff_mod,       'r',  'DisplayName', 'LR Diff bp filtered and mod');
 h3 = plot(psxx_rx_lrdiff_f, psxx_rx_lrdiff,               'g',  'DisplayName', 'LR Diff BB');
-title('Rx FM channel spectrum (linear)');
+title(fig_title);
 xlabel('frequency [Hz]');
 ylabel('magnitude');
+legend([h0,h1,h2,h3],'Location','east');
 xlim([0 65e3]);
 ylim(ylimits);
-legend([h0,h1,h2,h3]);
-saveas(fig_rx_spec, outputDir + "tx_freq_domain.png");
+saveas(fig_rx_spec, outputDir + "psd_rx_parts.png");
 
 
 %% Arrange all plots on the display
