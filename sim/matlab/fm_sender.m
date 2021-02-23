@@ -43,7 +43,9 @@ if EnableSenderSourceCreateSim
         audioData = audioDataL + audioDataR;
         
         tn = (0:1:length(audioData)-1)';
-    else        
+    else    
+        tn = (0:1:n_sec*fs-1)';
+
         audioFreqL = 400;
         audioDataL = 1 * sin(2*pi*audioFreqL/fs*tn);
         audioDataL(round(end/2):end) = 0; % mute second half
@@ -174,6 +176,8 @@ elseif EnableSenderSourceRecordedFile
     max_idx = n_sec*fs;
     assert(max_idx <= length(rx_fm_bb), 'File is shorter than requested length!');
     rx_fm_bb = rx_fm_bb(1:max_idx);
+
+    tn = (0:1:n_sec*fs-1)';
 else
     assert(false, 'Check settings.')
 end
