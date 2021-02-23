@@ -9,13 +9,13 @@
 # NOTE:
 #   Saalfelden: OE3 98.1 MHz
 
-center_freq=98.0e6
+center_freq=98.1e6
 sample_freq=970200
 n_seconds=10
 out_file="./recordings/fm_record_fs$sample_freq.bin"
 
 n_samples=$(( $sample_freq * $n_seconds))
-echo "Recording $n_samples @ $sample_freq SPS ($n_seconds seconds)."
+echo "Recording $n_samples samples @ $sample_freq SPS ($n_seconds seconds)."
 
 cmd="rtl_sdr -f $center_freq -s $sample_freq -n $n_samples $out_file"
 

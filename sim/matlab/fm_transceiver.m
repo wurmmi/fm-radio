@@ -37,12 +37,19 @@ EnableRxAudioReplay    = true;
 EnableFilterAnalyzeGUI = false;
 
 % Signal parameters
-n_sec = 1.7;  % 1.7s is "left channel, right channel" in audio file
-osr   = 22;
-fs    = 44.1e3 * osr;
+n_sec = 2;             % 1.7s is "left channel, right channel" in audio file
+osr   = 22;            % oversampling rate for fs
+fs    = 44.1e3 * osr;  % sampling rate fs
 
 % Channel
 fc_oe3 = 98.1e4;
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Common
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+tn = (0:1:n_sec*fs-1)';
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Sender
@@ -51,8 +58,10 @@ fc_oe3 = 98.1e4;
 fm_sender();
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% FM De-Modulator
+%% Receiver
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% FM Demodulator ================================================
 
 % Normalize the amplitude (remove amplitude variations)
 rx_fm_bb_norm = rx_fm_bb ./ abs(rx_fm_bb);
@@ -71,9 +80,7 @@ rx_fm_demod =  ...
 
 rx_fmChannelData = rx_fm_demod;
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Receiver
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Channel decoder ===============================================
 
 %% Downsample
 
@@ -215,20 +222,23 @@ end
 [psxx_rx_lrdiff, psxx_rx_lrdiff_f]               = pwelch(rx_audio_lrdiff, window, n_overlap, n_fft_welch, fs_rx);
 
 % Rx (RF) %%%%%%%%%%%%%%%%
-welch_size  = 4096*4*osr_mod;
-n_overlap   = welch_size / 4;
-if isRunningInOctave()
-    n_overlap = 1/4;
+if EnableSenderSourceCreateSim
+    welch_size  = 4096*4*osr_mod;
+    n_overlap   = welch_size / 4;
+    if isRunningInOctave()
+        n_overlap = 1/4;
+    end
+    n_fft_welch = welch_size;
+    window      = hanning(welch_size);
+    
+    [psxx_rx_fm, psxx_rx_fm_f] = pwelch(rx_fm, window, n_overlap, n_fft_welch, fs_mod);
 end
-n_fft_welch = welch_size;
-window      = hanning(welch_size);
-
-[psxx_rx_fm, psxx_rx_fm_f] = pwelch(rx_fm, window, n_overlap, n_fft_welch, fs_mod);
 
 %% Plots
 
 fig_title = 'Time domain signal';
 fig_audio_time = figure('Name',fig_title);
+if EnableSenderSourceCreateSim
 subplot(6,1,1);
 plot(tn/fs, audioDataL, 'r', 'DisplayName', 'audioDataL');
 title(fig_title);
@@ -236,6 +246,7 @@ grid on; legend();
 subplot(6,1,2);
 plot(tn/fs, audioDataR, 'g', 'DisplayName', 'audioDataR');
 grid on; legend();
+end
 subplot(6,1,3);
 plot(tnRx/fs_rx, rx_audio_lrdiff, 'b', 'DisplayName', 'rx\_audio\_lrdiff');
 ylabel('amplitude');
@@ -320,7 +331,10 @@ xline(19e3,'k--','19 kHz');
 xline(38e3,'k--','38 kHz');
 xline(57e3,'k--','57 kHz');
 xline(fc_oe3, 'k--', 'fc');
+h0 ='';
+if EnableSenderSourceCreateSim
 h0 = plot(psxx_rx_fm_f, psxx_rx_fm,       'b','DisplayName', 'RxFM');
+end
 h1 = plot(psxx_rx_fm_bb_f, psxx_rx_fm_bb, 'r','DisplayName', 'RxFM BB');
 grid on; 
 title(fig_title);
@@ -337,7 +351,10 @@ xline(19e3,'k--','19 kHz');
 xline(38e3,'k--','38 kHz');
 xline(57e3,'k--','57 kHz');
 %plot(fft_freqs, fmChannelSpec, 'k--', 'DisplayName', 'FFT');
+h0 ='';
+if EnableSenderSourceCreateSim
 h0 = plot(psxx_tx_f, psxx_tx,             'b','DisplayName', 'Tx');
+end
 h1 = plot(psxx_rx_fm_bb_f, psxx_rx_fm_bb, 'r','DisplayName', 'Rx');
 grid on; 
 title(fig_title);
