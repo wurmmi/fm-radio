@@ -1,11 +1,12 @@
 %-------------------------------------------------------------------------
-% File        : isOctave.m
+% File        : isRunningInOctave.m
 % Author      : Michael Wurm <wurm.michael95@gmail.com>
-% Description : FM-Radio Sender and Receiver
+% Description : Returns true, if running in GNU Octave. 
+%               Returns false otherwise.
 %-------------------------------------------------------------------------
 
 function result = isRunningInOctave()
-%isOctave - Returns true, if running in GNU Octave. Returns false otherwise.
+%isRunningInOctave - Returns true, if running in GNU Octave. Returns false otherwise.
 
 result = exist('OCTAVE_VERSION', 'builtin') ~= 0;
 
