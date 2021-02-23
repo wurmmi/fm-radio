@@ -5,6 +5,10 @@
 %               or loads recorded data file.
 %-------------------------------------------------------------------------
 
+%=========================================================================
+%NOTE: This file only works when called from "fm_transceiver.m".
+%=========================================================================
+
 % Sanity checks
 assert( not(EnableSenderSourceRecordedFile && EnableSenderSourceCreateSim), ...
     'Settings Error: Only one sender source can be enabled at a time.')
@@ -162,9 +166,13 @@ if EnableSenderSourceCreateSim
     
 elseif EnableSenderSourceRecordedFile
     disp('Loading FM data stream from file.');
+    disp('NOTE: This is assuming that the file was recorded with the correct sampling frequency!');
     
-    assert(false, 'Not implemented yet.');
+    filename = sprintf("./recordings/fm_record_fs%d.bin",fs);
+    rx_fm_bb = loadFile(filename);
     
+    % Trim data to requested length
+    rx_fm_bb = rx_fm_bb(1:n_sec*fs);
 else
     assert(false, 'Check settings.')
 end

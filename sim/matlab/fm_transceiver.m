@@ -25,11 +25,11 @@ end
 
 % Paths
 dir_filters = "./filters/";
-dir_output = "./matlab_output/";
+dir_output  = "./matlab_output/";
 
 % Simulation options
-EnableSenderSourceRecordedFile = false;
-EnableSenderSourceCreateSim    = true;
+EnableSenderSourceRecordedFile = true;
+EnableSenderSourceCreateSim    = false;
 EnableTrafficInfoTrigger       = false;
 EnableAudioFromFile            = true;
 
@@ -188,9 +188,11 @@ end
 
 % Tx %%%%%%%%%%%%%%%%%%%%%
 % FFT
-n_fft = 4096;
-fmChannelSpec = ( abs( fftshift( fft(fmChannelData,n_fft) )));
-fft_freqs = (-n_fft/2:1:n_fft/2-1)*fs/n_fft;
+if EnableSenderSourceCreateSim
+    n_fft = 4096;
+    fmChannelSpec = ( abs( fftshift( fft(fmChannelData,n_fft) )));
+    fft_freqs = (-n_fft/2:1:n_fft/2-1)*fs/n_fft;
+end
 
 % PSD over entire audio file
 welch_size  = 4096*4;
@@ -201,7 +203,9 @@ end
 n_fft_welch = welch_size;
 window      = hanning(welch_size);
 
-[psxx_tx, psxx_tx_f]             = pwelch(fmChannelData, window, n_overlap, n_fft_welch, fs);
+if EnableSenderSourceCreateSim
+    [psxx_tx, psxx_tx_f]             = pwelch(fmChannelData, window, n_overlap, n_fft_welch, fs);
+end
 [psxx_rx_fm_bb, psxx_rx_fm_bb_f] = pwelch(rx_fm_bb, window, n_overlap, n_fft_welch, fs);
 
 % Rx %%%%%%%%%%%%%%%%%%%%%
@@ -251,7 +255,9 @@ saveas(fig_audio_time, sprintf("%s%s",dir_output, "time_audio.png"));
 fig_title = 'Time domain signal (modulated and de-modulated)';
 fig_time_mod = figure('Name',fig_title);
 hold on;
-plot(tn/fs, fmChannelData,        'b', 'DisplayName', 'fmChannelData (pre-mod)');
+if EnableSenderSourceCreateSim
+    plot(tn/fs, fmChannelData,        'b', 'DisplayName', 'fmChannelData (pre-mod)');
+end
 plot(tnRx/fs_rx, rx_fmChannelData,'r', 'DisplayName', 'rx\_fmChannelData (demod)');
 grid on;
 title(fig_title);
