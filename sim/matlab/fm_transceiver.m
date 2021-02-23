@@ -7,6 +7,14 @@
 %TODO: find places, where power is attenuated --> Tx and Rx should be equal
 %      --> only amplify at a single place (at the receiver input)
 
+% TODO: check plots - they should be equal to the fm_demodulate.m
+%                     from the tutorial
+
+% TODO: change FM demodulator, for better HW implementation
+
+% TODO: change other things, for better HW implementation
+
+
 %% Prepare environment
 clear; close all; clc;
 
