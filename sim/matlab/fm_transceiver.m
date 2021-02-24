@@ -4,6 +4,8 @@
 % Description : FM-Radio Sender and Receiver
 %-------------------------------------------------------------------------
 
+% TODO: find integer osr for entire system
+
 %TODO: find places, where power is attenuated --> Tx and Rx should be equal
 %      --> only amplify at a single place (at the receiver input)
 
@@ -11,6 +13,7 @@
 
 % TODO: change other things, for better HW implementation
 
+% TODO: find a benchmark to compare against
 
 %% Prepare environment
 clear;
@@ -34,8 +37,8 @@ dir_filters = "./filters/";
 dir_output  = "./matlab_output/";
 
 % Simulation options
-EnableSenderSourceRecordedFile = false;
-EnableSenderSourceCreateSim    = true;
+EnableSenderSourceRecordedFile = true;
+EnableSenderSourceCreateSim    = false;
 EnableAudioFromFile            = true;
 EnableTrafficInfoTrigger       = false;
 
@@ -57,6 +60,9 @@ fc_oe3 = 98.1e4;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 fm_sender();
+
+% TODO
+%fm_sender_fixed_point();
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Receiver
@@ -235,7 +241,7 @@ if false
     end
 end
 
-fig_title = 'Rx channel spectrum complex IQ mixer (linear)';
+fig_title = 'Rx channel spectrum complex IQ mixer';
 fig_rx_mod = figure('Name',fig_title);
 hold on;
 xline(19e3,'k--','19 kHz');
@@ -245,9 +251,9 @@ xline(fc_oe3, 'k--', 'fc\_oe3');
 xline(fs, 'k--', 'fs');
 h0 ='';
 if EnableSenderSourceCreateSim
-    h0 = plot(psxx_rx_fm_f, psxx_rx_fm,   'b','DisplayName', 'RxFM');
+    h0 = plot(psxx_rx_fm_f, 10*log10(psxx_rx_fm),   'b','DisplayName', 'RxFM');
 end
-h1 = plot(psxx_rx_fm_bb_f, psxx_rx_fm_bb, 'r','DisplayName', 'RxFM BB');
+h1 = plot(psxx_rx_fm_bb_f, 10*log10(psxx_rx_fm_bb), 'r','DisplayName', 'RxFM BB');
 grid on;
 title(fig_title);
 xlabel('frequency [Hz]');
@@ -267,36 +273,36 @@ xline(57e3,'k--','57 kHz');
 %plot(fft_freqs, fmChannelSpec, 'k--', 'DisplayName', 'FFT');
 h0 ='';
 if EnableSenderSourceCreateSim
-    h0 = plot(psxx_tx_ChannelData_f, psxx_txChannelData, 'b','DisplayName', 'Tx');
+    h0 = plot(psxx_tx_ChannelData_f, 10*log10(psxx_txChannelData), 'b','DisplayName', 'Tx');
 end
-h1 = plot(psxx_rxChannelData_f, psxx_rxChannelData,  'r','DisplayName', 'Rx Demod');
+h1 = plot(psxx_rxChannelData_f, 10*log10(psxx_rxChannelData),  'r','DisplayName', 'Rx Demod');
 grid on;
 title(fig_title);
 xlabel('frequency [Hz]');
 ylabel('magnitude');
 legend([h0,h1],'Location','east');
-xlim([0 65e3]);
+xlim([0 350e3]);
 ylimits = ylim();
 if EnableSavePlotsToPng
     saveas(fig_tx_spec, sprintf("%s%s",dir_output, "psd_rx_tx.png"));
 end
 
-fig_title = 'Rx spectrum parts (linear)';
+fig_title = 'Rx spectrum parts';
 fig_rx_spec = figure('Name',fig_title);
 hold on;
 xline(19e3,'k--','19 kHz');
 xline(38e3,'k--','38 kHz');
 xline(57e3,'k--','57 kHz');
-h0 = plot(psxx_rx_mono_f, psxx_rx_mono,                   'b',  'DisplayName', 'Mono');
-h1 = plot(psxx_rx_lrdiff_bpfilt_f, psxx_rx_lrdiff_bpfilt, 'r-.','DisplayName', 'LR Diff bp filtered');
-h2 = plot(psxx_rx_lrdiff_mod_f, psxx_rx_lrdiff_mod,       'r',  'DisplayName', 'LR Diff bp filtered and mod');
-h3 = plot(psxx_rx_lrdiff_f, psxx_rx_lrdiff,               'g',  'DisplayName', 'LR Diff BB');
+h0 = plot(psxx_rx_mono_f, 10*log10(psxx_rx_mono),                   'b',  'DisplayName', 'Mono');
+h1 = plot(psxx_rx_lrdiff_bpfilt_f, 10*log10(psxx_rx_lrdiff_bpfilt), 'r-.','DisplayName', 'LR Diff bp filtered');
+h2 = plot(psxx_rx_lrdiff_mod_f, 10*log10(psxx_rx_lrdiff_mod),       'r',  'DisplayName', 'LR Diff bp filtered and mod');
+h3 = plot(psxx_rx_lrdiff_f, 10*log10(psxx_rx_lrdiff),               'g',  'DisplayName', 'LR Diff BB');
 grid on;
 title(fig_title);
 xlabel('frequency [Hz]');
 ylabel('magnitude');
 legend([h0,h1,h2,h3],'Location','east');
-xlim([0 65e3]);
+xlim([0 100e3]);
 ylim(ylimits);
 if EnableSavePlotsToPng
     saveas(fig_rx_spec, sprintf("%s%s",dir_output, "psd_rx_parts.png"));

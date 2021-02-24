@@ -6,7 +6,7 @@
 %-------------------------------------------------------------------------
 
 %=========================================================================
-% NOTE: 
+% NOTE:
 %   This file only works when called from "fm_transceiver.m".
 %=========================================================================
 
@@ -43,15 +43,15 @@ if EnableSenderSourceCreateSim
         audioData = audioDataL + audioDataR;
         
         tn = (0:1:length(audioData)-1)';
-    else    
+    else
         tn = (0:1:n_sec*fs-1)';
-
+        
         audioFreqL = 400;
-        audioDataL = 1 * sin(2*pi*audioFreqL/fs*tn);
+        audioDataL = sin(2*pi*audioFreqL/fs*tn);
         audioDataL(round(end/2):end) = 0; % mute second half
         
         audioFreqR = 400;
-        audioDataR = 1 * sin(2*pi*audioFreqR/fs*tn);
+        audioDataR = sin(2*pi*audioFreqR/fs*tn);
         audioDataR(1:round(end/2)) = 0;   % mute first half
         
         audioData = audioDataL + audioDataR;
@@ -60,14 +60,14 @@ if EnableSenderSourceCreateSim
     %% 19kHz pilot tone
     
     pilotFreq = 19000;
-    pilotTone = 0.25 * sin(2*pi*pilotFreq/fs*tn);
+    pilotTone = sin(2*pi*pilotFreq/fs*tn);
     
     %% Difference signal (for stereo)
     
     audioDiff = audioDataL - audioDataR;
     
     % Modulate it to 38 kHz
-    carrier38kHzTx = 1 * sin(2*pi*38e3/fs*tn);
+    carrier38kHzTx = cos(2*pi*38e3/fs*tn);
     audioLRDiffMod = audioDiff .* carrier38kHzTx;
     
     %% Radio Data Signal (RDS)
@@ -82,7 +82,6 @@ if EnableSenderSourceCreateSim
         f_deviation         = 123;
         hinz_duration_on_s  = 1.2;
         hinz_duration_off_s = 0.5;
-        hinz_amplitude      = 1/16;
         
         % Create the 123 Hz Hinz Triller tone and integrate it (for FM modulation)
         t_hinz = (0:1:min(hinz_duration_off_s,n_sec)*fs-1)';
@@ -92,12 +91,15 @@ if EnableSenderSourceCreateSim
         % FM modulation (with zero padding at the end, to match signal duration)
         hinz_triller = zeros(1,length(tn))';
         hinz_triller(t_hinz+1) = cos(2*pi*fc_hinz/fs*t_hinz + (2*pi*f_deviation*hinz_tone_int));
-        hinz_triller = hinz_amplitude * hinz_triller;
     end
     
     %% Combine all signal parts
     
-    fmChannelData = audioData + pilotTone + audioLRDiffMod + hinz_triller;
+    fmChannelData = ...
+        1.00 * audioData + ...
+        0.25 * pilotTone + ...
+        0.50 * audioLRDiffMod + ...
+        1/16 * hinz_triller;
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% FM Modulator
@@ -164,7 +166,7 @@ if EnableSenderSourceCreateSim
     
     % ADC (downsample to fs)
     rx_fm_bb = resample(rx_fm_bb, 1, osr_mod);
-
+    
     disp('Done.');
 elseif EnableSenderSourceRecordedFile
     disp('Loading FM data stream from file.');
@@ -177,7 +179,7 @@ elseif EnableSenderSourceRecordedFile
     max_idx = n_sec*fs;
     assert(max_idx <= length(rx_fm_bb), 'File is shorter than requested length!');
     rx_fm_bb = rx_fm_bb(1:max_idx);
-
+    
     tn = (0:1:n_sec*fs-1)';
 else
     assert(false, 'Check settings.')
