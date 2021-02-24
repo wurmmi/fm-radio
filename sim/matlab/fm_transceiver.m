@@ -7,25 +7,24 @@
 %TODO: find places, where power is attenuated --> Tx and Rx should be equal
 %      --> only amplify at a single place (at the receiver input)
 
-% TODO: check plots - they should be equal to the fm_demodulate.m
-%                     from the tutorial
-
 % TODO: change FM demodulator, for better HW implementation
 
 % TODO: change other things, for better HW implementation
 
 
 %% Prepare environment
-clear; close all; clc;
+clear;
+close all;
+clc;
 
 addpath(genpath('./helpers/'));
 addpath(genpath('./filters/'));
 
 % Octave
 if isRunningInOctave()
-  % Define xline function
-  %xline = @(xval, varargin) line([xval xval], ylim, varargin{:});
-  xline = @(xval) line([xval xval], ylim, 'color','black','linestyle','--');
+    % Define xline function
+    %xline = @(xval, varargin) line([xval xval], ylim, varargin{:});
+    xline = @(xval) line([xval xval], ylim, 'color','black','linestyle','--');
 end
 
 %% Settings
@@ -35,16 +34,17 @@ dir_filters = "./filters/";
 dir_output  = "./matlab_output/";
 
 % Simulation options
-EnableSenderSourceRecordedFile = true;
-EnableSenderSourceCreateSim    = false;
+EnableSenderSourceRecordedFile = false;
+EnableSenderSourceCreateSim    = true;
 EnableAudioFromFile            = true;
 EnableTrafficInfoTrigger       = false;
 
 EnableRxAudioReplay    = true;
 EnableFilterAnalyzeGUI = false;
+EnableSavePlotsToPng   = false;
 
 % Signal parameters
-n_sec = 2;             % 1.7s is "left channel, right channel" in audio file
+n_sec = 1.7;           % 1.7s is "left channel, right channel" in audio file
 osr   = 22;            % oversampling rate for fs
 fs    = 44.1e3 * osr;  % sampling rate fs
 
@@ -68,12 +68,12 @@ fm_receiver();
 %% Audio replay
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-if EnableRxAudioReplay    
+if EnableRxAudioReplay
     % Create LR audio signal for output
     rx_audioReplay = zeros(length(rx_audio_L),2);
     rx_audioReplay(:,1) = rx_audio_L;
     rx_audioReplay(:,2) = rx_audio_R;
-
+    
     % Downsample for PC soundcard
     osr_replay = 5;
     fs_audioReplay = fs_rx/osr_replay;
@@ -92,6 +92,7 @@ if ~exist(dir_output, 'dir')
 end
 
 %% Calculations
+disp('FFT and PSD calculations...');
 
 % Tx %%%%%%%%%%%%%%%%%%%%%
 % FFT
@@ -111,9 +112,10 @@ n_fft_welch = welch_size;
 window      = hanning(welch_size);
 
 if EnableSenderSourceCreateSim
-    [psxx_tx, psxx_tx_f]             = pwelch(fmChannelData, window, n_overlap, n_fft_welch, fs);
+    [psxx_txChannelData, psxx_tx_ChannelData_f] = pwelch(fmChannelData, window, n_overlap, n_fft_welch, fs);
 end
 [psxx_rx_fm_bb, psxx_rx_fm_bb_f] = pwelch(rx_fm_bb, window, n_overlap, n_fft_welch, fs);
+[psxx_rxChannelData, psxx_rxChannelData_f] = pwelch(rx_fm_demod, window, n_overlap, n_fft_welch, fs);
 
 % Rx %%%%%%%%%%%%%%%%%%%%%
 [psxx_rx_mono, psxx_rx_mono_f]                   = pwelch(rx_audio_mono, window, n_overlap, n_fft_welch, fs_rx);
@@ -134,18 +136,21 @@ if EnableSenderSourceCreateSim
     [psxx_rx_fm, psxx_rx_fm_f] = pwelch(rx_fm, window, n_overlap, n_fft_welch, fs_mod);
 end
 
+disp('Done.');
+
 %% Plots
+disp('Plots...');
 
 fig_title = 'Time domain signal';
 fig_audio_time = figure('Name',fig_title);
 if EnableSenderSourceCreateSim
-subplot(6,1,1);
-plot(tn/fs, audioDataL, 'r', 'DisplayName', 'audioDataL');
-title(fig_title);
-grid on; legend();
-subplot(6,1,2);
-plot(tn/fs, audioDataR, 'g', 'DisplayName', 'audioDataR');
-grid on; legend();
+    subplot(6,1,1);
+    plot(tn/fs, audioDataL, 'r', 'DisplayName', 'audioDataL');
+    title(fig_title);
+    grid on; legend();
+    subplot(6,1,2);
+    plot(tn/fs, audioDataR, 'g', 'DisplayName', 'audioDataR');
+    grid on; legend();
 end
 subplot(6,1,3);
 plot(tnRx/fs_rx, rx_audio_lrdiff, 'b', 'DisplayName', 'rx\_audio\_lrdiff');
@@ -161,21 +166,25 @@ subplot(6,1,6);
 plot(tnRx/fs_rx, rx_audio_R, 'g', 'DisplayName', 'rx\_audio\_R');
 xlabel('time [s]');
 grid on; legend();
-saveas(fig_audio_time, sprintf("%s%s",dir_output, "time_audio.png"));
-
-fig_title = 'Time domain signal (modulated and de-modulated)';
-fig_time_mod = figure('Name',fig_title);
-hold on;
-if EnableSenderSourceCreateSim
-    plot(tn/fs, fmChannelData,        'b', 'DisplayName', 'fmChannelData (pre-mod)');
+if EnableSavePlotsToPng
+    saveas(fig_audio_time, sprintf("%s%s",dir_output, "time_audio.png"));
 end
-plot(tnRx/fs_rx, rx_fmChannelData,'r', 'DisplayName', 'rx\_fmChannelData (demod)');
-grid on;
-title(fig_title);
-xlabel('time [s]');
-ylabel('amplitude');
-legend();
-saveas(fig_time_mod, sprintf("%s%s",dir_output, "time_mod_demod.png"));
+
+if EnableSenderSourceCreateSim
+    fig_title = 'Time domain signal (modulated and de-modulated)';
+    fig_time_mod = figure('Name',fig_title);
+    hold on;
+    plot(tn/fs, fmChannelData,        'b', 'DisplayName', 'fmChannelData (pre-mod)');
+    plot(tnRx/fs_rx, rx_fmChannelData,'r', 'DisplayName', 'rx\_fmChannelData (demod)');
+    grid on;
+    title(fig_title);
+    xlabel('time [s]');
+    ylabel('amplitude');
+    legend();
+    if EnableSavePlotsToPng
+        saveas(fig_time_mod, sprintf("%s%s",dir_output, "time_mod_demod.png"));
+    end
+end
 
 if false
     fig_title = 'FM demodulator';
@@ -197,7 +206,7 @@ if false
     hold on;
     plot(tnRx/fs_rx, rx_audio_mono,   'r', 'DisplayName', 'rx\_audio\_mono');
     plot(tnRx/fs_rx, rx_audio_lrdiff, 'b', 'DisplayName', 'rx\_audio\_lrdiff');
-    grid on; 
+    grid on;
     title(fig_title);
     xlabel('time [s]');
     ylabel('amplitude');
@@ -215,13 +224,15 @@ if false
     if EnableTrafficInfoTrigger
         plot(tn/fs, hinz_triller,'g', 'DisplayName', 'hinzTriller');
     end
-    grid on; 
+    grid on;
     title(fig_title);
     xlabel('time [s]');
     ylabel('amplitude');
     legend();
     xlim([0 inf]);
-    saveas(fig_tx_time, sprintf("%s%s",dir_output, "time_tx.png"));
+    if EnableSavePlotsToPng
+        saveas(fig_tx_time, sprintf("%s%s",dir_output, "time_tx.png"));
+    end
 end
 
 fig_title = 'Rx channel spectrum complex IQ mixer (linear)';
@@ -230,19 +241,22 @@ hold on;
 xline(19e3,'k--','19 kHz');
 xline(38e3,'k--','38 kHz');
 xline(57e3,'k--','57 kHz');
-xline(fc_oe3, 'k--', 'fc');
+xline(fc_oe3, 'k--', 'fc\_oe3');
+xline(fs, 'k--', 'fs');
 h0 ='';
 if EnableSenderSourceCreateSim
-h0 = plot(psxx_rx_fm_f, psxx_rx_fm,       'b','DisplayName', 'RxFM');
+    h0 = plot(psxx_rx_fm_f, psxx_rx_fm,   'b','DisplayName', 'RxFM');
 end
 h1 = plot(psxx_rx_fm_bb_f, psxx_rx_fm_bb, 'r','DisplayName', 'RxFM BB');
-grid on; 
+grid on;
 title(fig_title);
 xlabel('frequency [Hz]');
 ylabel('magnitude');
 legend([h0,h1],'Location','East');
-xlim([0 fc_oe3+fc_oe3/5]);
-saveas(fig_rx_mod, sprintf("%s%s",dir_output, "psd_iq_mixer.png"));
+xlim([0 fs+fs/8]);
+if EnableSavePlotsToPng
+    saveas(fig_rx_mod, sprintf("%s%s",dir_output, "psd_iq_mixer.png"));
+end
 
 fig_title = 'FM channel spectrum (linear)';
 fig_tx_spec = figure('Name',fig_title);
@@ -253,17 +267,19 @@ xline(57e3,'k--','57 kHz');
 %plot(fft_freqs, fmChannelSpec, 'k--', 'DisplayName', 'FFT');
 h0 ='';
 if EnableSenderSourceCreateSim
-h0 = plot(psxx_tx_f, psxx_tx,             'b','DisplayName', 'Tx');
+    h0 = plot(psxx_tx_ChannelData_f, psxx_txChannelData, 'b','DisplayName', 'Tx');
 end
-h1 = plot(psxx_rx_fm_bb_f, psxx_rx_fm_bb, 'r','DisplayName', 'Rx');
-grid on; 
+h1 = plot(psxx_rxChannelData_f, psxx_rxChannelData,  'r','DisplayName', 'Rx Demod');
+grid on;
 title(fig_title);
 xlabel('frequency [Hz]');
 ylabel('magnitude');
 legend([h0,h1],'Location','east');
 xlim([0 65e3]);
 ylimits = ylim();
-saveas(fig_tx_spec, sprintf("%s%s",dir_output, "psd_rx_tx.png"));
+if EnableSavePlotsToPng
+    saveas(fig_tx_spec, sprintf("%s%s",dir_output, "psd_rx_tx.png"));
+end
 
 fig_title = 'Rx spectrum parts (linear)';
 fig_rx_spec = figure('Name',fig_title);
@@ -275,14 +291,16 @@ h0 = plot(psxx_rx_mono_f, psxx_rx_mono,                   'b',  'DisplayName', '
 h1 = plot(psxx_rx_lrdiff_bpfilt_f, psxx_rx_lrdiff_bpfilt, 'r-.','DisplayName', 'LR Diff bp filtered');
 h2 = plot(psxx_rx_lrdiff_mod_f, psxx_rx_lrdiff_mod,       'r',  'DisplayName', 'LR Diff bp filtered and mod');
 h3 = plot(psxx_rx_lrdiff_f, psxx_rx_lrdiff,               'g',  'DisplayName', 'LR Diff BB');
-grid on; 
+grid on;
 title(fig_title);
 xlabel('frequency [Hz]');
 ylabel('magnitude');
 legend([h0,h1,h2,h3],'Location','east');
 xlim([0 65e3]);
 ylim(ylimits);
-saveas(fig_rx_spec, sprintf("%s%s",dir_output, "psd_rx_parts.png"));
+if EnableSavePlotsToPng
+    saveas(fig_rx_spec, sprintf("%s%s",dir_output, "psd_rx_parts.png"));
+end
 
 
 %% Arrange all plots on the display
@@ -290,3 +308,4 @@ if ~isRunningInOctave()
     autoArrangeFigures(2,3,2);
 end
 
+disp('Done.');

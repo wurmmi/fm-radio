@@ -18,7 +18,7 @@ assert( not(EnableSenderSourceRecordedFile == false && EnableSenderSourceCreateS
 
 
 if EnableSenderSourceCreateSim
-    disp('Creating FM data stream in simulation.');
+    disp('Creating FM data stream in simulation...');
     
     %% Audio stream data
     if EnableAudioFromFile
@@ -128,7 +128,7 @@ if EnableSenderSourceCreateSim
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% 'Analog' frontend
     % -- Direct down-conversion (DDC) to baseband with a complex mixer (IQ)
-    % -- Lowpass filter the spectral replicas at multiple of fc
+    % -- Lowpass filter the spectral replicas at multiple of fs
     % -- ADC: sample with fs
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
@@ -164,13 +164,14 @@ if EnableSenderSourceCreateSim
     
     % ADC (downsample to fs)
     rx_fm_bb = resample(rx_fm_bb, 1, osr_mod);
-    
+
+    disp('Done.');
 elseif EnableSenderSourceRecordedFile
     disp('Loading FM data stream from file.');
     disp('NOTE: This is assuming that the file was recorded with the correct sampling frequency!');
     
     filename = sprintf("./recordings/fm_record_fs%d.bin",fs);
-    rx_fm_bb = loadFile(filename);
+    rx_fm_bb = loadIQFile(filename);
     
     % Trim data to requested length
     max_idx = n_sec*fs;

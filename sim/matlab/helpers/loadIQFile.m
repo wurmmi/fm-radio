@@ -1,7 +1,7 @@
-function y = loadFile(filename)
+function y = loadIQFile(filename)
 
 %
-%  y = loadFile(filename)
+%  y = loadIQFile(filename)
 %
 % reads complex samples from the RTL-SDR file
 %

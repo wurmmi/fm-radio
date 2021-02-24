@@ -12,6 +12,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% FM Demodulator
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+disp('FM demodulator...');
 
 % Normalize the amplitude (remove amplitude variations)
 rx_fm_bb_norm = rx_fm_bb ./ abs(rx_fm_bb);
@@ -30,9 +31,12 @@ rx_fm_demod =  ...
 
 rx_fmChannelData = rx_fm_demod;
 
+disp('Done.');
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Channel decoder
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+disp('Channel decoder...');
 
 %% Downsample
 
@@ -113,5 +117,8 @@ bp_groupdelay = (length(filter_bp_lrdiff)-1)/2;
 % Compensate the group delay
 rx_audio_mono = [zeros(bp_groupdelay,1); rx_audio_mono(1:end-bp_groupdelay)];
 
+% Compute left and right channel signals
 rx_audio_L = rx_audio_mono + rx_audio_lrdiff;
 rx_audio_R = rx_audio_mono - rx_audio_lrdiff;
+
+disp('Done.');
