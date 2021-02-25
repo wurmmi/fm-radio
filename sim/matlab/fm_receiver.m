@@ -59,7 +59,7 @@ rx_fmChannelData = rx_fm_demod;
 
 %% Downsample
 
-osr_rx = 4;
+osr_rx = 1;
 fs_rx  = fs/osr_rx;
 rx_fmChannelData = resample(rx_fmChannelData, 1, osr_rx);
 

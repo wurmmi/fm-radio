@@ -44,9 +44,9 @@ if EnableSenderSourceCreateSim
         audioDataL = fileData(:,1);
         audioDataR = fileData(:,2);
         
-        audioData = audioDataL + audioDataR;
+        audioDataMono = audioDataL + audioDataR;
         
-        tn = (0:1:length(audioData)-1)';
+        tn = (0:1:length(audioDataMono)-1)';
     else
         tn = (0:1:n_sec*fs-1)';
         
@@ -58,21 +58,20 @@ if EnableSenderSourceCreateSim
         audioDataR = sin(2*pi*audioFreqR/fs*tn);
         audioDataR(1:round(end/2)) = 0;   % mute first half
         
-        audioData = audioDataL + audioDataR;
+        audioDataMono = audioDataL + audioDataR;
     end
     
     %% 19kHz pilot tone
     
-    pilotFreq = 19000;
-    pilotTone = sin(2*pi*pilotFreq/fs*tn);
+    pilotTone = cos(2*pi*19e3/fs*tn);
     
     %% Difference signal (for stereo)
     
-    audioDiff = audioDataL - audioDataR;
+    audioLRDiff = audioDataL - audioDataR;
     
     % Modulate it to 38 kHz
     carrier38kHzTx = cos(2*pi*38e3/fs*tn);
-    audioLRDiffMod = audioDiff .* carrier38kHzTx;
+    audioLRDiffMod = audioLRDiff .* carrier38kHzTx;
     
     %% Radio Data Signal (RDS)
     % TODO
@@ -98,21 +97,26 @@ if EnableSenderSourceCreateSim
     end
     
     %% Combine all signal parts
-    
+    % TODO: fix this somehow...
+    % See formula in https://en.wikipedia.org/wiki/FM_broadcasting#Stereo_FM
     fmChannelData = ...
-        1.00 * audioData + ...
-        0.25 * pilotTone + ...
-        0.50 * audioLRDiffMod + ...
+        0.9 * (audioDataMono/2 + audioLRDiffMod/2) + ...
+        0.1 * pilotTone + ...
         1/16 * hinz_triller;
+
+    %fmChannelData = ...
+    %    1.00 * audioDataMono + ...
+    %    0.25 * pilotTone + ...
+    %    0.50 * audioLRDiffMod + ...
+    %    1/16 * hinz_triller;
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% Pre-emphasis
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % TODO: is this the correct place to do this?
     %       should it be earlier, like separately for L and R?
-    disp('-- Pre-emphasis');
-
     if EnablePreEmphasis
+        disp('-- Pre-emphasis');
         % Create pre-emphasis filter
         tau = 50e-6;         % time constant (50µs in Europe, 75us in US)
         fc  = 1/(2*pi*tau);  % cut-off frequency
@@ -122,6 +126,7 @@ if EnableSenderSourceCreateSim
         filter_de_emphasis.Denum = [1 0];
         filter_de_emphasis.Num = [1+k -k];
         
+        % TODO: amplify filter, so that low freqs are around 0, and higher freqs are amplified
         fmChannelData = filter(filter_de_emphasis.Num, filter_de_emphasis.Denum, fmChannelData);
     end
         

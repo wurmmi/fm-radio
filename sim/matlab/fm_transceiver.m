@@ -4,6 +4,9 @@
 % Description : FM-Radio Sender and Receiver
 %-------------------------------------------------------------------------
 
+% TODO: check RX spectrum.. looks fishy - where does the 57k come from??
+%        - 19khz + 38 = 57 (--> better bp filter!)
+
 % TODO: find integer osr for entire system
 
 %TODO: find places, where power is attenuated --> Tx and Rx should be equal
@@ -37,20 +40,20 @@ dir_filters = "./filters/";
 dir_output  = "./matlab_output/";
 
 % Simulation options
-EnableSenderSourceRecordedFile = true;
-EnableSenderSourceCreateSim    = false;
-EnableAudioFromFile            = true;
+EnableSenderSourceRecordedFile = false;
+EnableSenderSourceCreateSim    = true;
+EnableAudioFromFile            = false;
 EnableTrafficInfoTrigger       = false;
 
-EnablePreEmphasis = true;
-EnableDeEmphasis  = true;
+EnablePreEmphasis = false;
+EnableDeEmphasis  = false;
 
 EnableRxAudioReplay    = true;
 EnableFilterAnalyzeGUI = false;
 EnableSavePlotsToPng   = false;
 
 % Signal parameters
-n_sec = 10;           % 1.7s is "left channel, right channel" in audio file
+n_sec = 0.6;           % 1.7s is "left channel, right channel" in audio file
 osr   = 22;            % oversampling rate for fs
 fs    = 44.1e3 * osr;  % sampling rate fs
 
@@ -105,17 +108,19 @@ end
 %% Calculations
 disp('-- FFT and PSD calculations');
 
+%% FFT
 % Tx %%%%%%%%%%%%%%%%%%%%%
-% FFT
 if EnableSenderSourceCreateSim
-    n_fft = 4096;
+    n_fft = 4096*10;
     fmChannelSpec = ( abs( fftshift( fft(fmChannelData,n_fft) )));
     fft_freqs = (-n_fft/2:1:n_fft/2-1)*fs/n_fft;
 end
 
-% PSD over entire audio file
-welch_size  = 4096*4;
-n_overlap   = welch_size / 4;
+%% PSD over entire audio file
+
+% fs domain %%%%%%%%%%%%%%%%%%%%%
+welch_size = length(fmChannelData);
+n_overlap  = welch_size / 4;
 if isRunningInOctave()
     n_overlap = 1/4;
 end
@@ -123,20 +128,28 @@ n_fft_welch = welch_size;
 window      = hanning(welch_size);
 
 if EnableSenderSourceCreateSim
-    [psxx_txChannelData, psxx_tx_ChannelData_f] = pwelch(fmChannelData, window, n_overlap, n_fft_welch, fs);
+    [psxx_tx_fmChannelData, psxx_tx_fmChannelData_f] = pwelch(fmChannelData, window, n_overlap, n_fft_welch, fs);
 end
 [psxx_rx_fm_bb, psxx_rx_fm_bb_f] = pwelch(rx_fm_bb, window, n_overlap, n_fft_welch, fs);
 [psxx_rxChannelData, psxx_rxChannelData_f] = pwelch(rx_fm_demod, window, n_overlap, n_fft_welch, fs);
 
-% Rx %%%%%%%%%%%%%%%%%%%%%
+% fs_rx domain %%%%%%%%%%%%%%%%%%%%%
+welch_size  = length(rx_audio_mono);
+n_overlap   = welch_size / 4;
+if isRunningInOctave()
+    n_overlap = 1/4;
+end
+n_fft_welch = welch_size;
+window      = hanning(welch_size);
+
 [psxx_rx_mono, psxx_rx_mono_f]                   = pwelch(rx_audio_mono, window, n_overlap, n_fft_welch, fs_rx);
 [psxx_rx_lrdiff_bpfilt, psxx_rx_lrdiff_bpfilt_f] = pwelch(rx_audio_lrdiff_bpfilt, window, n_overlap, n_fft_welch, fs_rx);
 [psxx_rx_lrdiff_mod, psxx_rx_lrdiff_mod_f]       = pwelch(rx_audio_lrdiff_mod, window, n_overlap, n_fft_welch, fs_rx);
 [psxx_rx_lrdiff, psxx_rx_lrdiff_f]               = pwelch(rx_audio_lrdiff, window, n_overlap, n_fft_welch, fs_rx);
 
-% Rx (RF) %%%%%%%%%%%%%%%%
+% fs_mod domain %%%%%%%%%%%%%%%%%%%%%
 if EnableSenderSourceCreateSim
-    welch_size  = 4096*4*osr_mod;
+    welch_size  = length(rx_fm);
     n_overlap   = welch_size / 4;
     if isRunningInOctave()
         n_overlap = 1/4;
@@ -222,14 +235,13 @@ if false
     legend();
 end
 
-if false
+if true
     fig_title = 'Tx time domain signal';
     fig_tx_time = figure('Name',fig_title);
     hold on;
     plot(tn/fs, fmChannelData, 'b', 'DisplayName', 'Total');
-    plot(tn/fs, audioData,     'r', 'DisplayName', 'audioData');
-    plot(tn/fs, pilotTone,     'm', 'DisplayName', 'pilotTone');
-    plot(tn/fs, audioLRDiffMod,'k', 'DisplayName', 'audioLRDiffMod');
+    plot(tn/fs, audioDataMono, 'r', 'DisplayName', 'audioDataMono');
+    plot(tn/fs, audioLRDiff,'k', 'DisplayName', 'audioLRDiff');
     if EnableTrafficInfoTrigger
         plot(tn/fs, hinz_triller,'g', 'DisplayName', 'hinzTriller');
     end
@@ -273,17 +285,18 @@ hold on;
 xline(19e3,'k--','19 kHz');
 xline(38e3,'k--','38 kHz');
 xline(57e3,'k--','57 kHz');
-%plot(fft_freqs, fmChannelSpec, 'k--', 'DisplayName', 'FFT');
 h0 ='';
 if EnableSenderSourceCreateSim
-    h0 = plot(psxx_tx_ChannelData_f, 10*log10(psxx_txChannelData), 'b','DisplayName', 'Tx');
+    h0 = plot(psxx_tx_fmChannelData_f, psxx_tx_fmChannelData, 'b','DisplayName', 'Tx (pre-mod)');
 end
-h1 = plot(psxx_rxChannelData_f, 10*log10(psxx_rxChannelData),  'r','DisplayName', 'Rx Demod');
+h1 = plot(psxx_rxChannelData_f, psxx_rxChannelData,  'r','DisplayName', 'Rx Demod');
+%h2 = plot(fft_freqs, fmChannelSpec, 'k--', 'DisplayName', 'FFT');
+h2 = '';
 grid on;
 title(fig_title);
 xlabel('frequency [Hz]');
 ylabel('magnitude');
-legend([h0,h1],'Location','east');
+legend([h0,h1,h2],'Location','east');
 xlim([0 62e3]);
 ylimits = ylim();
 if EnableSavePlotsToPng
