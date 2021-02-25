@@ -42,6 +42,9 @@ EnableSenderSourceCreateSim    = false;
 EnableAudioFromFile            = true;
 EnableTrafficInfoTrigger       = false;
 
+EnablePreEmphasis = true;
+EnableDeEmphasis  = true;
+
 EnableRxAudioReplay    = true;
 EnableFilterAnalyzeGUI = false;
 EnableSavePlotsToPng   = false;
@@ -73,6 +76,7 @@ fm_receiver();
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Audio replay
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+disp('### Audio Replay ###');
 
 if EnableRxAudioReplay
     % Create LR audio signal for output
@@ -91,6 +95,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Analysis
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+disp('### Analysis ###');
 
 % Create output folder to save figures
 if ~exist(dir_output, 'dir')
@@ -98,7 +103,7 @@ if ~exist(dir_output, 'dir')
 end
 
 %% Calculations
-disp('FFT and PSD calculations...');
+disp('-- FFT and PSD calculations');
 
 % Tx %%%%%%%%%%%%%%%%%%%%%
 % FFT
@@ -142,10 +147,8 @@ if EnableSenderSourceCreateSim
     [psxx_rx_fm, psxx_rx_fm_f] = pwelch(rx_fm, window, n_overlap, n_fft_welch, fs_mod);
 end
 
-disp('Done.');
-
 %% Plots
-disp('Plots...');
+disp('-- Plots');
 
 fig_title = 'Time domain signal';
 fig_audio_time = figure('Name',fig_title);

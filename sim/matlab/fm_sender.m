@@ -10,6 +10,8 @@
 %   This file only works when called from "fm_transceiver.m".
 %=========================================================================
 
+disp('### Sender Tx ###');
+
 % Sanity checks
 assert( not(EnableSenderSourceRecordedFile && EnableSenderSourceCreateSim), ...
     'Settings Error: Only one sender source can be enabled at a time.')
@@ -18,7 +20,7 @@ assert( not(EnableSenderSourceRecordedFile == false && EnableSenderSourceCreateS
 
 
 if EnableSenderSourceCreateSim
-    disp('Creating FM data stream in simulation...');
+    disp('-- Creating FM data stream');
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% Generate audio stream data
@@ -95,20 +97,6 @@ if EnableSenderSourceCreateSim
         hinz_triller(t_hinz+1) = cos(2*pi*fc_hinz/fs*t_hinz + (2*pi*f_deviation*hinz_tone_int));
     end
     
-   
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %% Pre-Emphasis
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % TODO
-    % Create de-emphasis filter
-    %tau = 50e-6;         % time constant (50µs in Europe, 75us in US)
-    %fc  = 1/(2*pi*tau);  % cut-off frequency
-    %
-    %k = fs/(2*pi*fc);
-    % 
-    %pre_digital = tf([1+k -k],[1 0],1/fs,'variable','z^-1');
-
-
     %% Combine all signal parts
     
     fmChannelData = ...
@@ -118,9 +106,30 @@ if EnableSenderSourceCreateSim
         1/16 * hinz_triller;
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %% Pre-emphasis
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % TODO: is this the correct place to do this?
+    %       should it be earlier, like separately for L and R?
+    disp('-- Pre-emphasis');
+
+    if EnablePreEmphasis
+        % Create pre-emphasis filter
+        tau = 50e-6;         % time constant (50µs in Europe, 75us in US)
+        fc  = 1/(2*pi*tau);  % cut-off frequency
+        
+        k = fs/(2*pi*fc);
+        
+        filter_de_emphasis.Denum = [1 0];
+        filter_de_emphasis.Num = [1+k -k];
+        
+        fmChannelData = filter(filter_de_emphasis.Num, filter_de_emphasis.Denum, fmChannelData);
+    end
+        
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% FM Modulator
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
+    disp('-- FM modulator');
+
     % Upsample
     osr_mod = 10;
     fmChannelDataUp = resample(fmChannelData, osr_mod, 1);
@@ -149,7 +158,8 @@ if EnableSenderSourceCreateSim
     % -- Lowpass filter the spectral replicas at multiple of fs
     % -- ADC: sample with fs
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
+    disp('-- Complex IQ mixer');
+
     % Receive
     rx_fm = tx_fm_awgn;
     
@@ -182,10 +192,8 @@ if EnableSenderSourceCreateSim
     
     % ADC (downsample to fs)
     rx_fm_bb = resample(rx_fm_bb, 1, osr_mod);
-    
-    disp('Done.');
 elseif EnableSenderSourceRecordedFile
-    disp('Loading FM data stream from file.');
+    disp('-- Loading FM data stream');
     disp('NOTE: This is assuming that the file was recorded with the correct sampling frequency!');
     
     filename = sprintf("./recordings/fm_record_fs%d.bin",fs);
@@ -200,3 +208,5 @@ elseif EnableSenderSourceRecordedFile
 else
     assert(false, 'Check settings.')
 end
+
+disp('Done.');

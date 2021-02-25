@@ -12,9 +12,10 @@ clc;
 
 %% Settings
 
-fs   = 240e3;         % sampling frequency
-tau  = 50e-6;         % time constant (50µs in Europe, 75us in US)
-fc   = 1/(2*pi*tau);  % cut-off frequency
+%fs  = 970.2e3;       % sampling frequency
+fs  = 625e3;         % sampling frequency
+tau = 50e-6;         % time constant (50µs in Europe, 75us in US)
+fc  = 1/(2*pi*tau);  % cut-off frequency
 
 %% Transfer functions of analog and digital filters
 
@@ -26,7 +27,7 @@ de_digital  = tf([1 0],[1+k -k],1/fs,'variable','z^-1');
 
 pre_n_de = pre_digital * de_digital;
 
-% Version from paper
+% Version from paper (NOTE: only valid for fs=625e3 !!!)
 a0 =  1;
 a1 = -0.9685612914;
 b0 =  0.0157493543;

@@ -9,10 +9,12 @@
 %   This file only works when called from "fm_transceiver.m".
 %=========================================================================
 
+disp('### Receiver Rx ###');
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% FM Demodulator
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-disp('FM demodulator...');
+disp('-- FM demodulator');
 
 % Normalize the amplitude (remove amplitude variations)
 rx_fm_bb_norm = rx_fm_bb ./ abs(rx_fm_bb);
@@ -29,29 +31,29 @@ rx_fm_demod =  ...
     rx_fm_q .* conv(rx_fm_i,filter_diff,'same')) ./  ...
     (rx_fm_i.^2 + rx_fm_q.^2);
 
-disp('Done.');
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% De-Emphasis
+%% De-emphasis
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+disp('-- De-emphasis');
 
-% Create de-emphasis filter
-tau = 50e-6;         % time constant (50µs in Europe, 75us in US)
-fc  = 1/(2*pi*tau);  % cut-off frequency
-
-k = fs/(2*pi*fc);
-
-filter_de_emphasis.Num = [1 0];
-filter_de_emphasis.Denum = [1+k -k];
-
-rx_fm_demod = filter(filter_de_emphasis.Num, filter_de_emphasis.Denum, rx_fm_demod);
+if EnableDeEmphasis
+    % Create de-emphasis filter
+    tau = 50e-6;         % time constant (50µs in Europe, 75us in US)
+    fc  = 1/(2*pi*tau);  % cut-off frequency
+    
+    k = fs/(2*pi*fc);
+    
+    filter_de_emphasis.Num = [1 0];
+    filter_de_emphasis.Denum = [1+k -k];
+    
+    rx_fm_demod = filter(filter_de_emphasis.Num, filter_de_emphasis.Denum, rx_fm_demod);
+end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Channel decoder
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-disp('Channel decoder...');
+disp('-- Channel decoder');
 
 rx_fmChannelData = rx_fm_demod;
 
