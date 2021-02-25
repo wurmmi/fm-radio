@@ -29,14 +29,31 @@ rx_fm_demod =  ...
     rx_fm_q .* conv(rx_fm_i,filter_diff,'same')) ./  ...
     (rx_fm_i.^2 + rx_fm_q.^2);
 
-rx_fmChannelData = rx_fm_demod;
-
 disp('Done.');
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% De-Emphasis
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Create de-emphasis filter
+tau = 50e-6;         % time constant (50µs in Europe, 75us in US)
+fc  = 1/(2*pi*tau);  % cut-off frequency
+
+k = fs/(2*pi*fc);
+
+filter_de_emphasis.Num = [1 0];
+filter_de_emphasis.Denum = [1+k -k];
+
+rx_fm_demod = filter(filter_de_emphasis.Num, filter_de_emphasis.Denum, rx_fm_demod);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Channel decoder
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 disp('Channel decoder...');
+
+rx_fmChannelData = rx_fm_demod;
 
 %% Downsample
 

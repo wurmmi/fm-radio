@@ -47,7 +47,7 @@ EnableFilterAnalyzeGUI = false;
 EnableSavePlotsToPng   = false;
 
 % Signal parameters
-n_sec = 1.7;           % 1.7s is "left channel, right channel" in audio file
+n_sec = 10;           % 1.7s is "left channel, right channel" in audio file
 osr   = 22;            % oversampling rate for fs
 fs    = 44.1e3 * osr;  % sampling rate fs
 
@@ -264,7 +264,7 @@ if EnableSavePlotsToPng
     saveas(fig_rx_mod, sprintf("%s%s",dir_output, "psd_iq_mixer.png"));
 end
 
-fig_title = 'FM channel spectrum (linear)';
+fig_title = 'FM channel spectrum';
 fig_tx_spec = figure('Name',fig_title);
 hold on;
 xline(19e3,'k--','19 kHz');
@@ -281,7 +281,7 @@ title(fig_title);
 xlabel('frequency [Hz]');
 ylabel('magnitude');
 legend([h0,h1],'Location','east');
-xlim([0 350e3]);
+xlim([0 62e3]);
 ylimits = ylim();
 if EnableSavePlotsToPng
     saveas(fig_tx_spec, sprintf("%s%s",dir_output, "psd_rx_tx.png"));

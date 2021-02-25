@@ -20,7 +20,9 @@ assert( not(EnableSenderSourceRecordedFile == false && EnableSenderSourceCreateS
 if EnableSenderSourceCreateSim
     disp('Creating FM data stream in simulation...');
     
-    %% Audio stream data
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %% Generate audio stream data
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     if EnableAudioFromFile
         fs_file = 44.1e3;
         
@@ -93,6 +95,20 @@ if EnableSenderSourceCreateSim
         hinz_triller(t_hinz+1) = cos(2*pi*fc_hinz/fs*t_hinz + (2*pi*f_deviation*hinz_tone_int));
     end
     
+   
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %% Pre-Emphasis
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % TODO
+    % Create de-emphasis filter
+    %tau = 50e-6;         % time constant (50µs in Europe, 75us in US)
+    %fc  = 1/(2*pi*tau);  % cut-off frequency
+    %
+    %k = fs/(2*pi*fc);
+    % 
+    %pre_digital = tf([1+k -k],[1 0],1/fs,'variable','z^-1');
+
+
     %% Combine all signal parts
     
     fmChannelData = ...
@@ -112,7 +128,7 @@ if EnableSenderSourceCreateSim
     tn_mod = (0:1:n_sec*fs_mod-1).';
     
     % FM modulator
-    fm_delta_f = 100e3; % channel bandwidth
+    fm_delta_f = 75e3; % channel bandwidth
     fm_fmax    = 57e3;  % max. frequency in fmChannelData
     
     fm_modindex = fm_delta_f / fm_fmax;
