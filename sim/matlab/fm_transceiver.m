@@ -40,20 +40,20 @@ dir_filters = "./filters/";
 dir_output  = "./matlab_output/";
 
 % Simulation options
-EnableSenderSourceRecordedFile = false;
-EnableSenderSourceCreateSim    = true;
+EnableSenderSourceRecordedFile = true;
+EnableSenderSourceCreateSim    = false;
 EnableAudioFromFile            = false;
 EnableTrafficInfoTrigger       = false;
 
 EnablePreEmphasis = false;
-EnableDeEmphasis  = false;
+EnableDeEmphasis  = true;
 
 EnableRxAudioReplay    = true;
 EnableFilterAnalyzeGUI = false;
 EnableSavePlotsToPng   = false;
 
 % Signal parameters
-n_sec = 0.6;           % 1.7s is "left channel, right channel" in audio file
+n_sec = 1.7;           % 1.7s is "left channel, right channel" in audio file
 osr   = 22;            % oversampling rate for fs
 fs    = 44.1e3 * osr;  % sampling rate fs
 
@@ -119,7 +119,7 @@ end
 %% PSD over entire audio file
 
 % fs domain %%%%%%%%%%%%%%%%%%%%%
-welch_size = length(fmChannelData);
+welch_size = length(rx_fm_bb);
 n_overlap  = welch_size / 4;
 if isRunningInOctave()
     n_overlap = 1/4;
@@ -235,7 +235,7 @@ if false
     legend();
 end
 
-if true
+if false
     fig_title = 'Tx time domain signal';
     fig_tx_time = figure('Name',fig_title);
     hold on;
