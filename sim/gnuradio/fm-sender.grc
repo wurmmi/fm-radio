@@ -41,7 +41,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [376, 12.0]
+    coordinate: [464, 12.0]
     rotation: 0
     state: true
 - name: fs_file
@@ -65,19 +65,43 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [296, 76.0]
+    coordinate: [288, 76.0]
+    rotation: 0
+    state: true
+- name: fs_rf
+  id: variable
+  parameters:
+    comment: ''
+    value: fs_file*osr_mod*osr_rf
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [384, 76.0]
     rotation: 0
     state: true
 - name: osr_mod
   id: variable
   parameters:
     comment: ''
-    value: '100'
+    value: '15'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [296, 12.0]
+    coordinate: [288, 12.0]
+    rotation: 0
+    state: true
+- name: osr_rf
+  id: variable
+  parameters:
+    comment: ''
+    value: '10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [384, 12.0]
     rotation: 0
     state: true
 - name: tx_gain_db
@@ -92,7 +116,7 @@ blocks:
     start: '0'
     step: '1'
     stop: '120'
-    value: '30'
+    value: '85'
     widget: counter_slider
   states:
     bus_sink: false
@@ -109,35 +133,16 @@ blocks:
     audio_rate: fs_file
     comment: ''
     fh: '-1.0'
-    max_dev: 10e3
+    max_dev: 75e3
     maxoutbuf: '0'
     minoutbuf: '0'
-    quad_rate: fs_file
+    quad_rate: fs_mod
     tau: 50e-6
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
     coordinate: [504, 268.0]
-    rotation: 0
-    state: true
-- name: audio_source_0
-  id: audio_source
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    device_name: ''
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    num_outputs: '1'
-    ok_to_block: 'True'
-    samp_rate: fs_file
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [48, 372.0]
     rotation: 0
     state: true
 - name: blocks_add_xx_0
@@ -148,7 +153,7 @@ blocks:
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    num_inputs: '3'
+    num_inputs: '2'
     type: float
     vlen: '1'
   states:
@@ -164,7 +169,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    const: '1'
+    const: '0.45'
     maxoutbuf: '0'
     minoutbuf: '0'
     type: float
@@ -182,7 +187,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    const: '1'
+    const: '0.45'
     maxoutbuf: '0'
     minoutbuf: '0'
     type: float
@@ -192,24 +197,6 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [232, 308.0]
-    rotation: 0
-    state: true
-- name: blocks_multiply_const_vxx_1
-  id: blocks_multiply_const_vxx
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    const: '0'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    type: float
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [232, 372.0]
     rotation: 0
     state: true
 - name: blocks_wavfile_source_0
@@ -328,7 +315,7 @@ blocks:
     autoscale: 'True'
     average: '0.2'
     axislabels: 'True'
-    bw: fs_file
+    bw: fs_mod
     color1: '"blue"'
     color10: '"dark blue"'
     color2: '"red"'
@@ -387,7 +374,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [744, 528.0]
+    coordinate: [784, 528.0]
     rotation: 0
     state: true
 - name: qtgui_freq_sink_x_0_0_0
@@ -408,7 +395,7 @@ blocks:
     autoscale: 'True'
     average: '0.2'
     axislabels: 'True'
-    bw: fs_mod
+    bw: fs_rf
     color1: '"blue"'
     color10: '"dark blue"'
     color2: '"red"'
@@ -478,7 +465,7 @@ blocks:
     comment: ''
     decim: '1'
     fbw: '0'
-    interp: osr_mod
+    interp: osr_rf
     maxoutbuf: '0'
     minoutbuf: '0'
     taps: ''
@@ -527,7 +514,7 @@ blocks:
     ant7: TX/RX
     ant8: TX/RX
     ant9: TX/RX
-    bw0: 100e3
+    bw0: 150e3
     bw1: '0'
     bw10: '0'
     bw11: '0'
@@ -737,7 +724,7 @@ blocks:
     norm_gain9: 'False'
     num_mboards: '1'
     otw: ''
-    samp_rate: fs_mod
+    samp_rate: fs_rf
     sd_spec0: ''
     sd_spec1: ''
     sd_spec2: ''
@@ -770,12 +757,10 @@ blocks:
 connections:
 - [analog_wfm_tx_0, '0', qtgui_freq_sink_x_0_0, '0']
 - [analog_wfm_tx_0, '0', rational_resampler_xxx_0, '0']
-- [audio_source_0, '0', blocks_multiply_const_vxx_1, '0']
 - [blocks_add_xx_0, '0', analog_wfm_tx_0, '0']
 - [blocks_add_xx_0, '0', qtgui_freq_sink_x_0, '0']
 - [blocks_multiply_const_vxx_0, '0', blocks_add_xx_0, '0']
 - [blocks_multiply_const_vxx_0_0, '0', blocks_add_xx_0, '1']
-- [blocks_multiply_const_vxx_1, '0', blocks_add_xx_0, '2']
 - [blocks_wavfile_source_0, '0', blocks_multiply_const_vxx_0, '0']
 - [blocks_wavfile_source_0, '1', blocks_multiply_const_vxx_0_0, '0']
 - [rational_resampler_xxx_0, '0', qtgui_freq_sink_x_0_0_0, '0']

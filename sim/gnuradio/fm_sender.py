@@ -27,7 +27,6 @@ from gnuradio import qtgui
 from gnuradio.filter import firdes
 import sip
 from gnuradio import analog
-from gnuradio import audio
 from gnuradio import blocks
 from gnuradio import filter
 from gnuradio import gr
@@ -78,16 +77,18 @@ class fm_sender(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
-        self.osr_mod = osr_mod = 100
+        self.osr_rf = osr_rf = 10
+        self.osr_mod = osr_mod = 15
         self.fs_file = fs_file = 44100
-        self.tx_gain_db = tx_gain_db = 30
+        self.tx_gain_db = tx_gain_db = 85
+        self.fs_rf = fs_rf = fs_file*osr_mod*osr_rf
         self.fs_mod = fs_mod = fs_file*osr_mod
         self.fc_pirate = fc_pirate = 99e6
 
         ##################################################
         # Blocks
         ##################################################
-        self._tx_gain_db_range = Range(0, 120, 1, 30, 200)
+        self._tx_gain_db_range = Range(0, 120, 1, 85, 200)
         self._tx_gain_db_win = RangeWidget(self._tx_gain_db_range, self.set_tx_gain_db, 'tx_gain_db', "counter_slider", float)
         self.top_grid_layout.addWidget(self._tx_gain_db_win)
         self.uhd_usrp_sink_1 = uhd.usrp_sink(
@@ -102,11 +103,11 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.uhd_usrp_sink_1.set_center_freq(fc_pirate, 0)
         self.uhd_usrp_sink_1.set_gain(tx_gain_db, 0)
         self.uhd_usrp_sink_1.set_antenna('TX/RX', 0)
-        self.uhd_usrp_sink_1.set_bandwidth(100e3, 0)
-        self.uhd_usrp_sink_1.set_samp_rate(fs_mod)
+        self.uhd_usrp_sink_1.set_bandwidth(150e3, 0)
+        self.uhd_usrp_sink_1.set_samp_rate(fs_rf)
         self.uhd_usrp_sink_1.set_time_unknown_pps(uhd.time_spec())
         self.rational_resampler_xxx_0 = filter.rational_resampler_ccc(
-                interpolation=osr_mod,
+                interpolation=osr_rf,
                 decimation=1,
                 taps=None,
                 fractional_bw=None)
@@ -114,7 +115,7 @@ class fm_sender(gr.top_block, Qt.QWidget):
             8092, #size
             firdes.WIN_BLACKMAN_hARRIS, #wintype
             fc_pirate, #fc
-            fs_mod, #bw
+            fs_rf, #bw
             "tx_fm_mod", #name
             1
         )
@@ -154,7 +155,7 @@ class fm_sender(gr.top_block, Qt.QWidget):
             4096, #size
             firdes.WIN_BLACKMAN_hARRIS, #wintype
             0, #fc
-            fs_file, #bw
+            fs_mod, #bw
             "tx_fm", #name
             1
         )
@@ -232,16 +233,14 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.pyqwidget(), Qt.QWidget)
         self.top_grid_layout.addWidget(self._qtgui_freq_sink_x_0_win)
         self.blocks_wavfile_source_0 = blocks.wavfile_source('/home/mike/work/fm-radio/sim/matlab/recordings/viera-blech-ehrenwert-polka.wav', True)
-        self.blocks_multiply_const_vxx_1 = blocks.multiply_const_ff(0)
-        self.blocks_multiply_const_vxx_0_0 = blocks.multiply_const_ff(1)
-        self.blocks_multiply_const_vxx_0 = blocks.multiply_const_ff(1)
+        self.blocks_multiply_const_vxx_0_0 = blocks.multiply_const_ff(0.45)
+        self.blocks_multiply_const_vxx_0 = blocks.multiply_const_ff(0.45)
         self.blocks_add_xx_0 = blocks.add_vff(1)
-        self.audio_source_0 = audio.source(fs_file, '', True)
         self.analog_wfm_tx_0 = analog.wfm_tx(
         	audio_rate=fs_file,
-        	quad_rate=fs_file,
+        	quad_rate=fs_mod,
         	tau=50e-6,
-        	max_dev=10e3,
+        	max_dev=75e3,
         	fh=-1.0,
         )
 
@@ -252,12 +251,10 @@ class fm_sender(gr.top_block, Qt.QWidget):
         ##################################################
         self.connect((self.analog_wfm_tx_0, 0), (self.qtgui_freq_sink_x_0_0, 0))
         self.connect((self.analog_wfm_tx_0, 0), (self.rational_resampler_xxx_0, 0))
-        self.connect((self.audio_source_0, 0), (self.blocks_multiply_const_vxx_1, 0))
         self.connect((self.blocks_add_xx_0, 0), (self.analog_wfm_tx_0, 0))
         self.connect((self.blocks_add_xx_0, 0), (self.qtgui_freq_sink_x_0, 0))
         self.connect((self.blocks_multiply_const_vxx_0, 0), (self.blocks_add_xx_0, 0))
         self.connect((self.blocks_multiply_const_vxx_0_0, 0), (self.blocks_add_xx_0, 1))
-        self.connect((self.blocks_multiply_const_vxx_1, 0), (self.blocks_add_xx_0, 2))
         self.connect((self.blocks_wavfile_source_0, 0), (self.blocks_multiply_const_vxx_0, 0))
         self.connect((self.blocks_wavfile_source_0, 1), (self.blocks_multiply_const_vxx_0_0, 0))
         self.connect((self.rational_resampler_xxx_0, 0), (self.qtgui_freq_sink_x_0_0_0, 0))
@@ -269,12 +266,20 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.settings.setValue("geometry", self.saveGeometry())
         event.accept()
 
+    def get_osr_rf(self):
+        return self.osr_rf
+
+    def set_osr_rf(self, osr_rf):
+        self.osr_rf = osr_rf
+        self.set_fs_rf(self.fs_file*self.osr_mod*self.osr_rf)
+
     def get_osr_mod(self):
         return self.osr_mod
 
     def set_osr_mod(self, osr_mod):
         self.osr_mod = osr_mod
         self.set_fs_mod(self.fs_file*self.osr_mod)
+        self.set_fs_rf(self.fs_file*self.osr_mod*self.osr_rf)
 
     def get_fs_file(self):
         return self.fs_file
@@ -282,8 +287,8 @@ class fm_sender(gr.top_block, Qt.QWidget):
     def set_fs_file(self, fs_file):
         self.fs_file = fs_file
         self.set_fs_mod(self.fs_file*self.osr_mod)
+        self.set_fs_rf(self.fs_file*self.osr_mod*self.osr_rf)
         self.qtgui_freq_sink_x_0.set_frequency_range(0, self.fs_file)
-        self.qtgui_freq_sink_x_0_0.set_frequency_range(0, self.fs_file)
 
     def get_tx_gain_db(self):
         return self.tx_gain_db
@@ -292,20 +297,27 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.tx_gain_db = tx_gain_db
         self.uhd_usrp_sink_1.set_gain(self.tx_gain_db, 0)
 
+    def get_fs_rf(self):
+        return self.fs_rf
+
+    def set_fs_rf(self, fs_rf):
+        self.fs_rf = fs_rf
+        self.qtgui_freq_sink_x_0_0_0.set_frequency_range(self.fc_pirate, self.fs_rf)
+        self.uhd_usrp_sink_1.set_samp_rate(self.fs_rf)
+
     def get_fs_mod(self):
         return self.fs_mod
 
     def set_fs_mod(self, fs_mod):
         self.fs_mod = fs_mod
-        self.qtgui_freq_sink_x_0_0_0.set_frequency_range(self.fc_pirate, self.fs_mod)
-        self.uhd_usrp_sink_1.set_samp_rate(self.fs_mod)
+        self.qtgui_freq_sink_x_0_0.set_frequency_range(0, self.fs_mod)
 
     def get_fc_pirate(self):
         return self.fc_pirate
 
     def set_fc_pirate(self, fc_pirate):
         self.fc_pirate = fc_pirate
-        self.qtgui_freq_sink_x_0_0_0.set_frequency_range(self.fc_pirate, self.fs_mod)
+        self.qtgui_freq_sink_x_0_0_0.set_frequency_range(self.fc_pirate, self.fs_rf)
         self.uhd_usrp_sink_1.set_center_freq(self.fc_pirate, 0)
 
 
