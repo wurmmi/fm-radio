@@ -34,9 +34,9 @@ import signal
 from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
-from gnuradio.qtgui import Range, RangeWidget
-import osmosdr
+from gnuradio import uhd
 import time
+from gnuradio.qtgui import Range, RangeWidget
 
 from gnuradio import qtgui
 
@@ -79,7 +79,7 @@ class fm_radio_receiver(gr.top_block, Qt.QWidget):
         self.volume_gain = volume_gain = 1
         self.samp_rate = samp_rate = 1.8e6
         self.decimate_factor = decimate_factor = 4
-        self.center_freq = center_freq = 88.8e6
+        self.center_freq = center_freq = 93.3e6
 
         ##################################################
         # Blocks
@@ -87,21 +87,19 @@ class fm_radio_receiver(gr.top_block, Qt.QWidget):
         self._volume_gain_range = Range(0, 10, 1, 1, 10)
         self._volume_gain_win = RangeWidget(self._volume_gain_range, self.set_volume_gain, 'Volume Gain', "counter_slider", float)
         self.top_grid_layout.addWidget(self._volume_gain_win)
-        self.rtlsdr_source_0 = osmosdr.source(
-            args="numchan=" + str(1) + " " + ""
+        self.uhd_usrp_source_0 = uhd.usrp_source(
+            ",".join(("", "")),
+            uhd.stream_args(
+                cpu_format="fc32",
+                args='',
+                channels=list(range(0,1)),
+            ),
         )
-        self.rtlsdr_source_0.set_time_unknown_pps(osmosdr.time_spec_t())
-        self.rtlsdr_source_0.set_sample_rate(samp_rate)
-        self.rtlsdr_source_0.set_center_freq(center_freq, 0)
-        self.rtlsdr_source_0.set_freq_corr(0, 0)
-        self.rtlsdr_source_0.set_dc_offset_mode(0, 0)
-        self.rtlsdr_source_0.set_iq_balance_mode(0, 0)
-        self.rtlsdr_source_0.set_gain_mode(False, 0)
-        self.rtlsdr_source_0.set_gain(40, 0)
-        self.rtlsdr_source_0.set_if_gain(20, 0)
-        self.rtlsdr_source_0.set_bb_gain(20, 0)
-        self.rtlsdr_source_0.set_antenna('', 0)
-        self.rtlsdr_source_0.set_bandwidth(0, 0)
+        self.uhd_usrp_source_0.set_center_freq(center_freq, 0)
+        self.uhd_usrp_source_0.set_gain(15, 0)
+        self.uhd_usrp_source_0.set_antenna('RX2', 0)
+        self.uhd_usrp_source_0.set_samp_rate(samp_rate)
+        self.uhd_usrp_source_0.set_time_unknown_pps(uhd.time_spec())
         self.rational_resampler_xxx_0 = filter.rational_resampler_fff(
                 interpolation=16,
                 decimation=150,
@@ -216,8 +214,8 @@ class fm_radio_receiver(gr.top_block, Qt.QWidget):
         self.connect((self.blocks_multiply_const_vxx_0, 0), (self.blocks_wavfile_sink_0, 0))
         self.connect((self.low_pass_filter_0, 0), (self.analog_wfm_rcv_0, 0))
         self.connect((self.rational_resampler_xxx_0, 0), (self.blocks_multiply_const_vxx_0, 0))
-        self.connect((self.rtlsdr_source_0, 0), (self.low_pass_filter_0, 0))
-        self.connect((self.rtlsdr_source_0, 0), (self.qtgui_freq_sink_x_0, 0))
+        self.connect((self.uhd_usrp_source_0, 0), (self.low_pass_filter_0, 0))
+        self.connect((self.uhd_usrp_source_0, 0), (self.qtgui_freq_sink_x_0, 0))
 
 
     def closeEvent(self, event):
@@ -240,7 +238,7 @@ class fm_radio_receiver(gr.top_block, Qt.QWidget):
         self.low_pass_filter_0.set_taps(firdes.low_pass(1, self.samp_rate, 108e3, 1e6, firdes.WIN_HAMMING, 6.76))
         self.qtgui_freq_sink_x_0.set_frequency_range(self.center_freq, self.samp_rate)
         self.qtgui_freq_sink_x_1.set_frequency_range(self.center_freq, self.samp_rate/self.decimate_factor)
-        self.rtlsdr_source_0.set_sample_rate(self.samp_rate)
+        self.uhd_usrp_source_0.set_samp_rate(self.samp_rate)
 
     def get_decimate_factor(self):
         return self.decimate_factor
@@ -256,7 +254,7 @@ class fm_radio_receiver(gr.top_block, Qt.QWidget):
         self.center_freq = center_freq
         self.qtgui_freq_sink_x_0.set_frequency_range(self.center_freq, self.samp_rate)
         self.qtgui_freq_sink_x_1.set_frequency_range(self.center_freq, self.samp_rate/self.decimate_factor)
-        self.rtlsdr_source_0.set_center_freq(self.center_freq, 0)
+        self.uhd_usrp_source_0.set_center_freq(self.center_freq, 0)
 
 
 
