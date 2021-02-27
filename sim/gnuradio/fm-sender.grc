@@ -41,7 +41,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [464, 12.0]
+    coordinate: [496, 12.0]
     rotation: 0
     state: true
 - name: fs_file
@@ -80,11 +80,74 @@ blocks:
     coordinate: [384, 76.0]
     rotation: 0
     state: true
+- name: gain_lrdiff
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: 2,0,1,1
+    label: gain_lrdiff
+    min_len: '200'
+    orient: Qt.Horizontal
+    rangeType: float
+    start: '0'
+    step: '0.05'
+    stop: '1'
+    value: '0.45'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [912, 132.0]
+    rotation: 0
+    state: true
+- name: gain_mono
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: 1,0,1,1
+    label: gain_mono
+    min_len: '200'
+    orient: Qt.Horizontal
+    rangeType: float
+    start: '0'
+    step: '0.05'
+    stop: '1'
+    value: '0.45'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [784, 132.0]
+    rotation: 0
+    state: true
+- name: gain_pilot
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: 3,0,1,1
+    label: gain_pilot
+    min_len: '200'
+    orient: Qt.Horizontal
+    rangeType: float
+    start: '0'
+    step: '0.05'
+    stop: '1'
+    value: '0.1'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1040, 132.0]
+    rotation: 0
+    state: true
 - name: osr_mod
   id: variable
   parameters:
     comment: ''
-    value: '15'
+    value: '20'
   states:
     bus_sink: false
     bus_source: false
@@ -96,7 +159,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '10'
+    value: '3'
   states:
     bus_sink: false
     bus_source: false
@@ -108,7 +171,7 @@ blocks:
   id: variable_qtgui_range
   parameters:
     comment: ''
-    gui_hint: ''
+    gui_hint: 0,0,1,1
     label: tx_gain_db
     min_len: '200'
     orient: Qt.Horizontal
@@ -116,13 +179,57 @@ blocks:
     start: '0'
     step: '1'
     stop: '120'
-    value: '85'
+    value: '50'
     widget: counter_slider
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1096, 108.0]
+    coordinate: [1752, 128.0]
+    rotation: 0
+    state: true
+- name: analog_sig_source_x_0
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: '0.2'
+    comment: 38kHz Subcarrier
+    freq: 38e3
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: fs_mod
+    type: float
+    waveform: analog.GR_COS_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [520, 480.0]
+    rotation: 0
+    state: true
+- name: analog_sig_source_x_0_0
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: '0.05'
+    comment: 19kHz Pilot Tone
+    freq: 19e3
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: fs_mod
+    type: float
+    waveform: analog.GR_COS_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [520, 644.0]
     rotation: 0
     state: true
 - name: analog_wfm_tx_0
@@ -130,7 +237,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    audio_rate: fs_file
+    audio_rate: fs_mod
     comment: ''
     fh: '-1.0'
     max_dev: 75e3
@@ -142,11 +249,137 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [504, 268.0]
+    coordinate: [1200, 300.0]
     rotation: 0
     state: true
 - name: blocks_add_xx_0
   id: blocks_add_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: mono
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [608, 288.0]
+    rotation: 0
+    state: true
+- name: blocks_add_xx_0_0
+  id: blocks_add_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '3'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1072, 304.0]
+    rotation: 0
+    state: true
+- name: blocks_multiply_const_xx_0
+  id: blocks_multiply_const_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: gain_mono
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [848, 300.0]
+    rotation: 0
+    state: true
+- name: blocks_multiply_const_xx_0_0
+  id: blocks_multiply_const_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: gain_lrdiff
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [848, 404.0]
+    rotation: 0
+    state: true
+- name: blocks_multiply_const_xx_0_0_0
+  id: blocks_multiply_const_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: gain_pilot
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [848, 508.0]
+    rotation: 0
+    state: true
+- name: blocks_multiply_const_xx_0_1
+  id: blocks_multiply_const_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [208, 284.0]
+    rotation: 0
+    state: true
+- name: blocks_multiply_const_xx_0_1_0
+  id: blocks_multiply_const_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [208, 404.0]
+    rotation: 0
+    state: true
+- name: blocks_multiply_xx_0
+  id: blocks_multiply_xx
   parameters:
     affinity: ''
     alias: ''
@@ -160,43 +393,25 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [392, 272.0]
+    coordinate: [728, 392.0]
     rotation: 0
     state: true
-- name: blocks_multiply_const_vxx_0
-  id: blocks_multiply_const_vxx
+- name: blocks_sub_xx_0
+  id: blocks_sub_xx
   parameters:
     affinity: ''
     alias: ''
-    comment: ''
-    const: '0.45'
+    comment: LRDiff
     maxoutbuf: '0'
     minoutbuf: '0'
+    num_inputs: '2'
     type: float
     vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [232, 260.0]
-    rotation: 0
-    state: true
-- name: blocks_multiply_const_vxx_0_0
-  id: blocks_multiply_const_vxx
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    const: '0.45'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    type: float
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [232, 308.0]
+    coordinate: [608, 376.0]
     rotation: 0
     state: true
 - name: blocks_wavfile_source_0
@@ -205,7 +420,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    file: /home/mike/work/fm-radio/sim/matlab/recordings/viera-blech-ehrenwert-polka.wav
+    file: /home/mike/work/fm-radio/sim/matlab/recordings/left-right-test.wav
     maxoutbuf: '0'
     minoutbuf: '0'
     nchan: '2'
@@ -214,7 +429,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [24, 272.0]
+    coordinate: [8, 328.0]
     rotation: 0
     state: true
 - name: qtgui_freq_sink_x_0
@@ -232,10 +447,10 @@ blocks:
     alpha7: '1.0'
     alpha8: '1.0'
     alpha9: '1.0'
-    autoscale: 'True'
-    average: '0.2'
+    autoscale: 'False'
+    average: '0.1'
     axislabels: 'True'
-    bw: fs_file
+    bw: fs_mod
     color1: '"blue"'
     color10: '"dark blue"'
     color2: '"red"'
@@ -249,10 +464,10 @@ blocks:
     comment: ''
     ctrlpanel: 'False'
     fc: '0'
-    fftsize: '4096'
-    freqhalf: 'True'
+    fftsize: 4096*2
+    freqhalf: 'False'
     grid: 'True'
-    gui_hint: ''
+    gui_hint: qtgui_tab_widget_0@0
     label: Relative Gain
     label1: ''
     label10: ''''''
@@ -267,7 +482,7 @@ blocks:
     legend: 'True'
     maxoutbuf: '0'
     minoutbuf: '0'
-    name: '"audioMono"'
+    name: '"fmChannelData"'
     nconnections: '1'
     showports: 'False'
     tr_chan: '0'
@@ -294,7 +509,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [504, 528.0]
+    coordinate: [1208, 552.0]
     rotation: 0
     state: true
 - name: qtgui_freq_sink_x_0_0
@@ -312,7 +527,7 @@ blocks:
     alpha7: '1.0'
     alpha8: '1.0'
     alpha9: '1.0'
-    autoscale: 'True'
+    autoscale: 'False'
     average: '0.2'
     axislabels: 'True'
     bw: fs_mod
@@ -332,7 +547,7 @@ blocks:
     fftsize: '4096'
     freqhalf: 'True'
     grid: 'True'
-    gui_hint: ''
+    gui_hint: qtgui_tab_widget_0@1
     label: Relative Gain
     label1: ''
     label10: ''''''
@@ -347,7 +562,7 @@ blocks:
     legend: 'True'
     maxoutbuf: '0'
     minoutbuf: '0'
-    name: '"tx_fm"'
+    name: '"tx_fm_bb"'
     nconnections: '1'
     showports: 'False'
     tr_chan: '0'
@@ -374,7 +589,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [784, 528.0]
+    coordinate: [1504, 552.0]
     rotation: 0
     state: true
 - name: qtgui_freq_sink_x_0_0_0
@@ -392,7 +607,7 @@ blocks:
     alpha7: '1.0'
     alpha8: '1.0'
     alpha9: '1.0'
-    autoscale: 'True'
+    autoscale: 'False'
     average: '0.2'
     axislabels: 'True'
     bw: fs_rf
@@ -412,7 +627,7 @@ blocks:
     fftsize: '8092'
     freqhalf: 'True'
     grid: 'True'
-    gui_hint: ''
+    gui_hint: qtgui_tab_widget_0@2
     label: Relative Gain
     label1: ''
     label10: ''''''
@@ -454,7 +669,41 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1080, 520.0]
+    coordinate: [1784, 552.0]
+    rotation: 0
+    state: true
+- name: qtgui_tab_widget_0
+  id: qtgui_tab_widget
+  parameters:
+    alias: ''
+    comment: ''
+    gui_hint: 4,0,1,1
+    label0: Tab 0
+    label1: Tab 1
+    label10: Tab 10
+    label11: Tab 11
+    label12: Tab 12
+    label13: Tab 13
+    label14: Tab 14
+    label15: Tab 15
+    label16: Tab 16
+    label17: Tab 17
+    label18: Tab 18
+    label19: Tab 19
+    label2: Tab 2
+    label3: Tab 3
+    label4: Tab 4
+    label5: Tab 5
+    label6: Tab 6
+    label7: Tab 7
+    label8: Tab 8
+    label9: Tab 9
+    num_tabs: '3'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [584, 12.0]
     rotation: 0
     state: true
 - name: rational_resampler_xxx_0
@@ -474,7 +723,47 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [872, 276.0]
+    coordinate: [1512, 308.0]
+    rotation: 0
+    state: true
+- name: rational_resampler_xxx_0_0
+  id: rational_resampler_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: left
+    decim: '1'
+    fbw: '0'
+    interp: osr_mod
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    taps: ''
+    type: fff
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [376, 260.0]
+    rotation: 0
+    state: true
+- name: rational_resampler_xxx_0_0_0
+  id: rational_resampler_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: right
+    decim: '1'
+    fbw: '0'
+    interp: osr_mod
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    taps: ''
+    type: fff
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [376, 380.0]
     rotation: 0
     state: true
 - name: uhd_usrp_sink_1
@@ -514,7 +803,7 @@ blocks:
     ant7: TX/RX
     ant8: TX/RX
     ant9: TX/RX
-    bw0: 150e3
+    bw0: 300e3
     bw1: '0'
     bw10: '0'
     bw11: '0'
@@ -750,21 +1039,33 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1064, 236.0]
+    coordinate: [1752, 268.0]
     rotation: 0
     state: enabled
 
 connections:
+- [analog_sig_source_x_0, '0', blocks_multiply_xx_0, '1']
+- [analog_sig_source_x_0_0, '0', blocks_multiply_const_xx_0_0_0, '0']
 - [analog_wfm_tx_0, '0', qtgui_freq_sink_x_0_0, '0']
 - [analog_wfm_tx_0, '0', rational_resampler_xxx_0, '0']
-- [blocks_add_xx_0, '0', analog_wfm_tx_0, '0']
-- [blocks_add_xx_0, '0', qtgui_freq_sink_x_0, '0']
-- [blocks_multiply_const_vxx_0, '0', blocks_add_xx_0, '0']
-- [blocks_multiply_const_vxx_0_0, '0', blocks_add_xx_0, '1']
-- [blocks_wavfile_source_0, '0', blocks_multiply_const_vxx_0, '0']
-- [blocks_wavfile_source_0, '1', blocks_multiply_const_vxx_0_0, '0']
+- [blocks_add_xx_0, '0', blocks_multiply_const_xx_0, '0']
+- [blocks_add_xx_0_0, '0', analog_wfm_tx_0, '0']
+- [blocks_add_xx_0_0, '0', qtgui_freq_sink_x_0, '0']
+- [blocks_multiply_const_xx_0, '0', blocks_add_xx_0_0, '0']
+- [blocks_multiply_const_xx_0_0, '0', blocks_add_xx_0_0, '1']
+- [blocks_multiply_const_xx_0_0_0, '0', blocks_add_xx_0_0, '2']
+- [blocks_multiply_const_xx_0_1, '0', rational_resampler_xxx_0_0, '0']
+- [blocks_multiply_const_xx_0_1_0, '0', rational_resampler_xxx_0_0_0, '0']
+- [blocks_multiply_xx_0, '0', blocks_multiply_const_xx_0_0, '0']
+- [blocks_sub_xx_0, '0', blocks_multiply_xx_0, '0']
+- [blocks_wavfile_source_0, '0', blocks_multiply_const_xx_0_1, '0']
+- [blocks_wavfile_source_0, '1', blocks_multiply_const_xx_0_1_0, '0']
 - [rational_resampler_xxx_0, '0', qtgui_freq_sink_x_0_0_0, '0']
 - [rational_resampler_xxx_0, '0', uhd_usrp_sink_1, '0']
+- [rational_resampler_xxx_0_0, '0', blocks_add_xx_0, '0']
+- [rational_resampler_xxx_0_0, '0', blocks_sub_xx_0, '0']
+- [rational_resampler_xxx_0_0_0, '0', blocks_add_xx_0, '1']
+- [rational_resampler_xxx_0_0_0, '0', blocks_sub_xx_0, '1']
 
 metadata:
   file_format: 1
