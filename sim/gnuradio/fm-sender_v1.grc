@@ -92,13 +92,13 @@ blocks:
     start: '0'
     step: '0.05'
     stop: '1'
-    value: '1'
+    value: '0.40'
     widget: counter_slider
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1536, 128.0]
+    coordinate: [1376, 132.0]
     rotation: 0
     state: true
 - name: gain_mono
@@ -113,13 +113,13 @@ blocks:
     start: '0'
     step: '0.05'
     stop: '1'
-    value: '1'
+    value: '0.8'
     widget: counter_slider
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1408, 128.0]
+    coordinate: [1248, 132.0]
     rotation: 0
     state: true
 - name: gain_pilot
@@ -134,13 +134,13 @@ blocks:
     start: '0'
     step: '0.05'
     stop: '1'
-    value: '1'
+    value: '0.9'
     widget: counter_slider
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1664, 128.0]
+    coordinate: [1504, 132.0]
     rotation: 0
     state: true
 - name: osr_mod
@@ -185,7 +185,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2648, 140.0]
+    coordinate: [2360, 140.0]
     rotation: 0
     state: true
 - name: analog_fm_preemph_0
@@ -232,12 +232,12 @@ blocks:
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    sensitivity: 75e3/fs_mod*2*3.1415926
+    sensitivity: '0.68'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1976, 392.0]
+    coordinate: [1680, 388.0]
     rotation: 0
     state: enabled
 - name: analog_sig_source_x_0
@@ -245,7 +245,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    amp: '1'
+    amp: '0.2'
     comment: 38kHz Subcarrier
     freq: 38e3
     maxoutbuf: '0'
@@ -259,7 +259,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [880, 508.0]
+    coordinate: [688, 492.0]
     rotation: 0
     state: true
 - name: analog_sig_source_x_0_0
@@ -267,7 +267,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    amp: '1'
+    amp: '0.1'
     comment: 19kHz Pilot Tone
     freq: 19e3
     maxoutbuf: '0'
@@ -281,7 +281,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [880, 668.0]
+    coordinate: [688, 652.0]
     rotation: 0
     state: true
 - name: analog_wfm_tx_0
@@ -301,7 +301,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1960, 244.0]
+    coordinate: [1648, 252.0]
     rotation: 0
     state: disabled
 - name: band_pass_filter_0
@@ -312,7 +312,7 @@ blocks:
     beta: '6.76'
     comment: ''
     decim: '1'
-    gain: '1'
+    gain: '10'
     high_cutoff_freq: 53e3
     interp: '1'
     low_cutoff_freq: 23e3
@@ -326,57 +326,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1216, 344.0]
-    rotation: 0
-    state: true
-- name: band_pass_filter_1
-  id: band_pass_filter
-  parameters:
-    affinity: ''
-    alias: ''
-    beta: '6.76'
-    comment: ''
-    decim: '1'
-    gain: '1'
-    high_cutoff_freq: 15e3
-    interp: '1'
-    low_cutoff_freq: '30'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    samp_rate: fs_mod
-    type: fir_filter_fff
-    width: '100'
-    win: firdes.WIN_HAMMING
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [888, 132.0]
-    rotation: 0
-    state: true
-- name: band_pass_filter_1_0
-  id: band_pass_filter
-  parameters:
-    affinity: ''
-    alias: ''
-    beta: '6.76'
-    comment: ''
-    decim: '1'
-    gain: '1'
-    high_cutoff_freq: 15e3
-    interp: '1'
-    low_cutoff_freq: '30'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    samp_rate: fs_mod
-    type: fir_filter_fff
-    width: '100'
-    win: firdes.WIN_HAMMING
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [888, 332.0]
+    coordinate: [1048, 348.0]
     rotation: 0
     state: true
 - name: blocks_add_xx_0
@@ -412,7 +362,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1648, 312.0]
+    coordinate: [1520, 312.0]
     rotation: 0
     state: true
 - name: blocks_multiply_const_xx_0
@@ -430,7 +380,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1424, 304.0]
+    coordinate: [1296, 308.0]
     rotation: 0
     state: true
 - name: blocks_multiply_const_xx_0_0
@@ -448,7 +398,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1424, 352.0]
+    coordinate: [1296, 372.0]
     rotation: 0
     state: true
 - name: blocks_multiply_const_xx_0_0_0
@@ -466,7 +416,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1424, 496.0]
+    coordinate: [1296, 508.0]
     rotation: 0
     state: true
 - name: blocks_multiply_const_xx_0_0_1
@@ -484,7 +434,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2424, 328.0]
+    coordinate: [2144, 332.0]
     rotation: 0
     state: true
 - name: blocks_multiply_const_xx_0_1
@@ -523,24 +473,6 @@ blocks:
     coordinate: [208, 404.0]
     rotation: 0
     state: true
-- name: blocks_multiply_const_xx_1
-  id: blocks_multiply_const_xx
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    const: '1'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    type: float
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1744, 336.0]
-    rotation: 0
-    state: true
 - name: blocks_multiply_xx_0
   id: blocks_multiply_xx
   parameters:
@@ -556,7 +488,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1096, 392.0]
+    coordinate: [920, 392.0]
     rotation: 0
     state: true
 - name: blocks_sub_xx_0
@@ -593,6 +525,30 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [8, 328.0]
+    rotation: 0
+    state: true
+- name: low_pass_filter_0
+  id: low_pass_filter
+  parameters:
+    affinity: ''
+    alias: ''
+    beta: '6.76'
+    comment: ''
+    cutoff_freq: 15e3
+    decim: '1'
+    gain: '0.3'
+    interp: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: fs_mod
+    type: interp_fir_filter_fff
+    width: 2e3
+    win: firdes.WIN_HAMMING
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1048, 140.0]
     rotation: 0
     state: true
 - name: qtgui_freq_sink_x_0
@@ -672,7 +628,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1976, 544.0]
+    coordinate: [1664, 552.0]
     rotation: 0
     state: true
 - name: qtgui_freq_sink_x_0_0
@@ -752,7 +708,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2232, 544.0]
+    coordinate: [1952, 552.0]
     rotation: 0
     state: true
 - name: qtgui_freq_sink_x_0_0_0
@@ -832,7 +788,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2520, 544.0]
+    coordinate: [2240, 552.0]
     rotation: 0
     state: true
 - name: qtgui_tab_widget_0
@@ -886,7 +842,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2248, 304.0]
+    coordinate: [1968, 308.0]
     rotation: 0
     state: true
 - name: rational_resampler_xxx_0_0
@@ -1202,7 +1158,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2648, 268.0]
+    coordinate: [2360, 276.0]
     rotation: 0
     state: enabled
 
@@ -1218,10 +1174,10 @@ connections:
 - [analog_wfm_tx_0, '0', qtgui_freq_sink_x_0_0, '0']
 - [analog_wfm_tx_0, '0', rational_resampler_xxx_0, '0']
 - [band_pass_filter_0, '0', blocks_multiply_const_xx_0_0, '0']
-- [band_pass_filter_1, '0', blocks_multiply_const_xx_0, '0']
-- [band_pass_filter_1_0, '0', blocks_multiply_xx_0, '0']
 - [blocks_add_xx_0, '0', rational_resampler_xxx_0_0, '0']
-- [blocks_add_xx_0_0, '0', blocks_multiply_const_xx_1, '0']
+- [blocks_add_xx_0_0, '0', analog_frequency_modulator_fc_0, '0']
+- [blocks_add_xx_0_0, '0', analog_wfm_tx_0, '0']
+- [blocks_add_xx_0_0, '0', qtgui_freq_sink_x_0, '0']
 - [blocks_multiply_const_xx_0, '0', blocks_add_xx_0_0, '0']
 - [blocks_multiply_const_xx_0_0, '0', blocks_add_xx_0_0, '1']
 - [blocks_multiply_const_xx_0_0_0, '0', blocks_add_xx_0_0, '2']
@@ -1229,16 +1185,14 @@ connections:
 - [blocks_multiply_const_xx_0_0_1, '0', uhd_usrp_sink_1, '0']
 - [blocks_multiply_const_xx_0_1, '0', analog_fm_preemph_0, '0']
 - [blocks_multiply_const_xx_0_1_0, '0', analog_fm_preemph_0_0, '0']
-- [blocks_multiply_const_xx_1, '0', analog_frequency_modulator_fc_0, '0']
-- [blocks_multiply_const_xx_1, '0', analog_wfm_tx_0, '0']
-- [blocks_multiply_const_xx_1, '0', qtgui_freq_sink_x_0, '0']
 - [blocks_multiply_xx_0, '0', band_pass_filter_0, '0']
 - [blocks_sub_xx_0, '0', rational_resampler_xxx_0_0_0, '0']
 - [blocks_wavfile_source_0, '0', blocks_multiply_const_xx_0_1, '0']
 - [blocks_wavfile_source_0, '1', blocks_multiply_const_xx_0_1_0, '0']
+- [low_pass_filter_0, '0', blocks_multiply_const_xx_0, '0']
 - [rational_resampler_xxx_0, '0', blocks_multiply_const_xx_0_0_1, '0']
-- [rational_resampler_xxx_0_0, '0', band_pass_filter_1, '0']
-- [rational_resampler_xxx_0_0_0, '0', band_pass_filter_1_0, '0']
+- [rational_resampler_xxx_0_0, '0', low_pass_filter_0, '0']
+- [rational_resampler_xxx_0_0_0, '0', blocks_multiply_xx_0, '0']
 
 metadata:
   file_format: 1

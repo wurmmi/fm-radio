@@ -81,9 +81,9 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.osr_mod = osr_mod = 5
         self.fs_file = fs_file = 44100
         self.tx_gain_db = tx_gain_db = 0.8
-        self.gain_pilot = gain_pilot = 0.9
-        self.gain_mono = gain_mono = 0.8
-        self.gain_lrdiff = gain_lrdiff = 0.40
+        self.gain_pilot = gain_pilot = 1
+        self.gain_mono = gain_mono = 1
+        self.gain_lrdiff = gain_lrdiff = 1
         self.fs_rf = fs_rf = fs_file*osr_mod*osr_rf
         self.fs_mod = fs_mod = fs_file*osr_mod
         self.fc_pirate = fc_pirate = 99e6
@@ -119,21 +119,21 @@ class fm_sender(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 1):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self._gain_pilot_range = Range(0, 1, 0.05, 0.9, 200)
+        self._gain_pilot_range = Range(0, 1, 0.05, 1, 200)
         self._gain_pilot_win = RangeWidget(self._gain_pilot_range, self.set_gain_pilot, 'gain_pilot', "counter_slider", float)
         self.top_grid_layout.addWidget(self._gain_pilot_win, 3, 0, 1, 1)
         for r in range(3, 4):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 1):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self._gain_mono_range = Range(0, 1, 0.05, 0.8, 200)
+        self._gain_mono_range = Range(0, 1, 0.05, 1, 200)
         self._gain_mono_win = RangeWidget(self._gain_mono_range, self.set_gain_mono, 'gain_mono', "counter_slider", float)
         self.top_grid_layout.addWidget(self._gain_mono_win, 1, 0, 1, 1)
         for r in range(1, 2):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 1):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self._gain_lrdiff_range = Range(0, 1, 0.05, 0.40, 200)
+        self._gain_lrdiff_range = Range(0, 1, 0.05, 1, 200)
         self._gain_lrdiff_win = RangeWidget(self._gain_lrdiff_range, self.set_gain_lrdiff, 'gain_lrdiff', "counter_slider", float)
         self.top_grid_layout.addWidget(self._gain_lrdiff_win, 2, 0, 1, 1)
         for r in range(2, 3):
@@ -290,18 +290,10 @@ class fm_sender(gr.top_block, Qt.QWidget):
 
         self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.pyqwidget(), Qt.QWidget)
         self.qtgui_tab_widget_0_layout_0.addWidget(self._qtgui_freq_sink_x_0_win)
-        self.low_pass_filter_0 = filter.interp_fir_filter_fff(
-            1,
-            firdes.low_pass(
-                0.3,
-                fs_mod,
-                15e3,
-                2e3,
-                firdes.WIN_HAMMING,
-                6.76))
         self.blocks_wavfile_source_0 = blocks.wavfile_source('/home/mike/work/fm-radio/sim/matlab/recordings/left-right-test.wav', True)
         self.blocks_sub_xx_0 = blocks.sub_ff(1)
         self.blocks_multiply_xx_0 = blocks.multiply_vff(1)
+        self.blocks_multiply_const_xx_1 = blocks.multiply_const_ff(1, 1)
         self.blocks_multiply_const_xx_0_1_0 = blocks.multiply_const_ff(1, 1)
         self.blocks_multiply_const_xx_0_1 = blocks.multiply_const_ff(1, 1)
         self.blocks_multiply_const_xx_0_0_1 = blocks.multiply_const_cc(1, 1)
@@ -310,19 +302,39 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.blocks_multiply_const_xx_0 = blocks.multiply_const_ff(gain_mono, 1)
         self.blocks_add_xx_0_0 = blocks.add_vff(1)
         self.blocks_add_xx_0 = blocks.add_vff(1)
+        self.band_pass_filter_1_0 = filter.fir_filter_fff(
+            1,
+            firdes.band_pass(
+                1,
+                fs_mod,
+                30,
+                15e3,
+                100,
+                firdes.WIN_HAMMING,
+                6.76))
+        self.band_pass_filter_1 = filter.fir_filter_fff(
+            1,
+            firdes.band_pass(
+                1,
+                fs_mod,
+                30,
+                15e3,
+                100,
+                firdes.WIN_HAMMING,
+                6.76))
         self.band_pass_filter_0 = filter.fir_filter_fff(
             1,
             firdes.band_pass(
-                10,
+                1,
                 fs_mod,
                 23e3,
                 53e3,
                 2e3,
                 firdes.WIN_HAMMING,
                 6.76))
-        self.analog_sig_source_x_0_0 = analog.sig_source_f(fs_mod, analog.GR_COS_WAVE, 19e3, 0.1, 0, 0)
-        self.analog_sig_source_x_0 = analog.sig_source_f(fs_mod, analog.GR_COS_WAVE, 38e3, 0.2, 0, 0)
-        self.analog_frequency_modulator_fc_0 = analog.frequency_modulator_fc(0.68)
+        self.analog_sig_source_x_0_0 = analog.sig_source_f(fs_mod, analog.GR_COS_WAVE, 19e3, 1, 0, 0)
+        self.analog_sig_source_x_0 = analog.sig_source_f(fs_mod, analog.GR_COS_WAVE, 38e3, 1, 0, 0)
+        self.analog_frequency_modulator_fc_0 = analog.frequency_modulator_fc(75e3/fs_mod*2*3.1415926)
         self.analog_fm_preemph_0_0 = analog.fm_preemph(fs=fs_file, tau=50e-6, fh=-1.0)
         self.analog_fm_preemph_0 = analog.fm_preemph(fs=fs_file, tau=50e-6, fh=-1.0)
 
@@ -340,9 +352,10 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.connect((self.analog_sig_source_x_0, 0), (self.blocks_multiply_xx_0, 1))
         self.connect((self.analog_sig_source_x_0_0, 0), (self.blocks_multiply_const_xx_0_0_0, 0))
         self.connect((self.band_pass_filter_0, 0), (self.blocks_multiply_const_xx_0_0, 0))
+        self.connect((self.band_pass_filter_1, 0), (self.blocks_multiply_const_xx_0, 0))
+        self.connect((self.band_pass_filter_1_0, 0), (self.blocks_multiply_xx_0, 0))
         self.connect((self.blocks_add_xx_0, 0), (self.rational_resampler_xxx_0_0, 0))
-        self.connect((self.blocks_add_xx_0_0, 0), (self.analog_frequency_modulator_fc_0, 0))
-        self.connect((self.blocks_add_xx_0_0, 0), (self.qtgui_freq_sink_x_0, 0))
+        self.connect((self.blocks_add_xx_0_0, 0), (self.blocks_multiply_const_xx_1, 0))
         self.connect((self.blocks_multiply_const_xx_0, 0), (self.blocks_add_xx_0_0, 0))
         self.connect((self.blocks_multiply_const_xx_0_0, 0), (self.blocks_add_xx_0_0, 1))
         self.connect((self.blocks_multiply_const_xx_0_0_0, 0), (self.blocks_add_xx_0_0, 2))
@@ -350,14 +363,15 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.connect((self.blocks_multiply_const_xx_0_0_1, 0), (self.uhd_usrp_sink_1, 0))
         self.connect((self.blocks_multiply_const_xx_0_1, 0), (self.analog_fm_preemph_0, 0))
         self.connect((self.blocks_multiply_const_xx_0_1_0, 0), (self.analog_fm_preemph_0_0, 0))
+        self.connect((self.blocks_multiply_const_xx_1, 0), (self.analog_frequency_modulator_fc_0, 0))
+        self.connect((self.blocks_multiply_const_xx_1, 0), (self.qtgui_freq_sink_x_0, 0))
         self.connect((self.blocks_multiply_xx_0, 0), (self.band_pass_filter_0, 0))
         self.connect((self.blocks_sub_xx_0, 0), (self.rational_resampler_xxx_0_0_0, 0))
         self.connect((self.blocks_wavfile_source_0, 0), (self.blocks_multiply_const_xx_0_1, 0))
         self.connect((self.blocks_wavfile_source_0, 1), (self.blocks_multiply_const_xx_0_1_0, 0))
-        self.connect((self.low_pass_filter_0, 0), (self.blocks_multiply_const_xx_0, 0))
         self.connect((self.rational_resampler_xxx_0, 0), (self.blocks_multiply_const_xx_0_0_1, 0))
-        self.connect((self.rational_resampler_xxx_0_0, 0), (self.low_pass_filter_0, 0))
-        self.connect((self.rational_resampler_xxx_0_0_0, 0), (self.blocks_multiply_xx_0, 0))
+        self.connect((self.rational_resampler_xxx_0_0, 0), (self.band_pass_filter_1, 0))
+        self.connect((self.rational_resampler_xxx_0_0_0, 0), (self.band_pass_filter_1_0, 0))
 
 
     def closeEvent(self, event):
@@ -429,10 +443,12 @@ class fm_sender(gr.top_block, Qt.QWidget):
 
     def set_fs_mod(self, fs_mod):
         self.fs_mod = fs_mod
+        self.analog_frequency_modulator_fc_0.set_sensitivity(75e3/self.fs_mod*2*3.1415926)
         self.analog_sig_source_x_0.set_sampling_freq(self.fs_mod)
         self.analog_sig_source_x_0_0.set_sampling_freq(self.fs_mod)
-        self.band_pass_filter_0.set_taps(firdes.band_pass(10, self.fs_mod, 23e3, 53e3, 2e3, firdes.WIN_HAMMING, 6.76))
-        self.low_pass_filter_0.set_taps(firdes.low_pass(0.3, self.fs_mod, 15e3, 2e3, firdes.WIN_HAMMING, 6.76))
+        self.band_pass_filter_0.set_taps(firdes.band_pass(1, self.fs_mod, 23e3, 53e3, 2e3, firdes.WIN_HAMMING, 6.76))
+        self.band_pass_filter_1.set_taps(firdes.band_pass(1, self.fs_mod, 30, 15e3, 100, firdes.WIN_HAMMING, 6.76))
+        self.band_pass_filter_1_0.set_taps(firdes.band_pass(1, self.fs_mod, 30, 15e3, 100, firdes.WIN_HAMMING, 6.76))
         self.qtgui_freq_sink_x_0.set_frequency_range(0, self.fs_mod)
         self.qtgui_freq_sink_x_0_0.set_frequency_range(0, self.fs_mod)
 
