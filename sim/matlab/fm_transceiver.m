@@ -180,34 +180,35 @@ disp('-- Plots');
 
 fig_title = 'Time domain signal';
 fig_audio_time = figure('Name',fig_title);
+title(fig_title);
 if EnableSenderSourceCreateSim
-    subplot(6,1,1);
+    ax1 = subplot(6,1,1);
     plot(tn/fs, audioDataL, 'r', 'DisplayName', 'audioDataL');
-    title(fig_title);
     grid on; legend();
-    subplot(6,1,2);
+    ax2 = subplot(6,1,2);
     plot(tn/fs, audioDataR, 'g', 'DisplayName', 'audioDataR');
     grid on; legend();
 end
-subplot(6,1,3);
+ax3 = subplot(6,1,3);
 hold on;
 plot(tnRx/fs_rx, rx_audio_lrdiff, 'b', 'DisplayName', 'rx\_audio\_lrdiff');
 plot(tnRx/fs_rx, rx_audio_mono, 'r', 'DisplayName', 'rx\_audio\_mono');
 ylabel('amplitude');
 grid on; legend();
-subplot(6,1,4);
+ax4 = subplot(6,1,4);
 plot(tnRx/fs_rx, rx_audio_mono, 'b', 'DisplayName', 'rx\_audio\_mono');
 grid on; legend();
-subplot(6,1,5);
+ax5 = subplot(6,1,5);
 plot(tnRx/fs_rx, rx_audio_L, 'r', 'DisplayName', 'rx\_audio\_L');
 ymax = max(rx_audio_L);
 ylim([-ymax,ymax]);
 grid on; legend();
-subplot(6,1,6);
+ax6 = subplot(6,1,6);
 plot(tnRx/fs_rx, rx_audio_R, 'g', 'DisplayName', 'rx\_audio\_R');
 ylim([-ymax,ymax]);
 xlabel('time [s]');
 grid on; legend();
+linkaxes([ax1,ax2,ax3,ax4,ax5,ax6],'x');
 if EnableSavePlotsToPng
     saveas(fig_audio_time, sprintf("%s%s",dir_output, "time_audio.png"));
 end
