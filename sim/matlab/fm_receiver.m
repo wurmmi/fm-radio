@@ -39,9 +39,70 @@ disp('-- De-emphasis');
 if EnableDeEmphasis
     % Create de-emphasis filter
     filter_de_emphasis = getEmphasisFilter(fs, 'de', EnableFilterAnalyzeGUI);
-
+    
     % Filter
     rx_fm_demod = filter(filter_de_emphasis.Num, filter_de_emphasis.Denum, rx_fm_demod);
+end
+
+%% Downsample
+
+rx_fmChannelData = rx_fm_demod;
+
+osr_rx = 4;
+fs_rx  = fs/osr_rx;
+rx_fmChannelData = resample(rx_fmChannelData, 1, osr_rx);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% RDS decoder
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+if EnableRDSDecoder
+    disp('-- RDS Decoder');
+    
+    % Create the bandpass filter
+    filter_name = sprintf("%s%s",dir_filters,"bandpass_rds.mat");
+    if isRunningInOctave()
+        disp("Running in GNU Octave - loading bandpass filter from folder!");
+        filter_bp_rds = load(filter_name);
+    else
+        ripple_pass_dB = 0.1;                   % Passband ripple in dB
+        ripple_stop_db = 80;                    % Stopband ripple in dB
+        cutoff_freqs   = [53e3 55e3 59e3 61e3]; % Band frequencies (defined like slopes)
+        
+        filter_bp_rds = getBPfilter( ...
+            ripple_pass_dB, ripple_stop_db, ...
+            cutoff_freqs, fs_rx, EnableFilterAnalyzeGUI);
+        
+        % Save the filter coefficients
+        save(filter_name,'filter_bp_rds','-ascii');
+    end
+    
+    % Filter (Bandpass 53k..61kHz)
+    rx_rds = filter(filter_bp_rds,1, rx_fmChannelData);
+    
+    % Modulate down to baseband
+    tnRx = (0:1:n_sec*fs_rx-1)';
+    carrier57kHzRx = cos(2*pi*57e3/fs_rx*tnRx);
+    rx_rds_mod = rx_rds .* carrier57kHzRx;
+    
+    % Filter (lowpass 3kHz)
+    filter_name = sprintf("%s%s",dir_filters,"lowpass_rds.mat");
+    if isRunningInOctave()
+        disp("Running in GNU Octave - loading lowpass filter from folder!");
+        filter_lp_rds = load(filter_name);
+    else
+        ripple_pass_dB = 0.1;         % Passband ripple in dB
+        ripple_stop_db = 50;          % Stopband ripple in dB
+        cutoff_freqs   = [3e3 4e3];   % Cutoff frequencies
+        
+        filter_lp_rds = getLPfilter( ...
+            ripple_pass_dB, ripple_stop_db, ...
+            cutoff_freqs, fs_rx, EnableFilterAnalyzeGUI);
+        
+        % Save the filter coefficients
+        save(filter_name,'filter_lp_rds','-ascii');
+    end
+    rx_rds_bb = filter(filter_lp_rds,1, rx_rds_mod);
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -49,14 +110,6 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 disp('-- Channel decoder');
-
-rx_fmChannelData = rx_fm_demod;
-
-%% Downsample
-
-osr_rx = 4;
-fs_rx  = fs/osr_rx;
-rx_fmChannelData = resample(rx_fmChannelData, 1, osr_rx);
 
 %% Filter the mono part
 
@@ -90,7 +143,7 @@ rx_audio_mono = filter(filter_lp_mono,1, rx_fmChannelData);
 % Create the bandpass filter
 filter_name = sprintf("%s%s",dir_filters,"bandpass_lrdiff.mat");
 if isRunningInOctave()
-    disp("Running in GNU Octave - loading lowpass filter from folder!");
+    disp("Running in GNU Octave - loading bandpass filter from folder!");
     filter_bp_lrdiff = load(filter_name);
 else
     ripple_pass_dB = 0.1;                   % Passband ripple in dB

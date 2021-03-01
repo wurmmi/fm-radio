@@ -40,18 +40,20 @@ dir_filters = "./filters/";
 dir_output  = "./matlab_output/";
 
 % Simulation options
-EnableSenderSourceRecordedFile = false;
-EnableSenderSourceCreateSim    = true;
+EnableSenderSourceRecordedFile = true;
+EnableSenderSourceCreateSim    = false;
 EnableAudioFromFile            = true;
 EnableTrafficInfoTrigger       = false;
 
 EnablePreEmphasis = false;
-EnableDeEmphasis  = false;
+EnableDeEmphasis  = true;
 
 EnableRxAudioReplay    = true;
 EnableFilterAnalyzeGUI = false;
 EnableSavePlotsToPng   = false;
 EnablePlotsLogarithmic = true;
+
+EnableRDSDecoder = true;
 
 % Signal parameters
 n_sec = 1.7;           % 1.7s is "left channel, right channel" in audio file
@@ -61,6 +63,9 @@ fs    = 44.1e3 * osr;  % sampling rate fs
 % Channel
 fc_oe3 = 98.1e4;
 
+%% Sanity checks
+assert( not(EnableRDSDecoder && EnableSenderSourceRecordedFile == false), ...
+    'Settings Error: RDS decoder only works with binary file data. (Simulator does not generate RDS!)')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Sender
@@ -147,6 +152,9 @@ window      = hanning(welch_size);
 [psxx_rx_lrdiff_bpfilt, psxx_rx_lrdiff_bpfilt_f] = pwelch(rx_audio_lrdiff_bpfilt, window, n_overlap, n_fft_welch, fs_rx);
 [psxx_rx_lrdiff_mod, psxx_rx_lrdiff_mod_f]       = pwelch(rx_audio_lrdiff_mod, window, n_overlap, n_fft_welch, fs_rx);
 [psxx_rx_lrdiff, psxx_rx_lrdiff_f]               = pwelch(rx_audio_lrdiff, window, n_overlap, n_fft_welch, fs_rx);
+[psxx_rx_rds, psxx_rx_rds_f]                     = pwelch(rx_rds, window, n_overlap, n_fft_welch, fs_rx);
+[psxx_rx_rds_mod, psxx_rx_rds_mod_f]             = pwelch(rx_rds_mod, window, n_overlap, n_fft_welch, fs_rx);
+[psxx_rx_rds_bb, psxx_rx_rds_bb_f]               = pwelch(rx_rds_bb, window, n_overlap, n_fft_welch, fs_rx);
 
 % fs_mod domain %%%%%%%%%%%%%%%%%%%%%
 if EnableSenderSourceCreateSim
@@ -173,6 +181,9 @@ if EnablePlotsLogarithmic
     psxx_rx_lrdiff_bpfilt = 10*log10(psxx_rx_lrdiff_bpfilt);
     psxx_rx_lrdiff_mod    = 10*log10(psxx_rx_lrdiff_mod);
     psxx_rx_lrdiff        = 10*log10(psxx_rx_lrdiff);
+    psxx_rx_rds           = 10*log10(psxx_rx_rds);
+    psxx_rx_rds_mod       = 10*log10(psxx_rx_rds_mod);
+    psxx_rx_rds_bb        = 10*log10(psxx_rx_rds_bb);
 end
 
 %% Plots
@@ -181,6 +192,8 @@ disp('-- Plots');
 fig_title = 'Time domain signal';
 fig_audio_time = figure('Name',fig_title);
 title(fig_title);
+ax1='';
+ax2='';
 if EnableSenderSourceCreateSim
     ax1 = subplot(6,1,1);
     plot(tn/fs, audioDataL, 'r', 'DisplayName', 'audioDataL');
@@ -345,6 +358,36 @@ if EnableSavePlotsToPng
     saveas(fig_rx_spec, sprintf("%s%s",dir_output, "psd_rx_parts.png"));
 end
 
+if EnableRDSDecoder
+    fig_title = 'Rx RDS spectrum parts';
+    fig_rx_spec_rds = figure('Name',fig_title);
+    hold on;
+    xline(19e3,'k--','19 kHz');
+    xline(38e3,'k--','38 kHz');
+    xline(57e3,'k--','57 kHz');
+    h0 = plot(psxx_rx_rds_f, psxx_rx_rds,         'b','DisplayName', 'RDS');
+    h1 = plot(psxx_rx_rds_mod_f, psxx_rx_rds_mod, 'r','DisplayName', 'RDS BB Mod');
+    h2 = plot(psxx_rx_rds_bb_f, psxx_rx_rds_bb,   'g','DisplayName', 'RDS BB Filtered');
+    grid on;
+    title(fig_title);
+    xlabel('frequency [Hz]');
+    ylabel('magnitude');
+    legend([h0,h1,h2],'Location','east');
+    xlim([0 100e3]);
+    if EnableSavePlotsToPng
+        saveas(fig_rx_spec_rds, sprintf("%s%s",dir_output, "psd_rx_rds_parts.png"));
+    end
+    
+    fig_title = 'RDS Time domain signal';
+    fig_rx_time_rds = figure('Name',fig_title);
+    hold on;
+    plot(tnRx/fs_rx, rx_rds_bb,   'r', 'DisplayName', 'rx\_rds\_bb');
+    grid on;
+    title(fig_title);
+    xlabel('time [s]');
+    ylabel('amplitude');
+    legend();
+end
 
 %% Arrange all plots on the display
 if ~isRunningInOctave()
