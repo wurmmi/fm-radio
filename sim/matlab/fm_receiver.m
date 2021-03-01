@@ -38,19 +38,14 @@ disp('-- De-emphasis');
 
 if EnableDeEmphasis
     % Create de-emphasis filter
-    tau = 50e-6;         % time constant (50µs in Europe, 75us in US)
-    fc  = 1/(2*pi*tau);  % cut-off frequency
-    
-    k = fs/(2*pi*fc);
-    
-    filter_de_emphasis.Num = [1 0];
-    filter_de_emphasis.Denum = [1+k -k];
-    
+    filter_de_emphasis = getEmphasisFilter(fs, 'de', EnableFilterAnalyzeGUI);
+
+    % Filter
     rx_fm_demod = filter(filter_de_emphasis.Num, filter_de_emphasis.Denum, rx_fm_demod);
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Channel decoder
+%% Audio channel decoder
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 disp('-- Channel decoder');
@@ -59,7 +54,7 @@ rx_fmChannelData = rx_fm_demod;
 
 %% Downsample
 
-osr_rx = 1;
+osr_rx = 4;
 fs_rx  = fs/osr_rx;
 rx_fmChannelData = resample(rx_fmChannelData, 1, osr_rx);
 
@@ -85,6 +80,10 @@ end
 
 % Filter
 rx_audio_mono = filter(filter_lp_mono,1, rx_fmChannelData);
+
+% TODO
+%mean_mono = mean(rx_audio_mono);
+%rx_audio_mono = rx_audio_mono - mean_mono;
 
 %% Filter the LR-diff-part
 
@@ -117,10 +116,10 @@ rx_audio_lrdiff_mod = rx_audio_lrdiff_bpfilt .* carrier38kHzRx;
 % Filter (lowpass 15kHz)
 rx_audio_lrdiff = filter(filter_lp_mono,1, rx_audio_lrdiff_mod);
 
-% TODO: where does this come from?? Factor 2 = ~3 dB
-% NOTE: normalize to 1 before the add/sub
-scalefactor = 4.33;
-rx_audio_lrdiff = rx_audio_lrdiff * scalefactor;
+% TODO: where does this come from?? Factor 4 = ~6 dB ?
+% NOTE: normalize to 1 before the add/sub?
+rx_scalefactor = 4;
+rx_audio_lrdiff = rx_audio_lrdiff * rx_scalefactor;
 
 %% Combine received signal
 % L = (L+R) + (L-R) = (2)L
