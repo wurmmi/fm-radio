@@ -54,7 +54,7 @@ EnableSavePlotsToPng   = false;
 EnablePlotsLogarithmic = true;
 
 % Signal parameters
-n_sec = 2;           % 1.7s is "left channel, right channel" in audio file
+n_sec = 1.7;           % 1.7s is "left channel, right channel" in audio file
 osr   = 22;            % oversampling rate for fs
 fs    = 44.1e3 * osr;  % sampling rate fs
 
