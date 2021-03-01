@@ -85,19 +85,25 @@ if EnableRDSDecoder
     carrier57kHzRx = cos(2*pi*57e3/fs_rx*tnRx);
     rx_rds_mod = rx_rds .* carrier57kHzRx;
     
+    % Downsample
+    osr_rds = 5;
+    fs_rds = fs_rx/osr_rds;
+    rx_rds_mod = resample(rx_rds_mod, 1, osr_rds);
+    tnRDS = (0:1:n_sec*fs_rds-1)';
+
     % Filter (lowpass 3kHz)
     filter_name = sprintf("%s%s",dir_filters,"lowpass_rds.mat");
     if isRunningInOctave()
         disp("Running in GNU Octave - loading lowpass filter from folder!");
         filter_lp_rds = load(filter_name);
     else
-        ripple_pass_dB = 0.1;         % Passband ripple in dB
-        ripple_stop_db = 50;          % Stopband ripple in dB
-        cutoff_freqs   = [3e3 4e3];   % Cutoff frequencies
+        ripple_pass_dB = 0.01;          % Passband ripple in dB
+        ripple_stop_db = 50;            % Stopband ripple in dB
+        cutoff_freqs   = [2.4e3 3.2e3]; % Cutoff frequencies
         
         filter_lp_rds = getLPfilter( ...
             ripple_pass_dB, ripple_stop_db, ...
-            cutoff_freqs, fs_rx, EnableFilterAnalyzeGUI);
+            cutoff_freqs, fs_rds, EnableFilterAnalyzeGUI);
         
         % Save the filter coefficients
         save(filter_name,'filter_lp_rds','-ascii');

@@ -46,7 +46,7 @@ EnableAudioFromFile            = true;
 EnableTrafficInfoTrigger       = false;
 
 EnablePreEmphasis = false;
-EnableDeEmphasis  = true;
+EnableDeEmphasis  = false;
 
 EnableRxAudioReplay    = true;
 EnableFilterAnalyzeGUI = false;
@@ -56,7 +56,7 @@ EnablePlotsLogarithmic = true;
 EnableRDSDecoder = true;
 
 % Signal parameters
-n_sec = 1.7;           % 1.7s is "left channel, right channel" in audio file
+n_sec = 10;           % 1.7s is "left channel, right channel" in audio file
 osr   = 22;            % oversampling rate for fs
 fs    = 44.1e3 * osr;  % sampling rate fs
 
@@ -153,8 +153,18 @@ window      = hanning(welch_size);
 [psxx_rx_lrdiff_mod, psxx_rx_lrdiff_mod_f]       = pwelch(rx_audio_lrdiff_mod, window, n_overlap, n_fft_welch, fs_rx);
 [psxx_rx_lrdiff, psxx_rx_lrdiff_f]               = pwelch(rx_audio_lrdiff, window, n_overlap, n_fft_welch, fs_rx);
 [psxx_rx_rds, psxx_rx_rds_f]                     = pwelch(rx_rds, window, n_overlap, n_fft_welch, fs_rx);
-[psxx_rx_rds_mod, psxx_rx_rds_mod_f]             = pwelch(rx_rds_mod, window, n_overlap, n_fft_welch, fs_rx);
-[psxx_rx_rds_bb, psxx_rx_rds_bb_f]               = pwelch(rx_rds_bb, window, n_overlap, n_fft_welch, fs_rx);
+
+% fs_rds domain %%%%%%%%%%%%%%%%%%%%%
+welch_size  = length(rx_rds_mod);
+n_overlap   = welch_size / 4;
+if isRunningInOctave()
+    n_overlap = 1/4;
+end
+n_fft_welch = welch_size;
+window      = hanning(welch_size);
+
+[psxx_rx_rds_mod, psxx_rx_rds_mod_f] = pwelch(rx_rds_mod, window, n_overlap, n_fft_welch, fs_rds);
+[psxx_rx_rds_bb, psxx_rx_rds_bb_f]   = pwelch(rx_rds_bb, window, n_overlap, n_fft_welch, fs_rds);
 
 % fs_mod domain %%%%%%%%%%%%%%%%%%%%%
 if EnableSenderSourceCreateSim
@@ -381,7 +391,7 @@ if EnableRDSDecoder
     fig_title = 'RDS Time domain signal';
     fig_rx_time_rds = figure('Name',fig_title);
     hold on;
-    plot(tnRx/fs_rx, rx_rds_bb,   'r', 'DisplayName', 'rx\_rds\_bb');
+    plot(tnRDS/fs_rds, rx_rds_bb,   'r', 'DisplayName', 'rx\_rds\_bb');
     grid on;
     title(fig_title);
     xlabel('time [s]');
