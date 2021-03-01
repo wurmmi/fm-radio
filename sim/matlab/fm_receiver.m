@@ -44,6 +44,32 @@ if EnableDeEmphasis
     rx_fm_demod = filter(filter_de_emphasis.Num, filter_de_emphasis.Denum, rx_fm_demod);
 end
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pilot tone recovery
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Create the bandpass filter
+filter_name = sprintf("%s%s",dir_filters,"bandpass_pilot.mat");
+if isRunningInOctave()
+    disp("Running in GNU Octave - loading bandpass filter from folder!");
+    filter_bp_pilot = load(filter_name);
+else
+    ripple_pass_dB = 0.1;                       % Passband ripple in dB
+    ripple_stop_db = 50;                        % Stopband ripple in dB
+    cutoff_freqs   = [17e3 18.5e3 19.5e3 21e3]; % Band frequencies (defined like slopes)
+
+    filter_bp_pilot = getBPfilter( ...
+        ripple_pass_dB, ripple_stop_db, ...
+        cutoff_freqs, fs, EnableFilterAnalyzeGUI);
+
+    % Save the filter coefficients
+    save(filter_name,'filter_bp_pilot','-ascii');
+end
+
+% Filter (Bandpass 18.5k..19.5kHz)
+rx_pilot = filter(filter_bp_pilot,1, rx_fm_demod);
+
+
 %% Downsample
 
 rx_fmChannelData = rx_fm_demod;
@@ -99,7 +125,7 @@ if EnableRDSDecoder
     else
         ripple_pass_dB = 0.01;          % Passband ripple in dB
         ripple_stop_db = 50;            % Stopband ripple in dB
-        cutoff_freqs   = [2.4e3 3.2e3]; % Cutoff frequencies
+        cutoff_freqs   = [1.5e3 3e3]; % Cutoff frequencies
         
         filter_lp_rds = getLPfilter( ...
             ripple_pass_dB, ripple_stop_db, ...
