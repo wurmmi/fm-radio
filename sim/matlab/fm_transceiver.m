@@ -42,7 +42,7 @@ dir_output  = "./matlab_output/";
 % Simulation options
 EnableSenderSourceRecordedFile = false;
 EnableSenderSourceCreateSim    = true;
-EnableAudioFromFile            = false;
+EnableAudioFromFile            = true;
 EnableTrafficInfoTrigger       = false;
 
 EnablePreEmphasis = false;
@@ -54,7 +54,7 @@ EnableSavePlotsToPng   = false;
 EnablePlotsLogarithmic = true;
 
 % Signal parameters
-n_sec = 1.7;           % 1.7s is "left channel, right channel" in audio file
+n_sec = 2;           % 1.7s is "left channel, right channel" in audio file
 osr   = 22;            % oversampling rate for fs
 fs    = 44.1e3 * osr;  % sampling rate fs
 
@@ -309,7 +309,6 @@ h0 ='';
 if EnableSenderSourceCreateSim
     h0 = plot(psxx_tx_fmChannelData_f, psxx_tx_fmChannelData, 'b','DisplayName', 'Tx (pre-mod)');
 end
-%psxx_rx_fmChannelData = normalize_signed(psxx_rx_fmChannelData)/2;
 h1 = plot(psxx_rxChannelData_f, psxx_rx_fmChannelData,  'r','DisplayName', 'Rx Demod');
 %h2 = plot(fft_freqs, fmChannelSpec, 'k--', 'DisplayName', 'FFT');
 h2 = '';
@@ -331,14 +330,14 @@ xline(19e3,'k--','19 kHz');
 xline(38e3,'k--','38 kHz');
 xline(57e3,'k--','57 kHz');
 h0 = plot(psxx_rx_mono_f, psxx_rx_mono,                   'b',  'DisplayName', 'Mono');
-h1 = plot(psxx_rx_lrdiff_bpfilt_f, psxx_rx_lrdiff_bpfilt, 'r-.','DisplayName', 'LR Diff bp filtered');
+%h1 = plot(psxx_rx_lrdiff_bpfilt_f, psxx_rx_lrdiff_bpfilt, 'r-.','DisplayName', 'LR Diff bp filtered');
 h2 = plot(psxx_rx_lrdiff_mod_f, psxx_rx_lrdiff_mod,       'r',  'DisplayName', 'LR Diff bp filtered and mod');
 h3 = plot(psxx_rx_lrdiff_f, psxx_rx_lrdiff,               'g',  'DisplayName', 'LR Diff BB');
 grid on;
 title(fig_title);
 xlabel('frequency [Hz]');
 ylabel('magnitude');
-legend([h0,h1,h2,h3],'Location','east');
+legend([h0,h2,h3],'Location','east');
 xlim([0 100e3]);
 ylim(ylimits);
 if EnableSavePlotsToPng

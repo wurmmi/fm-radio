@@ -38,14 +38,9 @@ disp('-- De-emphasis');
 
 if EnableDeEmphasis
     % Create de-emphasis filter
-    tau = 50e-6;         % time constant (50µs in Europe, 75us in US)
-    fc  = 1/(2*pi*tau);  % cut-off frequency
-    
-    k = fs/(2*pi*fc);
-    
-    filter_de_emphasis.Num = [1 0];
-    filter_de_emphasis.Denum = [1+k -k];
-    
+    filter_de_emphasis = getEmphasisFilter(fs, 'de', EnableFilterAnalyzeGUI);
+
+    % Filter
     rx_fm_demod = filter(filter_de_emphasis.Num, filter_de_emphasis.Denum, rx_fm_demod);
 end
 
@@ -139,10 +134,6 @@ bp_groupdelay = (length(filter_bp_lrdiff)-1)/2;
 
 % Compensate the group delay
 rx_audio_mono = [zeros(bp_groupdelay,1); rx_audio_mono(1:end-bp_groupdelay)];
-
-% TODO: scale to +-1
-rx_audio_mono = normalize_signed(rx_audio_mono);
-rx_audio_lrdiff = normalize_signed(rx_audio_lrdiff);
 
 % Compute left and right channel signals
 rx_audio_L = rx_audio_mono + rx_audio_lrdiff;

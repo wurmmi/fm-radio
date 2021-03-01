@@ -118,18 +118,12 @@ if EnableSenderSourceCreateSim
     if EnablePreEmphasis
         disp('-- Pre-emphasis');
         % Create pre-emphasis filter
-        tau = 50e-6;         % time constant (50µs in Europe, 75us in US)
-        fc  = 1/(2*pi*tau);  % cut-off frequency
-        
-        k = fs/(2*pi*fc);
-        
-        filter_de_emphasis.Denum = [1 0];
-        filter_de_emphasis.Num = [1+k -k];
-        
-        % TODO: amplify filter, so that low freqs are around 0, and higher freqs are amplified
-        fmChannelData = filter(filter_de_emphasis.Num, filter_de_emphasis.Denum, fmChannelData);
+        filter_pre_emphasis = getEmphasisFilter(fs, 'pre', EnableFilterAnalyzeGUI);
+
+        % Filter
+        fmChannelData = filter(filter_pre_emphasis.Num, filter_pre_emphasis.Denum, fmChannelData);
     end
-        
+    
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% FM Modulator
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -211,7 +205,7 @@ elseif EnableSenderSourceRecordedFile
     
     tn = (0:1:n_sec*fs-1)';
 else
-    assert(false, 'Check settings.')
+    error('Check settings.')
 end
 
 disp('Done.');
