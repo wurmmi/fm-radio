@@ -48,7 +48,7 @@ EnableTrafficInfoTrigger       = false;
 EnablePreEmphasis = false;
 EnableDeEmphasis  = false;
 
-EnableRxAudioReplay    = true;
+EnableRxAudioReplay    = false;
 EnableFilterAnalyzeGUI = false;
 EnableSavePlotsToPng   = false;
 EnablePlotsLogarithmic = true;
@@ -375,6 +375,7 @@ if EnableRDSDecoder
     xline(19e3,'k--','19 kHz');
     xline(38e3,'k--','38 kHz');
     xline(57e3,'k--','57 kHz');
+    xline(57e3/48,'k--','1187.5 Hz');
     h0 = plot(psxx_rx_rds_f, psxx_rx_rds,         'b','DisplayName', 'RDS');
     h1 = plot(psxx_rx_rds_mod_f, psxx_rx_rds_mod, 'r','DisplayName', 'RDS BB Mod');
     h2 = plot(psxx_rx_rds_bb_f, psxx_rx_rds_bb,   'g','DisplayName', 'RDS BB Filtered');
@@ -383,7 +384,7 @@ if EnableRDSDecoder
     xlabel('frequency [Hz]');
     ylabel('magnitude');
     legend([h0,h1,h2],'Location','east');
-    xlim([0 100e3]);
+    xlim([0 70e3]);
     if EnableSavePlotsToPng
         saveas(fig_rx_spec_rds, sprintf("%s%s",dir_output, "psd_rx_rds_parts.png"));
     end
