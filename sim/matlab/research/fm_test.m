@@ -7,7 +7,7 @@
 %% Prepare environment
 clear; close all; clc;
 
-addpath(genpath('./helpers/auto-arrange-figs/'));
+addpath(genpath('../helpers/auto-arrange-figs/'));
 
 %=========================================================================
 %% Settings

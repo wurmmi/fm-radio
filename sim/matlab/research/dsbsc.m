@@ -1,121 +1,136 @@
-                                    % =================================== %
-                                    % PROGRAMMED BY SHEIKH MUKHTAR HUSSIN %
-                                    % =================================== %
+%-------------------------------------------------------------------------
+% File        : dsbsc.m
+% Author      : Michael Wurm <wurm.michael95@gmail.com>
+% Description : Learn about DSB-SC (dual sideband AM, suppressed carrier)
+%-------------------------------------------------------------------------
 
-% ===============================
-% DSBSC MODULATION SIGNAL 2 (Tri)
-% ===============================
+%% Prepare environment
+clear;
+close all;
+clc;
 
-t1 = -0.02:1.e-4:0;
-t2 = 0:1.e-4:0.02;
-Ta = 0.01;
+addpath(genpath('../helpers/'));
+addpath(genpath('../filters/'));
 
+%=========================================================================
+%% Settings
 
-m1 = 1 - abs((t1+Ta)/Ta);
-m1 = [zeros([1 200]),m1,zeros([1 400])];
-m2 = 1 - abs((t2-Ta)/Ta);
-m2 = [zeros([1 400]),m2,zeros([1 200])];
+% Simulation Options
+EnableFilterAnalyzeGUI = false;
 
-m = m1 - m2;
+% Common
+osr = 10;
+fs  = 57e3*osr;
 
-t = -0.04:1.e-4:0.04;
-fc = 400;                                             % Frquency of carrier wave
+n_sec = 0.010;
+tn    = (0:1:fs*n_sec-1).';
 
-c = cos(2*fc*pi*t);
+% Signal
+fmsg = 57e3/48;
+Amsg = 1;
 
-% Modulation
-dsb =  2*m.*c;
+% Tx carrier
+fc_tx  = 57e3;
+A_tx_c = 1;
 
-% ====================================
-% De-Modulation By Synchoronous Method
-% ====================================
+% Rx carrier
+fc_rx  = 57e3;
+phi_rx = 45*pi/180;
+A_rx_c = 1;
 
-dem = dsb.*c;
+%=========================================================================
+%% Modulate
 
-% ==============================
-% Filtering out High Frequencies
-% ==============================
+msg       = Amsg   * cos(2*pi*fmsg/fs *tn);
+txCarrier = A_tx_c * cos(2*pi*fc_tx/fs*tn);
 
-a = fir1(25,100*1.e-4);
-b = 1;
-rec = filter(a,b,dem);
+tx = 2 * msg .* txCarrier;
 
-fl = length(t);
-fl = 2^ceil(log2(fl));
-f = (-fl/2:fl/2-1)/(fl*1.e-4);
-mF = fftshift(fft(m,fl));                               % Frequency Responce of Message Signal
-cF =  fftshift(fft(c,fl));                              % Frequency Responce of Carrier Signal
-dsbF = fftshift(fft(dsb,fl));                           % Frequency Responce of DSBSC
-recF = fftshift(fft(rec,fl));                           % Frequency Responce of Recovered Message Signal
+%=========================================================================
+%% Demodulate
 
-% =============================
-% Ploting signal in time domain
-% =============================
+rxCarrier = A_rx_c * cos(2*pi*fc_rx/fs*tn + phi_rx);
 
-figure(1);
-subplot(2,2,1);                                    
-plot(t,m);
-title('Message Signal');
-xlabel('{\it t} (sec)');
-ylabel('m(t)');
-grid;
+rx_msg_demod = tx .* rxCarrier;
 
-subplot(2,2,2);
-plot(t,dsb);
-title('DSBSC');
-xlabel('{\it t} (sec)');
-ylabel('DSBSC');
-grid;
+%=========================================================================
+%% Filter (lowpass)
 
-subplot(2,2,3);
-plot(t,dem);
-title('De-Modulated');
-xlabel('{\it t} (sec)');
-ylabel('dem')
-grid;
+filter_name = sprintf("./lowpass_rx.mat");
+if isRunningInOctave()
+    disp("Running in GNU Octave - loading lowpass filter from folder!");
+    filter_lp_rx = load(filter_name);
+else
+    ripple_pass_dB = 0.1;                % Passband ripple in dB
+    ripple_stop_db = 50;                 % Stopband ripple in dB
+    cutoff_freqs   = [fmsg*10 25*fmsg];  % Cutoff frequencies
 
-subplot(2,2,4);
-plot(t,rec);
-title('Recovered Signal');
-xlabel('{\it t} (sec)');
-ylabel('m(t)');
-grid;
+    filter_lp_rx = getLPfilter( ...
+        ripple_pass_dB, ripple_stop_db, ...
+        cutoff_freqs, fs, EnableFilterAnalyzeGUI);
 
-% ================================
-% Ploting Freq Responce of Signals
-% ================================
+    % Save the filter coefficients
+    save(filter_name,'filter_lp_rx','-ascii');
+end
 
-figure(2);
-subplot(2,2,1);                                         
-plot(f,abs(mF));
-title('Freq Responce of Message Signal');
-xlabel('f(Hz)');
-ylabel('M(f)');
-grid;
-axis([-600 600 0 200]);
+%Nfilt = 100;
+%wcut = fmsg*15/fs;
+%filter_lp = fir1(Nfilt, wcut);
+%fvtool(filter_lp,1);
 
+rx_msg = filter(filter_lp_rx,1, rx_msg_demod);
 
-subplot(2,2,2);
-plot(f,abs(cF));
-title('Freq Responce of Carrier');
-grid;
-xlabel('f(Hz)');
-ylabel('C(f)');
-axis([-600 600 0 500]);
+%=========================================================================
+%% Compensate filter delay
 
+grp_delay = (length(filter_lp_rx)-1)/2;
+msg_del = [zeros(grp_delay,1); msg(1:end-grp_delay)];
 
-subplot(2,2,3);
-plot(f,abs(dsbF));
-title('Freq Responce of DSBSC');
-xlabel('f(Hz)');
-ylabel('DSBSC(f)');
-grid;
-axis([-600 600 0 200]);
+%=========================================================================
+%% Analysis
 
-subplot(2,2,4);
-plot(f,abs(recF));
-title('Freq Responce of Recoverd Signal');
-xlabel('f(Hz)');
-ylabel('M(f)');
-grid;
-axis([-600 600 0 200]);
+%-------------------------------------------------------------------------
+fig_title = 'Tx time domain signal';
+fig_time_tx = figure('Name',fig_title);
+hold on;
+plot(tn/fs, txCarrier, 'r--', 'DisplayName', 'txCarrier');
+plot(tn/fs, msg,       'm--', 'DisplayName', 'msg');
+plot(tn/fs, tx,        'b',   'DisplayName', 'tx');
+grid on;
+title(fig_title);
+xlabel('time [s]');
+ylabel('amplitude');
+legend();
+
+%-------------------------------------------------------------------------
+fig_title = 'Carriers';
+fig_time_carr = figure('Name',fig_title);
+hold on;
+plot(tn/fs, txCarrier, 'b', 'DisplayName', 'txCarrier');
+plot(tn/fs, rxCarrier, 'r', 'DisplayName', 'rxCarrier');
+grid on;
+xlim([0,0.0001]);
+title(fig_title);
+xlabel('time [s]');
+ylabel('amplitude');
+legend();
+
+%-------------------------------------------------------------------------
+fig_title = 'Rx time domain signal';
+fig_time_rx = figure('Name',fig_title);
+hold on;
+plot(tn/fs, msg_del,      'b', 'DisplayName', 'msg\_del');
+plot(tn/fs, rx_msg,       'r', 'DisplayName', 'rx\_msg');
+grid on;
+title(fig_title);
+xlabel('time [s]');
+ylabel('amplitude');
+legend();
+
+%% Arrange all plots on the display
+
+if ~isRunningInOctave()
+    autoArrangeFigures(2,3,2);
+end
+
+disp('Done.');
