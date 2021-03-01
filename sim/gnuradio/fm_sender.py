@@ -81,9 +81,10 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.osr_mod = osr_mod = 5
         self.fs_file = fs_file = 44100
         self.tx_gain_db = tx_gain_db = 0.8
-        self.gain_pilot = gain_pilot = 1
-        self.gain_mono = gain_mono = 1
-        self.gain_lrdiff = gain_lrdiff = 1
+        self.n_filter_delay = n_filter_delay = 265//2
+        self.gain_pilot = gain_pilot = 0.05
+        self.gain_mono = gain_mono = 0.2
+        self.gain_lrdiff = gain_lrdiff = 0.6
         self.fs_rf = fs_rf = fs_file*osr_mod*osr_rf
         self.fs_mod = fs_mod = fs_file*osr_mod
         self.fc_pirate = fc_pirate = 99e6
@@ -119,21 +120,28 @@ class fm_sender(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 1):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self._gain_pilot_range = Range(0, 1, 0.05, 1, 200)
+        self._n_filter_delay_range = Range(0, 400, 1, 265//2, 200)
+        self._n_filter_delay_win = RangeWidget(self._n_filter_delay_range, self.set_n_filter_delay, 'n_filter_delay', "counter_slider", int)
+        self.top_grid_layout.addWidget(self._n_filter_delay_win, 5, 0, 1, 1)
+        for r in range(5, 6):
+            self.top_grid_layout.setRowStretch(r, 1)
+        for c in range(0, 1):
+            self.top_grid_layout.setColumnStretch(c, 1)
+        self._gain_pilot_range = Range(0, 1, 0.05, 0.05, 200)
         self._gain_pilot_win = RangeWidget(self._gain_pilot_range, self.set_gain_pilot, 'gain_pilot', "counter_slider", float)
         self.top_grid_layout.addWidget(self._gain_pilot_win, 3, 0, 1, 1)
         for r in range(3, 4):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 1):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self._gain_mono_range = Range(0, 1, 0.05, 1, 200)
+        self._gain_mono_range = Range(0, 1, 0.05, 0.2, 200)
         self._gain_mono_win = RangeWidget(self._gain_mono_range, self.set_gain_mono, 'gain_mono', "counter_slider", float)
         self.top_grid_layout.addWidget(self._gain_mono_win, 1, 0, 1, 1)
         for r in range(1, 2):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 1):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self._gain_lrdiff_range = Range(0, 1, 0.05, 1, 200)
+        self._gain_lrdiff_range = Range(0, 1, 0.05, 0.6, 200)
         self._gain_lrdiff_win = RangeWidget(self._gain_lrdiff_range, self.set_gain_lrdiff, 'gain_lrdiff', "counter_slider", float)
         self.top_grid_layout.addWidget(self._gain_lrdiff_win, 2, 0, 1, 1)
         for r in range(2, 3):
@@ -300,6 +308,8 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.blocks_multiply_const_xx_0_0_0 = blocks.multiply_const_ff(gain_pilot, 1)
         self.blocks_multiply_const_xx_0_0 = blocks.multiply_const_ff(gain_lrdiff, 1)
         self.blocks_multiply_const_xx_0 = blocks.multiply_const_ff(gain_mono, 1)
+        self.blocks_delay_0_0 = blocks.delay(gr.sizeof_float*1, n_filter_delay)
+        self.blocks_delay_0 = blocks.delay(gr.sizeof_float*1, n_filter_delay)
         self.blocks_add_xx_0_0 = blocks.add_vff(1)
         self.blocks_add_xx_0 = blocks.add_vff(1)
         self.band_pass_filter_1_0 = filter.fir_filter_fff(
@@ -350,12 +360,14 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.connect((self.analog_frequency_modulator_fc_0, 0), (self.qtgui_freq_sink_x_0_0, 0))
         self.connect((self.analog_frequency_modulator_fc_0, 0), (self.rational_resampler_xxx_0, 0))
         self.connect((self.analog_sig_source_x_0, 0), (self.blocks_multiply_xx_0, 1))
-        self.connect((self.analog_sig_source_x_0_0, 0), (self.blocks_multiply_const_xx_0_0_0, 0))
+        self.connect((self.analog_sig_source_x_0_0, 0), (self.blocks_delay_0, 0))
         self.connect((self.band_pass_filter_0, 0), (self.blocks_multiply_const_xx_0_0, 0))
-        self.connect((self.band_pass_filter_1, 0), (self.blocks_multiply_const_xx_0, 0))
+        self.connect((self.band_pass_filter_1, 0), (self.blocks_delay_0_0, 0))
         self.connect((self.band_pass_filter_1_0, 0), (self.blocks_multiply_xx_0, 0))
         self.connect((self.blocks_add_xx_0, 0), (self.rational_resampler_xxx_0_0, 0))
         self.connect((self.blocks_add_xx_0_0, 0), (self.blocks_multiply_const_xx_1, 0))
+        self.connect((self.blocks_delay_0, 0), (self.blocks_multiply_const_xx_0_0_0, 0))
+        self.connect((self.blocks_delay_0_0, 0), (self.blocks_multiply_const_xx_0, 0))
         self.connect((self.blocks_multiply_const_xx_0, 0), (self.blocks_add_xx_0_0, 0))
         self.connect((self.blocks_multiply_const_xx_0_0, 0), (self.blocks_add_xx_0_0, 1))
         self.connect((self.blocks_multiply_const_xx_0_0_0, 0), (self.blocks_add_xx_0_0, 2))
@@ -408,6 +420,14 @@ class fm_sender(gr.top_block, Qt.QWidget):
     def set_tx_gain_db(self, tx_gain_db):
         self.tx_gain_db = tx_gain_db
         self.uhd_usrp_sink_1.set_normalized_gain(self.tx_gain_db, 0)
+
+    def get_n_filter_delay(self):
+        return self.n_filter_delay
+
+    def set_n_filter_delay(self, n_filter_delay):
+        self.n_filter_delay = n_filter_delay
+        self.blocks_delay_0.set_dly(self.n_filter_delay)
+        self.blocks_delay_0_0.set_dly(self.n_filter_delay)
 
     def get_gain_pilot(self):
         return self.gain_pilot

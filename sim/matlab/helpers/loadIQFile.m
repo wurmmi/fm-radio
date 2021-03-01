@@ -1,3 +1,9 @@
+%-------------------------------------------------------------------------
+% File        : loadIQFile.m
+% Author      : Michael Wurm <wurm.michael95@gmail.com>
+% Description : Loads IQ data from a recorded binary file.
+%-------------------------------------------------------------------------
+
 function y = loadIQFile(filename)
 
 %

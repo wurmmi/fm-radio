@@ -59,7 +59,7 @@ rx_fmChannelData = rx_fm_demod;
 
 %% Downsample
 
-osr_rx = 1;
+osr_rx = 4;
 fs_rx  = fs/osr_rx;
 rx_fmChannelData = resample(rx_fmChannelData, 1, osr_rx);
 
@@ -85,6 +85,10 @@ end
 
 % Filter
 rx_audio_mono = filter(filter_lp_mono,1, rx_fmChannelData);
+
+% TODO
+%mean_mono = mean(rx_audio_mono);
+%rx_audio_mono = rx_audio_mono - mean_mono;
 
 %% Filter the LR-diff-part
 
@@ -119,8 +123,8 @@ rx_audio_lrdiff = filter(filter_lp_mono,1, rx_audio_lrdiff_mod);
 
 % TODO: where does this come from?? Factor 2 = ~3 dB
 % NOTE: normalize to 1 before the add/sub
-scalefactor = 4.33;
-rx_audio_lrdiff = rx_audio_lrdiff * scalefactor;
+%scalefactor = 4.33;
+%rx_audio_lrdiff = rx_audio_lrdiff * scalefactor;
 
 %% Combine received signal
 % L = (L+R) + (L-R) = (2)L
@@ -135,6 +139,10 @@ bp_groupdelay = (length(filter_bp_lrdiff)-1)/2;
 
 % Compensate the group delay
 rx_audio_mono = [zeros(bp_groupdelay,1); rx_audio_mono(1:end-bp_groupdelay)];
+
+% TODO: scale to +-1
+rx_audio_mono = normalize_signed(rx_audio_mono);
+rx_audio_lrdiff = normalize_signed(rx_audio_lrdiff);
 
 % Compute left and right channel signals
 rx_audio_L = rx_audio_mono + rx_audio_lrdiff;

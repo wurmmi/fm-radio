@@ -50,11 +50,11 @@ if EnableSenderSourceCreateSim
     else
         tn = (0:1:n_sec*fs-1)';
         
-        audioFreqL = 400;
+        audioFreqL = 443;
         audioDataL = sin(2*pi*audioFreqL/fs*tn);
         audioDataL(round(end/2):end) = 0; % mute second half
         
-        audioFreqR = 400;
+        audioFreqR = 443;
         audioDataR = sin(2*pi*audioFreqR/fs*tn);
         audioDataR(1:round(end/2)) = 0;   % mute first half
         
@@ -199,10 +199,10 @@ if EnableSenderSourceCreateSim
     rx_fm_bb = resample(rx_fm_bb, 1, osr_mod);
 elseif EnableSenderSourceRecordedFile
     disp('-- Loading FM data stream');
-    disp('NOTE: This is assuming that the file was recorded with the correct sampling frequency!');
     
     filename = sprintf("./recordings/fm_record_fs%d.bin",fs);
     rx_fm_bb = loadIQFile(filename);
+    fprintf("filename: %s", filename);
     
     % Trim data to requested length
     max_idx = n_sec*fs;
