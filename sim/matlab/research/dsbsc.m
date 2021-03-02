@@ -17,15 +17,14 @@ addpath(genpath('../filters/'));
 
 % Simulation Options
 EnableFilterAnalyzeGUI = false;
-EnableTriangleMessage  = true;
 EnableEqirippleFIR     = true;
+EnableTriangleMessage  = true;
 
 EnablePlotPhaseRecover   = false;
 EnablePlotPhaseShiftTest = false;
 
 % Common
-osr = 10;
-fs  = 57e3*osr;
+fs = 196608; % Nfft * x
 
 n_sec = 0.03;
 tn    = (0:1:fs*n_sec-1).';
@@ -36,7 +35,7 @@ A_tx_c = 1;
 
 % Rx carrier
 fc_rx  = 57e3;       % <-- ADAPT FREQUENCY ERROR
-phi_rx = 0*pi/180;   % <-- ADAPT PHASE ERROR
+phi_rx = 30*pi/180;  % <-- ADAPT PHASE ERROR
 A_rx_c = 1;
 
 %=========================================================================
@@ -46,9 +45,9 @@ fmsg = 57e3/48;
 Amsg = 1;
 
 if EnableTriangleMessage
-    tmsg = (0:1:n_sec*2/4*fs-1).';
-    msg  = Amsg * sawtooth(2*pi*fmsg/fs*tmsg+pi/2,1/2);
-    msg  = [zeros(n_sec/4*fs,1); msg; zeros(n_sec/4*fs,1)];
+    %tmsg = (0:1:n_sec*2/4*fs-1).';
+    %msg  = Amsg * sawtooth(2*pi*fmsg/fs*tmsg+pi/2,1/2);
+    %msg  = [zeros(n_sec/4*fs,1); msg; zeros(n_sec/4*fs,1)];
     
     msg  = Amsg * sawtooth(2*pi*fmsg/fs*tn, 1/2);
 else
@@ -72,6 +71,7 @@ rx_msg_demod = 2 * tx .* rxCarrier;
 %=========================================================================
 %% Filter (lowpass)
 
+% Create filter
 if EnableEqirippleFIR
     filter_name = sprintf("./lowpass_rx.mat");
     if isRunningInOctave()
@@ -80,7 +80,7 @@ if EnableEqirippleFIR
     else
         ripple_pass_dB = 0.1;                % Passband ripple in dB
         ripple_stop_db = 50;                 % Stopband ripple in dB
-        cutoff_freqs   = [fmsg*10 25*fmsg];  % Cutoff frequencies
+        cutoff_freqs   = [fmsg*5 fmsg*20]; % Cutoff frequencies
         
         filter_lp_rx = getLPfilter( ...
             ripple_pass_dB, ripple_stop_db, ...
@@ -93,8 +93,12 @@ else
     Nfilt = 100;
     wcut = fmsg*10/fs;
     filter_lp_rx = fir1(Nfilt, wcut);
-    %fvtool(filter_lp,1);
+    if EnableFilterAnalyzeGUI
+        fvtool(filter_lp_rx,1);
+    end
 end
+
+% Filter
 rx_msg = filter(filter_lp_rx,1, rx_msg_demod);
 
 %=========================================================================
@@ -116,12 +120,16 @@ carrier57k = cos(2*pi*57e3/fs*tn + phi_pilot*3);
 %% Analysis
 
 % Calculations
-Nfft      = length(tn)*4;
-Nfft      = 2^ceil(log2(Nfft));
+Nfft      = 4096*4;
+fft_bin = fs/Nfft;
+% fs = Nfft * x;
+fprintf('fft_bin: %.2f Hz\n', fft_bin);
+
+%Nfft      = 2^nextpow2(Nfft);
 fft_freqs = (-Nfft/2:Nfft/2-1)/(Nfft*1/fs);
 
-fft_msg    = abs(fftshift(fft(msg,Nfft)));
-fft_msg_rx = abs(fftshift(fft(rx_msg,Nfft)));
+fft_msg    = abs(fftshift( fft( hanning(length(msg)) .* msg,    Nfft) ))/Nfft;
+fft_msg_rx = abs(fftshift( fft( hanning(length(msg)) .* rx_msg, Nfft) ))/Nfft;
 
 
 % Plots
@@ -185,10 +193,11 @@ ylabel('amplitude');
 legend();
 
 fig_title = 'Frequency domain signal';
-fig_time_tx = figure('Name',fig_title);
+fig_freq_tx = figure('Name',fig_title);
 hold on;
 xline(-fmsg,'k--','-fmsg');
 xline( fmsg,'k--','fmsg');
+yline(cos(phi_rx)*max(fft_msg), 'k--', 'power loss due to Rx phase error')
 h0 = plot(fft_freqs, fft_msg,    'b', 'DisplayName', 'msg tx');
 h1 = plot(fft_freqs, fft_msg_rx, 'r', 'DisplayName', 'msg rx');
 grid on;
@@ -196,7 +205,7 @@ xlim([0,fmsg*2]);
 title(fig_title);
 xlabel('Frequency [Hz]');
 ylabel('magnitude');
-legend([h0,h1]);
+legend([h0,h1],'Location','east');
 
 
 %% Arrange all plots on the display
