@@ -83,8 +83,8 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.tx_gain_db = tx_gain_db = 0.8
         self.n_filter_delay = n_filter_delay = 265//2
         self.gain_pilot = gain_pilot = 0.05
-        self.gain_mono = gain_mono = 0.2
-        self.gain_lrdiff = gain_lrdiff = 0.6
+        self.gain_mono = gain_mono = 0.3
+        self.gain_lrdiff = gain_lrdiff = 0.5
         self.fs_rf = fs_rf = fs_file*osr_mod*osr_rf
         self.fs_mod = fs_mod = fs_file*osr_mod
         self.fc_pirate = fc_pirate = 99e6
@@ -134,14 +134,14 @@ class fm_sender(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 1):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self._gain_mono_range = Range(0, 1, 0.05, 0.2, 200)
+        self._gain_mono_range = Range(0, 1, 0.05, 0.3, 200)
         self._gain_mono_win = RangeWidget(self._gain_mono_range, self.set_gain_mono, 'gain_mono', "counter_slider", float)
         self.top_grid_layout.addWidget(self._gain_mono_win, 1, 0, 1, 1)
         for r in range(1, 2):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 1):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self._gain_lrdiff_range = Range(0, 1, 0.05, 0.6, 200)
+        self._gain_lrdiff_range = Range(0, 1, 0.05, 0.5, 200)
         self._gain_lrdiff_win = RangeWidget(self._gain_lrdiff_range, self.set_gain_lrdiff, 'gain_lrdiff', "counter_slider", float)
         self.top_grid_layout.addWidget(self._gain_lrdiff_win, 2, 0, 1, 1)
         for r in range(2, 3):
