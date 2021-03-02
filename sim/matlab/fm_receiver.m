@@ -108,7 +108,7 @@ if EnableRDSDecoder
     
     % Modulate down to baseband
     tnRx = (0:1:n_sec*fs_rx-1)';
-    carrier57kHzRx = cos(2*pi*57e3/fs_rx*tnRx);
+    carrier57kHzRx = cos(2*pi*57e3/fs_rx*tnRx + phi_pilot*3);
     rx_rds_mod = rx_rds .* carrier57kHzRx;
     
     % Downsample
@@ -195,7 +195,7 @@ rx_audio_lrdiff_bpfilt = filter(filter_bp_lrdiff,1, rx_fmChannelData);
 
 % Modulate down to baseband
 tnRx = (0:1:n_sec*fs_rx-1)';
-carrier38kHzRx = cos(2*pi*38e3/fs_rx*tnRx);
+carrier38kHzRx = cos(2*pi*38e3/fs_rx*tnRx + phi_pilot*2);
 rx_audio_lrdiff_mod = rx_audio_lrdiff_bpfilt .* carrier38kHzRx;
 
 % Filter (lowpass 15kHz)

@@ -56,9 +56,11 @@ EnablePlotsLogarithmic = true;
 EnableRDSDecoder = true;
 
 % Signal parameters
-n_sec = 10;           % 1.7s is "left channel, right channel" in audio file
+n_sec = 1.0;           % 1.7s is "left channel, right channel" in audio file
 osr   = 22;            % oversampling rate for fs
 fs    = 44.1e3 * osr;  % sampling rate fs
+
+phi_pilot = (25-180)*pi/180; % phase shift between local carrier and Rx
 
 % Channel
 fc_oe3 = 98.1e4;
@@ -392,12 +394,16 @@ if EnableRDSDecoder
     fig_title = 'RDS Time domain signal';
     fig_rx_time_rds = figure('Name',fig_title);
     hold on;
-    plot(tnRDS/fs_rds, rx_rds_bb,   'r', 'DisplayName', 'rx\_rds\_bb');
+    plot(tn/fs, 0.085*cos(2*pi*19e3/fs*tn + phi_pilot), 'r', 'DisplayName', 'carrier19kHz (local)');
+    plot(tnRx/fs_rx, 0.1*carrier38kHzRx,                'g', 'DisplayName', 'carrier38kHz (local)');
+    plot(tnRx/fs_rx, 0.1*carrier57kHzRx,                'b', 'DisplayName', 'carrier57kHz (local)');
+    plot(tn/fs, rx_pilot,                               'm', 'DisplayName', 'rx\_pilot', 'LineWidth',2);
     grid on;
     title(fig_title);
     xlabel('time [s]');
     ylabel('amplitude');
     legend();
+    xlim([0.1, 0.1 + 1/19e3*2]);
 end
 
 %% Arrange all plots on the display
