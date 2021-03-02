@@ -4,14 +4,6 @@
 % Description : FM-Radio Sender and Receiver
 %-------------------------------------------------------------------------
 
-% TODO: check RX spectrum.. looks fishy - where does the 57k come from??
-%        - 19khz + 38 = 57 (--> better bp filter!)
-
-% TODO: find integer osr for entire system
-
-%TODO: find places, where power is attenuated --> Tx and Rx should be equal
-%      --> only amplify at a single place (at the receiver input)
-
 % TODO: change FM demodulator, for better HW implementation
 
 % TODO: change other things, for better HW implementation
@@ -60,7 +52,7 @@ n_sec = 1.7;           % 1.7s is "left channel, right channel" in audio file
 osr   = 22;            % oversampling rate for fs
 fs    = 44.1e3 * osr;  % sampling rate fs
 
-phi_pilot = (25)*pi/180; % phase shift between local carrier and Rx
+phi_pilot = (23)*pi/180; % phase shift between local carrier and Rx pilot
 
 % Channel
 fc_oe3 = 98.1e4;
@@ -396,25 +388,25 @@ if EnableRDSDecoder
     if EnableSavePlotsToPng
         saveas(fig_rx_spec_rds, sprintf("%s%s",dir_output, "psd_rx_rds_parts.png"));
     end
-    
-    fig_title = 'RDS Time domain signal';
-    fig_rx_time_rds = figure('Name',fig_title);
-    hold on;
-    plot(tn/fs, 0.085*cos(2*pi*19e3/fs*tn + phi_pilot), 'r', 'DisplayName', 'carrier19kHz (local)');
-    plot(tnRx/fs_rx, 0.1*carrier38kHzRx,                'g', 'DisplayName', 'carrier38kHz (local)');
-    plot(tnRx/fs_rx, 0.1*carrier57kHzRx,                'b', 'DisplayName', 'carrier57kHz (local)');
-    plot(tn/fs, rx_pilot,                               'm', 'DisplayName', 'rx\_pilot', 'LineWidth',2);
-    grid on;
-    title(fig_title);
-    xlabel('time [s]');
-    ylabel('amplitude');
-    legend();
-    xlim([0.1, 0.1 + 1/19e3*2]);
 end
+
+fig_title = 'Carrier phase recovery';
+fig_rx_time_rds = figure('Name',fig_title);
+hold on;
+plot(tn/fs, 0.1*cos(2*pi*19e3/fs*tn + phi_pilot), 'r', 'DisplayName', 'carrier19kHz (local)');
+plot(tnRx/fs_rx, 0.1*carrier38kHzRx,              'g', 'DisplayName', 'carrier38kHz (local)');
+plot(tnRx/fs_rx, 0.1*carrier57kHzRx,              'b', 'DisplayName', 'carrier57kHz (local)');
+plot(tn/fs, rx_pilot,                             'm', 'DisplayName', 'rx\_pilot', 'LineWidth',2);
+grid on;
+title(fig_title);
+xlabel('time [s]');
+ylabel('amplitude');
+legend();
+xlim([0.1, 0.1 + 1/19e3*2]);
 
 %% Arrange all plots on the display
 if ~isRunningInOctave()
-    autoArrangeFigures(2,3,2);
+    autoArrangeFigures(3,3,2);
 end
 
 disp('Done.');

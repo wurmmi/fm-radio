@@ -21,10 +21,10 @@ EnableEqirippleFIR     = true;
 EnableTriangleMessage  = true;
 
 EnablePlotPhaseRecover   = false;
-EnablePlotPhaseShiftTest = false;
+EnablePlotPhaseShiftTest = true;
 
 % Common
-fs = 196608; % Nfft * x
+fs = 196608*8; % Nfft * x
 
 n_sec = 0.03;
 tn    = (0:1:fs*n_sec-1).';
@@ -35,7 +35,7 @@ A_tx_c = 1;
 
 % Rx carrier
 fc_rx  = 57e3;       % <-- ADAPT FREQUENCY ERROR
-phi_rx = 30*pi/180;  % <-- ADAPT PHASE ERROR
+phi_rx = 180*pi/180;  % <-- ADAPT PHASE ERROR
 A_rx_c = 1;
 
 %=========================================================================
@@ -110,7 +110,7 @@ msg_del = [zeros(grp_delay,1); msg(1:end-grp_delay)];
 %=========================================================================
 %% Carrier shift test
 
-phi_pilot = 80*pi/180;
+phi_pilot = phi_rx;
 
 carrier19k = cos(2*pi*19e3/fs*tn + phi_pilot  );
 carrier38k = cos(2*pi*38e3/fs*tn + phi_pilot*2);
@@ -120,7 +120,7 @@ carrier57k = cos(2*pi*57e3/fs*tn + phi_pilot*3);
 %% Analysis
 
 % Calculations
-Nfft      = 4096*4;
+Nfft      = 4096*32;
 fft_bin = fs/Nfft;
 % fs = Nfft * x;
 fprintf('fft_bin: %.2f Hz\n', fft_bin);
@@ -167,9 +167,10 @@ if EnablePlotPhaseShiftTest
     fig_title = 'Carrier phase shift test';
     fig_time_carr_test = figure('Name',fig_title);
     hold on;
-    plot(tn/fs, carrier19k, 'r', 'DisplayName', 'carrier19k');
-    plot(tn/fs, carrier38k, 'g', 'DisplayName', 'carrier38k');
-    plot(tn/fs, carrier57k, 'b', 'DisplayName', 'carrier57k');
+    plot(tn/fs, cos(2*pi*19e3/fs*tn), 'm', 'DisplayName', 'rx pilot','LineWidth',2);
+    plot(tn/fs, carrier19k, 'r', 'DisplayName', 'carrier19k (local)');
+    plot(tn/fs, carrier38k, 'g', 'DisplayName', 'carrier38k (local)');
+    plot(tn/fs, carrier57k, 'b', 'DisplayName', 'carrier57k (local)');
     grid on;
     xlim([0,1/19e3*2]);
     title(fig_title);
@@ -197,7 +198,7 @@ fig_freq_tx = figure('Name',fig_title);
 hold on;
 xline(-fmsg,'k--','-fmsg');
 xline( fmsg,'k--','fmsg');
-yline(cos(phi_rx)*max(fft_msg), 'k--', 'power loss due to Rx phase error')
+yline(abs(cos(phi_rx))*max(fft_msg), 'k--', 'power loss due to Rx phase error')
 h0 = plot(fft_freqs, fft_msg,    'b', 'DisplayName', 'msg tx');
 h1 = plot(fft_freqs, fft_msg_rx, 'r', 'DisplayName', 'msg rx');
 grid on;

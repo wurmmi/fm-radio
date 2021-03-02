@@ -69,7 +69,6 @@ end
 % Filter (Bandpass 18.5k..19.5kHz)
 rx_pilot = filter(filter_bp_pilot,1, rx_fm_demod);
 
-
 %% Downsample
 
 rx_fmChannelData = rx_fm_demod;
@@ -77,6 +76,14 @@ rx_fmChannelData = rx_fm_demod;
 osr_rx = 4;
 fs_rx  = fs/osr_rx;
 rx_fmChannelData = resample(rx_fmChannelData, 1, osr_rx);
+
+%% Generate sub-carriers
+
+% TODO: recover phase shift here (generate pilot)
+
+tnRx = (0:1:n_sec*fs_rx-1)';
+carrier38kHzRx = cos(2*pi*38e3/fs_rx*tnRx + phi_pilot*2);
+carrier57kHzRx = cos(2*pi*57e3/fs_rx*tnRx + phi_pilot*3);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% RDS decoder
@@ -107,8 +114,6 @@ if EnableRDSDecoder
     rx_rds = filter(filter_bp_rds,1, rx_fmChannelData);
     
     % Modulate down to baseband
-    tnRx = (0:1:n_sec*fs_rx-1)';
-    carrier57kHzRx = cos(2*pi*57e3/fs_rx*tnRx + phi_pilot*3);
     rx_rds_mod = 2 * rx_rds .* carrier57kHzRx;
     
     % Downsample
@@ -166,7 +171,7 @@ end
 % Filter
 rx_audio_mono = filter(filter_lp_mono,1, rx_fmChannelData);
 
-% TODO
+% TODO: remove mean (?)
 %mean_mono = mean(rx_audio_mono);
 %rx_audio_mono = rx_audio_mono - mean_mono;
 
@@ -194,8 +199,6 @@ end
 rx_audio_lrdiff_bpfilt = filter(filter_bp_lrdiff,1, rx_fmChannelData);
 
 % Modulate down to baseband
-tnRx = (0:1:n_sec*fs_rx-1)';
-carrier38kHzRx = cos(2*pi*38e3/fs_rx*tnRx + phi_pilot*2);
 rx_audio_lrdiff_mod = 2 * rx_audio_lrdiff_bpfilt .* carrier38kHzRx;
 
 % Filter (lowpass 15kHz)
