@@ -551,7 +551,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    comment: ''
+    comment: left
     const: '1'
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -569,7 +569,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    comment: ''
+    comment: right
     const: '1'
     maxoutbuf: '0'
     minoutbuf: '0'
