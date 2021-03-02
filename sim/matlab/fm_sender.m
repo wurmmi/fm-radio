@@ -163,8 +163,8 @@ if EnableSenderSourceCreateSim
     rx_fm = tx_fm_awgn;
     
     % Complex baseband mixer
-    rx_fm_i  = rx_fm .*  cos(2*pi*fc_oe3/fs_mod*tn_mod);
-    rx_fm_q  = rx_fm .* -sin(2*pi*fc_oe3/fs_mod*tn_mod);
+    rx_fm_i  = 2 * rx_fm .*  cos(2*pi*fc_oe3/fs_mod*tn_mod);
+    rx_fm_q  = 2 * rx_fm .* -sin(2*pi*fc_oe3/fs_mod*tn_mod);
     
     rx_fm_bb = rx_fm_i + 1j * rx_fm_q;
     

@@ -48,7 +48,7 @@ EnableTrafficInfoTrigger       = false;
 EnablePreEmphasis = false;
 EnableDeEmphasis  = false;
 
-EnableRxAudioReplay    = false;
+EnableRxAudioReplay    = true;
 EnableFilterAnalyzeGUI = false;
 EnableSavePlotsToPng   = false;
 EnablePlotsLogarithmic = true;
@@ -56,7 +56,7 @@ EnablePlotsLogarithmic = true;
 EnableRDSDecoder = false;
 
 % Signal parameters
-n_sec = 1.0;           % 1.7s is "left channel, right channel" in audio file
+n_sec = 1.7;           % 1.7s is "left channel, right channel" in audio file
 osr   = 22;            % oversampling rate for fs
 fs    = 44.1e3 * osr;  % sampling rate fs
 

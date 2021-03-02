@@ -201,10 +201,6 @@ rx_audio_lrdiff_mod = 2 * rx_audio_lrdiff_bpfilt .* carrier38kHzRx;
 % Filter (lowpass 15kHz)
 rx_audio_lrdiff = filter(filter_lp_mono,1, rx_audio_lrdiff_mod);
 
-% TODO: where does this come from?? Factor 2 = ~3 dB ?
-% NOTE: normalize to 1 before the add/sub?
-rx_scalefactor = 2;
-rx_audio_lrdiff = rx_audio_lrdiff * rx_scalefactor;
 
 %% Combine received signal
 % L = (L+R) + (L-R) = (2)L
