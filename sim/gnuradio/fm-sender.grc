@@ -642,7 +642,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    file: /home/mike/work/fm-radio/sim/matlab/recordings/left-right-test.wav
+    file: /home/mike/work/fm-radio/sim/matlab/recordings/viera-blech-ehrenwert-polka.wav
     maxoutbuf: '0'
     minoutbuf: '0'
     nchan: '2'
