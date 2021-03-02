@@ -40,8 +40,8 @@ dir_filters = "./filters/";
 dir_output  = "./matlab_output/";
 
 % Simulation options
-EnableSenderSourceRecordedFile = true;
-EnableSenderSourceCreateSim    = false;
+EnableSenderSourceRecordedFile = false;
+EnableSenderSourceCreateSim    = true;
 EnableAudioFromFile            = true;
 EnableTrafficInfoTrigger       = false;
 
@@ -53,14 +53,14 @@ EnableFilterAnalyzeGUI = false;
 EnableSavePlotsToPng   = false;
 EnablePlotsLogarithmic = true;
 
-EnableRDSDecoder = true;
+EnableRDSDecoder = false;
 
 % Signal parameters
 n_sec = 1.0;           % 1.7s is "left channel, right channel" in audio file
 osr   = 22;            % oversampling rate for fs
 fs    = 44.1e3 * osr;  % sampling rate fs
 
-phi_pilot = (25-180)*pi/180; % phase shift between local carrier and Rx
+phi_pilot = (25)*pi/180; % phase shift between local carrier and Rx
 
 % Channel
 fc_oe3 = 98.1e4;
@@ -154,19 +154,23 @@ window      = hanning(welch_size);
 [psxx_rx_lrdiff_bpfilt, psxx_rx_lrdiff_bpfilt_f] = pwelch(rx_audio_lrdiff_bpfilt, window, n_overlap, n_fft_welch, fs_rx);
 [psxx_rx_lrdiff_mod, psxx_rx_lrdiff_mod_f]       = pwelch(rx_audio_lrdiff_mod, window, n_overlap, n_fft_welch, fs_rx);
 [psxx_rx_lrdiff, psxx_rx_lrdiff_f]               = pwelch(rx_audio_lrdiff, window, n_overlap, n_fft_welch, fs_rx);
-[psxx_rx_rds, psxx_rx_rds_f]                     = pwelch(rx_rds, window, n_overlap, n_fft_welch, fs_rx);
+if EnableRDSDecoder
+    [psxx_rx_rds, psxx_rx_rds_f]                 = pwelch(rx_rds, window, n_overlap, n_fft_welch, fs_rx);
+end
 
 % fs_rds domain %%%%%%%%%%%%%%%%%%%%%
-welch_size  = length(rx_rds_mod);
-n_overlap   = welch_size / 4;
-if isRunningInOctave()
-    n_overlap = 1/4;
+if EnableRDSDecoder
+    welch_size  = length(rx_rds_mod);
+    n_overlap   = welch_size / 4;
+    if isRunningInOctave()
+        n_overlap = 1/4;
+    end
+    n_fft_welch = welch_size;
+    window      = hanning(welch_size);
+    
+    [psxx_rx_rds_mod, psxx_rx_rds_mod_f] = pwelch(rx_rds_mod, window, n_overlap, n_fft_welch, fs_rds);
+    [psxx_rx_rds_bb, psxx_rx_rds_bb_f]   = pwelch(rx_rds_bb, window, n_overlap, n_fft_welch, fs_rds);
 end
-n_fft_welch = welch_size;
-window      = hanning(welch_size);
-
-[psxx_rx_rds_mod, psxx_rx_rds_mod_f] = pwelch(rx_rds_mod, window, n_overlap, n_fft_welch, fs_rds);
-[psxx_rx_rds_bb, psxx_rx_rds_bb_f]   = pwelch(rx_rds_bb, window, n_overlap, n_fft_welch, fs_rds);
 
 % fs_mod domain %%%%%%%%%%%%%%%%%%%%%
 if EnableSenderSourceCreateSim
@@ -184,7 +188,7 @@ end
 % Calc logarithmus
 if EnablePlotsLogarithmic
     if EnableSenderSourceCreateSim
-        psxx_tx_fmChannelData = 10*log10(psxx_tx_fmChannelData);    
+        psxx_tx_fmChannelData = 10*log10(psxx_tx_fmChannelData);   
         psxx_rx_fm            = 10*log10(psxx_rx_fm);
     end
     psxx_rx_fm_bb         = 10*log10(psxx_rx_fm_bb);
@@ -193,9 +197,11 @@ if EnablePlotsLogarithmic
     psxx_rx_lrdiff_bpfilt = 10*log10(psxx_rx_lrdiff_bpfilt);
     psxx_rx_lrdiff_mod    = 10*log10(psxx_rx_lrdiff_mod);
     psxx_rx_lrdiff        = 10*log10(psxx_rx_lrdiff);
-    psxx_rx_rds           = 10*log10(psxx_rx_rds);
-    psxx_rx_rds_mod       = 10*log10(psxx_rx_rds_mod);
-    psxx_rx_rds_bb        = 10*log10(psxx_rx_rds_bb);
+    if EnableRDSDecoder
+        psxx_rx_rds           = 10*log10(psxx_rx_rds);
+        psxx_rx_rds_mod       = 10*log10(psxx_rx_rds_mod);
+        psxx_rx_rds_bb        = 10*log10(psxx_rx_rds_bb);
+    end
 end
 
 %% Plots

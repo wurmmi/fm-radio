@@ -109,7 +109,7 @@ if EnableRDSDecoder
     % Modulate down to baseband
     tnRx = (0:1:n_sec*fs_rx-1)';
     carrier57kHzRx = cos(2*pi*57e3/fs_rx*tnRx + phi_pilot*3);
-    rx_rds_mod = rx_rds .* carrier57kHzRx;
+    rx_rds_mod = 2 * rx_rds .* carrier57kHzRx;
     
     % Downsample
     osr_rds = 5;
@@ -196,14 +196,14 @@ rx_audio_lrdiff_bpfilt = filter(filter_bp_lrdiff,1, rx_fmChannelData);
 % Modulate down to baseband
 tnRx = (0:1:n_sec*fs_rx-1)';
 carrier38kHzRx = cos(2*pi*38e3/fs_rx*tnRx + phi_pilot*2);
-rx_audio_lrdiff_mod = rx_audio_lrdiff_bpfilt .* carrier38kHzRx;
+rx_audio_lrdiff_mod = 2 * rx_audio_lrdiff_bpfilt .* carrier38kHzRx;
 
 % Filter (lowpass 15kHz)
 rx_audio_lrdiff = filter(filter_lp_mono,1, rx_audio_lrdiff_mod);
 
-% TODO: where does this come from?? Factor 4 = ~6 dB ?
+% TODO: where does this come from?? Factor 2 = ~3 dB ?
 % NOTE: normalize to 1 before the add/sub?
-rx_scalefactor = 4;
+rx_scalefactor = 2;
 rx_audio_lrdiff = rx_audio_lrdiff * rx_scalefactor;
 
 %% Combine received signal
