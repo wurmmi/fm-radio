@@ -103,7 +103,7 @@ if EnableSenderSourceCreateSim
         0.9 * (audioDataMono/2 + audioLRDiffMod/2) + ...
         0.1 * pilotTone + ...
         1/16 * hinz_triller;
-
+    
     %fmChannelData = ...
     %    1.00 * audioDataMono + ...
     %    0.25 * pilotTone + ...
@@ -119,7 +119,7 @@ if EnableSenderSourceCreateSim
         disp('-- Pre-emphasis');
         % Create pre-emphasis filter
         filter_pre_emphasis = getEmphasisFilter(fs, 'pre', EnableFilterAnalyzeGUI);
-
+        
         % Filter
         fmChannelData = filter(filter_pre_emphasis.Num, filter_pre_emphasis.Denum, fmChannelData);
     end
@@ -128,7 +128,7 @@ if EnableSenderSourceCreateSim
     %% FM Modulator
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     disp('-- FM modulator');
-
+    
     % Upsample
     osr_mod = 10;
     fmChannelDataUp = resample(fmChannelData, osr_mod, 1);
@@ -158,7 +158,7 @@ if EnableSenderSourceCreateSim
     % -- ADC: sample with fs
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     disp('-- Complex IQ mixer');
-
+    
     % Receive
     rx_fm = tx_fm_awgn;
     
@@ -170,21 +170,14 @@ if EnableSenderSourceCreateSim
     
     % Lowpass filter (for spectral replicas)
     filter_name = sprintf("%s%s",dir_filters,"lowpass_iq_mixer.mat");
-    if isRunningInOctave()
-        disp("Running in GNU Octave - loading lowpass filter from folder!");
-        filter_lp_mixer = load(filter_name);
-    else
-        ripple_pass_dB = 0.1;           % Passband ripple in dB
-        ripple_stop_db = 50;            % Stopband ripple in dB
-        cutoff_freqs   = [120e3 250e3]; % Cutoff frequencies
-        
-        filter_lp_mixer = getLPfilter(  ...
-            ripple_pass_dB, ripple_stop_db,  ...
-            cutoff_freqs, fs_mod, EnableFilterAnalyzeGUI);
-        
-        % Save the filter coefficients
-        save(filter_name,'filter_lp_mixer','-ascii');
-    end
+    ripple_pass_dB = 0.1;           % Passband ripple in dB
+    ripple_stop_db = 50;            % Stopband ripple in dB
+    cutoff_freqs   = [120e3 250e3]; % Cutoff frequencies
+    
+    filter_lp_mixer = getLPfilter(  ...
+        filter_name, ...
+        ripple_pass_dB, ripple_stop_db,  ...
+        cutoff_freqs, fs_mod, EnableFilterAnalyzeGUI);
     
     % Filter
     rx_fm_bb = filter(filter_lp_mixer,1, rx_fm_bb);

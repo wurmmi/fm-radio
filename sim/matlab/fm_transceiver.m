@@ -182,7 +182,7 @@ end
 % Calc logarithmus
 if EnablePlotsLogarithmic
     if EnableSenderSourceCreateSim
-        psxx_tx_fmChannelData = 10*log10(psxx_tx_fmChannelData);   
+        psxx_tx_fmChannelData = 10*log10(psxx_tx_fmChannelData);
         psxx_rx_fm            = 10*log10(psxx_rx_fm);
     end
     psxx_rx_fm_bb         = 10*log10(psxx_rx_fm_bb);
