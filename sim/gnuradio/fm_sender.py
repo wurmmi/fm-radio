@@ -160,7 +160,7 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.uhd_usrp_sink_1.set_center_freq(fc_pirate, 0)
         self.uhd_usrp_sink_1.set_normalized_gain(tx_gain_db, 0)
         self.uhd_usrp_sink_1.set_antenna('TX/RX', 0)
-        self.uhd_usrp_sink_1.set_bandwidth(500e3, 0)
+        self.uhd_usrp_sink_1.set_bandwidth(200e3, 0)
         self.uhd_usrp_sink_1.set_samp_rate(fs_rf)
         self.uhd_usrp_sink_1.set_time_unknown_pps(uhd.time_spec())
         self.rational_resampler_xxx_0_0_0 = filter.rational_resampler_fff(
