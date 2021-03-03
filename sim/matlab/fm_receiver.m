@@ -79,7 +79,10 @@ rx_fmChannelData = resample(rx_fmChannelData, 1, osr_rx);
 
 %% Generate sub-carriers
 
-% TODO: recover phase shift here (generate pilot)
+% TODO: Generate local carriers here
+%         -- use the rx_pilot and multiply with itself = 38kHz!
+%         -- LP filter replicas at >19khz
+%         -- use this signal as the carrier38kHz!
 
 tnRx = (0:1:n_sec*fs_rx-1)';
 carrier38kHzRx = cos(2*pi*38e3/fs_rx*tnRx + phi_pilot*2);
