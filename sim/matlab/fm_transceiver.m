@@ -34,8 +34,8 @@ dir_filters = "./filters/";
 dir_output  = "./matlab_output/";
 
 % Simulation options
-EnableSenderSourceRecordedFile = false;
-EnableSenderSourceCreateSim    = true;
+EnableSenderSourceRecordedFile = true;
+EnableSenderSourceCreateSim    = false;
 EnableAudioFromFile            = true;
 EnableTrafficInfoTrigger       = false;
 
@@ -47,7 +47,7 @@ EnableFilterAnalyzeGUI = false;
 EnableSavePlotsToPng   = false;
 EnablePlotsLogarithmic = true;
 
-EnableRDSDecoder = false;
+EnableRDSDecoder = true;
 
 % Signal parameters
 n_sec = 1.7;           % 1.7s is "left channel, right channel" in audio file
