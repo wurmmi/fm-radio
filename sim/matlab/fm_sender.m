@@ -87,8 +87,8 @@ if EnableSenderSourceCreateSim
         hinz_duration_off_s = 0.5;
         
         % Create the 123 Hz Hinz Triller tone and integrate it (for FM modulation)
-        t_hinz = (0:1:min(hinz_duration_off_s,n_sec)*fs-1)';
-        hinz_tone = sin(2*pi*f_deviation/fs*t_hinz);
+        t_hinz        = (0:1:min(hinz_duration_off_s,n_sec)*fs-1)';
+        hinz_tone     = sin(2*pi*f_deviation/fs*t_hinz);
         hinz_tone_int = cumsum(hinz_tone)/fs;
         
         % FM modulation (with zero padding at the end, to match signal duration)
