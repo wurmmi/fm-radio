@@ -69,14 +69,14 @@ assert( not(EnableRDSDecoder && EnableSenderSourceRecordedFile == false), ...
 
 fm_sender();
 
-% TODO
-%fm_sender_fixed_point();
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Receiver
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 fm_receiver();
+
+% TODO: implement an implementation that is suitable for hardware
+% fm_receiver_fixed_point();
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Audio replay
