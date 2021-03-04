@@ -74,21 +74,14 @@ rx_msg_demod = 2 * tx .* rxCarrier;
 % Create filter
 if EnableEqirippleFIR
     filter_name = sprintf("./lowpass_rx.mat");
-    if isRunningInOctave()
-        disp("Running in GNU Octave - loading lowpass filter from folder!");
-        filter_lp_rx = load(filter_name);
-    else
-        ripple_pass_dB = 0.1;                % Passband ripple in dB
-        ripple_stop_db = 50;                 % Stopband ripple in dB
-        cutoff_freqs   = [fmsg*5 fmsg*20]; % Cutoff frequencies
-        
-        filter_lp_rx = getLPfilter( ...
-            ripple_pass_dB, ripple_stop_db, ...
-            cutoff_freqs, fs, EnableFilterAnalyzeGUI);
-        
-        % Save the filter coefficients
-        save(filter_name,'filter_lp_rx','-ascii');
-    end
+    ripple_pass_dB = 0.1;                % Passband ripple in dB
+    ripple_stop_db = 50;                 % Stopband ripple in dB
+    cutoff_freqs   = [fmsg*5 fmsg*20];   % Cutoff frequencies
+    
+    filter_lp_rx = getLPfilter( ...
+        filter_name, ...
+        ripple_pass_dB, ripple_stop_db, ...
+        cutoff_freqs, fs, EnableFilterAnalyzeGUI);
 else
     Nfilt = 100;
     wcut = fmsg*10/fs;

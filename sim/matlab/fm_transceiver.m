@@ -34,8 +34,8 @@ dir_filters = "./filters/";
 dir_output  = "./matlab_output/";
 
 % Simulation options
-EnableSenderSourceRecordedFile = true;
-EnableSenderSourceCreateSim    = false;
+EnableSenderSourceRecordedFile = false;
+EnableSenderSourceCreateSim    = true;
 EnableAudioFromFile            = true;
 EnableTrafficInfoTrigger       = false;
 
@@ -54,7 +54,7 @@ n_sec = 1.7;           % 1.7s is "left channel, right channel" in audio file
 osr   = 22;            % oversampling rate for fs
 fs    = 44.1e3 * osr;  % sampling rate fs
 
-phi_pilot = (23)*pi/180; % phase shift between local carrier and Rx pilot
+phi_pilot = (23+180)*pi/180; % phase shift between local carrier and Rx pilot
 
 % Channel
 fc_oe3 = 98.1e4;
@@ -395,10 +395,12 @@ end
 fig_title = 'Carrier phase recovery';
 fig_rx_time_rds = figure('Name',fig_title);
 hold on;
-plot(tn/fs, 0.1*cos(2*pi*19e3/fs*tn + phi_pilot), 'r', 'DisplayName', 'carrier19kHz (local)');
-plot(tnRx/fs_rx, 0.1*carrier38kHzRx,              'g', 'DisplayName', 'carrier38kHz (local)');
-plot(tnRx/fs_rx, 0.1*carrier57kHzRx,              'b', 'DisplayName', 'carrier57kHz (local)');
-plot(tn/fs, rx_pilot,                             'm', 'DisplayName', 'rx\_pilot', 'LineWidth',2);
+plot(tnRx/fs_rx, rx_pilot,             'm',   'DisplayName', 'carrier19kHz (rec.)', 'LineWidth',2);
+plot(tnRx/fs_rx, pilot_local,          'm--', 'DisplayName', 'carrier19kHz (local)');
+plot(tnRx/fs_rx, carrier38kHzRx,       'g',   'DisplayName', 'carrier38kHz (rec.)', 'LineWidth',2);
+plot(tnRx/fs_rx, carrier38kHzRx_local, 'g--', 'DisplayName', 'carrier38kHz (local)');
+plot(tnRx/fs_rx, carrier57kHzRx,       'b',   'DisplayName', 'carrier57kHz (rec.)', 'LineWidth',2);
+plot(tnRx/fs_rx, carrier57kHzRx_local, 'b--', 'DisplayName', 'carrier57kHz (local)');
 grid on;
 title(fig_title);
 xlabel('time [s]');
@@ -408,7 +410,7 @@ xlim([0.1, 0.1 + 1/19e3*2]);
 
 %% Arrange all plots on the display
 if ~isRunningInOctave()
-    autoArrangeFigures(3,3,2);
+    autoArrangeFigures(3,2,2);
 end
 
 disp('Done.');

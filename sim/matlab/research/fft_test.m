@@ -27,13 +27,22 @@ tn    = (0:1:fs*n_sec).';
 
 fmax = 400;
 
-phi = 30 * pi/180;
+if false
+    phi = 30 * pi/180;
+    sig1 = 10 * sin(2*pi*100/fs*tn + phi);
+    sig2 =  1 * sin(2*pi*200/fs*tn + phi);
+    sig3 =  4 * sin(2*pi*400/fs*tn + phi);
+    
+    signal = sig1 + sig2 + sig3;
+else
+    sig1 = cos(2*pi*100/fs*tn);
 
-sig1 = 10 * sin(2*pi*100/fs*tn + phi);
-sig2 =  1 * sin(2*pi*200/fs*tn + phi);
-sig3 =  4 * sin(2*pi*400/fs*tn + phi);
-
-signal = sig1 + sig2 + sig3;
+    % Create double freq and "low pass filter by removing the DC content"
+    signal = sig1 .* sig1 * 2 - 1;   
+    
+    signal = signal .* sig1 * 2; % create triple freq
+    % TODO: need to HP filter and other delay signals to align
+end
 
 %=========================================================================
 %% FFT

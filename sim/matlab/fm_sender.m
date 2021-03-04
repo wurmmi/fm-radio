@@ -28,7 +28,7 @@ if EnableSenderSourceCreateSim
     if EnableAudioFromFile
         fs_file = 44.1e3;
         
-        [fileDataAll,fileFsRead] = audioread('./recordings/left-right-test.wav');
+        [fileDataAll,fileFsRead] = audioread('./recordings/wav/left-right-test.wav');
         if fileFsRead ~= fs_file
             error("Unexpected sample frequency of file!");
         end

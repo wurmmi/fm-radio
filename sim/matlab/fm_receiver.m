@@ -62,24 +62,55 @@ filter_bp_pilot = getBPfilter( ...
 % Filter (Bandpass 18.5k..19.5kHz)
 rx_pilot = filter(filter_bp_pilot,1, rx_fm_demod);
 
+% Amplify 
+% NOTE: Theoretically, the factor should be 10, since the pilot is
+%       transmitted with an amplitude of 10%.
+rx_pilot = rx_pilot * 11;
+
 %% Downsample
 
 rx_fmChannelData = rx_fm_demod;
 
 osr_rx = 4;
 fs_rx  = fs/osr_rx;
+tnRx = (0:1:n_sec*fs_rx-1)';
+
 rx_fmChannelData = resample(rx_fmChannelData, 1, osr_rx);
+rx_pilot         = resample(rx_pilot, 1, osr_rx);
 
 %% Generate sub-carriers
 
-% TODO: Generate local carriers here
-%         -- use the rx_pilot and multiply with itself = 38kHz!
-%         -- LP filter replicas at >19khz
-%         -- use this signal as the carrier38kHz!
+% 38 kHz carrier
+carrier38kHzRx = rx_pilot .* rx_pilot * 2 - 1;
 
-tnRx = (0:1:n_sec*fs_rx-1)';
-carrier38kHzRx = cos(2*pi*38e3/fs_rx*tnRx + phi_pilot*2);
-carrier57kHzRx = cos(2*pi*57e3/fs_rx*tnRx + phi_pilot*3);
+% 57 kHz carrier
+carrier57kHzRx = carrier38kHzRx .* rx_pilot * 2 - 1;
+
+% Create the lowpass filter
+filter_name = sprintf("%s%s",dir_filters,"lowpass_57kHz.mat");
+ripple_pass_dB = 0.1;          % Passband ripple in dB
+ripple_stop_db = 50;           % Stopband ripple in dB
+cutoff_freqs   = [20e3 36e3];  % Cutoff frequencies
+
+filter_hp_57k = getHPfilter( ...
+    filter_name, ...
+    ripple_pass_dB, ripple_stop_db, ...
+    cutoff_freqs, fs_rx, EnableFilterAnalyzeGUI);
+
+% Filter (lowpass 1.5kHz)
+carrier57kHzRx = filter(filter_hp_57k,1, carrier57kHzRx);
+
+% TODO: delay all other carriers and the rx signal (rx_fmChannelData)
+%       to compensate for the HP filter.
+% NOTE: Using a "circshift" as a workaround for now. 
+%       This cannot be done in hardware!
+filt_hp57k_groupdelay = (length(filter_hp_57k)-1)/2;
+carrier57kHzRx = circshift(carrier57kHzRx, -filt_hp57k_groupdelay);
+
+% For test purpose only.
+pilot_local          = cos(2*pi*19e3/fs_rx*tnRx + phi_pilot);
+carrier38kHzRx_local = cos(2*pi*38e3/fs_rx*tnRx + phi_pilot*2);
+carrier57kHzRx_local = cos(2*pi*57e3/fs_rx*tnRx + phi_pilot*3);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% RDS decoder
@@ -184,10 +215,10 @@ rx_audio_lrdiff = filter(filter_lp_mono,1, rx_audio_lrdiff_mod);
 % NOTE: The mono signal only needs to pass through a single LP.
 %       The lrdiff signal passed through a BP and a LP. Thus, it needs to
 %       be delayed by the BP's groupdelay, since the LP is the same.
-bp_groupdelay = (length(filter_bp_lrdiff)-1)/2;
+filt_bp_groupdelay = (length(filter_bp_lrdiff)-1)/2;
 
 % Compensate the group delay
-rx_audio_mono = [zeros(bp_groupdelay,1); rx_audio_mono(1:end-bp_groupdelay)];
+rx_audio_mono = [zeros(filt_bp_groupdelay,1); rx_audio_mono(1:end-filt_bp_groupdelay)];
 
 % Compute left and right channel signals
 rx_audio_L = rx_audio_mono + rx_audio_lrdiff;
