@@ -187,7 +187,7 @@ if EnableSenderSourceCreateSim
 elseif EnableSenderSourceRecordedFile
     disp('-- Loading FM data stream');
     
-    filename = sprintf("./recordings/fm_record_fs%d.bin",fs);
+    filename = sprintf("./recordings/bin/fm_record_fs%d.bin",fs);
     rx_fm_bb = loadIQFile(filename);
     fprintf("filename: %s", filename);
     

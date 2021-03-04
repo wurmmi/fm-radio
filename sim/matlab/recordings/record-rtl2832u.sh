@@ -12,7 +12,7 @@
 center_freq=99e6
 sample_freq=970200
 n_seconds=10
-out_file="./recordings/fm_record_fs${sample_freq}_fmsender.bin"
+out_file="./fm_record_fs${sample_freq}_fmsender.bin"
 
 n_samples=$(( $sample_freq * $n_seconds))
 echo "Recording $n_samples samples @ $sample_freq SPS ($n_seconds seconds)."

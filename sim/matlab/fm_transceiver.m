@@ -34,8 +34,8 @@ dir_filters = "./filters/";
 dir_output  = "./matlab_output/";
 
 % Simulation options
-EnableSenderSourceRecordedFile = false;
-EnableSenderSourceCreateSim    = true;
+EnableSenderSourceRecordedFile = true;
+EnableSenderSourceCreateSim    = false;
 EnableAudioFromFile            = true;
 EnableTrafficInfoTrigger       = false;
 

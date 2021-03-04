@@ -4,7 +4,7 @@ options:
     category: '[GRC Hier Blocks]'
     cmake_opt: ''
     comment: ''
-    copyright: ''
+    copyright: (C) M. Wurm 2021
     description: FM Sender, using USRP.
     gen_cmake: 'On'
     gen_linking: dynamic
@@ -80,6 +80,27 @@ blocks:
     coordinate: [384, 76.0]
     rotation: 0
     state: true
+- name: gain_hinz
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: 4,0,1,1
+    label: gain_hinz
+    min_len: '200'
+    orient: Qt.Horizontal
+    rangeType: float
+    start: '0'
+    step: '0.05'
+    stop: '0.5'
+    value: '0.05'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [696, 1068.0]
+    rotation: 0
+    state: true
 - name: gain_lrdiff
   id: variable_qtgui_range
   parameters:
@@ -147,7 +168,7 @@ blocks:
   id: variable_qtgui_range
   parameters:
     comment: ''
-    gui_hint: 5,0,1,1
+    gui_hint: 9,0,1,1
     label: n_filter_delay
     min_len: '200'
     orient: Qt.Horizontal
@@ -163,7 +184,7 @@ blocks:
     bus_structure: null
     coordinate: [432, 548.0]
     rotation: 0
-    state: true
+    state: enabled
 - name: osr_mod
   id: variable
   parameters:
@@ -206,7 +227,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1072, 1108.0]
+    coordinate: [936, 1300.0]
     rotation: 0
     state: true
 - name: analog_fm_preemph_0
@@ -224,7 +245,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [392, 264.0]
+    coordinate: [392, 196.0]
     rotation: 0
     state: true
 - name: analog_fm_preemph_0_0
@@ -242,7 +263,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [392, 392.0]
+    coordinate: [392, 412.0]
     rotation: 0
     state: true
 - name: analog_frequency_modulator_fc_0
@@ -258,7 +279,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [368, 1428.0]
+    coordinate: [376, 1628.0]
     rotation: 0
     state: enabled
 - name: analog_sig_source_x_0
@@ -322,9 +343,30 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [328, 1268.0]
+    coordinate: [344, 1468.0]
     rotation: 0
     state: disabled
+- name: audio_source_0
+  id: audio_source
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'Checkout this link.
+
+      https://wiki.gnuradio.org/index.php/ALSAPulseAudio'
+    device_name: pulse_monitor
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_outputs: '1'
+    ok_to_block: 'False'
+    samp_rate: '44100'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [32, 1188.0]
+    rotation: 0
+    state: enabled
 - name: band_pass_filter_0
   id: band_pass_filter
   parameters:
@@ -372,7 +414,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [920, 132.0]
+    coordinate: [920, 172.0]
     rotation: 0
     state: true
 - name: band_pass_filter_1_0
@@ -397,7 +439,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [920, 340.0]
+    coordinate: [920, 356.0]
     rotation: 0
     state: true
 - name: blocks_add_xx_0
@@ -415,7 +457,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [624, 288.0]
+    coordinate: [632, 216.0]
     rotation: 0
     state: true
 - name: blocks_add_xx_0_0
@@ -426,7 +468,7 @@ blocks:
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    num_inputs: '3'
+    num_inputs: '4'
     type: float
     vlen: '1'
   states:
@@ -441,7 +483,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    comment: ''
+    comment: Compensate BP Filter.
     delay: n_filter_delay
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -452,7 +494,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [536, 988.0]
+    coordinate: [504, 940.0]
     rotation: 0
     state: enabled
 - name: blocks_delay_0_0
@@ -460,7 +502,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    comment: ''
+    comment: Compensate BP Filter.
     delay: n_filter_delay
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -471,7 +513,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [504, 684.0]
+    coordinate: [504, 692.0]
     rotation: 0
     state: enabled
 - name: blocks_multiply_const_xx_0
@@ -507,7 +549,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [688, 784.0]
+    coordinate: [696, 812.0]
     rotation: 0
     state: true
 - name: blocks_multiply_const_xx_0_0_0
@@ -525,25 +567,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [688, 880.0]
-    rotation: 0
-    state: true
-- name: blocks_multiply_const_xx_0_0_1
-  id: blocks_multiply_const_xx
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    const: '1'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    type: complex
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [840, 1300.0]
+    coordinate: [696, 940.0]
     rotation: 0
     state: true
 - name: blocks_multiply_const_xx_0_1
@@ -561,7 +585,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [224, 280.0]
+    coordinate: [208, 212.0]
     rotation: 0
     state: true
 - name: blocks_multiply_const_xx_0_1_0
@@ -579,16 +603,16 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [224, 408.0]
+    coordinate: [208, 428.0]
     rotation: 0
     state: true
-- name: blocks_multiply_const_xx_1
+- name: blocks_multiply_const_xx_0_2
   id: blocks_multiply_const_xx
   parameters:
     affinity: ''
     alias: ''
-    comment: ''
-    const: '1'
+    comment: gain_mono
+    const: gain_hinz
     maxoutbuf: '0'
     minoutbuf: '0'
     type: float
@@ -597,9 +621,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1064, 724.0]
+    coordinate: [696, 1196.0]
     rotation: 0
-    state: true
+    state: enabled
 - name: blocks_multiply_xx_0
   id: blocks_multiply_xx
   parameters:
@@ -615,7 +639,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [376, 784.0]
+    coordinate: [376, 800.0]
     rotation: 0
     state: true
 - name: blocks_sub_xx_0
@@ -633,7 +657,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [624, 384.0]
+    coordinate: [632, 400.0]
     rotation: 0
     state: true
 - name: blocks_wavfile_source_0
@@ -641,8 +665,8 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    comment: ''
-    file: /home/mike/work/fm-radio/sim/matlab/recordings/viera-blech-ehrenwert-polka.wav
+    comment: "NOTE: \nOpen gnuradio-companion from \nthe ./sim/gnuradio directory!"
+    file: ../matlab/recordings/wav/left-right-mix-viera-blech-ehrenwert-polka.wav
     maxoutbuf: '0'
     minoutbuf: '0'
     nchan: '2'
@@ -651,7 +675,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [24, 336.0]
+    coordinate: [16, 304.0]
     rotation: 0
     state: true
 - name: qtgui_freq_sink_x_0
@@ -731,7 +755,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [360, 1552.0]
+    coordinate: [376, 1744.0]
     rotation: 0
     state: true
 - name: qtgui_freq_sink_x_0_0
@@ -811,7 +835,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [656, 1544.0]
+    coordinate: [664, 1744.0]
     rotation: 0
     state: true
 - name: qtgui_freq_sink_x_0_0_0
@@ -891,7 +915,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1072, 1544.0]
+    coordinate: [936, 1744.0]
     rotation: 0
     state: true
 - name: qtgui_tab_widget_0
@@ -899,7 +923,7 @@ blocks:
   parameters:
     alias: ''
     comment: ''
-    gui_hint: 4,0,1,1
+    gui_hint: 5,0,1,1
     label0: Tab 0
     label1: Tab 1
     label10: Tab 10
@@ -945,7 +969,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [648, 1276.0]
+    coordinate: [664, 1476.0]
     rotation: 0
     state: true
 - name: rational_resampler_xxx_0_0
@@ -965,7 +989,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [728, 160.0]
+    coordinate: [744, 204.0]
     rotation: 0
     state: true
 - name: rational_resampler_xxx_0_0_0
@@ -985,7 +1009,27 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [728, 368.0]
+    coordinate: [744, 388.0]
+    rotation: 0
+    state: true
+- name: rational_resampler_xxx_0_0_0_0
+  id: rational_resampler_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    decim: '1'
+    fbw: '0'
+    interp: osr_mod
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    taps: ''
+    type: fff
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [368, 1172.0]
     rotation: 0
     state: true
 - name: uhd_usrp_sink_1
@@ -1261,7 +1305,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1072, 1244.0]
+    coordinate: [936, 1436.0]
     rotation: 0
     state: enabled
 - name: virtual_sink_0
@@ -1274,7 +1318,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1104, 188.0]
+    coordinate: [1112, 228.0]
     rotation: 0
     state: true
 - name: virtual_sink_1
@@ -1287,7 +1331,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1104, 396.0]
+    coordinate: [1104, 412.0]
     rotation: 0
     state: true
 - name: virtual_sink_2
@@ -1300,7 +1344,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1248, 724.0]
+    coordinate: [1088, 724.0]
     rotation: 0
     state: true
 - name: virtual_source_0
@@ -1313,7 +1357,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [32, 688.0]
+    coordinate: [32, 692.0]
     rotation: 0
     state: true
 - name: virtual_source_1
@@ -1326,7 +1370,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [24, 768.0]
+    coordinate: [32, 796.0]
     rotation: 0
     state: true
 - name: virtual_source_2
@@ -1339,7 +1383,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [32, 1300.0]
+    coordinate: [40, 1500.0]
     rotation: 0
     state: true
 
@@ -1354,28 +1398,29 @@ connections:
 - [analog_sig_source_x_0_0, '0', blocks_delay_0, '0']
 - [analog_wfm_tx_0, '0', qtgui_freq_sink_x_0_0, '0']
 - [analog_wfm_tx_0, '0', rational_resampler_xxx_0, '0']
+- [audio_source_0, '0', rational_resampler_xxx_0_0_0_0, '0']
 - [band_pass_filter_0, '0', blocks_multiply_const_xx_0_0, '0']
 - [band_pass_filter_1, '0', virtual_sink_0, '0']
 - [band_pass_filter_1_0, '0', virtual_sink_1, '0']
 - [blocks_add_xx_0, '0', rational_resampler_xxx_0_0, '0']
-- [blocks_add_xx_0_0, '0', blocks_multiply_const_xx_1, '0']
+- [blocks_add_xx_0_0, '0', virtual_sink_2, '0']
 - [blocks_delay_0, '0', blocks_multiply_const_xx_0_0_0, '0']
 - [blocks_delay_0_0, '0', blocks_multiply_const_xx_0, '0']
 - [blocks_multiply_const_xx_0, '0', blocks_add_xx_0_0, '0']
 - [blocks_multiply_const_xx_0_0, '0', blocks_add_xx_0_0, '1']
 - [blocks_multiply_const_xx_0_0_0, '0', blocks_add_xx_0_0, '2']
-- [blocks_multiply_const_xx_0_0_1, '0', qtgui_freq_sink_x_0_0_0, '0']
-- [blocks_multiply_const_xx_0_0_1, '0', uhd_usrp_sink_1, '0']
 - [blocks_multiply_const_xx_0_1, '0', analog_fm_preemph_0, '0']
 - [blocks_multiply_const_xx_0_1_0, '0', analog_fm_preemph_0_0, '0']
-- [blocks_multiply_const_xx_1, '0', virtual_sink_2, '0']
+- [blocks_multiply_const_xx_0_2, '0', blocks_add_xx_0_0, '3']
 - [blocks_multiply_xx_0, '0', band_pass_filter_0, '0']
 - [blocks_sub_xx_0, '0', rational_resampler_xxx_0_0_0, '0']
 - [blocks_wavfile_source_0, '0', blocks_multiply_const_xx_0_1, '0']
 - [blocks_wavfile_source_0, '1', blocks_multiply_const_xx_0_1_0, '0']
-- [rational_resampler_xxx_0, '0', blocks_multiply_const_xx_0_0_1, '0']
+- [rational_resampler_xxx_0, '0', qtgui_freq_sink_x_0_0_0, '0']
+- [rational_resampler_xxx_0, '0', uhd_usrp_sink_1, '0']
 - [rational_resampler_xxx_0_0, '0', band_pass_filter_1, '0']
 - [rational_resampler_xxx_0_0_0, '0', band_pass_filter_1_0, '0']
+- [rational_resampler_xxx_0_0_0_0, '0', blocks_multiply_const_xx_0_2, '0']
 - [virtual_source_0, '0', blocks_delay_0_0, '0']
 - [virtual_source_1, '0', blocks_multiply_xx_0, '0']
 - [virtual_source_2, '0', analog_frequency_modulator_fc_0, '0']
