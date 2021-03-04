@@ -44,8 +44,18 @@ if EnableDeEmphasis
     rx_fm_demod = filter(filter_de_emphasis.Num, filter_de_emphasis.Denum, rx_fm_demod);
 end
 
+%% Downsample
+
+rx_fmChannelData = rx_fm_demod;
+
+osr_rx = 4;
+fs_rx  = fs/osr_rx;
+tnRx = (0:1:n_sec*fs_rx-1)';
+
+rx_fmChannelData = resample(rx_fmChannelData, 1, osr_rx);
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Pilot tone recovery
+%% Recover pilot tone and subcarriers
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Create the bandpass filter
@@ -57,26 +67,15 @@ cutoff_freqs   = [17e3 18.5e3 19.5e3 21e3]; % Band frequencies (defined like slo
 filter_bp_pilot = getBPfilter( ...
     filter_name, ...
     ripple_pass_dB, ripple_stop_db, ...
-    cutoff_freqs, fs, EnableFilterAnalyzeGUI);
+    cutoff_freqs, fs_rx, EnableFilterAnalyzeGUI);
 
 % Filter (Bandpass 18.5k..19.5kHz)
-rx_pilot = filter(filter_bp_pilot,1, rx_fm_demod);
+rx_pilot = filter(filter_bp_pilot,1, rx_fmChannelData);
 
 % Amplify 
 % NOTE: Theoretically, the factor should be 10, since the pilot is
 %       transmitted with an amplitude of 10%.
 rx_pilot = rx_pilot * 11;
-
-%% Downsample
-
-rx_fmChannelData = rx_fm_demod;
-
-osr_rx = 4;
-fs_rx  = fs/osr_rx;
-tnRx = (0:1:n_sec*fs_rx-1)';
-
-rx_fmChannelData = resample(rx_fmChannelData, 1, osr_rx);
-rx_pilot         = resample(rx_pilot, 1, osr_rx);
 
 %% Generate sub-carriers
 
