@@ -10,7 +10,7 @@ options:
     gen_linking: dynamic
     generate_options: qt_gui
     hier_block_src_path: '.:'
-    id: fm_receiver_2
+    id: fm_receiver
     max_nouts: '0'
     output_language: python
     placement: (0,0)
@@ -21,7 +21,7 @@ options:
     run_options: prompt
     sizing_mode: fixed
     thread_safe_setters: ''
-    title: FM Radio Receiver 2
+    title: FM Radio Receiver
     window_size: ''
   states:
     bus_sink: false
@@ -36,12 +36,12 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: 88.8e6
+    value: 99e6
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [8, 224.0]
+    coordinate: [8, 228.0]
     rotation: 0
     state: enabled
 - name: decimate_factor
@@ -53,48 +53,48 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [456, 44.0]
+    coordinate: [8, 292.0]
     rotation: 0
     state: enabled
-- name: gain
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: 0.96e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 160]
+    rotation: 0
+    state: enabled
+- name: volume_gain
   id: variable_qtgui_range
   parameters:
     comment: ''
     gui_hint: ''
-    label: gain
+    label: Volume Gain
     min_len: '10'
     orient: Qt.Horizontal
     rangeType: float
     start: '0'
-    step: '1'
-    stop: '10'
+    step: '0.05'
+    stop: '1'
     value: '1'
     widget: counter_slider
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [640, 20.0]
+    coordinate: [1072, 12.0]
     rotation: 0
     state: true
-- name: samp_rate
-  id: variable
-  parameters:
-    comment: ''
-    value: 1.0e6
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [8, 160.0]
-    rotation: 0
-    state: enabled
-- name: analog_wfm_rcv_pll_0
-  id: analog_wfm_rcv_pll
+- name: analog_wfm_rcv_0
+  id: analog_wfm_rcv
   parameters:
     affinity: ''
     alias: ''
-    audio_decimation: '5'
+    audio_decimation: '1'
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -103,7 +103,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [816, 144.0]
+    coordinate: [640, 148]
     rotation: 0
     state: enabled
 - name: audio_sink_0
@@ -113,14 +113,14 @@ blocks:
     alias: ''
     comment: ''
     device_name: ''
-    num_inputs: '2'
+    num_inputs: '1'
     ok_to_block: 'True'
     samp_rate: int(48e3)
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1264, 144.0]
+    coordinate: [1264, 156.0]
     rotation: 0
     state: enabled
 - name: blocks_multiply_const_vxx_0
@@ -129,16 +129,64 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    const: gain
+    const: volume_gain
     maxoutbuf: '0'
     minoutbuf: '0'
-    type: complex
+    type: float
     vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [640, 156.0]
+    coordinate: [1072, 156.0]
+    rotation: 0
+    state: true
+- name: blocks_wavfile_sink_0
+  id: blocks_wavfile_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    bits_per_sample: '8'
+    comment: ''
+    file: ./fm_receiver_record.wav
+    nchan: '1'
+    samp_rate: int(48e3)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1264, 76.0]
+    rotation: 0
+    state: enabled
+- name: goto_pwd_module
+  id: epy_module
+  parameters:
+    alias: ''
+    comment: ''
+    source_code: '# -------------------------------------------------------------------------
+
+      # File:        generateHinzTrillerFile.m
+
+      # Author:      Michael Wurm < wurm.michael95 @ gmail.com >
+
+      # Description: Stores the Hinz Triller in an audio file(*.wav).
+
+      # -------------------------------------------------------------------------
+
+
+      import os
+
+
+      script_path = os.path.dirname(os.path.realpath(__file__))
+
+      os.chdir(script_path)
+
+      '
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 108.0]
     rotation: 0
     state: true
 - name: low_pass_filter_0
@@ -156,13 +204,13 @@ blocks:
     minoutbuf: '0'
     samp_rate: samp_rate
     type: fir_filter_ccf
-    width: 10e5
+    width: 30e3
     win: firdes.WIN_HAMMING
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [448, 108.0]
+    coordinate: [448, 108]
     rotation: 0
     state: enabled
 - name: qtgui_freq_sink_x_0
@@ -199,7 +247,7 @@ blocks:
     fc: center_freq
     fftsize: '1024'
     freqhalf: 'True'
-    grid: 'False'
+    grid: 'True'
     gui_hint: ''
     label: Relative Gain
     label1: ''
@@ -215,7 +263,7 @@ blocks:
     legend: 'True'
     maxoutbuf: '0'
     minoutbuf: '0'
-    name: '""'
+    name: HF
     nconnections: '1'
     showports: 'False'
     tr_chan: '0'
@@ -245,8 +293,8 @@ blocks:
     coordinate: [456, 288.0]
     rotation: 0
     state: enabled
-- name: qtgui_waterfall_sink_x_0
-  id: qtgui_waterfall_sink_x
+- name: qtgui_freq_sink_x_1
+  id: qtgui_freq_sink_x
   parameters:
     affinity: ''
     alias: ''
@@ -260,61 +308,80 @@ blocks:
     alpha7: '1.0'
     alpha8: '1.0'
     alpha9: '1.0'
+    autoscale: 'False'
+    average: '0.1'
     axislabels: 'True'
-    bw: samp_rate
-    color1: '0'
-    color10: '0'
-    color2: '0'
-    color3: '0'
-    color4: '0'
-    color5: '0'
-    color6: '0'
-    color7: '0'
-    color8: '0'
-    color9: '0'
+    bw: samp_rate/decimate_factor
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
     comment: ''
-    fc: center_freq
+    ctrlpanel: 'False'
+    fc: '0'
     fftsize: '1024'
-    freqhalf: 'True'
-    grid: 'False'
+    freqhalf: 'False'
+    grid: 'True'
     gui_hint: ''
-    int_max: '10'
-    int_min: '-140'
+    label: Relative Gain
     label1: ''
-    label10: ''
-    label2: ''
-    label3: ''
-    label4: ''
-    label5: ''
-    label6: ''
-    label7: ''
-    label8: ''
-    label9: ''
+    label10: ''''''
+    label2: ''''''
+    label3: ''''''
+    label4: ''''''
+    label5: ''''''
+    label6: ''''''
+    label7: ''''''
+    label8: ''''''
+    label9: ''''''
     legend: 'True'
     maxoutbuf: '0'
     minoutbuf: '0'
-    name: '""'
+    name: FM Demod
     nconnections: '1'
     showports: 'False'
-    type: complex
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_tag: '""'
+    type: float
+    units: dB
     update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
     wintype: firdes.WIN_BLACKMAN_hARRIS
+    ymax: '10'
+    ymin: '-140'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [456, 400.0]
+    coordinate: [856, 288.0]
     rotation: 0
-    state: true
+    state: enabled
 - name: rational_resampler_xxx_0
   id: rational_resampler_xxx
   parameters:
     affinity: ''
     alias: ''
     comment: ''
-    decim: '50'
+    decim: '5'
     fbw: '0'
-    interp: '48'
+    interp: '1'
     maxoutbuf: '0'
     minoutbuf: '0'
     taps: ''
@@ -323,27 +390,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1040, 84.0]
-    rotation: 0
-    state: enabled
-- name: rational_resampler_xxx_0_0
-  id: rational_resampler_xxx
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    decim: '50'
-    fbw: '0'
-    interp: '48'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    taps: ''
-    type: fff
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1040, 188.0]
+    coordinate: [888, 132]
     rotation: 0
     state: enabled
 - name: rtlsdr_source_0
@@ -553,7 +600,7 @@ blocks:
     freq7: 100e6
     freq8: 100e6
     freq9: 100e6
-    gain0: '50'
+    gain0: '40'
     gain1: '10'
     gain10: '10'
     gain11: '10'
@@ -1076,15 +1123,14 @@ blocks:
     state: disabled
 
 connections:
-- [analog_wfm_rcv_pll_0, '0', rational_resampler_xxx_0, '0']
-- [analog_wfm_rcv_pll_0, '1', rational_resampler_xxx_0_0, '0']
-- [blocks_multiply_const_vxx_0, '0', analog_wfm_rcv_pll_0, '0']
-- [low_pass_filter_0, '0', blocks_multiply_const_vxx_0, '0']
-- [rational_resampler_xxx_0, '0', audio_sink_0, '0']
-- [rational_resampler_xxx_0_0, '0', audio_sink_0, '1']
+- [analog_wfm_rcv_0, '0', qtgui_freq_sink_x_1, '0']
+- [analog_wfm_rcv_0, '0', rational_resampler_xxx_0, '0']
+- [blocks_multiply_const_vxx_0, '0', audio_sink_0, '0']
+- [blocks_multiply_const_vxx_0, '0', blocks_wavfile_sink_0, '0']
+- [low_pass_filter_0, '0', analog_wfm_rcv_0, '0']
+- [rational_resampler_xxx_0, '0', blocks_multiply_const_vxx_0, '0']
 - [rtlsdr_source_0, '0', low_pass_filter_0, '0']
 - [rtlsdr_source_0, '0', qtgui_freq_sink_x_0, '0']
-- [rtlsdr_source_0, '0', qtgui_waterfall_sink_x_0, '0']
 - [uhd_usrp_source_0, '0', low_pass_filter_0, '0']
 - [uhd_usrp_source_0, '0', qtgui_freq_sink_x_0, '0']
 

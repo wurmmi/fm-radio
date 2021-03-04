@@ -665,7 +665,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    comment: "NOTE: \nOpen gnuradio-companion from \nthe ./sim/gnuradio directory!"
+    comment: ''
     file: ../matlab/recordings/wav/left-right-mix-viera-blech-ehrenwert-polka.wav
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -676,6 +676,37 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [16, 304.0]
+    rotation: 0
+    state: true
+- name: goto_pwd_module
+  id: epy_module
+  parameters:
+    alias: ''
+    comment: ''
+    source_code: '# -------------------------------------------------------------------------
+
+      # File:        generateHinzTrillerFile.m
+
+      # Author:      Michael Wurm < wurm.michael95 @ gmail.com >
+
+      # Description: Stores the Hinz Triller in an audio file(*.wav).
+
+      # -------------------------------------------------------------------------
+
+
+      import os
+
+
+      script_path = os.path.dirname(os.path.realpath(__file__))
+
+      os.chdir(script_path)
+
+      '
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 140.0]
     rotation: 0
     state: true
 - name: qtgui_freq_sink_x_0

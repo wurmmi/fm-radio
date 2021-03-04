@@ -40,6 +40,7 @@ from gnuradio import eng_notation
 from gnuradio import uhd
 import time
 from gnuradio.qtgui import Range, RangeWidget
+import goto_pwd_module  # embedded python module
 
 from gnuradio import qtgui
 
