@@ -164,6 +164,27 @@ blocks:
     coordinate: [848, 548.0]
     rotation: 0
     state: true
+- name: gain_rds
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: 8,0,1,1
+    label: gain_rds
+    min_len: '200'
+    orient: Qt.Horizontal
+    rangeType: float
+    start: '0'
+    step: '0.05'
+    stop: '1'
+    value: '0.3'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [880, 1524.0]
+    rotation: 0
+    state: true
 - name: n_filter_delay
   id: variable_qtgui_range
   parameters:
@@ -209,6 +230,18 @@ blocks:
     coordinate: [384, 12.0]
     rotation: 0
     state: true
+- name: outbuffer
+  id: variable
+  parameters:
+    comment: ''
+    value: '10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [336, 1404.0]
+    rotation: 0
+    state: enabled
 - name: tx_gain_db
   id: variable_qtgui_range
   parameters:
@@ -227,7 +260,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [936, 1300.0]
+    coordinate: [936, 1764.0]
     rotation: 0
     state: true
 - name: analog_fm_preemph_0
@@ -279,7 +312,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [376, 1628.0]
+    coordinate: [376, 2092.0]
     rotation: 0
     state: enabled
 - name: analog_sig_source_x_0
@@ -343,7 +376,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [344, 1468.0]
+    coordinate: [344, 1932.0]
     rotation: 0
     state: disabled
 - name: audio_source_0
@@ -468,14 +501,14 @@ blocks:
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    num_inputs: '4'
+    num_inputs: '5'
     type: float
     vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [952, 696.0]
+    coordinate: [1000, 696.0]
     rotation: 0
     state: true
 - name: blocks_delay_0
@@ -514,6 +547,24 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [504, 692.0]
+    rotation: 0
+    state: enabled
+- name: blocks_multiply_const_vxx_0_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: gain_rds
+    maxoutbuf: outbuffer
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [880, 1660.0]
     rotation: 0
     state: enabled
 - name: blocks_multiply_const_xx_0
@@ -642,6 +693,24 @@ blocks:
     coordinate: [376, 800.0]
     rotation: 0
     state: true
+- name: blocks_repeat_0
+  id: blocks_repeat
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    interp: '160'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [288, 1676.0]
+    rotation: 0
+    state: enabled
 - name: blocks_sub_xx_0
   id: blocks_sub_xx
   parameters:
@@ -709,6 +778,151 @@ blocks:
     coordinate: [8, 140.0]
     rotation: 0
     state: true
+- name: gr_char_to_float_0
+  id: blocks_char_to_float
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: outbuffer
+    minoutbuf: '0'
+    scale: '1'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [96, 1676.0]
+    rotation: 0
+    state: enabled
+- name: gr_diff_encoder_bb_0
+  id: digital_diff_encoder_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: outbuffer
+    minoutbuf: '0'
+    modulus: '2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [336, 1468.0]
+    rotation: 0
+    state: enabled
+- name: gr_map_bb_0
+  id: digital_map_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    map: '[-1,1]'
+    maxoutbuf: outbuffer
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [64, 1612.0]
+    rotation: 180
+    state: enabled
+- name: gr_map_bb_1
+  id: digital_map_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    map: '[1,2]'
+    maxoutbuf: outbuffer
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [384, 1612.0]
+    rotation: 180
+    state: enabled
+- name: gr_multiply_xx_0
+  id: blocks_multiply_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: outbuffer
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [752, 1648.0]
+    rotation: 0
+    state: enabled
+- name: gr_sig_source_x_0_0
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: '1'
+    comment: ''
+    freq: 57e3
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: fs_mod
+    type: float
+    waveform: analog.GR_SIN_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [560, 1396.0]
+    rotation: 0
+    state: enabled
+- name: gr_unpack_k_bits_bb_0
+  id: blocks_unpack_k_bits_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    k: '2'
+    maxoutbuf: outbuffer
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [192, 1612.0]
+    rotation: 180
+    state: enabled
+- name: low_pass_filter_0
+  id: low_pass_filter
+  parameters:
+    affinity: ''
+    alias: ''
+    beta: '6.76'
+    comment: ''
+    cutoff_freq: 2.5e3
+    decim: '1'
+    gain: '1'
+    interp: '1'
+    maxoutbuf: outbuffer
+    minoutbuf: '0'
+    samp_rate: fs_mod
+    type: interp_fir_filter_fff
+    width: .5e3
+    win: firdes.WIN_HAMMING
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [544, 1628.0]
+    rotation: 0
+    state: enabled
 - name: qtgui_freq_sink_x_0
   id: qtgui_freq_sink_x
   parameters:
@@ -786,7 +1000,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [376, 1744.0]
+    coordinate: [376, 2208.0]
     rotation: 0
     state: true
 - name: qtgui_freq_sink_x_0_0
@@ -866,7 +1080,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [664, 1744.0]
+    coordinate: [664, 2208.0]
     rotation: 0
     state: true
 - name: qtgui_freq_sink_x_0_0_0
@@ -946,7 +1160,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [936, 1744.0]
+    coordinate: [936, 2208.0]
     rotation: 0
     state: true
 - name: qtgui_tab_widget_0
@@ -1000,7 +1214,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [664, 1476.0]
+    coordinate: [664, 1940.0]
     rotation: 0
     state: true
 - name: rational_resampler_xxx_0_0
@@ -1061,6 +1275,32 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [368, 1172.0]
+    rotation: 0
+    state: true
+- name: rds_encoder_0
+  id: rds_encoder
+  parameters:
+    af1: 47.11e6
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    ms: 'True'
+    pi_country_code: '13'
+    pi_coverage_area: '3'
+    pi_reference_number: '147'
+    ps: PIRAT 4711
+    pty: '20'
+    pty_locale: '0'
+    radiotext: SAALFELDEN TESTING
+    ta: 'False'
+    tp: 'True'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [64, 1388.0]
     rotation: 0
     state: true
 - name: uhd_usrp_sink_1
@@ -1336,7 +1576,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [936, 1436.0]
+    coordinate: [936, 1900.0]
     rotation: 0
     state: enabled
 - name: virtual_sink_0
@@ -1375,7 +1615,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1088, 724.0]
+    coordinate: [1088, 756.0]
     rotation: 0
     state: true
 - name: virtual_source_0
@@ -1414,7 +1654,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [40, 1500.0]
+    coordinate: [40, 1964.0]
     rotation: 0
     state: true
 
@@ -1437,6 +1677,7 @@ connections:
 - [blocks_add_xx_0_0, '0', virtual_sink_2, '0']
 - [blocks_delay_0, '0', blocks_multiply_const_xx_0_0_0, '0']
 - [blocks_delay_0_0, '0', blocks_multiply_const_xx_0, '0']
+- [blocks_multiply_const_vxx_0_0, '0', blocks_add_xx_0_0, '4']
 - [blocks_multiply_const_xx_0, '0', blocks_add_xx_0_0, '0']
 - [blocks_multiply_const_xx_0_0, '0', blocks_add_xx_0_0, '1']
 - [blocks_multiply_const_xx_0_0_0, '0', blocks_add_xx_0_0, '2']
@@ -1444,14 +1685,24 @@ connections:
 - [blocks_multiply_const_xx_0_1_0, '0', analog_fm_preemph_0_0, '0']
 - [blocks_multiply_const_xx_0_2, '0', blocks_add_xx_0_0, '3']
 - [blocks_multiply_xx_0, '0', band_pass_filter_0, '0']
+- [blocks_repeat_0, '0', low_pass_filter_0, '0']
 - [blocks_sub_xx_0, '0', rational_resampler_xxx_0_0_0, '0']
 - [blocks_wavfile_source_0, '0', blocks_multiply_const_xx_0_1, '0']
 - [blocks_wavfile_source_0, '1', blocks_multiply_const_xx_0_1_0, '0']
+- [gr_char_to_float_0, '0', blocks_repeat_0, '0']
+- [gr_diff_encoder_bb_0, '0', gr_map_bb_1, '0']
+- [gr_map_bb_0, '0', gr_char_to_float_0, '0']
+- [gr_map_bb_1, '0', gr_unpack_k_bits_bb_0, '0']
+- [gr_multiply_xx_0, '0', blocks_multiply_const_vxx_0_0, '0']
+- [gr_sig_source_x_0_0, '0', gr_multiply_xx_0, '0']
+- [gr_unpack_k_bits_bb_0, '0', gr_map_bb_0, '0']
+- [low_pass_filter_0, '0', gr_multiply_xx_0, '1']
 - [rational_resampler_xxx_0, '0', qtgui_freq_sink_x_0_0_0, '0']
 - [rational_resampler_xxx_0, '0', uhd_usrp_sink_1, '0']
 - [rational_resampler_xxx_0_0, '0', band_pass_filter_1, '0']
 - [rational_resampler_xxx_0_0_0, '0', band_pass_filter_1_0, '0']
 - [rational_resampler_xxx_0_0_0_0, '0', blocks_multiply_const_xx_0_2, '0']
+- [rds_encoder_0, '0', gr_diff_encoder_bb_0, '0']
 - [virtual_source_0, '0', blocks_delay_0_0, '0']
 - [virtual_source_1, '0', blocks_multiply_xx_0, '0']
 - [virtual_source_2, '0', analog_frequency_modulator_fc_0, '0']

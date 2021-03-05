@@ -54,7 +54,13 @@ filter_lp_rds = getLPfilter( ...
 % Filter (lowpass 1.5kHz)
 rx_rds_bb = filter(filter_lp_rds,1, rx_rds_mod);
 
-%%
 
+%% Decode
+
+userInput = helperRBDSInit();
+userInput.Duration = n_sec;
+%userInput.SignalSource =
+
+[rbdsParam, sigSrc] = helperRBDSConfig(userInput);
 
 

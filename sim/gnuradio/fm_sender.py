@@ -30,6 +30,7 @@ import sip
 from gnuradio import analog
 from gnuradio import audio
 from gnuradio import blocks
+from gnuradio import digital
 from gnuradio import filter
 from gnuradio import gr
 import sys
@@ -41,6 +42,7 @@ from gnuradio import uhd
 import time
 from gnuradio.qtgui import Range, RangeWidget
 import goto_pwd_module  # embedded python module
+import rds
 
 from gnuradio import qtgui
 
@@ -84,7 +86,9 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.osr_mod = osr_mod = 5
         self.fs_file = fs_file = 44100
         self.tx_gain_db = tx_gain_db = 0.8
+        self.outbuffer = outbuffer = 10
         self.n_filter_delay = n_filter_delay = 265//2
+        self.gain_rds = gain_rds = 0.3
         self.gain_pilot = gain_pilot = 0.05
         self.gain_mono = gain_mono = 0.3
         self.gain_lrdiff = gain_lrdiff = 0.5
@@ -131,6 +135,13 @@ class fm_sender(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 1):
             self.top_grid_layout.setColumnStretch(c, 1)
+        self._gain_rds_range = Range(0, 1, 0.05, 0.3, 200)
+        self._gain_rds_win = RangeWidget(self._gain_rds_range, self.set_gain_rds, 'gain_rds', "counter_slider", float)
+        self.top_grid_layout.addWidget(self._gain_rds_win, 8, 0, 1, 1)
+        for r in range(8, 9):
+            self.top_grid_layout.setRowStretch(r, 1)
+        for c in range(0, 1):
+            self.top_grid_layout.setColumnStretch(c, 1)
         self._gain_pilot_range = Range(0, 1, 0.05, 0.05, 200)
         self._gain_pilot_win = RangeWidget(self._gain_pilot_range, self.set_gain_pilot, 'gain_pilot', "counter_slider", float)
         self.top_grid_layout.addWidget(self._gain_pilot_win, 3, 0, 1, 1)
@@ -174,6 +185,10 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.uhd_usrp_sink_1.set_bandwidth(200e3, 0)
         self.uhd_usrp_sink_1.set_samp_rate(fs_rf)
         self.uhd_usrp_sink_1.set_time_unknown_pps(uhd.time_spec())
+        self.rds_encoder_0 = rds.encoder(0, 20, True, 'PIRAT 4711', 47.11e6,
+        			True, False, 13, 3,
+        			147, 'SAALFELDEN TESTING')
+
         self.rational_resampler_xxx_0_0_0_0 = filter.rational_resampler_fff(
                 interpolation=osr_mod,
                 decimation=1,
@@ -315,8 +330,32 @@ class fm_sender(gr.top_block, Qt.QWidget):
 
         self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.pyqwidget(), Qt.QWidget)
         self.qtgui_tab_widget_0_layout_0.addWidget(self._qtgui_freq_sink_x_0_win)
+        self.low_pass_filter_0 = filter.interp_fir_filter_fff(
+            1,
+            firdes.low_pass(
+                1,
+                fs_mod,
+                2.5e3,
+                .5e3,
+                firdes.WIN_HAMMING,
+                6.76))
+        self.low_pass_filter_0.set_max_output_buffer(10)
+        self.gr_unpack_k_bits_bb_0 = blocks.unpack_k_bits_bb(2)
+        self.gr_unpack_k_bits_bb_0.set_max_output_buffer(10)
+        self.gr_sig_source_x_0_0 = analog.sig_source_f(fs_mod, analog.GR_SIN_WAVE, 57e3, 1, 0, 0)
+        self.gr_multiply_xx_0 = blocks.multiply_vff(1)
+        self.gr_multiply_xx_0.set_max_output_buffer(10)
+        self.gr_map_bb_1 = digital.map_bb([1,2])
+        self.gr_map_bb_1.set_max_output_buffer(10)
+        self.gr_map_bb_0 = digital.map_bb([-1,1])
+        self.gr_map_bb_0.set_max_output_buffer(10)
+        self.gr_diff_encoder_bb_0 = digital.diff_encoder_bb(2)
+        self.gr_diff_encoder_bb_0.set_max_output_buffer(10)
+        self.gr_char_to_float_0 = blocks.char_to_float(1, 1)
+        self.gr_char_to_float_0.set_max_output_buffer(10)
         self.blocks_wavfile_source_0 = blocks.wavfile_source('../matlab/recordings/wav/left-right-mix-viera-blech-ehrenwert-polka.wav', True)
         self.blocks_sub_xx_0 = blocks.sub_ff(1)
+        self.blocks_repeat_0 = blocks.repeat(gr.sizeof_float*1, 160)
         self.blocks_multiply_xx_0 = blocks.multiply_vff(1)
         self.blocks_multiply_const_xx_0_2 = blocks.multiply_const_ff(gain_hinz, 1)
         self.blocks_multiply_const_xx_0_1_0 = blocks.multiply_const_ff(1, 1)
@@ -324,6 +363,8 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.blocks_multiply_const_xx_0_0_0 = blocks.multiply_const_ff(gain_pilot, 1)
         self.blocks_multiply_const_xx_0_0 = blocks.multiply_const_ff(gain_lrdiff, 1)
         self.blocks_multiply_const_xx_0 = blocks.multiply_const_ff(gain_mono, 1)
+        self.blocks_multiply_const_vxx_0_0 = blocks.multiply_const_ff(gain_rds)
+        self.blocks_multiply_const_vxx_0_0.set_max_output_buffer(10)
         self.blocks_delay_0_0 = blocks.delay(gr.sizeof_float*1, n_filter_delay)
         self.blocks_delay_0 = blocks.delay(gr.sizeof_float*1, n_filter_delay)
         self.blocks_add_xx_0_0 = blocks.add_vff(1)
@@ -387,6 +428,7 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.connect((self.blocks_add_xx_0_0, 0), (self.qtgui_freq_sink_x_0, 0))
         self.connect((self.blocks_delay_0, 0), (self.blocks_multiply_const_xx_0_0_0, 0))
         self.connect((self.blocks_delay_0_0, 0), (self.blocks_multiply_const_xx_0, 0))
+        self.connect((self.blocks_multiply_const_vxx_0_0, 0), (self.blocks_add_xx_0_0, 4))
         self.connect((self.blocks_multiply_const_xx_0, 0), (self.blocks_add_xx_0_0, 0))
         self.connect((self.blocks_multiply_const_xx_0_0, 0), (self.blocks_add_xx_0_0, 1))
         self.connect((self.blocks_multiply_const_xx_0_0_0, 0), (self.blocks_add_xx_0_0, 2))
@@ -394,14 +436,24 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.connect((self.blocks_multiply_const_xx_0_1_0, 0), (self.analog_fm_preemph_0_0, 0))
         self.connect((self.blocks_multiply_const_xx_0_2, 0), (self.blocks_add_xx_0_0, 3))
         self.connect((self.blocks_multiply_xx_0, 0), (self.band_pass_filter_0, 0))
+        self.connect((self.blocks_repeat_0, 0), (self.low_pass_filter_0, 0))
         self.connect((self.blocks_sub_xx_0, 0), (self.rational_resampler_xxx_0_0_0, 0))
         self.connect((self.blocks_wavfile_source_0, 0), (self.blocks_multiply_const_xx_0_1, 0))
         self.connect((self.blocks_wavfile_source_0, 1), (self.blocks_multiply_const_xx_0_1_0, 0))
+        self.connect((self.gr_char_to_float_0, 0), (self.blocks_repeat_0, 0))
+        self.connect((self.gr_diff_encoder_bb_0, 0), (self.gr_map_bb_1, 0))
+        self.connect((self.gr_map_bb_0, 0), (self.gr_char_to_float_0, 0))
+        self.connect((self.gr_map_bb_1, 0), (self.gr_unpack_k_bits_bb_0, 0))
+        self.connect((self.gr_multiply_xx_0, 0), (self.blocks_multiply_const_vxx_0_0, 0))
+        self.connect((self.gr_sig_source_x_0_0, 0), (self.gr_multiply_xx_0, 0))
+        self.connect((self.gr_unpack_k_bits_bb_0, 0), (self.gr_map_bb_0, 0))
+        self.connect((self.low_pass_filter_0, 0), (self.gr_multiply_xx_0, 1))
         self.connect((self.rational_resampler_xxx_0, 0), (self.qtgui_freq_sink_x_0_0_0, 0))
         self.connect((self.rational_resampler_xxx_0, 0), (self.uhd_usrp_sink_1, 0))
         self.connect((self.rational_resampler_xxx_0_0, 0), (self.band_pass_filter_1, 0))
         self.connect((self.rational_resampler_xxx_0_0_0, 0), (self.band_pass_filter_1_0, 0))
         self.connect((self.rational_resampler_xxx_0_0_0_0, 0), (self.blocks_multiply_const_xx_0_2, 0))
+        self.connect((self.rds_encoder_0, 0), (self.gr_diff_encoder_bb_0, 0))
 
 
     def closeEvent(self, event):
@@ -439,6 +491,12 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.tx_gain_db = tx_gain_db
         self.uhd_usrp_sink_1.set_normalized_gain(self.tx_gain_db, 0)
 
+    def get_outbuffer(self):
+        return self.outbuffer
+
+    def set_outbuffer(self, outbuffer):
+        self.outbuffer = outbuffer
+
     def get_n_filter_delay(self):
         return self.n_filter_delay
 
@@ -446,6 +504,13 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.n_filter_delay = n_filter_delay
         self.blocks_delay_0.set_dly(self.n_filter_delay)
         self.blocks_delay_0_0.set_dly(self.n_filter_delay)
+
+    def get_gain_rds(self):
+        return self.gain_rds
+
+    def set_gain_rds(self, gain_rds):
+        self.gain_rds = gain_rds
+        self.blocks_multiply_const_vxx_0_0.set_k(self.gain_rds)
 
     def get_gain_pilot(self):
         return self.gain_pilot
@@ -494,6 +559,8 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.band_pass_filter_0.set_taps(firdes.band_pass(1, self.fs_mod, 23e3, 53e3, 2e3, firdes.WIN_HAMMING, 6.76))
         self.band_pass_filter_1.set_taps(firdes.band_pass(1, self.fs_mod, 30, 15e3, 100, firdes.WIN_HAMMING, 6.76))
         self.band_pass_filter_1_0.set_taps(firdes.band_pass(1, self.fs_mod, 30, 15e3, 100, firdes.WIN_HAMMING, 6.76))
+        self.gr_sig_source_x_0_0.set_sampling_freq(self.fs_mod)
+        self.low_pass_filter_0.set_taps(firdes.low_pass(1, self.fs_mod, 2.5e3, .5e3, firdes.WIN_HAMMING, 6.76))
         self.qtgui_freq_sink_x_0.set_frequency_range(0, self.fs_mod)
         self.qtgui_freq_sink_x_0_0.set_frequency_range(0, self.fs_mod)
 
