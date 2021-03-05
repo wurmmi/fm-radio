@@ -307,7 +307,7 @@ blocks:
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    sensitivity: 75e3/fs_mod*2*3.1415926
+    sensitivity: 75e3/fs_mod*2*math.pi
   states:
     bus_sink: false
     bus_source: false
@@ -699,7 +699,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    interp: '160'
+    interp: '92'
     maxoutbuf: '0'
     minoutbuf: '0'
     type: float
@@ -875,12 +875,12 @@ blocks:
     phase: '0'
     samp_rate: fs_mod
     type: float
-    waveform: analog.GR_SIN_WAVE
+    waveform: analog.GR_COS_WAVE
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [560, 1396.0]
+    coordinate: [544, 1396.0]
     rotation: 0
     state: enabled
 - name: gr_unpack_k_bits_bb_0
@@ -899,6 +899,19 @@ blocks:
     coordinate: [192, 1612.0]
     rotation: 180
     state: enabled
+- name: import_0
+  id: import
+  parameters:
+    alias: ''
+    comment: ''
+    imports: import math
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 188.0]
+    rotation: 0
+    state: true
 - name: low_pass_filter_0
   id: low_pass_filter
   parameters:

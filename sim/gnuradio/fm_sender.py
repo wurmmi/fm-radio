@@ -42,6 +42,7 @@ from gnuradio import uhd
 import time
 from gnuradio.qtgui import Range, RangeWidget
 import goto_pwd_module  # embedded python module
+import math
 import rds
 
 from gnuradio import qtgui
@@ -342,7 +343,7 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.low_pass_filter_0.set_max_output_buffer(10)
         self.gr_unpack_k_bits_bb_0 = blocks.unpack_k_bits_bb(2)
         self.gr_unpack_k_bits_bb_0.set_max_output_buffer(10)
-        self.gr_sig_source_x_0_0 = analog.sig_source_f(fs_mod, analog.GR_SIN_WAVE, 57e3, 1, 0, 0)
+        self.gr_sig_source_x_0_0 = analog.sig_source_f(fs_mod, analog.GR_COS_WAVE, 57e3, 1, 0, 0)
         self.gr_multiply_xx_0 = blocks.multiply_vff(1)
         self.gr_multiply_xx_0.set_max_output_buffer(10)
         self.gr_map_bb_1 = digital.map_bb([1,2])
@@ -355,7 +356,7 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.gr_char_to_float_0.set_max_output_buffer(10)
         self.blocks_wavfile_source_0 = blocks.wavfile_source('../matlab/recordings/wav/left-right-mix-viera-blech-ehrenwert-polka.wav', True)
         self.blocks_sub_xx_0 = blocks.sub_ff(1)
-        self.blocks_repeat_0 = blocks.repeat(gr.sizeof_float*1, 160)
+        self.blocks_repeat_0 = blocks.repeat(gr.sizeof_float*1, 92)
         self.blocks_multiply_xx_0 = blocks.multiply_vff(1)
         self.blocks_multiply_const_xx_0_2 = blocks.multiply_const_ff(gain_hinz, 1)
         self.blocks_multiply_const_xx_0_1_0 = blocks.multiply_const_ff(1, 1)
@@ -402,7 +403,7 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.audio_source_0 = audio.source(44100, 'pulse_monitor', False)
         self.analog_sig_source_x_0_0 = analog.sig_source_f(fs_mod, analog.GR_COS_WAVE, 19e3, 1, 0, 0)
         self.analog_sig_source_x_0 = analog.sig_source_f(fs_mod, analog.GR_COS_WAVE, 38e3, 1, 0, 0)
-        self.analog_frequency_modulator_fc_0 = analog.frequency_modulator_fc(75e3/fs_mod*2*3.1415926)
+        self.analog_frequency_modulator_fc_0 = analog.frequency_modulator_fc(75e3/fs_mod*2*math.pi)
         self.analog_fm_preemph_0_0 = analog.fm_preemph(fs=fs_file, tau=50e-6, fh=-1.0)
         self.analog_fm_preemph_0 = analog.fm_preemph(fs=fs_file, tau=50e-6, fh=-1.0)
 
@@ -553,7 +554,7 @@ class fm_sender(gr.top_block, Qt.QWidget):
 
     def set_fs_mod(self, fs_mod):
         self.fs_mod = fs_mod
-        self.analog_frequency_modulator_fc_0.set_sensitivity(75e3/self.fs_mod*2*3.1415926)
+        self.analog_frequency_modulator_fc_0.set_sensitivity(75e3/self.fs_mod*2*math.pi)
         self.analog_sig_source_x_0.set_sampling_freq(self.fs_mod)
         self.analog_sig_source_x_0_0.set_sampling_freq(self.fs_mod)
         self.band_pass_filter_0.set_taps(firdes.band_pass(1, self.fs_mod, 23e3, 53e3, 2e3, firdes.WIN_HAMMING, 6.76))
