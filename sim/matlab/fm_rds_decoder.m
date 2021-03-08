@@ -55,12 +55,14 @@ filter_lp_rds = getLPfilter( ...
 rx_rds_bb = filter(filter_lp_rds,1, rx_rds_mod);
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TODO: see 'research/RBDSExample.m'
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %% Decode
 
-userInput = helperRBDSInit();
-userInput.Duration = n_sec;
+%userInput = helperRBDSInit();
+%userInput.Duration = n_sec;
 %userInput.SignalSource =
 
-[rbdsParam, sigSrc] = helperRBDSConfig(userInput);
-
-
+%[rbdsParam, sigSrc] = helperRBDSConfig(userInput);

@@ -10,7 +10,7 @@ close all;
 clc;
 
 %% Settings
-fs                  = 44.1e3;
+fs                  = 48e3;
 fc_hinz             = 2350;
 f_deviation         = 123;
 hinz_duration_on_s  = 1.2;
@@ -28,11 +28,11 @@ hinz_triller  = cos(2*pi*fc_hinz/fs*tn + (2*pi*f_deviation*hinz_tone_int));
 %% Save to file
 
 % ON sequence
-hinz_filename = '../recordings/wav/hinz_triller_on.wav';
+hinz_filename = sprintf('../recordings/wav/hinz_triller_on_%d.wav',fs);
 audiowrite(hinz_filename, hinz_triller, fs);
 
 % OFF sequence
-hinz_filename = '../recordings/wav/hinz_triller_off.wav';
+hinz_filename = sprintf('../recordings/wav/hinz_triller_off_%d.wav',fs);
 
 idx_end = hinz_duration_off_s*fs;
 audiowrite(hinz_filename, hinz_triller(1:idx_end), fs);
