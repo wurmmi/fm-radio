@@ -28,6 +28,7 @@ from gnuradio import qtgui
 from gnuradio.filter import firdes
 import sip
 from gnuradio import analog
+from gnuradio import audio
 from gnuradio import blocks
 from gnuradio import digital
 from gnuradio import filter
@@ -273,18 +274,17 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.gr_diff_encoder_bb_0.set_max_output_buffer(10)
         self.gr_char_to_float_0 = blocks.char_to_float(1, 1)
         self.gr_char_to_float_0.set_max_output_buffer(10)
-        self.blocks_wavfile_source_0 = blocks.wavfile_source('/home/mike/work/fm-radio/sim/matlab/recordings/wav/left-right-mix-viera-blech-ehrenwert-polka_48000.wav', True)
         self.blocks_sub_xx_0 = blocks.sub_ff(1)
         self.blocks_repeat_0 = blocks.repeat(gr.sizeof_float*1, int(fs_mod/2.375/1000))
         self.blocks_multiply_xx_0 = blocks.multiply_vff(1)
         self.blocks_multiply_const_xx_0_2 = blocks.multiply_const_ff(gain_hinz, 1)
-        self.blocks_multiply_const_xx_0_1_0 = blocks.multiply_const_ff(1, 1)
-        self.blocks_multiply_const_xx_0_1 = blocks.multiply_const_ff(1, 1)
         self.blocks_multiply_const_xx_0_0_0 = blocks.multiply_const_ff(gain_pilot, 1)
         self.blocks_multiply_const_xx_0_0 = blocks.multiply_const_ff(gain_lrdiff, 1)
         self.blocks_multiply_const_xx_0 = blocks.multiply_const_ff(gain_mono, 1)
+        self.blocks_multiply_const_vxx_0_1 = blocks.multiply_const_ff(1)
         self.blocks_multiply_const_vxx_0_0 = blocks.multiply_const_ff(gain_rds)
         self.blocks_multiply_const_vxx_0_0.set_max_output_buffer(10)
+        self.blocks_multiply_const_vxx_0 = blocks.multiply_const_ff(1)
         self.blocks_delay_0_0 = blocks.delay(gr.sizeof_float*1, n_filter_delay)
         self.blocks_delay_0 = blocks.delay(gr.sizeof_float*1, n_filter_delay)
         self.blocks_add_xx_0_0 = blocks.add_vff(1)
@@ -320,6 +320,7 @@ class fm_sender(gr.top_block, Qt.QWidget):
                 firdes.WIN_HAMMING,
                 6.76))
         self.band_pass_filter_0.set_block_alias("filter_bp_lrdiff")
+        self.audio_source_0_0 = audio.source(48000, 'pulse_monitor', False)
         self.analog_sig_source_x_0_0 = analog.sig_source_f(fs_mod, analog.GR_COS_WAVE, 19e3, 1, 0, 0)
         self.analog_sig_source_x_0 = analog.sig_source_f(fs_mod, analog.GR_COS_WAVE, 38e3, 1, 0, 0)
         self.analog_frequency_modulator_fc_0 = analog.frequency_modulator_fc(75e3/fs_mod*2*math.pi)
@@ -340,6 +341,8 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.connect((self.analog_frequency_modulator_fc_0, 0), (self.rational_resampler_xxx_0, 0))
         self.connect((self.analog_sig_source_x_0, 0), (self.blocks_multiply_xx_0, 1))
         self.connect((self.analog_sig_source_x_0_0, 0), (self.blocks_delay_0, 0))
+        self.connect((self.audio_source_0_0, 0), (self.blocks_multiply_const_vxx_0, 0))
+        self.connect((self.audio_source_0_0, 1), (self.blocks_multiply_const_vxx_0_1, 0))
         self.connect((self.band_pass_filter_0, 0), (self.blocks_multiply_const_xx_0_0, 0))
         self.connect((self.band_pass_filter_1, 0), (self.blocks_delay_0_0, 0))
         self.connect((self.band_pass_filter_1_0, 0), (self.blocks_multiply_xx_0, 0))
@@ -348,18 +351,16 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.connect((self.blocks_add_xx_0_0, 0), (self.qtgui_freq_sink_x_0, 0))
         self.connect((self.blocks_delay_0, 0), (self.blocks_multiply_const_xx_0_0_0, 0))
         self.connect((self.blocks_delay_0_0, 0), (self.blocks_multiply_const_xx_0, 0))
+        self.connect((self.blocks_multiply_const_vxx_0, 0), (self.analog_fm_preemph_0, 0))
         self.connect((self.blocks_multiply_const_vxx_0_0, 0), (self.blocks_add_xx_0_0, 4))
+        self.connect((self.blocks_multiply_const_vxx_0_1, 0), (self.analog_fm_preemph_0_0, 0))
         self.connect((self.blocks_multiply_const_xx_0, 0), (self.blocks_add_xx_0_0, 0))
         self.connect((self.blocks_multiply_const_xx_0_0, 0), (self.blocks_add_xx_0_0, 1))
         self.connect((self.blocks_multiply_const_xx_0_0_0, 0), (self.blocks_add_xx_0_0, 2))
-        self.connect((self.blocks_multiply_const_xx_0_1, 0), (self.analog_fm_preemph_0, 0))
-        self.connect((self.blocks_multiply_const_xx_0_1_0, 0), (self.analog_fm_preemph_0_0, 0))
         self.connect((self.blocks_multiply_const_xx_0_2, 0), (self.blocks_add_xx_0_0, 3))
         self.connect((self.blocks_multiply_xx_0, 0), (self.band_pass_filter_0, 0))
         self.connect((self.blocks_repeat_0, 0), (self.low_pass_filter_0, 0))
         self.connect((self.blocks_sub_xx_0, 0), (self.rational_resampler_xxx_0_0_0, 0))
-        self.connect((self.blocks_wavfile_source_0, 0), (self.blocks_multiply_const_xx_0_1, 0))
-        self.connect((self.blocks_wavfile_source_0, 1), (self.blocks_multiply_const_xx_0_1_0, 0))
         self.connect((self.gr_char_to_float_0, 0), (self.blocks_repeat_0, 0))
         self.connect((self.gr_diff_encoder_bb_0, 0), (self.gr_map_bb_1, 0))
         self.connect((self.gr_map_bb_0, 0), (self.gr_char_to_float_0, 0))

@@ -425,6 +425,27 @@ blocks:
     coordinate: [32, 1244.0]
     rotation: 0
     state: disabled
+- name: audio_source_0_0
+  id: audio_source
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'Checkout this link.
+
+      https://wiki.gnuradio.org/index.php/ALSAPulseAudio'
+    device_name: pulse_monitor
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_outputs: '2'
+    ok_to_block: 'False'
+    samp_rate: '48000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [24, 360.0]
+    rotation: 0
+    state: enabled
 - name: band_pass_filter_0
   id: band_pass_filter
   parameters:
@@ -574,6 +595,24 @@ blocks:
     coordinate: [504, 692.0]
     rotation: 0
     state: enabled
+- name: blocks_multiply_const_vxx_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [248, 212.0]
+    rotation: 0
+    state: true
 - name: blocks_multiply_const_vxx_0_0
   id: blocks_multiply_const_vxx
   parameters:
@@ -592,6 +631,24 @@ blocks:
     coordinate: [880, 1660.0]
     rotation: 0
     state: enabled
+- name: blocks_multiply_const_vxx_0_1
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [240, 428.0]
+    rotation: 0
+    state: true
 - name: blocks_multiply_const_xx_0
   id: blocks_multiply_const_xx
   parameters:
@@ -644,42 +701,6 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [696, 940.0]
-    rotation: 0
-    state: true
-- name: blocks_multiply_const_xx_0_1
-  id: blocks_multiply_const_xx
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: left
-    const: '1'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    type: float
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [208, 212.0]
-    rotation: 0
-    state: true
-- name: blocks_multiply_const_xx_0_1_0
-  id: blocks_multiply_const_xx
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: right
-    const: '1'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    type: float
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [208, 428.0]
     rotation: 0
     state: true
 - name: blocks_multiply_const_xx_0_2
@@ -769,9 +790,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [16, 304.0]
+    coordinate: [24, 288.0]
     rotation: 0
-    state: true
+    state: disabled
 - name: goto_pwd_module
   id: epy_module
   parameters:
@@ -1709,6 +1730,8 @@ connections:
 - [analog_wfm_tx_0, '0', qtgui_freq_sink_x_0_0, '0']
 - [analog_wfm_tx_0, '0', rational_resampler_xxx_0, '0']
 - [audio_source_0, '0', rational_resampler_xxx_0_0_0_0, '0']
+- [audio_source_0_0, '0', blocks_multiply_const_vxx_0, '0']
+- [audio_source_0_0, '1', blocks_multiply_const_vxx_0_1, '0']
 - [band_pass_filter_0, '0', blocks_multiply_const_xx_0_0, '0']
 - [band_pass_filter_1, '0', virtual_sink_0, '0']
 - [band_pass_filter_1_0, '0', virtual_sink_1, '0']
@@ -1716,18 +1739,18 @@ connections:
 - [blocks_add_xx_0_0, '0', virtual_sink_2, '0']
 - [blocks_delay_0, '0', blocks_multiply_const_xx_0_0_0, '0']
 - [blocks_delay_0_0, '0', blocks_multiply_const_xx_0, '0']
+- [blocks_multiply_const_vxx_0, '0', analog_fm_preemph_0, '0']
 - [blocks_multiply_const_vxx_0_0, '0', blocks_add_xx_0_0, '4']
+- [blocks_multiply_const_vxx_0_1, '0', analog_fm_preemph_0_0, '0']
 - [blocks_multiply_const_xx_0, '0', blocks_add_xx_0_0, '0']
 - [blocks_multiply_const_xx_0_0, '0', blocks_add_xx_0_0, '1']
 - [blocks_multiply_const_xx_0_0_0, '0', blocks_add_xx_0_0, '2']
-- [blocks_multiply_const_xx_0_1, '0', analog_fm_preemph_0, '0']
-- [blocks_multiply_const_xx_0_1_0, '0', analog_fm_preemph_0_0, '0']
 - [blocks_multiply_const_xx_0_2, '0', blocks_add_xx_0_0, '3']
 - [blocks_multiply_xx_0, '0', band_pass_filter_0, '0']
 - [blocks_repeat_0, '0', low_pass_filter_0, '0']
 - [blocks_sub_xx_0, '0', rational_resampler_xxx_0_0_0, '0']
-- [blocks_wavfile_source_0, '0', blocks_multiply_const_xx_0_1, '0']
-- [blocks_wavfile_source_0, '1', blocks_multiply_const_xx_0_1_0, '0']
+- [blocks_wavfile_source_0, '0', blocks_multiply_const_vxx_0, '0']
+- [blocks_wavfile_source_0, '1', blocks_multiply_const_vxx_0_1, '0']
 - [gr_char_to_float_0, '0', blocks_repeat_0, '0']
 - [gr_diff_encoder_bb_0, '0', gr_map_bb_1, '0']
 - [gr_map_bb_0, '0', gr_char_to_float_0, '0']
