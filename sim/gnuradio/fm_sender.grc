@@ -98,7 +98,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [696, 1068.0]
+    coordinate: [696, 1124.0]
     rotation: 0
     state: true
 - name: gain_lrdiff
@@ -263,6 +263,23 @@ blocks:
     coordinate: [936, 1764.0]
     rotation: 0
     state: true
+- name: analog_const_source_x_0
+  id: analog_const_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: '0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [32, 1196.0]
+    rotation: 0
+    state: enabled
 - name: analog_fm_preemph_0
   id: analog_fm_preemph
   parameters:
@@ -397,9 +414,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [32, 1188.0]
+    coordinate: [32, 1244.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: band_pass_filter_0
   id: band_pass_filter
   parameters:
@@ -672,7 +689,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [696, 1196.0]
+    coordinate: [696, 1252.0]
     rotation: 0
     state: enabled
 - name: blocks_multiply_xx_0
@@ -1287,7 +1304,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [368, 1172.0]
+    coordinate: [368, 1228.0]
     rotation: 0
     state: true
 - name: rds_encoder_0
@@ -1303,7 +1320,7 @@ blocks:
     pi_country_code: '13'
     pi_coverage_area: '3'
     pi_reference_number: '147'
-    ps: PIRAT 4711
+    ps: PIRAT 17
     pty: '20'
     pty_locale: '0'
     radiotext: SAALFELDEN TESTING
@@ -1672,6 +1689,7 @@ blocks:
     state: true
 
 connections:
+- [analog_const_source_x_0, '0', rational_resampler_xxx_0_0_0_0, '0']
 - [analog_fm_preemph_0, '0', blocks_add_xx_0, '0']
 - [analog_fm_preemph_0, '0', blocks_sub_xx_0, '0']
 - [analog_fm_preemph_0_0, '0', blocks_add_xx_0, '1']

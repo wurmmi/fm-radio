@@ -28,7 +28,6 @@ from gnuradio import qtgui
 from gnuradio.filter import firdes
 import sip
 from gnuradio import analog
-from gnuradio import audio
 from gnuradio import blocks
 from gnuradio import digital
 from gnuradio import filter
@@ -186,7 +185,7 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.uhd_usrp_sink_1.set_bandwidth(200e3, 0)
         self.uhd_usrp_sink_1.set_samp_rate(fs_rf)
         self.uhd_usrp_sink_1.set_time_unknown_pps(uhd.time_spec())
-        self.rds_encoder_0 = rds.encoder(0, 20, True, 'PIRAT 4711', 47.11e6,
+        self.rds_encoder_0 = rds.encoder(0, 20, True, 'PIRAT 17', 47.11e6,
         			True, False, 13, 3,
         			147, 'SAALFELDEN TESTING')
 
@@ -400,18 +399,19 @@ class fm_sender(gr.top_block, Qt.QWidget):
                 2e3,
                 firdes.WIN_HAMMING,
                 6.76))
-        self.audio_source_0 = audio.source(44100, 'pulse_monitor', False)
         self.analog_sig_source_x_0_0 = analog.sig_source_f(fs_mod, analog.GR_COS_WAVE, 19e3, 1, 0, 0)
         self.analog_sig_source_x_0 = analog.sig_source_f(fs_mod, analog.GR_COS_WAVE, 38e3, 1, 0, 0)
         self.analog_frequency_modulator_fc_0 = analog.frequency_modulator_fc(75e3/fs_mod*2*math.pi)
         self.analog_fm_preemph_0_0 = analog.fm_preemph(fs=fs_file, tau=50e-6, fh=-1.0)
         self.analog_fm_preemph_0 = analog.fm_preemph(fs=fs_file, tau=50e-6, fh=-1.0)
+        self.analog_const_source_x_0 = analog.sig_source_f(0, analog.GR_CONST_WAVE, 0, 0, 0)
 
 
 
         ##################################################
         # Connections
         ##################################################
+        self.connect((self.analog_const_source_x_0, 0), (self.rational_resampler_xxx_0_0_0_0, 0))
         self.connect((self.analog_fm_preemph_0, 0), (self.blocks_add_xx_0, 0))
         self.connect((self.analog_fm_preemph_0, 0), (self.blocks_sub_xx_0, 0))
         self.connect((self.analog_fm_preemph_0_0, 0), (self.blocks_add_xx_0, 1))
@@ -420,7 +420,6 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.connect((self.analog_frequency_modulator_fc_0, 0), (self.rational_resampler_xxx_0, 0))
         self.connect((self.analog_sig_source_x_0, 0), (self.blocks_multiply_xx_0, 1))
         self.connect((self.analog_sig_source_x_0_0, 0), (self.blocks_delay_0, 0))
-        self.connect((self.audio_source_0, 0), (self.rational_resampler_xxx_0_0_0_0, 0))
         self.connect((self.band_pass_filter_0, 0), (self.blocks_multiply_const_xx_0_0, 0))
         self.connect((self.band_pass_filter_1, 0), (self.blocks_delay_0_0, 0))
         self.connect((self.band_pass_filter_1_0, 0), (self.blocks_multiply_xx_0, 0))

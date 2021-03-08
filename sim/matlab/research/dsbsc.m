@@ -73,7 +73,7 @@ rx_msg_demod = 2 * tx .* rxCarrier;
 
 % Create filter
 if EnableEqirippleFIR
-    filter_name = sprintf("./lowpass_rx.mat");
+    filter_name = sprintf("./filters/lowpass_rx.mat");
     ripple_pass_dB = 0.1;                % Passband ripple in dB
     ripple_stop_db = 50;                 % Stopband ripple in dB
     cutoff_freqs   = [fmsg*5 fmsg*20];   % Cutoff frequencies
