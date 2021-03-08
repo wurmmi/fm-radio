@@ -26,9 +26,9 @@ if EnableSenderSourceCreateSim
     %% Generate audio stream data
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     if EnableAudioFromFile
-        fs_file = 44.1e3;
+        fs_file = 48e3;
         
-        [fileDataAll,fileFsRead] = audioread('./recordings/wav/left-right-test.wav');
+        [fileDataAll,fileFsRead] = audioread('./recordings/wav/left-right-test_48000.wav');
         if fileFsRead ~= fs_file
             error("Unexpected sample frequency of file!");
         end

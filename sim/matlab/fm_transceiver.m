@@ -34,8 +34,8 @@ dir_filters = "./filters/";
 dir_output  = "./matlab_output/";
 
 % Simulation options
-EnableSenderSourceRecordedFile = true;
-EnableSenderSourceCreateSim    = false;
+EnableSenderSourceRecordedFile = false;
+EnableSenderSourceCreateSim    = true;
 EnableAudioFromFile            = true;
 EnableTrafficInfoTrigger       = false;
 
@@ -47,14 +47,14 @@ EnableFilterAnalyzeGUI = false;
 EnableSavePlotsToPng   = false;
 EnablePlotsLogarithmic = true;
 
-EnableRDSDecoder = true;
+EnableRDSDecoder = false;
 
 % Signal parameters
 n_sec = 1.7;           % 1.7s is "left channel, right channel" in audio file
 osr   = 22;            % oversampling rate for fs
-fs    = 44.1e3 * osr;  % sampling rate fs
+fs    = 48e3 * osr;    % sampling rate fs
 
-phi_pilot = (23+180)*pi/180; % phase shift between local carrier and Rx pilot
+phi_pilot = (-10+180)*pi/180; % phase shift between local carrier and Rx pilot
 
 % Channel
 fc_oe3 = 98.1e4;
@@ -90,7 +90,7 @@ if EnableRxAudioReplay
     rx_audioReplay(:,2) = rx_audio_R;
     
     % Downsample for PC soundcard
-    osr_replay = 5;
+    osr_replay = 6;
     fs_audioReplay = fs_rx/osr_replay;
     rx_audioReplay = resample(rx_audioReplay, 1, osr_replay);
     

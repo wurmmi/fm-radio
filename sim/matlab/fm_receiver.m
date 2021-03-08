@@ -108,8 +108,8 @@ carrier57kHzRx = filter(filter_hp_57k,1, carrier57kHzRx);
 %       to compensate for the HP filter.
 % NOTE: Using a "circshift" as a workaround for now. 
 %       This cannot be done in hardware!
-filt_hp57k_groupdelay = (length(filter_hp_57k)-1)/2;
-carrier57kHzRx = circshift(carrier57kHzRx, -filt_hp57k_groupdelay);
+filter_hp57k_groupdelay = (length(filter_hp_57k)-1)/2;
+carrier57kHzRx = circshift(carrier57kHzRx, -filter_hp57k_groupdelay);
 
 % For test purpose only.
 pilot_local          = cos(2*pi*19e3/fs_rx*tnRx + phi_pilot);
