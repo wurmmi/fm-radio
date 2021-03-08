@@ -55,7 +55,7 @@ rx_fmChannelData = rx_fm_demod;
 
 osr_rx = 4;
 fs_rx  = fs/osr_rx;
-tnRx = (0:1:n_sec*fs_rx-1)';
+tnRx   = (0:1:n_sec*fs_rx-1)';
 
 rx_fmChannelData = resample(rx_fmChannelData, 1, osr_rx);
 

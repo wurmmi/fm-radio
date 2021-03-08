@@ -4,11 +4,14 @@
 % Description : FM-Radio Sender and Receiver
 %-------------------------------------------------------------------------
 
+% TODO: try even lower downsample for fs_rx (compare l-r-test audio)
+%       highest freq = 38k+10, so at only 48*2 for nyquist required
+
+% TODO: implement resample() function 'by hand' (skip samples + lowpass)
+
+% TODO: change/optimize things for better HW implementation
+
 % TODO: draw a block diagram
-
-% TODO: change FM demodulator, for better HW implementation
-
-% TODO: change other things, for better HW implementation
 
 % TODO: find a benchmark to compare against
 
