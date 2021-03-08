@@ -48,7 +48,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '44100'
+    value: '48000'
   states:
     bus_sink: false
     bus_source: false
@@ -176,7 +176,7 @@ blocks:
     start: '0'
     step: '0.05'
     stop: '1'
-    value: '0.3'
+    value: '0.05'
     widget: counter_slider
   states:
     bus_sink: false
@@ -184,11 +184,19 @@ blocks:
     bus_structure: null
     coordinate: [880, 1524.0]
     rotation: 0
-    state: true
+    state: enabled
 - name: n_filter_delay
   id: variable_qtgui_range
   parameters:
-    comment: ''
+    comment: "#####\n (1) Find the code line, where the bp filter is constructed:\n\
+      \n        self.band_pass_filter_0 = filter.fir_filter_fff(\n            1,\n\
+      \            firdes.band_pass(\n                1,\n                fs_mod,\n\
+      \                23e3,\n                53e3,\n                2e3,\n      \
+      \          firdes.WIN_HAMMING,\n                6.76))\n#####\n(2) Add the following\
+      \ lines, to find out the group delay:\n\n        taps = firdes.band_pass(1,\
+      \ self.fs_mod, 23e3, 53e3, 2e3, firdes.WIN_HAMMING, 6.76)\n\n        print(\"\
+      len(taps):  {}\".format(len(taps)))\n        print(\"groupdelay: {}\".format((len(taps)\
+      \ - 1) / 2))"
     gui_hint: 9,0,1,1
     label: n_filter_delay
     min_len: '200'
@@ -197,7 +205,7 @@ blocks:
     start: '0'
     step: '1'
     stop: '400'
-    value: 265//2
+    value: 289//2
     widget: counter_slider
   states:
     bus_sink: false
@@ -222,7 +230,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '10'
+    value: '4'
   states:
     bus_sink: false
     bus_source: false
@@ -409,7 +417,7 @@ blocks:
     minoutbuf: '0'
     num_outputs: '1'
     ok_to_block: 'False'
-    samp_rate: '44100'
+    samp_rate: '48000'
   states:
     bus_sink: false
     bus_source: false
@@ -421,7 +429,7 @@ blocks:
   id: band_pass_filter
   parameters:
     affinity: ''
-    alias: ''
+    alias: filter_bp_lrdiff
     beta: '6.76'
     comment: ''
     decim: '1'
@@ -716,7 +724,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    interp: '92'
+    interp: int(fs_mod/2.375/1000)
     maxoutbuf: '0'
     minoutbuf: '0'
     type: float
@@ -752,7 +760,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    file: ../matlab/recordings/wav/left-right-mix-viera-blech-ehrenwert-polka.wav
+    file: ../matlab/recordings/wav/left-right-mix-viera-blech-ehrenwert-polka_48000.wav
     maxoutbuf: '0'
     minoutbuf: '0'
     nchan: '2'
@@ -1112,7 +1120,7 @@ blocks:
     bus_structure: null
     coordinate: [664, 2208.0]
     rotation: 0
-    state: true
+    state: disabled
 - name: qtgui_freq_sink_x_0_0_0
   id: qtgui_freq_sink_x
   parameters:
@@ -1192,7 +1200,7 @@ blocks:
     bus_structure: null
     coordinate: [936, 2208.0]
     rotation: 0
-    state: true
+    state: disabled
 - name: qtgui_tab_widget_0
   id: qtgui_tab_widget
   parameters:
@@ -1332,7 +1340,7 @@ blocks:
     bus_structure: null
     coordinate: [64, 1388.0]
     rotation: 0
-    state: true
+    state: enabled
 - name: uhd_usrp_sink_1
   id: uhd_usrp_sink
   parameters:
