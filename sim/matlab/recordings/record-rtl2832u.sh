@@ -9,10 +9,10 @@
 # NOTE:
 #   Saalfelden: OE3 98.1 MHz
 
-center_freq=99e6
-sample_freq=970200
+center_freq=98.1e6
+sample_freq=960000
 n_seconds=10
-out_file="./fm_record_fs${sample_freq}_fmsender.bin"
+out_file="./bin/fm_record_fs${sample_freq}.bin"
 
 n_samples=$(( $sample_freq * $n_seconds))
 echo "Recording $n_samples samples @ $sample_freq SPS ($n_seconds seconds)."
