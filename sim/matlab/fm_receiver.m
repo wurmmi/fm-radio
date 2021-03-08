@@ -65,9 +65,9 @@ rx_fmChannelData = resample(rx_fmChannelData, 1, osr_rx);
 
 % Create the bandpass filter
 filter_name = sprintf("%s%s",dir_filters,"bandpass_pilot.mat");
-ripple_pass_dB = 0.1;                       % Passband ripple in dB
-ripple_stop_db = 50;                        % Stopband ripple in dB
-cutoff_freqs   = [17e3 18.5e3 19.5e3 21e3]; % Band frequencies (defined like slopes)
+ripple_pass_dB = 1;                         % Passband ripple in dB
+ripple_stop_db = 40;                        % Stopband ripple in dB
+cutoff_freqs   = [15e3 18.5e3 19.5e3 23e3]; % Band frequencies (defined like slopes)
 
 filter_bp_pilot = getBPfilter( ...
     filter_name, ...
@@ -81,6 +81,11 @@ rx_pilot = filter(filter_bp_pilot,1, rx_fmChannelData);
 % NOTE: Theoretically, the factor should be 10, since the pilot is
 %       transmitted with an amplitude of 10%.
 rx_pilot = rx_pilot * 11;
+
+% Amplify again, if a de-emphasis filter is used.
+if EnableDeEmphasis
+    rx_pilot = rx_pilot * 7;
+end
 
 %% Generate sub-carriers
 
@@ -182,10 +187,10 @@ rx_audio_lrdiff = filter(filter_lp_mono,1, rx_audio_lrdiff_mod);
 % NOTE: The mono signal only needs to pass through a single LP.
 %       The lrdiff signal passed through a BP and a LP. Thus, it needs to
 %       be delayed by the BP's groupdelay, since the LP is the same.
-filt_bp_groupdelay = (length(filter_bp_lrdiff)-1)/2;
+filter_bp_lrdiff_groupdelay = (length(filter_bp_lrdiff)-1)/2;
 
 % Compensate the group delay
-rx_audio_mono = [zeros(filt_bp_groupdelay,1); rx_audio_mono(1:end-filt_bp_groupdelay)];
+rx_audio_mono = [zeros(filter_bp_lrdiff_groupdelay,1); rx_audio_mono(1:end-filter_bp_lrdiff_groupdelay)];
 
 % Compute left and right channel signals
 rx_audio_L = rx_audio_mono + rx_audio_lrdiff;
