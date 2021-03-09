@@ -29,6 +29,7 @@ if isRunningInOctave()
     %xline = @(xval, varargin) line([xval xval], ylim, varargin{:});
     xline = @(xval) line([xval xval], ylim, 'color','black','linestyle','--');
 end
+isIntegerVal = @(x) mod(x, 1) == 0;
 
 %% Settings
 
@@ -37,8 +38,8 @@ dir_filters = "./filters/";
 dir_output  = "./matlab_output/";
 
 % Simulation options
-EnableSenderSourceRecordedFile = true;
-EnableSenderSourceCreateSim    = false;
+EnableSenderSourceRecordedFile = false;
+EnableSenderSourceCreateSim    = true;
 EnableAudioFromFile            = true;
 EnableTrafficInfoTrigger       = false;
 
@@ -53,11 +54,11 @@ EnablePlotsLogarithmic = true;
 EnableRDSDecoder = false;
 
 % Signal parameters
-n_sec = 1.7;           % 1.7s is "left channel, right channel" in audio file
+n_sec = 5;           % 1.7s is "left channel, right channel" in audio file
 osr   = 20;            % oversampling rate for fs
 fs    = 48e3 * osr;    % sampling rate fs
 
-phi_pilot = (0+180)*pi/180; % phase shift between local carrier and Rx pilot
+phi_pilot = (-60)*pi/180; % phase shift between local carrier and Rx pilot
 
 % Channel
 fc_oe3 = 98.1e4;
@@ -93,7 +94,7 @@ if EnableRxAudioReplay
     rx_audioReplay(:,2) = rx_audio_R;
     
     % Downsample for PC soundcard
-    osr_replay = 6;
+    osr_replay = 3;
     fs_audioReplay = fs_rx/osr_replay;
     rx_audioReplay = resample(rx_audioReplay, 1, osr_replay);
     
@@ -400,10 +401,12 @@ fig_rx_time_rds = figure('Name',fig_title);
 hold on;
 plot(tnRx/fs_rx, rx_pilot,             'm',   'DisplayName', 'carrier19kHz (rec.)', 'LineWidth',2);
 plot(tnRx/fs_rx, pilot_local,          'm--', 'DisplayName', 'carrier19kHz (local)');
-plot(tnRx/fs_rx, carrier38kHzRx,       'g',   'DisplayName', 'carrier38kHz (rec.)', 'LineWidth',2);
-plot(tnRx/fs_rx, carrier38kHzRx_local, 'g--', 'DisplayName', 'carrier38kHz (local)');
-plot(tnRx/fs_rx, carrier57kHzRx,       'b',   'DisplayName', 'carrier57kHz (rec.)', 'LineWidth',2);
-plot(tnRx/fs_rx, carrier57kHzRx_local, 'b--', 'DisplayName', 'carrier57kHz (local)');
+plot(tnRx/fs_rx, carrier38kHzRx,       'b',   'DisplayName', 'carrier38kHz (rec.)', 'LineWidth',2);
+plot(tnRx/fs_rx, carrier38kHzRx_local, 'b--', 'DisplayName', 'carrier38kHz (local)');
+if EnableRDSDecoder
+    plot(tnRx/fs_rx, carrier57kHzRx,       'g',   'DisplayName', 'carrier57kHz (rec.)', 'LineWidth',2);
+    plot(tnRx/fs_rx, carrier57kHzRx_local, 'g--', 'DisplayName', 'carrier57kHz (local)');
+end
 grid on;
 title(fig_title);
 xlabel('time [s]');

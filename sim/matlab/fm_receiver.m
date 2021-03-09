@@ -50,14 +50,21 @@ if EnableDeEmphasis
 end
 
 %% Downsample
+% NOTE: This receiver is NOT decoding the RDS stream.
+%       Thus, the highest frequency content is 53kHz (end of LR-Diff band).
+%       Consequently, the sampling frequency only needs to be 53kHz * 2,
+%       according to Nyquist.
 
 rx_fmChannelData = rx_fm_demod;
 
-osr_rx = 4;
+osr_rx = 8;
 fs_rx  = fs/osr_rx;
 tnRx   = (0:1:n_sec*fs_rx-1)';
 
 rx_fmChannelData = resample(rx_fmChannelData, 1, osr_rx);
+
+assert(isIntegerVal(fs_rx), 'Sampling frequency fs_rx must be an integer!');
+assert(fs_rx > 53e3 * 2, 'Sampling frequency fs_rx too low --> Nyquist!');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Recover pilot tone and subcarriers
@@ -77,7 +84,7 @@ filter_bp_pilot = getBPfilter( ...
 % Filter (Bandpass 18.5k..19.5kHz)
 rx_pilot = filter(filter_bp_pilot,1, rx_fmChannelData);
 
-% Amplify 
+% Amplify
 % NOTE: Theoretically, the factor should be 10, since the pilot is
 %       transmitted with an amplitude of 10%.
 rx_pilot = rx_pilot * 11;
@@ -92,29 +99,35 @@ end
 % 38 kHz carrier
 carrier38kHzRx = rx_pilot .* rx_pilot * 2 - 1;
 
-% 57 kHz carrier
-carrier57kHzRx = carrier38kHzRx .* rx_pilot * 2 - 1;
-
-% Create the lowpass filter
-filter_name = sprintf("%s%s",dir_filters,"lowpass_57kHz.mat");
-ripple_pass_dB = 0.1;          % Passband ripple in dB
-ripple_stop_db = 50;           % Stopband ripple in dB
-cutoff_freqs   = [20e3 36e3];  % Cutoff frequencies
-
-filter_hp_57k = getHPfilter( ...
-    filter_name, ...
-    ripple_pass_dB, ripple_stop_db, ...
-    cutoff_freqs, fs_rx, EnableFilterAnalyzeGUI);
-
-% Filter (lowpass 1.5kHz)
-carrier57kHzRx = filter(filter_hp_57k,1, carrier57kHzRx);
-
-% TODO: delay all other carriers and the rx signal (rx_fmChannelData)
-%       to compensate for the HP filter.
-% NOTE: Using a "circshift" as a workaround for now. 
-%       This cannot be done in hardware!
-filter_hp57k_groupdelay = (length(filter_hp_57k)-1)/2;
-carrier57kHzRx = circshift(carrier57kHzRx, -filter_hp57k_groupdelay);
+if EnableRDSDecoder
+    if fs_rx < 57e3 * 2
+        error('Sampling rate fs_rx is too small for the 57kHz carrier! (Nyquist)')
+    end
+    
+    % 57 kHz carrier
+    carrier57kHzRx = carrier38kHzRx .* rx_pilot * 2 - 1;
+    
+    % Create the lowpass filter
+    filter_name = sprintf("%s%s",dir_filters,"lowpass_57kHz.mat");
+    ripple_pass_dB = 0.1;          % Passband ripple in dB
+    ripple_stop_db = 50;           % Stopband ripple in dB
+    cutoff_freqs   = [20e3 36e3];  % Cutoff frequencies
+    
+    filter_hp_57k = getHPfilter( ...
+        filter_name, ...
+        ripple_pass_dB, ripple_stop_db, ...
+        cutoff_freqs, fs_rx, EnableFilterAnalyzeGUI);
+    
+    % Filter (lowpass 1.5kHz)
+    carrier57kHzRx = filter(filter_hp_57k,1, carrier57kHzRx);
+    
+    % TODO: delay all other carriers and the rx signal (rx_fmChannelData)
+    %       to compensate for the HP filter.
+    % NOTE: Using a "circshift" as a workaround for now.
+    %       This cannot be done in hardware!
+    filter_hp57k_groupdelay = (length(filter_hp_57k)-1)/2;
+    carrier57kHzRx = circshift(carrier57kHzRx, -filter_hp57k_groupdelay);
+end
 
 % For test purpose only.
 pilot_local          = cos(2*pi*19e3/fs_rx*tnRx + phi_pilot);
