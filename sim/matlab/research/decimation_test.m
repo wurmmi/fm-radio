@@ -1,5 +1,5 @@
 %-------------------------------------------------------------------------
-% File        : decimation.m
+% File        : decimation_test.m
 % Author      : Michael Wurm <wurm.michael95@gmail.com>
 % Description : Testing different ways for downsampling/decimation.
 %-------------------------------------------------------------------------
@@ -62,9 +62,11 @@ y2_man = y2_man_filt(1:osr:end);
 %=========================================================================
 %% Analysis
 
-fprintf("norm resample-decimate : %.3f\n", norm(y0_res - y1_dec));
-fprintf("norm resample-own      : %.3f\n", norm(y0_res - y2_man));
-fprintf("norm decimate-own      : %.3f\n", norm(y1_dec - y2_man));
+skip_end = 3;
+
+fprintf("norm resample-decimate : %.3f\n", norm(y0_res(1:end-skip_end) - y1_dec(1:end-skip_end)));
+fprintf("norm own-resample      : %.3f\n", norm(y0_res(1:end-skip_end) - y2_man(1:end-skip_end)));
+fprintf("norm own-decimate      : %.3f\n", norm(y1_dec(1:end-skip_end) - y2_man(1:end-skip_end)));
 
 fig_title = 'Time domain signal';
 fig_time = figure('Name', fig_title);

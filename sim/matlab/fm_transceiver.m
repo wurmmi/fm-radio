@@ -4,10 +4,7 @@
 % Description : FM-Radio Sender and Receiver
 %-------------------------------------------------------------------------
 
-% TODO: try even lower downsample for fs_rx (compare l-r-test audio)
-%       highest freq = 38k+10, so at only 48*2 for nyquist required
-
-% TODO: implement resample() function 'by hand' (skip samples + lowpass)
+% TODO: make everything fixed point
 
 % TODO: change/optimize things for better HW implementation
 
@@ -29,7 +26,6 @@ if isRunningInOctave()
     %xline = @(xval, varargin) line([xval xval], ylim, varargin{:});
     xline = @(xval) line([xval xval], ylim, 'color','black','linestyle','--');
 end
-isIntegerVal = @(x) mod(x, 1) == 0;
 
 %% Settings
 
@@ -43,18 +39,19 @@ EnableSenderSourceCreateSim    = true;
 EnableAudioFromFile            = true;
 EnableTrafficInfoTrigger       = false;
 
-EnablePreEmphasis = false;
-EnableDeEmphasis  = false;
-
 EnableRxAudioReplay    = true;
 EnableFilterAnalyzeGUI = false;
 EnableSavePlotsToPng   = false;
 EnablePlotsLogarithmic = true;
 
-EnableRDSDecoder = false;
+% Signal processing options
+EnablePreEmphasis      = false;
+EnableDeEmphasis       = false;
+EnableManualDecimation = true;
+EnableRDSDecoder       = false;
 
 % Signal parameters
-n_sec = 5;           % 1.7s is "left channel, right channel" in audio file
+n_sec = 1.7;           % 1.7s is "left channel, right channel" in audio file
 osr   = 20;            % oversampling rate for fs
 fs    = 48e3 * osr;    % sampling rate fs
 

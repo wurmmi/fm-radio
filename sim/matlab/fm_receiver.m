@@ -55,16 +55,14 @@ end
 %       Consequently, the sampling frequency only needs to be 53kHz * 2,
 %       according to Nyquist.
 
-rx_fmChannelData = rx_fm_demod;
-
 osr_rx = 8;
 fs_rx  = fs/osr_rx;
 tnRx   = (0:1:n_sec*fs_rx-1)';
 
-rx_fmChannelData = resample(rx_fmChannelData, 1, osr_rx);
-
 assert(isIntegerVal(fs_rx), 'Sampling frequency fs_rx must be an integer!');
-assert(fs_rx > 53e3 * 2, 'Sampling frequency fs_rx too low --> Nyquist!');
+assert(fs_rx > 53e3 * 2,    'Sampling frequency fs_rx too low --> Nyquist!');
+
+rx_fmChannelData = calcDecimation(rx_fm_demod, osr_rx, EnableManualDecimation);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Recover pilot tone and subcarriers

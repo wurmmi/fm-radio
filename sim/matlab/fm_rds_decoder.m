@@ -15,6 +15,11 @@
 
 disp('-- RDS Decoder');
 
+%% Sanity checks
+
+% 61 kHz is the highest frequency content in the RDS band
+assert(fs_rx > 61e3 * 2, 'Sampling frequency fs_rx too low --> Nyquist!');
+
 %% Modulate down to baseband
 
 % Create the bandpass filter
@@ -37,7 +42,9 @@ rx_rds_mod = 2 * rx_rds .* carrier57kHzRx;
 % Downsample
 osr_rds = 5;
 fs_rds = fs_rx/osr_rds;
-rx_rds_mod = resample(rx_rds_mod, 1, osr_rds);
+
+rx_rds_mod = calcDecimation(rx_rds_mod, osr_rds, EnableManualDecimation);
+
 tnRDS = (0:1:n_sec*fs_rds-1)';
 
 % Create the lowpass filter
