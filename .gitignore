@@ -7,3 +7,7 @@
 # Matlab
 *.asv
 matlab_output/
+*.txt
+
+# Python
+__pycache__

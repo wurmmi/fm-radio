@@ -4,17 +4,11 @@
 % Description : FM-Radio Sender and Receiver
 %-------------------------------------------------------------------------
 
-% TODO: check RX spectrum.. looks fishy - where does the 57k come from??
-%        - 19khz + 38 = 57 (--> better bp filter!)
+% TODO: make everything fixed point
 
-% TODO: find integer osr for entire system
+% TODO: change/optimize things for better HW implementation
 
-%TODO: find places, where power is attenuated --> Tx and Rx should be equal
-%      --> only amplify at a single place (at the receiver input)
-
-% TODO: change FM demodulator, for better HW implementation
-
-% TODO: change other things, for better HW implementation
+% TODO: draw a block diagram
 
 % TODO: find a benchmark to compare against
 
@@ -36,7 +30,7 @@ end
 %% Settings
 
 % Paths
-dir_filters = "./filters/";
+dir_filters = "./filters/stored/";
 dir_output  = "./matlab_output/";
 
 % Simulation options
@@ -45,22 +39,30 @@ EnableSenderSourceCreateSim    = true;
 EnableAudioFromFile            = true;
 EnableTrafficInfoTrigger       = false;
 
-EnablePreEmphasis = false;
-EnableDeEmphasis  = false;
-
 EnableRxAudioReplay    = true;
 EnableFilterAnalyzeGUI = false;
 EnableSavePlotsToPng   = false;
 EnablePlotsLogarithmic = true;
 
+% Signal processing options
+EnablePreEmphasis      = false;
+EnableDeEmphasis       = false;
+EnableManualDecimation = true;
+EnableRDSDecoder       = false;
+
 % Signal parameters
 n_sec = 1.7;           % 1.7s is "left channel, right channel" in audio file
-osr   = 22;            % oversampling rate for fs
-fs    = 44.1e3 * osr;  % sampling rate fs
+osr   = 20;            % oversampling rate for fs
+fs    = 48e3 * osr;    % sampling rate fs
+
+phi_pilot = (-60)*pi/180; % phase shift between local carrier and Rx pilot
 
 % Channel
 fc_oe3 = 98.1e4;
 
+%% Sanity checks
+assert( not(EnableRDSDecoder && EnableSenderSourceRecordedFile == false), ...
+    'Settings Error: RDS decoder only works with binary file data. (Simulator does not generate RDS!)')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Sender
@@ -68,14 +70,14 @@ fc_oe3 = 98.1e4;
 
 fm_sender();
 
-% TODO
-%fm_sender_fixed_point();
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Receiver
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 fm_receiver();
+
+% TODO: implement an implementation that is suitable for hardware
+% fm_receiver_fixed_point();
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Audio replay
@@ -89,7 +91,7 @@ if EnableRxAudioReplay
     rx_audioReplay(:,2) = rx_audio_R;
     
     % Downsample for PC soundcard
-    osr_replay = 5;
+    osr_replay = 3;
     fs_audioReplay = fs_rx/osr_replay;
     rx_audioReplay = resample(rx_audioReplay, 1, osr_replay);
     
@@ -147,6 +149,23 @@ window      = hanning(welch_size);
 [psxx_rx_lrdiff_bpfilt, psxx_rx_lrdiff_bpfilt_f] = pwelch(rx_audio_lrdiff_bpfilt, window, n_overlap, n_fft_welch, fs_rx);
 [psxx_rx_lrdiff_mod, psxx_rx_lrdiff_mod_f]       = pwelch(rx_audio_lrdiff_mod, window, n_overlap, n_fft_welch, fs_rx);
 [psxx_rx_lrdiff, psxx_rx_lrdiff_f]               = pwelch(rx_audio_lrdiff, window, n_overlap, n_fft_welch, fs_rx);
+if EnableRDSDecoder
+    [psxx_rx_rds, psxx_rx_rds_f]                 = pwelch(rx_rds, window, n_overlap, n_fft_welch, fs_rx);
+end
+
+% fs_rds domain %%%%%%%%%%%%%%%%%%%%%
+if EnableRDSDecoder
+    welch_size  = length(rx_rds_mod);
+    n_overlap   = welch_size / 4;
+    if isRunningInOctave()
+        n_overlap = 1/4;
+    end
+    n_fft_welch = welch_size;
+    window      = hanning(welch_size);
+    
+    [psxx_rx_rds_mod, psxx_rx_rds_mod_f] = pwelch(rx_rds_mod, window, n_overlap, n_fft_welch, fs_rds);
+    [psxx_rx_rds_bb, psxx_rx_rds_bb_f]   = pwelch(rx_rds_bb, window, n_overlap, n_fft_welch, fs_rds);
+end
 
 % fs_mod domain %%%%%%%%%%%%%%%%%%%%%
 if EnableSenderSourceCreateSim
@@ -164,7 +183,7 @@ end
 % Calc logarithmus
 if EnablePlotsLogarithmic
     if EnableSenderSourceCreateSim
-        psxx_tx_fmChannelData = 10*log10(psxx_tx_fmChannelData);    
+        psxx_tx_fmChannelData = 10*log10(psxx_tx_fmChannelData);
         psxx_rx_fm            = 10*log10(psxx_rx_fm);
     end
     psxx_rx_fm_bb         = 10*log10(psxx_rx_fm_bb);
@@ -173,6 +192,11 @@ if EnablePlotsLogarithmic
     psxx_rx_lrdiff_bpfilt = 10*log10(psxx_rx_lrdiff_bpfilt);
     psxx_rx_lrdiff_mod    = 10*log10(psxx_rx_lrdiff_mod);
     psxx_rx_lrdiff        = 10*log10(psxx_rx_lrdiff);
+    if EnableRDSDecoder
+        psxx_rx_rds           = 10*log10(psxx_rx_rds);
+        psxx_rx_rds_mod       = 10*log10(psxx_rx_rds_mod);
+        psxx_rx_rds_bb        = 10*log10(psxx_rx_rds_bb);
+    end
 end
 
 %% Plots
@@ -181,6 +205,8 @@ disp('-- Plots');
 fig_title = 'Time domain signal';
 fig_audio_time = figure('Name',fig_title);
 title(fig_title);
+ax1='';
+ax2='';
 if EnableSenderSourceCreateSim
     ax1 = subplot(6,1,1);
     plot(tn/fs, audioDataL, 'r', 'DisplayName', 'audioDataL');
@@ -345,10 +371,49 @@ if EnableSavePlotsToPng
     saveas(fig_rx_spec, sprintf("%s%s",dir_output, "psd_rx_parts.png"));
 end
 
+if EnableRDSDecoder
+    fig_title = 'Rx RDS spectrum parts';
+    fig_rx_spec_rds = figure('Name',fig_title);
+    hold on;
+    xline(19e3,'k--','19 kHz');
+    xline(38e3,'k--','38 kHz');
+    xline(57e3,'k--','57 kHz');
+    xline(57e3/48,'k--','1187.5 Hz');
+    h0 = plot(psxx_rx_rds_f, psxx_rx_rds,         'b','DisplayName', 'RDS');
+    h1 = plot(psxx_rx_rds_mod_f, psxx_rx_rds_mod, 'r','DisplayName', 'RDS BB Mod');
+    h2 = plot(psxx_rx_rds_bb_f, psxx_rx_rds_bb,   'g','DisplayName', 'RDS BB Filtered');
+    grid on;
+    title(fig_title);
+    xlabel('frequency [Hz]');
+    ylabel('magnitude');
+    legend([h0,h1,h2],'Location','east');
+    xlim([0 70e3]);
+    if EnableSavePlotsToPng
+        saveas(fig_rx_spec_rds, sprintf("%s%s",dir_output, "psd_rx_rds_parts.png"));
+    end
+end
+
+fig_title = 'Carrier phase recovery';
+fig_rx_time_rds = figure('Name',fig_title);
+hold on;
+plot(tnRx/fs_rx, rx_pilot,             'm',   'DisplayName', 'carrier19kHz (rec.)', 'LineWidth',2);
+plot(tnRx/fs_rx, pilot_local,          'm--', 'DisplayName', 'carrier19kHz (local)');
+plot(tnRx/fs_rx, carrier38kHzRx,       'b',   'DisplayName', 'carrier38kHz (rec.)', 'LineWidth',2);
+plot(tnRx/fs_rx, carrier38kHzRx_local, 'b--', 'DisplayName', 'carrier38kHz (local)');
+if EnableRDSDecoder
+    plot(tnRx/fs_rx, carrier57kHzRx,       'g',   'DisplayName', 'carrier57kHz (rec.)', 'LineWidth',2);
+    plot(tnRx/fs_rx, carrier57kHzRx_local, 'g--', 'DisplayName', 'carrier57kHz (local)');
+end
+grid on;
+title(fig_title);
+xlabel('time [s]');
+ylabel('amplitude');
+legend();
+xlim([0.1, 0.1 + 1/19e3*2]);
 
 %% Arrange all plots on the display
 if ~isRunningInOctave()
-    autoArrangeFigures(2,3,2);
+    autoArrangeFigures(3,2,2);
 end
 
 disp('Done.');

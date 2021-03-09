@@ -26,9 +26,9 @@ if EnableSenderSourceCreateSim
     %% Generate audio stream data
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     if EnableAudioFromFile
-        fs_file = 44.1e3;
+        fs_file = 48e3;
         
-        [fileDataAll,fileFsRead] = audioread('./recordings/left-right-test.wav');
+        [fileDataAll,fileFsRead] = audioread('./recordings/wav/left-right-test_48000.wav');
         if fileFsRead ~= fs_file
             error("Unexpected sample frequency of file!");
         end
@@ -87,8 +87,8 @@ if EnableSenderSourceCreateSim
         hinz_duration_off_s = 0.5;
         
         % Create the 123 Hz Hinz Triller tone and integrate it (for FM modulation)
-        t_hinz = (0:1:min(hinz_duration_off_s,n_sec)*fs-1)';
-        hinz_tone = sin(2*pi*f_deviation/fs*t_hinz);
+        t_hinz        = (0:1:min(hinz_duration_off_s,n_sec)*fs-1)';
+        hinz_tone     = sin(2*pi*f_deviation/fs*t_hinz);
         hinz_tone_int = cumsum(hinz_tone)/fs;
         
         % FM modulation (with zero padding at the end, to match signal duration)
@@ -103,7 +103,7 @@ if EnableSenderSourceCreateSim
         0.9 * (audioDataMono/2 + audioLRDiffMod/2) + ...
         0.1 * pilotTone + ...
         1/16 * hinz_triller;
-
+    
     %fmChannelData = ...
     %    1.00 * audioDataMono + ...
     %    0.25 * pilotTone + ...
@@ -119,7 +119,7 @@ if EnableSenderSourceCreateSim
         disp('-- Pre-emphasis');
         % Create pre-emphasis filter
         filter_pre_emphasis = getEmphasisFilter(fs, 'pre', EnableFilterAnalyzeGUI);
-
+        
         % Filter
         fmChannelData = filter(filter_pre_emphasis.Num, filter_pre_emphasis.Denum, fmChannelData);
     end
@@ -128,7 +128,7 @@ if EnableSenderSourceCreateSim
     %% FM Modulator
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     disp('-- FM modulator');
-
+    
     % Upsample
     osr_mod = 10;
     fmChannelDataUp = resample(fmChannelData, osr_mod, 1);
@@ -158,33 +158,26 @@ if EnableSenderSourceCreateSim
     % -- ADC: sample with fs
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     disp('-- Complex IQ mixer');
-
+    
     % Receive
     rx_fm = tx_fm_awgn;
     
     % Complex baseband mixer
-    rx_fm_i  = rx_fm .*  cos(2*pi*fc_oe3/fs_mod*tn_mod);
-    rx_fm_q  = rx_fm .* -sin(2*pi*fc_oe3/fs_mod*tn_mod);
+    rx_fm_i  = 2 * rx_fm .*  cos(2*pi*fc_oe3/fs_mod*tn_mod);
+    rx_fm_q  = 2 * rx_fm .* -sin(2*pi*fc_oe3/fs_mod*tn_mod);
     
     rx_fm_bb = rx_fm_i + 1j * rx_fm_q;
     
     % Lowpass filter (for spectral replicas)
     filter_name = sprintf("%s%s",dir_filters,"lowpass_iq_mixer.mat");
-    if isRunningInOctave()
-        disp("Running in GNU Octave - loading lowpass filter from folder!");
-        filter_lp_mixer = load(filter_name);
-    else
-        ripple_pass_dB = 0.1;           % Passband ripple in dB
-        ripple_stop_db = 50;            % Stopband ripple in dB
-        cutoff_freqs   = [120e3 250e3]; % Cutoff frequencies
-        
-        filter_lp_mixer = getLPfilter(  ...
-            ripple_pass_dB, ripple_stop_db,  ...
-            cutoff_freqs, fs_mod, EnableFilterAnalyzeGUI);
-        
-        % Save the filter coefficients
-        save(filter_name,'filter_lp_mixer','-ascii');
-    end
+    ripple_pass_dB = 0.1;           % Passband ripple in dB
+    ripple_stop_db = 50;            % Stopband ripple in dB
+    cutoff_freqs   = [120e3 250e3]; % Cutoff frequencies
+    
+    filter_lp_mixer = getLPfilter(  ...
+        filter_name, ...
+        ripple_pass_dB, ripple_stop_db,  ...
+        cutoff_freqs, fs_mod, EnableFilterAnalyzeGUI);
     
     % Filter
     rx_fm_bb = filter(filter_lp_mixer,1, rx_fm_bb);
@@ -194,7 +187,7 @@ if EnableSenderSourceCreateSim
 elseif EnableSenderSourceRecordedFile
     disp('-- Loading FM data stream');
     
-    filename = sprintf("./recordings/fm_record_fs%d.bin",fs);
+    filename = sprintf("./recordings/bin/fm_record_fs%d.bin",fs);
     rx_fm_bb = loadIQFile(filename);
     fprintf("filename: %s", filename);
     

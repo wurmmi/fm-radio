@@ -7,6 +7,7 @@
 # GNU Radio Python Flow Graph
 # Title: FM Sender
 # Author: Michael Wurm <wurm.michael95@gmail.com>
+# Copyright: (C) M. Wurm 2021
 # Description: FM Sender, using USRP.
 # GNU Radio version: 3.8.2.0
 
@@ -27,7 +28,9 @@ from gnuradio import qtgui
 from gnuradio.filter import firdes
 import sip
 from gnuradio import analog
+from gnuradio import audio
 from gnuradio import blocks
+from gnuradio import digital
 from gnuradio import filter
 from gnuradio import gr
 import sys
@@ -38,6 +41,9 @@ from gnuradio import eng_notation
 from gnuradio import uhd
 import time
 from gnuradio.qtgui import Range, RangeWidget
+import goto_pwd_module  # embedded python module
+import math
+import rds
 
 from gnuradio import qtgui
 
@@ -77,14 +83,17 @@ class fm_sender(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
-        self.osr_rf = osr_rf = 10
+        self.osr_rf = osr_rf = 4
         self.osr_mod = osr_mod = 5
-        self.fs_file = fs_file = 44100
+        self.fs_file = fs_file = 48000
         self.tx_gain_db = tx_gain_db = 0.8
-        self.n_filter_delay = n_filter_delay = 265//2
+        self.outbuffer = outbuffer = 10
+        self.n_filter_delay = n_filter_delay = 289//2
+        self.gain_rds = gain_rds = 0.05
         self.gain_pilot = gain_pilot = 0.05
-        self.gain_mono = gain_mono = 0.2
-        self.gain_lrdiff = gain_lrdiff = 0.6
+        self.gain_mono = gain_mono = 0.3
+        self.gain_lrdiff = gain_lrdiff = 0.5
+        self.gain_hinz = gain_hinz = 0.05
         self.fs_rf = fs_rf = fs_file*osr_mod*osr_rf
         self.fs_mod = fs_mod = fs_file*osr_mod
         self.fc_pirate = fc_pirate = 99e6
@@ -115,15 +124,22 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.qtgui_tab_widget_0_grid_layout_2 = Qt.QGridLayout()
         self.qtgui_tab_widget_0_layout_2.addLayout(self.qtgui_tab_widget_0_grid_layout_2)
         self.qtgui_tab_widget_0.addTab(self.qtgui_tab_widget_0_widget_2, 'Tab 2')
-        self.top_grid_layout.addWidget(self.qtgui_tab_widget_0, 4, 0, 1, 1)
-        for r in range(4, 5):
+        self.top_grid_layout.addWidget(self.qtgui_tab_widget_0, 5, 0, 1, 1)
+        for r in range(5, 6):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 1):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self._n_filter_delay_range = Range(0, 400, 1, 265//2, 200)
+        self._n_filter_delay_range = Range(0, 400, 1, 289//2, 200)
         self._n_filter_delay_win = RangeWidget(self._n_filter_delay_range, self.set_n_filter_delay, 'n_filter_delay', "counter_slider", int)
-        self.top_grid_layout.addWidget(self._n_filter_delay_win, 5, 0, 1, 1)
-        for r in range(5, 6):
+        self.top_grid_layout.addWidget(self._n_filter_delay_win, 9, 0, 1, 1)
+        for r in range(9, 10):
+            self.top_grid_layout.setRowStretch(r, 1)
+        for c in range(0, 1):
+            self.top_grid_layout.setColumnStretch(c, 1)
+        self._gain_rds_range = Range(0, 1, 0.05, 0.05, 200)
+        self._gain_rds_win = RangeWidget(self._gain_rds_range, self.set_gain_rds, 'gain_rds', "counter_slider", float)
+        self.top_grid_layout.addWidget(self._gain_rds_win, 8, 0, 1, 1)
+        for r in range(8, 9):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 1):
             self.top_grid_layout.setColumnStretch(c, 1)
@@ -134,17 +150,24 @@ class fm_sender(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 1):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self._gain_mono_range = Range(0, 1, 0.05, 0.2, 200)
+        self._gain_mono_range = Range(0, 1, 0.05, 0.3, 200)
         self._gain_mono_win = RangeWidget(self._gain_mono_range, self.set_gain_mono, 'gain_mono', "counter_slider", float)
         self.top_grid_layout.addWidget(self._gain_mono_win, 1, 0, 1, 1)
         for r in range(1, 2):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 1):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self._gain_lrdiff_range = Range(0, 1, 0.05, 0.6, 200)
+        self._gain_lrdiff_range = Range(0, 1, 0.05, 0.5, 200)
         self._gain_lrdiff_win = RangeWidget(self._gain_lrdiff_range, self.set_gain_lrdiff, 'gain_lrdiff', "counter_slider", float)
         self.top_grid_layout.addWidget(self._gain_lrdiff_win, 2, 0, 1, 1)
         for r in range(2, 3):
+            self.top_grid_layout.setRowStretch(r, 1)
+        for c in range(0, 1):
+            self.top_grid_layout.setColumnStretch(c, 1)
+        self._gain_hinz_range = Range(0, 0.5, 0.05, 0.05, 200)
+        self._gain_hinz_win = RangeWidget(self._gain_hinz_range, self.set_gain_hinz, 'gain_hinz', "counter_slider", float)
+        self.top_grid_layout.addWidget(self._gain_hinz_win, 4, 0, 1, 1)
+        for r in range(4, 5):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 1):
             self.top_grid_layout.setColumnStretch(c, 1)
@@ -160,9 +183,18 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.uhd_usrp_sink_1.set_center_freq(fc_pirate, 0)
         self.uhd_usrp_sink_1.set_normalized_gain(tx_gain_db, 0)
         self.uhd_usrp_sink_1.set_antenna('TX/RX', 0)
-        self.uhd_usrp_sink_1.set_bandwidth(500e3, 0)
+        self.uhd_usrp_sink_1.set_bandwidth(200e3, 0)
         self.uhd_usrp_sink_1.set_samp_rate(fs_rf)
         self.uhd_usrp_sink_1.set_time_unknown_pps(uhd.time_spec())
+        self.rds_encoder_0 = rds.encoder(0, 20, True, 'PIRAT 17', 47.11e6,
+        			True, False, 13, 3,
+        			147, 'SAALFELDEN TESTING')
+
+        self.rational_resampler_xxx_0_0_0_0 = filter.rational_resampler_fff(
+                interpolation=osr_mod,
+                decimation=1,
+                taps=None,
+                fractional_bw=None)
         self.rational_resampler_xxx_0_0_0 = filter.rational_resampler_fff(
                 interpolation=osr_mod,
                 decimation=1,
@@ -178,86 +210,6 @@ class fm_sender(gr.top_block, Qt.QWidget):
                 decimation=1,
                 taps=None,
                 fractional_bw=None)
-        self.qtgui_freq_sink_x_0_0_0 = qtgui.freq_sink_c(
-            8092, #size
-            firdes.WIN_BLACKMAN_hARRIS, #wintype
-            fc_pirate, #fc
-            fs_rf, #bw
-            "tx_fm_mod", #name
-            1
-        )
-        self.qtgui_freq_sink_x_0_0_0.set_update_time(0.10)
-        self.qtgui_freq_sink_x_0_0_0.set_y_axis(-140, 10)
-        self.qtgui_freq_sink_x_0_0_0.set_y_label('Relative Gain', 'dB')
-        self.qtgui_freq_sink_x_0_0_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, 0.0, 0, "")
-        self.qtgui_freq_sink_x_0_0_0.enable_autoscale(False)
-        self.qtgui_freq_sink_x_0_0_0.enable_grid(True)
-        self.qtgui_freq_sink_x_0_0_0.set_fft_average(0.2)
-        self.qtgui_freq_sink_x_0_0_0.enable_axis_labels(True)
-        self.qtgui_freq_sink_x_0_0_0.enable_control_panel(False)
-
-
-
-        labels = ['', '', '', '', '',
-            '', '', '', '', '']
-        widths = [1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1]
-        colors = ["blue", "red", "green", "black", "cyan",
-            "magenta", "yellow", "dark red", "dark green", "dark blue"]
-        alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
-            1.0, 1.0, 1.0, 1.0, 1.0]
-
-        for i in range(1):
-            if len(labels[i]) == 0:
-                self.qtgui_freq_sink_x_0_0_0.set_line_label(i, "Data {0}".format(i))
-            else:
-                self.qtgui_freq_sink_x_0_0_0.set_line_label(i, labels[i])
-            self.qtgui_freq_sink_x_0_0_0.set_line_width(i, widths[i])
-            self.qtgui_freq_sink_x_0_0_0.set_line_color(i, colors[i])
-            self.qtgui_freq_sink_x_0_0_0.set_line_alpha(i, alphas[i])
-
-        self._qtgui_freq_sink_x_0_0_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0_0_0.pyqwidget(), Qt.QWidget)
-        self.qtgui_tab_widget_0_layout_2.addWidget(self._qtgui_freq_sink_x_0_0_0_win)
-        self.qtgui_freq_sink_x_0_0 = qtgui.freq_sink_c(
-            4096, #size
-            firdes.WIN_BLACKMAN_hARRIS, #wintype
-            0, #fc
-            fs_mod, #bw
-            "tx_fm_bb", #name
-            1
-        )
-        self.qtgui_freq_sink_x_0_0.set_update_time(0.10)
-        self.qtgui_freq_sink_x_0_0.set_y_axis(-140, 10)
-        self.qtgui_freq_sink_x_0_0.set_y_label('Relative Gain', 'dB')
-        self.qtgui_freq_sink_x_0_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, 0.0, 0, "")
-        self.qtgui_freq_sink_x_0_0.enable_autoscale(False)
-        self.qtgui_freq_sink_x_0_0.enable_grid(True)
-        self.qtgui_freq_sink_x_0_0.set_fft_average(0.2)
-        self.qtgui_freq_sink_x_0_0.enable_axis_labels(True)
-        self.qtgui_freq_sink_x_0_0.enable_control_panel(False)
-
-
-
-        labels = ['', '', '', '', '',
-            '', '', '', '', '']
-        widths = [1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1]
-        colors = ["blue", "red", "green", "black", "cyan",
-            "magenta", "yellow", "dark red", "dark green", "dark blue"]
-        alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
-            1.0, 1.0, 1.0, 1.0, 1.0]
-
-        for i in range(1):
-            if len(labels[i]) == 0:
-                self.qtgui_freq_sink_x_0_0.set_line_label(i, "Data {0}".format(i))
-            else:
-                self.qtgui_freq_sink_x_0_0.set_line_label(i, labels[i])
-            self.qtgui_freq_sink_x_0_0.set_line_width(i, widths[i])
-            self.qtgui_freq_sink_x_0_0.set_line_color(i, colors[i])
-            self.qtgui_freq_sink_x_0_0.set_line_alpha(i, alphas[i])
-
-        self._qtgui_freq_sink_x_0_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0_0.pyqwidget(), Qt.QWidget)
-        self.qtgui_tab_widget_0_layout_1.addWidget(self._qtgui_freq_sink_x_0_0_win)
         self.qtgui_freq_sink_x_0 = qtgui.freq_sink_f(
             4096*2, #size
             firdes.WIN_BLACKMAN_hARRIS, #wintype
@@ -299,16 +251,40 @@ class fm_sender(gr.top_block, Qt.QWidget):
 
         self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.pyqwidget(), Qt.QWidget)
         self.qtgui_tab_widget_0_layout_0.addWidget(self._qtgui_freq_sink_x_0_win)
-        self.blocks_wavfile_source_0 = blocks.wavfile_source('/home/mike/work/fm-radio/sim/matlab/recordings/left-right-test.wav', True)
+        self.low_pass_filter_0 = filter.interp_fir_filter_fff(
+            1,
+            firdes.low_pass(
+                1,
+                fs_mod,
+                2.5e3,
+                .5e3,
+                firdes.WIN_HAMMING,
+                6.76))
+        self.low_pass_filter_0.set_max_output_buffer(10)
+        self.gr_unpack_k_bits_bb_0 = blocks.unpack_k_bits_bb(2)
+        self.gr_unpack_k_bits_bb_0.set_max_output_buffer(10)
+        self.gr_sig_source_x_0_0 = analog.sig_source_f(fs_mod, analog.GR_COS_WAVE, 57e3, 1, 0, 0)
+        self.gr_multiply_xx_0 = blocks.multiply_vff(1)
+        self.gr_multiply_xx_0.set_max_output_buffer(10)
+        self.gr_map_bb_1 = digital.map_bb([1,2])
+        self.gr_map_bb_1.set_max_output_buffer(10)
+        self.gr_map_bb_0 = digital.map_bb([-1,1])
+        self.gr_map_bb_0.set_max_output_buffer(10)
+        self.gr_diff_encoder_bb_0 = digital.diff_encoder_bb(2)
+        self.gr_diff_encoder_bb_0.set_max_output_buffer(10)
+        self.gr_char_to_float_0 = blocks.char_to_float(1, 1)
+        self.gr_char_to_float_0.set_max_output_buffer(10)
         self.blocks_sub_xx_0 = blocks.sub_ff(1)
+        self.blocks_repeat_0 = blocks.repeat(gr.sizeof_float*1, int(fs_mod/2.375/1000))
         self.blocks_multiply_xx_0 = blocks.multiply_vff(1)
-        self.blocks_multiply_const_xx_1 = blocks.multiply_const_ff(1, 1)
-        self.blocks_multiply_const_xx_0_1_0 = blocks.multiply_const_ff(1, 1)
-        self.blocks_multiply_const_xx_0_1 = blocks.multiply_const_ff(1, 1)
-        self.blocks_multiply_const_xx_0_0_1 = blocks.multiply_const_cc(1, 1)
+        self.blocks_multiply_const_xx_0_2 = blocks.multiply_const_ff(gain_hinz, 1)
         self.blocks_multiply_const_xx_0_0_0 = blocks.multiply_const_ff(gain_pilot, 1)
         self.blocks_multiply_const_xx_0_0 = blocks.multiply_const_ff(gain_lrdiff, 1)
         self.blocks_multiply_const_xx_0 = blocks.multiply_const_ff(gain_mono, 1)
+        self.blocks_multiply_const_vxx_0_1 = blocks.multiply_const_ff(1)
+        self.blocks_multiply_const_vxx_0_0 = blocks.multiply_const_ff(gain_rds)
+        self.blocks_multiply_const_vxx_0_0.set_max_output_buffer(10)
+        self.blocks_multiply_const_vxx_0 = blocks.multiply_const_ff(1)
         self.blocks_delay_0_0 = blocks.delay(gr.sizeof_float*1, n_filter_delay)
         self.blocks_delay_0 = blocks.delay(gr.sizeof_float*1, n_filter_delay)
         self.blocks_add_xx_0_0 = blocks.add_vff(1)
@@ -343,48 +319,61 @@ class fm_sender(gr.top_block, Qt.QWidget):
                 2e3,
                 firdes.WIN_HAMMING,
                 6.76))
+        self.band_pass_filter_0.set_block_alias("filter_bp_lrdiff")
+        self.audio_source_0_0 = audio.source(48000, 'pulse_monitor', False)
         self.analog_sig_source_x_0_0 = analog.sig_source_f(fs_mod, analog.GR_COS_WAVE, 19e3, 1, 0, 0)
         self.analog_sig_source_x_0 = analog.sig_source_f(fs_mod, analog.GR_COS_WAVE, 38e3, 1, 0, 0)
-        self.analog_frequency_modulator_fc_0 = analog.frequency_modulator_fc(75e3/fs_mod*2*3.1415926)
+        self.analog_frequency_modulator_fc_0 = analog.frequency_modulator_fc(75e3/fs_mod*2*math.pi)
         self.analog_fm_preemph_0_0 = analog.fm_preemph(fs=fs_file, tau=50e-6, fh=-1.0)
         self.analog_fm_preemph_0 = analog.fm_preemph(fs=fs_file, tau=50e-6, fh=-1.0)
+        self.analog_const_source_x_0 = analog.sig_source_f(0, analog.GR_CONST_WAVE, 0, 0, 0)
 
 
 
         ##################################################
         # Connections
         ##################################################
+        self.connect((self.analog_const_source_x_0, 0), (self.rational_resampler_xxx_0_0_0_0, 0))
         self.connect((self.analog_fm_preemph_0, 0), (self.blocks_add_xx_0, 0))
         self.connect((self.analog_fm_preemph_0, 0), (self.blocks_sub_xx_0, 0))
         self.connect((self.analog_fm_preemph_0_0, 0), (self.blocks_add_xx_0, 1))
         self.connect((self.analog_fm_preemph_0_0, 0), (self.blocks_sub_xx_0, 1))
-        self.connect((self.analog_frequency_modulator_fc_0, 0), (self.qtgui_freq_sink_x_0_0, 0))
         self.connect((self.analog_frequency_modulator_fc_0, 0), (self.rational_resampler_xxx_0, 0))
         self.connect((self.analog_sig_source_x_0, 0), (self.blocks_multiply_xx_0, 1))
         self.connect((self.analog_sig_source_x_0_0, 0), (self.blocks_delay_0, 0))
+        self.connect((self.audio_source_0_0, 0), (self.blocks_multiply_const_vxx_0, 0))
+        self.connect((self.audio_source_0_0, 1), (self.blocks_multiply_const_vxx_0_1, 0))
         self.connect((self.band_pass_filter_0, 0), (self.blocks_multiply_const_xx_0_0, 0))
         self.connect((self.band_pass_filter_1, 0), (self.blocks_delay_0_0, 0))
         self.connect((self.band_pass_filter_1_0, 0), (self.blocks_multiply_xx_0, 0))
         self.connect((self.blocks_add_xx_0, 0), (self.rational_resampler_xxx_0_0, 0))
-        self.connect((self.blocks_add_xx_0_0, 0), (self.blocks_multiply_const_xx_1, 0))
+        self.connect((self.blocks_add_xx_0_0, 0), (self.analog_frequency_modulator_fc_0, 0))
+        self.connect((self.blocks_add_xx_0_0, 0), (self.qtgui_freq_sink_x_0, 0))
         self.connect((self.blocks_delay_0, 0), (self.blocks_multiply_const_xx_0_0_0, 0))
         self.connect((self.blocks_delay_0_0, 0), (self.blocks_multiply_const_xx_0, 0))
+        self.connect((self.blocks_multiply_const_vxx_0, 0), (self.analog_fm_preemph_0, 0))
+        self.connect((self.blocks_multiply_const_vxx_0_0, 0), (self.blocks_add_xx_0_0, 4))
+        self.connect((self.blocks_multiply_const_vxx_0_1, 0), (self.analog_fm_preemph_0_0, 0))
         self.connect((self.blocks_multiply_const_xx_0, 0), (self.blocks_add_xx_0_0, 0))
         self.connect((self.blocks_multiply_const_xx_0_0, 0), (self.blocks_add_xx_0_0, 1))
         self.connect((self.blocks_multiply_const_xx_0_0_0, 0), (self.blocks_add_xx_0_0, 2))
-        self.connect((self.blocks_multiply_const_xx_0_0_1, 0), (self.qtgui_freq_sink_x_0_0_0, 0))
-        self.connect((self.blocks_multiply_const_xx_0_0_1, 0), (self.uhd_usrp_sink_1, 0))
-        self.connect((self.blocks_multiply_const_xx_0_1, 0), (self.analog_fm_preemph_0, 0))
-        self.connect((self.blocks_multiply_const_xx_0_1_0, 0), (self.analog_fm_preemph_0_0, 0))
-        self.connect((self.blocks_multiply_const_xx_1, 0), (self.analog_frequency_modulator_fc_0, 0))
-        self.connect((self.blocks_multiply_const_xx_1, 0), (self.qtgui_freq_sink_x_0, 0))
+        self.connect((self.blocks_multiply_const_xx_0_2, 0), (self.blocks_add_xx_0_0, 3))
         self.connect((self.blocks_multiply_xx_0, 0), (self.band_pass_filter_0, 0))
+        self.connect((self.blocks_repeat_0, 0), (self.low_pass_filter_0, 0))
         self.connect((self.blocks_sub_xx_0, 0), (self.rational_resampler_xxx_0_0_0, 0))
-        self.connect((self.blocks_wavfile_source_0, 0), (self.blocks_multiply_const_xx_0_1, 0))
-        self.connect((self.blocks_wavfile_source_0, 1), (self.blocks_multiply_const_xx_0_1_0, 0))
-        self.connect((self.rational_resampler_xxx_0, 0), (self.blocks_multiply_const_xx_0_0_1, 0))
+        self.connect((self.gr_char_to_float_0, 0), (self.blocks_repeat_0, 0))
+        self.connect((self.gr_diff_encoder_bb_0, 0), (self.gr_map_bb_1, 0))
+        self.connect((self.gr_map_bb_0, 0), (self.gr_char_to_float_0, 0))
+        self.connect((self.gr_map_bb_1, 0), (self.gr_unpack_k_bits_bb_0, 0))
+        self.connect((self.gr_multiply_xx_0, 0), (self.blocks_multiply_const_vxx_0_0, 0))
+        self.connect((self.gr_sig_source_x_0_0, 0), (self.gr_multiply_xx_0, 0))
+        self.connect((self.gr_unpack_k_bits_bb_0, 0), (self.gr_map_bb_0, 0))
+        self.connect((self.low_pass_filter_0, 0), (self.gr_multiply_xx_0, 1))
+        self.connect((self.rational_resampler_xxx_0, 0), (self.uhd_usrp_sink_1, 0))
         self.connect((self.rational_resampler_xxx_0_0, 0), (self.band_pass_filter_1, 0))
         self.connect((self.rational_resampler_xxx_0_0_0, 0), (self.band_pass_filter_1_0, 0))
+        self.connect((self.rational_resampler_xxx_0_0_0_0, 0), (self.blocks_multiply_const_xx_0_2, 0))
+        self.connect((self.rds_encoder_0, 0), (self.gr_diff_encoder_bb_0, 0))
 
 
     def closeEvent(self, event):
@@ -422,6 +411,12 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.tx_gain_db = tx_gain_db
         self.uhd_usrp_sink_1.set_normalized_gain(self.tx_gain_db, 0)
 
+    def get_outbuffer(self):
+        return self.outbuffer
+
+    def set_outbuffer(self, outbuffer):
+        self.outbuffer = outbuffer
+
     def get_n_filter_delay(self):
         return self.n_filter_delay
 
@@ -429,6 +424,13 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.n_filter_delay = n_filter_delay
         self.blocks_delay_0.set_dly(self.n_filter_delay)
         self.blocks_delay_0_0.set_dly(self.n_filter_delay)
+
+    def get_gain_rds(self):
+        return self.gain_rds
+
+    def set_gain_rds(self, gain_rds):
+        self.gain_rds = gain_rds
+        self.blocks_multiply_const_vxx_0_0.set_k(self.gain_rds)
 
     def get_gain_pilot(self):
         return self.gain_pilot
@@ -451,12 +453,18 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.gain_lrdiff = gain_lrdiff
         self.blocks_multiply_const_xx_0_0.set_k(self.gain_lrdiff)
 
+    def get_gain_hinz(self):
+        return self.gain_hinz
+
+    def set_gain_hinz(self, gain_hinz):
+        self.gain_hinz = gain_hinz
+        self.blocks_multiply_const_xx_0_2.set_k(self.gain_hinz)
+
     def get_fs_rf(self):
         return self.fs_rf
 
     def set_fs_rf(self, fs_rf):
         self.fs_rf = fs_rf
-        self.qtgui_freq_sink_x_0_0_0.set_frequency_range(self.fc_pirate, self.fs_rf)
         self.uhd_usrp_sink_1.set_samp_rate(self.fs_rf)
 
     def get_fs_mod(self):
@@ -464,21 +472,22 @@ class fm_sender(gr.top_block, Qt.QWidget):
 
     def set_fs_mod(self, fs_mod):
         self.fs_mod = fs_mod
-        self.analog_frequency_modulator_fc_0.set_sensitivity(75e3/self.fs_mod*2*3.1415926)
+        self.analog_frequency_modulator_fc_0.set_sensitivity(75e3/self.fs_mod*2*math.pi)
         self.analog_sig_source_x_0.set_sampling_freq(self.fs_mod)
         self.analog_sig_source_x_0_0.set_sampling_freq(self.fs_mod)
         self.band_pass_filter_0.set_taps(firdes.band_pass(1, self.fs_mod, 23e3, 53e3, 2e3, firdes.WIN_HAMMING, 6.76))
         self.band_pass_filter_1.set_taps(firdes.band_pass(1, self.fs_mod, 30, 15e3, 100, firdes.WIN_HAMMING, 6.76))
         self.band_pass_filter_1_0.set_taps(firdes.band_pass(1, self.fs_mod, 30, 15e3, 100, firdes.WIN_HAMMING, 6.76))
+        self.blocks_repeat_0.set_interpolation(int(self.fs_mod/2.375/1000))
+        self.gr_sig_source_x_0_0.set_sampling_freq(self.fs_mod)
+        self.low_pass_filter_0.set_taps(firdes.low_pass(1, self.fs_mod, 2.5e3, .5e3, firdes.WIN_HAMMING, 6.76))
         self.qtgui_freq_sink_x_0.set_frequency_range(0, self.fs_mod)
-        self.qtgui_freq_sink_x_0_0.set_frequency_range(0, self.fs_mod)
 
     def get_fc_pirate(self):
         return self.fc_pirate
 
     def set_fc_pirate(self, fc_pirate):
         self.fc_pirate = fc_pirate
-        self.qtgui_freq_sink_x_0_0_0.set_frequency_range(self.fc_pirate, self.fs_rf)
         self.uhd_usrp_sink_1.set_center_freq(self.fc_pirate, 0)
 
 
