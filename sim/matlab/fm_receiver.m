@@ -190,6 +190,9 @@ rx_audio_lrdiff_mod = 2 * rx_audio_lrdiff_bpfilt .* carrier38kHzRx;
 % Filter (lowpass 15kHz)
 rx_audio_lrdiff = filter(filter_lp_mono,1, rx_audio_lrdiff_mod);
 
+% TODO: check, why this is inverted, depending on the sample rate..
+rx_audio_lrdiff = -1 * rx_audio_lrdiff;
+
 
 %% Combine received signal
 % L = (L+R) + (L-R) = (2)L
