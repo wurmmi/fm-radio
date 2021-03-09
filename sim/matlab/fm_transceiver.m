@@ -30,7 +30,7 @@ end
 %% Settings
 
 % Paths
-dir_filters = "./filters/";
+dir_filters = "./filters/stored/";
 dir_output  = "./matlab_output/";
 
 % Simulation options
