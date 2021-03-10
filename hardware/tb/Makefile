@@ -20,6 +20,8 @@ endif
 # VHDL sources in compile order
 VHDL_SOURCES =
 VHDL_SOURCES += $(CURDIR)/../src/fm_pkg.vhd
+VHDL_SOURCES += $(CURDIR)/../src/filter_coeff_pkgs/filter_bp_pilot_pkg.vhd
+VHDL_SOURCES += $(CURDIR)/../src/DspFir.vhd
 VHDL_SOURCES += $(CURDIR)/../src/fm_receiver.vhd
 
 # Set toplevel module in VHDL

@@ -5,7 +5,7 @@
 %-------------------------------------------------------------------------
 
 function status = writeDataToFile(data, filename)
-%writeDataToFile - Decimates/Downsamples a signal.
+%writeDataToFile - Writes data to file.
 %   data     ... data to be written
 %   filename ... filename
 

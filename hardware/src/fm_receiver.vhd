@@ -5,6 +5,13 @@
 --! @brief     FM Receiver IP implementation.
 -------------------------------------------------------------------------------
 
+-------------------------------------------------------------------------------
+-- TIME LOGGING
+--
+-- (1) FIR Filter implementation
+--    03/10/2021 11:30 - xx:xx    2:00 h
+--
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
@@ -12,6 +19,7 @@ use ieee.fixed_pkg.all;
 
 library work;
 use work.fm_pkg.all;
+use work.filter_bp_pilot_pkg.all;
 
 entity fm_receiver is
   generic (
@@ -20,7 +28,11 @@ entity fm_receiver is
     clk_i : in std_ulogic;
     rst_i : in std_ulogic;
 
-    read_strobe_i    : in  std_ulogic;
+    fir_i       : in  sample_t;
+    fir_valid_i : in  std_ulogic;
+    fir_o       : out sample_t;
+    fir_valid_o : out std_ulogic;
+
     read_data_real_o : out iq_value_t;
     read_data_imag_o : out iq_value_t);
 
@@ -88,6 +100,16 @@ begin  -- architecture rtl
   -- Instantiations
   ------------------------------------------------------------------------------
 
+  dspfir_inst : entity work.DspFir
+  generic map(
+      gB => filter_bp_pilot_coeffs_c)
+  port map(
+      iClk            => clk_i,
+      inResetAsync    => not rst_i,
+      iDdry           => fir_i,
+      iValDry         => fir_valid_i,
+      oDwet           => fir_o,
+      oValWet         => fir_valid_o);
 
   -----------------------------------------------------------------------------
   -- Assertions for testbench
