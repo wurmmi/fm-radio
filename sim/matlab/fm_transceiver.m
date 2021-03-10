@@ -107,13 +107,15 @@ end
 
 if EnableWriteDataFiles
     disp('### Write verification data ###');
-
-    writeDataToFile(rx_fmChannelData, './verification_data/rx_fmChannelData.txt');
-    writeDataToFile(rx_pilot,         './verification_data/rx_pilot.txt');
     
-    writeFilterCoeffsToVHDLFile(filter_bp_pilot, ...
-                                'filter_bp_pilot', ...
-                                '../../hardware/src/filter_coeff_pkgs/');
+    fp_width      = 32;
+    fp_width_frac = 31;
+    
+    writeDataToFile(rx_fmChannelData, './verification_data/rx_fmChannelData.txt', fp_width, fp_width_frac);
+    writeDataToFile(rx_pilot,         './verification_data/rx_pilot.txt', fp_width, fp_width_frac);
+    
+    writeFilterCoeffsToVHDLFile(filter_bp_pilot, 'filter_bp_pilot', ...
+                                '../../hardware/src/filter_coeff_pkgs/', fp_width, fp_width_frac);
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

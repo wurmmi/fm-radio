@@ -21,8 +21,8 @@ package fm_pkg is
   subtype iq_value_t is std_ulogic_vector(26 downto 0);
 
   --! Fixed point bitwidth
-  constant fp_width_c      : natural := 16;
-  constant fp_width_frac_c : natural := 15;
+  constant fp_width_c      : natural := 32;
+  constant fp_width_frac_c : natural := 31;
 
   subtype sample_t is u_sfixed(0 downto -fp_width_frac_c);
 

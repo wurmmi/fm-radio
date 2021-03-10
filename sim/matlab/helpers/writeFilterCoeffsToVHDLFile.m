@@ -4,7 +4,7 @@
 % Description : Writes filter coefficients to VHDL file.
 %-------------------------------------------------------------------------
 
-function status = writeFilterCoeffsToVHDLFile(data, filtername, filedir)
+function status = writeFilterCoeffsToVHDLFile(data, filtername, filedir, fp_width, fp_width_frac)
 %writeFilterCoeffsToVHDLFile - Writes filter coefficients to VHDL file.
 %   data       ... data to be written
 %   filtername ... name used for VHDL entity and constant
@@ -36,11 +36,11 @@ fprintf(fileID, [ ...
 %% Write coefficients
 
 % Convert to fixed point
-data_fp = cast(data, 'like', fi([], true, 16,15));
+data_fp = cast(data, 'like', fi([], true, fp_width,fp_width_frac));
 
 fprintf(fileID, "constant %s_coeffs_c : filter_coeffs_t := (\n", filtername);
-fprintf(fileID, "    %.15f,\n", data_fp(1:end-1));
-fprintf(fileID, "    %.15f);\n\n", data_fp(end));
+fprintf(fileID, "    %.32f,\n", data_fp(1:end-1));
+fprintf(fileID, "    %.32f);\n\n", data_fp(end));
 
 %% Write VHDL end
 

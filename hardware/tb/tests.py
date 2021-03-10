@@ -27,8 +27,8 @@ async def fir_filter_test(dut):
     ###
     fs_rx_c = 120e3  # set according to files in folder verification_data/
 
-    fp_width_c = 16
-    fp_width_frac_c = 15
+    fp_width_c = 32
+    fp_width_frac_c = 31
 
     ###
     # Load data from files
