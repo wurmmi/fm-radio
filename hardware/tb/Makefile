@@ -9,7 +9,7 @@ TOPLEVEL_LANG = vhdl
 
 USE_WAVE_VCD = 0
 
-COMPILE_ARGS = --std=08 -P./sim_build/
+COMPILE_ARGS = --std=08
 ifeq ($(USE_WAVE_VCD),1)
 	SIM_ARGS = --vcd=sim_build/waveform.vcd --read-wave-opt=gtkwave/waveopt.gtkw
 else
