@@ -17,7 +17,11 @@ from fm_receiver_model import FM_RECEIVER_MODEL
 
 class FM_TB(object):
     # Constants
-    CLOCK_FREQ_MHZ = 50
+    CLOCK_FREQ_MHZ = 48
+    FS_RX_KHZ = 120
+
+    assert (CLOCK_FREQ_MHZ * 1e3 / FS_RX_KHZ).is_integer(), \
+        "Clock rate and fs_rx must have an integer relation!"
 
     def __del__(self):
         pass
@@ -37,3 +41,9 @@ class FM_TB(object):
         await Timer(3.3, units="us")
         self.dut.rst_i <= 0
         await RisingEdge(self.dut.clk_i)
+
+    @cocotb.coroutine
+    async def assign_defaults(self):
+        self.dut._log.info("Setting defaults ...")
+
+        self.dut.fir_valid_i <= 0

@@ -25,6 +25,7 @@ async def fir_filter_test(dut):
     ###
     # Constants
     ###
+    num_samples = 150
     fs_rx_c = 120e3  # set according to files in folder verification_data/
 
     fp_width_c = 32
@@ -36,8 +37,13 @@ async def fir_filter_test(dut):
     filename = "../../sim/matlab/verification_data/rx_fmChannelData.txt"
     data_i = []
     with open(filename) as fd:
+        val_count = 0
         for line in fd:
             data_i.append(float(line.strip('\n')))
+            val_count += 1
+            # Stop after required number of samples
+            if val_count > num_samples:
+                break
 
     # Convert to fixed point and back to int
     data_i_fp = to_fixed_point(data_i, fp_width_c, fp_width_frac_c)
@@ -57,17 +63,22 @@ async def fir_filter_test(dut):
     ###
     tb = FM_TB(dut)
 
-    # Generate clock
-    clk = Clock(dut.clk_i, period=1 / tb.CLOCK_FREQ_MHZ * 1000, units='ns')
+    # Generate clocks
+    clk_period = int(1 / tb.CLOCK_FREQ_MHZ * 1e3)
+    clk = Clock(dut.clk_i, period=clk_period, units='ns')
     clk_gen = cocotb.fork(clk.start())
+
+    clk_period_fs = int(1 / tb.FS_RX_KHZ * 1e6)
+    clk_fs = Clock(dut.fir_valid_i, period=clk_period_fs, units='ns')
+    clk_gen_fs = cocotb.fork(clk_fs.start(start_high=False))
 
     ###
     # Run test on DUT
     ###
+
     # Reset the DUT before any tests begin
     await tb.reset()
-
-    await Timer(5, units='us')
+    await tb.assign_defaults()
 
     # Run input data through filter
     dut._log.info("Sending input data through filter ...")
@@ -75,16 +86,15 @@ async def fir_filter_test(dut):
     data_out = np.zeros(len(data_i_int))
     for i, sample in enumerate(data_i_int):
         dut.fir_i <= int(sample)
-        dut.fir_valid_i <= 1
 
-        await RisingEdge(dut.clk_i)
+        await RisingEdge(dut.fir_valid_i)
         dut.fir_valid_i <= 0
 
-        await RisingEdge(dut.clk_i)
+        await RisingEdge(dut.fir_valid_o)
 
-        # if duf.fir_valid_o == '1' @ TODO ?
-        sample_out = dut.fir_o.value.signed_integer
+        sample_out = dut.fir_o.value.signed_integer * 11
         data_out[i] = int_to_fixed(sample_out, fp_width_c, fp_width_frac_c)
+        print(i)
 
     timestamp_end = time.time()
     dut._log.info("Execution took {:.2f} seconds.".format(timestamp_end - timestamp_start))
@@ -105,4 +115,5 @@ async def fir_filter_test(dut):
     fig.tight_layout()
     plt.xlim([0, 0.002])
     plt.show()
+
     dut._log.info("Done.")
