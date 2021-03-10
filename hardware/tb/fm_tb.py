@@ -57,11 +57,11 @@ class FM_TB(object):
         #self.dut.fir_i <= 0
 
     @cocotb.coroutine
-    async def read_fir_result(self):
+    async def read_fir_result(self, output_scale):
         edge = RisingEdge(self.dut.fir_valid_o)
         while(True):
             await edge
-            sample_out = self.dut.fir_o.value.signed_integer * 11
+            sample_out = self.dut.fir_o.value.signed_integer * output_scale
             self.data_out.append(
                 int_to_fixed(sample_out, self.fp_width_c, self.fp_width_frac_c))
             size = len(self.data_out)

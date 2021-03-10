@@ -35,6 +35,7 @@ dir_output  = "./matlab_output/";
 
 % Simulation options
 EnableWriteDataFiles = true;
+EnablePlots = false;
 
 EnableSenderSourceRecordedFile = false;
 EnableSenderSourceCreateSim    = true;
@@ -110,6 +111,12 @@ if EnableWriteDataFiles
     
     fp_width      = 32;
     fp_width_frac = 31;
+    fp_maximum    = 0.999;
+    
+    assert(max(rx_fmChannelData) < fp_maximum, ...
+        "Value exceeds maximal value of fixed point! This will lead to overflows in the hardware.");
+    assert(max(rx_pilot) < fp_maximum, ...
+        "Value exceeds maximal value of fixed point! This will lead to overflows in the hardware.");
     
     writeDataToFile(rx_fmChannelData, './verification_data/rx_fmChannelData.txt', fp_width, fp_width_frac);
     writeDataToFile(rx_pilot,         './verification_data/rx_pilot.txt', fp_width, fp_width_frac);
@@ -122,6 +129,11 @@ end
 %% Analysis
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 disp('### Analysis ###');
+
+if ~EnablePlots
+    disp('-- skipped calculations (plots are disabled)');
+    return
+end
 
 % Create output folder to save figures
 if ~exist(dir_output, 'dir')
@@ -220,6 +232,7 @@ if EnablePlotsLogarithmic
 end
 
 %% Plots
+
 disp('-- Plots');
 
 fig_title = 'Time domain signal';

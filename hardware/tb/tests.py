@@ -32,6 +32,7 @@ async def fir_filter_test(dut):
 
     fp_width_c = 32
     fp_width_frac_c = 31
+    output_scale_c = 10
 
     ###
     # Load data from files
@@ -84,7 +85,7 @@ async def fir_filter_test(dut):
     await tb.assign_defaults()
 
     # Fork the 'receiving part'
-    fir_out_fork = cocotb.fork(tb.read_fir_result())
+    fir_out_fork = cocotb.fork(tb.read_fir_result(output_scale_c))
 
     # Run input data through filter
     dut._log.info("Sending input data through filter ...")
