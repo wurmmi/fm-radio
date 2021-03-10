@@ -53,7 +53,7 @@ EnableManualDecimation = true;
 EnableRDSDecoder       = false;
 
 % Signal parameters
-n_sec = 1.7;           % 1.7s is "left channel, right channel" in audio file
+n_sec = 0.15;           % 1.7s is "left channel, right channel" in audio file
 osr   = 20;            % oversampling rate for fs
 fs    = 48e3 * osr;    % sampling rate fs
 
@@ -108,10 +108,10 @@ end
 if EnableWriteDataFiles
     disp('### Write verification data ###');
 
-    %writeDataToFile(rx_fmChannelData, './verification_data/rx_fmChannelData.txt');
-    %writeDataToFile(rx_pilot,         './verification_data/rx_pilot.txt');
+    writeDataToFile(rx_fmChannelData, './verification_data/rx_fmChannelData.txt');
+    writeDataToFile(rx_pilot,         './verification_data/rx_pilot.txt');
     
-    writeFilterCoeffsToVHDLFile(filter_bp_pilot(1:5), ...
+    writeFilterCoeffsToVHDLFile(filter_bp_pilot, ...
                                 'filter_bp_pilot', ...
                                 '../../hardware/src/filter_coeff_pkgs/');
 end
@@ -427,7 +427,8 @@ title(fig_title);
 xlabel('time [s]');
 ylabel('amplitude');
 legend();
-xlim([0.1, 0.1 + 1/19e3*2]);
+offset = 0.0;
+xlim([offset, offset + 1/19e3*2]);
 
 %% Arrange all plots on the display
 if ~isRunningInOctave()

@@ -1,24 +1,30 @@
 [*]
 [*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
-[*] Wed Mar 10 08:54:45 2021
+[*] Wed Mar 10 12:37:14 2021
 [*]
 [dumpfile] "/home/mike/work/fm-radio/hardware/tb/sim_build/waveform.ghw"
-[dumpfile_mtime] "Wed Mar 10 08:54:22 2021"
-[dumpfile_size] 10136
+[dumpfile_mtime] "Wed Mar 10 12:33:15 2021"
+[dumpfile_size] 13804202
 [savefile] "/home/mike/work/fm-radio/hardware/tb/gtkwave/waveconfig.gtkw"
 [timestart] 0
 [size] 1848 1016
-[pos] -51 -51
-*-30.059046 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[pos] -1 -1
+*-37.949791 175000000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.fm_receiver.
 [sst_width] 233
-[signals_width] 78
+[signals_width] 180
 [sst_expanded] 1
 [sst_vpaned_height] 289
 @28
 top.fm_receiver.rst_i
-@29
 top.fm_receiver.clk_i
+top.fm_receiver.fir_valid_i
+@8420
+top.fm_receiver.dspfir_inst.ivaldry
+@28
+top.fm_receiver.fir_valid_o
+@8421
+top.fm_receiver.dspfir_inst.ovalwet
 [pattern_trace] 1
 [pattern_trace] 0

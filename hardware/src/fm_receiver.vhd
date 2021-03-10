@@ -58,13 +58,6 @@ architecture rtl of fm_receiver is
   -----------------------------------------------------------------------------
   --! @{
 
-  signal mod_symbol_re    : sample_t;
-  signal mod_symbol_im    : sample_t;
-
-  signal fft_source_real  : iq_value_t;
-  signal fft_source_imag  : iq_value_t;
-
-  signal fifo_read_strobe : std_ulogic;
 
   --! @}
 
