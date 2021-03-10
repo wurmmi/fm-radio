@@ -5,6 +5,7 @@
 ################################################################################
 
 import cocotb
+from cocotb.drivers import BitDriver
 from cocotb.triggers import RisingEdge, Timer
 from fixed_point import *
 
@@ -28,10 +29,14 @@ class FM_TB(object):
     def __init__(self, dut: cocotb.handle.HierarchyObject, fp_width, fp_width_frac, num_samples):
         self.dut = dut
         self.dut._log.debug("Building/Connecting Testbench")
-        self.fm_receiver_model = FM_RECEIVER_MODEL()
+
         self.fp_width_c = fp_width
         self.fp_width_frac_c = fp_width_frac
         self.num_samples_c = num_samples
+
+        self.fm_receiver_model = FM_RECEIVER_MODEL()
+
+        self.fir_in_strobe = BitDriver(self.dut.fir_valid_i, self.dut.clk_i)
 
     @cocotb.coroutine
     async def reset(self):
@@ -48,7 +53,8 @@ class FM_TB(object):
     async def assign_defaults(self):
         self.dut._log.info("Setting defaults ...")
 
-        self.dut.fir_valid_i <= 0
+        #self.dut.fir_valid_i <= 0
+        #self.dut.fir_i <= 0
 
     @cocotb.coroutine
     async def read_fir_result(self):

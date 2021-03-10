@@ -10,6 +10,8 @@ import cocotb
 import matplotlib.pyplot as plt
 import numpy as np
 from cocotb.clock import Clock
+from cocotb.generators import repeat
+from cocotb.generators.bit import bit_toggler
 from cocotb.triggers import RisingEdge, Timer
 from fixed_point import *
 
@@ -63,16 +65,15 @@ async def fir_filter_test(dut):
     ###
     tb = FM_TB(dut, fp_width_c, fp_width_frac_c, num_samples)
 
-    # Generate clocks
+    # Generate clock
     clk_period = int(1 / tb.CLOCK_FREQ_MHZ * 1e3)
     clk = Clock(dut.clk_i, period=clk_period, units='ns')
     clk_gen = cocotb.fork(clk.start())
 
-    clk_period_fs = int(1 / tb.FS_RX_KHZ * 1e6)
-    clk_fs = Clock(dut.fir_valid_i, period=clk_period_fs, units='ns')
-    clk_gen_fs = cocotb.fork(clk_fs.start(start_high=False))
-
-    fir_out_fork = cocotb.fork(tb.read_fir_result())
+    # Generate FIR input strobe
+    strobe_num_cycles_high = 1
+    strobe_num_cycles_low = tb.CLOCK_FREQ_MHZ * 1000 // tb.FS_RX_KHZ - strobe_num_cycles_high
+    tb.fir_in_strobe.start(bit_toggler(repeat(strobe_num_cycles_high), repeat(strobe_num_cycles_low)))
 
     ###
     # Run test on DUT
@@ -81,6 +82,9 @@ async def fir_filter_test(dut):
     # Reset the DUT before any tests begin
     await tb.reset()
     await tb.assign_defaults()
+
+    # Fork the 'receiving part'
+    fir_out_fork = cocotb.fork(tb.read_fir_result())
 
     # Run input data through filter
     dut._log.info("Sending input data through filter ...")
