@@ -108,23 +108,8 @@ end
 if EnableWriteDataFiles
     disp('### Write verification data ###');
 
-    fileID = fopen('./verification_data/rx_fmChannelData.txt','w');
-    for i=1:length(rx_fmChannelData)
-        % Convert to fixed point
-        fp_val = fi(rx_fmChannelData(i), true, 16,15);
-
-        % Write to file
-        fprintf(fileID, "%f\n", fp_val);
-    end
-    
-    fileID = fopen('./verification_data/rx_pilot.txt','w');
-    for i=1:length(rx_pilot)
-        % Convert to fixed point
-        fp_val = fi(rx_pilot(i), true, 16,15);
-
-        % Write to file
-        fprintf(fileID, "%f\n", fp_val(i));
-    end
+    writeDataToFile(rx_fmChannelData, './verification_data/rx_fmChannelData.txt');
+    writeDataToFile(rx_pilot,         './verification_data/rx_pilot.txt');
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
