@@ -1,5 +1,5 @@
 ################################################################################
-# File        : ofdm_tb.py
+# File        : fm_tb.py
 # Author      : Michael Wurm <wurm.michael95@gmail.com>
 # Description : Testbench and Model of the gain ip
 ################################################################################

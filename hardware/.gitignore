@@ -10,5 +10,5 @@ sim_build/
 *.o
 __pycache__
 
-ofdm_tx_top
+fm_receiver
 *.txt

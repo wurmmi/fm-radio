@@ -1,7 +1,7 @@
 ################################################################################
 # File        : fm_receiver_model.py
 # Author      : Michael Wurm <wurm.michael95@gmail.com>
-# Description : Model of the OFDM Tx IP
+# Description : Model of the FM Receiver IP
 ################################################################################
 
 import cocotb
