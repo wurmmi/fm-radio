@@ -25,6 +25,8 @@ async def fir_filter_test(dut):
     ###
     # Constants
     ###
+    fs_rx_c = 120e3  # set according to files in folder verification_data/
+
     fp_width_c = 16
     fp_width_frac_c = 15
 
@@ -85,18 +87,22 @@ async def fir_filter_test(dut):
         data_out[i] = int_to_fixed(sample_out, fp_width_c, fp_width_frac_c)
 
     timestamp_end = time.time()
-    dut._log.info("Execution took: {:.2f} seconds.".format(timestamp_end - timestamp_start))
+    dut._log.info("Execution took {:.2f} seconds.".format(timestamp_end - timestamp_start))
 
     ###
     # Plots
     ###
     dut._log.info("Plots ...")
 
-    plt.figure()
-    plt.plot(from_fixed_point(data_o_gold_fp), "b", label="data_o_gold_fp")
-    plt.plot(data_out, "r", label="data_out")
-    plt.title("Time domain signal")
+    fig = plt.figure()
+    plt.plot(np.arange(0, len(data_o_gold_fp)) / fs_rx_c,
+             from_fixed_point(data_o_gold_fp), "b", label="data_o_gold_fp")
+    plt.plot(np.arange(0, len(data_out)) / fs_rx_c,
+             data_out, "r", label="data_out")
+    plt.title("Carrier phase recovery")
+    plt.grid(True)
     plt.legend()
+    fig.tight_layout()
+    plt.xlim([0, 0.002])
     plt.show()
-
     dut._log.info("Done.")
