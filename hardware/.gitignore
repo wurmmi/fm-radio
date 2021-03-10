@@ -1,0 +1,14 @@
+################################################################################
+# File        : .gitignore
+# Author      : Michael Wurm <wurm.michael95@gmail.com>
+# Description : Local gitignore file
+################################################################################
+
+# cocotb
+sim_build/
+*.xml
+*.o
+__pycache__
+
+fm_receiver
+*.txt
