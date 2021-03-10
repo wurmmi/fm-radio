@@ -11,17 +11,15 @@ function status = writeDataToFile(data, filename)
 
 fileID = fopen(filename, 'w');
 if fileID <= 0
-    status = false;
-    return;
+    error("Could not open file '%s'!", filename);
 end
 
 % Convert to fixed point
 data_fp = cast(data, 'like', fi([], true, 16,15));
 
 % Write to file
-for i=1:length(data_fp)
-    fprintf(fileID, "%.15f\n", data_fp(i));
-end
+fprintf(fileID, "%.15f\n", data_fp);
+
 fclose(fileID);
 
 
