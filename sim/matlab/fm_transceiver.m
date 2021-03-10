@@ -34,6 +34,8 @@ dir_filters = "./filters/stored/";
 dir_output  = "./matlab_output/";
 
 % Simulation options
+EnableWriteDataFiles = true;
+
 EnableSenderSourceRecordedFile = false;
 EnableSenderSourceCreateSim    = true;
 EnableAudioFromFile            = true;
@@ -82,9 +84,10 @@ fm_receiver();
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Audio replay
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-disp('### Audio Replay ###');
 
 if EnableRxAudioReplay
+    disp('### Audio Replay ###');
+
     % Create LR audio signal for output
     rx_audioReplay = zeros(length(rx_audio_L),2);
     rx_audioReplay(:,1) = rx_audio_L;
@@ -96,6 +99,32 @@ if EnableRxAudioReplay
     rx_audioReplay = resample(rx_audioReplay, 1, osr_replay);
     
     sound(rx_audioReplay, fs_audioReplay);
+end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Store data to file
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+if EnableWriteDataFiles
+    disp('### Write verification data ###');
+
+    fileID = fopen('./verification_data/rx_fmChannelData.txt','w');
+    for i=1:length(rx_fmChannelData)
+        % Convert to fixed point
+        fp_val = fi(rx_fmChannelData(i), true, 16,15);
+
+        % Write to file
+        fprintf(fileID, "%f\n", fp_val);
+    end
+    
+    fileID = fopen('./verification_data/rx_pilot.txt','w');
+    for i=1:length(rx_pilot)
+        % Convert to fixed point
+        fp_val = fi(rx_pilot(i), true, 16,15);
+
+        % Write to file
+        fprintf(fileID, "%f\n", fp_val(i));
+    end
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
