@@ -65,6 +65,7 @@ class FM_TB(object):
             self.data_out.append(
                 int_to_fixed(sample_out, self.fp_width_c, self.fp_width_frac_c))
             size = len(self.data_out)
-            print(size)
-            # if size >= self.num_samples_c:
-            #    return
+
+            # print every 10th number to show progress
+            if size % 10 == 0:
+                print(size)
