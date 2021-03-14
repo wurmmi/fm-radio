@@ -138,9 +138,10 @@ async def fir_filter_test(dut):
     for i, res in enumerate(tb.data_out):
         diff = data_o_gold_fp[i] - res
         if abs(from_fixed_point(diff)) > max_diff:
-            #raise cocotb.result.TestError("FIR output is not matching the expected values.")
-            dut._log.info("FIR output [{}] is not matching the expected values: {}>{}.".format(
+            raise cocotb.result.TestError("FIR output [{}] is not matching the expected values: {}>{}.".format(
                 i, abs(from_fixed_point(diff)), max_diff))
+            # dut._log.info("FIR output [{}] is not matching the expected values: {}>{}.".format(
+            #    i, abs(from_fixed_point(diff)), max_diff))
 
     norm_res = np.linalg.norm(np.array(from_fixed_point(data_o_gold_fp[0:len(tb.data_out)])) - np.array(tb.data_out), 2)
     dut._log.info("2-Norm = {}".format(norm_res))
