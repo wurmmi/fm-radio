@@ -24,7 +24,7 @@ async def fir_filter_test(dut):
     Load test data from files and send them through the DUT.
     Compare input and output afterwards.
     """
-    EnablePlots = False
+    EnablePlots = True
 
     timestamp_start = time.time()
 
@@ -41,7 +41,7 @@ async def fir_filter_test(dut):
     ###
     # Load data from files
     ###
-    filename = "../../sim/matlab/verification_data/rx_fmChannelData.txt"
+    filename = "../../../sim/matlab/verification_data/rx_fmChannelData.txt"
     data_i = []
     with open(filename) as fd:
         val_count = 0
@@ -56,7 +56,7 @@ async def fir_filter_test(dut):
     data_i_fp = to_fixed_point(data_i, fp_width_c, fp_width_frac_c)
     data_i_int = fixed_to_int(data_i_fp)
 
-    filename = "../../sim/matlab/verification_data/rx_pilot.txt"
+    filename = "../../../sim/matlab/verification_data/rx_pilot.txt"
     data_o_gold = []
     with open(filename) as fd:
         val_count = 0
@@ -77,7 +77,7 @@ async def fir_filter_test(dut):
 
     # Generate clock
     clk_period = int(1 / tb.CLOCK_FREQ_MHZ * 1e3)
-    clk = Clock(dut.clk_i, period=clk_period, units='ns')
+    clk = Clock(dut.iClk, period=clk_period, units='ns')
     clk_gen = cocotb.fork(clk.start())
 
     # Generate FIR input strobe
@@ -100,16 +100,19 @@ async def fir_filter_test(dut):
     dut._log.info("Sending input data through filter ...")
 
     for i, sample in enumerate(data_i_int):
-        await RisingEdge(dut.fir_valid_i)
-        dut.fir_i <= int(sample)
+        await RisingEdge(dut.iValDry)
+        dut.iDdry <= int(sample)
 
-    await RisingEdge(dut.fir_valid_i)
+    await RisingEdge(dut.iValDry)
 
     # Stop other forked routines
     fir_out_fork.kill()
 
     timestamp_end = time.time()
     dut._log.info("Execution took {:.2f} seconds.".format(timestamp_end - timestamp_start))
+
+    num_received = len(tb.data_out)
+    num_expected = len(data_o_gold_fp)
 
     ###
     # Plots
@@ -118,9 +121,9 @@ async def fir_filter_test(dut):
         dut._log.info("Plots ...")
 
         fig = plt.figure()
-        plt.plot(np.arange(0, len(data_o_gold_fp)) / fs_rx_c,
+        plt.plot(np.arange(0, num_expected) / fs_rx_c,
                  from_fixed_point(data_o_gold_fp), "b", label="data_o_gold_fp")
-        plt.plot(np.arange(0, len(tb.data_out)) / fs_rx_c,
+        plt.plot(np.arange(0, num_received) / fs_rx_c,
                  tb.data_out, "r", label="data_out")
         plt.title("Carrier phase recovery")
         plt.grid(True)
@@ -133,12 +136,17 @@ async def fir_filter_test(dut):
     # Compare results
     ###
 
+    # Sanity check
+    if num_received < num_expected:
+        raise cocotb.result.TestError(
+            "Did not capture enough output values: {} actual, {} expected.".format(num_received, num_expected))
+
     # Skip first N samples
     skip_N = 10
-    dut._log.info("Skipping first N={} samples. (in:out = {}:{})".format(skip_N, len(data_o_gold_fp), len(tb.data_out)))
+    dut._log.info("Skipping first N={} samples. (in:out = {}:{})".format(skip_N, num_expected, num_received))
     data_o_gold_fp = data_o_gold_fp[skip_N:]
     tb.data_out = tb.data_out[skip_N:]
-    dut._log.info("Skipped first N={} samples.  (in:out = {}:{})".format(skip_N, len(data_o_gold_fp), len(tb.data_out)))
+    dut._log.info("Skipped first N={} samples.  (in:out = {}:{})".format(skip_N, num_expected, num_received))
 
     max_diff = 2**-5
     for i, res in enumerate(tb.data_out):
@@ -149,7 +157,7 @@ async def fir_filter_test(dut):
             # dut._log.info("FIR output [{}] is not matching the expected values: {}>{}.".format(
             #    i, abs(from_fixed_point(diff)), max_diff))
 
-    norm_res = np.linalg.norm(np.array(from_fixed_point(data_o_gold_fp[0:len(tb.data_out)])) - np.array(tb.data_out), 2)
+    norm_res = np.linalg.norm(np.array(from_fixed_point(data_o_gold_fp[0:num_received])) - np.array(tb.data_out), 2)
     dut._log.info("2-Norm = {}".format(norm_res))
 
     dut._log.info("Done.")

@@ -19,20 +19,12 @@ endif
 
 # VHDL sources in compile order
 VHDL_SOURCES =
-VHDL_SOURCES += $(CURDIR)/../src/fm_pkg.vhd
-VHDL_SOURCES += $(CURDIR)/../src/filter_coeff_pkgs/filter_bp_pilot_pkg.vhd
-VHDL_SOURCES += $(CURDIR)/../src/utils/DspFir.vhd
-VHDL_SOURCES += $(CURDIR)/../src/utils/decimator.vhd
-VHDL_SOURCES += $(CURDIR)/../src/channel_decoder/recover_carriers.vhd
-VHDL_SOURCES += $(CURDIR)/../src/channel_decoder/recover_lrdiff.vhd
-VHDL_SOURCES += $(CURDIR)/../src/channel_decoder/recover_mono.vhd
-VHDL_SOURCES += $(CURDIR)/../src/channel_decoder/separate_lr_audio.vhd
-VHDL_SOURCES += $(CURDIR)/../src/channel_decoder.vhd
-VHDL_SOURCES += $(CURDIR)/../src/fm_demodulator.vhd
-VHDL_SOURCES += $(CURDIR)/../src/fm_receiver.vhd
+VHDL_SOURCES += $(CURDIR)/../../src/fm_pkg.vhd
+VHDL_SOURCES += $(CURDIR)/../../src/filter_coeff_pkgs/filter_bp_pilot_pkg.vhd
+VHDL_SOURCES += $(CURDIR)/../../src/utils/DspFir.vhd
 
 # Set toplevel module in VHDL
-TOPLEVEL = fm_receiver
+TOPLEVEL = dspfir
 
 # Set python testbench filename
 MODULE = tests

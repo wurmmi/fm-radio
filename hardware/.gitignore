@@ -6,9 +6,12 @@
 
 # cocotb
 sim_build/
+*.lst
 *.xml
 *.o
 __pycache__
 
-fm_receiver
 *.txt
+
+fm_receiver
+dspfir
