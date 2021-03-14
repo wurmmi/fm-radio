@@ -34,6 +34,9 @@ dir_filters = "./filters/stored/";
 dir_output  = "./matlab_output/";
 
 % Simulation options
+EnableWriteDataFiles = true;
+EnablePlots = false;
+
 EnableSenderSourceRecordedFile = false;
 EnableSenderSourceCreateSim    = true;
 EnableAudioFromFile            = true;
@@ -51,7 +54,7 @@ EnableManualDecimation = true;
 EnableRDSDecoder       = false;
 
 % Signal parameters
-n_sec = 1.7;           % 1.7s is "left channel, right channel" in audio file
+n_sec = 0.15;           % 1.7s is "left channel, right channel" in audio file
 osr   = 20;            % oversampling rate for fs
 fs    = 48e3 * osr;    % sampling rate fs
 
@@ -82,9 +85,10 @@ fm_receiver();
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Audio replay
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-disp('### Audio Replay ###');
 
 if EnableRxAudioReplay
+    disp('### Audio Replay ###');
+
     % Create LR audio signal for output
     rx_audioReplay = zeros(length(rx_audio_L),2);
     rx_audioReplay(:,1) = rx_audio_L;
@@ -99,9 +103,37 @@ if EnableRxAudioReplay
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Store data to file
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+if EnableWriteDataFiles
+    disp('### Write verification data ###');
+    
+    fp_width      = 32;
+    fp_width_frac = 31;
+    fp_maximum    = 0.999;
+    
+    assert(max(rx_fmChannelData) < fp_maximum, ...
+        "Value exceeds maximal value of fixed point! This will lead to overflows in the hardware.");
+    assert(max(rx_pilot) < fp_maximum, ...
+        "Value exceeds maximal value of fixed point! This will lead to overflows in the hardware.");
+    
+    writeDataToFile(rx_fmChannelData, './verification_data/rx_fmChannelData.txt', fp_width, fp_width_frac);
+    writeDataToFile(rx_pilot,         './verification_data/rx_pilot.txt', fp_width, fp_width_frac);
+    
+    writeFilterCoeffsToVHDLFile(filter_bp_pilot, 'filter_bp_pilot', ...
+                                '../../hardware/src/filter_coeff_pkgs/', fp_width, fp_width_frac);
+end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Analysis
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 disp('### Analysis ###');
+
+if ~EnablePlots
+    disp('-- skipped calculations (plots are disabled)');
+    return
+end
 
 % Create output folder to save figures
 if ~exist(dir_output, 'dir')
@@ -200,6 +232,7 @@ if EnablePlotsLogarithmic
 end
 
 %% Plots
+
 disp('-- Plots');
 
 fig_title = 'Time domain signal';
@@ -409,7 +442,8 @@ title(fig_title);
 xlabel('time [s]');
 ylabel('amplitude');
 legend();
-xlim([0.1, 0.1 + 1/19e3*2]);
+offset = 0.0;
+xlim([offset, offset + 1/19e3*2]);
 
 %% Arrange all plots on the display
 if ~isRunningInOctave()

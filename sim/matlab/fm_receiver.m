@@ -85,7 +85,7 @@ rx_pilot = filter(filter_bp_pilot,1, rx_fmChannelData);
 % Amplify
 % NOTE: Theoretically, the factor should be 10, since the pilot is
 %       transmitted with an amplitude of 10%.
-rx_pilot = rx_pilot * 11;
+rx_pilot = rx_pilot * 10;
 
 % Amplify again, if a de-emphasis filter is used.
 if EnableDeEmphasis
