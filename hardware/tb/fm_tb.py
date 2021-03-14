@@ -68,4 +68,4 @@ class FM_TB(object):
 
             # print every 10th number to show progress
             if size % 10 == 0:
-                print(size)
+                self.dut._log.info("Progress sample: {}".format(size))
