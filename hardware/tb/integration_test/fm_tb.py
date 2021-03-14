@@ -9,6 +9,8 @@ from cocotb.drivers import BitDriver
 from cocotb.triggers import RisingEdge, Timer
 from fixed_point import *
 
+from fm_receiver_model import FM_RECEIVER_MODEL
+
 
 class FM_TB(object):
     # Constants
@@ -16,7 +18,8 @@ class FM_TB(object):
     FS_RX_KHZ = 120
 
     # Variables
-    data_out = []
+    data_out_L = []
+    data_out_R = []
 
     assert (CLOCK_FREQ_MHZ * 1e3 / FS_RX_KHZ).is_integer(), \
         "Clock rate and fs_rx must have an integer relation!"
@@ -32,36 +35,42 @@ class FM_TB(object):
         self.fp_width_frac_c = fp_width_frac
         self.num_samples_c = num_samples
 
-        self.fir_in_strobe = BitDriver(self.dut.iValDry, self.dut.iClk)
+        self.fm_receiver_model = FM_RECEIVER_MODEL()
+
+        self.iq_in_strobe = BitDriver(self.dut.iq_valid_i, self.dut.clk_i)
 
     @cocotb.coroutine
     async def reset(self):
         self.dut._log.info("Resetting DUT ...")
 
-        self.dut.inResetAsync <= 1
-        await RisingEdge(self.dut.iClk)
-        self.dut.inResetAsync <= 0
+        self.dut.rst_i <= 0
+        await RisingEdge(self.dut.clk_i)
+        self.dut.rst_i <= 1
         await Timer(3.3, units="us")
-        self.dut.inResetAsync <= 1
-        await RisingEdge(self.dut.iClk)
+        self.dut.rst_i <= 0
+        await RisingEdge(self.dut.clk_i)
 
     @cocotb.coroutine
     async def assign_defaults(self):
         self.dut._log.info("Setting input port defaults ...")
 
-        #self.dut.iValDry <= 0
-        self.dut.iDdry <= 0
+        self.dut.iq_valid_i <= 0
+        self.dut.i_sample_i <= 0
+        self.dut.q_sample_i <= 0
 
     @cocotb.coroutine
-    async def read_fir_result(self, output_scale):
-        edge = RisingEdge(self.dut.oValWet)
+    async def read_fm_receiver_output(self):
+        edge = RisingEdge(self.dut.audio_valid_o)
         while(True):
             await edge
-            sample_out = self.dut.oDwet.value.signed_integer * output_scale
-            self.data_out.append(
-                int_to_fixed(sample_out, self.fp_width_c, self.fp_width_frac_c))
+            audio_L = self.dut.audio_L_o.value.signed_integer
+            audio_R = self.dut.audio_L_o.value.signed_integer
+            self.data_out_L.append(
+                int_to_fixed(audio_L, self.fp_width_c, self.fp_width_frac_c))
+            self.data_out_R.append(
+                int_to_fixed(audio_R, self.fp_width_c, self.fp_width_frac_c))
 
             # print every 10th number to show progress
-            size = len(self.data_out)
+            size = len(self.data_out_L)
             if size % 10 == 0:
                 self.dut._log.info("Progress sample: {}".format(size))

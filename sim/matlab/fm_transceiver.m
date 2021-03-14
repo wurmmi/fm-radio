@@ -118,10 +118,14 @@ if EnableWriteDataFiles
     assert(max(rx_pilot) < fp_maximum, ...
         "Value exceeds maximal value of fixed point! This will lead to overflows in the hardware.");
     
+    % Test data
     writeDataToFile(rx_fmChannelData, './verification_data/rx_fmChannelData.txt', fp_width, fp_width_frac);
     writeDataToFile(rx_pilot,         './verification_data/rx_pilot.txt', fp_width, fp_width_frac);
     
+    % Filter coefficients
     writeFilterCoeffsToVHDLFile(filter_bp_pilot, 'filter_bp_pilot', ...
+                                '../../hardware/src/filter_coeff_pkgs/', fp_width, fp_width_frac);
+    writeFilterCoeffsToVHDLFile(filter_lp_mono, 'filter_lp_mono', ...
                                 '../../hardware/src/filter_coeff_pkgs/', fp_width, fp_width_frac);
 end
 

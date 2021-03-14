@@ -22,7 +22,6 @@ use ieee.fixed_pkg.all;
 
 library work;
 use work.fm_pkg.all;
-use work.filter_bp_pilot_pkg.all;
 
 entity fm_receiver is
   generic (
@@ -31,19 +30,13 @@ entity fm_receiver is
     clk_i : in std_ulogic;
     rst_i : in std_ulogic;
 
-    i_sample_i     : in  iq_value_t;
-    q_sample_i     : in  iq_value_t;
-    sample_valid_i : in  std_ulogic;
+    i_sample_i : in  iq_value_t;
+    q_sample_i : in  iq_value_t;
+    iq_valid_i : in  std_ulogic;
 
     audio_L_o     : out sample_t;
     audio_R_o     : out sample_t;
-    audio_valid_o : out std_ulogic;
-
-    -- testing only
-    fir_i       : in  sample_t;
-    fir_valid_i : in  std_ulogic;
-    fir_o       : out sample_t;
-    fir_valid_o : out std_ulogic);
+    audio_valid_o : out std_ulogic);
 
 end entity fm_receiver;
 
@@ -102,16 +95,6 @@ begin  -- architecture rtl
   -- Instantiations
   ------------------------------------------------------------------------------
 
-  dspfir_inst : entity work.DspFir
-  generic map(
-      gB => filter_bp_pilot_coeffs_c)
-  port map(
-      iClk            => clk_i,
-      inResetAsync    => not rst_i,
-      iDdry           => fir_i,
-      iValDry         => fir_valid_i,
-      oDwet           => fir_o,
-      oValWet         => fir_valid_o);
 
   -----------------------------------------------------------------------------
   -- Assertions for testbench

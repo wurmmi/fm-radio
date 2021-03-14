@@ -12,6 +12,7 @@ use ieee.fixed_pkg.all;
 
 library work;
 use work.fm_pkg.all;
+use work.filter_lp_mono_pkg.all;
 
 entity recover_carriers is
   port (
@@ -85,5 +86,16 @@ begin  -- architecture rtl
   ------------------------------------------------------------------------------
   -- Instantiations
   ------------------------------------------------------------------------------
+
+  dspfir_inst : entity work.DspFir
+  generic map(
+      gB => filter_bp_pilot_coeffs_c)
+  port map(
+      iClk            => clk_i,
+      inResetAsync    => not rst_i,
+      iDdry           => fir_i,
+      iValDry         => fir_valid_i,
+      oDwet           => fir_o,
+      oValWet         => fir_valid_o);
 
 end architecture rtl;
