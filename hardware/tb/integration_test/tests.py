@@ -19,7 +19,7 @@ from fm_tb import FM_TB
 
 
 @cocotb.test()
-async def fir_filter_test(dut):
+async def audio_mono_test(dut):
     """
     Load test data from files and send them through the DUT.
     Compare input and output afterwards.
@@ -45,34 +45,41 @@ async def fir_filter_test(dut):
     ###
     # Load data from files
     ###
-    filename = "../../../sim/matlab/verification_data/rx_fmChannelData.txt"
-    data_i = []
+
+    filename = "../../../sim/matlab/verification_data/rx_fm_bb.txt"
+    data = []
     with open(filename) as fd:
         val_count = 0
         for line in fd:
-            data_i.append(float(line.strip('\n')))
+            data.append(float(line.strip('\n')))
             val_count += 1
             # Stop after required number of samples
-            if val_count >= num_samples:
+            if val_count >= num_samples * 2:
                 break
 
-    # Convert to fixed point and back to int
-    data_i_fp = to_fixed_point(data_i, fp_width_c, fp_width_frac_c)
-    data_i_int = fixed_to_int(data_i_fp)
+    # Split interleaved I/Q samples (take every other)
+    data_in_i = data[0::2]  # start:end:step
+    data_in_q = data[1::2]  # start:end:step
 
-    filename = "../../../sim/matlab/verification_data/rx_pilot.txt"
-    data_o_gold = []
+    # Convert to fixed point and back to int
+    data_in_i_fp = to_fixed_point(data_in_i, fp_width_c, fp_width_frac_c)
+    data_in_q_fp = to_fixed_point(data_in_q, fp_width_c, fp_width_frac_c)
+    data_in_i_int = fixed_to_int(data_in_i_fp)
+    data_in_q_int = fixed_to_int(data_in_q_fp)
+
+    filename = "../../../sim/matlab/verification_data/rx_audio_mono.txt"
+    audio_mono_gold = []
     with open(filename) as fd:
         val_count = 0
         for line in fd:
-            data_o_gold.append(float(line.strip('\n')))
+            audio_mono_gold.append(float(line.strip('\n')))
             val_count += 1
             # Stop after required number of samples
             if val_count >= num_samples:
                 break
 
     # Convert to fixed point
-    data_o_gold_fp = to_fixed_point(data_o_gold, fp_width_c, fp_width_frac_c)
+    audio_mono_gold_fp = to_fixed_point(audio_mono_gold, fp_width_c, fp_width_frac_c)
 
     ###
     # Prepare environment
@@ -98,26 +105,27 @@ async def fir_filter_test(dut):
     await tb.reset()
 
     # Fork the 'receiving part'
-    fir_out_fork = cocotb.fork(tb.read_fm_receiver_output())
+    output_fork = cocotb.fork(tb.read_fm_receiver_output())
 
     # Send input data through filter
     dut._log.info("Sending IQ samples to FM Receiver IP ...")
 
-    for i, sample in enumerate(data_i_int):
+    for i in range(0, len(data_in_i)):
         await RisingEdge(dut.iq_valid_i)
-        dut.i_sample_i <= int(sample)
-        dut.q_sample_i <= int(sample)
+        dut.i_sample_i <= int(data_in_i_int[i])
+        dut.q_sample_i <= int(data_in_q_int[i])
 
     await RisingEdge(dut.iq_valid_i)
 
     # Stop other forked routines
-    fir_out_fork.kill()
+    output_fork.kill()
 
+    # Measure time
     timestamp_end = time.time()
     dut._log.info("Execution took {:.2f} seconds.".format(timestamp_end - timestamp_start))
 
-    num_received = len(tb.data_out_L)
-    num_expected = len(data_o_gold_fp)
+    num_received = len(tb.data_out_audio_mono)
+    num_expected = len(audio_mono_gold_fp)
 
     ###
     # Plots
@@ -127,9 +135,9 @@ async def fir_filter_test(dut):
 
         fig = plt.figure()
         plt.plot(np.arange(0, num_expected) / fs_rx_c,
-                 from_fixed_point(data_o_gold_fp), "b", label="data_o_gold_fp")
+                 from_fixed_point(audio_mono_gold_fp), "b", label="audio_mono_gold_fp")
         plt.plot(np.arange(0, num_received) / fs_rx_c,
-                 tb.data_out_L, "r", label="data_out_L")
+                 tb.data_out_audio_mono, "r", label="data_out_audio_mono")
         plt.title("Carrier phase recovery")
         plt.grid(True)
         plt.legend()
@@ -151,14 +159,14 @@ async def fir_filter_test(dut):
     skip_N = 10
     dut._log.info("Skipping first N={} samples. (in:out = {}:{})".format(
         skip_N, num_expected, num_received))
-    data_o_gold_fp = data_o_gold_fp[skip_N:]
-    tb.data_out_L = tb.data_out_L[skip_N:]
+    audio_mono_gold_fp = audio_mono_gold_fp[skip_N:]
+    tb.data_out_audio_mono = tb.data_out_audio_mono[skip_N:]
     dut._log.info("Skipped first N={} samples.  (in:out = {}:{})".format(
         skip_N, num_expected, num_received))
 
     max_diff = 2**-5
-    for i, res in enumerate(tb.data_out_L):
-        diff = data_o_gold_fp[i] - res
+    for i, res in enumerate(tb.data_out_audio_mono):
+        diff = audio_mono_gold_fp[i] - res
         if abs(from_fixed_point(diff)) > max_diff:
             raise cocotb.result.TestError("FIR output [{}] is not matching the expected values: {}>{}.".format(
                 i, abs(from_fixed_point(diff)), max_diff))
@@ -166,7 +174,7 @@ async def fir_filter_test(dut):
             #    i, abs(from_fixed_point(diff)), max_diff))
 
     norm_res = np.linalg.norm(np.array(from_fixed_point(
-        data_o_gold_fp[0:num_received])) - np.array(tb.data_out_L), 2)
+        audio_mono_gold_fp[0:num_received])) - np.array(tb.data_out_audio_mono), 2)
     dut._log.info("2-Norm = {}".format(norm_res))
 
     dut._log.info("Done.")

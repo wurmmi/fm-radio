@@ -122,6 +122,7 @@ if EnableWriteDataFiles
     writeDataToFile(rx_fmChannelData, './verification_data/rx_fmChannelData.txt', fp_width, fp_width_frac);
     writeDataToFile(rx_pilot,         './verification_data/rx_pilot.txt',         fp_width, fp_width_frac);
     writeDataToFile(rx_fm_bb,         './verification_data/rx_fm_bb.txt',         fp_width, fp_width_frac);
+    writeDataToFile(rx_audio_mono,    './verification_data/rx_audio_mono.txt',    fp_width, fp_width_frac);
     writeDataToFile(rx_audio_L,       './verification_data/rx_audio_L.txt',       fp_width, fp_width_frac);
     writeDataToFile(rx_audio_R,       './verification_data/rx_audio_R.txt',       fp_width, fp_width_frac);
     

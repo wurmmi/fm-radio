@@ -115,6 +115,7 @@ async def fir_filter_test(dut):
     # Stop other forked routines
     fir_out_fork.kill()
 
+    # Measure time
     timestamp_end = time.time()
     dut._log.info("Execution took {:.2f} seconds.".format(timestamp_end - timestamp_start))
 

@@ -26,7 +26,10 @@ else
     data_fp_q = cast(imag(data), 'like', fi([], true, fp_width, fp_width_frac));
     
     % Write to file
-    fprintf(fileID, "%.32f, %.32f\n", data_fp_i, data_fp_q);
+    for i=1:length(data_fp_i)
+        fprintf(fileID, "%.32f\n", data_fp_i(i));
+        fprintf(fileID, "%.10f\n", data_fp_q(i));
+    end
 end
 
 fclose(fileID);

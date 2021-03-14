@@ -20,6 +20,7 @@ class FM_TB(object):
     # Variables
     data_out_L = []
     data_out_R = []
+    data_out_audio_mono = []
 
     assert (CLOCK_FREQ_MHZ * 1e3 / FS_RX_KHZ).is_integer(), \
         "Clock rate and fs_rx must have an integer relation!"
