@@ -88,7 +88,7 @@ fm_receiver();
 
 if EnableRxAudioReplay
     disp('### Audio Replay ###');
-
+    
     % Create LR audio signal for output
     rx_audioReplay = zeros(length(rx_audio_L),2);
     rx_audioReplay(:,1) = rx_audio_L;
@@ -120,13 +120,16 @@ if EnableWriteDataFiles
     
     % Test data
     writeDataToFile(rx_fmChannelData, './verification_data/rx_fmChannelData.txt', fp_width, fp_width_frac);
-    writeDataToFile(rx_pilot,         './verification_data/rx_pilot.txt', fp_width, fp_width_frac);
+    writeDataToFile(rx_pilot,         './verification_data/rx_pilot.txt',         fp_width, fp_width_frac);
+    writeDataToFile(rx_fm_bb,         './verification_data/rx_fm_bb.txt',         fp_width, fp_width_frac);
+    writeDataToFile(rx_audio_L,       './verification_data/rx_audio_L.txt',       fp_width, fp_width_frac);
+    writeDataToFile(rx_audio_R,       './verification_data/rx_audio_R.txt',       fp_width, fp_width_frac);
     
     % Filter coefficients
     writeFilterCoeffsToVHDLFile(filter_bp_pilot, 'filter_bp_pilot', ...
-                                '../../hardware/src/filter_coeff_pkgs/', fp_width, fp_width_frac);
+        '../../hardware/src/filter_coeff_pkgs/', fp_width, fp_width_frac);
     writeFilterCoeffsToVHDLFile(filter_lp_mono, 'filter_lp_mono', ...
-                                '../../hardware/src/filter_coeff_pkgs/', fp_width, fp_width_frac);
+        '../../hardware/src/filter_coeff_pkgs/', fp_width, fp_width_frac);
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

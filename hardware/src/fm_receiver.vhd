@@ -13,7 +13,7 @@
 --                15:15 - 19:15    4:00 h
 -- (2) FM receiver implementation
 --    03/14/2021  09:30 - 12:00    2:30 h
---                12:30 - xx:xx    x:xx h
+--                12:30 - 13:30    1:00 h
 --
 
 library ieee;
