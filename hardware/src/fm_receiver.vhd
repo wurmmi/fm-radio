@@ -10,7 +10,7 @@
 --
 -- (1) FIR Filter implementation
 --    03/10/2021 11:30 - 14:00    2:30 h
---               15:15 - xx:xx    2:30 h
+--               15:15 - 19:15    4:00 h
 --
 
 library ieee;
