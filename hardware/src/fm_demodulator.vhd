@@ -18,9 +18,9 @@ entity fm_demodulator is
     clk_i : in std_ulogic;
     rst_i : in std_ulogic;
 
-    i_sample_i     : in  iq_value_t;
-    q_sample_i     : in  iq_value_t;
-    sample_valid_i : in  std_ulogic;
+    i_sample_i : in iq_value_t;
+    q_sample_i : in iq_value_t;
+    iq_valid_i : in std_ulogic;
 
     fm_demod_o       : out sample_t;
     fm_demod_valid_o : out std_ulogic);
@@ -39,18 +39,14 @@ architecture rtl of fm_demodulator is
   --! @name Internal Registers
   -----------------------------------------------------------------------------
   --! @{
-
-
   --! @}
   -----------------------------------------------------------------------------
   --! @name Internal Wires
   -----------------------------------------------------------------------------
   --! @{
-
-
   --! @}
 
-begin  -- architecture rtl
+begin -- architecture rtl
 
   ------------------------------------------------------------------------------
   -- Outputs
@@ -59,8 +55,6 @@ begin  -- architecture rtl
   -----------------------------------------------------------------------------
   -- Signal Assignments
   -----------------------------------------------------------------------------
-
-
   ------------------------------------------------------------------------------
   -- Registers
   ------------------------------------------------------------------------------

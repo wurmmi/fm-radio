@@ -12,7 +12,8 @@
 --    03/10/2021  11:30 - 14:00    2:30 h
 --                15:15 - 19:15    4:00 h
 -- (2) FM receiver implementation
---    03/14/2021  09:30 - xx:xx    x:xx h
+--    03/14/2021  09:30 - 12:00    2:30 h
+--                12:30 - xx:xx    x:xx h
 --
 
 library ieee;
@@ -30,9 +31,9 @@ entity fm_receiver is
     clk_i : in std_ulogic;
     rst_i : in std_ulogic;
 
-    i_sample_i : in  iq_value_t;
-    q_sample_i : in  iq_value_t;
-    iq_valid_i : in  std_ulogic;
+    i_sample_i : in iq_value_t;
+    q_sample_i : in iq_value_t;
+    iq_valid_i : in std_ulogic;
 
     audio_L_o     : out sample_t;
     audio_R_o     : out sample_t;
@@ -52,49 +53,76 @@ architecture rtl of fm_receiver is
   --! @name Internal Registers
   -----------------------------------------------------------------------------
   --! @{
-
-
   --! @}
   -----------------------------------------------------------------------------
   --! @name Internal Wires
   -----------------------------------------------------------------------------
   --! @{
 
+  signal fm_demod       : sample_t;
+  signal fm_demod_valid : std_ulogic;
+
+  signal fm_channel_data       : sample_t;
+  signal fm_channel_data_valid : std_ulogic;
+
+  signal audio_L     : sample_t;
+  signal audio_R     : sample_t;
+  signal audio_valid : std_ulogic;
 
   --! @}
 
-begin  -- architecture rtl
+begin -- architecture rtl
 
   ------------------------------------------------------------------------------
   -- Outputs
   ------------------------------------------------------------------------------
 
+  audio_L_o     <= audio_L;
+  audio_R_o     <= audio_R;
+  audio_valid_o <= audio_valid;
+
   -----------------------------------------------------------------------------
   -- Signal Assignments
   -----------------------------------------------------------------------------
-
-
-  ------------------------------------------------------------------------------
-  -- Registers
-  ------------------------------------------------------------------------------
-
-  regs : process (clk_i) is
-    procedure reset is
-    begin
-    end procedure reset;
-  begin  -- process regs
-    if rising_edge(clk_i) then
-      if rst_i = '1' then
-        reset;
-      else
-      end if;
-    end if;
-  end process regs;
 
   ------------------------------------------------------------------------------
   -- Instantiations
   ------------------------------------------------------------------------------
 
+  fm_demodulator_inst : entity work.fm_demodulator
+    port map(
+      clk_i => clk_i,
+      rst_i => rst_i,
+
+      i_sample_i => i_sample_i,
+      q_sample_i => q_sample_i,
+      iq_valid_i => iq_valid_i,
+
+      fm_demod_o       => fm_demod,
+      fm_demod_valid_o => fm_demod_valid);
+
+  decimator_inst : entity work.decimator
+    port map(
+      clk_i => clk_i,
+      rst_i => rst_i,
+
+      sample_i       => fm_demod,
+      sample_valid_i => fm_demod_valid,
+
+      sample_o       => fm_channel_data,
+      sample_valid_o => fm_channel_data_valid);
+
+  channel_decoder_inst : entity work.channel_decoder
+    port map(
+      clk_i => clk_i,
+      rst_i => rst_i,
+
+      sample_i       => fm_channel_data,
+      sample_valid_i => fm_channel_data_valid,
+
+      audio_L_o     => audio_L,
+      audio_R_o     => audio_R,
+      audio_valid_o => audio_valid);
 
   -----------------------------------------------------------------------------
   -- Assertions for testbench

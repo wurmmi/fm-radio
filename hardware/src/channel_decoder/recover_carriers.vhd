@@ -19,8 +19,8 @@ entity recover_carriers is
     clk_i : in std_ulogic;
     rst_i : in std_ulogic;
 
-    sample_i       : in  sample_t;
-    sample_valid_i : in  std_ulogic;
+    sample_i       : in sample_t;
+    sample_valid_i : in std_ulogic;
 
     carrier_38k_o       : out sample_t;
     carrier_38k_valid_o : out std_ulogic;
@@ -41,18 +41,14 @@ architecture rtl of recover_carriers is
   --! @name Internal Registers
   -----------------------------------------------------------------------------
   --! @{
-
-
   --! @}
   -----------------------------------------------------------------------------
   --! @name Internal Wires
   -----------------------------------------------------------------------------
   --! @{
-
-
   --! @}
 
-begin  -- architecture rtl
+begin -- architecture rtl
 
   ------------------------------------------------------------------------------
   -- Outputs
@@ -64,8 +60,6 @@ begin  -- architecture rtl
   -----------------------------------------------------------------------------
   -- Signal Assignments
   -----------------------------------------------------------------------------
-
-
   ------------------------------------------------------------------------------
   -- Registers
   ------------------------------------------------------------------------------
@@ -74,7 +68,7 @@ begin  -- architecture rtl
     procedure reset is
     begin
     end procedure reset;
-  begin  -- process regs
+  begin -- process regs
     if rising_edge(clk_i) then
       if rst_i = '1' then
         reset;
@@ -88,14 +82,14 @@ begin  -- architecture rtl
   ------------------------------------------------------------------------------
 
   dspfir_inst : entity work.DspFir
-  generic map(
+    generic map(
       gB => filter_bp_pilot_coeffs_c)
-  port map(
-      iClk            => clk_i,
-      inResetAsync    => not rst_i,
-      iDdry           => fir_i,
-      iValDry         => fir_valid_i,
-      oDwet           => fir_o,
-      oValWet         => fir_valid_o);
+    port map(
+      iClk         => clk_i,
+      inResetAsync => not rst_i,
+      iDdry        => fir_i,
+      iValDry      => fir_valid_i,
+      oDwet        => fir_o,
+      oValWet      => fir_valid_o);
 
 end architecture rtl;

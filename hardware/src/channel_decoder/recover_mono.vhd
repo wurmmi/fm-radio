@@ -19,8 +19,8 @@ entity recover_mono is
     clk_i : in std_ulogic;
     rst_i : in std_ulogic;
 
-    sample_i       : in  sample_t;
-    sample_valid_i : in  std_ulogic;
+    sample_i       : in sample_t;
+    sample_valid_i : in std_ulogic;
 
     mono_o       : out sample_t;
     mono_valid_o : out std_ulogic);
@@ -39,48 +39,38 @@ architecture rtl of recover_mono is
   --! @name Internal Registers
   -----------------------------------------------------------------------------
   --! @{
-
-
   --! @}
   -----------------------------------------------------------------------------
   --! @name Internal Wires
   -----------------------------------------------------------------------------
   --! @{
-
-
   --! @}
 
-begin  -- architecture rtl
+begin -- architecture rtl
 
   ------------------------------------------------------------------------------
   -- Outputs
   ------------------------------------------------------------------------------
-
-
   -----------------------------------------------------------------------------
   -- Signal Assignments
   -----------------------------------------------------------------------------
-
-
   ------------------------------------------------------------------------------
   -- Registers
   ------------------------------------------------------------------------------
-
-
   ------------------------------------------------------------------------------
   -- Instantiations
   ------------------------------------------------------------------------------
 
   dspfir_lp_mono_inst : entity work.DspFir
-  generic map(
+    generic map(
       gB => filter_bp_mono_coeffs_c)
-  port map(
-      iClk            => clk_i,
-      inResetAsync    => not rst_i,
-      iDdry           => fir_i,
-      iValDry         => fir_valid_i,
-      oDwet           => fir_o,
-      oValWet         => fir_valid_o);
+    port map(
+      iClk         => clk_i,
+      inResetAsync => not rst_i,
+      iDdry        => fir_i,
+      iValDry      => fir_valid_i,
+      oDwet        => fir_o,
+      oValWet      => fir_valid_o);
 
   -- Delay
 
