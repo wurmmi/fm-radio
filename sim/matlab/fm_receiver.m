@@ -39,9 +39,10 @@ rx_fm_demod = part_demod_a - part_demod_b;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% De-emphasis
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-disp('-- De-emphasis');
 
 if EnableDeEmphasis
+    disp('-- De-emphasis');
+
     % Create de-emphasis filter
     filter_de_emphasis = getEmphasisFilter(fs, 'de', EnableFilterAnalyzeGUI);
     

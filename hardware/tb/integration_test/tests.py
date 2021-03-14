@@ -24,7 +24,7 @@ async def fir_filter_test(dut):
     Load test data from files and send them through the DUT.
     Compare input and output afterwards.
     """
-    EnablePlots = True
+    EnablePlots = False
 
     timestamp_start = time.time()
 

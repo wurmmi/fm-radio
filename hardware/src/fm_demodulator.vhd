@@ -39,11 +39,26 @@ architecture rtl of fm_demodulator is
   --! @name Internal Registers
   -----------------------------------------------------------------------------
   --! @{
+
+  signal demod_part_a : sample_t;
+  signal demod_part_b : sample_t;
+
+  signal fm_demod       : sample_t;
+  signal fm_demod_valid : std_ulogic;
+
   --! @}
   -----------------------------------------------------------------------------
   --! @name Internal Wires
   -----------------------------------------------------------------------------
   --! @{
+
+  signal i_sample_diff : sample_t;
+  signal q_sample_diff : sample_t;
+  signal iq_valid_diff : std_ulogic;
+
+  signal i_sample_del : sample_t;
+  signal q_sample_del : sample_t;
+
   --! @}
 
 begin -- architecture rtl
@@ -55,12 +70,77 @@ begin -- architecture rtl
   -----------------------------------------------------------------------------
   -- Signal Assignments
   -----------------------------------------------------------------------------
+
   ------------------------------------------------------------------------------
   -- Registers
   ------------------------------------------------------------------------------
 
+  regs : process (clk_i) is
+  begin -- process regs
+    if rising_edge(clk_i) then
+      -- Defaults
+      fm_demod_valid <= '0';
+
+      if iq_valid_diff = '1' then
+        --demod_part_a <= ResizeTruncAbsVal(i_sample_del * q_sample_diff, demod_part_a);
+        --demod_part_b <= ResizeTruncAbsVal(q_sample_del * i_sample_diff, demod_part_b);
+        --
+        --fm_demod       <= ResizeTruncAbsVal(demod_part_a - demod_part_b, fm_demod);
+        --fm_demod_valid <= '1';
+      end if;
+    end if;
+  end process regs;
+
   ------------------------------------------------------------------------------
   -- Instantiations
   ------------------------------------------------------------------------------
+
+  DspFir_differentiator_i_inst : entity work.DspFir
+    generic map(
+      gB => (-1.0, 0.0, 0.99999999999))
+    port map(
+      iClk         => clk_i,
+      inResetAsync => not rst_i,
+
+      iDdry   => i_sample_i,
+      iValDry => iq_valid_i,
+
+      oDwet   => i_sample_diff,
+      oValWet => iq_valid_diff);
+
+  DspFir_differentiator_q_inst : entity work.DspFir
+    generic map(
+      gB => (-1.0, 0.0, 0.99999999999))
+    port map(
+      iClk         => clk_i,
+      inResetAsync => not rst_i,
+
+      iDdry   => q_sample_i,
+      iValDry => iq_valid_i,
+
+      oDwet   => q_sample_diff,
+      oValWet => open);
+
+  delay_i_inst : entity work.delay_vector
+    generic map(
+      gDelay => 1)
+    port map(
+      iClk         => clk_i,
+      inResetAsync => not rst_i,
+
+      iDdry   => i_sample_i,
+      iValDry => iq_valid_i,
+      oDwet   => i_sample_del);
+
+  delay_q_inst : entity work.delay_vector
+    generic map(
+      gDelay => 1)
+    port map(
+      iClk         => clk_i,
+      inResetAsync => not rst_i,
+
+      iDdry   => q_sample_i,
+      iValDry => iq_valid_i,
+      oDwet   => q_sample_del);
 
 end architecture rtl;
