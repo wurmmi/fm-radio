@@ -8,9 +8,11 @@
 -------------------------------------------------------------------------------
 -- TIME LOGGING
 --
--- (1) FIR Filter implementation
---    03/10/2021 11:30 - 14:00    2:30 h
---               15:15 - 19:15    4:00 h
+-- (1) FIR filter implementation
+--    03/10/2021  11:30 - 14:00    2:30 h
+--                15:15 - 19:15    4:00 h
+-- (2) FM receiver implementation
+--    03/14/2021  09:30 - xx:xx    x:xx h
 --
 
 library ieee;
@@ -29,13 +31,19 @@ entity fm_receiver is
     clk_i : in std_ulogic;
     rst_i : in std_ulogic;
 
+    i_sample_i     : in  iq_value_t;
+    q_sample_i     : in  iq_value_t;
+    sample_valid_i : in  std_ulogic;
+
+    audio_L_o     : out sample_t;
+    audio_R_o     : out sample_t;
+    audio_valid_o : out std_ulogic;
+
+    -- testing only
     fir_i       : in  sample_t;
     fir_valid_i : in  std_ulogic;
     fir_o       : out sample_t;
-    fir_valid_o : out std_ulogic;
-
-    read_data_real_o : out iq_value_t;
-    read_data_imag_o : out iq_value_t);
+    fir_valid_o : out std_ulogic);
 
 end entity fm_receiver;
 
