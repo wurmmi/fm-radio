@@ -20,9 +20,14 @@ from fm_tb import FM_TB
 
 @cocotb.test()
 async def fir_filter_test(dut):
-    """Load test data from files and send them through the DUT.\n Compare input and output afterwards."""
+    """
+    Load test data from files and send them through the DUT.
+    Compare input and output afterwards.
+    """
+    EnablePlots = False
 
     timestamp_start = time.time()
+
     ###
     # Constants
     ###
@@ -109,19 +114,20 @@ async def fir_filter_test(dut):
     ###
     # Plots
     ###
-    dut._log.info("Plots ...")
+    if EnablePlots:
+        dut._log.info("Plots ...")
 
-    fig = plt.figure()
-    plt.plot(np.arange(0, len(data_o_gold_fp)) / fs_rx_c,
-             from_fixed_point(data_o_gold_fp), "b", label="data_o_gold_fp")
-    plt.plot(np.arange(0, len(tb.data_out)) / fs_rx_c,
-             tb.data_out, "r", label="data_out")
-    plt.title("Carrier phase recovery")
-    plt.grid(True)
-    plt.legend()
-    fig.tight_layout()
-    plt.xlim([0, 0.002])
-    plt.show()
+        fig = plt.figure()
+        plt.plot(np.arange(0, len(data_o_gold_fp)) / fs_rx_c,
+                 from_fixed_point(data_o_gold_fp), "b", label="data_o_gold_fp")
+        plt.plot(np.arange(0, len(tb.data_out)) / fs_rx_c,
+                 tb.data_out, "r", label="data_out")
+        plt.title("Carrier phase recovery")
+        plt.grid(True)
+        plt.legend()
+        fig.tight_layout()
+        plt.xlim([0, 0.002])
+        plt.show()
 
     ###
     # Compare results
