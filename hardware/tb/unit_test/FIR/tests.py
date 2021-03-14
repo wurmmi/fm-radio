@@ -90,8 +90,8 @@ async def fir_filter_test(dut):
     ###
 
     # Reset the DUT before any tests begin
-    await tb.reset()
     await tb.assign_defaults()
+    await tb.reset()
 
     # Fork the 'receiving part'
     fir_out_fork = cocotb.fork(tb.read_fir_result(output_scale_c))

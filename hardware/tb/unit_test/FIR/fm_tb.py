@@ -50,7 +50,7 @@ class FM_TB(object):
         self.dut._log.info("Setting defaults ...")
 
         #self.dut.iValDry <= 0
-        #self.dut.iDdry <= 0
+        self.dut.iDdry <= 0
 
     @cocotb.coroutine
     async def read_fir_result(self, output_scale):
