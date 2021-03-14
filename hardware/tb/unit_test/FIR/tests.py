@@ -41,7 +41,7 @@ async def fir_filter_test(dut):
     ###
     # Load data from files
     ###
-    filename = "../../../sim/matlab/verification_data/rx_fmChannelData.txt"
+    filename = "../../../../sim/matlab/verification_data/rx_fmChannelData.txt"
     data_i = []
     with open(filename) as fd:
         val_count = 0
@@ -56,7 +56,7 @@ async def fir_filter_test(dut):
     data_i_fp = to_fixed_point(data_i, fp_width_c, fp_width_frac_c)
     data_i_int = fixed_to_int(data_i_fp)
 
-    filename = "../../../sim/matlab/verification_data/rx_pilot.txt"
+    filename = "../../../../sim/matlab/verification_data/rx_pilot.txt"
     data_o_gold = []
     with open(filename) as fd:
         val_count = 0
