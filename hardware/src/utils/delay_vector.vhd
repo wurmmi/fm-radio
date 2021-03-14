@@ -48,8 +48,8 @@ architecture RtlRam of delay_vector is
   ----------------------------------------------------------------------------
 
   type aRamMem is array (integer range <>) of sample_t;
-  signal ram     : aRamMem(0 to gDelay - 1)                 := (others => (others => '0'));
-  signal addrCnt : unsigned(LogDualis(gDelay) - 1 downto 0) := (others => '0');
+  signal ram     : aRamMem(0 to gDelay - 1)  := (others => (others => '0'));
+  signal addrCnt : natural range 0 to gDelay := 0;
 
 begin
 
@@ -67,16 +67,6 @@ begin
   -- Logic
   ----------------------------------------------------------------------------
 
-  regs : process (iClk) is
-  begin -- process regs
-    if rising_edge(iClk) then
-
-      if inResetAsync = '0' then
-        addrCnt <= (others => '0');
-      end if;
-    end if;
-  end process regs;
-
   ----------------------------------------------------------------------------
   -- Read and write RAM
   ----------------------------------------------------------------------------
@@ -84,20 +74,20 @@ begin
   begin
     if rising_edge(iClk) then
       if iValDry = '1' then
-        --ram(to_integer(addrCnt)) <= iDdry;
-        --
-        --if (addrCnt = gDelay - 1) then
-        --  addrCnt <= (others => '0');
-        --else
-        --  addrCnt <= addrCnt + 1;
-        --end if;
+        ram(addrCnt) <= iDdry;
+
+        if addrCnt = gDelay - 1 then
+          addrCnt <= 0;
+        else
+          addrCnt <= addrCnt + 1;
+        end if;
       end if;
 
-      --      if addrCnt = gDelay - 1 then
-      --        readVal <= ram(0);
-      --      else
-      --        readVal <= ram(to_integer(addrCnt + 1));
-      --      end if;
+      if addrCnt = gDelay - 1 then
+        readVal <= ram(0);
+      else
+        readVal <= ram(addrCnt + 1);
+      end if;
     end if;
   end process ReadWrite;
 

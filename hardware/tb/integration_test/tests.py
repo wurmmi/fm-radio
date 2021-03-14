@@ -19,7 +19,7 @@ from fm_tb import FM_TB
 
 
 @cocotb.test()
-async def audio_mono_test(dut):
+async def data_processing_test(dut):
     """
     Load test data from files and send them through the DUT.
     Compare input and output afterwards.
@@ -81,6 +81,20 @@ async def audio_mono_test(dut):
     # Convert to fixed point
     audio_mono_gold_fp = to_fixed_point(audio_mono_gold, fp_width_c, fp_width_frac_c)
 
+    filename = "../../../sim/matlab/verification_data/rx_fm_demod.txt"
+    fm_demod = []
+    with open(filename) as fd:
+        val_count = 0
+        for line in fd:
+            fm_demod.append(float(line.strip('\n')))
+            val_count += 1
+            # Stop after required number of samples
+            if val_count >= num_samples:
+                break
+
+    # Convert to fixed point
+    fm_demod_gold_fp = to_fixed_point(fm_demod, fp_width_c, fp_width_frac_c)
+
     ###
     # Prepare environment
     ###
@@ -105,7 +119,8 @@ async def audio_mono_test(dut):
     await tb.reset()
 
     # Fork the 'receiving part'
-    output_fork = cocotb.fork(tb.read_fm_receiver_output())
+    audio_LR_output_fork = cocotb.fork(tb.read_audio_LR_output())
+    fm_demod_output_fork = cocotb.fork(tb.read_fm_demod_output())
 
     # Send input data through filter
     dut._log.info("Sending IQ samples to FM Receiver IP ...")
@@ -118,13 +133,15 @@ async def audio_mono_test(dut):
     await RisingEdge(dut.iq_valid_i)
 
     # Stop other forked routines
-    output_fork.kill()
+    audio_LR_output_fork.kill()
+    fm_demod_output_fork.kill()
 
     # Measure time
     timestamp_end = time.time()
     dut._log.info("Execution took {:.2f} seconds.".format(timestamp_end - timestamp_start))
 
-    num_received = len(tb.data_out_audio_mono)
+    num_received = len(tb.data_out_audio_mono)  # TODO
+    num_received = len(tb.data_out_fm_demod)
     num_expected = len(audio_mono_gold_fp)
 
     ###

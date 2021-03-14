@@ -21,6 +21,7 @@ class FM_TB(object):
     data_out_L = []
     data_out_R = []
     data_out_audio_mono = []
+    data_out_fm_demod = []
 
     assert (CLOCK_FREQ_MHZ * 1e3 / FS_RX_KHZ).is_integer(), \
         "Clock rate and fs_rx must have an integer relation!"
@@ -60,7 +61,7 @@ class FM_TB(object):
         self.dut.q_sample_i <= 0
 
     @cocotb.coroutine
-    async def read_fm_receiver_output(self):
+    async def read_audio_LR_output(self):
         edge = RisingEdge(self.dut.audio_valid_o)
         while(True):
             await edge
@@ -74,4 +75,18 @@ class FM_TB(object):
             # print every 10th number to show progress
             size = len(self.data_out_L)
             if size % 10 == 0:
-                self.dut._log.info("Progress sample: {}".format(size))
+                self.dut._log.info("Progress audio_LR: {}".format(size))
+
+    @cocotb.coroutine
+    async def read_fm_demod_output(self):
+        edge = RisingEdge(self.dut.fm_demod_valid)
+        while(True):
+            await edge
+            fm_demod = self.dut.fm_demod.value.signed_integer
+            self.data_out_fm_demod.append(
+                int_to_fixed(fm_demod, self.fp_width_c, self.fp_width_frac_c))
+
+            # print every 10th number to show progress
+            size = len(self.data_out_fm_demod)
+            if size % 10 == 0:
+                self.dut._log.info("Progress fm_demod: {}".format(size))

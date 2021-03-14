@@ -67,6 +67,9 @@ begin -- architecture rtl
   -- Outputs
   ------------------------------------------------------------------------------
 
+  fm_demod_o       <= fm_demod;
+  fm_demod_valid_o <= fm_demod_valid;
+
   -----------------------------------------------------------------------------
   -- Signal Assignments
   -----------------------------------------------------------------------------
@@ -76,17 +79,28 @@ begin -- architecture rtl
   ------------------------------------------------------------------------------
 
   regs : process (clk_i) is
+    procedure reset is
+    begin
+      demod_part_a   <= (others => '0');
+      demod_part_b   <= (others => '0');
+      fm_demod       <= (others => '0');
+      fm_demod_valid <= '0';
+    end procedure reset;
   begin -- process regs
     if rising_edge(clk_i) then
-      -- Defaults
-      fm_demod_valid <= '0';
+      if rst_i = '1' then
+        reset;
+      else
+        -- Defaults
+        fm_demod_valid <= '0';
 
-      if iq_valid_diff = '1' then
-        --demod_part_a <= ResizeTruncAbsVal(i_sample_del * q_sample_diff, demod_part_a);
-        --demod_part_b <= ResizeTruncAbsVal(q_sample_del * i_sample_diff, demod_part_b);
-        --
-        --fm_demod       <= ResizeTruncAbsVal(demod_part_a - demod_part_b, fm_demod);
-        --fm_demod_valid <= '1';
+        if iq_valid_diff = '1' then
+          demod_part_a <= ResizeTruncAbsVal(i_sample_del * q_sample_diff, demod_part_a);
+          demod_part_b <= ResizeTruncAbsVal(q_sample_del * i_sample_diff, demod_part_b);
+
+          fm_demod       <= ResizeTruncAbsVal(demod_part_a - demod_part_b, fm_demod);
+          fm_demod_valid <= '1';
+        end if;
       end if;
     end if;
   end process regs;
