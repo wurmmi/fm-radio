@@ -12,6 +12,7 @@ use ieee.fixed_pkg.all;
 
 library work;
 use work.fm_pkg.all;
+use work.filter_diff_pkg.all;
 
 entity fm_demodulator is
   port (
@@ -113,7 +114,7 @@ begin -- architecture rtl
 
   DspFir_differentiator_i_inst : entity work.DspFir
     generic map(
-      gB => (0.9999999999999999999, 0.0, -1.0))
+      gB => filter_diff_coeffs_c)
     port map(
       iClk         => clk_i,
       inResetAsync => not rst_i,
@@ -126,7 +127,7 @@ begin -- architecture rtl
 
   DspFir_differentiator_q_inst : entity work.DspFir
     generic map(
-      gB => (0.9999999999999999999, 0.0, -1.0))
+      gB => filter_diff_coeffs_c)
     port map(
       iClk         => clk_i,
       inResetAsync => not rst_i,

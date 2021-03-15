@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
-[*] Mon Mar 15 15:34:51 2021
+[*] Mon Mar 15 16:10:00 2021
 [*]
 [dumpfile] "/home/mike/work/fm-radio/hardware/tb/integration_test/sim_build/waveform.ghw"
-[dumpfile_mtime] "Mon Mar 15 15:28:35 2021"
-[dumpfile_size] 9982400
+[dumpfile_mtime] "Mon Mar 15 16:04:59 2021"
+[dumpfile_size] 21902217
 [savefile] "/home/mike/work/fm-radio/hardware/tb/integration_test/gtkwave/waveconfig.gtkw"
 [timestart] 0
 [size] 1848 1016
 [pos] -1 -1
-*-33.516640 2820000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-39.554668 1368040000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.fm_receiver.
 [treeopen] top.fm_receiver.channel_decoder_inst.
@@ -55,7 +55,7 @@ top.fm_receiver.fm_demodulator_inst.q_sample_i[-28]
 top.fm_receiver.fm_demodulator_inst.q_sample_i[-29]
 top.fm_receiver.fm_demodulator_inst.q_sample_i[-30]
 top.fm_receiver.fm_demodulator_inst.q_sample_i[-31]
-@1401200
+@1401600
 -group_end
 @20000
 -
@@ -64,7 +64,7 @@ top.fm_receiver.fm_demodulator_inst.q_sample_i[-31]
 -
 @28
 top.fm_receiver.fm_demodulator_inst.iq_valid_i
-@8420
+@8421
 #{top.fm_receiver.fm_demodulator_inst.q_sample_diff[0:-31]} top.fm_receiver.fm_demodulator_inst.q_sample_diff[0] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-1] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-2] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-3] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-4] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-5] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-6] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-7] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-8] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-9] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-10] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-11] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-12] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-13] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-14] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-15] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-16] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-17] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-18] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-19] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-20] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-21] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-22] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-23] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-24] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-25] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-26] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-27] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-28] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-29] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-30] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-31]
 @20000
 -
@@ -90,7 +90,7 @@ top.fm_receiver.fm_demodulator_inst.delay_vector_i_inst.addrcnt
 top.fm_receiver.fm_demod_valid
 @22
 #{top.fm_receiver.fm_channel_data[0:-31]} top.fm_receiver.fm_channel_data[0] top.fm_receiver.fm_channel_data[-1] top.fm_receiver.fm_channel_data[-2] top.fm_receiver.fm_channel_data[-3] top.fm_receiver.fm_channel_data[-4] top.fm_receiver.fm_channel_data[-5] top.fm_receiver.fm_channel_data[-6] top.fm_receiver.fm_channel_data[-7] top.fm_receiver.fm_channel_data[-8] top.fm_receiver.fm_channel_data[-9] top.fm_receiver.fm_channel_data[-10] top.fm_receiver.fm_channel_data[-11] top.fm_receiver.fm_channel_data[-12] top.fm_receiver.fm_channel_data[-13] top.fm_receiver.fm_channel_data[-14] top.fm_receiver.fm_channel_data[-15] top.fm_receiver.fm_channel_data[-16] top.fm_receiver.fm_channel_data[-17] top.fm_receiver.fm_channel_data[-18] top.fm_receiver.fm_channel_data[-19] top.fm_receiver.fm_channel_data[-20] top.fm_receiver.fm_channel_data[-21] top.fm_receiver.fm_channel_data[-22] top.fm_receiver.fm_channel_data[-23] top.fm_receiver.fm_channel_data[-24] top.fm_receiver.fm_channel_data[-25] top.fm_receiver.fm_channel_data[-26] top.fm_receiver.fm_channel_data[-27] top.fm_receiver.fm_channel_data[-28] top.fm_receiver.fm_channel_data[-29] top.fm_receiver.fm_channel_data[-30] top.fm_receiver.fm_channel_data[-31]
-@29
+@28
 top.fm_receiver.fm_channel_data_valid
 @c08420
 #{top.fm_receiver.channel_decoder_inst.audio_mono[0:-31]} top.fm_receiver.channel_decoder_inst.audio_mono[0] top.fm_receiver.channel_decoder_inst.audio_mono[-1] top.fm_receiver.channel_decoder_inst.audio_mono[-2] top.fm_receiver.channel_decoder_inst.audio_mono[-3] top.fm_receiver.channel_decoder_inst.audio_mono[-4] top.fm_receiver.channel_decoder_inst.audio_mono[-5] top.fm_receiver.channel_decoder_inst.audio_mono[-6] top.fm_receiver.channel_decoder_inst.audio_mono[-7] top.fm_receiver.channel_decoder_inst.audio_mono[-8] top.fm_receiver.channel_decoder_inst.audio_mono[-9] top.fm_receiver.channel_decoder_inst.audio_mono[-10] top.fm_receiver.channel_decoder_inst.audio_mono[-11] top.fm_receiver.channel_decoder_inst.audio_mono[-12] top.fm_receiver.channel_decoder_inst.audio_mono[-13] top.fm_receiver.channel_decoder_inst.audio_mono[-14] top.fm_receiver.channel_decoder_inst.audio_mono[-15] top.fm_receiver.channel_decoder_inst.audio_mono[-16] top.fm_receiver.channel_decoder_inst.audio_mono[-17] top.fm_receiver.channel_decoder_inst.audio_mono[-18] top.fm_receiver.channel_decoder_inst.audio_mono[-19] top.fm_receiver.channel_decoder_inst.audio_mono[-20] top.fm_receiver.channel_decoder_inst.audio_mono[-21] top.fm_receiver.channel_decoder_inst.audio_mono[-22] top.fm_receiver.channel_decoder_inst.audio_mono[-23] top.fm_receiver.channel_decoder_inst.audio_mono[-24] top.fm_receiver.channel_decoder_inst.audio_mono[-25] top.fm_receiver.channel_decoder_inst.audio_mono[-26] top.fm_receiver.channel_decoder_inst.audio_mono[-27] top.fm_receiver.channel_decoder_inst.audio_mono[-28] top.fm_receiver.channel_decoder_inst.audio_mono[-29] top.fm_receiver.channel_decoder_inst.audio_mono[-30] top.fm_receiver.channel_decoder_inst.audio_mono[-31]

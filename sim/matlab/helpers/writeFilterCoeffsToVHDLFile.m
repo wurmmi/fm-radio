@@ -39,9 +39,9 @@ fprintf(fileID, [ ...
 data_fp = cast(coeffs, 'like', fi([], true, fp_width,fp_width_frac));
 
 grpdelay = (length(coeffs)-1)/2;
-fprintf(fileID, "constant %s_grpdelay_c : natural := %d;\n\n", filtername, grpdelay);
+fprintf(fileID, "  constant %s_grpdelay_c : natural := %d;\n\n", filtername, grpdelay);
 
-fprintf(fileID, "constant %s_coeffs_c : filter_coeffs_t := (\n", filtername);
+fprintf(fileID, "  constant %s_coeffs_c : filter_coeffs_t := (\n", filtername);
 fprintf(fileID, "    %.32f,\n", data_fp(1:end-1));
 fprintf(fileID, "    %.32f);\n\n", data_fp(end));
 
