@@ -54,10 +54,11 @@ architecture rtl of fm_demodulator is
 
   signal i_sample_diff : sample_t;
   signal q_sample_diff : sample_t;
-  signal iq_valid_diff : std_ulogic;
+  signal valid_diff    : std_ulogic;
 
-  signal i_sample_del : sample_t;
-  signal q_sample_del : sample_t;
+  signal i_sample_del     : sample_t;
+  signal q_sample_del     : sample_t;
+  signal sample_del_valid : std_ulogic;
 
   --! @}
 
@@ -94,7 +95,7 @@ begin -- architecture rtl
         -- Defaults
         fm_demod_valid <= '0';
 
-        if iq_valid_diff = '1' then
+        if valid_diff = '1' then
           demod_part_a <= ResizeTruncAbsVal(i_sample_del * q_sample_diff, demod_part_a);
           demod_part_b <= ResizeTruncAbsVal(q_sample_del * i_sample_diff, demod_part_b);
 
@@ -121,7 +122,7 @@ begin -- architecture rtl
       iValDry => iq_valid_i,
 
       oDwet   => i_sample_diff,
-      oValWet => iq_valid_diff);
+      oValWet => valid_diff);
 
   DspFir_differentiator_q_inst : entity work.DspFir
     generic map(
@@ -136,7 +137,7 @@ begin -- architecture rtl
       oDwet   => q_sample_diff,
       oValWet => open);
 
-  delay_i_inst : entity work.delay_vector
+  delay_vector_i_inst : entity work.delay_vector
     generic map(
       gDelay => 1)
     port map(
@@ -145,9 +146,11 @@ begin -- architecture rtl
 
       iDdry   => i_sample_i,
       iValDry => iq_valid_i,
-      oDwet   => i_sample_del);
 
-  delay_q_inst : entity work.delay_vector
+      oDwet   => i_sample_del,
+      oValWet => sample_del_valid);
+
+  delay_vector_q_inst : entity work.delay_vector
     generic map(
       gDelay => 1)
     port map(
@@ -156,6 +159,8 @@ begin -- architecture rtl
 
       iDdry   => q_sample_i,
       iValDry => iq_valid_i,
-      oDwet   => q_sample_del);
+
+      oDwet   => q_sample_del,
+      oValWet => open);
 
 end architecture rtl;

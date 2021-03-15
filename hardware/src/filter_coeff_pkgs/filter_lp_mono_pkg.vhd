@@ -7,6 +7,8 @@ use work.fm_pkg.all;
 
 package filter_lp_mono_pkg is
 
+constant filter_lp_mono_grpdelay_c : natural := 36;
+
 constant filter_lp_mono_coeffs_c : filter_coeffs_t := (
     0.00093090347945690155029296875000,
     -0.00209134072065353393554687500000,

@@ -11,7 +11,7 @@ use ieee.numeric_std.all;
 
 library work;
 use work.fm_pkg.all;
-use work.filter_bp_pilot_pkg.all;
+use work.filter_lp_mono_pkg.all;
 
 entity recover_mono is
   port (
@@ -43,6 +43,13 @@ architecture rtl of recover_mono is
   --! @name Internal Wires
   -----------------------------------------------------------------------------
   --! @{
+
+  signal mono       : sample_t;
+  signal mono_valid : std_ulogic;
+
+  signal mono_delayed       : sample_t;
+  signal mono_valid_delayed : std_ulogic;
+
   --! @}
 
 begin -- architecture rtl
@@ -50,6 +57,10 @@ begin -- architecture rtl
   ------------------------------------------------------------------------------
   -- Outputs
   ------------------------------------------------------------------------------
+
+  mono_o       <= mono_delayed;
+  mono_valid_o <= mono_valid_delayed;
+
   -----------------------------------------------------------------------------
   -- Signal Assignments
   -----------------------------------------------------------------------------
@@ -62,15 +73,28 @@ begin -- architecture rtl
 
   dspfir_lp_mono_inst : entity work.DspFir
     generic map(
-      gB => filter_bp_mono_coeffs_c)
+      gB => filter_lp_mono_coeffs_c)
     port map(
       iClk         => clk_i,
       inResetAsync => not rst_i,
-      iDdry        => fir_i,
-      iValDry      => fir_valid_i,
-      oDwet        => fir_o,
-      oValWet      => fir_valid_o);
 
-  -- Delay
+      iDdry   => sample_i,
+      iValDry => sample_valid_i,
+
+      oDwet   => mono,
+      oValWet => mono_valid);
+
+  delay_vector_inst : entity work.delay_vector
+    generic map(
+      gDelay => filter_lp_mono_grpdelay_c)
+    port map(
+      iClk         => clk_i,
+      inResetAsync => not rst_i,
+
+      iDdry   => mono,
+      iValDry => mono_valid,
+
+      oDwet   => mono_delayed,
+      oValWet => mono_valid_delayed);
 
 end architecture rtl;

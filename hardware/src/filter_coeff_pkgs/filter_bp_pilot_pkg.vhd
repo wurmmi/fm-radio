@@ -7,6 +7,8 @@ use work.fm_pkg.all;
 
 package filter_bp_pilot_pkg is
 
+constant filter_bp_pilot_grpdelay_c : natural := 25;
+
 constant filter_bp_pilot_coeffs_c : filter_coeffs_t := (
     0.00745439855381846427917480468750,
     0.00079929223284125328063964843750,

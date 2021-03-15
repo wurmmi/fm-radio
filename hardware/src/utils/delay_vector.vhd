@@ -30,7 +30,8 @@ entity delay_vector is
     iValDry : in std_ulogic;
 
     -- Output audio channel
-    oDwet : out sample_t);
+    oDwet   : out sample_t;
+    oValWet : out std_ulogic);
 
 end delay_vector;
 
@@ -39,16 +40,17 @@ architecture RtlRam of delay_vector is
   ----------------------------------------------------------------------------
   -- Signals
   ----------------------------------------------------------------------------
-
-  signal readVal : sample_t;
-
   ----------------------------------------------------------------------------
   -- Registers
   ----------------------------------------------------------------------------
 
   type aRamMem is array (integer range <>) of sample_t;
-  signal ram     : aRamMem(0 to gDelay - 1)  := (others => (others => '0'));
-  signal addrCnt : natural range 0 to gDelay := 0;
+  signal ram     : aRamMem(0 to gDelay - 1)      := (others => (others => '0'));
+  signal addrCnt : natural range 0 to gDelay - 1 := 0;
+
+  signal valid      : std_ulogic;
+  signal next_valid : std_ulogic;
+  signal readVal    : sample_t;
 
 begin
 
@@ -56,7 +58,8 @@ begin
   -- Outputs
   ----------------------------------------------------------------------------
 
-  oDwet <= readVal;
+  oDwet   <= readVal;
+  oValWet <= valid;
 
   ----------------------------------------------------------------------------
   -- Signal assignments
@@ -69,23 +72,39 @@ begin
   ----------------------------------------------------------------------------
   -- Read and write RAM
   ----------------------------------------------------------------------------
+
   ReadWrite : process (iClk) is
+    procedure reset is
+    begin
+      next_valid <= '0';
+      valid      <= '0';
+      readVal    <= (others => '0');
+      addrCnt    <= 0;
+    end procedure;
   begin
     if rising_edge(iClk) then
-      if iValDry = '1' then
-        ram(addrCnt) <= iDdry;
+      if inResetAsync = '0' then
+        reset;
+      else
+        valid      <= next_valid;
+        next_valid <= '0';
+
+        if iValDry = '1' then
+          next_valid   <= '1';
+          ram(addrCnt) <= iDdry;
+
+          if addrCnt = gDelay - 1 then
+            addrCnt <= 0;
+          else
+            addrCnt <= addrCnt + 1;
+          end if;
+        end if;
 
         if addrCnt = gDelay - 1 then
-          addrCnt <= 0;
+          readVal <= ram(0);
         else
-          addrCnt <= addrCnt + 1;
+          readVal <= ram(addrCnt + 1);
         end if;
-      end if;
-
-      if addrCnt = gDelay - 1 then
-        readVal <= ram(0);
-      else
-        readVal <= ram(addrCnt + 1);
       end if;
     end if;
   end process ReadWrite;

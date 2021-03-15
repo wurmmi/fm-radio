@@ -43,6 +43,10 @@ architecture rtl of channel_decoder is
   --! @name Internal Wires
   -----------------------------------------------------------------------------
   --! @{
+
+  signal audio_mono       : sample_t;
+  signal audio_mono_valid : std_ulogic;
+
   --! @}
 
 begin -- architecture rtl
@@ -61,6 +65,17 @@ begin -- architecture rtl
   ------------------------------------------------------------------------------
   -- Instantiations
   ------------------------------------------------------------------------------
+
+  recover_mono_inst : entity work.recover_mono
+    port map(
+      clk_i => clk_i,
+      rst_i => rst_i,
+
+      sample_i       => sample_i,
+      sample_valid_i => sample_valid_i,
+
+      mono_o       => audio_mono,
+      mono_valid_o => audio_mono_valid);
 
   -- RecoverLRDiff
   -- RecoverCarriers
