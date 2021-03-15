@@ -31,8 +31,9 @@ rx_fm_q = imag(rx_fm_bb_norm);
 filter_diff = [1,0,-1];
 
 if EnableProcessingLikeHW
-    rx_fm_i_diff = [rx_fm_i(3:end) ;0;0] - [0;0; rx_fm_i(1:end-2)];
-    rx_fm_q_diff = [rx_fm_q(3:end) ;0;0] - [0;0; rx_fm_q(1:end-2)];
+    shift = 3;
+    rx_fm_i_diff = [rx_fm_i(1:end-shift); zeros(shift,1)] - [zeros(shift,1); rx_fm_i(1:end-shift)];
+    rx_fm_q_diff = [rx_fm_q(1:end-shift); zeros(shift,1)] - [zeros(shift,1); rx_fm_q(1:end-shift)];
 else
     rx_fm_i_diff = filter(filter_diff,1, rx_fm_i);
     rx_fm_q_diff = filter(filter_diff,1, rx_fm_q);
@@ -98,7 +99,7 @@ rx_pilot = filter(filter_bp_pilot,1, rx_fmChannelData);
 % Amplify
 % NOTE: Theoretically, the factor should be 10, since the pilot is
 %       transmitted with an amplitude of 10%.
-rx_pilot = rx_pilot * 8;
+rx_pilot = rx_pilot * 10;
 
 % Amplify again, if a de-emphasis filter is used.
 % TODO: check this
