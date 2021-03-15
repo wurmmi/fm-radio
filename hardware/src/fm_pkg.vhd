@@ -17,6 +17,9 @@ package fm_pkg is
   -- Types and Constants
   ------------------------------------------------------------------------------
 
+  --! Oversampling rate fs:fs_rx
+  constant osr_rx_c : natural := 8;
+
   --! Fixed point bitwidth
   constant fp_width_c      : natural := 32;
   constant fp_width_frac_c : natural := 31;

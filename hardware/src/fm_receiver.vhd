@@ -103,6 +103,8 @@ begin -- architecture rtl
       fm_demod_valid_o => fm_demod_valid);
 
   decimator_inst : entity work.decimator
+    generic map(
+      decimation_g => osr_rx_c)
     port map(
       clk_i => clk_i,
       rst_i => rst_i,

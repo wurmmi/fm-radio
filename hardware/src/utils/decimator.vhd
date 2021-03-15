@@ -14,7 +14,7 @@ use work.fm_pkg.all;
 
 entity decimator is
   generic (
-    decimation_g : natural := 1);
+    decimation_g : natural := 8);
   port (
     clk_i : in std_ulogic;
     rst_i : in std_ulogic;

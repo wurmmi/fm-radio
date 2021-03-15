@@ -33,19 +33,31 @@ async def data_processing_test(dut):
     # Constants
     # --------------------------------------------------------------------------
 
-    # Number of samples to process
-    num_samples = 150
+    # Number of seconds to process
+    n_sec = 0.001
+
+    # Sample rate (set according to Matlab model!)
+    fs_rx_khz_c = 120
+    fs_khz_c = 960
 
     # Fixed point settings
     fp_width_c = 32
     fp_width_frac_c = 31
+
+    # Derived constants
+    fs_c = fs_khz_c * 1000
+    fs_rx_c = fs_rx_khz_c * 1000
+    num_samples_fs = int(n_sec * fs_khz_c * 1000)
+    num_samples = int(n_sec * fs_rx_khz_c * 1000)
+
+    dut._log.info("num_samples_fs: {}, num_samples: {} ".format(num_samples_fs, num_samples))
 
     # --------------------------------------------------------------------------
     # Load data from files
     # --------------------------------------------------------------------------
 
     filename = "../../../sim/matlab/verification_data/rx_fm_bb.txt"
-    data_fp = loadDataFromFile(filename, num_samples * 2, fp_width_c, fp_width_frac_c)
+    data_fp = loadDataFromFile(filename, num_samples_fs * 2, fp_width_c, fp_width_frac_c)
 
     # Split interleaved I/Q samples (take every other)
     data_in_i_fp = data_fp[0::2]  # start:end:step
@@ -63,9 +75,8 @@ async def data_processing_test(dut):
 
     tb = FM_TB(dut, fp_width_c, fp_width_frac_c, num_samples)
 
-    # Sample rate (set according to files in folder sim/matlab/verification_data/)
-    fs_c = tb.FS_KHZ * 1000
-    fs_rx_c = tb.FS_RX_KHZ * 1000
+    assert (tb.CLOCK_FREQ_MHZ * 1e3 / fs_rx_khz_c).is_integer(), \
+        "Clock rate and fs_rx must have an integer relation!"
 
     # Generate clock
     clk_period = int(1 / tb.CLOCK_FREQ_MHZ * 1e3)
@@ -74,7 +85,7 @@ async def data_processing_test(dut):
 
     # Generate IQ input strobe
     strobe_num_cycles_high = 1
-    strobe_num_cycles_low = tb.CLOCK_FREQ_MHZ * 1000 // tb.FS_KHZ - strobe_num_cycles_high
+    strobe_num_cycles_low = tb.CLOCK_FREQ_MHZ * 1000 // fs_khz_c - strobe_num_cycles_high
     tb.iq_in_strobe.start(bit_toggler(repeat(strobe_num_cycles_high), repeat(strobe_num_cycles_low)))
 
     # --------------------------------------------------------------------------
@@ -86,8 +97,9 @@ async def data_processing_test(dut):
     await tb.reset()
 
     # Fork the 'receiving part'
-    audio_LR_output_fork = cocotb.fork(tb.read_audio_LR_output())
     fm_demod_output_fork = cocotb.fork(tb.read_fm_demod_output())
+    audio_mono_output_fork = cocotb.fork(tb.read_audio_mono_output())
+    audio_LR_output_fork = cocotb.fork(tb.read_audio_LR_output())
 
     # Send input data through filter
     dut._log.info("Sending IQ samples to FM Receiver IP ...")
@@ -100,8 +112,9 @@ async def data_processing_test(dut):
     await RisingEdge(dut.iq_valid_i)
 
     # Stop other forked routines
-    audio_LR_output_fork.kill()
     fm_demod_output_fork.kill()
+    audio_mono_output_fork.join()
+    audio_LR_output_fork.join()
 
     # Measure time
     timestamp_end = time.time()
@@ -125,6 +138,7 @@ async def data_processing_test(dut):
 
     # TODO: bypassing this for now
     okay_fm_demod = True
+    okay_audio_mono = True
 
     # --------------------------------------------------------------------------
     # Plots
@@ -137,12 +151,12 @@ async def data_processing_test(dut):
                 (np.arange(0, num_samples) / fs_c, from_fixed_point(fm_demod_gold_fp), "fm_demod_gold_fp"),
                 (np.arange(0, num_samples) / fs_c, tb.data_out_fm_demod, "tb.data_out_fm_demod")
             )
-            plotData(data, title="FM Demodulator")
+            plotData(data, title="FM Demodulator", block=False)
 
         if okay_audio_mono:
             data = (
-                (np.arange(0, num_samples) / fs_rx_c, from_fixed_point(audio_mono_gold_fp), "audio_mono_gold_fp"),
-                (np.arange(0, num_samples) / fs_rx_c, tb.data_out_audio_mono, "tb.data_out_audio_mono")
+                (np.arange(0, len(audio_mono_gold_fp)) / fs_rx_c, from_fixed_point(audio_mono_gold_fp), "audio_mono_gold_fp"),
+                (np.arange(0, len(tb.data_out_audio_mono)) / fs_rx_c, tb.data_out_audio_mono, "tb.data_out_audio_mono")
             )
             plotData(data, title="Audio Mono")
 

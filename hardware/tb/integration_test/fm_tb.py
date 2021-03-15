@@ -15,17 +15,12 @@ from fm_receiver_model import FM_RECEIVER_MODEL
 class FM_TB(object):
     # Constants
     CLOCK_FREQ_MHZ = 48
-    FS_RX_KHZ = 120
-    FS_KHZ = 960
 
     # Variables
     data_out_L = []
     data_out_R = []
     data_out_audio_mono = []
     data_out_fm_demod = []
-
-    assert (CLOCK_FREQ_MHZ * 1e3 / FS_RX_KHZ).is_integer(), \
-        "Clock rate and fs_rx must have an integer relation!"
 
     def __del__(self):
         pass
@@ -62,6 +57,37 @@ class FM_TB(object):
         self.dut.q_sample_i <= 0
 
     @cocotb.coroutine
+    async def read_fm_demod_output(self):
+        edge = RisingEdge(self.dut.fm_demod_valid)
+        while(True):
+            await edge
+            fm_demod = self.dut.fm_demod.value.signed_integer
+            self.data_out_fm_demod.append(
+                int_to_fixed(fm_demod, self.fp_width_c, self.fp_width_frac_c))
+
+            # print every 10th number to show progress
+            size = len(self.data_out_fm_demod)
+            if size % 10 == 0:
+                self.dut._log.info("Progress fm_demod: {}".format(size))
+
+    @cocotb.coroutine
+    async def read_audio_mono_output(self):
+        edge = RisingEdge(self.dut.channel_decoder_inst.audio_mono_valid)
+        while(True):
+            await edge
+            audio_mono = self.dut.channel_decoder_inst.audio_mono.value.signed_integer
+            self.data_out_audio_mono.append(
+                int_to_fixed(audio_mono, self.fp_width_c, self.fp_width_frac_c))
+
+            # print every 10th number to show progress
+            size = len(self.data_out_audio_mono)
+            if size % 10 == 0:
+                self.dut._log.info("Progress audio_mono: {}".format(size))
+
+            # if size >= self.num_samples_c:
+            #    break
+
+    @cocotb.coroutine
     async def read_audio_LR_output(self):
         edge = RisingEdge(self.dut.audio_valid_o)
         while(True):
@@ -78,16 +104,5 @@ class FM_TB(object):
             if size % 10 == 0:
                 self.dut._log.info("Progress audio_LR: {}".format(size))
 
-    @cocotb.coroutine
-    async def read_fm_demod_output(self):
-        edge = RisingEdge(self.dut.fm_demod_valid)
-        while(True):
-            await edge
-            fm_demod = self.dut.fm_demod.value.signed_integer
-            self.data_out_fm_demod.append(
-                int_to_fixed(fm_demod, self.fp_width_c, self.fp_width_frac_c))
-
-            # print every 10th number to show progress
-            size = len(self.data_out_fm_demod)
-            if size % 10 == 0:
-                self.dut._log.info("Progress fm_demod: {}".format(size))
+            # if size >= self.num_samples_c:
+            #    break
