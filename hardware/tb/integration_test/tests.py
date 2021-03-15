@@ -14,6 +14,7 @@ from cocotb.generators import repeat
 from cocotb.generators.bit import bit_toggler
 from cocotb.triggers import RisingEdge, Timer
 from fixed_point import *
+from helpers import *
 
 from fm_tb import FM_TB
 
@@ -28,9 +29,9 @@ async def data_processing_test(dut):
 
     timestamp_start = time.time()
 
-    ###
+    # --------------------------------------------------------------------------
     # Constants
-    ###
+    # --------------------------------------------------------------------------
 
     # Number of samples to process
     num_samples = 150
@@ -39,62 +40,27 @@ async def data_processing_test(dut):
     fp_width_c = 32
     fp_width_frac_c = 31
 
-    ###
+    # --------------------------------------------------------------------------
     # Load data from files
-    ###
+    # --------------------------------------------------------------------------
 
     filename = "../../../sim/matlab/verification_data/rx_fm_bb.txt"
-    data = []
-    with open(filename) as fd:
-        val_count = 0
-        for line in fd:
-            data.append(float(line.strip('\n')))
-            val_count += 1
-            # Stop after required number of samples
-            if val_count >= num_samples * 2:
-                break
+    data_fp = loadDataFromFile(filename, num_samples * 2, fp_width_c, fp_width_frac_c)
 
     # Split interleaved I/Q samples (take every other)
-    data_in_i = data[0::2]  # start:end:step
-    data_in_q = data[1::2]  # start:end:step
-
-    # Convert to fixed point and back to int
-    data_in_i_fp = to_fixed_point(data_in_i, fp_width_c, fp_width_frac_c)
-    data_in_q_fp = to_fixed_point(data_in_q, fp_width_c, fp_width_frac_c)
-    data_in_i_int = fixed_to_int(data_in_i_fp)
-    data_in_q_int = fixed_to_int(data_in_q_fp)
+    data_in_i_fp = data_fp[0::2]  # start:end:step
+    data_in_q_fp = data_fp[1::2]  # start:end:step
 
     filename = "../../../sim/matlab/verification_data/rx_audio_mono.txt"
-    audio_mono_gold = []
-    with open(filename) as fd:
-        val_count = 0
-        for line in fd:
-            audio_mono_gold.append(float(line.strip('\n')))
-            val_count += 1
-            # Stop after required number of samples
-            if val_count >= num_samples:
-                break
-
-    # Convert to fixed point
-    audio_mono_gold_fp = to_fixed_point(audio_mono_gold, fp_width_c, fp_width_frac_c)
+    audio_mono_gold_fp = loadDataFromFile(filename, num_samples, fp_width_c, fp_width_frac_c)
 
     filename = "../../../sim/matlab/verification_data/rx_fm_demod.txt"
-    fm_demod_gold = []
-    with open(filename) as fd:
-        val_count = 0
-        for line in fd:
-            fm_demod_gold.append(float(line.strip('\n')))
-            val_count += 1
-            # Stop after required number of samples
-            if val_count >= num_samples:
-                break
+    fm_demod_gold_fp = loadDataFromFile(filename, num_samples, fp_width_c, fp_width_frac_c)
 
-    # Convert to fixed point
-    fm_demod_gold_fp = to_fixed_point(fm_demod_gold, fp_width_c, fp_width_frac_c)
-
-    ###
+    # --------------------------------------------------------------------------
     # Prepare environment
-    ###
+    # --------------------------------------------------------------------------
+
     tb = FM_TB(dut, fp_width_c, fp_width_frac_c, num_samples)
 
     # Sample rate (set according to files in folder sim/matlab/verification_data/)
@@ -111,9 +77,9 @@ async def data_processing_test(dut):
     strobe_num_cycles_low = tb.CLOCK_FREQ_MHZ * 1000 // tb.FS_KHZ - strobe_num_cycles_high
     tb.iq_in_strobe.start(bit_toggler(repeat(strobe_num_cycles_high), repeat(strobe_num_cycles_low)))
 
-    ###
+    # --------------------------------------------------------------------------
     # Run test on DUT
-    ###
+    # --------------------------------------------------------------------------
 
     # Reset the DUT before any tests begin
     await tb.assign_defaults()
@@ -126,10 +92,10 @@ async def data_processing_test(dut):
     # Send input data through filter
     dut._log.info("Sending IQ samples to FM Receiver IP ...")
 
-    for i in range(0, len(data_in_i)):
+    for i in range(0, len(data_in_i_fp)):
         await RisingEdge(dut.iq_valid_i)
-        dut.i_sample_i <= int(data_in_i_int[i])
-        dut.q_sample_i <= int(data_in_q_int[i])
+        dut.i_sample_i <= int(fixed_to_int(data_in_i_fp[i]))
+        dut.q_sample_i <= int(fixed_to_int(data_in_q_fp[i]))
 
     await RisingEdge(dut.iq_valid_i)
 
@@ -141,73 +107,40 @@ async def data_processing_test(dut):
     timestamp_end = time.time()
     dut._log.info("Execution took {:.2f} seconds.".format(timestamp_end - timestamp_start))
 
-    num_received = len(tb.data_out_fm_demod)
-    num_expected = len(audio_mono_gold_fp)
+    # --------------------------------------------------------------------------
+    # Compare results
+    # --------------------------------------------------------------------------
 
-    ###
+    okay_fm_demod = compareResultsOkay(fm_demod_gold_fp,
+                                       tb.data_out_fm_demod,
+                                       abs_max_error=2**-5,
+                                       skip_n_samples=10,
+                                       data_name="fm_demod")
+
+    okay_audio_mono = compareResultsOkay(audio_mono_gold_fp,
+                                         tb.data_out_audio_mono,
+                                         abs_max_error=2**-5,
+                                         skip_n_samples=10,
+                                         data_name="audio_mono")
+
+    # --------------------------------------------------------------------------
     # Plots
-    ###
+    # --------------------------------------------------------------------------
+
     if EnablePlots:
         dut._log.info("Plots ...")
+        if okay_fm_demod:
+            data = (
+                (np.arange(0, num_samples) / fs_c, from_fixed_point(fm_demod_gold_fp), "fm_demod_gold_fp"),
+                (np.arange(0, num_samples) / fs_c, tb.data_out_fm_demod, "tb.data_out_fm_demod")
+            )
+            plotData(data, title="FM Demodulator")
 
-        fig = plt.figure()
-        plt.plot(np.arange(0, num_expected) / fs_c,
-                 from_fixed_point(fm_demod_gold_fp), "b", label="fm_demod_gold_fp")
-        plt.plot(np.arange(0, num_received) / fs_c,
-                 tb.data_out_fm_demod, "r", label="tb.data_out_fm_demod")
-        plt.title("Carrier phase recovery")
-        plt.grid(True)
-        plt.legend()
-        fig.tight_layout()
-        plt.xlim([0, num_samples / fs_c])
-        plt.show()
-
-        if len(tb.data_out_audio_mono) < num_expected:
-            dut._log.warning(
-                "Did not capture enough output values for audio_mono: {} actual, {} expected.".format(len(tb.data_out_audio_mono), num_expected))
-        else:
-            fig = plt.figure()
-            plt.plot(np.arange(0, num_expected) / fs_rx_c,
-                     from_fixed_point(audio_mono_gold_fp), "b", label="audio_mono_gold_fp")
-            plt.plot(np.arange(0, num_received) / fs_rx_c,
-                     tb.data_out_audio_mono, "r", label="tb.data_out_audio_mono")
-            plt.title("Carrier phase recovery")
-            plt.grid(True)
-            plt.legend()
-            fig.tight_layout()
-            plt.xlim([0, num_samples / fs_rx_c])
-            plt.show(block=False)
-
-    ###
-    # Compare results
-    ###
-
-    # Sanity check
-    if num_received < num_expected:
-        # raise cocotb.result.TestError(
-        dut._log.warning(
-            "Did not capture enough output values: {} actual, {} expected.".format(num_received, num_expected))
-
-    # Skip first N samples
-    skip_N = 10
-    dut._log.info("Skipping first N={} samples. (in:out = {}:{})".format(
-        skip_N, num_expected, num_received))
-    audio_mono_gold_fp = audio_mono_gold_fp[skip_N:]
-    tb.data_out_audio_mono = tb.data_out_audio_mono[skip_N:]
-    dut._log.info("Skipped first N={} samples.  (in:out = {}:{})".format(
-        skip_N, num_expected, num_received))
-
-    max_diff = 2**-5
-    for i, res in enumerate(tb.data_out_audio_mono):
-        diff = audio_mono_gold_fp[i] - res
-        if abs(from_fixed_point(diff)) > max_diff:
-            msg = "FIR output [{}] is not matching the expected values: {}>{}.".format(
-                i, abs(from_fixed_point(diff)), max_diff)
-            raise cocotb.result.TestError(msg)
-            # dut._log.info(msg)
-
-    # norm_res = np.linalg.norm(np.array(from_fixed_point(
-    #    audio_mono_gold_fp[0:num_received])) - np.array(tb.data_out_audio_mono), 2)
-    #dut._log.info("2-Norm = {}".format(norm_res))
+        if okay_audio_mono:
+            data = (
+                (np.arange(0, num_samples) / fs_rx_c, from_fixed_point(audio_mono_gold_fp), "audio_mono_gold_fp"),
+                (np.arange(0, num_samples) / fs_rx_c, tb.data_out_audio_mono, "tb.data_out_audio_mono")
+            )
+            plotData(data, title="Audio Mono")
 
     dut._log.info("Done.")

@@ -16,5 +16,6 @@ fi
 echo "### Python environment"
 
 export PYTHONPATH=$PROJECT_ROOT/hardware/tb/packages/fixed_point
+export PYTHONPATH=$PYTHONPATH:$PROJECT_ROOT/hardware/tb/packages/helpers
 
 echo "Done."

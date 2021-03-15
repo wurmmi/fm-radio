@@ -28,9 +28,9 @@ async def fir_filter_test(dut):
 
     timestamp_start = time.time()
 
-    ###
+    # --------------------------------------------------------------------------
     # Constants
-    ###
+    # --------------------------------------------------------------------------
 
     # Number of samples to process
     num_samples = 150
@@ -45,9 +45,9 @@ async def fir_filter_test(dut):
     # Other
     output_scale_c = 10
 
-    ###
+    # --------------------------------------------------------------------------
     # Load data from files
-    ###
+    # --------------------------------------------------------------------------
     filename = "../../../../sim/matlab/verification_data/rx_fmChannelData.txt"
     data_i = []
     with open(filename) as fd:
@@ -77,9 +77,9 @@ async def fir_filter_test(dut):
     # Convert to fixed point
     data_o_gold_fp = to_fixed_point(data_o_gold, fp_width_c, fp_width_frac_c)
 
-    ###
+    # --------------------------------------------------------------------------
     # Prepare environment
-    ###
+    # --------------------------------------------------------------------------
     tb = FM_TB(dut, fp_width_c, fp_width_frac_c, num_samples)
 
     # Generate clock
@@ -92,9 +92,9 @@ async def fir_filter_test(dut):
     strobe_num_cycles_low = tb.CLOCK_FREQ_MHZ * 1000 // tb.FS_RX_KHZ - strobe_num_cycles_high
     tb.fir_in_strobe.start(bit_toggler(repeat(strobe_num_cycles_high), repeat(strobe_num_cycles_low)))
 
-    ###
+    # --------------------------------------------------------------------------
     # Run test on DUT
-    ###
+    # --------------------------------------------------------------------------
 
     # Reset the DUT before any tests begin
     await tb.assign_defaults()
@@ -122,9 +122,9 @@ async def fir_filter_test(dut):
     num_received = len(tb.data_out)
     num_expected = len(data_o_gold_fp)
 
-    ###
+    # --------------------------------------------------------------------------
     # Plots
-    ###
+    # --------------------------------------------------------------------------
     if EnablePlots:
         dut._log.info("Plots ...")
 
@@ -140,9 +140,9 @@ async def fir_filter_test(dut):
         plt.xlim([0, num_samples / fs_rx_c])
         plt.show()
 
-    ###
+    # --------------------------------------------------------------------------
     # Compare results
-    ###
+    # --------------------------------------------------------------------------
 
     # Sanity check
     if num_received < num_expected:
@@ -160,10 +160,10 @@ async def fir_filter_test(dut):
     for i, res in enumerate(tb.data_out):
         diff = data_o_gold_fp[i] - res
         if abs(from_fixed_point(diff)) > max_diff:
-            raise cocotb.result.TestError("FIR output [{}] is not matching the expected values: {}>{}.".format(
-                i, abs(from_fixed_point(diff)), max_diff))
-            # dut._log.info("FIR output [{}] is not matching the expected values: {}>{}.".format(
-            #    i, abs(from_fixed_point(diff)), max_diff))
+            msg = "FIR output [{}] is not matching the expected values: {}>{}.".format(
+                i, abs(from_fixed_point(diff)), max_diff)
+            raise cocotb.result.TestError(msg)
+            # dut._log.info(msg)
 
     norm_res = np.linalg.norm(np.array(from_fixed_point(data_o_gold_fp[0:num_received])) - np.array(tb.data_out), 2)
     dut._log.info("2-Norm = {}".format(norm_res))

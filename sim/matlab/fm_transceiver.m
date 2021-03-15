@@ -35,7 +35,7 @@ dir_output  = "./matlab_output/";
 
 % Simulation options
 EnableWriteDataFiles = true;
-EnablePlots = false;
+EnablePlots = true;
 
 EnableSenderSourceRecordedFile = false;
 EnableSenderSourceCreateSim    = true;
@@ -55,7 +55,7 @@ EnableManualDecimation = true;
 EnableRDSDecoder       = false;
 
 % Signal parameters
-n_sec = 0.15;           % 1.7s is "left channel, right channel" in audio file
+n_sec = 1.7;           % 1.7s is "left channel, right channel" in audio file
 osr   = 20;            % oversampling rate for fs
 fs    = 48e3 * osr;    % sampling rate fs
 
@@ -456,10 +456,10 @@ title(fig_title);
 xlabel('time [s]');
 ylabel('amplitude');
 legend();
-offset = 0.0;
+offset = 0.1;
 xlim([offset, offset + 1/19e3*2]);
 
-%% Arrange all plots on the display
+% Arrange all plots on the display
 if ~isRunningInOctave()
     autoArrangeFigures(3,2,2);
 end
