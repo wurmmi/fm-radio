@@ -114,11 +114,6 @@ if EnableWriteDataFiles
     fp_width_frac = 31;
     fp_maximum    = 0.999;
     
-    assert(max(rx_fmChannelData) < fp_maximum, ...
-        "Value exceeds maximal value of fixed point! This will lead to overflows in the hardware.");
-    assert(max(rx_pilot) < fp_maximum, ...
-        "Value exceeds maximal value of fixed point! This will lead to overflows in the hardware.");
-    
     n_sec_file = 0.05;
 
     num_samples = n_sec_file * fs/osr_rx;

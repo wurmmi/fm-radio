@@ -10,6 +10,10 @@ function status = writeFilterCoeffsToVHDLFile(coeffs, filtername, filedir, fp_wi
 %   filtername ... name used for VHDL entity and constant
 %   filedir    ... directory where to store the VHDL file
 
+fp_maximum = 1; % is 0.999 actually 
+assert(max(coeffs) <= fp_maximum, ...
+    "Value exceeds maximal value of fixed point! This will lead to overflows in the hardware.");
+
 filename = sprintf('%s/%s_pkg.vhd', filedir,filtername);
 
 fileID = fopen(filename, 'w');

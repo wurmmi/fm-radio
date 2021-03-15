@@ -12,6 +12,10 @@ function status = writeDataToFile(data, num_samples, filename, fp_width, fp_widt
 %   fp_width      ... fixed point data width
 %   fp_width_frac ... fixed point data width of fractional part
 
+fp_maximum = 0.999;
+assert(max(data) < fp_maximum, ...
+    "Value exceeds maximal value of fixed point! This will lead to overflows in the hardware.");
+
 fileID = fopen(filename, 'w');
 if fileID <= 0
     error("Could not open file '%s'!", filename);
