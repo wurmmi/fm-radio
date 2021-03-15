@@ -31,9 +31,9 @@ rx_fm_q = imag(rx_fm_bb_norm);
 filter_diff = [1,0,-1];
 
 if EnableProcessingLikeHW
-    shift = 3;
-    rx_fm_i_diff = [rx_fm_i(1:end-shift); zeros(shift,1)] - [zeros(shift,1); rx_fm_i(1:end-shift)];
-    rx_fm_q_diff = [rx_fm_q(1:end-shift); zeros(shift,1)] - [zeros(shift,1); rx_fm_q(1:end-shift)];
+    n_shift = 3;
+    rx_fm_i_diff = rx_fm_i - [zeros(n_shift,1); rx_fm_i(1:end-n_shift)];
+    rx_fm_q_diff = rx_fm_q - [zeros(n_shift,1); rx_fm_q(1:end-n_shift)];
 else
     rx_fm_i_diff = filter(filter_diff,1, rx_fm_i);
     rx_fm_q_diff = filter(filter_diff,1, rx_fm_q);
@@ -44,8 +44,8 @@ else
     %    (rx_fm_i.^2 + rx_fm_q.^2);
 end
 
-part_demod_a = circshift(rx_fm_i,0) .* rx_fm_q_diff;
-part_demod_b = circshift(rx_fm_q,0) .* rx_fm_i_diff;
+part_demod_a = rx_fm_i .* rx_fm_q_diff;
+part_demod_b = rx_fm_q .* rx_fm_i_diff;
 
 rx_fm_demod = part_demod_a - part_demod_b;
 
@@ -99,7 +99,7 @@ rx_pilot = filter(filter_bp_pilot,1, rx_fmChannelData);
 % Amplify
 % NOTE: Theoretically, the factor should be 10, since the pilot is
 %       transmitted with an amplitude of 10%.
-rx_pilot = rx_pilot * 10;
+rx_pilot = rx_pilot * 12;
 
 % Amplify again, if a de-emphasis filter is used.
 % TODO: check this
