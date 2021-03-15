@@ -38,6 +38,10 @@ else
     rx_fm_i_diff = filter(filter_diff,1, rx_fm_i);
     rx_fm_q_diff = filter(filter_diff,1, rx_fm_q);
     
+    % Compensate group delay of filter
+    rx_fm_i_diff = circshift(rx_fm_i_diff,-1);
+    rx_fm_q_diff = circshift(rx_fm_q_diff,-1);
+    
     %rx_fm_demod =  ...
     %    (rx_fm_i .* conv(rx_fm_q,filter_diff,'same') -   ...
     %    rx_fm_q .* conv(rx_fm_i,filter_diff,'same')) ./  ...
@@ -55,7 +59,7 @@ rx_fm_demod = part_demod_a - part_demod_b;
 
 if EnableDeEmphasis
     disp('-- De-emphasis');
-
+    
     % Create de-emphasis filter
     filter_de_emphasis = getEmphasisFilter(fs, 'de', EnableFilterAnalyzeGUI);
     

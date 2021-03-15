@@ -112,6 +112,8 @@ begin -- architecture rtl
   -- Instantiations
   ------------------------------------------------------------------------------
 
+  -- TODO: implement this like in Matlab (replace the FIR)
+
   DspFir_differentiator_i_inst : entity work.DspFir
     generic map(
       gB => filter_diff_coeffs_c)
