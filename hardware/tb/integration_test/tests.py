@@ -24,7 +24,7 @@ async def data_processing_test(dut):
     Load test data from files and send them through the DUT.
     Compare input and output afterwards.
     """
-    EnablePlots = False
+    EnablePlots = True
 
     timestamp_start = time.time()
 
@@ -33,9 +33,10 @@ async def data_processing_test(dut):
     ###
 
     # Number of samples to process
-    num_samples = 150
+    num_samples = 300
 
     # Sample rate (set according to files in folder sim/matlab/verification_data/)
+    fs_c = 960e3
     fs_rx_c = 120e3
 
     # Fixed point settings
@@ -82,18 +83,18 @@ async def data_processing_test(dut):
     audio_mono_gold_fp = to_fixed_point(audio_mono_gold, fp_width_c, fp_width_frac_c)
 
     filename = "../../../sim/matlab/verification_data/rx_fm_demod.txt"
-    fm_demod = []
+    fm_demod_gold = []
     with open(filename) as fd:
         val_count = 0
         for line in fd:
-            fm_demod.append(float(line.strip('\n')))
+            fm_demod_gold.append(float(line.strip('\n')))
             val_count += 1
             # Stop after required number of samples
             if val_count >= num_samples:
                 break
 
     # Convert to fixed point
-    fm_demod_gold_fp = to_fixed_point(fm_demod, fp_width_c, fp_width_frac_c)
+    fm_demod_gold_fp = to_fixed_point(fm_demod_gold, fp_width_c, fp_width_frac_c)
 
     ###
     # Prepare environment
@@ -151,16 +152,28 @@ async def data_processing_test(dut):
         dut._log.info("Plots ...")
 
         fig = plt.figure()
+        plt.plot(np.arange(0, num_expected) / fs_c,
+                 from_fixed_point(fm_demod_gold_fp), "b", label="fm_demod_gold_fp")
+        plt.plot(np.arange(0, num_received) / fs_c,
+                 tb.data_out_fm_demod, "r", label="tb.data_out_fm_demod")
+        plt.title("Carrier phase recovery")
+        plt.grid(True)
+        plt.legend()
+        fig.tight_layout()
+        plt.xlim([0, num_samples / fs_c])
+        plt.show()
+
+        fig = plt.figure()
         plt.plot(np.arange(0, num_expected) / fs_rx_c,
                  from_fixed_point(audio_mono_gold_fp), "b", label="audio_mono_gold_fp")
         plt.plot(np.arange(0, num_received) / fs_rx_c,
-                 tb.data_out_audio_mono, "r", label="data_out_audio_mono")
+                 tb.data_out_audio_mono, "r", label="tb.data_out_audio_mono")
         plt.title("Carrier phase recovery")
         plt.grid(True)
         plt.legend()
         fig.tight_layout()
         plt.xlim([0, num_samples / fs_rx_c])
-        plt.show()
+        plt.show(block=False)
 
     ###
     # Compare results

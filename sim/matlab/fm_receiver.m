@@ -17,7 +17,11 @@ disp('### Receiver Rx ###');
 disp('-- FM demodulator');
 
 % Normalize the amplitude (remove amplitude variations)
-rx_fm_bb_norm = rx_fm_bb ./ abs(rx_fm_bb);
+if EnableProcessingLikeHW
+    rx_fm_bb_norm = rx_fm_bb;
+else
+    rx_fm_bb_norm = rx_fm_bb ./ abs(rx_fm_bb);
+end
 
 % Design differentiator
 filter_diff = [1,0,-1];

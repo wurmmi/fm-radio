@@ -48,6 +48,7 @@ EnableSavePlotsToPng   = false;
 EnablePlotsLogarithmic = true;
 
 % Signal processing options
+EnableProcessingLikeHW = true;
 EnablePreEmphasis      = false;
 EnableDeEmphasis       = false;
 EnableManualDecimation = true;
@@ -118,14 +119,18 @@ if EnableWriteDataFiles
     assert(max(rx_pilot) < fp_maximum, ...
         "Value exceeds maximal value of fixed point! This will lead to overflows in the hardware.");
     
+    n_sec_file = 0.05;
+
+    num_samples = n_sec_file * fs/osr_rx;
+    
     % Test data
-    writeDataToFile(rx_fmChannelData, './verification_data/rx_fmChannelData.txt', fp_width, fp_width_frac);
-    writeDataToFile(rx_pilot,         './verification_data/rx_pilot.txt',         fp_width, fp_width_frac);
-    writeDataToFile(rx_fm_bb,         './verification_data/rx_fm_bb.txt',         fp_width, fp_width_frac);
-    writeDataToFile(rx_fm_demod,      './verification_data/rx_fm_demod.txt',      fp_width, fp_width_frac);
-    writeDataToFile(rx_audio_mono,    './verification_data/rx_audio_mono.txt',    fp_width, fp_width_frac);
-    writeDataToFile(rx_audio_L,       './verification_data/rx_audio_L.txt',       fp_width, fp_width_frac);
-    writeDataToFile(rx_audio_R,       './verification_data/rx_audio_R.txt',       fp_width, fp_width_frac);
+    writeDataToFile(rx_fmChannelData, num_samples,       './verification_data/rx_fmChannelData.txt', fp_width, fp_width_frac);
+    writeDataToFile(rx_pilot,         num_samples,       './verification_data/rx_pilot.txt',         fp_width, fp_width_frac);
+    writeDataToFile(rx_fm_bb,         num_samples,       './verification_data/rx_fm_bb.txt',         fp_width, fp_width_frac);
+    writeDataToFile(rx_fm_demod,      num_samples*osr_rx,'./verification_data/rx_fm_demod.txt',      fp_width, fp_width_frac);
+    writeDataToFile(rx_audio_mono,    num_samples,       './verification_data/rx_audio_mono.txt',    fp_width, fp_width_frac);
+    writeDataToFile(rx_audio_L,       num_samples,       './verification_data/rx_audio_L.txt',       fp_width, fp_width_frac);
+    writeDataToFile(rx_audio_R,       num_samples,       './verification_data/rx_audio_R.txt',       fp_width, fp_width_frac);
     
     % Filter coefficients
     writeFilterCoeffsToVHDLFile(filter_bp_pilot, 'filter_bp_pilot', ...
