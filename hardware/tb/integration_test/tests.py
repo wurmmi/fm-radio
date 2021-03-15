@@ -33,11 +33,7 @@ async def data_processing_test(dut):
     ###
 
     # Number of samples to process
-    num_samples = 300
-
-    # Sample rate (set according to files in folder sim/matlab/verification_data/)
-    fs_c = 960e3
-    fs_rx_c = 120e3
+    num_samples = 150
 
     # Fixed point settings
     fp_width_c = 32
@@ -101,14 +97,18 @@ async def data_processing_test(dut):
     ###
     tb = FM_TB(dut, fp_width_c, fp_width_frac_c, num_samples)
 
+    # Sample rate (set according to files in folder sim/matlab/verification_data/)
+    fs_c = tb.FS_KHZ * 1000
+    fs_rx_c = tb.FS_RX_KHZ * 1000
+
     # Generate clock
     clk_period = int(1 / tb.CLOCK_FREQ_MHZ * 1e3)
     clk = Clock(dut.clk_i, period=clk_period, units='ns')
     clk_gen = cocotb.fork(clk.start())
 
-    # Generate FIR input strobe
+    # Generate IQ input strobe
     strobe_num_cycles_high = 1
-    strobe_num_cycles_low = tb.CLOCK_FREQ_MHZ * 1000 // tb.FS_RX_KHZ - strobe_num_cycles_high
+    strobe_num_cycles_low = tb.CLOCK_FREQ_MHZ * 1000 // tb.FS_KHZ - strobe_num_cycles_high
     tb.iq_in_strobe.start(bit_toggler(repeat(strobe_num_cycles_high), repeat(strobe_num_cycles_low)))
 
     ###
@@ -141,7 +141,6 @@ async def data_processing_test(dut):
     timestamp_end = time.time()
     dut._log.info("Execution took {:.2f} seconds.".format(timestamp_end - timestamp_start))
 
-    num_received = len(tb.data_out_audio_mono)  # TODO
     num_received = len(tb.data_out_fm_demod)
     num_expected = len(audio_mono_gold_fp)
 
@@ -163,17 +162,21 @@ async def data_processing_test(dut):
         plt.xlim([0, num_samples / fs_c])
         plt.show()
 
-        fig = plt.figure()
-        plt.plot(np.arange(0, num_expected) / fs_rx_c,
-                 from_fixed_point(audio_mono_gold_fp), "b", label="audio_mono_gold_fp")
-        plt.plot(np.arange(0, num_received) / fs_rx_c,
-                 tb.data_out_audio_mono, "r", label="tb.data_out_audio_mono")
-        plt.title("Carrier phase recovery")
-        plt.grid(True)
-        plt.legend()
-        fig.tight_layout()
-        plt.xlim([0, num_samples / fs_rx_c])
-        plt.show(block=False)
+        if len(tb.data_out_audio_mono) < num_expected:
+            dut._log.warning(
+                "Did not capture enough output values for audio_mono: {} actual, {} expected.".format(len(tb.data_out_audio_mono), num_expected))
+        else:
+            fig = plt.figure()
+            plt.plot(np.arange(0, num_expected) / fs_rx_c,
+                     from_fixed_point(audio_mono_gold_fp), "b", label="audio_mono_gold_fp")
+            plt.plot(np.arange(0, num_received) / fs_rx_c,
+                     tb.data_out_audio_mono, "r", label="tb.data_out_audio_mono")
+            plt.title("Carrier phase recovery")
+            plt.grid(True)
+            plt.legend()
+            fig.tight_layout()
+            plt.xlim([0, num_samples / fs_rx_c])
+            plt.show(block=False)
 
     ###
     # Compare results
@@ -198,13 +201,13 @@ async def data_processing_test(dut):
     for i, res in enumerate(tb.data_out_audio_mono):
         diff = audio_mono_gold_fp[i] - res
         if abs(from_fixed_point(diff)) > max_diff:
-            raise cocotb.result.TestError("FIR output [{}] is not matching the expected values: {}>{}.".format(
-                i, abs(from_fixed_point(diff)), max_diff))
-            # dut._log.info("FIR output [{}] is not matching the expected values: {}>{}.".format(
-            #    i, abs(from_fixed_point(diff)), max_diff))
+            msg = "FIR output [{}] is not matching the expected values: {}>{}.".format(
+                i, abs(from_fixed_point(diff)), max_diff)
+            raise cocotb.result.TestError(msg)
+            # dut._log.info(msg)
 
-    norm_res = np.linalg.norm(np.array(from_fixed_point(
-        audio_mono_gold_fp[0:num_received])) - np.array(tb.data_out_audio_mono), 2)
-    dut._log.info("2-Norm = {}".format(norm_res))
+    # norm_res = np.linalg.norm(np.array(from_fixed_point(
+    #    audio_mono_gold_fp[0:num_received])) - np.array(tb.data_out_audio_mono), 2)
+    #dut._log.info("2-Norm = {}".format(norm_res))
 
     dut._log.info("Done.")

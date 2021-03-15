@@ -16,6 +16,7 @@ class FM_TB(object):
     # Constants
     CLOCK_FREQ_MHZ = 48
     FS_RX_KHZ = 120
+    FS_KHZ = 960
 
     # Variables
     data_out_L = []

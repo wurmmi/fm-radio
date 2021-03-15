@@ -98,7 +98,8 @@ begin -- architecture rtl
           demod_part_a <= ResizeTruncAbsVal(i_sample_del * q_sample_diff, demod_part_a);
           demod_part_b <= ResizeTruncAbsVal(q_sample_del * i_sample_diff, demod_part_b);
 
-          fm_demod       <= ResizeTruncAbsVal(demod_part_a - demod_part_b, fm_demod);
+          -- TODO: is inverted (should be part_a-part_b)
+          fm_demod       <= ResizeTruncAbsVal(demod_part_b - demod_part_a, fm_demod);
           fm_demod_valid <= '1';
         end if;
       end if;
@@ -111,7 +112,7 @@ begin -- architecture rtl
 
   DspFir_differentiator_i_inst : entity work.DspFir
     generic map(
-      gB => (-1.0, 0.0, 0.99999999999))
+      gB => (0.9999999999999999999, 0.0, -1.0))
     port map(
       iClk         => clk_i,
       inResetAsync => not rst_i,
@@ -124,7 +125,7 @@ begin -- architecture rtl
 
   DspFir_differentiator_q_inst : entity work.DspFir
     generic map(
-      gB => (-1.0, 0.0, 0.99999999999))
+      gB => (0.9999999999999999999, 0.0, -1.0))
     port map(
       iClk         => clk_i,
       inResetAsync => not rst_i,

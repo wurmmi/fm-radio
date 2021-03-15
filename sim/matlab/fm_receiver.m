@@ -23,20 +23,23 @@ else
     rx_fm_bb_norm = rx_fm_bb ./ abs(rx_fm_bb);
 end
 
-% Design differentiator
-filter_diff = [1,0,-1];
-
 % Demodulate
 rx_fm_i = real(rx_fm_bb_norm);
 rx_fm_q = imag(rx_fm_bb_norm);
+
+% Design differentiator
+filter_diff = [1,0,-1];
 
 %rx_fm_demod =  ...
 %    (rx_fm_i .* conv(rx_fm_q,filter_diff,'same') -   ...
 %    rx_fm_q .* conv(rx_fm_i,filter_diff,'same')) ./  ...
 %    (rx_fm_i.^2 + rx_fm_q.^2);
 
-part_demod_a = rx_fm_i .* filter(filter_diff,1, rx_fm_q);
-part_demod_b = rx_fm_q .* filter(filter_diff,1, rx_fm_i);
+rx_fm_i_diff = filter(filter_diff,1, rx_fm_i);
+rx_fm_q_diff = filter(filter_diff,1, rx_fm_q);
+
+part_demod_a = circshift(rx_fm_i,0) .* rx_fm_q_diff;
+part_demod_b = circshift(rx_fm_q,0) .* rx_fm_i_diff;
 
 rx_fm_demod = part_demod_a - part_demod_b;
 
