@@ -27,13 +27,14 @@ def loadDataFromFile(filename, num_samples, bitwidth, bitwidth_frac):
     return data
 
 
-def plotData(data, title="", block=True):
+def plotData(data, title="", filename="", block=True):
     """
     Plots data in a line diagram.\n
-    Usage:  plot((
+    Usage:  plotData((
                   (x1,y1,"data 1"),
                   (x2,y2,"data 2")),
-                  title="My Diagram Title")
+                  title="My Diagram Title",
+                  filename="sim_build/my_plot.png")
     """
     fig = plt.figure()
     for x, y, label in data:
@@ -43,6 +44,9 @@ def plotData(data, title="", block=True):
     plt.legend()
     fig.tight_layout()
     plt.xlim([0, max(x)])
+
+    if not (filename == ""):
+        plt.savefig(filename, bbox_inches='tight')
     plt.show(block=block)
 
 

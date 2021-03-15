@@ -25,13 +25,16 @@ class FM_TB(object):
     def __del__(self):
         pass
 
-    def __init__(self, dut: cocotb.handle.HierarchyObject, fp_width, fp_width_frac, num_samples):
+    def __init__(self, dut: cocotb.handle.HierarchyObject,
+                 fp_width, fp_width_frac,
+                 num_samples, num_samples_fs):
         self.dut = dut
         self.dut._log.debug("Building/Connecting Testbench")
 
         self.fp_width_c = fp_width
         self.fp_width_frac_c = fp_width_frac
         self.num_samples_c = num_samples
+        self.num_samples_fs_c = num_samples_fs
 
         self.fm_receiver_model = FM_RECEIVER_MODEL()
 
@@ -70,6 +73,9 @@ class FM_TB(object):
             if size % 10 == 0:
                 self.dut._log.info("Progress fm_demod: {}".format(size))
 
+            if size >= self.num_samples_fs_c:
+                break
+
     @cocotb.coroutine
     async def read_audio_mono_output(self):
         edge = RisingEdge(self.dut.channel_decoder_inst.audio_mono_valid)
@@ -84,8 +90,8 @@ class FM_TB(object):
             if size % 10 == 0:
                 self.dut._log.info("Progress audio_mono: {}".format(size))
 
-            # if size >= self.num_samples_c:
-            #    break
+            if size >= self.num_samples_c:
+                break
 
     @cocotb.coroutine
     async def read_audio_LR_output(self):
@@ -104,5 +110,5 @@ class FM_TB(object):
             if size % 10 == 0:
                 self.dut._log.info("Progress audio_LR: {}".format(size))
 
-            # if size >= self.num_samples_c:
-            #    break
+            if size >= self.num_samples_c:
+                break

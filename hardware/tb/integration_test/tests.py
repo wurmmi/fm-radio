@@ -34,7 +34,7 @@ async def data_processing_test(dut):
     # --------------------------------------------------------------------------
 
     # Number of seconds to process
-    n_sec = 0.001
+    n_sec = 0.0005
 
     # Sample rate (set according to Matlab model!)
     fs_rx_khz_c = 120
@@ -63,17 +63,17 @@ async def data_processing_test(dut):
     data_in_i_fp = data_fp[0::2]  # start:end:step
     data_in_q_fp = data_fp[1::2]  # start:end:step
 
+    filename = "../../../sim/matlab/verification_data/rx_fm_demod.txt"
+    fm_demod_gold_fp = loadDataFromFile(filename, num_samples_fs, fp_width_c, fp_width_frac_c)
+
     filename = "../../../sim/matlab/verification_data/rx_audio_mono.txt"
     audio_mono_gold_fp = loadDataFromFile(filename, num_samples, fp_width_c, fp_width_frac_c)
-
-    filename = "../../../sim/matlab/verification_data/rx_fm_demod.txt"
-    fm_demod_gold_fp = loadDataFromFile(filename, num_samples, fp_width_c, fp_width_frac_c)
 
     # --------------------------------------------------------------------------
     # Prepare environment
     # --------------------------------------------------------------------------
 
-    tb = FM_TB(dut, fp_width_c, fp_width_frac_c, num_samples)
+    tb = FM_TB(dut, fp_width_c, fp_width_frac_c, num_samples, num_samples_fs)
 
     assert (tb.CLOCK_FREQ_MHZ * 1e3 / fs_rx_khz_c).is_integer(), \
         "Clock rate and fs_rx must have an integer relation!"
@@ -109,10 +109,10 @@ async def data_processing_test(dut):
         dut.i_sample_i <= int(fixed_to_int(data_in_i_fp[i]))
         dut.q_sample_i <= int(fixed_to_int(data_in_q_fp[i]))
 
-    await RisingEdge(dut.iq_valid_i)
+    await RisingEdge(dut.channel_decoder_inst.audio_mono_valid)
 
     # Stop other forked routines
-    fm_demod_output_fork.kill()
+    fm_demod_output_fork.join()
     audio_mono_output_fork.join()
     audio_LR_output_fork.join()
 
@@ -148,16 +148,22 @@ async def data_processing_test(dut):
         dut._log.info("Plots ...")
         if okay_fm_demod:
             data = (
-                (np.arange(0, num_samples) / fs_c, from_fixed_point(fm_demod_gold_fp), "fm_demod_gold_fp"),
-                (np.arange(0, num_samples) / fs_c, tb.data_out_fm_demod, "tb.data_out_fm_demod")
+                (np.arange(0, num_samples_fs) / fs_c,
+                 from_fixed_point(fm_demod_gold_fp), "fm_demod_gold_fp"),
+                (np.arange(0, num_samples_fs) / fs_c,
+                 tb.data_out_fm_demod, "tb.data_out_fm_demod")
             )
-            plotData(data, title="FM Demodulator", block=False)
+            plotData(data, title="FM Demodulator",
+                     filename="sim_build/fm_demod.png", block=False)
 
         if okay_audio_mono:
             data = (
-                (np.arange(0, len(audio_mono_gold_fp)) / fs_rx_c, from_fixed_point(audio_mono_gold_fp), "audio_mono_gold_fp"),
-                (np.arange(0, len(tb.data_out_audio_mono)) / fs_rx_c, tb.data_out_audio_mono, "tb.data_out_audio_mono")
+                (np.arange(0, num_samples) / fs_rx_c,
+                 from_fixed_point(audio_mono_gold_fp), "audio_mono_gold_fp"),
+                (np.arange(0, num_samples) / fs_rx_c,
+                 tb.data_out_audio_mono, "tb.data_out_audio_mono")
             )
-            plotData(data, title="Audio Mono")
+            plotData(data, title="Audio Mono",
+                     filename="sim_build/audio_mono.png",)
 
     dut._log.info("Done.")
