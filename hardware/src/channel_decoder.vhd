@@ -8,7 +8,6 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-use ieee.fixed_pkg.all;
 
 library work;
 use work.fm_pkg.all;
@@ -18,8 +17,8 @@ entity channel_decoder is
     clk_i : in std_ulogic;
     rst_i : in std_ulogic;
 
-    sample_i       : in  sample_t;
-    sample_valid_i : in  std_ulogic;
+    sample_i       : in sample_t;
+    sample_valid_i : in std_ulogic;
 
     audio_L_o     : out sample_t;
     audio_R_o     : out sample_t;
@@ -39,18 +38,14 @@ architecture rtl of channel_decoder is
   --! @name Internal Registers
   -----------------------------------------------------------------------------
   --! @{
-
-
   --! @}
   -----------------------------------------------------------------------------
   --! @name Internal Wires
   -----------------------------------------------------------------------------
   --! @{
-
-
   --! @}
 
-begin  -- architecture rtl
+begin -- architecture rtl
 
   ------------------------------------------------------------------------------
   -- Outputs
@@ -59,8 +54,6 @@ begin  -- architecture rtl
   -----------------------------------------------------------------------------
   -- Signal Assignments
   -----------------------------------------------------------------------------
-
-
   ------------------------------------------------------------------------------
   -- Registers
   ------------------------------------------------------------------------------

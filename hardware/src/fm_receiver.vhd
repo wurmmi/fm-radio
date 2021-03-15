@@ -14,13 +14,13 @@
 -- (2) FM receiver implementation
 --    03/14/2021  09:30 - 12:00    2:30 h
 --                12:30 - 14:00    1:30 h
---    03/15/2021  09:00 - 12:00    xxxxx h
+--    03/15/2021  09:00 - 12:30    3:30 h
+--                13:00 - xxxxx    xxxx h
 --
 
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-use ieee.fixed_pkg.all;
 
 library work;
 use work.fm_pkg.all;
