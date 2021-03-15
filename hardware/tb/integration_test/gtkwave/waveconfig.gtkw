@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
-[*] Mon Mar 15 16:40:12 2021
+[*] Mon Mar 15 17:12:11 2021
 [*]
 [dumpfile] "/home/mike/work/fm-radio/hardware/tb/integration_test/sim_build/waveform.ghw"
-[dumpfile_mtime] "Mon Mar 15 16:38:05 2021"
-[dumpfile_size] 1900924
+[dumpfile_mtime] "Mon Mar 15 17:07:28 2021"
+[dumpfile_size] 27574716
 [savefile] "/home/mike/work/fm-radio/hardware/tb/integration_test/gtkwave/waveconfig.gtkw"
-[timestart] 8830000000
+[timestart] 0
 [size] 1848 1016
 [pos] -1 -1
-*-31.554668 12450000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-40.554668 541080000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.fm_receiver.
 [treeopen] top.fm_receiver.channel_decoder_inst.
@@ -20,7 +20,7 @@
 @28
 top.fm_receiver.rst_i
 top.fm_receiver.clk_i
-@c08421
+@c08420
 #{top.fm_receiver.fm_demodulator_inst.q_sample_i[0:-31]} top.fm_receiver.fm_demodulator_inst.q_sample_i[0] top.fm_receiver.fm_demodulator_inst.q_sample_i[-1] top.fm_receiver.fm_demodulator_inst.q_sample_i[-2] top.fm_receiver.fm_demodulator_inst.q_sample_i[-3] top.fm_receiver.fm_demodulator_inst.q_sample_i[-4] top.fm_receiver.fm_demodulator_inst.q_sample_i[-5] top.fm_receiver.fm_demodulator_inst.q_sample_i[-6] top.fm_receiver.fm_demodulator_inst.q_sample_i[-7] top.fm_receiver.fm_demodulator_inst.q_sample_i[-8] top.fm_receiver.fm_demodulator_inst.q_sample_i[-9] top.fm_receiver.fm_demodulator_inst.q_sample_i[-10] top.fm_receiver.fm_demodulator_inst.q_sample_i[-11] top.fm_receiver.fm_demodulator_inst.q_sample_i[-12] top.fm_receiver.fm_demodulator_inst.q_sample_i[-13] top.fm_receiver.fm_demodulator_inst.q_sample_i[-14] top.fm_receiver.fm_demodulator_inst.q_sample_i[-15] top.fm_receiver.fm_demodulator_inst.q_sample_i[-16] top.fm_receiver.fm_demodulator_inst.q_sample_i[-17] top.fm_receiver.fm_demodulator_inst.q_sample_i[-18] top.fm_receiver.fm_demodulator_inst.q_sample_i[-19] top.fm_receiver.fm_demodulator_inst.q_sample_i[-20] top.fm_receiver.fm_demodulator_inst.q_sample_i[-21] top.fm_receiver.fm_demodulator_inst.q_sample_i[-22] top.fm_receiver.fm_demodulator_inst.q_sample_i[-23] top.fm_receiver.fm_demodulator_inst.q_sample_i[-24] top.fm_receiver.fm_demodulator_inst.q_sample_i[-25] top.fm_receiver.fm_demodulator_inst.q_sample_i[-26] top.fm_receiver.fm_demodulator_inst.q_sample_i[-27] top.fm_receiver.fm_demodulator_inst.q_sample_i[-28] top.fm_receiver.fm_demodulator_inst.q_sample_i[-29] top.fm_receiver.fm_demodulator_inst.q_sample_i[-30] top.fm_receiver.fm_demodulator_inst.q_sample_i[-31]
 @28
 top.fm_receiver.fm_demodulator_inst.q_sample_i[0]
@@ -55,7 +55,7 @@ top.fm_receiver.fm_demodulator_inst.q_sample_i[-28]
 top.fm_receiver.fm_demodulator_inst.q_sample_i[-29]
 top.fm_receiver.fm_demodulator_inst.q_sample_i[-30]
 top.fm_receiver.fm_demodulator_inst.q_sample_i[-31]
-@1401201
+@1401200
 -group_end
 @20000
 -
@@ -84,8 +84,12 @@ top.fm_receiver.fm_demodulator_inst.valid_diff
 top.fm_receiver.fm_demodulator_inst.sample_del_valid
 @420
 top.fm_receiver.fm_demodulator_inst.delay_vector_i_inst.addrcnt
-@22
+@8421
 #{top.fm_receiver.fm_demod[0:-31]} top.fm_receiver.fm_demod[0] top.fm_receiver.fm_demod[-1] top.fm_receiver.fm_demod[-2] top.fm_receiver.fm_demod[-3] top.fm_receiver.fm_demod[-4] top.fm_receiver.fm_demod[-5] top.fm_receiver.fm_demod[-6] top.fm_receiver.fm_demod[-7] top.fm_receiver.fm_demod[-8] top.fm_receiver.fm_demod[-9] top.fm_receiver.fm_demod[-10] top.fm_receiver.fm_demod[-11] top.fm_receiver.fm_demod[-12] top.fm_receiver.fm_demod[-13] top.fm_receiver.fm_demod[-14] top.fm_receiver.fm_demod[-15] top.fm_receiver.fm_demod[-16] top.fm_receiver.fm_demod[-17] top.fm_receiver.fm_demod[-18] top.fm_receiver.fm_demod[-19] top.fm_receiver.fm_demod[-20] top.fm_receiver.fm_demod[-21] top.fm_receiver.fm_demod[-22] top.fm_receiver.fm_demod[-23] top.fm_receiver.fm_demod[-24] top.fm_receiver.fm_demod[-25] top.fm_receiver.fm_demod[-26] top.fm_receiver.fm_demod[-27] top.fm_receiver.fm_demod[-28] top.fm_receiver.fm_demod[-29] top.fm_receiver.fm_demod[-30] top.fm_receiver.fm_demod[-31]
+@20000
+-
+-
+-
 @28
 top.fm_receiver.fm_demod_valid
 @22

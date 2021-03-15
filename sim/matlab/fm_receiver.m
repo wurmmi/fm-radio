@@ -30,13 +30,18 @@ rx_fm_q = imag(rx_fm_bb_norm);
 % Design differentiator
 filter_diff = [1,0,-1];
 
-%rx_fm_demod =  ...
-%    (rx_fm_i .* conv(rx_fm_q,filter_diff,'same') -   ...
-%    rx_fm_q .* conv(rx_fm_i,filter_diff,'same')) ./  ...
-%    (rx_fm_i.^2 + rx_fm_q.^2);
-
-rx_fm_i_diff = filter(filter_diff,1, rx_fm_i);
-rx_fm_q_diff = filter(filter_diff,1, rx_fm_q);
+if EnableProcessingLikeHW
+    rx_fm_i_diff = rx_fm_i - [0;0; rx_fm_i(1:end-2)];
+    rx_fm_q_diff = rx_fm_q - [0;0; rx_fm_q(1:end-2)];
+else
+    rx_fm_i_diff = filter(filter_diff,1, rx_fm_i);
+    rx_fm_q_diff = filter(filter_diff,1, rx_fm_q);
+    
+    %rx_fm_demod =  ...
+    %    (rx_fm_i .* conv(rx_fm_q,filter_diff,'same') -   ...
+    %    rx_fm_q .* conv(rx_fm_i,filter_diff,'same')) ./  ...
+    %    (rx_fm_i.^2 + rx_fm_q.^2);
+end
 
 part_demod_a = circshift(rx_fm_i,0) .* rx_fm_q_diff;
 part_demod_b = circshift(rx_fm_q,0) .* rx_fm_i_diff;
