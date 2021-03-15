@@ -76,11 +76,12 @@ package body fm_pkg is
     variable tmp : u_sfixed(size_res'high + 1 downto size_res'low) := (others => '0');
   begin
     lsb(lsb'low)        := '1';
-    tmp(size_res'range) := resize(arg => arg,
-    left_index                        => size_res'high,
-    right_index                       => size_res'low,
-    round_style                       => fixed_truncate,
-    overflow_style                    => fixed_saturate);
+    tmp(size_res'range) := resize(
+    arg            => arg,
+    left_index     => size_res'high,
+    right_index    => size_res'low,
+    round_style    => fixed_truncate,
+    overflow_style => fixed_saturate);
 
     if tmp < 0 and arg >- 1 then
       tmp := tmp(size_res'range) + lsb;

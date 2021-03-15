@@ -34,7 +34,7 @@ async def data_processing_test(dut):
     # --------------------------------------------------------------------------
 
     # Number of seconds to process
-    n_sec = 0.005
+    n_sec = 0.0005
 
     # Sample rate (set according to Matlab model!)
     fs_rx_khz_c = 120

@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
-[*] Mon Mar 15 16:10:00 2021
+[*] Mon Mar 15 16:40:12 2021
 [*]
 [dumpfile] "/home/mike/work/fm-radio/hardware/tb/integration_test/sim_build/waveform.ghw"
-[dumpfile_mtime] "Mon Mar 15 16:04:59 2021"
-[dumpfile_size] 21902217
+[dumpfile_mtime] "Mon Mar 15 16:38:05 2021"
+[dumpfile_size] 1900924
 [savefile] "/home/mike/work/fm-radio/hardware/tb/integration_test/gtkwave/waveconfig.gtkw"
-[timestart] 0
+[timestart] 8830000000
 [size] 1848 1016
 [pos] -1 -1
-*-39.554668 1368040000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-31.554668 12450000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.fm_receiver.
 [treeopen] top.fm_receiver.channel_decoder_inst.
@@ -20,7 +20,7 @@
 @28
 top.fm_receiver.rst_i
 top.fm_receiver.clk_i
-@c08420
+@c08421
 #{top.fm_receiver.fm_demodulator_inst.q_sample_i[0:-31]} top.fm_receiver.fm_demodulator_inst.q_sample_i[0] top.fm_receiver.fm_demodulator_inst.q_sample_i[-1] top.fm_receiver.fm_demodulator_inst.q_sample_i[-2] top.fm_receiver.fm_demodulator_inst.q_sample_i[-3] top.fm_receiver.fm_demodulator_inst.q_sample_i[-4] top.fm_receiver.fm_demodulator_inst.q_sample_i[-5] top.fm_receiver.fm_demodulator_inst.q_sample_i[-6] top.fm_receiver.fm_demodulator_inst.q_sample_i[-7] top.fm_receiver.fm_demodulator_inst.q_sample_i[-8] top.fm_receiver.fm_demodulator_inst.q_sample_i[-9] top.fm_receiver.fm_demodulator_inst.q_sample_i[-10] top.fm_receiver.fm_demodulator_inst.q_sample_i[-11] top.fm_receiver.fm_demodulator_inst.q_sample_i[-12] top.fm_receiver.fm_demodulator_inst.q_sample_i[-13] top.fm_receiver.fm_demodulator_inst.q_sample_i[-14] top.fm_receiver.fm_demodulator_inst.q_sample_i[-15] top.fm_receiver.fm_demodulator_inst.q_sample_i[-16] top.fm_receiver.fm_demodulator_inst.q_sample_i[-17] top.fm_receiver.fm_demodulator_inst.q_sample_i[-18] top.fm_receiver.fm_demodulator_inst.q_sample_i[-19] top.fm_receiver.fm_demodulator_inst.q_sample_i[-20] top.fm_receiver.fm_demodulator_inst.q_sample_i[-21] top.fm_receiver.fm_demodulator_inst.q_sample_i[-22] top.fm_receiver.fm_demodulator_inst.q_sample_i[-23] top.fm_receiver.fm_demodulator_inst.q_sample_i[-24] top.fm_receiver.fm_demodulator_inst.q_sample_i[-25] top.fm_receiver.fm_demodulator_inst.q_sample_i[-26] top.fm_receiver.fm_demodulator_inst.q_sample_i[-27] top.fm_receiver.fm_demodulator_inst.q_sample_i[-28] top.fm_receiver.fm_demodulator_inst.q_sample_i[-29] top.fm_receiver.fm_demodulator_inst.q_sample_i[-30] top.fm_receiver.fm_demodulator_inst.q_sample_i[-31]
 @28
 top.fm_receiver.fm_demodulator_inst.q_sample_i[0]
@@ -55,7 +55,7 @@ top.fm_receiver.fm_demodulator_inst.q_sample_i[-28]
 top.fm_receiver.fm_demodulator_inst.q_sample_i[-29]
 top.fm_receiver.fm_demodulator_inst.q_sample_i[-30]
 top.fm_receiver.fm_demodulator_inst.q_sample_i[-31]
-@1401600
+@1401201
 -group_end
 @20000
 -
@@ -64,7 +64,7 @@ top.fm_receiver.fm_demodulator_inst.q_sample_i[-31]
 -
 @28
 top.fm_receiver.fm_demodulator_inst.iq_valid_i
-@8421
+@8420
 #{top.fm_receiver.fm_demodulator_inst.q_sample_diff[0:-31]} top.fm_receiver.fm_demodulator_inst.q_sample_diff[0] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-1] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-2] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-3] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-4] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-5] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-6] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-7] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-8] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-9] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-10] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-11] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-12] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-13] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-14] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-15] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-16] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-17] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-18] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-19] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-20] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-21] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-22] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-23] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-24] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-25] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-26] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-27] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-28] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-29] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-30] top.fm_receiver.fm_demodulator_inst.q_sample_diff[-31]
 @20000
 -

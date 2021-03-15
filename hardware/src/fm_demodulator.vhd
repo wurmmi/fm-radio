@@ -140,7 +140,7 @@ begin -- architecture rtl
 
   delay_vector_i_inst : entity work.delay_vector
     generic map(
-      gDelay => 1)
+      gDelay => 3)
     port map(
       iClk         => clk_i,
       inResetAsync => not rst_i,
@@ -153,7 +153,7 @@ begin -- architecture rtl
 
   delay_vector_q_inst : entity work.delay_vector
     generic map(
-      gDelay => 1)
+      gDelay => 3)
     port map(
       iClk         => clk_i,
       inResetAsync => not rst_i,
