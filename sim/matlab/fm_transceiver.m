@@ -114,7 +114,7 @@ if EnableWriteDataFiles
     fp_width_frac = 31;
     fp_maximum    = 0.999;
     
-    n_sec_file = 0.01;
+    n_sec_file = 0.03;
 
     num_samples = n_sec_file * fs/osr_rx;
     

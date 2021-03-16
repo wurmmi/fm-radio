@@ -41,21 +41,20 @@ architecture rtl of fm_demodulator is
   -----------------------------------------------------------------------------
   --! @{
 
-  signal demod_part_a : sample_t;
-  signal demod_part_b : sample_t;
+  signal i_sample_diff : sample_t := (others => '0');
+  signal q_sample_diff : sample_t := (others => '0');
 
-  signal fm_demod       : sample_t;
-  signal fm_demod_valid : std_ulogic;
+  signal demod_part_a : sample_t := (others => '0');
+  signal demod_part_b : sample_t := (others => '0');
+
+  signal fm_demod       : sample_t   := (others => '0');
+  signal fm_demod_valid : std_ulogic := '0';
 
   --! @}
   -----------------------------------------------------------------------------
   --! @name Internal Wires
   -----------------------------------------------------------------------------
   --! @{
-
-  signal i_sample_diff : sample_t;
-  signal q_sample_diff : sample_t;
-  signal valid_diff    : std_ulogic;
 
   signal i_sample_del     : sample_t;
   signal q_sample_del     : sample_t;
@@ -83,6 +82,8 @@ begin -- architecture rtl
   regs : process (clk_i) is
     procedure reset is
     begin
+      i_sample_diff  <= (others => '0');
+      q_sample_diff  <= (others => '0');
       demod_part_a   <= (others => '0');
       demod_part_b   <= (others => '0');
       fm_demod       <= (others => '0');
@@ -96,12 +97,14 @@ begin -- architecture rtl
         -- Defaults
         fm_demod_valid <= '0';
 
-        if valid_diff = '1' then
-          demod_part_a <= ResizeTruncAbsVal(i_sample_del * q_sample_diff, demod_part_a);
-          demod_part_b <= ResizeTruncAbsVal(q_sample_del * i_sample_diff, demod_part_b);
+        if sample_del_valid = '1' then
+          i_sample_diff <= ResizeTruncAbsVal(i_sample_i - i_sample_del, i_sample_diff);
+          q_sample_diff <= ResizeTruncAbsVal(q_sample_i - q_sample_del, q_sample_diff);
 
-          -- TODO: is inverted (should be part_a-part_b)
-          fm_demod       <= ResizeTruncAbsVal(demod_part_b - demod_part_a, fm_demod);
+          demod_part_a <= ResizeTruncAbsVal(i_sample_i * q_sample_diff, demod_part_a);
+          demod_part_b <= ResizeTruncAbsVal(q_sample_i * i_sample_diff, demod_part_b);
+
+          fm_demod       <= ResizeTruncAbsVal(demod_part_a - demod_part_b, fm_demod);
           fm_demod_valid <= '1';
         end if;
       end if;
@@ -112,37 +115,9 @@ begin -- architecture rtl
   -- Instantiations
   ------------------------------------------------------------------------------
 
-  -- TODO: implement this like in Matlab (replace the FIR)
-
-  DspFir_differentiator_i_inst : entity work.DspFir
-    generic map(
-      gB => filter_diff_coeffs_c)
-    port map(
-      iClk         => clk_i,
-      inResetAsync => not rst_i,
-
-      iDdry   => i_sample_i,
-      iValDry => iq_valid_i,
-
-      oDwet   => i_sample_diff,
-      oValWet => valid_diff);
-
-  DspFir_differentiator_q_inst : entity work.DspFir
-    generic map(
-      gB => filter_diff_coeffs_c)
-    port map(
-      iClk         => clk_i,
-      inResetAsync => not rst_i,
-
-      iDdry   => q_sample_i,
-      iValDry => iq_valid_i,
-
-      oDwet   => q_sample_diff,
-      oValWet => open);
-
   delay_vector_i_inst : entity work.delay_vector
     generic map(
-      gDelay => 3)
+      gDelay => 5) -- NOTE: N-2 is actual delay (e.g. gDelay=>5 --> -2 = 3)
     port map(
       iClk         => clk_i,
       inResetAsync => not rst_i,
@@ -155,7 +130,7 @@ begin -- architecture rtl
 
   delay_vector_q_inst : entity work.delay_vector
     generic map(
-      gDelay => 3)
+      gDelay => 5) -- NOTE: N-2 is actual delay (e.g. gDelay=>5 --> -2 = 3)
     port map(
       iClk         => clk_i,
       inResetAsync => not rst_i,

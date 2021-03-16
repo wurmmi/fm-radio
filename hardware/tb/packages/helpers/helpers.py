@@ -77,7 +77,7 @@ def compareResultsOkay(gold, actual, abs_max_error, skip_n_samples, data_name):
     # Compute 2-Norm
     norm_res = np.linalg.norm(
         np.array(from_fixed_point(gold)) - np.array(actual), 2)
-    cocotb.log.warning("2-Norm for '{}': {}".format(data_name, norm_res))
+    cocotb.log.info("2-Norm for '{}': {}".format(data_name, norm_res))
 
     # Compare absolute difference
     for i in range(0, len(actual)):

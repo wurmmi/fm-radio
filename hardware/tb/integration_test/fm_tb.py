@@ -68,9 +68,9 @@ class FM_TB(object):
             self.data_out_fm_demod.append(
                 int_to_fixed(fm_demod, self.fp_width_c, self.fp_width_frac_c))
 
-            # print every 10th number to show progress
+            # print every 100th number to show progress
             size = len(self.data_out_fm_demod)
-            if size % 10 == 0:
+            if size % 100 == 0:
                 self.dut._log.info("Progress fm_demod: {}".format(size))
 
             if size >= self.num_samples_fs_c:
@@ -85,9 +85,9 @@ class FM_TB(object):
             self.data_out_audio_mono.append(
                 int_to_fixed(audio_mono, self.fp_width_c, self.fp_width_frac_c))
 
-            # print every 10th number to show progress
+            # print every 100th number to show progress
             size = len(self.data_out_audio_mono)
-            if size % 10 == 0:
+            if size % 100 == 0:
                 self.dut._log.info("Progress audio_mono: {}".format(size))
 
             if size >= self.num_samples_c:
@@ -105,9 +105,9 @@ class FM_TB(object):
             self.data_out_R.append(
                 int_to_fixed(audio_R, self.fp_width_c, self.fp_width_frac_c))
 
-            # print every 10th number to show progress
+            # print every 100th number to show progress
             size = len(self.data_out_L)
-            if size % 10 == 0:
+            if size % 100 == 0:
                 self.dut._log.info("Progress audio_LR: {}".format(size))
 
             if size >= self.num_samples_c:
