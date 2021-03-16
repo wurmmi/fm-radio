@@ -69,6 +69,9 @@ async def data_processing_test(dut):
     filename = "../../../sim/matlab/verification_data/rx_audio_mono.txt"
     audio_mono_gold_fp = loadDataFromFile(filename, num_samples, fp_width_c, fp_width_frac_c)
 
+    filename = "../../../sim/matlab/verification_data/rx_pilot.txt"
+    pilot_gold_fp = loadDataFromFile(filename, num_samples, fp_width_c, fp_width_frac_c)
+
     # --------------------------------------------------------------------------
     # Prepare environment
     # --------------------------------------------------------------------------
@@ -99,6 +102,7 @@ async def data_processing_test(dut):
     # Fork the 'receiving part'
     fm_demod_output_fork = cocotb.fork(tb.read_fm_demod_output())
     audio_mono_output_fork = cocotb.fork(tb.read_audio_mono_output())
+    pilot_output_fork = cocotb.fork(tb.read_pilot_output())
     #audio_LR_output_fork = cocotb.fork(tb.read_audio_LR_output())
 
     # Send input data through filter
@@ -114,6 +118,7 @@ async def data_processing_test(dut):
     # Stop other forked routines
     fm_demod_output_fork.join()
     audio_mono_output_fork.join()
+    pilot_output_fork.join()
     # audio_LR_output_fork.join()
 
     # Measure time
@@ -125,14 +130,9 @@ async def data_processing_test(dut):
     # --------------------------------------------------------------------------
 
     # Compensate shift between file data and testbench data
-    fm_demod_gold_fp.insert(0, to_fixed_point(0, fp_width_c, fp_width_frac_c))
-    fm_demod_gold_fp.insert(0, to_fixed_point(0, fp_width_c, fp_width_frac_c))
-    fm_demod_gold_fp.pop()
-    fm_demod_gold_fp.pop()
-    audio_mono_gold_fp.append(to_fixed_point(0, fp_width_c, fp_width_frac_c))
-    audio_mono_gold_fp.append(to_fixed_point(0, fp_width_c, fp_width_frac_c))
-    audio_mono_gold_fp.pop(0)
-    audio_mono_gold_fp.pop(0)
+    prepend_n_zeros(fm_demod_gold_fp, 2, fp_width_c, fp_width_frac_c)
+    append_n_zeros(audio_mono_gold_fp, 2, fp_width_c, fp_width_frac_c)
+    append_n_zeros(pilot_gold_fp, 3, fp_width_c, fp_width_frac_c)
 
     # Compare
     okay_fm_demod = compareResultsOkay(dut,
@@ -153,6 +153,15 @@ async def data_processing_test(dut):
                                          skip_n_samples=10,
                                          data_name="audio_mono")
 
+    okay_pilot = compareResultsOkay(dut,
+                                    pilot_gold_fp,
+                                    tb.data_out_pilot,
+                                    fail_on_err=False,
+                                    max_error_abs=2**-5,
+                                    max_error_norm=0.06,
+                                    skip_n_samples=10,
+                                    data_name="pilot")
+
     # --------------------------------------------------------------------------
     # Plots
     # --------------------------------------------------------------------------
@@ -167,7 +176,7 @@ async def data_processing_test(dut):
                 tb.data_out_fm_demod, "tb.data_out_fm_demod")
         )
         plotData(data, title="FM Demodulator",
-                 filename="sim_build/fm_demod.png",
+                 filename="sim_build/plot_fm_demod.png",
                  show=(not okay_fm_demod), block=False)
 
         data = (
@@ -177,7 +186,17 @@ async def data_processing_test(dut):
                 tb.data_out_audio_mono, "tb.data_out_audio_mono")
         )
         plotData(data, title="Audio Mono",
-                 filename="sim_build/audio_mono.png",
+                 filename="sim_build/plot_audio_mono.png",
                  show=(not okay_audio_mono))
+
+        data = (
+            (np.arange(0, num_samples) / fs_rx_c,
+                from_fixed_point(pilot_gold_fp), "pilot_gold_fp"),
+            (np.arange(0, num_samples) / fs_rx_c,
+                tb.data_out_pilot, "tb.data_out_pilot")
+        )
+        plotData(data, title="Pilot",
+                 filename="sim_build/plot_pilot.png",
+                 show=(not okay_pilot))
 
     dut._log.info("Done.")

@@ -103,13 +103,17 @@ rx_pilot = filter(filter_bp_pilot,1, rx_fmChannelData);
 % Amplify
 % NOTE: Theoretically, the factor should be 10, since the pilot is
 %       transmitted with an amplitude of 10%.
-rx_pilot = rx_pilot * 12; %TODO: adapt this value
+% --> 12 for optimum in sim
+% --> 7 to keep < 1 for fp
+pilot_scale_factor = 7; %TODO: write this into _pkg.vhdl with filter coeffs
+rx_pilot = rx_pilot * pilot_scale_factor; %TODO: adapt this value
 
 % Amplify again, if a de-emphasis filter is used.
 % TODO: check this
 if EnableDeEmphasis
     rx_pilot = rx_pilot * 7;
 end
+max(rx_pilot)
 
 %% Generate sub-carriers
 

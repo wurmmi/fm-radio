@@ -8,6 +8,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use ieee.fixed_pkg.all;
 
 library work;
 use work.fm_pkg.all;
@@ -35,6 +36,9 @@ architecture rtl of recover_carriers is
   -----------------------------------------------------------------------------
   --! @{
 
+  -- TODO: get this constant from pilot_pkg.vhdl
+  constant pilot_scale_factor_c : u_sfixed(4 downto 0) := to_sfixed(7, 4, 0);
+
   --! @}
   -----------------------------------------------------------------------------
   --! @name Internal Registers
@@ -46,8 +50,10 @@ architecture rtl of recover_carriers is
   -----------------------------------------------------------------------------
   --! @{
 
-  signal pilot       : sample_t;
-  signal pilot_valid : std_ulogic;
+  signal pilot_fir       : sample_t;
+  signal pilot_fir_valid : std_ulogic;
+  signal pilot           : sample_t;
+  signal pilot_valid     : std_ulogic;
 
   --! @}
 
@@ -77,6 +83,13 @@ begin -- architecture rtl
       if rst_i = '1' then
         reset;
       else
+        -- Defaults
+        pilot_valid <= '0';
+
+        if pilot_fir_valid = '1' then
+          pilot       <= ResizeTruncAbsVal(pilot_fir * pilot_scale_factor_c, pilot);
+          pilot_valid <= '1';
+        end if;
       end if;
     end if;
   end process regs;
@@ -95,7 +108,7 @@ begin -- architecture rtl
       iDdry   => sample_i,
       iValDry => sample_valid_i,
 
-      oDwet   => pilot,
-      oValWet => pilot_valid);
+      oDwet   => pilot_fir,
+      oValWet => pilot_fir_valid);
 
 end architecture rtl;

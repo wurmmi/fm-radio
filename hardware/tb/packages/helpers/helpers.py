@@ -47,7 +47,7 @@ def plotData(data, title="", filename="", show=True, block=True):
         plt.plot(x, y, label=label)
     plt.title(title)
     plt.grid(True)
-    plt.legend()
+    plt.legend(loc='upper left')
     fig.tight_layout()
     plt.xlim([0, max(x)])
 
@@ -55,6 +55,7 @@ def plotData(data, title="", filename="", show=True, block=True):
         plt.savefig(filename, bbox_inches='tight')
     if show:
         plt.show(block=block)
+    plt.close()
 
 
 def compareResultsOkay(dut, gold, actual, fail_on_err,
@@ -104,3 +105,21 @@ def compareResultsOkay(dut, gold, actual, fail_on_err,
     dut._log.info("OKAY results for '{}' (2-norm = {:.5f})".format(
         data_name, norm_res))
     return True
+
+
+def prepend_n_zeros(data, num_of_zeros, fp_width, fp_width_frac):
+    for _ in range(0, num_of_zeros):
+        # insert at begin
+        data.insert(0, to_fixed_point(0, fp_width, fp_width_frac))
+        # remove end
+        data.pop()
+    return data
+
+
+def append_n_zeros(data, num_of_zeros, fp_width, fp_width_frac):
+    for _ in range(0, num_of_zeros):
+        # insert at end
+        data.append(to_fixed_point(0, fp_width, fp_width_frac))
+        # remove begin
+        data.pop(0)
+    return data

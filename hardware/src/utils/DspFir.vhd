@@ -61,8 +61,7 @@ architecture RtlRam of DspFir is
   ----------------------------------------------------------------------------
   -- Types
   ----------------------------------------------------------------------------
-  type aMemory is array (0 to gB'length - 1) of
-  sample_t;
+  type aMemory is array (0 to gB'length - 1) of sample_t;
 
   type aFirStates is (NewVal, MulSum);
 

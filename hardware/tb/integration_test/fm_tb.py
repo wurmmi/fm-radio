@@ -20,6 +20,7 @@ class FM_TB(object):
     data_out_L = []
     data_out_R = []
     data_out_audio_mono = []
+    data_out_pilot = []
     data_out_fm_demod = []
 
     def __del__(self):
@@ -89,6 +90,23 @@ class FM_TB(object):
             size = len(self.data_out_audio_mono)
             if size % 100 == 0:
                 self.dut._log.info("Progress audio_mono: {}".format(size))
+
+            if size >= self.num_samples_c:
+                break
+
+    @cocotb.coroutine
+    async def read_pilot_output(self):
+        edge = RisingEdge(self.dut.channel_decoder_inst.recover_carriers_inst.pilot_valid)
+        while(True):
+            await edge
+            pilot = self.dut.channel_decoder_inst.recover_carriers_inst.pilot.value.signed_integer
+            self.data_out_pilot.append(
+                int_to_fixed(pilot, self.fp_width_c, self.fp_width_frac_c))
+
+            # print every 100th number to show progress
+            size = len(self.data_out_pilot)
+            if size % 100 == 0:
+                self.dut._log.info("Progress pilot: {}".format(size))
 
             if size >= self.num_samples_c:
                 break
