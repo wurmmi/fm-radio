@@ -34,7 +34,7 @@ async def data_processing_test(dut):
     # --------------------------------------------------------------------------
 
     # Number of seconds to process
-    n_sec = 0.005
+    n_sec = 0.001
 
     # Sample rate (set according to Matlab model!)
     fs_rx_khz_c = 120
@@ -138,7 +138,7 @@ async def data_processing_test(dut):
     okay_fm_demod = compareResultsOkay(dut,
                                        fm_demod_gold_fp,
                                        tb.data_out_fm_demod,
-                                       fail_on_err=true,
+                                       fail_on_err=True,
                                        max_error_abs=2**-5,
                                        max_error_norm=0.06,
                                        skip_n_samples=30,
@@ -147,7 +147,7 @@ async def data_processing_test(dut):
     okay_audio_mono = compareResultsOkay(dut,
                                          audio_mono_gold_fp,
                                          tb.data_out_audio_mono,
-                                         fail_on_err=true,
+                                         fail_on_err=True,
                                          max_error_abs=2**-5,
                                          max_error_norm=0.06,
                                          skip_n_samples=10,

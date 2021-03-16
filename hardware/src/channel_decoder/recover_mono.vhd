@@ -12,6 +12,7 @@ use ieee.numeric_std.all;
 library work;
 use work.fm_pkg.all;
 use work.filter_lp_mono_pkg.all;
+use work.filter_bp_lrdiff_pkg.all;
 
 entity recover_mono is
   port (
@@ -69,7 +70,7 @@ begin -- architecture rtl
 
   delay_vector_inst : entity work.delay_vector
     generic map(
-      gDelay => filter_lp_mono_grpdelay_c + 2)
+      gDelay => filter_bp_lrdiff_grpdelay_c + 2)
     port map(
       iClk         => clk_i,
       inResetAsync => not rst_i,

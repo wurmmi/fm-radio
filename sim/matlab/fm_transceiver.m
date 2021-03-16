@@ -134,6 +134,8 @@ if EnableWriteDataFiles
         '../../hardware/src/filter_coeff_pkgs/', fp_width, fp_width_frac);
     writeFilterCoeffsToVHDLFile(filter_lp_mono, 'filter_lp_mono', ...
         '../../hardware/src/filter_coeff_pkgs/', fp_width, fp_width_frac);
+    writeFilterCoeffsToVHDLFile(filter_bp_lrdiff, 'filter_bp_lrdiff', ...
+        '../../hardware/src/filter_coeff_pkgs/', fp_width, fp_width_frac);
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
