@@ -10,7 +10,7 @@ function status = writeFilterCoeffsToVHDLFile(coeffs, filtername, filedir, fp_wi
 %   filtername ... name used for VHDL entity and constant
 %   filedir    ... directory where to store the VHDL file
 
-fp_maximum = 1; % is 0.999 actually 
+fp_maximum = 0.999;
 coeff_max = max(coeffs);
 assert(coeff_max <= fp_maximum, ...
     "Max. value (%.5f) exceeds fixed point range! This will lead to overflows in the hardware.", coeff_max);

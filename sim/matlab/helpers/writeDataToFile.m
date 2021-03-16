@@ -14,8 +14,8 @@ function status = writeDataToFile(data, num_samples, filename, fp_width, fp_widt
 
 fp_maximum = 0.999;
 data_max = max(data);
-%assert(data_max < fp_maximum, ...
-%    "Max. value (%.5f) exceeds fixed point range! This will lead to overflows in the hardware.", data_max);
+assert(data_max < fp_maximum, ...
+    "Max. value (%.5f) exceeds fixed point range! This will lead to overflows in the hardware.", data_max);
 
 fileID = fopen(filename, 'w');
 if fileID <= 0
