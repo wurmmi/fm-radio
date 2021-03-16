@@ -47,6 +47,11 @@ architecture rtl of channel_decoder is
   signal audio_mono       : sample_t;
   signal audio_mono_valid : std_ulogic;
 
+  signal carrier_38k       : sample_t;
+  signal carrier_38k_valid : std_ulogic;
+  signal carrier_57k       : sample_t;
+  signal carrier_57k_valid : std_ulogic;
+
   --! @}
 
 begin -- architecture rtl
@@ -78,9 +83,20 @@ begin -- architecture rtl
       mono_o       => audio_mono,
       mono_valid_o => audio_mono_valid);
 
-  -- RecoverLRDiff
-  -- RecoverCarriers
-  -- RecoverMono
-  -- LRSeparator
+  recover_carriers_inst : entity work.recover_carriers
+    port map(
+      clk_i => clk_i,
+      rst_i => rst_i,
+
+      sample_i       => sample_i,
+      sample_valid_i => sample_valid_i,
+
+      carrier_38k_o       => carrier_38k,
+      carrier_38k_valid_o => carrier_38k_valid,
+      carrier_57k_o       => carrier_57k,
+      carrier_57k_valid_o => carrier_57k_valid);
+
+  -- recover_lrdiff
+  -- separate_lr_audio
 
 end architecture rtl;

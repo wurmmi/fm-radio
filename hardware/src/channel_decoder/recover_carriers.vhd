@@ -11,7 +11,7 @@ use ieee.numeric_std.all;
 
 library work;
 use work.fm_pkg.all;
-use work.filter_lp_mono_pkg.all;
+use work.filter_bp_pilot_pkg.all;
 
 entity recover_carriers is
   port (
@@ -45,6 +45,10 @@ architecture rtl of recover_carriers is
   --! @name Internal Wires
   -----------------------------------------------------------------------------
   --! @{
+
+  signal pilot       : sample_t;
+  signal pilot_valid : std_ulogic;
+
   --! @}
 
 begin -- architecture rtl
@@ -59,6 +63,7 @@ begin -- architecture rtl
   -----------------------------------------------------------------------------
   -- Signal Assignments
   -----------------------------------------------------------------------------
+
   ------------------------------------------------------------------------------
   -- Registers
   ------------------------------------------------------------------------------
@@ -86,9 +91,11 @@ begin -- architecture rtl
     port map(
       iClk         => clk_i,
       inResetAsync => not rst_i,
-      iDdry        => fir_i,
-      iValDry      => fir_valid_i,
-      oDwet        => fir_o,
-      oValWet      => fir_valid_o);
+
+      iDdry   => sample_i,
+      iValDry => sample_valid_i,
+
+      oDwet   => pilot,
+      oValWet => pilot_valid);
 
 end architecture rtl;
