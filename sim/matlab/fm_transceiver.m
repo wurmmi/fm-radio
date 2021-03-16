@@ -119,10 +119,10 @@ if EnableWriteDataFiles
     num_samples = n_sec_file * fs/osr_rx;
     
     % Test data
+    writeDataToFile(rx_fm_bb,         num_samples*osr_rx,'./verification_data/rx_fm_bb.txt',         fp_width, fp_width_frac);
+    writeDataToFile(rx_fm_demod,      num_samples*osr_rx,'./verification_data/rx_fm_demod.txt',      fp_width, fp_width_frac);
     writeDataToFile(rx_fmChannelData, num_samples,       './verification_data/rx_fmChannelData.txt', fp_width, fp_width_frac);
     writeDataToFile(rx_pilot,         num_samples,       './verification_data/rx_pilot.txt',         fp_width, fp_width_frac);
-    writeDataToFile(rx_fm_bb,         num_samples,       './verification_data/rx_fm_bb.txt',         fp_width, fp_width_frac);
-    writeDataToFile(rx_fm_demod,      num_samples*osr_rx,'./verification_data/rx_fm_demod.txt',      fp_width, fp_width_frac);
     writeDataToFile(rx_audio_mono,    num_samples,       './verification_data/rx_audio_mono.txt',    fp_width, fp_width_frac);
     writeDataToFile(rx_audio_L,       num_samples,       './verification_data/rx_audio_L.txt',       fp_width, fp_width_frac);
     writeDataToFile(rx_audio_R,       num_samples,       './verification_data/rx_audio_R.txt',       fp_width, fp_width_frac);
