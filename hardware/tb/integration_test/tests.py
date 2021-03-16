@@ -34,7 +34,7 @@ async def data_processing_test(dut):
     # --------------------------------------------------------------------------
 
     # Number of seconds to process
-    n_sec = 0.01
+    n_sec = 0.005
 
     # Sample rate (set according to Matlab model!)
     fs_rx_khz_c = 120
@@ -98,8 +98,8 @@ async def data_processing_test(dut):
 
     # Fork the 'receiving part'
     fm_demod_output_fork = cocotb.fork(tb.read_fm_demod_output())
-    audio_mono_output_fork = cocotb.fork(tb.read_audio_mono_output())
-    audio_LR_output_fork = cocotb.fork(tb.read_audio_LR_output())
+    #audio_mono_output_fork = cocotb.fork(tb.read_audio_mono_output())
+    #audio_LR_output_fork = cocotb.fork(tb.read_audio_LR_output())
 
     # Send input data through filter
     dut._log.info("Sending IQ samples to FM Receiver IP ...")
@@ -113,8 +113,8 @@ async def data_processing_test(dut):
 
     # Stop other forked routines
     fm_demod_output_fork.join()
-    audio_mono_output_fork.join()
-    audio_LR_output_fork.join()
+    # audio_mono_output_fork.join()
+    # audio_LR_output_fork.join()
 
     # Measure time
     timestamp_end = time.time()
@@ -138,7 +138,7 @@ async def data_processing_test(dut):
 
     # TODO: bypassing this for now
     okay_fm_demod = True
-    okay_audio_mono = True
+    #okay_audio_mono = True
 
     # --------------------------------------------------------------------------
     # Plots
@@ -154,7 +154,7 @@ async def data_processing_test(dut):
                  tb.data_out_fm_demod, "tb.data_out_fm_demod")
             )
             plotData(data, title="FM Demodulator",
-                     filename="sim_build/fm_demod.png", block=False)
+                     filename="sim_build/fm_demod.png")
 
         if okay_audio_mono:
             data = (

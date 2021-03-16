@@ -4,6 +4,7 @@
 # Description : Library for common helper functions.
 ################################################################################
 
+import cocotb
 import matplotlib.pyplot as plt
 import numpy as np
 from fixed_point import from_fixed_point, to_fixed_point
@@ -22,6 +23,11 @@ def loadDataFromFile(filename, num_samples, bitwidth, bitwidth_frac):
             # Stop after required number of samples
             if val_count >= num_samples:
                 break
+
+    if val_count < num_samples:
+        raise cocotb.result.TestFailure(
+            "File '{}' contains less elements than requested ({} < {}).".format(
+                filename, val_count, num_samples))
 
     data = to_fixed_point(data, bitwidth, bitwidth_frac)
     return data
@@ -55,7 +61,6 @@ def compareResultsOkay(gold, actual, abs_max_error, skip_n_samples, data_name):
     Compares actual data against "golden data".
     Metrics: number of samples,
     """
-    import cocotb
 
     # Sanity check
     if len(actual) < len(gold):
