@@ -33,7 +33,7 @@ def loadDataFromFile(filename, num_samples, bitwidth, bitwidth_frac):
     return data
 
 
-def plotData(data, title="", filename="", block=True):
+def plotData(data, title="", filename="", show=True, block=True):
     """
     Plots data in a line diagram.\n
     Usage:  plotData((
@@ -53,10 +53,13 @@ def plotData(data, title="", filename="", block=True):
 
     if not (filename == ""):
         plt.savefig(filename, bbox_inches='tight')
-    plt.show(block=block)
+    if show:
+        plt.show(block=block)
 
 
-def compareResultsOkay(gold, actual, abs_max_error, skip_n_samples, data_name):
+def compareResultsOkay(dut, gold, actual, fail_on_err,
+                       max_error_abs, max_error_norm,
+                       skip_n_samples, data_name):
     """
     Compares actual data against "golden data".
     Metrics: number of samples,
@@ -66,27 +69,38 @@ def compareResultsOkay(gold, actual, abs_max_error, skip_n_samples, data_name):
     if len(actual) < len(gold):
         msg = "Did not capture enough output values for '{}': {} actual, {} expected.".format(
             data_name, len(actual), len(gold))
-        #raise cocotb.result.TestFailure(msg)
+        if fail_on_err:
+            raise cocotb.result.TestFailure(msg)
         cocotb.log.warning(msg)
         return False
 
-    # Skip first N samples
-    gold = gold[skip_n_samples:]
-    actual = actual[skip_n_samples:]
+    # Skip first and last N samples
+    gold = gold[skip_n_samples:-skip_n_samples]
+    actual = actual[skip_n_samples:-skip_n_samples]
 
     # Compute 2-Norm
     norm_res = np.linalg.norm(
         np.array(from_fixed_point(gold)) - np.array(actual), 2)
-    cocotb.log.info("2-Norm for '{}': {}".format(data_name, norm_res))
+    if norm_res > max_error_norm:
+        msg = "2-Norm too large! {:.5f} > {}.".format(norm_res, max_error_norm)
+        if fail_on_err:
+            raise cocotb.result.TestFailure(msg)
+        cocotb.log.warning(msg)
+        return False
 
-    # Compare absolute difference
+    # Compare absolute error
     for i in range(0, len(actual)):
         diff = gold[i] - actual[i]
-        if abs(from_fixed_point(diff)) > abs_max_error:
+
+        abs_err = abs(from_fixed_point(diff))
+        if abs_err > max_error_abs:
             msg = "Actual value [idx={}] is not matching the expected value! Errors: {:.5f} > {}.".format(
-                i, abs(from_fixed_point(diff)), abs_max_error)
-            #raise cocotb.result.TestFailure(msg)
+                i, abs_err, max_error_abs)
+            if fail_on_err:
+                raise cocotb.result.TestFailure(msg)
             cocotb.log.warning(msg)
             return False
 
+    dut._log.info("OKAY results for '{}' (2-norm = {:.5f})".format(
+        data_name, norm_res))
     return True

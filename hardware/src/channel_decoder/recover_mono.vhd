@@ -86,7 +86,7 @@ begin -- architecture rtl
 
   delay_vector_inst : entity work.delay_vector
     generic map(
-      gDelay => filter_lp_mono_grpdelay_c)
+      gDelay => filter_lp_mono_grpdelay_c + 2)
     port map(
       iClk         => clk_i,
       inResetAsync => not rst_i,

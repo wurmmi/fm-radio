@@ -34,7 +34,7 @@ async def data_processing_test(dut):
     # --------------------------------------------------------------------------
 
     # Number of seconds to process
-    n_sec = 0.001
+    n_sec = 0.005
 
     # Sample rate (set according to Matlab model!)
     fs_rx_khz_c = 120
@@ -129,47 +129,55 @@ async def data_processing_test(dut):
     fm_demod_gold_fp.insert(0, to_fixed_point(0, fp_width_c, fp_width_frac_c))
     fm_demod_gold_fp.pop()
     fm_demod_gold_fp.pop()
+    audio_mono_gold_fp.append(to_fixed_point(0, fp_width_c, fp_width_frac_c))
+    audio_mono_gold_fp.append(to_fixed_point(0, fp_width_c, fp_width_frac_c))
+    audio_mono_gold_fp.pop(0)
+    audio_mono_gold_fp.pop(0)
 
     # Compare
-    okay_fm_demod = compareResultsOkay(fm_demod_gold_fp,
+    okay_fm_demod = compareResultsOkay(dut,
+                                       fm_demod_gold_fp,
                                        tb.data_out_fm_demod,
-                                       abs_max_error=2**-5,
+                                       fail_on_err=true,
+                                       max_error_abs=2**-5,
+                                       max_error_norm=0.06,
                                        skip_n_samples=30,
                                        data_name="fm_demod")
 
-    okay_audio_mono = compareResultsOkay(audio_mono_gold_fp,
+    okay_audio_mono = compareResultsOkay(dut,
+                                         audio_mono_gold_fp,
                                          tb.data_out_audio_mono,
-                                         abs_max_error=2**-5,
+                                         fail_on_err=true,
+                                         max_error_abs=2**-5,
+                                         max_error_norm=0.06,
                                          skip_n_samples=10,
                                          data_name="audio_mono")
-
-    # TODO: bypassing this for now
-    okay_audio_mono = True
 
     # --------------------------------------------------------------------------
     # Plots
     # --------------------------------------------------------------------------
 
+    # NOTE: Only showing plots, if results are NOT okay.
     if EnablePlots:
         dut._log.info("Plots ...")
-        if okay_fm_demod:
-            data = (
-                (np.arange(0, num_samples_fs) / fs_c,
-                 from_fixed_point(fm_demod_gold_fp), "fm_demod_gold_fp"),
-                (np.arange(0, num_samples_fs) / fs_c,
-                 tb.data_out_fm_demod, "tb.data_out_fm_demod")
-            )
-            plotData(data, title="FM Demodulator",
-                     filename="sim_build/fm_demod.png", block=False)
+        data = (
+            (np.arange(0, num_samples_fs) / fs_c,
+                from_fixed_point(fm_demod_gold_fp), "fm_demod_gold_fp"),
+            (np.arange(0, num_samples_fs) / fs_c,
+                tb.data_out_fm_demod, "tb.data_out_fm_demod")
+        )
+        plotData(data, title="FM Demodulator",
+                 filename="sim_build/fm_demod.png",
+                 show=(not okay_fm_demod), block=False)
 
-        if okay_audio_mono:
-            data = (
-                (np.arange(0, num_samples) / fs_rx_c,
-                 from_fixed_point(audio_mono_gold_fp), "audio_mono_gold_fp"),
-                (np.arange(0, num_samples) / fs_rx_c,
-                 tb.data_out_audio_mono, "tb.data_out_audio_mono")
-            )
-            plotData(data, title="Audio Mono",
-                     filename="sim_build/audio_mono.png",)
+        data = (
+            (np.arange(0, num_samples) / fs_rx_c,
+                from_fixed_point(audio_mono_gold_fp), "audio_mono_gold_fp"),
+            (np.arange(0, num_samples) / fs_rx_c,
+                tb.data_out_audio_mono, "tb.data_out_audio_mono")
+        )
+        plotData(data, title="Audio Mono",
+                 filename="sim_build/audio_mono.png",
+                 show=(not okay_audio_mono))
 
     dut._log.info("Done.")
