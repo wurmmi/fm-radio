@@ -52,8 +52,8 @@ architecture rtl of channel_decoder is
   signal carrier_57k       : sample_t;
   signal carrier_57k_valid : std_ulogic;
 
-  signal lrdiff       : sample_t;
-  signal lrdiff_valid : std_ulogic;
+  signal audio_lrdiff       : sample_t;
+  signal audio_lrdiff_valid : std_ulogic;
 
   --! @}
 
@@ -109,8 +109,8 @@ begin -- architecture rtl
       carrier_38k_i       => carrier_38k,
       carrier_38k_valid_i => carrier_38k_valid,
 
-      lrdiff_o       => lrdiff,
-      lrdiff_valid_o => lrdiff_valid);
+      lrdiff_o       => audio_lrdiff,
+      lrdiff_valid_o => audio_lrdiff_valid);
 
   -- separate_lr_audio
 

@@ -29,6 +29,8 @@ def loadDataFromFile(filename, num_samples, bitwidth, bitwidth_frac):
             "File '{}' contains less elements than requested ({} < {}).".format(
                 filename, val_count, num_samples))
 
+    # TODO: print data before and after this, to check for any
+    #       value errors/inconsistency here, between file/matlab and tb..
     data = to_fixed_point(data, bitwidth, bitwidth_frac)
     return data
 

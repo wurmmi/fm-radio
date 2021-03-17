@@ -26,6 +26,7 @@ async def data_processing_test(dut):
     Compare input and output afterwards.
     """
     EnablePlots = True
+    EnableFailOnError = False
 
     timestamp_start = time.time()
 
@@ -34,7 +35,7 @@ async def data_processing_test(dut):
     # --------------------------------------------------------------------------
 
     # Number of seconds to process
-    n_sec = 0.002
+    n_sec = 0.005
 
     # Sample rate (set according to Matlab model!)
     fs_rx_khz_c = 120
@@ -75,6 +76,9 @@ async def data_processing_test(dut):
     filename = "../../../sim/matlab/verification_data/rx_carrier38kHz.txt"
     carrier_38k_gold_fp = loadDataFromFile(filename, num_samples, fp_width_c, fp_width_frac_c)
 
+    filename = "../../../sim/matlab/verification_data/rx_audio_lrdiff.txt"
+    audio_lrdiff_gold_fp = loadDataFromFile(filename, num_samples, fp_width_c, fp_width_frac_c)
+
     # --------------------------------------------------------------------------
     # Prepare environment
     # --------------------------------------------------------------------------
@@ -102,11 +106,12 @@ async def data_processing_test(dut):
     await tb.assign_defaults()
     await tb.reset()
 
-    # Fork the 'receiving part'
+    # Fork the 'receiving parts'
     fm_demod_output_fork = cocotb.fork(tb.read_fm_demod_output())
     audio_mono_output_fork = cocotb.fork(tb.read_audio_mono_output())
     pilot_output_fork = cocotb.fork(tb.read_pilot_output())
     carrier_38k_output_fork = cocotb.fork(tb.read_carrier_38k_output())
+    audio_lrdiff_output_fork = cocotb.fork(tb.read_audio_lrdiff_output())
     #audio_LR_output_fork = cocotb.fork(tb.read_audio_LR_output())
 
     # Send input data through filter
@@ -117,13 +122,14 @@ async def data_processing_test(dut):
         dut.i_sample_i <= int(fixed_to_int(data_in_i_fp[i]))
         dut.q_sample_i <= int(fixed_to_int(data_in_q_fp[i]))
 
-    await RisingEdge(dut.channel_decoder_inst.audio_mono_valid)
+    await RisingEdge(dut.channel_decoder_inst.audio_lrdiff_valid)
 
     # Stop other forked routines
     fm_demod_output_fork.join()
     audio_mono_output_fork.join()
     pilot_output_fork.join()
     carrier_38k_output_fork.join()
+    audio_lrdiff_output_fork.join()
     # audio_LR_output_fork.join()
 
     # Measure time
@@ -139,12 +145,13 @@ async def data_processing_test(dut):
     append_n_zeros(audio_mono_gold_fp, 2, fp_width_c, fp_width_frac_c)
     append_n_zeros(pilot_gold_fp, 3, fp_width_c, fp_width_frac_c)
     append_n_zeros(carrier_38k_gold_fp, 3, fp_width_c, fp_width_frac_c)
+    append_n_zeros(audio_lrdiff_gold_fp, 3, fp_width_c, fp_width_frac_c)
 
     # Compare
     okay_fm_demod = compareResultsOkay(dut,
                                        fm_demod_gold_fp,
                                        tb.data_out_fm_demod,
-                                       fail_on_err=True,
+                                       fail_on_err=EnableFailOnError,
                                        max_error_abs=2**-5,
                                        max_error_norm=0.11,
                                        skip_n_samples=30,
@@ -153,7 +160,7 @@ async def data_processing_test(dut):
     okay_audio_mono = compareResultsOkay(dut,
                                          audio_mono_gold_fp,
                                          tb.data_out_audio_mono,
-                                         fail_on_err=True,
+                                         fail_on_err=EnableFailOnError,
                                          max_error_abs=2**-5,
                                          max_error_norm=0.06,
                                          skip_n_samples=10,
@@ -162,7 +169,7 @@ async def data_processing_test(dut):
     okay_pilot = compareResultsOkay(dut,
                                     pilot_gold_fp,
                                     tb.data_out_pilot,
-                                    fail_on_err=False,
+                                    fail_on_err=EnableFailOnError,
                                     max_error_abs=2**-5,
                                     max_error_norm=0.06,
                                     skip_n_samples=10,
@@ -171,16 +178,27 @@ async def data_processing_test(dut):
     okay_carrier_38k = compareResultsOkay(dut,
                                           carrier_38k_gold_fp,
                                           tb.data_out_carrier_38k,
-                                          fail_on_err=False,
+                                          fail_on_err=EnableFailOnError,
                                           max_error_abs=2**-5,
                                           max_error_norm=0.06,
                                           skip_n_samples=10,
                                           data_name="carrier_38k")
 
+    okay_audio_lrdiff = compareResultsOkay(dut,
+                                           audio_lrdiff_gold_fp,
+                                           tb.data_out_audio_lrdiff,
+                                           fail_on_err=EnableFailOnError,
+                                           max_error_abs=2**-5,
+                                           max_error_norm=0.06,
+                                           skip_n_samples=10,
+                                           data_name="audio_lrdiff")
+
     # TODO: Bypassing for now
-    #okay_fm_demod = False
-    #okay_audio_mono = False
-    #okay_pilot = False
+    #okay_fm_demod = True
+    #okay_audio_mono = True
+    #okay_pilot = True
+    #okay_carrier_38k = True
+    okay_audio_lrdiff = False
 
     # --------------------------------------------------------------------------
     # Plots
@@ -225,8 +243,18 @@ async def data_processing_test(dut):
             (np.arange(0, num_samples) / fs_rx_c,
                 tb.data_out_carrier_38k, "tb.data_out_carrier_38k")
         )
-        plotData(data, title="carrier_38k",
+        plotData(data, title="Carrier 38kHz",
                  filename="sim_build/plot_carrier_38k.png",
                  show=(not okay_carrier_38k))
+
+        data = (
+            (np.arange(0, num_samples) / fs_rx_c,
+                from_fixed_point(audio_lrdiff_gold_fp), "audio_lrdiff_gold_fp"),
+            (np.arange(0, num_samples) / fs_rx_c,
+                tb.data_out_audio_lrdiff, "tb.data_out_audio_lrdiff")
+        )
+        plotData(data, title="Audio LR Diff",
+                 filename="sim_build/plot_audio_lrdiff.png",
+                 show=(not okay_audio_lrdiff))
 
     dut._log.info("Done.")

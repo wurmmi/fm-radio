@@ -89,9 +89,11 @@ begin -- architecture rtl
 
         -- Modulate down to baseband
         -- TODO: check when carier_38k_i is valid, or store it here internally
+        -- TODO: Note the inverted output here!
+        --       (This is according to the Matlab model.)
         if lrdiff_bpfilt_valid = '1' then
           lrdiff_mod_bb <= ResizeTruncAbsVal(
-            lrdiff_bpfilt * carrier_38k_i * to_sfixed(2, 2, 0), lrdiff_mod_bb);
+            lrdiff_bpfilt * carrier_38k_i * to_sfixed(-2, 2, 0), lrdiff_mod_bb);
           lrdiff_mod_bb_valid <= '1';
         end if;
       end if;
@@ -102,6 +104,7 @@ begin -- architecture rtl
   -- Instantiations
   ------------------------------------------------------------------------------
 
+  -- Bandpass 23..38kHz
   dspfir_bp_lrdiff_inst : entity work.DspFir
     generic map(
       gB => filter_bp_lrdiff_coeffs_c)
@@ -115,6 +118,7 @@ begin -- architecture rtl
       oDwet   => lrdiff_bpfilt,
       oValWet => lrdiff_bpfilt_valid);
 
+  -- Lowpass 15kHz
   dspfir_lp_mono_inst : entity work.DspFir
     generic map(
       gB => filter_lp_mono_coeffs_c)

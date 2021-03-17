@@ -1,7 +1,7 @@
 ################################################################################
 # File        : fm_tb.py
 # Author      : Michael Wurm <wurm.michael95@gmail.com>
-# Description : Testbench and Model of the gain ip
+# Description : Testbench environment
 ################################################################################
 
 import cocotb
@@ -17,12 +17,13 @@ class FM_TB(object):
     CLOCK_FREQ_MHZ = 48
 
     # Variables
+    data_out_fm_demod = []
+    data_out_audio_mono = []
+    data_out_pilot = []
+    data_out_carrier_38k = []
+    data_out_audio_lrdiff = []
     data_out_L = []
     data_out_R = []
-    data_out_audio_mono = []
-    data_out_carrier_38k = []
-    data_out_pilot = []
-    data_out_fm_demod = []
 
     def __del__(self):
         pass
@@ -125,6 +126,23 @@ class FM_TB(object):
             size = len(self.data_out_carrier_38k)
             if size % 100 == 0:
                 self.dut._log.info("Progress carrier_38k: {}".format(size))
+
+            if size >= self.num_samples_c:
+                break
+
+    @cocotb.coroutine
+    async def read_audio_lrdiff_output(self):
+        edge = RisingEdge(self.dut.channel_decoder_inst.audio_lrdiff_valid)
+        while(True):
+            await edge
+            audio_lrdiff = self.dut.channel_decoder_inst.audio_lrdiff.value.signed_integer
+            self.data_out_audio_lrdiff.append(
+                int_to_fixed(audio_lrdiff, self.fp_width_c, self.fp_width_frac_c))
+
+            # print every 100th number to show progress
+            size = len(self.data_out_audio_lrdiff)
+            if size % 100 == 0:
+                self.dut._log.info("Progress audio_lrdiff: {}".format(size))
 
             if size >= self.num_samples_c:
                 break
