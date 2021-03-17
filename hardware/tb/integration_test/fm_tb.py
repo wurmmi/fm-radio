@@ -280,6 +280,6 @@ class FM_TB(object):
             (tn, from_fixed_point(self.model.gold_audio_R_fp), "gold_audio_R_fp"),
             (tn, self.data_out_audio_R, "data_out_audio_R")
         )
-        plotData(data, title="Audio L",
+        plotData(data, title="Audio R",
                  filename="sim_build/plot_audio_R.png",
                  show=(not self.ok_audio_R))

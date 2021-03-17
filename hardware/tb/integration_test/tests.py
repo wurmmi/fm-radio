@@ -103,8 +103,9 @@ async def data_processing_test(dut):
     audio_R_output_fork.join()
 
     # Measure time
-    timestamp_end = time.time()
-    dut._log.info("Execution took {:.2f} seconds.".format(timestamp_end - timestamp_start))
+    duration_s = int(time.time() - timestamp_start)
+    mins, secs = divmod(duration_s, 60)
+    dut._log.info("Execution took {:02d}:{:02d} seconds.".format(mins, secs))
 
     # --------------------------------------------------------------------------
     # Compare results

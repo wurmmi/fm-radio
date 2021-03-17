@@ -130,7 +130,7 @@ if EnableRDSDecoder
     end
     
     % 57 kHz carrier
-    carrier57kHzRx = rx_carrier38kHz .* rx_pilot * 2 - 1;
+    rx_carrier57kHz = rx_carrier38kHz .* rx_pilot * 2 - 1;
     
     % Create the lowpass filter
     filter_name = sprintf("%s%s",dir_filters,"lowpass_57kHz.mat");
@@ -144,20 +144,20 @@ if EnableRDSDecoder
         cutoff_freqs, fs_rx, fp_config, EnableFilterAnalyzeGUI);
     
     % Filter (lowpass 1.5kHz)
-    carrier57kHzRx = filter(filter_hp_57k,1, carrier57kHzRx);
+    rx_carrier57kHz = filter(filter_hp_57k,1, rx_carrier57kHz);
     
     % TODO: delay all other carriers and the rx signal (rx_fmChannelData)
     %       to compensate for the HP filter.
     % NOTE: Using a "circshift" as a workaround for now.
     %       This cannot be done in hardware!
     filter_hp57k_groupdelay = (length(filter_hp_57k)-1)/2;
-    carrier57kHzRx = circshift(carrier57kHzRx, -filter_hp57k_groupdelay);
+    rx_carrier57kHz = circshift(rx_carrier57kHz, -filter_hp57k_groupdelay);
 end
 
 % For test purpose only.
 pilot_local          = cos(2*pi*19e3/fs_rx*tnRx + phi_pilot);
-carrier38kHzRx_local = cos(2*pi*38e3/fs_rx*tnRx + phi_pilot*2);
-carrier57kHzRx_local = cos(2*pi*57e3/fs_rx*tnRx + phi_pilot*3);
+rx_carrier38kHz_local = cos(2*pi*38e3/fs_rx*tnRx + phi_pilot*2);
+rx_carrier57kHz_local = cos(2*pi*57e3/fs_rx*tnRx + phi_pilot*3);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% RDS decoder
