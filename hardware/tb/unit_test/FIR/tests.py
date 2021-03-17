@@ -64,18 +64,18 @@ async def fir_filter_test(dut):
     data_i_int = fixed_to_int(data_i_fp)
 
     filename = "../../../../sim/matlab/verification_data/rx_pilot.txt"
-    data_o_gold = []
+    gold_data_o = []
     with open(filename) as fd:
         val_count = 0
         for line in fd:
-            data_o_gold.append(float(line.strip('\n')))
+            gold_data_o.append(float(line.strip('\n')))
             val_count += 1
             # Stop after required number of samples
             if val_count >= num_samples:
                 break
 
     # Convert to fixed point
-    data_o_gold_fp = to_fixed_point(data_o_gold, fp_width_c, fp_width_frac_c)
+    gold_data_o_fp = to_fixed_point(gold_data_o, fp_width_c, fp_width_frac_c)
 
     # --------------------------------------------------------------------------
     # Prepare environment
@@ -120,7 +120,7 @@ async def fir_filter_test(dut):
     dut._log.info("Execution took {:.2f} seconds.".format(timestamp_end - timestamp_start))
 
     num_received = len(tb.data_out)
-    num_expected = len(data_o_gold_fp)
+    num_expected = len(gold_data_o_fp)
 
     # --------------------------------------------------------------------------
     # Plots
@@ -130,7 +130,7 @@ async def fir_filter_test(dut):
 
         fig = plt.figure()
         plt.plot(np.arange(0, num_expected) / fs_rx_c,
-                 from_fixed_point(data_o_gold_fp), "b", label="data_o_gold_fp")
+                 from_fixed_point(gold_data_o_fp), "b", label="gold_data_o_fp")
         plt.plot(np.arange(0, num_received) / fs_rx_c,
                  tb.data_out, "r", label="data_out")
         plt.title("Carrier phase recovery")
@@ -152,20 +152,20 @@ async def fir_filter_test(dut):
     # Skip first N samples
     skip_N = 10
     dut._log.info("Skipping first N={} samples. (in:out = {}:{})".format(skip_N, num_expected, num_received))
-    data_o_gold_fp = data_o_gold_fp[skip_N:]
+    gold_data_o_fp = gold_data_o_fp[skip_N:]
     tb.data_out = tb.data_out[skip_N:]
     dut._log.info("Skipped first N={} samples.  (in:out = {}:{})".format(skip_N, num_expected, num_received))
 
     max_diff = 2**-5
     for i, res in enumerate(tb.data_out):
-        diff = data_o_gold_fp[i] - res
+        diff = gold_data_o_fp[i] - res
         if abs(from_fixed_point(diff)) > max_diff:
             msg = "FIR output [{}] is not matching the expected values: {}>{}.".format(
                 i, abs(from_fixed_point(diff)), max_diff)
             raise cocotb.result.TestError(msg)
             # dut._log.info(msg)
 
-    norm_res = np.linalg.norm(np.array(from_fixed_point(data_o_gold_fp[0:num_received])) - np.array(tb.data_out), 2)
+    norm_res = np.linalg.norm(np.array(from_fixed_point(gold_data_o_fp[0:num_received])) - np.array(tb.data_out), 2)
     dut._log.info("2-Norm = {}".format(norm_res))
 
     dut._log.info("Done.")

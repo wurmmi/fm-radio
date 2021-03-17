@@ -9,6 +9,7 @@ from cocotb.drivers import BitDriver
 from cocotb.triggers import RisingEdge, Timer
 from fixed_point import *
 from helpers import *
+from vhdl_sampler import VHDL_SAMPLER
 
 from fm_receiver_model import FM_RECEIVER_MODEL
 
@@ -70,88 +71,53 @@ class FM_TB(object):
 
     @cocotb.coroutine
     async def read_fm_demod_output(self):
-        edge = RisingEdge(self.dut.fm_demod_valid)
-        while(True):
-            await edge
-            fm_demod = self.dut.fm_demod.value.signed_integer
-            self.data_out_fm_demod.append(
-                int_to_fixed(fm_demod, self.fp_width_c, self.fp_width_frac_c))
+        sampler = VHDL_SAMPLER("fm_demod", self.dut,
+                               self.dut.fm_demod,
+                               self.dut.fm_demod_valid,
+                               self.model.num_samples_fs_c,
+                               self.fp_width_c, self.fp_width_frac_c)
 
-            # print every 100th number to show progress
-            size = len(self.data_out_fm_demod)
-            if size % 100 == 0:
-                self.dut._log.info("Progress fm_demod: {}".format(size))
-
-            if size >= self.model.num_samples_fs_c:
-                break
+        await sampler.read_vhdl_output(self.data_out_fm_demod)
 
     @cocotb.coroutine
     async def read_audio_mono_output(self):
-        edge = RisingEdge(self.dut.channel_decoder_inst.audio_mono_valid)
-        while(True):
-            await edge
-            audio_mono = self.dut.channel_decoder_inst.audio_mono.value.signed_integer
-            self.data_out_audio_mono.append(
-                int_to_fixed(audio_mono, self.fp_width_c, self.fp_width_frac_c))
+        sampler = VHDL_SAMPLER("audio_mono", self.dut,
+                               self.dut.channel_decoder_inst.audio_mono,
+                               self.dut.channel_decoder_inst.audio_mono_valid,
+                               self.model.num_samples_c,
+                               self.fp_width_c, self.fp_width_frac_c)
 
-            # print every 100th number to show progress
-            size = len(self.data_out_audio_mono)
-            if size % 100 == 0:
-                self.dut._log.info("Progress audio_mono: {}".format(size))
-
-            if size >= self.model.num_samples_c:
-                break
+        await sampler.read_vhdl_output(self.data_out_audio_mono)
 
     @cocotb.coroutine
     async def read_pilot_output(self):
-        edge = RisingEdge(self.dut.channel_decoder_inst.recover_carriers_inst.pilot_valid)
-        while(True):
-            await edge
-            pilot = self.dut.channel_decoder_inst.recover_carriers_inst.pilot.value.signed_integer
-            self.data_out_pilot.append(
-                int_to_fixed(pilot, self.fp_width_c, self.fp_width_frac_c))
+        sampler = VHDL_SAMPLER("pilot", self.dut,
+                               self.dut.channel_decoder_inst.recover_carriers_inst.pilot,
+                               self.dut.channel_decoder_inst.recover_carriers_inst.pilot_valid,
+                               self.model.num_samples_c,
+                               self.fp_width_c, self.fp_width_frac_c)
 
-            # print every 100th number to show progress
-            size = len(self.data_out_pilot)
-            if size % 100 == 0:
-                self.dut._log.info("Progress pilot: {}".format(size))
-
-            if size >= self.model.num_samples_c:
-                break
+        await sampler.read_vhdl_output(self.data_out_pilot)
 
     @cocotb.coroutine
     async def read_carrier_38k_output(self):
-        edge = RisingEdge(self.dut.channel_decoder_inst.recover_carriers_inst.carrier_38k_valid)
-        while(True):
-            await edge
-            carrier_38k = self.dut.channel_decoder_inst.recover_carriers_inst.carrier_38k.value.signed_integer
-            self.data_out_carrier_38k.append(
-                int_to_fixed(carrier_38k, self.fp_width_c, self.fp_width_frac_c))
+        sampler = VHDL_SAMPLER("carrier_38k", self.dut,
+                               self.dut.channel_decoder_inst.recover_carriers_inst.carrier_38k,
+                               self.dut.channel_decoder_inst.recover_carriers_inst.carrier_38k_valid,
+                               self.model.num_samples_c,
+                               self.fp_width_c, self.fp_width_frac_c)
 
-            # print every 100th number to show progress
-            size = len(self.data_out_carrier_38k)
-            if size % 100 == 0:
-                self.dut._log.info("Progress carrier_38k: {}".format(size))
-
-            if size >= self.model.num_samples_c:
-                break
+        await sampler.read_vhdl_output(self.data_out_carrier_38k)
 
     @cocotb.coroutine
     async def read_audio_lrdiff_output(self):
-        edge = RisingEdge(self.dut.channel_decoder_inst.audio_lrdiff_valid)
-        while(True):
-            await edge
-            audio_lrdiff = self.dut.channel_decoder_inst.audio_lrdiff.value.signed_integer
-            self.data_out_audio_lrdiff.append(
-                int_to_fixed(audio_lrdiff, self.fp_width_c, self.fp_width_frac_c))
+        sampler = VHDL_SAMPLER("audio_lrdiff", self.dut,
+                               self.dut.channel_decoder_inst.audio_lrdiff,
+                               self.dut.channel_decoder_inst.audio_lrdiff_valid,
+                               self.model.num_samples_c,
+                               self.fp_width_c, self.fp_width_frac_c)
 
-            # print every 100th number to show progress
-            size = len(self.data_out_audio_lrdiff)
-            if size % 100 == 0:
-                self.dut._log.info("Progress audio_lrdiff: {}".format(size))
-
-            if size >= self.model.num_samples_c:
-                break
+        await sampler.read_vhdl_output(self.data_out_audio_lrdiff)
 
     @cocotb.coroutine
     async def read_audio_LR_output(self):
@@ -175,21 +141,14 @@ class FM_TB(object):
 
     def compareData(self):
         # Shift loaded file-data to compensate shift to testbench-data
-        move_n_left(self.model.fm_demod_gold_fp, 2, self.fp_width_c, self.fp_width_frac_c)
-        move_n_right(self.model.audio_mono_gold_fp, 2, self.fp_width_c, self.fp_width_frac_c)
-        move_n_right(self.model.pilot_gold_fp, 3, self.fp_width_c, self.fp_width_frac_c)
-        move_n_right(self.model.carrier_38k_gold_fp, 3, self.fp_width_c, self.fp_width_frac_c)
-        move_n_right(self.model.audio_lrdiff_gold_fp, 3, self.fp_width_c, self.fp_width_frac_c)
-
-        # TODO: Enabling plots for debug
-        #okay_fm_demod = True
-        #okay_audio_mono = True
-        #okay_pilot = True
-        #okay_carrier_38k = True
-        #okay_audio_lrdiff = False
+        move_n_right(self.model.gold_fm_demod_fp, 2, self.fp_width_c, self.fp_width_frac_c)
+        move_n_left(self.model.gold_audio_mono_fp, 2, self.fp_width_c, self.fp_width_frac_c)
+        move_n_left(self.model.gold_pilot_fp, 3, self.fp_width_c, self.fp_width_frac_c)
+        move_n_left(self.model.gold_carrier_38k_fp, 3, self.fp_width_c, self.fp_width_frac_c)
+        move_n_left(self.model.gold_audio_lrdiff_fp, 3, self.fp_width_c, self.fp_width_frac_c)
 
         # Compare
-        self.ok_fm_demod = compareResultsOkay(self.model.fm_demod_gold_fp,
+        self.ok_fm_demod = compareResultsOkay(self.model.gold_fm_demod_fp,
                                               self.data_out_fm_demod,
                                               fail_on_err=self.EnableFailOnError,
                                               max_error_abs=2**-5,
@@ -197,7 +156,7 @@ class FM_TB(object):
                                               skip_n_samples=30,
                                               data_name="fm_demod")
 
-        self.ok_audio_mono = compareResultsOkay(self.model.audio_mono_gold_fp,
+        self.ok_audio_mono = compareResultsOkay(self.model.gold_audio_mono_fp,
                                                 self.data_out_audio_mono,
                                                 fail_on_err=self.EnableFailOnError,
                                                 max_error_abs=2**-5,
@@ -205,7 +164,7 @@ class FM_TB(object):
                                                 skip_n_samples=10,
                                                 data_name="audio_mono")
 
-        self.ok_pilot = compareResultsOkay(self.model.pilot_gold_fp,
+        self.ok_pilot = compareResultsOkay(self.model.gold_pilot_fp,
                                            self.data_out_pilot,
                                            fail_on_err=self.EnableFailOnError,
                                            max_error_abs=2**-5,
@@ -213,7 +172,7 @@ class FM_TB(object):
                                            skip_n_samples=10,
                                            data_name="pilot")
 
-        self.ok_carrier_38k = compareResultsOkay(self.model.carrier_38k_gold_fp,
+        self.ok_carrier_38k = compareResultsOkay(self.model.gold_carrier_38k_fp,
                                                  self.data_out_carrier_38k,
                                                  fail_on_err=self.EnableFailOnError,
                                                  max_error_abs=2**-5,
@@ -221,7 +180,7 @@ class FM_TB(object):
                                                  skip_n_samples=10,
                                                  data_name="carrier_38k")
 
-        self.ok_audio_lrdiff = compareResultsOkay(self.model.audio_lrdiff_gold_fp,
+        self.ok_audio_lrdiff = compareResultsOkay(self.model.gold_audio_lrdiff_fp,
                                                   self.data_out_audio_lrdiff,
                                                   fail_on_err=self.EnableFailOnError,
                                                   max_error_abs=2**-5,
@@ -231,20 +190,28 @@ class FM_TB(object):
 
     def generatePlots(self):
         if self.EnablePlots:
+
+            # TODO: Enable plots for debug
+            self.ok_fm_demod = False
+            self.ok_audio_mono = False
+            self.ok_pilot = False
+            self.ok_carrier_38k = False
+            self.ok_audio_lrdiff = False
+
             # -----------------------------------------------------------------
             tn = np.arange(0, self.model.num_samples_fs_c) / self.fs_c
             data = (
-                (tn, from_fixed_point(self.model.fm_demod_gold_fp), "fm_demod_gold_fp"),
+                (tn, from_fixed_point(self.model.gold_fm_demod_fp), "gold_fm_demod_fp"),
                 (tn, self.data_out_fm_demod, "data_out_fm_demod")
             )
             plotData(data, title="FM Demodulator",
                      filename="sim_build/plot_fm_demod.png",
-                     show=(not self.ok_fm_demod), block=False)
+                     show=(not self.ok_fm_demod))
 
             # -----------------------------------------------------------------
             tn = np.arange(0, self.model.num_samples_c) / self.fs_rx_c
             data = (
-                (tn, from_fixed_point(self.model.audio_mono_gold_fp), "audio_mono_gold_fp"),
+                (tn, from_fixed_point(self.model.gold_audio_mono_fp), "gold_audio_mono_fp"),
                 (tn, self.data_out_audio_mono, "data_out_audio_mono")
             )
             plotData(data, title="Audio Mono",
@@ -253,7 +220,7 @@ class FM_TB(object):
 
             # -----------------------------------------------------------------
             data = (
-                (tn, from_fixed_point(self.model.pilot_gold_fp), "pilot_gold_fp"),
+                (tn, from_fixed_point(self.model.gold_pilot_fp), "gold_pilot_fp"),
                 (tn, self.data_out_pilot, "data_out_pilot")
             )
             plotData(data, title="Pilot",
@@ -262,7 +229,7 @@ class FM_TB(object):
 
             # -----------------------------------------------------------------
             data = (
-                (tn, from_fixed_point(self.model.carrier_38k_gold_fp), "carrier_38k_gold_fp"),
+                (tn, from_fixed_point(self.model.gold_carrier_38k_fp), "gold_carrier_38k_fp"),
                 (tn, self.data_out_carrier_38k, "data_out_carrier_38k")
             )
             plotData(data, title="Carrier 38kHz",
@@ -271,7 +238,7 @@ class FM_TB(object):
 
             # -----------------------------------------------------------------
             data = (
-                (tn, from_fixed_point(self.model.audio_lrdiff_gold_fp), "audio_lrdiff_gold_fp"),
+                (tn, from_fixed_point(self.model.gold_audio_lrdiff_fp), "gold_audio_lrdiff_fp"),
                 (tn, self.data_out_audio_lrdiff, "data_out_audio_lrdiff")
             )
             plotData(data, title="Audio LR Diff",
