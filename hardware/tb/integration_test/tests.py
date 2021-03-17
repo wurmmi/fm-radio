@@ -31,7 +31,7 @@ async def data_processing_test(dut):
     # --------------------------------------------------------------------------
 
     # Number of seconds to process
-    n_sec = 0.005
+    n_sec = 0.0005
 
     # Fixed point settings
     fp_width_c = 32
@@ -80,7 +80,8 @@ async def data_processing_test(dut):
     pilot_output_fork = cocotb.fork(tb.read_pilot_output())
     carrier_38k_output_fork = cocotb.fork(tb.read_carrier_38k_output())
     audio_lrdiff_output_fork = cocotb.fork(tb.read_audio_lrdiff_output())
-    #audio_LR_output_fork = cocotb.fork(tb.read_audio_LR_output())
+    audio_L_output_fork = cocotb.fork(tb.read_audio_L_output())
+    audio_R_output_fork = cocotb.fork(tb.read_audio_R_output())
 
     # Send input data through filter
     dut._log.info("Sending IQ samples to FM Receiver IP ...")
@@ -98,7 +99,8 @@ async def data_processing_test(dut):
     pilot_output_fork.join()
     carrier_38k_output_fork.join()
     audio_lrdiff_output_fork.join()
-    # audio_LR_output_fork.join()
+    audio_L_output_fork.join()
+    audio_R_output_fork.join()
 
     # Measure time
     timestamp_end = time.time()

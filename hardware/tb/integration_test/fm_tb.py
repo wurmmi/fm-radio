@@ -26,8 +26,8 @@ class FM_TB(object):
     data_out_pilot = []
     data_out_carrier_38k = []
     data_out_audio_lrdiff = []
-    data_out_L = []
-    data_out_R = []
+    data_out_audio_L = []
+    data_out_audio_R = []
 
     def __del__(self):
         pass
@@ -120,24 +120,24 @@ class FM_TB(object):
         await sampler.read_vhdl_output(self.data_out_audio_lrdiff)
 
     @cocotb.coroutine
-    async def read_audio_LR_output(self):
-        edge = RisingEdge(self.dut.audio_valid_o)
-        while(True):
-            await edge
-            audio_L = self.dut.audio_L_o.value.signed_integer
-            audio_R = self.dut.audio_L_o.value.signed_integer
-            self.data_out_L.append(
-                int_to_fixed(audio_L, self.fp_width_c, self.fp_width_frac_c))
-            self.data_out_R.append(
-                int_to_fixed(audio_R, self.fp_width_c, self.fp_width_frac_c))
+    async def read_audio_L_output(self):
+        sampler_L = VHDL_SAMPLER("audio_L", self.dut,
+                                 self.dut.audio_L_o,
+                                 self.dut.audio_valid_o,
+                                 self.model.num_samples_c,
+                                 self.fp_width_c, self.fp_width_frac_c)
 
-            # print every 100th number to show progress
-            size = len(self.data_out_L)
-            if size % 100 == 0:
-                self.dut._log.info("Progress audio_LR: {}".format(size))
+        await sampler_L.read_vhdl_output(self.data_out_audio_L)
 
-            if size >= self.model.num_samples_c:
-                break
+    @cocotb.coroutine
+    async def read_audio_R_output(self):
+        sampler_R = VHDL_SAMPLER("audio_R", self.dut,
+                                 self.dut.audio_R_o,
+                                 self.dut.audio_valid_o,
+                                 self.model.num_samples_c,
+                                 self.fp_width_c, self.fp_width_frac_c)
+
+        await sampler_R.read_vhdl_output(self.data_out_audio_R)
 
     def compareData(self):
         # Shift loaded file-data to compensate shift to testbench-data
@@ -146,6 +146,8 @@ class FM_TB(object):
         move_n_left(self.model.gold_pilot_fp, 3, self.fp_width_c, self.fp_width_frac_c)
         move_n_left(self.model.gold_carrier_38k_fp, 3, self.fp_width_c, self.fp_width_frac_c)
         move_n_left(self.model.gold_audio_lrdiff_fp, 3, self.fp_width_c, self.fp_width_frac_c)
+        move_n_left(self.model.gold_audio_L_fp, 2, self.fp_width_c, self.fp_width_frac_c)
+        move_n_left(self.model.gold_audio_R_fp, 2, self.fp_width_c, self.fp_width_frac_c)
 
         # Compare
         self.ok_fm_demod = compareResultsOkay(self.model.gold_fm_demod_fp,
@@ -188,59 +190,96 @@ class FM_TB(object):
                                                   skip_n_samples=10,
                                                   data_name="audio_lrdiff")
 
+        self.ok_audio_L = compareResultsOkay(self.model.gold_audio_L_fp,
+                                             self.data_out_audio_L,
+                                             fail_on_err=self.EnableFailOnError,
+                                             max_error_abs=2**-5,
+                                             max_error_norm=0.06,
+                                             skip_n_samples=10,
+                                             data_name="audio_L")
+
+        self.ok_audio_R = compareResultsOkay(self.model.gold_audio_R_fp,
+                                             self.data_out_audio_R,
+                                             fail_on_err=self.EnableFailOnError,
+                                             max_error_abs=2**-5,
+                                             max_error_norm=0.06,
+                                             skip_n_samples=10,
+                                             data_name="audio_R")
+
     def generatePlots(self):
-        if self.EnablePlots:
+        if not self.EnablePlots:
+            return
 
-            # TODO: Enable plots for debug
-            self.ok_fm_demod = False
-            self.ok_audio_mono = False
-            self.ok_pilot = False
-            self.ok_carrier_38k = False
-            self.ok_audio_lrdiff = False
+        # TODO: Enable plots for debug
+        #self.ok_fm_demod = False
+        #self.ok_audio_mono = False
+        #self.ok_pilot = False
+        #self.ok_carrier_38k = False
+        #self.ok_audio_lrdiff = False
+        self.ok_audio_L = False
+        self.ok_audio_R = False
 
-            # -----------------------------------------------------------------
-            tn = np.arange(0, self.model.num_samples_fs_c) / self.fs_c
-            data = (
-                (tn, from_fixed_point(self.model.gold_fm_demod_fp), "gold_fm_demod_fp"),
-                (tn, self.data_out_fm_demod, "data_out_fm_demod")
-            )
-            plotData(data, title="FM Demodulator",
-                     filename="sim_build/plot_fm_demod.png",
-                     show=(not self.ok_fm_demod))
+        # -----------------------------------------------------------------
+        tn = np.arange(0, self.model.num_samples_fs_c) / self.fs_c
+        data = (
+            (tn, from_fixed_point(self.model.gold_fm_demod_fp), "gold_fm_demod_fp"),
+            (tn, self.data_out_fm_demod, "data_out_fm_demod")
+        )
+        plotData(data, title="FM Demodulator",
+                 filename="sim_build/plot_fm_demod.png",
+                 show=(not self.ok_fm_demod))
 
-            # -----------------------------------------------------------------
-            tn = np.arange(0, self.model.num_samples_c) / self.fs_rx_c
-            data = (
-                (tn, from_fixed_point(self.model.gold_audio_mono_fp), "gold_audio_mono_fp"),
-                (tn, self.data_out_audio_mono, "data_out_audio_mono")
-            )
-            plotData(data, title="Audio Mono",
-                     filename="sim_build/plot_audio_mono.png",
-                     show=(not self.ok_audio_mono))
+        # -----------------------------------------------------------------
+        tn = np.arange(0, self.model.num_samples_c) / self.fs_rx_c
+        data = (
+            (tn, from_fixed_point(self.model.gold_audio_mono_fp), "gold_audio_mono_fp"),
+            (tn, self.data_out_audio_mono, "data_out_audio_mono")
+        )
+        plotData(data, title="Audio Mono",
+                 filename="sim_build/plot_audio_mono.png",
+                 show=(not self.ok_audio_mono))
 
-            # -----------------------------------------------------------------
-            data = (
-                (tn, from_fixed_point(self.model.gold_pilot_fp), "gold_pilot_fp"),
-                (tn, self.data_out_pilot, "data_out_pilot")
-            )
-            plotData(data, title="Pilot",
-                     filename="sim_build/plot_pilot.png",
-                     show=(not self.ok_pilot))
+        # -----------------------------------------------------------------
+        data = (
+            (tn, from_fixed_point(self.model.gold_pilot_fp), "gold_pilot_fp"),
+            (tn, self.data_out_pilot, "data_out_pilot")
+        )
+        plotData(data, title="Pilot",
+                 filename="sim_build/plot_pilot.png",
+                 show=(not self.ok_pilot))
 
-            # -----------------------------------------------------------------
-            data = (
-                (tn, from_fixed_point(self.model.gold_carrier_38k_fp), "gold_carrier_38k_fp"),
-                (tn, self.data_out_carrier_38k, "data_out_carrier_38k")
-            )
-            plotData(data, title="Carrier 38kHz",
-                     filename="sim_build/plot_carrier_38k.png",
-                     show=(not self.ok_carrier_38k))
+        # -----------------------------------------------------------------
+        data = (
+            (tn, from_fixed_point(self.model.gold_carrier_38k_fp), "gold_carrier_38k_fp"),
+            (tn, self.data_out_carrier_38k, "data_out_carrier_38k")
+        )
+        plotData(data, title="Carrier 38kHz",
+                 filename="sim_build/plot_carrier_38k.png",
+                 show=(not self.ok_carrier_38k))
 
-            # -----------------------------------------------------------------
-            data = (
-                (tn, from_fixed_point(self.model.gold_audio_lrdiff_fp), "gold_audio_lrdiff_fp"),
-                (tn, self.data_out_audio_lrdiff, "data_out_audio_lrdiff")
-            )
-            plotData(data, title="Audio LR Diff",
-                     filename="sim_build/plot_audio_lrdiff.png",
-                     show=(not self.ok_audio_lrdiff))
+        # -----------------------------------------------------------------
+        data = (
+            (tn, from_fixed_point(self.model.gold_audio_lrdiff_fp), "gold_audio_lrdiff_fp"),
+            (tn, self.data_out_audio_lrdiff, "data_out_audio_lrdiff")
+        )
+        plotData(data, title="Audio LR Diff",
+                 filename="sim_build/plot_audio_lrdiff.png",
+                 show=(not self.ok_audio_lrdiff))
+
+        # -----------------------------------------------------------------
+        data = (
+            (tn, from_fixed_point(self.model.gold_audio_L_fp), "gold_audio_L_fp"),
+            (tn, self.data_out_audio_L, "data_out_audio_L")
+        )
+        plotData(data, title="Audio L",
+                 filename="sim_build/plot_audio_L.png",
+                 show=(not self.ok_audio_L))
+
+        # -----------------------------------------------------------------
+        data = (
+            (tn, from_fixed_point(self.model.gold_audio_R_fp), "gold_audio_R_fp"),
+            (tn, self.data_out_audio_R, "data_out_audio_R")
+        )
+        plotData(data, title="Audio L",
+                 filename="sim_build/plot_audio_R.png",
+                 show=(not self.ok_audio_R))

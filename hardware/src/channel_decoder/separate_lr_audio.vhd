@@ -8,6 +8,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use ieee.fixed_pkg.all;
 
 library work;
 use work.fm_pkg.all;
@@ -40,6 +41,11 @@ architecture rtl of separate_lr_audio is
   --! @name Internal Registers
   -----------------------------------------------------------------------------
   --! @{
+
+  signal audio_L     : sample_t   := (others => '0');
+  signal audio_R     : sample_t   := (others => '0');
+  signal audio_valid : std_ulogic := '0';
+
   --! @}
   -----------------------------------------------------------------------------
   --! @name Internal Wires
@@ -47,22 +53,48 @@ architecture rtl of separate_lr_audio is
   --! @{
   --! @}
 
+  --! @}
+
 begin -- architecture rtl
 
   ------------------------------------------------------------------------------
   -- Outputs
   ------------------------------------------------------------------------------
+
+  audio_L_o     <= audio_L;
+  audio_R_o     <= audio_R;
+  audio_valid_o <= audio_valid;
+
   -----------------------------------------------------------------------------
   -- Signal Assignments
   -----------------------------------------------------------------------------
+
   ------------------------------------------------------------------------------
   -- Registers
   ------------------------------------------------------------------------------
-  ------------------------------------------------------------------------------
-  -- Instantiations
-  ------------------------------------------------------------------------------
 
-  -- LPFilter 15k
-  -- Delay
+  regs : process (clk_i) is
+    procedure reset is
+    begin
+      audio_L     <= (others => '0');
+      audio_R     <= (others => '0');
+      audio_valid <= '0';
+    end procedure reset;
+  begin -- process regs
+    if rising_edge(clk_i) then
+      if rst_i = '1' then
+        reset;
+      else
+        -- Defaults
+        audio_valid <= '0';
+
+        if mono_valid_i = '1' then --and lrdiff_valid_i (need to be synced!!)
+          audio_L     <= ResizeTruncAbsVal(mono_i + lrdiff_i, audio_L);
+          audio_R     <= ResizeTruncAbsVal(mono_i - lrdiff_i, audio_R);
+          audio_valid <= '1';
+        end if;
+      end if;
+    end if;
+  end process regs;
 
 end architecture rtl;

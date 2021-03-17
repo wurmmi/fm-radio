@@ -40,6 +40,10 @@ package fm_pkg is
   -- function log2 returns the logarithm of base 2 as an integer
   function LogDualis(cNumber : natural) return natural;
 
+  -- ***
+  -- NOTE: Need to "use ieee.fixed_pkg.all;" everywhere this function is used!!
+  -- ***
+  -- Resize and truncate
   function ResizeTruncAbsVal (
     arg      : u_sfixed; -- input
     size_res : u_sfixed) -- for size only
@@ -66,6 +70,9 @@ package body fm_pkg is
     return vResult;
   end LogDualis;
 
+  -- ***
+  -- NOTE: Need to "use ieee.fixed_pkg.all;" everywhere this function is used!!
+  -- ***
   -- Resize and truncate
   function ResizeTruncAbsVal (
     arg      : u_sfixed;
