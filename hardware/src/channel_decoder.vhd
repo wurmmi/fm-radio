@@ -55,6 +55,10 @@ architecture rtl of channel_decoder is
   signal audio_lrdiff       : sample_t;
   signal audio_lrdiff_valid : std_ulogic;
 
+  signal audio_L     : sample_t;
+  signal audio_R     : sample_t;
+  signal audio_valid : std_ulogic;
+
   --! @}
 
 begin -- architecture rtl
@@ -62,6 +66,10 @@ begin -- architecture rtl
   ------------------------------------------------------------------------------
   -- Outputs
   ------------------------------------------------------------------------------
+
+  audio_L_o     <= audio_L;
+  audio_R_o     <= audio_R;
+  audio_valid_o <= audio_valid;
 
   -----------------------------------------------------------------------------
   -- Signal Assignments
@@ -112,6 +120,18 @@ begin -- architecture rtl
       lrdiff_o       => audio_lrdiff,
       lrdiff_valid_o => audio_lrdiff_valid);
 
-  -- separate_lr_audio
+  separate_lr_audio_inst : entity work.separate_lr_audio
+    port map(
+      clk_i => clk_i,
+      rst_i => rst_i,
+
+      mono_i         => audio_mono,
+      mono_valid_i   => audio_mono_valid,
+      lrdiff_i       => audio_lrdiff,
+      lrdiff_valid_i => audio_lrdiff_valid,
+
+      audio_L_o     => audio_L,
+      audio_R_o     => audio_R,
+      audio_valid_o => audio_valid);
 
 end architecture rtl;

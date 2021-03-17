@@ -116,7 +116,6 @@ def move_n_right(data, num_of_zeros, fp_width, fp_width_frac):
         data.insert(0, to_fixed_point(0, fp_width, fp_width_frac))
         # remove end
         data.pop()
-    # return data
 
 
 def move_n_left(data, num_of_zeros, fp_width, fp_width_frac):
@@ -125,4 +124,3 @@ def move_n_left(data, num_of_zeros, fp_width, fp_width_frac):
         data.append(to_fixed_point(0, fp_width, fp_width_frac))
         # remove begin
         data.pop(0)
-    # return data

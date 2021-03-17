@@ -31,7 +31,7 @@ async def data_processing_test(dut):
     # --------------------------------------------------------------------------
 
     # Number of seconds to process
-    n_sec = 0.0005
+    n_sec = 0.005
 
     # Fixed point settings
     fp_width_c = 32
