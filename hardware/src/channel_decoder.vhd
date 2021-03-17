@@ -104,8 +104,10 @@ begin -- architecture rtl
       clk_i => clk_i,
       rst_i => rst_i,
 
-      sample_i       => sample_i,
-      sample_valid_i => sample_valid_i,
+      sample_i            => sample_i,
+      sample_valid_i      => sample_valid_i,
+      carrier_38k_i       => carrier_38k,
+      carrier_38k_valid_i => carrier_38k_valid,
 
       lrdiff_o       => lrdiff,
       lrdiff_valid_o => lrdiff_valid);
