@@ -95,7 +95,7 @@ cutoff_freqs   = [15e3 18.5e3 19.5e3 23e3]; % Band frequencies (defined like slo
 filter_bp_pilot = getBPfilter( ...
     filter_name, ...
     ripple_pass_dB, ripple_stop_db, ...
-    cutoff_freqs, fs_rx, EnableFilterAnalyzeGUI);
+    cutoff_freqs, fs_rx, fp_config, EnableFilterAnalyzeGUI);
 
 % Filter (Bandpass 18.5k..19.5kHz)
 rx_pilot = filter(filter_bp_pilot,1, rx_fmChannelData);
@@ -113,7 +113,6 @@ rx_pilot = rx_pilot * pilot_scale_factor; %TODO: adapt this value
 if EnableDeEmphasis
     rx_pilot = rx_pilot * 7;
 end
-max(rx_pilot)
 
 %% Generate sub-carriers
 
@@ -137,7 +136,7 @@ if EnableRDSDecoder
     filter_hp_57k = getHPfilter( ...
         filter_name, ...
         ripple_pass_dB, ripple_stop_db, ...
-        cutoff_freqs, fs_rx, EnableFilterAnalyzeGUI);
+        cutoff_freqs, fs_rx, fp_config, EnableFilterAnalyzeGUI);
     
     % Filter (lowpass 1.5kHz)
     carrier57kHzRx = filter(filter_hp_57k,1, carrier57kHzRx);
@@ -180,7 +179,7 @@ cutoff_freqs   = [15e3 19e3]; % Cutoff frequencies
 filter_lp_mono = getLPfilter( ...
     filter_name, ...
     ripple_pass_dB, ripple_stop_db, ...
-    cutoff_freqs, fs_rx, EnableFilterAnalyzeGUI);
+    cutoff_freqs, fs_rx, fp_config, EnableFilterAnalyzeGUI);
 
 % Filter (lowpass 15kHz)
 rx_audio_mono = filter(filter_lp_mono,1, rx_fmChannelData);
@@ -200,7 +199,7 @@ cutoff_freqs   = [19e3 23e3 53e3 57e3]; % Band frequencies (defined like slopes)
 filter_bp_lrdiff = getBPfilter( ...
     filter_name, ...
     ripple_pass_dB, ripple_stop_db, ...
-    cutoff_freqs, fs_rx, EnableFilterAnalyzeGUI);
+    cutoff_freqs, fs_rx, fp_config, EnableFilterAnalyzeGUI);
 
 % Filter (Bandpass 23k..53kHz)
 rx_audio_lrdiff_bpfilt = filter(filter_bp_lrdiff,1, rx_fmChannelData);

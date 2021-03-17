@@ -4,16 +4,20 @@
 % Description : Writes filter coefficients to VHDL file.
 %-------------------------------------------------------------------------
 
-function status = writeFilterCoeffsToVHDLFile(coeffs, filtername, filedir, fp_width, fp_width_frac)
+function status = writeFilterCoeffsToVHDLFile(coeffs, filtername, filedir, fp_config)
 %writeFilterCoeffsToVHDLFile - Writes filter coefficients to VHDL file.
-%   data       ... data to be written
-%   filtername ... name used for VHDL entity and constant
-%   filedir    ... directory where to store the VHDL file
+%   data                 ... data to be written
+%   filtername           ... name used for VHDL entity and constant
+%   filedir              ... directory where to store the VHDL file
+%   fp_config.width      ... fixed point data width
+%   fp_config.width_frac ... fixed point data width of fractional part
 
 fp_maximum = 0.999;
 coeff_max = max(coeffs);
-assert(coeff_max <= fp_maximum, ...
-    "Max. value (%.5f) exceeds fixed point range! This will lead to overflows in the hardware.", coeff_max);
+if fp_config.max_check
+    assert(coeff_max <= fp_maximum, ...
+        "Max. value (%.5f) exceeds fixed point range! This will lead to overflows in the hardware.", coeff_max);
+end
 
 filename = sprintf('%s/%s_pkg.vhd', filedir,filtername);
 
@@ -41,14 +45,14 @@ fprintf(fileID, [ ...
 %% Write coefficients
 
 % Convert to fixed point
-data_fp = cast(coeffs, 'like', fi([], true, fp_width,fp_width_frac));
+coeffs_fp = cast(coeffs, 'like', fi([], true, fp_config.width,fp_config.width_frac));
 
 grpdelay = (length(coeffs)-1)/2;
 fprintf(fileID, "  constant %s_grpdelay_c : natural := %d;\n\n", filtername, grpdelay);
 
 fprintf(fileID, "  constant %s_coeffs_c : filter_coeffs_t := (\n", filtername);
-fprintf(fileID, "    %.32f,\n", data_fp(1:end-1));
-fprintf(fileID, "    %.32f);\n\n", data_fp(end));
+fprintf(fileID, "    %.32f,\n", coeffs_fp(1:end-1));
+fprintf(fileID, "    %.32f);\n\n", coeffs_fp(end));
 
 %% Write VHDL end
 

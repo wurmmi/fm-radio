@@ -29,6 +29,10 @@ fs = 196608*8; % Nfft * x
 n_sec = 0.03;
 tn    = (0:1:fs*n_sec-1).';
 
+fp_config.enable     = false;
+fp_config.width      = 32;
+fp_config.width_frac = 31;
+
 % Tx carrier
 fc_tx  = 57e3;
 A_tx_c = 1;
@@ -81,7 +85,7 @@ if EnableEqirippleFIR
     filter_lp_rx = getLPfilter( ...
         filter_name, ...
         ripple_pass_dB, ripple_stop_db, ...
-        cutoff_freqs, fs, EnableFilterAnalyzeGUI);
+        cutoff_freqs, fs, fp_config, EnableFilterAnalyzeGUI);
 else
     Nfilt = 100;
     wcut = fmsg*10/fs;

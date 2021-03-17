@@ -4,18 +4,20 @@
 % Description : Writes data to file.
 %-------------------------------------------------------------------------
 
-function status = writeDataToFile(data, num_samples, filename, fp_width, fp_width_frac)
+function status = writeDataToFile(data, num_samples, filename, fp_config)
 %writeDataToFile - Writes data to file.
-%   data          ... data to be written
-%   num_samples   ... number of samples to be written
-%   filename      ... filename
-%   fp_width      ... fixed point data width
-%   fp_width_frac ... fixed point data width of fractional part
+%   data                 ... data to be written
+%   num_samples          ... number of samples to be written
+%   filename             ... filename
+%   fp_config.width      ... fixed point data width
+%   fp_config.width_frac ... fixed point data width of fractional part
 
 fp_maximum = 0.999;
 data_max = max(data);
-assert(data_max < fp_maximum, ...
-    "Max. value (%.5f) exceeds fixed point range! This will lead to overflows in the hardware.", data_max);
+if fp_config.max_check
+    assert(data_max < fp_maximum, ...
+        "Max. value (%.5f) exceeds fixed point range! This will lead to overflows in the hardware.", data_max);
+end
 
 fileID = fopen(filename, 'w');
 if fileID <= 0
@@ -27,14 +29,14 @@ data = data(1:num_samples);
 
 if isreal(data)
     % Convert to fixed point
-    data_fp = cast(data, 'like', fi([], true, fp_width, fp_width_frac));
+    data_fp = cast(data, 'like', fi([], true, fp_config.width, fp_config.width_frac));
     
     % Write to file
     fprintf(fileID, "%.32f\n", data_fp);
 else
     % Convert to fixed point
-    data_fp_i = cast(real(data), 'like', fi([], true, fp_width, fp_width_frac));
-    data_fp_q = cast(imag(data), 'like', fi([], true, fp_width, fp_width_frac));
+    data_fp_i = cast(real(data), 'like', fi([], true, fp_config.width, fp_config.width_frac));
+    data_fp_q = cast(imag(data), 'like', fi([], true, fp_config.width, fp_config.width_frac));
     
     % Write to file
     for i=1:length(data_fp_i)

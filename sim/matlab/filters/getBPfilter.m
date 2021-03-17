@@ -5,7 +5,10 @@
 %               of minimum order.
 %-------------------------------------------------------------------------
 
-function [filter_coeff] = getBPfilter(filename, rp, rs, fco, fs, showGUI)
+function [filter_coeff] = getBPfilter( ...
+    filename, rp, rs, fco, fs, ...
+    fixed_point_config, ...
+    showGUI)
 %getLPfilter Design (or load) an equiripple FIR bandpass filter of minimum order.
 %   filename ... filename of stored filter
 %   rp       ... Passband ripple in dB
@@ -25,6 +28,11 @@ else
     
     % Design the filter
     filter_coeff = getMinOrderFIR(fco, m, dev, fs, showGUI);
+    
+    % Convert to fixed point
+    if fixed_point_config.enable
+        filter_coeff = num2fixpt(filter_coeff, fixdt(true, fixed_point_config.width, fixed_point_config.width_frac));
+    end
     
     % Save the filter coefficients
     save(filename,'filter_coeff','-ascii');

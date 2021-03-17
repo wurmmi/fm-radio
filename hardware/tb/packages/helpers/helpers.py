@@ -83,7 +83,8 @@ def compareResultsOkay(dut, gold, actual, fail_on_err,
     norm_res = np.linalg.norm(
         np.array(from_fixed_point(gold)) - np.array(actual), 2)
     if norm_res > max_error_norm:
-        msg = "2-Norm too large! {:.5f} > {}.".format(norm_res, max_error_norm)
+        msg = "2-Norm for '{}' too large! {:.5f} > {}.".format(
+            data_name, norm_res, max_error_norm)
         if fail_on_err:
             raise cocotb.result.TestFailure(msg)
         cocotb.log.warning(msg)

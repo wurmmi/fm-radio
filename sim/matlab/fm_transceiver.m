@@ -54,6 +54,11 @@ EnableDeEmphasis       = false;
 EnableManualDecimation = true;
 EnableRDSDecoder       = false;
 
+fp_config.enable     = false;
+fp_config.width      = 32;
+fp_config.width_frac = 31;
+fp_config.max_check  = false;
+
 % Signal parameters
 n_sec = 1.7;           % 1.7s is "left channel, right channel" in audio file
 osr   = 20;            % oversampling rate for fs
@@ -108,34 +113,32 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if EnableWriteDataFiles
-    disp('### Write verification data ###');
-    
-    fp_width      = 32;
-    fp_width_frac = 31;
-    fp_maximum    = 0.999;
-    
-    n_sec_file = 0.03;
+    disp('### Write data to files ###');
 
+    disp('--- Filter coefficients to VHDL');
+    % Filter coefficients
+    %writeFilterCoeffsToVHDLFile(filter_diff, 'filter_diff', ...
+    %    '../../hardware/src/filter_coeff_pkgs/', fp_config);
+    writeFilterCoeffsToVHDLFile(filter_bp_pilot, 'filter_bp_pilot', ...
+        '../../hardware/src/filter_coeff_pkgs/', fp_config);
+    writeFilterCoeffsToVHDLFile(filter_lp_mono, 'filter_lp_mono', ...
+        '../../hardware/src/filter_coeff_pkgs/', fp_config);
+    writeFilterCoeffsToVHDLFile(filter_bp_lrdiff, 'filter_bp_lrdiff', ...
+        '../../hardware/src/filter_coeff_pkgs/', fp_config);
+    
+    disp('--- Verification data');
+    % Only write a fraction of the simulation time to file
+    n_sec_file  = 0.03;
     num_samples = n_sec_file * fs/osr_rx;
     
     % Test data
-    writeDataToFile(rx_fm_bb,         num_samples*osr_rx,'./verification_data/rx_fm_bb.txt',         fp_width, fp_width_frac);
-    writeDataToFile(rx_fm_demod,      num_samples*osr_rx,'./verification_data/rx_fm_demod.txt',      fp_width, fp_width_frac);
-    writeDataToFile(rx_pilot,         num_samples,       './verification_data/rx_pilot.txt',         fp_width, fp_width_frac);
-    %writeDataToFile(rx_fmChannelData, num_samples,       './verification_data/rx_fmChannelData.txt', fp_width, fp_width_frac);
-    %writeDataToFile(rx_audio_mono,    num_samples,       './verification_data/rx_audio_mono.txt',    fp_width, fp_width_frac);
-    %writeDataToFile(rx_audio_L,       num_samples,       './verification_data/rx_audio_L.txt',       fp_width, fp_width_frac);
-    %writeDataToFile(rx_audio_R,       num_samples,       './verification_data/rx_audio_R.txt',       fp_width, fp_width_frac);
-    
-    % Filter coefficients
-    %writeFilterCoeffsToVHDLFile(filter_diff, 'filter_diff', ...
-    %    '../../hardware/src/filter_coeff_pkgs/', fp_width, fp_width_frac);
-    writeFilterCoeffsToVHDLFile(filter_bp_pilot, 'filter_bp_pilot', ...
-        '../../hardware/src/filter_coeff_pkgs/', fp_width, fp_width_frac);
-    writeFilterCoeffsToVHDLFile(filter_lp_mono, 'filter_lp_mono', ...
-        '../../hardware/src/filter_coeff_pkgs/', fp_width, fp_width_frac);
-    writeFilterCoeffsToVHDLFile(filter_bp_lrdiff, 'filter_bp_lrdiff', ...
-        '../../hardware/src/filter_coeff_pkgs/', fp_width, fp_width_frac);
+    writeDataToFile(rx_fm_bb,         num_samples*osr_rx,'./verification_data/rx_fm_bb.txt',         fp_config);
+    writeDataToFile(rx_fm_demod,      num_samples*osr_rx,'./verification_data/rx_fm_demod.txt',      fp_config);
+    writeDataToFile(rx_pilot,         num_samples,       './verification_data/rx_pilot.txt',         fp_config);
+    %writeDataToFile(rx_fmChannelData, num_samples,       './verification_data/rx_fmChannelData.txt',fp_config);
+    %writeDataToFile(rx_audio_mono,    num_samples,       './verification_data/rx_audio_mono.txt',   fp_config);
+    %writeDataToFile(rx_audio_L,       num_samples,       './verification_data/rx_audio_L.txt',      fp_config);
+    %writeDataToFile(rx_audio_R,       num_samples,       './verification_data/rx_audio_R.txt',      fp_config);
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
