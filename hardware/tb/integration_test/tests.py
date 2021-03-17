@@ -163,9 +163,9 @@ async def data_processing_test(dut):
                                     data_name="pilot")
 
     # TODO: Bypassing for now
-    okay_fm_demod = False
-    okay_audio_mono = False
-    okay_pilot = False
+    #okay_fm_demod = False
+    #okay_audio_mono = False
+    #okay_pilot = False
 
     # --------------------------------------------------------------------------
     # Plots
