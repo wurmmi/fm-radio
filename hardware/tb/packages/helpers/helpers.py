@@ -60,7 +60,7 @@ def plotData(data, title="", filename="", show=True, block=True):
     plt.close()
 
 
-def compareResultsOkay(dut, gold, actual, fail_on_err,
+def compareResultsOkay(gold, actual, fail_on_err,
                        max_error_abs, max_error_norm,
                        skip_n_samples, data_name):
     """
@@ -75,7 +75,7 @@ def compareResultsOkay(dut, gold, actual, fail_on_err,
         if fail_on_err:
             raise cocotb.result.TestFailure(msg)
         cocotb.log.warning(msg)
-        return False
+        return True
 
     # Skip first and last N samples
     gold = gold[skip_n_samples:-skip_n_samples]
@@ -105,12 +105,12 @@ def compareResultsOkay(dut, gold, actual, fail_on_err,
             cocotb.log.warning(msg)
             return False
 
-    dut._log.info("OKAY results for '{}' (2-norm = {:.5f})".format(
+    cocotb.log.info("OKAY results for '{}' (2-norm = {:.5f})".format(
         data_name, norm_res))
     return True
 
 
-def prepend_n_zeros(data, num_of_zeros, fp_width, fp_width_frac):
+def move_n_right(data, num_of_zeros, fp_width, fp_width_frac):
     for _ in range(0, num_of_zeros):
         # insert at begin
         data.insert(0, to_fixed_point(0, fp_width, fp_width_frac))
@@ -119,7 +119,7 @@ def prepend_n_zeros(data, num_of_zeros, fp_width, fp_width_frac):
     return data
 
 
-def append_n_zeros(data, num_of_zeros, fp_width, fp_width_frac):
+def move_n_left(data, num_of_zeros, fp_width, fp_width_frac):
     for _ in range(0, num_of_zeros):
         # insert at end
         data.append(to_fixed_point(0, fp_width, fp_width_frac))
