@@ -44,6 +44,13 @@ architecture rtl of recover_carriers is
   --! @name Internal Registers
   -----------------------------------------------------------------------------
   --! @{
+
+  signal pilot       : sample_t   := (others => '0');
+  signal pilot_valid : std_ulogic := '0';
+
+  signal carrier_38k       : sample_t   := (others => '0');
+  signal carrier_38k_valid : std_ulogic := '0';
+
   --! @}
   -----------------------------------------------------------------------------
   --! @name Internal Wires
@@ -52,8 +59,6 @@ architecture rtl of recover_carriers is
 
   signal pilot_fir       : sample_t;
   signal pilot_fir_valid : std_ulogic;
-  signal pilot           : sample_t;
-  signal pilot_valid     : std_ulogic;
 
   --! @}
 
@@ -62,6 +67,9 @@ begin -- architecture rtl
   ------------------------------------------------------------------------------
   -- Outputs
   ------------------------------------------------------------------------------
+
+  carrier_38k_o       <= carrier_38k;
+  carrier_38k_valid_o <= carrier_38k_valid;
 
   carrier_57k_o       <= (others => '0');
   carrier_57k_valid_o <= '0';
@@ -77,6 +85,10 @@ begin -- architecture rtl
   regs : process (clk_i) is
     procedure reset is
     begin
+      pilot             <= (others => '0');
+      pilot_valid       <= '0';
+      carrier_38k       <= (others => '0');
+      carrier_38k_valid <= '0';
     end procedure reset;
   begin -- process regs
     if rising_edge(clk_i) then
@@ -84,11 +96,19 @@ begin -- architecture rtl
         reset;
       else
         -- Defaults
-        pilot_valid <= '0';
+        pilot_valid       <= '0';
+        carrier_38k_valid <= '0';
 
+        -- Amplify the filtered pilot
         if pilot_fir_valid = '1' then
           pilot       <= ResizeTruncAbsVal(pilot_fir * pilot_scale_factor_c, pilot);
           pilot_valid <= '1';
+        end if;
+
+        -- Create the 38kHz carrier
+        if pilot_valid = '1' then
+          carrier_38k       <= ResizeTruncAbsVal(pilot * pilot - 1, carrier_38k);
+          carrier_38k_valid <= '1';
         end if;
       end if;
     end if;

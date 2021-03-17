@@ -72,6 +72,9 @@ async def data_processing_test(dut):
     filename = "../../../sim/matlab/verification_data/rx_pilot.txt"
     pilot_gold_fp = loadDataFromFile(filename, num_samples, fp_width_c, fp_width_frac_c)
 
+    filename = "../../../sim/matlab/verification_data/rx_carrier38kHz.txt"
+    carrier_38k_gold_fp = loadDataFromFile(filename, num_samples, fp_width_c, fp_width_frac_c)
+
     # --------------------------------------------------------------------------
     # Prepare environment
     # --------------------------------------------------------------------------
@@ -103,6 +106,7 @@ async def data_processing_test(dut):
     fm_demod_output_fork = cocotb.fork(tb.read_fm_demod_output())
     audio_mono_output_fork = cocotb.fork(tb.read_audio_mono_output())
     pilot_output_fork = cocotb.fork(tb.read_pilot_output())
+    carrier_38k_output_fork = cocotb.fork(tb.read_carrier_38k_output())
     #audio_LR_output_fork = cocotb.fork(tb.read_audio_LR_output())
 
     # Send input data through filter
@@ -119,6 +123,7 @@ async def data_processing_test(dut):
     fm_demod_output_fork.join()
     audio_mono_output_fork.join()
     pilot_output_fork.join()
+    carrier_38k_output_fork.join()
     # audio_LR_output_fork.join()
 
     # Measure time
@@ -133,6 +138,7 @@ async def data_processing_test(dut):
     prepend_n_zeros(fm_demod_gold_fp, 2, fp_width_c, fp_width_frac_c)
     append_n_zeros(audio_mono_gold_fp, 2, fp_width_c, fp_width_frac_c)
     append_n_zeros(pilot_gold_fp, 3, fp_width_c, fp_width_frac_c)
+    append_n_zeros(carrier_38k_gold_fp, 3, fp_width_c, fp_width_frac_c)
 
     # Compare
     okay_fm_demod = compareResultsOkay(dut,
@@ -161,6 +167,15 @@ async def data_processing_test(dut):
                                     max_error_norm=0.06,
                                     skip_n_samples=10,
                                     data_name="pilot")
+
+    okay_carrier_38k = compareResultsOkay(dut,
+                                          carrier_38k_gold_fp,
+                                          tb.data_out_carrier_38k,
+                                          fail_on_err=False,
+                                          max_error_abs=2**-5,
+                                          max_error_norm=0.06,
+                                          skip_n_samples=10,
+                                          data_name="carrier_38k")
 
     # TODO: Bypassing for now
     #okay_fm_demod = False
@@ -203,5 +218,15 @@ async def data_processing_test(dut):
         plotData(data, title="Pilot",
                  filename="sim_build/plot_pilot.png",
                  show=(not okay_pilot))
+
+        data = (
+            (np.arange(0, num_samples) / fs_rx_c,
+                from_fixed_point(carrier_38k_gold_fp), "carrier_38k_gold_fp"),
+            (np.arange(0, num_samples) / fs_rx_c,
+                tb.data_out_carrier_38k, "tb.data_out_carrier_38k")
+        )
+        plotData(data, title="carrier_38k",
+                 filename="sim_build/plot_carrier_38k.png",
+                 show=(not okay_carrier_38k))
 
     dut._log.info("Done.")

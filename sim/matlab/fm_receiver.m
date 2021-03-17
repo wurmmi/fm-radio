@@ -100,6 +100,11 @@ filter_bp_pilot = getBPfilter( ...
 % Filter (Bandpass 18.5k..19.5kHz)
 rx_pilot = filter(filter_bp_pilot,1, rx_fmChannelData);
 
+% TODO: compensate rx_pilot filter delay, before multiplication!!
+%       (rx_pilot, and thus carrier38k, is shifted with respect to 
+%        rx_audio_lrdiff_bpfilt, IF THE GROUP DELAYS of 
+%        filter_bp_pilot and filter_bp_lrdiff ARE DIFFERENT)
+
 % Amplify
 % NOTE: Theoretically, the factor should be 10, since the pilot is
 %       transmitted with an amplitude of 10%.
@@ -117,7 +122,7 @@ end
 %% Generate sub-carriers
 
 % 38 kHz carrier
-carrier38kHzRx = rx_pilot .* rx_pilot * 1 - 1;
+rx_carrier38kHz = rx_pilot .* rx_pilot * 1 - 1;
 
 if EnableRDSDecoder
     if fs_rx < 57e3 * 2
@@ -125,7 +130,7 @@ if EnableRDSDecoder
     end
     
     % 57 kHz carrier
-    carrier57kHzRx = carrier38kHzRx .* rx_pilot * 2 - 1;
+    carrier57kHzRx = rx_carrier38kHz .* rx_pilot * 2 - 1;
     
     % Create the lowpass filter
     filter_name = sprintf("%s%s",dir_filters,"lowpass_57kHz.mat");
@@ -205,7 +210,7 @@ filter_bp_lrdiff = getBPfilter( ...
 rx_audio_lrdiff_bpfilt = filter(filter_bp_lrdiff,1, rx_fmChannelData);
 
 % Modulate down to baseband
-rx_audio_lrdiff_mod = 2 * rx_audio_lrdiff_bpfilt .* carrier38kHzRx;
+rx_audio_lrdiff_mod = 2 * rx_audio_lrdiff_bpfilt .* rx_carrier38kHz;
 
 % Filter (lowpass 15kHz)
 rx_audio_lrdiff = filter(filter_lp_mono,1, rx_audio_lrdiff_mod);

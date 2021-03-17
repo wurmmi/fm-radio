@@ -137,6 +137,7 @@ if EnableWriteDataFiles
     %writeDataToFile(rx_fmChannelData, num_samples,       './verification_data/rx_fmChannelData.txt', fp_config);
     writeDataToFile(rx_audio_mono,    num_samples,       './verification_data/rx_audio_mono.txt',    fp_config);
     writeDataToFile(rx_pilot,         num_samples,       './verification_data/rx_pilot.txt',         fp_config);
+    writeDataToFile(rx_carrier38kHz,  num_samples,       './verification_data/rx_carrier38kHz.txt',   fp_config);
     %writeDataToFile(rx_audio_L,       num_samples,       './verification_data/rx_audio_L.txt',       fp_config);
     %writeDataToFile(rx_audio_R,       num_samples,       './verification_data/rx_audio_R.txt',       fp_config);
 end
