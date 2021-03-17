@@ -41,7 +41,7 @@ class FM_TB(object):
         self.dut.inResetAsync <= 1
         await RisingEdge(self.dut.iClk)
         self.dut.inResetAsync <= 0
-        await Timer(3.3, units="us")
+        await Timer(3.3, units='us')
         self.dut.inResetAsync <= 1
         await RisingEdge(self.dut.iClk)
 

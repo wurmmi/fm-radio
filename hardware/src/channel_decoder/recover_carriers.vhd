@@ -2,7 +2,7 @@
 --! @file      recover_carriers.vhd
 --! @author    Michael Wurm <wurm.michael95@gmail.com>
 --! @copyright 2021 Michael Wurm
---! @brief     Recover Carriers implementation.
+--! @brief     Recover carriers implementation.
 -------------------------------------------------------------------------------
 
 library ieee;
@@ -73,10 +73,6 @@ begin -- architecture rtl
 
   carrier_57k_o       <= (others => '0');
   carrier_57k_valid_o <= '0';
-
-  -----------------------------------------------------------------------------
-  -- Signal Assignments
-  -----------------------------------------------------------------------------
 
   ------------------------------------------------------------------------------
   -- Registers

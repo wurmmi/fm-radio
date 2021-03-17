@@ -49,7 +49,7 @@ class FM_TB(object):
         self.dut.rst_i <= 0
         await RisingEdge(self.dut.clk_i)
         self.dut.rst_i <= 1
-        await Timer(3.3, units="us")
+        await Timer(3.3, units='us')
         self.dut.rst_i <= 0
         await RisingEdge(self.dut.clk_i)
 
