@@ -7,15 +7,18 @@
 
 function [filter_coeff] = getHPfilter( ...
     filename, rp, rs, fco, fs, ...
-    fixed_point_config, ...
+    fp_config, ...
     showGUI)
 %getHPfilter Design (or load) an equiripple FIR highpass filter of minimum order.
-%   filename ... filename of stored filter
-%   rp       ... Passband ripple in dB
-%   rs       ... Stopband ripple in dB
-%   fco      ... Cutoff frequencies
-%   fs       ... Sampling frequency
-%   showGUI  ... Use fvtool to show the filter in a GUI
+%   filename             ... filename of stored filter
+%   rp                   ... Passband ripple in dB
+%   rs                   ... Stopband ripple in dB
+%   fco                  ... Cutoff frequencies
+%   fs                   ... Sampling frequency
+%   fp_config.enable     ... enable conversion to fixed point
+%   fp_config.width      ... fixed point data width
+%   fp_config.width_frac ... fixed point data width of fractional part
+%   showGUI              ... Use fvtool to show the filter in a GUI
 
 if isRunningInOctave()
     fprintf("Running in GNU Octave - loading filter '%s' from folder!", filename);
@@ -30,8 +33,9 @@ else
     filter_coeff = getMinOrderFIR(fco, m, dev, fs, showGUI);
     
     % Convert to fixed point
-    if fixed_point_config.enable
-        filter_coeff = num2fixpt(filter_coeff, fixdt(true, fixed_point_config.width, fixed_point_config.width_frac));
+    if fp_config.enable
+        filter_coeff = num2fixpt( ...
+            filter_coeff, fixdt(true, fp_config.width, fp_config.width_frac));
     end
 
     % Save the filter coefficients
