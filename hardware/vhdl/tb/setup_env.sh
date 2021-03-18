@@ -5,7 +5,7 @@
 # Description : Set up environment for cocotb testbench.
 ################################################################################
 
-PROJECT_ROOT="$( cd "$(dirname "$BASH_SOURCE")/../.." >/dev/null 2>&1 ; pwd -P )"
+PROJECT_ROOT="$( cd "$(dirname "$BASH_SOURCE")/../../.." >/dev/null 2>&1 ; pwd -P )"
 
 if [ $BASH_SOURCE == $0 ]; then
     echo "Failure, this script must be called with source"
@@ -15,8 +15,8 @@ fi
 
 echo "### Python environment"
 
-export PYTHONPATH=$PROJECT_ROOT/hardware/tb/packages/fixed_point
-export PYTHONPATH=$PYTHONPATH:$PROJECT_ROOT/hardware/tb/packages/helpers
-export PYTHONPATH=$PYTHONPATH:$PROJECT_ROOT/hardware/tb/packages/vhdl_sampler
+export PYTHONPATH=$PROJECT_ROOT/hardware/vhdl/tb/packages/fixed_point
+export PYTHONPATH=$PYTHONPATH:$PROJECT_ROOT/hardware/vhdl/tb/packages/helpers
+export PYTHONPATH=$PYTHONPATH:$PROJECT_ROOT/hardware/vhdl/tb/packages/vhdl_sampler
 
 echo "Done."

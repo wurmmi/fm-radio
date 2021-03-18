@@ -24,29 +24,31 @@ class FM_RECEIVER_MODEL(object):
         self.loadModelData()
 
     def loadModelData(self):
-        filename = "../../../sim/matlab/verification_data/rx_fm_demod.txt"
+        directory = "../../../../sim/matlab/verification_data/"
+
+        filename = directory + "rx_fm_demod.txt"
         self.gold_fm_demod_fp = loadDataFromFile(filename, self.num_samples_fs_c, self.fp_width_c, self.fp_width_frac_c)
 
-        filename = "../../../sim/matlab/verification_data/rx_fmChannelData.txt"
+        filename = directory + "rx_fmChannelData.txt"
         self.gold_decimator_fp = loadDataFromFile(filename, self.num_samples_c, self.fp_width_c, self.fp_width_frac_c)
 
-        filename = "../../../sim/matlab/verification_data/rx_audio_mono.txt"
+        filename = directory + "rx_audio_mono.txt"
         self.gold_audio_mono_fp = loadDataFromFile(filename, self.num_samples_c, self.fp_width_c, self.fp_width_frac_c)
 
-        filename = "../../../sim/matlab/verification_data/rx_pilot.txt"
+        filename = directory + "rx_pilot.txt"
         self.gold_pilot_fp = loadDataFromFile(filename, self.num_samples_c, self.fp_width_c, self.fp_width_frac_c)
 
-        filename = "../../../sim/matlab/verification_data/rx_carrier38kHz.txt"
+        filename = directory + "rx_carrier38kHz.txt"
         self.gold_carrier_38k_fp = loadDataFromFile(filename, self.num_samples_c, self.fp_width_c, self.fp_width_frac_c)
 
-        filename = "../../../sim/matlab/verification_data/rx_audio_lrdiff.txt"
+        filename = directory + "rx_audio_lrdiff.txt"
         self.gold_audio_lrdiff_fp = loadDataFromFile(
             filename, self.num_samples_c, self.fp_width_c, self.fp_width_frac_c)
 
-        filename = "../../../sim/matlab/verification_data/rx_audio_L.txt"
+        filename = directory + "rx_audio_L.txt"
         self.gold_audio_L_fp = loadDataFromFile(filename, self.num_samples_c, self.fp_width_c, self.fp_width_frac_c)
 
-        filename = "../../../sim/matlab/verification_data/rx_audio_R.txt"
+        filename = directory + "rx_audio_R.txt"
         self.gold_audio_R_fp = loadDataFromFile(filename, self.num_samples_c, self.fp_width_c, self.fp_width_frac_c)
 
         cocotb.log.info("num_samples_fs: {}, num_samples: {} ".format(self.num_samples_fs_c, self.num_samples_c))

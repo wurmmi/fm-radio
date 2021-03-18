@@ -59,7 +59,7 @@ async def data_processing_test(dut):
     # Load data from files
     # --------------------------------------------------------------------------
 
-    filename = "../../../sim/matlab/verification_data/rx_fm_bb.txt"
+    filename = "../../../../sim/matlab/verification_data/rx_fm_bb.txt"
     data_fp = loadDataFromFile(filename, tb.model.num_samples_fs_c * 2, fp_width_c, fp_width_frac_c)
 
     # Split interleaved I/Q samples (take every other)
