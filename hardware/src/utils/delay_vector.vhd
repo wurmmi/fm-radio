@@ -50,7 +50,8 @@ architecture RtlRam of delay_vector is
 
   signal valid      : std_ulogic;
   signal next_valid : std_ulogic;
-  signal readVal    : sample_t;
+  --signal next_valid : std_ulogic_vector(gDelay - 1 downto 0) := (others => '0');
+  signal readVal : sample_t;
 
 begin
 
@@ -108,5 +109,43 @@ begin
       end if;
     end if;
   end process ReadWrite;
+
+  --  ReadWrite : process (iClk) is
+  --    procedure reset is
+  --    begin
+  --      next_valid <= (others => '0');
+  --      valid      <= '0';
+  --      readVal    <= (others => '0');
+  --      addrCnt    <= 0;
+  --    end procedure;
+  --  begin
+  --    if rising_edge(iClk) then
+  --      if inResetAsync = '0' then
+  --        reset;
+  --      else
+  --        -- Defaults
+  --        valid <= '0';
+  --
+  --        if iValDry = '1' then
+  --          next_valid <= next_valid(next_valid'high - 1 downto next_valid'low) & '1';
+  --          valid      <= next_valid(next_valid'high);
+  --
+  --          ram(addrCnt) <= iDdry;
+  --
+  --          if addrCnt = gDelay - 1 then
+  --            addrCnt <= 0;
+  --          else
+  --            addrCnt <= addrCnt + 1;
+  --          end if;
+  --        end if;
+  --
+  --        if addrCnt = gDelay - 1 then
+  --          readVal <= ram(0);
+  --        else
+  --          readVal <= ram(addrCnt + 1);
+  --        end if;
+  --      end if;
+  --    end if;
+  --  end process ReadWrite;
 
 end RtlRam;

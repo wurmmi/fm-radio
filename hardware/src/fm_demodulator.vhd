@@ -116,7 +116,7 @@ begin -- architecture rtl
 
   delay_vector_i_inst : entity work.delay_vector
     generic map(
-      gDelay => 3 + 2) -- NOTE: N-2 is actual delay (e.g. gDelay=>5 --> -2 = 3)
+      gDelay => 3 + 2) -- NOTE: why +2 ??
     port map(
       iClk         => clk_i,
       inResetAsync => not rst_i,
@@ -129,7 +129,7 @@ begin -- architecture rtl
 
   delay_vector_q_inst : entity work.delay_vector
     generic map(
-      gDelay => 3 + 2) -- NOTE: N-2 is actual delay (e.g. gDelay=>5 --> -2 = 3)
+      gDelay => 3 + 2) -- NOTE: why +2 ??
     port map(
       iClk         => clk_i,
       inResetAsync => not rst_i,

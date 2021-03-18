@@ -31,7 +31,7 @@ async def data_processing_test(dut):
     # --------------------------------------------------------------------------
 
     # Number of seconds to process
-    n_sec = 0.0005
+    n_sec = 0.001
 
     # Fixed point settings
     fp_width_c = 16
@@ -76,6 +76,7 @@ async def data_processing_test(dut):
 
     # Fork the 'receiving parts'
     fm_demod_output_fork = cocotb.fork(tb.read_fm_demod_output())
+    decimator_output_fork = cocotb.fork(tb.read_decimator_output())
     audio_mono_output_fork = cocotb.fork(tb.read_audio_mono_output())
     pilot_output_fork = cocotb.fork(tb.read_pilot_output())
     carrier_38k_output_fork = cocotb.fork(tb.read_carrier_38k_output())
@@ -94,18 +95,19 @@ async def data_processing_test(dut):
     await RisingEdge(dut.channel_decoder_inst.audio_lrdiff_valid)
 
     # Stop other forked routines
-    fm_demod_output_fork.join()
-    audio_mono_output_fork.join()
-    pilot_output_fork.join()
-    carrier_38k_output_fork.join()
-    audio_lrdiff_output_fork.join()
-    audio_L_output_fork.join()
-    audio_R_output_fork.join()
+    await fm_demod_output_fork  # .join()
+    await decimator_output_fork  # .join()
+    await audio_mono_output_fork  # .join()
+    await pilot_output_fork  # .join()
+    await carrier_38k_output_fork  # .join()
+    await audio_lrdiff_output_fork  # .join()
+    await audio_L_output_fork  # .join()
+    await audio_R_output_fork  # .join()
 
     # Measure time
     duration_s = int(time.time() - timestamp_start)
     mins, secs = divmod(duration_s, 60)
-    dut._log.info("Execution took {:02d}:{:02d} seconds.".format(mins, secs))
+    dut._log.info("Execution took {:02d}:{:02d} minutes.".format(mins, secs))
 
     # --------------------------------------------------------------------------
     # Compare results

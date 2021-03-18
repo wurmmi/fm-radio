@@ -27,6 +27,9 @@ class FM_RECEIVER_MODEL(object):
         filename = "../../../sim/matlab/verification_data/rx_fm_demod.txt"
         self.gold_fm_demod_fp = loadDataFromFile(filename, self.num_samples_fs_c, self.fp_width_c, self.fp_width_frac_c)
 
+        filename = "../../../sim/matlab/verification_data/rx_fmChannelData.txt"
+        self.gold_decimator_fp = loadDataFromFile(filename, self.num_samples_c, self.fp_width_c, self.fp_width_frac_c)
+
         filename = "../../../sim/matlab/verification_data/rx_audio_mono.txt"
         self.gold_audio_mono_fp = loadDataFromFile(filename, self.num_samples_c, self.fp_width_c, self.fp_width_frac_c)
 

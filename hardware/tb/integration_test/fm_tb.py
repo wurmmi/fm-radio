@@ -22,6 +22,7 @@ class FM_TB(object):
 
     # Variables
     data_out_fm_demod = []
+    data_out_decimator = []
     data_out_audio_mono = []
     data_out_pilot = []
     data_out_carrier_38k = []
@@ -78,6 +79,16 @@ class FM_TB(object):
                                self.fp_width_c, self.fp_width_frac_c)
 
         await sampler.read_vhdl_output(self.data_out_fm_demod)
+
+    @cocotb.coroutine
+    async def read_decimator_output(self):
+        sampler = VHDL_SAMPLER("decimator", self.dut,
+                               self.dut.fm_channel_data,
+                               self.dut.fm_channel_data_valid,
+                               self.model.num_samples_c,
+                               self.fp_width_c, self.fp_width_frac_c)
+
+        await sampler.read_vhdl_output(self.data_out_decimator)
 
     @cocotb.coroutine
     async def read_audio_mono_output(self):
@@ -142,12 +153,13 @@ class FM_TB(object):
     def compareData(self):
         # Shift loaded file-data to compensate shift to testbench-data
         move_n_right(self.model.gold_fm_demod_fp, 2, self.fp_width_c, self.fp_width_frac_c)
+        move_n_left(self.model.gold_decimator_fp, 0, self.fp_width_c, self.fp_width_frac_c)
         move_n_left(self.model.gold_audio_mono_fp, 0, self.fp_width_c, self.fp_width_frac_c)
-        move_n_left(self.model.gold_pilot_fp, 1, self.fp_width_c, self.fp_width_frac_c)
-        move_n_left(self.model.gold_carrier_38k_fp, 1, self.fp_width_c, self.fp_width_frac_c)
-        move_n_left(self.model.gold_audio_lrdiff_fp, 1, self.fp_width_c, self.fp_width_frac_c)
-        move_n_left(self.model.gold_audio_L_fp, 1, self.fp_width_c, self.fp_width_frac_c)
-        move_n_left(self.model.gold_audio_R_fp, 1, self.fp_width_c, self.fp_width_frac_c)
+        move_n_left(self.model.gold_pilot_fp, 0, self.fp_width_c, self.fp_width_frac_c)
+        move_n_left(self.model.gold_carrier_38k_fp, 0, self.fp_width_c, self.fp_width_frac_c)
+        move_n_left(self.model.gold_audio_lrdiff_fp, 0, self.fp_width_c, self.fp_width_frac_c)
+        move_n_left(self.model.gold_audio_L_fp, 0, self.fp_width_c, self.fp_width_frac_c)
+        move_n_left(self.model.gold_audio_R_fp, 0, self.fp_width_c, self.fp_width_frac_c)
 
         # Compare
         self.ok_fm_demod = compareResultsOkay(self.model.gold_fm_demod_fp,
@@ -157,6 +169,15 @@ class FM_TB(object):
                                               max_error_norm=0.06,
                                               skip_n_samples=30,
                                               data_name="fm_demod")
+
+        # Compare
+        self.ok_decimator = compareResultsOkay(self.model.gold_decimator_fp,
+                                               self.data_out_decimator,
+                                               fail_on_err=self.EnableFailOnError,
+                                               max_error_abs=2**-5,
+                                               max_error_norm=0.06,
+                                               skip_n_samples=30,
+                                               data_name="decimator")
 
         self.ok_audio_mono = compareResultsOkay(self.model.gold_audio_mono_fp,
                                                 self.data_out_audio_mono,
@@ -218,19 +239,29 @@ class FM_TB(object):
         #self.ok_audio_lrdiff = False
         #self.ok_audio_L = False
         #self.ok_audio_R = False
+        self.ok_decimator = False
 
+        tn_fs = np.arange(0, self.model.num_samples_fs_c) / self.fs_c
+        tn = np.arange(0, self.model.num_samples_c) / self.fs_rx_c
         # -----------------------------------------------------------------
-        tn = np.arange(0, self.model.num_samples_fs_c) / self.fs_c
         data = (
-            (tn, self.data_out_fm_demod, "data_out_fm_demod"),
-            (tn, from_fixed_point(self.model.gold_fm_demod_fp), "gold_fm_demod_fp")
+            (tn_fs, self.data_out_fm_demod, "data_out_fm_demod"),
+            (tn_fs, from_fixed_point(self.model.gold_fm_demod_fp), "gold_fm_demod_fp")
         )
         plotData(data, title="FM Demodulator",
                  filename="sim_build/plot_fm_demod.png",
                  show=(not self.ok_fm_demod))
 
         # -----------------------------------------------------------------
-        tn = np.arange(0, self.model.num_samples_c) / self.fs_rx_c
+        data = (
+            (tn, self.data_out_decimator, "data_out_decimator"),
+            (tn, from_fixed_point(self.model.gold_decimator_fp), "gold_decimator_fp")
+        )
+        plotData(data, title="Decimator",
+                 filename="sim_build/plot_decimator.png",
+                 show=(not self.ok_decimator))
+
+        # -----------------------------------------------------------------
         data = (
             (tn, self.data_out_audio_mono, "data_out_audio_mono"),
             (tn, from_fixed_point(self.model.gold_audio_mono_fp), "gold_audio_mono_fp")

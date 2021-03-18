@@ -15,8 +15,8 @@ class VHDL_SAMPLER(object):
         pass
 
     def __init__(self, data_name, dut: cocotb.handle.HierarchyObject,
-                 signal: cocotb.handle.RealObject,
-                 signal_valid: cocotb.handle.RealObject,
+                 signal,
+                 signal_valid,
                  num_expected,
                  fp_width, fp_width_frac):
         self.data_name = data_name
