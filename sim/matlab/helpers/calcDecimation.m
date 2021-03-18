@@ -24,10 +24,13 @@ if manual
     signal_down = signal_filt(1:rate:end);
 else
     % Option 1
-    signal_down = resample(x, 1, rate);
-    
+    %signal_down = resample(x, 1, rate);
+
     % Option 2
     %signal_down = decimate(x, rate, 'fir');
+    
+    % Option 3 (no anti-alias filter)
+    signal_down = downsample(x, rate);
 end
 
 end

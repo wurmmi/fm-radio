@@ -17,31 +17,55 @@ disp('### Receiver Rx ###');
 disp('-- FM demodulator');
 
 % Normalize the amplitude (remove amplitude variations)
-rx_fm_bb_norm = rx_fm_bb ./ abs(rx_fm_bb);
+if EnableProcessingLikeHW
+    % Convert to fixed point
+    rx_fm_bb = num2fixpt( ...
+        rx_fm_bb, fixdt(true, fp_config.width, fp_config.width_frac));
 
-% Design differentiator
-filter_diff = [1,0,-1];
+    % Do not normalize
+    rx_fm_bb_norm = rx_fm_bb;
+else
+    % Normalize
+    rx_fm_bb_norm = rx_fm_bb ./ abs(rx_fm_bb);
+end
 
 % Demodulate
 rx_fm_i = real(rx_fm_bb_norm);
 rx_fm_q = imag(rx_fm_bb_norm);
 
-%rx_fm_demod =  ...
-%    (rx_fm_i .* conv(rx_fm_q,filter_diff,'same') -   ...
-%    rx_fm_q .* conv(rx_fm_i,filter_diff,'same')) ./  ...
-%    (rx_fm_i.^2 + rx_fm_q.^2);
+if EnableProcessingLikeHW
+    n_shift = 3;
+    rx_fm_i_diff = rx_fm_i - [zeros(n_shift,1); rx_fm_i(1:end-n_shift)];
+    rx_fm_q_diff = rx_fm_q - [zeros(n_shift,1); rx_fm_q(1:end-n_shift)];
+else
+    % Design differentiator
+    filter_diff = [1,0,-1];
 
-part_demod_a = rx_fm_i .* filter(filter_diff,1, rx_fm_q);
-part_demod_b = rx_fm_q .* filter(filter_diff,1, rx_fm_i);
+    rx_fm_i_diff = filter(filter_diff,1, rx_fm_i);
+    rx_fm_q_diff = filter(filter_diff,1, rx_fm_q);
+    
+    % Compensate group delay of filter
+    rx_fm_i_diff = circshift(rx_fm_i_diff,-1);
+    rx_fm_q_diff = circshift(rx_fm_q_diff,-1);
+    
+    %rx_fm_demod =  ...
+    %    (rx_fm_i .* conv(rx_fm_q,filter_diff,'same') -   ...
+    %    rx_fm_q .* conv(rx_fm_i,filter_diff,'same')) ./  ...
+    %    (rx_fm_i.^2 + rx_fm_q.^2);
+end
+
+part_demod_a = rx_fm_i .* rx_fm_q_diff;
+part_demod_b = rx_fm_q .* rx_fm_i_diff;
 
 rx_fm_demod = part_demod_a - part_demod_b;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% De-emphasis
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-disp('-- De-emphasis');
 
 if EnableDeEmphasis
+    disp('-- De-emphasis');
+    
     % Create de-emphasis filter
     filter_de_emphasis = getEmphasisFilter(fs, 'de', EnableFilterAnalyzeGUI);
     
@@ -55,6 +79,8 @@ end
 %       Consequently, the sampling frequency only needs to be 53kHz * 2,
 %       according to Nyquist.
 
+disp('-- Downsample');
+
 osr_rx = 8;
 fs_rx  = fs/osr_rx;
 tnRx   = (0:1:n_sec*fs_rx-1)';
@@ -64,46 +90,64 @@ assert(fs_rx > 53e3 * 2,    'Sampling frequency fs_rx too low --> Nyquist!');
 
 rx_fmChannelData = calcDecimation(rx_fm_demod, osr_rx, EnableManualDecimation);
 
+% TODO: check where this comes from.....
+rx_fmChannelData = [zeros(12,1); rx_fmChannelData(1:end-12)];
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Recover pilot tone and subcarriers
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+disp('-- Recover pilot');
+
 % Create the bandpass filter
 filter_name = sprintf("%s%s",dir_filters,"bandpass_pilot.mat");
 ripple_pass_dB = 1;                         % Passband ripple in dB
-ripple_stop_db = 40;                        % Stopband ripple in dB
+ripple_stop_db = 63;                        % Stopband ripple in dB
 cutoff_freqs   = [15e3 18.5e3 19.5e3 23e3]; % Band frequencies (defined like slopes)
 
 filter_bp_pilot = getBPfilter( ...
     filter_name, ...
     ripple_pass_dB, ripple_stop_db, ...
-    cutoff_freqs, fs_rx, EnableFilterAnalyzeGUI);
+    cutoff_freqs, fs_rx, fp_config, EnableFilterAnalyzeGUI);
 
 % Filter (Bandpass 18.5k..19.5kHz)
 rx_pilot = filter(filter_bp_pilot,1, rx_fmChannelData);
 
+% TODO: compensate rx_pilot filter delay, before multiplication!!
+%       (rx_pilot, and thus carrier38k, is shifted with respect to 
+%        rx_audio_lrdiff_bpfilt, IF THE GROUP DELAYS of 
+%        filter_bp_pilot and filter_bp_lrdiff ARE DIFFERENT)
+
 % Amplify
 % NOTE: Theoretically, the factor should be 10, since the pilot is
 %       transmitted with an amplitude of 10%.
-rx_pilot = rx_pilot * 10;
+% --> 12 for optimum in sim
+% --> 6 to keep < 1 for fp
+pilot_scale_factor = 6; %TODO: write this into _pkg.vhdl with filter coeffs
+rx_pilot = rx_pilot * pilot_scale_factor; %TODO: adapt this value
 
 % Amplify again, if a de-emphasis filter is used.
+% TODO: check this
 if EnableDeEmphasis
     rx_pilot = rx_pilot * 7;
 end
 
 %% Generate sub-carriers
 
+disp('-- Recover 38kHz subcarrier');
+
 % 38 kHz carrier
-carrier38kHzRx = rx_pilot .* rx_pilot * 2 - 1;
+rx_carrier38kHz = rx_pilot .* rx_pilot * 2 - 0.75;
 
 if EnableRDSDecoder
+    disp('-- Recover 57kHz subcarrier');
+    
     if fs_rx < 57e3 * 2
         error('Sampling rate fs_rx is too small for the 57kHz carrier! (Nyquist)')
     end
     
     % 57 kHz carrier
-    carrier57kHzRx = carrier38kHzRx .* rx_pilot * 2 - 1;
+    rx_carrier57kHz = rx_carrier38kHz .* rx_pilot * 2 - 1;
     
     % Create the lowpass filter
     filter_name = sprintf("%s%s",dir_filters,"lowpass_57kHz.mat");
@@ -114,23 +158,23 @@ if EnableRDSDecoder
     filter_hp_57k = getHPfilter( ...
         filter_name, ...
         ripple_pass_dB, ripple_stop_db, ...
-        cutoff_freqs, fs_rx, EnableFilterAnalyzeGUI);
+        cutoff_freqs, fs_rx, fp_config, EnableFilterAnalyzeGUI);
     
     % Filter (lowpass 1.5kHz)
-    carrier57kHzRx = filter(filter_hp_57k,1, carrier57kHzRx);
+    rx_carrier57kHz = filter(filter_hp_57k,1, rx_carrier57kHz);
     
     % TODO: delay all other carriers and the rx signal (rx_fmChannelData)
     %       to compensate for the HP filter.
     % NOTE: Using a "circshift" as a workaround for now.
     %       This cannot be done in hardware!
     filter_hp57k_groupdelay = (length(filter_hp_57k)-1)/2;
-    carrier57kHzRx = circshift(carrier57kHzRx, -filter_hp57k_groupdelay);
+    rx_carrier57kHz = circshift(rx_carrier57kHz, -filter_hp57k_groupdelay);
 end
 
 % For test purpose only.
 pilot_local          = cos(2*pi*19e3/fs_rx*tnRx + phi_pilot);
-carrier38kHzRx_local = cos(2*pi*38e3/fs_rx*tnRx + phi_pilot*2);
-carrier57kHzRx_local = cos(2*pi*57e3/fs_rx*tnRx + phi_pilot*3);
+rx_carrier38kHz_local = cos(2*pi*38e3/fs_rx*tnRx + phi_pilot*2);
+rx_carrier57kHz_local = cos(2*pi*57e3/fs_rx*tnRx + phi_pilot*3);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% RDS decoder
@@ -157,7 +201,7 @@ cutoff_freqs   = [15e3 19e3]; % Cutoff frequencies
 filter_lp_mono = getLPfilter( ...
     filter_name, ...
     ripple_pass_dB, ripple_stop_db, ...
-    cutoff_freqs, fs_rx, EnableFilterAnalyzeGUI);
+    cutoff_freqs, fs_rx, fp_config, EnableFilterAnalyzeGUI);
 
 % Filter (lowpass 15kHz)
 rx_audio_mono = filter(filter_lp_mono,1, rx_fmChannelData);
@@ -177,19 +221,20 @@ cutoff_freqs   = [19e3 23e3 53e3 57e3]; % Band frequencies (defined like slopes)
 filter_bp_lrdiff = getBPfilter( ...
     filter_name, ...
     ripple_pass_dB, ripple_stop_db, ...
-    cutoff_freqs, fs_rx, EnableFilterAnalyzeGUI);
+    cutoff_freqs, fs_rx, fp_config, EnableFilterAnalyzeGUI);
 
 % Filter (Bandpass 23k..53kHz)
 rx_audio_lrdiff_bpfilt = filter(filter_bp_lrdiff,1, rx_fmChannelData);
 
 % Modulate down to baseband
-rx_audio_lrdiff_mod = 2 * rx_audio_lrdiff_bpfilt .* carrier38kHzRx;
+rx_audio_lrdiff_mod = 2 * rx_audio_lrdiff_bpfilt .* rx_carrier38kHz;
 
 % Filter (lowpass 15kHz)
 rx_audio_lrdiff = filter(filter_lp_mono,1, rx_audio_lrdiff_mod);
 
 % TODO: check, why this is inverted, depending on the sample rate..
-rx_audio_lrdiff = -1 * rx_audio_lrdiff;
+%       --> because of delay of pilot/carrier38k ???
+%rx_audio_lrdiff = -1 * rx_audio_lrdiff;
 
 
 %% Combine received signal

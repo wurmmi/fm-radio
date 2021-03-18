@@ -8,19 +8,28 @@
 -------------------------------------------------------------------------------
 -- TIME LOGGING
 --
--- (1) FIR Filter implementation
---    03/10/2021 11:30 - 14:00    2:30 h
---               15:15 - 19:15    4:00 h
+-- (1) FIR filter implementation
+--       03/10/2021  11:30 - 14:00    2:30 h
+--                   15:15 - 19:15    4:00 h
+--
+-- (2) FM receiver implementation
+--       03/14/2021  09:30 - 12:00    2:30 h
+--                   12:30 - 14:00    1:30 h
+--       03/15/2021  09:00 - 12:30    3:30 h
+--                   13:00 - 17:00    5:00 h
+--       03/16/2021  09:30 - 12:30    3:00 h
+--                   13:00 - 18:00    5:00 h
+--       03/17/2021  09:00 - 12:30    3:30 h
+--                   14:00 - 18:00    4:00 h
+--       03/18/2021  09:00 - xxxxxxxxxxxxx h
 --
 
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-use ieee.fixed_pkg.all;
 
 library work;
 use work.fm_pkg.all;
-use work.filter_bp_pilot_pkg.all;
 
 entity fm_receiver is
   generic (
@@ -29,13 +38,13 @@ entity fm_receiver is
     clk_i : in std_ulogic;
     rst_i : in std_ulogic;
 
-    fir_i       : in  sample_t;
-    fir_valid_i : in  std_ulogic;
-    fir_o       : out sample_t;
-    fir_valid_o : out std_ulogic;
+    i_sample_i : in iq_value_t;
+    q_sample_i : in iq_value_t;
+    iq_valid_i : in std_ulogic;
 
-    read_data_real_o : out iq_value_t;
-    read_data_imag_o : out iq_value_t);
+    audio_L_o     : out sample_t;
+    audio_R_o     : out sample_t;
+    audio_valid_o : out std_ulogic);
 
 end entity fm_receiver;
 
@@ -51,59 +60,78 @@ architecture rtl of fm_receiver is
   --! @name Internal Registers
   -----------------------------------------------------------------------------
   --! @{
-
-
   --! @}
   -----------------------------------------------------------------------------
   --! @name Internal Wires
   -----------------------------------------------------------------------------
   --! @{
 
+  signal fm_demod       : sample_t;
+  signal fm_demod_valid : std_ulogic;
+
+  signal fm_channel_data       : sample_t;
+  signal fm_channel_data_valid : std_ulogic;
+
+  signal audio_L     : sample_t;
+  signal audio_R     : sample_t;
+  signal audio_valid : std_ulogic;
 
   --! @}
 
-begin  -- architecture rtl
+begin -- architecture rtl
 
   ------------------------------------------------------------------------------
   -- Outputs
   ------------------------------------------------------------------------------
 
+  audio_L_o     <= audio_L;
+  audio_R_o     <= audio_R;
+  audio_valid_o <= audio_valid;
+
   -----------------------------------------------------------------------------
   -- Signal Assignments
   -----------------------------------------------------------------------------
-
-
-  ------------------------------------------------------------------------------
-  -- Registers
-  ------------------------------------------------------------------------------
-
-  regs : process (clk_i) is
-    procedure reset is
-    begin
-    end procedure reset;
-  begin  -- process regs
-    if rising_edge(clk_i) then
-      if rst_i = '1' then
-        reset;
-      else
-      end if;
-    end if;
-  end process regs;
 
   ------------------------------------------------------------------------------
   -- Instantiations
   ------------------------------------------------------------------------------
 
-  dspfir_inst : entity work.DspFir
-  generic map(
-      gB => filter_bp_pilot_coeffs_c)
-  port map(
-      iClk            => clk_i,
-      inResetAsync    => not rst_i,
-      iDdry           => fir_i,
-      iValDry         => fir_valid_i,
-      oDwet           => fir_o,
-      oValWet         => fir_valid_o);
+  fm_demodulator_inst : entity work.fm_demodulator
+    port map(
+      clk_i => clk_i,
+      rst_i => rst_i,
+
+      i_sample_i => i_sample_i,
+      q_sample_i => q_sample_i,
+      iq_valid_i => iq_valid_i,
+
+      fm_demod_o       => fm_demod,
+      fm_demod_valid_o => fm_demod_valid);
+
+  decimator_inst : entity work.decimator
+    generic map(
+      decimation_g => osr_rx_c)
+    port map(
+      clk_i => clk_i,
+      rst_i => rst_i,
+
+      sample_i       => fm_demod,
+      sample_valid_i => fm_demod_valid,
+
+      sample_o       => fm_channel_data,
+      sample_valid_o => fm_channel_data_valid);
+
+  channel_decoder_inst : entity work.channel_decoder
+    port map(
+      clk_i => clk_i,
+      rst_i => rst_i,
+
+      sample_i       => fm_channel_data,
+      sample_valid_i => fm_channel_data_valid,
+
+      audio_L_o     => audio_L,
+      audio_R_o     => audio_R,
+      audio_valid_o => audio_valid);
 
   -----------------------------------------------------------------------------
   -- Assertions for testbench
