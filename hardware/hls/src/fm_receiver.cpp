@@ -4,8 +4,9 @@
  * @author  Michael Wurm <wurm.michael95@gmail.com>
  * @brief   FM Receiver IP implementation.
  */
+/*****************************************************************************/
 
-/*****************************************************************************
+/*
 -- TIME LOGGING
 --
 -- (1) FIR filter implementation

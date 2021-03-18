@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<autopilotfilemapping:AutoPilotFileMapping xmlns:autopilotfilemapping="www.autoesl.com/autopilotfilemapping">
+  <source>
+    <originFiles name="fir.cpp" path="/home/mike/work/fm-radio/hardware/hls/src/utils/fir.cpp"/>
+    <originFiles name="fir.hpp" path="/home/mike/work/fm-radio/hardware/hls/src/utils/fir.hpp"/>
+    <originFiles name="fm_global.hpp" path="/home/mike/work/fm-radio/hardware/hls/src/fm_global.hpp"/>
+    <originFiles name="fm_receiver.cpp" path="/home/mike/work/fm-radio/hardware/hls/src/fm_receiver.cpp"/>
+    <originFiles name="fm_receiver.hpp" path="/home/mike/work/fm-radio/hardware/hls/src/fm_receiver.hpp"/>
+  </source>
+  <testbench>
+    <originFiles name="main.cpp" path="/home/mike/work/fm-radio/hardware/hls/tb/main.cpp"/>
+    <originFiles name="main.hpp" path="/home/mike/work/fm-radio/hardware/hls/tb/main.hpp"/>
+  </testbench>
+</autopilotfilemapping:AutoPilotFileMapping>
