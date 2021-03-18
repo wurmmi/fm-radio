@@ -55,6 +55,7 @@ def plotData(data, title="", filename="", show=True, block=True):
 
     if not (filename == ""):
         plt.savefig(filename, bbox_inches='tight')
+        store_plot_pickle(fig, filename)
     if show:
         plt.show(block=block)
     plt.close()
@@ -124,3 +125,37 @@ def move_n_left(data, num_of_zeros, fp_width, fp_width_frac):
         data.append(to_fixed_point(0, fp_width, fp_width_frac))
         # remove begin
         data.pop(0)
+
+
+def store_plot_pickle(fig, filename):
+    import pickle
+    with open(filename + ".pickle", 'wb') as fd:
+        pickle.dump(fig, fd)
+
+
+def reload_plot_pickle(filename):
+    import pickle
+    with open(filename, 'rb') as fd:
+        fig = pickle.load(fd)
+        plt.show()
+
+
+def reload_all_plots_pickle(directory):
+    import os
+    import pickle
+
+    print(f"Loading all plots from '{directory}'...")
+
+    filenames = []
+    for file in os.listdir(directory):
+        if file.endswith(".pickle"):
+            filenames.append(os.path.join(directory, file))
+
+    for filename in filenames:
+        print(f"Opening plot {filename}")
+        with open(filename, 'rb') as fd:
+            fig = pickle.load(fd)
+            if filename == filenames[-1]:
+                plt.show(block=True)
+            else:
+                plt.show(block=False)

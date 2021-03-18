@@ -51,4 +51,10 @@ else
 		gtkwave sim_build/waveform.ghw gtkwave/waveconfig.gtkw
 endif
 
+reload_python_plots:
+	@python -c """\
+	from helpers import reload_all_plots_pickle; \
+	reload_all_plots_pickle('sim_build')\
+	"""
+
 .PHONY: wave
