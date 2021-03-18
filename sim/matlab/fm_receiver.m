@@ -19,8 +19,8 @@ disp('-- FM demodulator');
 % Normalize the amplitude (remove amplitude variations)
 if EnableProcessingLikeHW
     % Convert to fixed point
-    %rx_fm_bb = num2fixpt( ...
-    %    rx_fm_bb, fixdt(true, fp_config.width, fp_config.width_frac));
+    rx_fm_bb = num2fixpt( ...
+        rx_fm_bb, fixdt(true, fp_config.width, fp_config.width_frac));
 
     % Do not normalize
     rx_fm_bb_norm = rx_fm_bb;

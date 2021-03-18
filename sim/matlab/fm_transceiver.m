@@ -54,9 +54,9 @@ EnableDeEmphasis       = false;
 EnableManualDecimation = false;
 EnableRDSDecoder       = false;
 
-fp_config.enable     = false;
-fp_config.width      = 32;
-fp_config.width_frac = 31;
+fp_config.enable     = true;
+fp_config.width      = 16;
+fp_config.width_frac = 14;
 fp_config.max_check  = false;
 
 % Signal parameters

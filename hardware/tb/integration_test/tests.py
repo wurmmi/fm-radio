@@ -34,8 +34,8 @@ async def data_processing_test(dut):
     n_sec = 0.0005
 
     # Fixed point settings
-    fp_width_c = 32
-    fp_width_frac_c = 31
+    fp_width_c = 16
+    fp_width_frac_c = 14
 
     # --------------------------------------------------------------------------
     # Prepare environment
