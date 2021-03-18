@@ -73,6 +73,8 @@ end
 %       Consequently, the sampling frequency only needs to be 53kHz * 2,
 %       according to Nyquist.
 
+disp('-- Downsample');
+
 osr_rx = 8;
 fs_rx  = fs/osr_rx;
 tnRx   = (0:1:n_sec*fs_rx-1)';
@@ -85,6 +87,8 @@ rx_fmChannelData = calcDecimation(rx_fm_demod, osr_rx, EnableManualDecimation);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Recover pilot tone and subcarriers
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+disp('-- Recover pilot');
 
 % Create the bandpass filter
 filter_name = sprintf("%s%s",dir_filters,"bandpass_pilot.mat");
@@ -121,10 +125,14 @@ end
 
 %% Generate sub-carriers
 
+disp('-- Recover 38kHz subcarrier');
+
 % 38 kHz carrier
 rx_carrier38kHz = rx_pilot .* rx_pilot * 1 - 1;
 
 if EnableRDSDecoder
+    disp('-- Recover 57kHz subcarrier');
+    
     if fs_rx < 57e3 * 2
         error('Sampling rate fs_rx is too small for the 57kHz carrier! (Nyquist)')
     end

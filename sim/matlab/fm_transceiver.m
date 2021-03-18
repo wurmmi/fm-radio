@@ -51,7 +51,7 @@ EnablePlotsLogarithmic = true;
 EnableProcessingLikeHW = true;
 EnablePreEmphasis      = false;
 EnableDeEmphasis       = false;
-EnableManualDecimation = true;
+EnableManualDecimation = false;
 EnableRDSDecoder       = false;
 
 fp_config.enable     = false;
