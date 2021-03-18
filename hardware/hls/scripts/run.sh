@@ -25,7 +25,7 @@ IP_DIR=$GENERAL_OUT_DIR/ips
 mkdir -p $PROJ_DIR
 mkdir -p $IP_DIR
 
-#cd $PROJ_DIR
+cd $PROJ_DIR
 
 
 if [ "$ARG" == "project_hls" ]; then
