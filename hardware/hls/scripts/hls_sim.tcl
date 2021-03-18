@@ -1,24 +1,12 @@
 #-------------------------------------------------------------------------------
-# File        : .gitignore
+# File        : hls_sim.tcl
 # Author      : Michael Wurm <wurm.michael95@gmail.com>
-# Description : Local gitignore file
+# Description : Simulate Vivado HLS project.
 #-------------------------------------------------------------------------------
 
-######## VHDL #########
+open_project prj
+open_solution solution
 
-# cocotb
-sim_build/
-*.lst
-*.xml
-*.o
-__pycache__
+csim_design -clean
 
-*.txt
-
-fm_receiver
-dspfir
-
-######## HLS ##########
-
-# Vivado
-generated/
+quit

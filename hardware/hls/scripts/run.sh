@@ -18,8 +18,8 @@ VIVADO_HLS_BATCH="vivado_hls -f"
 VIVADO_PROJECT_NAME="fm_radio_system"
 
 GENERAL_OUT_DIR=$SCRIPT_PATH/../generated
-PROJ_DIR=$GENERAL_OUT_DIR/cordic_cc
-IP_DIR=$GENERAL_OUT_DIR/ips
+PROJ_DIR=$GENERAL_OUT_DIR/fm_receiver
+IP_DIR=$GENERAL_OUT_DIR/ip
 
 
 mkdir -p $PROJ_DIR
@@ -28,11 +28,11 @@ mkdir -p $IP_DIR
 cd $PROJ_DIR
 
 
-if [ "$ARG" == "project_hls" ]; then
+if [ "$ARG" == "hls_project" ]; then
   $VIVADO_HLS_BATCH $SCRIPT_PATH/create_hls_project.tcl
   exit 0
-elif [ "$ARG" == "sim_hls" ]; then
-  $VIVADO_HLS_BATCH $SCRIPT_PATH/sim_hls.tcl
+elif [ "$ARG" == "hls_sim" ]; then
+  $VIVADO_HLS_BATCH $SCRIPT_PATH/hls_sim.tcl
   exit 0
 elif [ "$ARG" == "synth_hls" ]; then
   $VIVADO_HLS_BATCH $SCRIPT_PATH/synth_hls.tcl
@@ -53,7 +53,7 @@ elif [ "$ARG" == "export_hls" ]; then
 else
   echo "===================================================================================="
   echo "(ERROR) Wrong or invalid argument."
-  echo "Usage: ./run.sh <project_hls|sim_hls|synth_hls|export_hls>"
+  echo "Usage: ./run.sh <hls_project|hls_sim|synth_hls|export_hls>"
   echo "===================================================================================="
   exit 1
 fi
