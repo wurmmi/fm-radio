@@ -8,10 +8,7 @@
 
 #include "fm_global.hpp"
 
-#define FIR_N       16
-#define NUM_SAMPLES 1024
-
-#define ERROR_TOLERANCE 0.1
+#define FIR_N 16
 
 void fir_filter(hls::stream<sample_t> &in,
                 hls::stream<sample_t> &out,

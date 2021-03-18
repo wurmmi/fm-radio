@@ -17,8 +17,8 @@ int main()
 	hls::stream<axi_stream_t> top_out_hw("top_out_hw");
 	hls::stream<axi_stream_t> out_gold("out_gold");
 
-	inp_data_t signal[NUM_SAMPLES];
-	out_data_t reference[NUM_SAMPLES];
+	sample_t signal[NUM_SAMPLES];
+	sample_t reference[NUM_SAMPLES];
 
 	FILE *fp1, *fp2;
 	float val1, val2;
@@ -30,31 +30,31 @@ int main()
 	for (int i = 0; i < NUM_SAMPLES; i++)
 	{
 		fscanf(fp1, "%f\n", &val1);
-		signal[i] = (inp_data_t)val1;
+		signal[i] = (sample_t)val1;
 		fscanf(fp2, "%f\n", &val2);
-		reference[i] = (out_data_t)val2;
+		reference[i] = (sample_t)val2;
 	}
 	fclose(fp1);
 	fclose(fp2);
 
 	// convert input data array into an input stream
-	getArray2Stream_axi<NUM_SAMPLES, DATA_WIDTH_IN, axi_stream_t, inp_data_t>(signal, top_in_hw);
+	getArray2Stream_axi<NUM_SAMPLES, FP_WIDTH, axi_stream_t, sample_t>(signal, top_in_hw);
 	// convert golden data array into a golden stream
-	getArray2Stream_axi<NUM_SAMPLES, DATA_WIDTH_OUT, axi_stream_t, out_data_t>(reference, out_gold);
+	getArray2Stream_axi<NUM_SAMPLES, FP_WIDTH, axi_stream_t, sample_t>(reference, out_gold);
 	// CALL DESIGN UNDER TEST
-	top(top_in_hw, top_out_hw);
+	fm_receiver(top_in_hw, top_out_hw);
 	// CHECK RESULTS
-	err += checkStreamEqual_axi<axi_stream_t, out_data_t>(top_out_hw, out_gold, false);
+	err += checkStreamEqual_axi<axi_stream_t, sample_t>(top_out_hw, out_gold, false);
 	printf("%s\n", (err == 0) ? "\r\n\t--- PASSED ---\r\n" : "\r\n\t--- FAILED ---\r\n");
 	//	------	Execute a second filter run
 	// convert input data array into an input stream
-	getArray2Stream_axi<NUM_SAMPLES, DATA_WIDTH_IN, axi_stream_t, inp_data_t>(signal, top_in_hw);
+	getArray2Stream_axi<NUM_SAMPLES, FP_WIDTH, axi_stream_t, sample_t>(signal, top_in_hw);
 	// convert golden data array into a golden stream
-	getArray2Stream_axi<NUM_SAMPLES, DATA_WIDTH_OUT, axi_stream_t, out_data_t>(reference, out_gold);
+	getArray2Stream_axi<NUM_SAMPLES, FP_WIDTH, axi_stream_t, sample_t>(reference, out_gold);
 	// CALL DESIGN UNDER TEST
-	top(top_in_hw, top_out_hw);
+	fm_receiver(top_in_hw, top_out_hw);
 	// CHECK RESULTS
-	err += checkStreamEqual_axi<axi_stream_t, out_data_t>(top_out_hw, out_gold, false);
+	err += checkStreamEqual_axi<axi_stream_t, sample_t>(top_out_hw, out_gold, false);
 	printf("%s\n", (err == 0) ? "\r\n\t--- PASSED ---\r\n" : "\r\n\t--- FAILED ---\r\n");
 
 	return err;
