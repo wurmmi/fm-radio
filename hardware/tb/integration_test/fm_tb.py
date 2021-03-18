@@ -154,7 +154,7 @@ class FM_TB(object):
                                               self.data_out_fm_demod,
                                               fail_on_err=self.EnableFailOnError,
                                               max_error_abs=2**-5,
-                                              max_error_norm=0.05,
+                                              max_error_norm=0.06,
                                               skip_n_samples=30,
                                               data_name="fm_demod")
 
@@ -162,7 +162,7 @@ class FM_TB(object):
                                                 self.data_out_audio_mono,
                                                 fail_on_err=self.EnableFailOnError,
                                                 max_error_abs=2**-5,
-                                                max_error_norm=0.05,
+                                                max_error_norm=0.06,
                                                 skip_n_samples=10,
                                                 data_name="audio_mono")
 
@@ -222,8 +222,8 @@ class FM_TB(object):
         # -----------------------------------------------------------------
         tn = np.arange(0, self.model.num_samples_fs_c) / self.fs_c
         data = (
-            (tn, from_fixed_point(self.model.gold_fm_demod_fp), "gold_fm_demod_fp"),
-            (tn, self.data_out_fm_demod, "data_out_fm_demod")
+            (tn, self.data_out_fm_demod, "data_out_fm_demod"),
+            (tn, from_fixed_point(self.model.gold_fm_demod_fp), "gold_fm_demod_fp")
         )
         plotData(data, title="FM Demodulator",
                  filename="sim_build/plot_fm_demod.png",
@@ -232,8 +232,8 @@ class FM_TB(object):
         # -----------------------------------------------------------------
         tn = np.arange(0, self.model.num_samples_c) / self.fs_rx_c
         data = (
-            (tn, from_fixed_point(self.model.gold_audio_mono_fp), "gold_audio_mono_fp"),
-            (tn, self.data_out_audio_mono, "data_out_audio_mono")
+            (tn, self.data_out_audio_mono, "data_out_audio_mono"),
+            (tn, from_fixed_point(self.model.gold_audio_mono_fp), "gold_audio_mono_fp")
         )
         plotData(data, title="Audio Mono",
                  filename="sim_build/plot_audio_mono.png",
@@ -241,8 +241,8 @@ class FM_TB(object):
 
         # -----------------------------------------------------------------
         data = (
-            (tn, from_fixed_point(self.model.gold_pilot_fp), "gold_pilot_fp"),
-            (tn, self.data_out_pilot, "data_out_pilot")
+            (tn, self.data_out_pilot, "data_out_pilot"),
+            (tn, from_fixed_point(self.model.gold_pilot_fp), "gold_pilot_fp")
         )
         plotData(data, title="Pilot",
                  filename="sim_build/plot_pilot.png",
@@ -250,8 +250,8 @@ class FM_TB(object):
 
         # -----------------------------------------------------------------
         data = (
-            (tn, from_fixed_point(self.model.gold_carrier_38k_fp), "gold_carrier_38k_fp"),
-            (tn, self.data_out_carrier_38k, "data_out_carrier_38k")
+            (tn, self.data_out_carrier_38k, "data_out_carrier_38k"),
+            (tn, from_fixed_point(self.model.gold_carrier_38k_fp), "gold_carrier_38k_fp")
         )
         plotData(data, title="Carrier 38kHz",
                  filename="sim_build/plot_carrier_38k.png",
@@ -259,8 +259,8 @@ class FM_TB(object):
 
         # -----------------------------------------------------------------
         data = (
-            (tn, from_fixed_point(self.model.gold_audio_lrdiff_fp), "gold_audio_lrdiff_fp"),
-            (tn, self.data_out_audio_lrdiff, "data_out_audio_lrdiff")
+            (tn, self.data_out_audio_lrdiff, "data_out_audio_lrdiff"),
+            (tn, from_fixed_point(self.model.gold_audio_lrdiff_fp), "gold_audio_lrdiff_fp")
         )
         plotData(data, title="Audio LR Diff",
                  filename="sim_build/plot_audio_lrdiff.png",
@@ -268,8 +268,8 @@ class FM_TB(object):
 
         # -----------------------------------------------------------------
         data = (
-            (tn, from_fixed_point(self.model.gold_audio_L_fp), "gold_audio_L_fp"),
-            (tn, self.data_out_audio_L, "data_out_audio_L")
+            (tn, self.data_out_audio_L, "data_out_audio_L"),
+            (tn, from_fixed_point(self.model.gold_audio_L_fp), "gold_audio_L_fp")
         )
         plotData(data, title="Audio L",
                  filename="sim_build/plot_audio_L.png",
@@ -277,8 +277,8 @@ class FM_TB(object):
 
         # -----------------------------------------------------------------
         data = (
-            (tn, from_fixed_point(self.model.gold_audio_R_fp), "gold_audio_R_fp"),
-            (tn, self.data_out_audio_R, "data_out_audio_R")
+            (tn, self.data_out_audio_R, "data_out_audio_R"),
+            (tn, from_fixed_point(self.model.gold_audio_R_fp), "gold_audio_R_fp")
         )
         plotData(data, title="Audio R",
                  filename="sim_build/plot_audio_R.png",

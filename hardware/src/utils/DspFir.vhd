@@ -80,16 +80,16 @@ architecture RtlRam of DspFir is
   ----------------------------------------------------------------------------
   -- Constants
   ----------------------------------------------------------------------------
-  constant cInitFirParam : aFirParam := (firState => NewVal,
-  writeAdr => (others => '0'),
-  readAdr => (others => '0'),
-  coeffAdr => (others => '0'),
-  valDry                                          => '0',
-  dDry => (others => '0'),
-  sum => (others => '0'),
-  mulRes => (others => '0'),
-  valWet                                          => '0'
-  );
+  constant cInitFirParam : aFirParam := (
+    firState => NewVal,
+    writeAdr => (others => '0'),
+    readAdr => (others => '0'),
+    coeffAdr => (others => '0'),
+    valDry   => '0',
+    dDry => (others => '0'),
+    sum => (others => '0'),
+    mulRes => (others => '0'),
+    valWet   => '0');
 
   ----------------------------------------------------------------------------
   -- Functions

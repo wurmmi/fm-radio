@@ -93,7 +93,8 @@ begin -- architecture rtl
         --       (This is according to the Matlab model.)
         if lrdiff_bpfilt_valid = '1' then
           lrdiff_mod_bb <= ResizeTruncAbsVal(
-            lrdiff_bpfilt * carrier_38k_i * to_sfixed(-2, 2, 0), lrdiff_mod_bb);
+            lrdiff_bpfilt * carrier_38k_i * to_sfixed(2, 2, 0), lrdiff_mod_bb);
+
           lrdiff_mod_bb_valid <= '1';
         end if;
       end if;

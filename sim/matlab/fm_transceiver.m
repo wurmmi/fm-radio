@@ -128,7 +128,7 @@ if EnableWriteDataFiles
     
     disp('--- Verification data');
     % Only write a fraction of the simulation time to file
-    n_sec_file  = 0.03;
+    n_sec_file  = 0.005;
     num_samples = n_sec_file * fs/osr_rx;
     
     % Test data
@@ -460,8 +460,8 @@ title(fig_title);
 xlabel('time [s]');
 ylabel('amplitude');
 legend();
-offset = 0.1;
-xlim([offset, offset + 1/19e3*2]);
+offset = 0.0;
+xlim([offset, offset + 1/19e3*100]);
 
 % Arrange all plots on the display
 if ~isRunningInOctave()

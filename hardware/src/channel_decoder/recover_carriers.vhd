@@ -37,7 +37,7 @@ architecture rtl of recover_carriers is
   --! @{
 
   -- TODO: get this constant from pilot_pkg.vhdl
-  constant pilot_scale_factor_c : u_sfixed(4 downto 0) := to_sfixed(7, 4, 0);
+  constant pilot_scale_factor_c : u_sfixed(4 downto 0) := to_sfixed(6, 4, 0);
 
   --! @}
   -----------------------------------------------------------------------------
@@ -103,7 +103,9 @@ begin -- architecture rtl
 
         -- Create the 38kHz carrier
         if pilot_valid = '1' then
-          carrier_38k       <= ResizeTruncAbsVal(pilot * pilot - 1, carrier_38k);
+          carrier_38k <= ResizeTruncAbsVal(
+            pilot * pilot * to_sfixed(2, 2, 0) - to_sfixed(0.75, 0, -2), carrier_38k);
+
           carrier_38k_valid <= '1';
         end if;
       end if;

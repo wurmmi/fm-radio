@@ -23,7 +23,6 @@ VHDL_SOURCES += $(CURDIR)/../../src/fm_pkg.vhd
 VHDL_SOURCES += $(CURDIR)/../../src/filter_coeff_pkgs/filter_lp_mono_pkg.vhd
 VHDL_SOURCES += $(CURDIR)/../../src/filter_coeff_pkgs/filter_bp_pilot_pkg.vhd
 VHDL_SOURCES += $(CURDIR)/../../src/filter_coeff_pkgs/filter_bp_lrdiff_pkg.vhd
-VHDL_SOURCES += $(CURDIR)/../../src/filter_coeff_pkgs/filter_diff_pkg.vhd
 VHDL_SOURCES += $(CURDIR)/../../src/utils/delay_bit.vhd
 VHDL_SOURCES += $(CURDIR)/../../src/utils/delay_vector.vhd
 VHDL_SOURCES += $(CURDIR)/../../src/utils/DspFir.vhd

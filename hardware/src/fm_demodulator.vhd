@@ -12,7 +12,6 @@ use ieee.fixed_pkg.all;
 
 library work;
 use work.fm_pkg.all;
-use work.filter_diff_pkg.all;
 
 entity fm_demodulator is
   port (
