@@ -142,7 +142,7 @@ class FM_TB(object):
     def compareData(self):
         # Shift loaded file-data to compensate shift to testbench-data
         move_n_right(self.model.gold_fm_demod_fp, 2, self.fp_width_c, self.fp_width_frac_c)
-        move_n_left(self.model.gold_audio_mono_fp, 1, self.fp_width_c, self.fp_width_frac_c)
+        move_n_left(self.model.gold_audio_mono_fp, 0, self.fp_width_c, self.fp_width_frac_c)
         move_n_left(self.model.gold_pilot_fp, 1, self.fp_width_c, self.fp_width_frac_c)
         move_n_left(self.model.gold_carrier_38k_fp, 1, self.fp_width_c, self.fp_width_frac_c)
         move_n_left(self.model.gold_audio_lrdiff_fp, 1, self.fp_width_c, self.fp_width_frac_c)

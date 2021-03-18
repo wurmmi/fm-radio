@@ -29,15 +29,22 @@ data = data(1:num_samples);
 
 if isreal(data)
     % Convert to fixed point
-    data_fp = cast(data, 'like', fi([], true, fp_config.width, fp_config.width_frac));
-    
+    %data_fp = cast(data, 'like', fi([], true, fp_config.width, fp_config.width_frac));
+    data_fp = num2fixpt( ...
+        data, fixdt(true, fp_config.width, fp_config.width_frac));
+
     % Write to file
     fprintf(fileID, "%.32f\n", data_fp);
 else
     % Convert to fixed point
-    data_fp_i = cast(real(data), 'like', fi([], true, fp_config.width, fp_config.width_frac));
-    data_fp_q = cast(imag(data), 'like', fi([], true, fp_config.width, fp_config.width_frac));
+    %data_fp_i = cast(real(data), 'like', fi([], true, fp_config.width, fp_config.width_frac));
+    %data_fp_q = cast(imag(data), 'like', fi([], true, fp_config.width, fp_config.width_frac));
     
+    data_fp_i = num2fixpt( ...
+        real(data), fixdt(true, fp_config.width, fp_config.width_frac));
+    data_fp_q = num2fixpt( ...
+        imag(data), fixdt(true, fp_config.width, fp_config.width_frac));
+
     % Write to file
     for i=1:length(data_fp_i)
         fprintf(fileID, "%.32f\n", data_fp_i(i));

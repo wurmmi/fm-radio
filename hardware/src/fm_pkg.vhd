@@ -23,11 +23,12 @@ package fm_pkg is
   --! Fixed point bitwidth
   constant fp_width_c      : natural := 16;
   constant fp_width_frac_c : natural := 14;
+  constant fp_width_int_c  : natural := fp_width_c - fp_width_frac_c - 1;
 
   --! Value
-  subtype iq_value_t is u_sfixed(fp_width_c - fp_width_frac_c - 1 downto -fp_width_frac_c);
+  subtype iq_value_t is u_sfixed(fp_width_int_c downto -fp_width_frac_c);
 
-  subtype sample_t is u_sfixed(fp_width_c - fp_width_frac_c - 1 downto -fp_width_frac_c);
+  subtype sample_t is u_sfixed(fp_width_int_c downto -fp_width_frac_c);
 
   subtype fract_real is real range
   - 1.0 to 0.99999999999999999999999999999999999999999999999999999999999999999;

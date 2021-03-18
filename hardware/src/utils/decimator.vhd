@@ -34,7 +34,7 @@ architecture rtl of decimator is
   -----------------------------------------------------------------------------
   --! @{
 
-  signal count : natural range 0 to decimation_g - 1 := 0;
+  signal count : natural range 0 to decimation_g - 1 := decimation_g - 1;
 
   signal sample : sample_t   := (others => '0');
   signal valid  : std_ulogic := '0';

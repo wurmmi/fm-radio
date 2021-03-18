@@ -45,7 +45,9 @@ fprintf(fileID, [ ...
 %% Write coefficients
 
 % Convert to fixed point
-coeffs_fp = cast(coeffs, 'like', fi([], true, fp_config.width,fp_config.width_frac));
+%coeffs_fp = cast(coeffs, 'like', fi([], true, fp_config.width,fp_config.width_frac));
+coeffs_fp = num2fixpt( ...
+    coeffs, fixdt(true, fp_config.width, fp_config.width_frac));
 
 grpdelay = (length(coeffs)-1)/2;
 fprintf(fileID, "  constant %s_grpdelay_c : natural := %d;\n\n", filtername, grpdelay);
