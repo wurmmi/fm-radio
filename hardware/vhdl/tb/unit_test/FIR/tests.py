@@ -39,16 +39,16 @@ async def fir_filter_test(dut):
     fs_rx_c = 120e3
 
     # Fixed point settings
-    fp_width_c = 32
-    fp_width_frac_c = 31
+    fp_width_c = 16
+    fp_width_frac_c = 14
 
     # Other
-    output_scale_c = 10
+    output_scale_c = 6
 
     # --------------------------------------------------------------------------
     # Load data from files
     # --------------------------------------------------------------------------
-    filename = "../../../../sim/matlab/verification_data/rx_fmChannelData.txt"
+    filename = "../../../../../sim/matlab/verification_data/rx_fmChannelData.txt"
     data_i = []
     with open(filename) as fd:
         val_count = 0
@@ -63,7 +63,7 @@ async def fir_filter_test(dut):
     data_i_fp = to_fixed_point(data_i, fp_width_c, fp_width_frac_c)
     data_i_int = fixed_to_int(data_i_fp)
 
-    filename = "../../../../sim/matlab/verification_data/rx_pilot.txt"
+    filename = "../../../../../sim/matlab/verification_data/rx_pilot.txt"
     gold_data_o = []
     with open(filename) as fd:
         val_count = 0
