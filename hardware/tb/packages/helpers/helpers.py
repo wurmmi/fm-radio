@@ -144,7 +144,7 @@ def reload_all_plots_pickle(directory):
     import os
     import pickle
 
-    print(f"Loading all plots from '{directory}'...")
+    print(f"Loading all plots from directory '{directory}'...\n")
 
     filenames = []
     for file in os.listdir(directory):

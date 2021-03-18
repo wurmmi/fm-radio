@@ -142,19 +142,19 @@ class FM_TB(object):
     def compareData(self):
         # Shift loaded file-data to compensate shift to testbench-data
         move_n_right(self.model.gold_fm_demod_fp, 2, self.fp_width_c, self.fp_width_frac_c)
-        move_n_left(self.model.gold_audio_mono_fp, 2, self.fp_width_c, self.fp_width_frac_c)
-        move_n_left(self.model.gold_pilot_fp, 3, self.fp_width_c, self.fp_width_frac_c)
-        move_n_left(self.model.gold_carrier_38k_fp, 3, self.fp_width_c, self.fp_width_frac_c)
-        move_n_left(self.model.gold_audio_lrdiff_fp, 3, self.fp_width_c, self.fp_width_frac_c)
-        move_n_left(self.model.gold_audio_L_fp, 2, self.fp_width_c, self.fp_width_frac_c)
-        move_n_left(self.model.gold_audio_R_fp, 2, self.fp_width_c, self.fp_width_frac_c)
+        move_n_left(self.model.gold_audio_mono_fp, 1, self.fp_width_c, self.fp_width_frac_c)
+        move_n_left(self.model.gold_pilot_fp, 1, self.fp_width_c, self.fp_width_frac_c)
+        move_n_left(self.model.gold_carrier_38k_fp, 1, self.fp_width_c, self.fp_width_frac_c)
+        move_n_left(self.model.gold_audio_lrdiff_fp, 1, self.fp_width_c, self.fp_width_frac_c)
+        move_n_left(self.model.gold_audio_L_fp, 1, self.fp_width_c, self.fp_width_frac_c)
+        move_n_left(self.model.gold_audio_R_fp, 1, self.fp_width_c, self.fp_width_frac_c)
 
         # Compare
         self.ok_fm_demod = compareResultsOkay(self.model.gold_fm_demod_fp,
                                               self.data_out_fm_demod,
                                               fail_on_err=self.EnableFailOnError,
                                               max_error_abs=2**-5,
-                                              max_error_norm=0.11,
+                                              max_error_norm=0.05,
                                               skip_n_samples=30,
                                               data_name="fm_demod")
 
@@ -162,7 +162,7 @@ class FM_TB(object):
                                                 self.data_out_audio_mono,
                                                 fail_on_err=self.EnableFailOnError,
                                                 max_error_abs=2**-5,
-                                                max_error_norm=0.06,
+                                                max_error_norm=0.05,
                                                 skip_n_samples=10,
                                                 data_name="audio_mono")
 
@@ -216,8 +216,8 @@ class FM_TB(object):
         #self.ok_pilot = False
         #self.ok_carrier_38k = False
         #self.ok_audio_lrdiff = False
-        self.ok_audio_L = False
-        self.ok_audio_R = False
+        #self.ok_audio_L = False
+        #self.ok_audio_R = False
 
         # -----------------------------------------------------------------
         tn = np.arange(0, self.model.num_samples_fs_c) / self.fs_c
