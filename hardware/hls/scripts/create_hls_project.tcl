@@ -4,22 +4,25 @@
 # Description : Create Vivado HLS project.
 #-------------------------------------------------------------------------------
 
-set SRC_DIR  "../src"
+set SRC_DIR  "../../src"
+set TB_DIR   "../../tb"
 set CPPFLAGS "--std=c++11 -I$SRC_DIR"
-
 open_project -reset prj
-add_files       $SRC_DIR/fm_global.hpp
-add_files       $SRC_DIR/utils/fir.hpp
-add_files       $SRC_DIR/utils/fir.cpp     -cflags $CPPFLAGS
-add_files -tb   $SRC_DIR/../tb/main.hpp
-add_files -tb   $SRC_DIR/../tb/main.cpp    -cflags $CPPFLAGS
-
-open_solution -reset solution
-
 set_top fm_receiver
-create_clock -period 20 -name default
-set_part "xc7z007sclg225-1"
+
+add_files      $SRC_DIR/utils/fir.cpp     -cflags $CPPFLAGS
+add_files      $SRC_DIR/utils/fir.hpp
+add_files      $SRC_DIR/fm_global.hpp
+add_files      $SRC_DIR/fm_receiver.cpp   -cflags $CPPFLAGS
+add_files      $SRC_DIR/fm_receiver.hpp
+add_files -tb  $TB_DIR/main.cpp           -cflags $CPPFLAGS
+add_files -tb  $TB_DIR/main.hpp
+
+open_solution -reset "solution1"
+
+set_part {xc7z020clg484-1} -tool vivado
+create_clock -period 10 -name default
 
 config_rtl -reset control -reset_level low
 
-quit
+exit
