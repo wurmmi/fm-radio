@@ -7,6 +7,7 @@
 set SRC_DIR  "../../src"
 set TB_DIR   "../../tb"
 set CPPFLAGS "--std=c++11 -I$SRC_DIR"
+
 open_project -reset prj
 set_top fm_receiver
 
@@ -20,7 +21,7 @@ add_files -tb  $TB_DIR/main.hpp
 
 open_solution -reset "solution1"
 
-set_part {xc7z020clg484-1} -tool vivado
+set_part {xc7z020clg484-1}
 create_clock -period 10 -name default
 
 config_rtl -reset control -reset_level low

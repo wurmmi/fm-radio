@@ -5,8 +5,8 @@
 #-------------------------------------------------------------------------------
 
 open_project prj
-open_solution solution
+open_solution "solution1"
 
 csim_design -clean
 
-quit
+exit
