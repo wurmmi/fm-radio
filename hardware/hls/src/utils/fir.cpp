@@ -11,16 +11,14 @@
 
 #include "fir.hpp"
 
-const int fir_pilot_num_coeffs_c                        = 85;
-const coeff_t fir_pilot_coeff_c[fir_pilot_num_coeffs_c] = {
-#include "fir_coeffs.inc"
-};
-
-/* Top-level function with FIR class instantiated */
-sample_t fir_filter(sample_t x) {
-  static FIR<coeff_t, sample_t, acc_t, fir_pilot_num_coeffs_c> fir_inst;
+/* Top-level function.
+ * Instantiates the FIR class with correct template parameters.
+ */
+template <class coeff_T, class sample_T, class acc_T, uint8_t fir_n_T>
+sample_T fir_filter(sample_T x) {
+  static FIR<coeff_T, sample_T, acc_T, fir_n_T> fir_inst;
 
   // cout << fir_inst;
 
-  return fir_inst(x, fir_pilot_coeff_c);
+  return fir_inst(x, fir_n_T);
 }
