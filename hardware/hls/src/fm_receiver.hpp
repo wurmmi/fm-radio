@@ -11,6 +11,6 @@
 
 #include "fm_global.hpp"
 
-void fm_receiver(axi_stream_t& src, axi_stream_t& dst);
+sample_t fm_receiver(sample_t in);
 
 #endif /* _FM_RECEIVER_HPP */

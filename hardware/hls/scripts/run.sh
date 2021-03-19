@@ -33,7 +33,7 @@ if [ "$ARG" == "hls_project" ]; then
   $VIVADO_HLS_BATCH $SCRIPT_PATH/create_hls_project.tcl $VIVADO_HLS_PROJECT_NAME
   exit 0
 elif [ "$ARG" == "hls_sim" ]; then
-  $VIVADO_HLS_BATCH $SCRIPT_PATH/hls_sim.tcl $VIVADO_HLS_PROJECT_NAME
+  $VIVADO_HLS_BATCH $SCRIPT_PATH/hls_sim_csynth.tcl $VIVADO_HLS_PROJECT_NAME
   exit 0
 elif [ "$ARG" == "hls_gui" ]; then
   $VIVADO_HLS_GUI $VIVADO_HLS_PROJECT_NAME
