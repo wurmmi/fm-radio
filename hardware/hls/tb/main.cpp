@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "fm_global.hpp"
 #include "fm_receiver.hpp"
 #include "tb_helper.hpp"
 

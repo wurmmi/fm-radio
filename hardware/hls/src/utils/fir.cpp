@@ -1,5 +1,9 @@
 #include "fir.hpp"
 
+#include <iostream>
+
+using namespace std;
+
 sample_t fir_coeffs_c[FIR_N] = {0.180617,
                                 0.045051,
                                 0.723173,
@@ -19,13 +23,16 @@ sample_t fir_coeffs_c[FIR_N] = {0.180617,
 
 void fir_filter(hls::stream<sample_t> &in,
                 hls::stream<sample_t> &out,
-                sample_t coeff[NUM_SAMPLES]) {
+                sample_t coeffs[FIR_N]) {
 #pragma HLS INTERFACE axis port = in
 #pragma HLS INTERFACE axis port = out
 
-  sample_t acc, mult;
+  sample_t acc;
+  sample_t mult;
   static sample_t shift_reg[FIR_N];
 #pragma HLS ARRAY_PARTITION variable = shift_reg complete dim = 0
+
+  cout << "called fir_filter" << endl;
 
 Samples_loop:
   for (int s = 0; s < NUM_SAMPLES; s++) {
@@ -41,13 +48,16 @@ Samples_loop:
         else  // Else, Shift Register normal operation
           shift_reg[i] = shift_reg[i - 1];
       }
+
       //	------	Multiply by coefficient	------
-      mult = shift_reg[i] * coeff[i];
+      mult = shift_reg[i] * coeffs[i];
+
       //	------	Accumulate	------
       if (i == FIR_N - 1)
         acc = mult;
       else
         acc = acc + mult;
+
       //	------	Write output result	------
       if (i == 0)
         out.write((sample_t)acc);

@@ -13,8 +13,7 @@
 #include <ap_fixed.h>
 #include <hls_stream.h>
 
-#define NUM_SAMPLES        1024
-#define TB_ERROR_TOLERANCE 0.1
+#define NUM_SAMPLES 1024
 
 #define FP_WIDTH      ((uint32_t)16)
 #define FP_WIDTH_FRAC ((uint32_t)14)

@@ -14,6 +14,7 @@
 #include <hls_stream.h>
 
 #include "fm_global.hpp"
+#include "main.hpp"
 
 template <int SIZE, int DATA_WIDTH, typename AXI_T, typename T>
 void getArray2Stream_axi(T in[SIZE], hls::stream<AXI_T>& out) {

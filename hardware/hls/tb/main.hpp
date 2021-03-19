@@ -9,6 +9,6 @@
 #ifndef _MAIN_HPP
 #define _MAIN_HPP
 
-#include "fm_global.hpp"
+#define TB_ERROR_TOLERANCE 0.1
 
 #endif /* _MAIN_HPP */

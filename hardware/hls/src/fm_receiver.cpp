@@ -19,10 +19,12 @@
 
 #include "fm_receiver.hpp"
 
-#include <stdio.h>
+#include <iostream>
 
 #include "utils/fir.hpp"
 #include "utils/memory_access.hpp"
+
+using namespace std;
 
 void fm_receiver(axi_stream_t &src, axi_stream_t &dst) {
 #pragma HLS INTERFACE s_axilite port = return bundle = ctrl
@@ -38,6 +40,8 @@ void fm_receiver(axi_stream_t &src, axi_stream_t &dst) {
 #pragma HLS STREAM variable = out depth = 1 + 1
 
 #pragma HLS DATAFLOW
+
+  cout << "called fm_receiver" << endl;
 
   // Read from the input AXI-Stream interface
   mem_read<axi_stream_element_t, sample_t, NUM_SAMPLES>(src, in);
