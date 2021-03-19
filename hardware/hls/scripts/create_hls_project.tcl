@@ -8,7 +8,9 @@ set SRC_DIR  "../../src"
 set TB_DIR   "../../tb"
 set CPPFLAGS "--std=c++11 -I$SRC_DIR"
 
-open_project -reset prj
+set project_name [lindex $argv 2]
+
+open_project -reset $project_name
 set_top fm_receiver
 
 add_files      $SRC_DIR/utils/fir.cpp     -cflags $CPPFLAGS
@@ -18,6 +20,7 @@ add_files      $SRC_DIR/fm_receiver.cpp   -cflags $CPPFLAGS
 add_files      $SRC_DIR/fm_receiver.hpp
 add_files -tb  $TB_DIR/main.cpp           -cflags $CPPFLAGS
 add_files -tb  $TB_DIR/main.hpp
+add_files -tb  $TB_DIR/data/
 
 open_solution -reset "solution1"
 

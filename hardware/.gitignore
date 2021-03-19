@@ -23,4 +23,3 @@ dspfir
 # Vivado
 generated/
 *.log
-csim/

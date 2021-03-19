@@ -4,7 +4,9 @@
 # Description : Simulate Vivado HLS project.
 #-------------------------------------------------------------------------------
 
-open_project prj
+set project_name [lindex $argv 2]
+
+open_project $project_name
 open_solution "solution1"
 
 csim_design -clean
