@@ -10,7 +10,8 @@
 -- TIME LOGGING
 --
 -- (1) FIR filter implementation
---       03/18/2021  17:00 - xxxx    xxx h
+--       03/18/2021  17:00 - 19:00    2:00 h
+--       03/19/2021  09:30 -          x:xx h
 --
 -- (2) FM receiver implementation
 --

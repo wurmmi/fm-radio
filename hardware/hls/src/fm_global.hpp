@@ -75,10 +75,10 @@ write_loop:
       tmp.last = 0;
     }
 
-    type_t val                       = out.read();
-    tmp.data.range(64 - 1, FP_WIDTH) = 0;
-    tmp.data.range(FP_WIDTH - 1, 0)  = val.range();
-    tmp.keep                         = -1;
+    type_t val                      = out.read();
+    tmp.data.range(FP_WIDTH - 1, 0) = 0;
+    tmp.data.range(FP_WIDTH - 1, 0) = val.range();
+    tmp.keep                        = -1;
     out_hw.write(tmp);
   }
 }
@@ -89,13 +89,13 @@ void getArray2Stream_axi(T in[SIZE], hls::stream<AXI_T>& out) {
   int cnt = 0;
 
   for (int k = 0; k < SIZE; k++) {
-    axi.data.range(64 - 1, DATA_WIDTH) = 0;
-    axi.data.range(DATA_WIDTH - 1, 0)  = in[k].range();
-    axi.user                           = (cnt == 0) ? 1 : 0;
-    axi.last                           = (cnt == SIZE) ? 1 : 0;
-    axi.keep                           = -1;
-    axi.id                             = 0;
-    axi.dest                           = 0;
+    axi.data.range(FP_WIDTH - 1, 0)   = 0;
+    axi.data.range(DATA_WIDTH - 1, 0) = in[k].range();
+    axi.user                          = (cnt == 0) ? 1 : 0;
+    axi.last                          = (cnt == SIZE) ? 1 : 0;
+    axi.keep                          = -1;
+    axi.id                            = 0;
+    axi.dest                          = 0;
     out << axi;
     cnt++;
   }
