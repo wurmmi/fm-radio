@@ -36,7 +36,7 @@ int main() {
     cout << "Could not open input file!" << endl;
     return -1;
   }
-  fp2 = fopen("./data/ref_res.dat", "r");
+  fp2 = fopen("./data/output_gold.dat", "r");
   if (fp1 == nullptr) {
     cout << "Could not open output file!" << endl;
     return -1;
