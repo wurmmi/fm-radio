@@ -10,6 +10,8 @@
 
 #define FIR_N 16
 
+extern sample_t fir_coeffs_c[FIR_N];
+
 void fir_filter(hls::stream<sample_t> &in,
                 hls::stream<sample_t> &out,
                 sample_t coeff[NUM_SAMPLES]);

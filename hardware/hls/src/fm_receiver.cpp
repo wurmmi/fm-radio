@@ -20,7 +20,7 @@
 
 #include <stdio.h>
 
-#include "utils/fir.h"
+#include "utils/fir.hpp"
 
 void fm_receiver(axi_stream_t &src, axi_stream_t &dst) {
 #pragma HLS INTERFACE s_axilite port = return bundle = ctrl
@@ -40,7 +40,7 @@ void fm_receiver(axi_stream_t &src, axi_stream_t &dst) {
   // Read from the input AXI-Stream interface
   mem_read<axi_stream_element_t, sample_t, NUM_SAMPLES>(src, in);
   // FIR filter
-  fir_filter(in, out, taps);
+  fir_filter(in, out, fir_coeffs_c);
   // Write to the output AXI-Stream interface
-  mem_write<axi_stream_element_t, sample_t, SAMPLES>(out, dst);
+  mem_write<axi_stream_element_t, sample_t, NUM_SAMPLES>(out, dst);
 }

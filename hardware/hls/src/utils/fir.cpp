@@ -1,4 +1,21 @@
-#include "fir.h"
+#include "fir.hpp"
+
+sample_t fir_coeffs_c[FIR_N] = {0.180617,
+                                0.045051,
+                                0.723173,
+                                0.347438,
+                                0.660617,
+                                0.383869,
+                                0.627347,
+                                0.021650,
+                                0.910570,
+                                0.800559,
+                                0.745847,
+                                0.813113,
+                                0.383306,
+                                0.617279,
+                                0.575495,
+                                0.530052};
 
 void fir_filter(hls::stream<sample_t> &in,
                 hls::stream<sample_t> &out,
