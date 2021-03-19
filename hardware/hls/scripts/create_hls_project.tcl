@@ -6,14 +6,14 @@
 
 set SRC_DIR  "../../src"
 set TB_DIR   "../../tb"
-set CPPFLAGS "--std=c++17 -I$SRC_DIR"
+set CPPFLAGS "--std=c++11 -I$SRC_DIR"
 
 set project_name [lindex $argv 2]
 
 open_project -reset $project_name
 set_top fm_receiver
 
-add_files      $SRC_DIR/utils/fir.cpp       -cflags $CPPFLAGS
+add_files      $SRC_DIR/filter_coeff_headers/
 add_files      $SRC_DIR/utils/fir.hpp
 add_files      $SRC_DIR/fm_global.hpp
 add_files      $SRC_DIR/fm_receiver.cpp     -cflags $CPPFLAGS
