@@ -21,57 +21,54 @@
 
 using namespace std;
 
-#define FIR_N 85
-
-typedef int coef_t;
-typedef int acc_t;
-
-// Class CFir definition
-template <class coef_T, class sample_t, class acc_T>
-class CFir {
- protected:
-  static const coef_T c[FIR_N];
-  sample_t shift_reg[FIR_N - 1];
-
+// Class FIR definition
+template <class coeff_T, class sample_T, class acc_T, uint8_t fir_n_T>
+class FIR {
  private:
+ protected:
+  sample_T shift_reg[fir_n_T - 1];
+
  public:
-  sample_t operator()(sample_t x);
-  template <class coef_TT, class sample_tT, class acc_TT>
-  friend ostream& operator<<(ostream& o,
-                             const CFir<coef_TT, sample_tT, acc_TT>& f);
+  sample_T operator()(sample_T x, const coeff_T coeff[fir_n_T]);
+
+  template <class coef_TT, class sample_TT, class acc_TT, uint8_t fir_n_TT>
+  friend ostream& operator<<(
+      ostream& o, const FIR<coef_TT, sample_TT, acc_TT, fir_n_TT>& f);
 };
 
-// Load FIR coefficients
-template <class coef_T, class sample_t, class acc_T>
-const coef_T CFir<coef_T, sample_t, acc_T>::c[FIR_N] = {
-#include "fir_coeffs.inc"
-};
+//// Load FIR coefficients
+// template <class coeff_T, class sample_t, class acc_T>
+// const coeff_T FIR<coeff_T, sample_t, acc_T>::coeff[fir_n_T] = {
+//#include "fir_coeffs.inc"
+//};
 
 // FIR main algorithm
-template <class coef_T, class sample_t, class acc_T>
-sample_t CFir<coef_T, sample_t, acc_T>::operator()(sample_t x) {
+template <class coeff_T, class sample_T, class acc_T, uint8_t fir_n_T>
+sample_T FIR<coeff_T, sample_T, acc_T, fir_n_T>::operator()(
+    sample_T x, const coeff_T coeff[fir_n_T]) {
   int i;
-  acc_t acc = 0;
+  acc_T acc = 0;
   sample_t m;
 
 loop:
-  for (i = FIR_N - 1; i >= 0; i--) {
+  for (i = fir_n_T - 1; i >= 0; i--) {
     if (i == 0) {
       m            = x;
       shift_reg[0] = x;
     } else {
       m = shift_reg[i - 1];
-      if (i != (FIR_N - 1))
+      if (i != (fir_n_T - 1))
         shift_reg[i] = shift_reg[i - 1];
     }
-    acc += m * c[i];
+    acc += m * coeff[i];
   }
   return acc;
 }
 
 // Operator for displaying results
-template <class coef_T, class sample_t, class acc_T>
-ostream& operator<<(ostream& o, const CFir<coef_T, sample_t, acc_T>& f) {
+template <class coeff_T, class sample_T, class acc_T, uint8_t fir_n_T>
+ostream& operator<<(ostream& o,
+                    const FIR<coeff_T, sample_T, acc_T, fir_n_T>& f) {
   for (int i = 0; i < (sizeof(f.shift_reg) / sizeof(sample_t)); i++) {
     o << "shift_reg[" << i << "]= " << f.shift_reg[i] << endl;
   }

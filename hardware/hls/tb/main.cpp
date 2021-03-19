@@ -24,7 +24,7 @@ int main() {
   int retval = 0;
 
   // Open a file to save the results
-  result.open("data/result.dat");
+  result.open("./data/result.dat");
 
   // Apply stimuli, call the top-level function and save the results
   for (int i = 0; i <= 250; i++) {
@@ -37,7 +37,7 @@ int main() {
   result.close();
 
   // Compare the results file with the golden results
-  retval = system("diff --brief -w data/result.dat data/result.golden.dat");
+  retval = system("diff --brief -w ./data/result.dat ./data/result.golden.dat");
   if (retval != 0) {
     printf("Test failed  !!!\n");
     retval = 1;
