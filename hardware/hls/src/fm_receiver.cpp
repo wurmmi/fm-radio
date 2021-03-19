@@ -22,20 +22,16 @@
 #include <iostream>
 
 #include "filter_coeff_headers/filter_bp_lrdiff.h"
+#include "filter_coeff_headers/filter_bp_pilot.h"
 #include "utils/fir.hpp"
 
 using namespace std;
 
-const uint8_t fir_bp_pilot_num_coeffs_c                       = 85;
-const coeff_t fir_bp_pilot_coeff_c[fir_bp_pilot_num_coeffs_c] = {
-#include "utils/fir_coeffs.inc"
-};
-
 sample_t fm_receiver(sample_t in) {
   // FIR filter pilot
   sample_t pilot =
-      fir_filter_top<coeff_t, sample_t, acc_t, fir_bp_pilot_num_coeffs_c>(
-          in, fir_bp_pilot_coeff_c);
+      fir_filter_top<coeff_t, sample_t, acc_t, filter_bp_pilot_num_coeffs_c>(
+          in, filter_bp_pilot_coeffs_c);
 
   // FIR filter lrdiff
   sample_t lrdiff =

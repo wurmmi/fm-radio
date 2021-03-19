@@ -8,41 +8,110 @@
 
 #include <fstream>
 #include <iostream>
+#include <vector>
 
 #include "fm_global.hpp"
 #include "fm_receiver.hpp"
 
 using namespace std;
 
+/* Constant s*/
+constexpr double n_sec_c       = 0.001;
+constexpr int fs_c             = 960000;  // TODO: check this
+constexpr int fs_rx_c          = 120000;  // TODO: check this
+constexpr int num_samples_fs_c = n_sec_c * fs_c;
+constexpr int num_samples_c    = n_sec_c * fs_rx_c;
+
+constexpr double max_abs_err_c = 0.01;
+
+/* Testbench main function */
 int main() {
   cout << "===============================================" << endl;
   cout << "### Running testbench ..." << endl;
   cout << "===============================================" << endl;
 
-  ofstream result;
-  sample_t output;
-  int retval = 0;
+  ifstream fd_gold_pilot;
+  ifstream fd_data_in;
+  vector<sample_t> data_in;
+  vector<sample_t> data_gold_pilot;
+  vector<sample_t> data_out_pilot;
 
-  // Open a file to save the results
-  result.open("./data/result.dat");
+  cout << "num_samples_fs = " << num_samples_fs_c << endl;
+  cout << "num_samples    = " << num_samples_c << endl;
+
+  /*** Load data files ***/
+  // Golden output data
+  string gold_folder = "../../../../../../../../sim/matlab/verification_data/";
+  fd_gold_pilot.open(gold_folder + "rx_pilot.txt", ios::in);
+  if (!fd_gold_pilot.is_open()) {
+    cerr << "Failed to open 'gold_pilot' file!" << endl;
+    return -1;
+  }
+  double value = 0;
+  while (fd_gold_pilot >> value) {
+    data_gold_pilot.emplace_back(value);
+
+    // Stop, if enough samples were read
+    if (data_gold_pilot.size() >= num_samples_c)
+      break;
+  }
+  // Check if enough samples were read
+  size_t num_read = data_gold_pilot.size();
+  if (num_read < num_samples_c) {
+    cerr << "File 'data_gold_pilot' contains less elements than requested!"
+         << endl;
+    cerr << num_read << " < " << num_samples_c << endl;
+    return -1;
+  }
+
+  // Input data
+  fd_data_in.open(gold_folder + "rx_fmChannelData.txt", ios::in);
+  if (!fd_data_in.is_open()) {
+    cerr << "Failed to open 'input' file!" << endl;
+    return -1;
+  }
+  value = 0;
+  while (fd_data_in >> value) {
+    data_in.emplace_back(value);
+
+    if (data_in.size() >= num_samples_c)
+      break;
+  }
+  num_read = data_in.size();
+  if (num_read < num_samples_c) {
+    cerr << "File 'data_in' contains less elements than requested!" << endl;
+    cerr << num_read << " < " << num_samples_c << endl;
+    return -1;
+  }
 
   // Apply stimuli, call the top-level function and save the results
-  for (int i = 0; i <= 250; i++) {
-    output = fm_receiver(i);
+  sample_t output;
+  for (size_t i = 0; i < num_samples_c; i++) {
+    output = fm_receiver(data_in[i]);  // TODO: use fixed point here (currently,
+                                       // everything is 0, i guess..)
 
-    result << setw(10) << i;
-    result << setw(20) << output;
-    result << endl;
+    data_out_pilot.emplace_back(output);
   }
-  result.close();
 
-  // Compare the results file with the golden results
-  retval = system("diff --brief -w ./data/result.dat ./data/result.golden.dat");
+  // Compare the simulation results with the golden results
+  int retval = 0;
+  for (size_t i = 0; i < num_samples_c; i++) {
+    // Check absolute error
+    double err = data_out_pilot[i] - data_gold_pilot[i];
+    cout << "err: " << err << endl;
+    if (abs(err) > max_abs_err_c) {
+      cerr << "Actual value [i] not matching the expected value!" << endl;
+      cerr << "Errors: act > max_err" << endl;
+      retval = -1;
+      break;
+    }
+  }
+
   if (retval != 0) {
-    printf("Test failed  !!!\n");
+    cout << "===> Test failed  !!!" << endl;
     retval = 1;
   } else {
-    printf("Test passed !\n");
+    cout << "===> Test passed !" << endl;
   }
 
   // Return 0 if the test passes
