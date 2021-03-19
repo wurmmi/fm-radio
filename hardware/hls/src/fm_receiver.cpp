@@ -22,6 +22,7 @@
 #include <stdio.h>
 
 #include "utils/fir.hpp"
+#include "utils/memory_access.hpp"
 
 void fm_receiver(axi_stream_t &src, axi_stream_t &dst) {
 #pragma HLS INTERFACE s_axilite port = return bundle = ctrl
