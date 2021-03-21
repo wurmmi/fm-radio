@@ -59,6 +59,8 @@ int main() {
     if (data_gold_pilot.size() >= num_samples_c)
       break;
   }
+  fd_gold_pilot.close();
+
   // Check if enough samples were read
   size_t num_read = data_gold_pilot.size();
   if (num_read < num_samples_c) {
@@ -81,6 +83,9 @@ int main() {
     if (data_in.size() >= num_samples_c)
       break;
   }
+  fd_data_in.close();
+
+  // Check if enough samples were read
   num_read = data_in.size();
   if (num_read < num_samples_c) {
     cerr << "File 'data_in' contains less elements than requested!" << endl;
@@ -108,6 +113,7 @@ int main() {
     data_out_pilot.emplace_back(output);
     fd_data_out << output << endl;
   }
+  fd_data_out.close();
 
   // --------------------------------------------------------------------------
   // Compare results
