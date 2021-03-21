@@ -54,11 +54,6 @@ fprintf(fileID, "const coeff_t %s_coeffs_c[%d] = {\n", filtername, num_coeffs);
 fprintf(fileID, "    (coeff_t)%.32f,\n", coeffs_fp(1:end-1));
 fprintf(fileID, "    (coeff_t)%.32f};\n", coeffs_fp(end));
 
-%% Write VHDL end
-
-fprintf(fileID, [ ...
-    '']);
-
 fclose(fileID);
 
 

@@ -17,10 +17,8 @@
 #define FP_WIDTH_FRAC ((uint32_t)14)
 #define FP_WIDTH_INT  (FP_WIDTH - FP_WIDTH_FRAC)
 
-// typedef ap_fixed < FP_WIDTH, FP_WIDTH_INT> sample_t;
-
-typedef int sample_t;
-typedef int coeff_t;
-typedef int acc_t;
+typedef ap_fixed<FP_WIDTH, FP_WIDTH_INT> sample_t;
+typedef sample_t coeff_t;
+typedef sample_t acc_t;
 
 #endif /* _FM_GLOBAL_HPP */

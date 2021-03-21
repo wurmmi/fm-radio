@@ -22,7 +22,7 @@ constexpr int fs_rx_c          = 120000;  // TODO: check this
 constexpr int num_samples_fs_c = n_sec_c * fs_c;
 constexpr int num_samples_c    = n_sec_c * fs_rx_c;
 
-constexpr double max_abs_err_c = 0.01;
+constexpr double max_abs_err_c = 0.99;
 
 /* Testbench main function */
 int main() {
@@ -30,8 +30,13 @@ int main() {
   cout << "### Running testbench ..." << endl;
   cout << "===============================================" << endl;
 
-  ifstream fd_gold_pilot;
+  // --------------------------------------------------------------------------
+  // Load data from files
+  // --------------------------------------------------------------------------
+
   ifstream fd_data_in;
+  ifstream fd_gold_pilot;
+  ofstream fd_data_out;
   vector<sample_t> data_in;
   vector<sample_t> data_gold_pilot;
   vector<sample_t> data_out_pilot;
@@ -39,10 +44,9 @@ int main() {
   cout << "num_samples_fs = " << num_samples_fs_c << endl;
   cout << "num_samples    = " << num_samples_c << endl;
 
-  /*** Load data files ***/
   // Golden output data
-  string gold_folder = "../../../../../../../../sim/matlab/verification_data/";
-  fd_gold_pilot.open(gold_folder + "rx_pilot.txt", ios::in);
+  string folder_gold = "../../../../../../../../sim/matlab/verification_data/";
+  fd_gold_pilot.open(folder_gold + "rx_pilot.txt", ios::in);
   if (!fd_gold_pilot.is_open()) {
     cerr << "Failed to open 'gold_pilot' file!" << endl;
     return -1;
@@ -65,7 +69,7 @@ int main() {
   }
 
   // Input data
-  fd_data_in.open(gold_folder + "rx_fmChannelData.txt", ios::in);
+  fd_data_in.open(folder_gold + "rx_fmChannelData.txt", ios::in);
   if (!fd_data_in.is_open()) {
     cerr << "Failed to open 'input' file!" << endl;
     return -1;
@@ -84,14 +88,30 @@ int main() {
     return -1;
   }
 
+  // Create output file
+  string folder_output = "./data/";
+  fd_data_out.open(folder_output + "data_out_rx_pilot.txt", ios::out);
+  if (!fd_data_out.is_open()) {
+    cerr << "Failed to open 'output' file!" << endl;
+    return -1;
+  }
+
+  // --------------------------------------------------------------------------
+  // Run test on DUT
+  // --------------------------------------------------------------------------
+
   // Apply stimuli, call the top-level function and save the results
   sample_t output;
   for (size_t i = 0; i < num_samples_c; i++) {
-    output = fm_receiver(data_in[i]);  // TODO: use fixed point here (currently,
-                                       // everything is 0, i guess..)
+    output = fm_receiver(data_in[i]);
 
     data_out_pilot.emplace_back(output);
+    fd_data_out << output << endl;
   }
+
+  // --------------------------------------------------------------------------
+  // Compare results
+  // --------------------------------------------------------------------------
 
   // Compare the simulation results with the golden results
   int retval = 0;
