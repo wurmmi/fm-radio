@@ -22,4 +22,4 @@ dspfir
 
 # Vivado
 generated/
-result.dat
+output/

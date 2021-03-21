@@ -89,7 +89,7 @@ int main() {
   }
 
   // Create output file
-  string folder_output = "./data/";
+  string folder_output = "./output/";
   fd_data_out.open(folder_output + "data_out_rx_pilot.txt", ios::out);
   if (!fd_data_out.is_open()) {
     cerr << "Failed to open 'output' file!" << endl;

@@ -19,7 +19,7 @@ add_files      $SRC_DIR/fm_global.hpp
 add_files      $SRC_DIR/fm_receiver.cpp     -cflags $CPPFLAGS
 add_files      $SRC_DIR/fm_receiver.hpp
 add_files -tb  $TB_DIR/main.cpp             -cflags $CPPFLAGS
-add_files -tb  $TB_DIR/data/
+add_files -tb  $TB_DIR/output/
 
 open_solution -reset "solution1"
 
