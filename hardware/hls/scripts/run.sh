@@ -33,7 +33,13 @@ if [ "$ARG" == "hls_project" ]; then
   $VIVADO_HLS_BATCH $SCRIPT_PATH/create_hls_project.tcl $VIVADO_HLS_PROJECT_NAME
   exit 0
 elif [ "$ARG" == "hls_sim" ]; then
+  # Run HLS testbench
   $VIVADO_HLS_BATCH $SCRIPT_PATH/hls_sim_csynth.tcl $VIVADO_HLS_PROJECT_NAME
+
+  # Analyze results
+  cd $SCRIPT_PATH
+  source ../../vhdl/tb/setup_env.sh
+  python ../tb/analyze_tb_results.py
   exit 0
 elif [ "$ARG" == "hls_gui" ]; then
   $VIVADO_HLS_GUI $VIVADO_HLS_PROJECT_NAME
