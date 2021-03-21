@@ -40,12 +40,11 @@ class FIR {
 template <class coeff_T, class sample_T, class acc_T, uint8_t fir_n_T>
 sample_T FIR<coeff_T, sample_T, acc_T, fir_n_T>::operator()(
     sample_T x, const coeff_T coeff[fir_n_T]) {
-  int i;
   acc_T acc = 0;
   sample_T m;
 
 loop:
-  for (i = fir_n_T - 1; i >= 0; i--) {
+  for (int i = fir_n_T - 1; i >= 0; i--) {
     if (i == 0) {
       m            = x;
       shift_reg[0] = x;

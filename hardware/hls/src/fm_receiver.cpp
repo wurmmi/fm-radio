@@ -33,9 +33,9 @@ const ap_fixed<4, 4> pilot_scale_factor_c = 6;
 sample_t fm_receiver(sample_t in) {
   // FIR filter pilot
   sample_t pilot =
+      pilot_scale_factor_c *
       fir_filter_top<coeff_t, sample_t, acc_t, filter_bp_pilot_num_coeffs_c>(
-          in, filter_bp_pilot_coeffs_c) *
-      pilot_scale_factor_c;
+          in, filter_bp_pilot_coeffs_c);
 
   // FIR filter lrdiff
   sample_t lrdiff =

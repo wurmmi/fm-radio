@@ -15,7 +15,7 @@
 
 using namespace std;
 
-/* Constant s*/
+/* Constants */
 constexpr double n_sec_c       = 0.005;
 constexpr int fs_c             = 960000;  // TODO: check this
 constexpr int fs_rx_c          = 120000;  // TODO: check this
@@ -51,7 +51,7 @@ int main() {
     cerr << "Failed to open 'gold_pilot' file!" << endl;
     return -1;
   }
-  double value = 0;
+  sample_t value = 0;
   while (fd_gold_pilot >> value) {
     data_gold_pilot.emplace_back(value);
 
