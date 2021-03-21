@@ -31,10 +31,6 @@ def analyze():
     # --------------------------------------------------------------------------
 
     # Golden data
-    import os
-
-    print(os.getcwd())
-
     directory_gold = "../../../sim/matlab/verification_data/"
 
     filename = directory_gold + "rx_pilot.txt"

@@ -16,13 +16,13 @@
 using namespace std;
 
 /* Constant s*/
-constexpr double n_sec_c       = 0.001;
+constexpr double n_sec_c       = 0.005;
 constexpr int fs_c             = 960000;  // TODO: check this
 constexpr int fs_rx_c          = 120000;  // TODO: check this
 constexpr int num_samples_fs_c = n_sec_c * fs_c;
 constexpr int num_samples_c    = n_sec_c * fs_rx_c;
 
-constexpr double max_abs_err_c = 0.99;
+constexpr double max_abs_err_c = 2;  // TODO
 
 /* Testbench main function */
 int main() {
