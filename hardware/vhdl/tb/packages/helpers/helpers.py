@@ -63,19 +63,27 @@ def plotData(data, title="", filename="", show=True, block=True):
 
 def compareResultsOkay(gold, actual, fail_on_err,
                        max_error_abs, max_error_norm,
-                       skip_n_samples, data_name):
+                       skip_n_samples, data_name, is_cocotb=True):
     """
     Compares actual data against "golden data".
     Metrics: number of samples,
     """
+    if is_cocotb:
+        log_info = cocotb.log.info
+        log_warn = cocotb.log.warning
+        test_fail = cocotb.result.TestFailure
+    else:
+        log_info = print
+        log_warn = print
+        test_fail = Exception
 
     # Sanity check
     if len(actual) < len(gold):
         msg = "Did not capture enough output values for '{}': {} actual, {} expected.".format(
             data_name, len(actual), len(gold))
         if fail_on_err:
-            raise cocotb.result.TestFailure(msg)
-        cocotb.log.warning(msg)
+            raise test_fail(msg)
+        log_warn(msg)
         return True
 
     # Skip first and last N samples
@@ -89,8 +97,8 @@ def compareResultsOkay(gold, actual, fail_on_err,
         msg = "2-Norm for '{}' too large! {:.5f} > {}.".format(
             data_name, norm_res, max_error_norm)
         if fail_on_err:
-            raise cocotb.result.TestFailure(msg)
-        cocotb.log.warning(msg)
+            raise test_fail(msg)
+        log_warn(msg)
         return False
 
     # Compare absolute error
@@ -102,11 +110,11 @@ def compareResultsOkay(gold, actual, fail_on_err,
             msg = "Actual value [idx={}] is not matching the expected value! Errors: {:.5f} > {}.".format(
                 i, abs_err, max_error_abs)
             if fail_on_err:
-                raise cocotb.result.TestFailure(msg)
-            cocotb.log.warning(msg)
+                raise test_fail(msg)
+            log_warn(msg)
             return False
 
-    cocotb.log.info("OKAY results for '{}' (2-norm = {:.5f})".format(
+    log_info("OKAY results for '{}' (2-norm = {:.5f})".format(
         data_name, norm_res))
     return True
 

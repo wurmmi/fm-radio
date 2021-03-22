@@ -6,11 +6,11 @@
  */
 /*****************************************************************************/
 
-#include <iomanip>
 #include <iostream>
 
 #include "fm_receiver.hpp"
 #include "helper/DataLoader.hpp"
+#include "helper/DataWriter.hpp"
 
 using namespace std;
 
@@ -52,13 +52,8 @@ int main() {
         DataLoader::loadDataFromFile(filename, num_samples_c);
 
     // Create output file
-    ofstream fd_data_out;
-    string folder_output = "./output/";
-    fd_data_out.open(folder_output + "data_out_rx_pilot.txt", ios::out);
-    if (!fd_data_out.is_open()) {
-      cerr << "Failed to open 'output' file!" << endl;
-      return -1;
-    }
+    const string filename_data_out_L = "rx_audio_L.txt";
+    DataWriter writer_data_out_L(filename_data_out_L);
 
     // --------------------------------------------------------------------------
     // Run test on DUT
@@ -67,45 +62,44 @@ int main() {
 
     // Apply stimuli, call the top-level function and save the results
     sample_t output;
-    vector<sample_t> data_out_pilot;
     for (size_t i = 0; i < num_samples_c; i++) {
       output = fm_receiver(data_in_iq[i]);
 
-      data_out_pilot.emplace_back(output);
-      fd_data_out << std::fixed << std::setw(FP_WIDTH + 3)
-                  << std::setprecision(FP_WIDTH_FRAC) << output.to_float()
-                  << endl;
+      writer_data_out_L.write(output);
     }
-    fd_data_out.close();
 
     // --------------------------------------------------------------------------
     // Compare results
     // --------------------------------------------------------------------------
-    cout << "--- Comparing results" << endl;
-    cout << "Comparing against max. absolute error: " << max_abs_err_c << endl;
+    // cout << "--- Comparing results" << endl;
+    // cout << "Comparing against max. absolute error: " << max_abs_err_c <<
+    // endl;
+    //
+    // int failed_tests = 0;
+    //    for (size_t i = 0; i < num_samples_c; i++) {
+    //      // Check absolute error
+    //      double err     = data_out_pilot[i] - data_gold_pilot[i];
+    //      double abs_err = abs(err);
+    //
+    //      if (abs_err > max_abs_err_c) {
+    //        cerr << "Actual value [" << i << "] not matching the expected
+    //        value!"
+    //             << endl;
+    //        cerr << "Errors: " << abs_err << " actual > max_err " <<
+    //        max_abs_err_c
+    //             << endl;
+    //        failed_tests += 1;
+    //        break;
+    //      }
+    //    }
 
-    int failed_tests = 0;
-    for (size_t i = 0; i < num_samples_c; i++) {
-      // Check absolute error
-      double err     = data_out_pilot[i] - data_gold_pilot[i];
-      double abs_err = abs(err);
-
-      if (abs_err > max_abs_err_c) {
-        cerr << "Actual value [" << i << "] not matching the expected value!"
-             << endl;
-        cerr << "Errors: " << abs_err << " actual > max_err " << max_abs_err_c
-             << endl;
-        failed_tests += 1;
-        break;
-      }
-    }
-
-    if (failed_tests == 0) {
-      cout << "===> Test passed <===\n" << endl;
-    } else {
-      cout << "===> Test failed <===\n" << endl;
-      return -1;
-    }
+    // if (failed_tests == 0) {
+    //  cout << "===> Test passed <===\n" << endl;
+    //} else {
+    //  cout << "===> Test failed <===\n" << endl;
+    //  return -1;
+    //}
+    cout << "Done." << endl;
   } catch (const std::exception& e) {
     cerr << "Exception occured: " << e.what() << endl;
     return -1;

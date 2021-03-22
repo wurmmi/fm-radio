@@ -13,12 +13,14 @@ from helpers import *
 # --------------------------------------------------------------------------
 # Number of seconds to process
 n_sec = 0.005
+EnableFailOnError = True
 
 # Sample rate (NOTE: set according to Matlab model!)
 fp_width_c = 16
 fp_width_frac_c = 14
 fs_rx_c = 120e3
 fs_c = 960e3
+
 
 # Derived constants
 num_samples_c = int(n_sec * fs_rx_c)
@@ -44,6 +46,14 @@ def analyze():
     # --------------------------------------------------------------------------
     # Compare data
     # --------------------------------------------------------------------------
+    ok_pilot = compareResultsOkay(gold_pilot_fp,
+                                  from_fixed_point(data_out_pilot_fp),
+                                  fail_on_err=EnableFailOnError,
+                                  max_error_abs=2**-5,
+                                  max_error_norm=0.6,
+                                  skip_n_samples=30,
+                                  data_name="pilot",
+                                  is_cocotb=False)
 
     # --------------------------------------------------------------------------
     # Plots
