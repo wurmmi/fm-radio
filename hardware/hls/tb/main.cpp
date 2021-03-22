@@ -23,7 +23,7 @@ constexpr int num_samples_fs_c = n_sec_c * fs_c;
 constexpr int num_samples_c    = n_sec_c * fs_rx_c;
 constexpr double max_abs_err_c = pow(2.0, -5);
 
-const string folder_gold =
+const string data_folder =
     "../../../../../../../../sim/matlab/verification_data/";
 
 /* Testbench main function */
@@ -41,15 +41,20 @@ int main() {
     cout << "num_samples_fs = " << num_samples_fs_c << endl;
     cout << "num_samples    = " << num_samples_c << endl;
 
-    // Golden output data
-    string filename = folder_gold + "rx_pilot.txt";
-    vector<sample_t> data_gold_pilot =
-        DataLoader::loadDataFromFile(filename, num_samples_c);
-
     // Input data
-    filename = folder_gold + "rx_fmChannelData.txt";
+    const string filename = data_folder + "rx_fm_bb.txt";
     vector<sample_t> data_in_iq =
-        DataLoader::loadDataFromFile(filename, num_samples_c);
+        DataLoader::loadDataFromFile(filename, num_samples_fs_c * 2);
+
+    // Split interleaved I/Q samples (take every other)
+    vector<sample_t> data_in_i;
+    vector<sample_t> data_in_q;
+    for (size_t i = 0; i < data_in_iq.size(); i++) {
+      if (i % 2 == 0)
+        data_in_i.emplace_back(data_in_iq[i]);
+      else
+        data_in_q.emplace_back(data_in_iq[i]);
+    }
 
     // --------------------------------------------------------------------------
     // Run test on DUT
@@ -58,11 +63,14 @@ int main() {
 
     // Apply stimuli, call the top-level function and save the results
     DataWriter writer_data_out_L("data_out_rx_audio_L.txt");
-    sample_t output;
+    DataWriter writer_data_out_R("data_out_rx_audio_R.txt");
+    sample_t audio_L;
+    sample_t audio_R;
     for (size_t i = 0; i < num_samples_c; i++) {
-      output = fm_receiver(data_in_iq[i]);
+      fm_receiver(data_in_i[i], data_in_q[i], audio_L, audio_R);
 
-      writer_data_out_L.write(output);
+      writer_data_out_L.write(audio_L);
+      writer_data_out_R.write(audio_R);
     }
 
     cout << "--- Done." << endl;
