@@ -6,7 +6,8 @@
 
 set SRC_DIR  "../../src"
 set TB_DIR   "../../tb"
-set CPPFLAGS "--std=c++11 -I$SRC_DIR"
+set CPPFLAGS "--std=c++11 -I$SRC_DIR \
+              -Wall -Wno-unused-label -Wno-unused-parameter"
 
 set project_name [lindex $argv 2]
 
@@ -23,8 +24,10 @@ add_files      $SRC_DIR/fm_receiver.cpp           -cflags $CPPFLAGS
 add_files      $SRC_DIR/fm_receiver.hpp
 
 # Testbench files
-add_files -tb  $TB_DIR/main.cpp                   -cflags $CPPFLAGS
+file mkdir     $TB_DIR/output/
 add_files -tb  $TB_DIR/output/
+add_files -tb  $TB_DIR/main.hpp
+add_files -tb  $TB_DIR/main.cpp                   -cflags $CPPFLAGS
 
 # Solution settings
 open_solution -reset "solution1"
