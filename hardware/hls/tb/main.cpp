@@ -15,7 +15,7 @@
 using namespace std;
 
 /* Constants */
-constexpr double n_sec_c = 0.0003;
+constexpr double n_sec_c = 0.001;
 const int fs_c           = 960000;  // TODO: get this from file
 const int fs_rx_c        = 120000;  // TODO: get this from file
 
@@ -66,7 +66,7 @@ int main() {
     DataWriter writer_data_out_R("data_out_rx_audio_R.txt");
     sample_t audio_L;
     sample_t audio_R;
-    for (size_t i = 0; i < num_samples_c; i++) {
+    for (size_t i = 0; i < num_samples_fs_c; i++) {
       fm_receiver(data_in_i[i], data_in_q[i], audio_L, audio_R);
 
       writer_data_out_L.write(audio_L);

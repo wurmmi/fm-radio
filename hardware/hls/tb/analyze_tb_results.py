@@ -12,7 +12,7 @@ from helpers import *
 # Constants
 # --------------------------------------------------------------------------
 # Number of seconds to process
-n_sec = 0.005
+n_sec = 0.001  # TODO: get this from file
 EnableFailOnError = True
 
 # Sample rate (NOTE: set according to Matlab model!)
@@ -38,10 +38,16 @@ def analyze():
     filename = directory_gold + "rx_pilot.txt"
     gold_pilot_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
 
+    filename = directory_gold + "rx_fm_demod.txt"
+    gold_fm_demod_fp = loadDataFromFile(filename, num_samples_fs_c, fp_width_c, fp_width_frac_c)
+
     # Testbench result data
     directory_tb = "../tb/output/"
     filename = directory_tb + "data_out_rx_pilot.txt"
     data_out_pilot_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
+
+    filename = directory_tb + "data_out_fm_demod.txt"
+    data_out_fm_demod_fp = loadDataFromFile(filename, num_samples_fs_c, fp_width_c, fp_width_frac_c)
 
     # --------------------------------------------------------------------------
     # Compare data
@@ -55,17 +61,36 @@ def analyze():
                                   data_name="pilot",
                                   is_cocotb=False)
 
+    ok_fm_demod = compareResultsOkay(gold_fm_demod_fp,
+                                     from_fixed_point(data_out_fm_demod_fp),
+                                     fail_on_err=EnableFailOnError,
+                                     max_error_abs=2**-5,
+                                     max_error_norm=0.6,
+                                     skip_n_samples=30,
+                                     data_name="pilot",
+                                     is_cocotb=False)
+
     # --------------------------------------------------------------------------
     # Plots
     # --------------------------------------------------------------------------
-    tn = np.arange(0, num_samples_c) / fs_rx_c
 
+    tn_fs = np.arange(0, num_samples_fs_c) / fs_c
+    tn = np.arange(0, num_samples_c) / fs_rx_c
+    # -----------------------------------------------------------------
     data = (
         (tn, from_fixed_point(data_out_pilot_fp), "data_out_pilot"),
         (tn, from_fixed_point(gold_pilot_fp), "gold_pilot")
     )
     plotData(data, title="Pilot",
              filename="../tb/output/plot_pilot.png",
+             show=True)
+    # -----------------------------------------------------------------
+    data = (
+        (tn, from_fixed_point(data_out_fm_demod_fp), "data_out_fm_demod"),
+        (tn, from_fixed_point(gold_fm_demod_fp), "gold_fm_demod")
+    )
+    plotData(data, title="FM Demodulator",
+             filename="../tb/output/plot_fm_demod.png",
              show=True)
 
 

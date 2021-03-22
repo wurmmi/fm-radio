@@ -46,9 +46,6 @@ void fm_receiver(sample_t in_i,
 
   sample_t fm_demod = fm_demodulator(in_i, in_q);
 
-  static DataWriter writer_data_out_fm_demod("fm_demod.txt");
-  writer_data_out_fm_demod.write(fm_demod);
-
   // Recover pilot
   static FIR<coeff_t, sample_t, acc_t, filter_bp_pilot_num_coeffs_c>
       fir_pilot_inst;
@@ -64,4 +61,10 @@ void fm_receiver(sample_t in_i,
   // ------------------------------------------------------
   audio_L = pilot;
   audio_R = 0;
+
+  // ------------------------------------------------------
+  // Debug
+  // ------------------------------------------------------
+  static DataWriter writer_data_out_fm_demod("data_out_fm_demod.txt");
+  writer_data_out_fm_demod.write(fm_demod);
 }
