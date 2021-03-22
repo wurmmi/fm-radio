@@ -26,6 +26,7 @@
 #include "../tb/helper/DataWriter.hpp"
 #include "filter_coeff_headers/filter_bp_lrdiff.h"
 #include "filter_coeff_headers/filter_bp_pilot.h"
+#include "utils/delay.hpp"
 #include "utils/fir.hpp"
 
 using namespace std;
@@ -43,6 +44,15 @@ sample_t fm_receiver(sample_t in) {
 
   static DataWriter writer_data_out_pilot("data_out_rx_pilot.txt");
   writer_data_out_pilot.write(pilot);
+
+  // ----------------------------------
+  // TEST DELAY
+  static DELAY<sample_t, 10> delay_inst;
+  sample_t pilot_delayed = delay_inst(pilot);
+
+  static DataWriter writer_data_out_pilot_delayed(
+      "data_out_rx_pilot_delayed.txt");
+  writer_data_out_pilot_delayed.write(pilot_delayed);
 
   // Recover lrdiff
   static FIR<coeff_t, sample_t, acc_t, filter_bp_lrdiff_num_coeffs_c>
