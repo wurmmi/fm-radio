@@ -15,18 +15,23 @@ set project_name [lindex $argv 2]
 open_project -reset $project_name
 
 # Design files
-add_files      $SRC_DIR/filter_coeff_headers/*.h
-add_files      $SRC_DIR/channel_decoder/*.cpp     -cflags $CPPFLAGS
-add_files      $SRC_DIR/channel_decoder.cpp       -cflags $CPPFLAGS
+add_files      $SRC_DIR/filter_coeff_headers/
+add_files      $SRC_DIR/channel_decoder/recover_carriers.cpp   -cflags $CPPFLAGS
+add_files      $SRC_DIR/channel_decoder/recover_lrdiff.cpp     -cflags $CPPFLAGS
+add_files      $SRC_DIR/channel_decoder/recover_mono.cpp       -cflags $CPPFLAGS
+add_files      $SRC_DIR/channel_decoder/separate_lr_audio.cpp  -cflags $CPPFLAGS
+add_files      $SRC_DIR/channel_decoder.cpp                    -cflags $CPPFLAGS
 add_files      $SRC_DIR/utils/fir.hpp
+add_files      $SRC_DIR/utils/delay.hpp
 add_files      $SRC_DIR/fm_global.hpp
-add_files      $SRC_DIR/fm_receiver.cpp           -cflags $CPPFLAGS
+add_files      $SRC_DIR/fm_receiver.cpp                        -cflags $CPPFLAGS
 add_files      $SRC_DIR/fm_receiver.hpp
 
 # Testbench files
 file mkdir     $TB_DIR/output/
 add_files -tb  $TB_DIR/output/
-add_files -tb  $TB_DIR/helper/*.h
+add_files -tb  $TB_DIR/helper/DataLoader.hpp
+add_files -tb  $TB_DIR/helper/DataWriter.hpp
 add_files -tb  $TB_DIR/main.cpp                   -cflags $CPPFLAGS
 
 # Solution settings
