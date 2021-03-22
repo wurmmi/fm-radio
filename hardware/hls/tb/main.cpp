@@ -51,16 +51,13 @@ int main() {
     vector<sample_t> data_in_iq =
         DataLoader::loadDataFromFile(filename, num_samples_c);
 
-    // Create output file
-    const string filename_data_out_L = "rx_audio_L.txt";
-    DataWriter writer_data_out_L(filename_data_out_L);
-
     // --------------------------------------------------------------------------
     // Run test on DUT
     // --------------------------------------------------------------------------
     cout << "--- Running test on DUT" << endl;
 
     // Apply stimuli, call the top-level function and save the results
+    DataWriter writer_data_out_L("rx_audio_L.txt");
     sample_t output;
     for (size_t i = 0; i < num_samples_c; i++) {
       output = fm_receiver(data_in_iq[i]);

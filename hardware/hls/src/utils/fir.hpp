@@ -2,7 +2,7 @@
 /**
  * @file    fir.hpp
  * @author  Michael Wurm <wurm.michael95@gmail.com>
- * @brief   FIR IP header.
+ * @brief   FIR IP.
  * @details Partially taken from Vivado HLS design examples, by Xilinx Inc.
  *          Can be found in the Vivado install directory under
  *          e.g. Xilinx/Vivado/2018.2/examples/coding/cpp_FIR
