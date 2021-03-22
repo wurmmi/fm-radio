@@ -32,16 +32,17 @@ using namespace std;
 const ap_fixed<4, 4> pilot_scale_factor_c = 6;
 
 sample_t fm_receiver(sample_t in) {
-  // FIR filter pilot
-  sample_t pilot =
-      pilot_scale_factor_c *
-      fir_filter_top<coeff_t, sample_t, acc_t, filter_bp_pilot_num_coeffs_c>(
-          in, filter_bp_pilot_coeffs_c);
+  // Recover pilot
+  static FIR<coeff_t, sample_t, acc_t, filter_bp_pilot_num_coeffs_c>
+      fir_pilot_inst;
 
-  // FIR filter lrdiff
-  // sample_t lrdiff =
-  //    fir_filter_top<coeff_t, sample_t, acc_t, filter_bp_lrdiff_num_coeffs_c>(
-  //        in, filter_bp_lrdiff_coeffs_c);
+  sample_t pilot =
+      pilot_scale_factor_c * fir_pilot_inst(in, filter_bp_pilot_coeffs_c);
+
+  // Recover lrdiff
+  static FIR<coeff_t, sample_t, acc_t, filter_bp_lrdiff_num_coeffs_c>
+      fir_lrdiff_inst;
+  sample_t lrdiff = fir_lrdiff_inst(in, filter_bp_lrdiff_coeffs_c);
 
   return pilot;
 }

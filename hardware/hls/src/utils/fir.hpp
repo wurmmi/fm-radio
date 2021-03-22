@@ -69,16 +69,16 @@ ostream& operator<<(ostream& ost,
   return ost;
 }
 
-/* Top-level function.
- * Instantiates the FIR class with correct template parameters.
- */
-template <class coeff_T, class sample_T, class acc_T, uint8_t fir_n_T>
-sample_T fir_filter_top(sample_T x, const coeff_T coeff[fir_n_T]) {
-  static FIR<coeff_T, sample_T, acc_T, fir_n_T> fir_inst;
-
-  // cout << fir_inst;
-
-  return fir_inst(x, coeff);
-}
+///* Top-level function.
+// * Instantiates the FIR class with correct template parameters.
+// */
+// template <class coeff_T, class sample_T, class acc_T, uint8_t fir_n_T>
+// sample_T fir_filter_top(sample_T x, const coeff_T coeff[fir_n_T]) {
+//  static FIR<coeff_T, sample_T, acc_T, fir_n_T> fir_inst;
+//
+//  // cout << fir_inst;
+//
+//  return fir_inst(x, coeff);
+//}
 
 #endif /* _FIR_H */
