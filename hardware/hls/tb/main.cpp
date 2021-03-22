@@ -23,7 +23,7 @@ constexpr int fs_rx_c          = 120000;  // TODO: check this
 constexpr int num_samples_fs_c = n_sec_c * fs_c;
 constexpr int num_samples_c    = n_sec_c * fs_rx_c;
 
-constexpr double max_abs_err_c = 2;  // TODO
+constexpr double max_abs_err_c = pow(2.0, -5);
 
 /* Testbench main function */
 int main() {
@@ -34,6 +34,7 @@ int main() {
   // --------------------------------------------------------------------------
   // Load data from files
   // --------------------------------------------------------------------------
+  cout << "--- Loading data from files" << endl;
 
   ifstream fd_data_in;
   ifstream fd_gold_pilot;
@@ -105,6 +106,7 @@ int main() {
   // --------------------------------------------------------------------------
   // Run test on DUT
   // --------------------------------------------------------------------------
+  cout << "--- Running test on DUT" << endl;
 
   // Apply stimuli, call the top-level function and save the results
   sample_t output;
@@ -121,26 +123,29 @@ int main() {
   // --------------------------------------------------------------------------
   // Compare results
   // --------------------------------------------------------------------------
+  cout << "--- Comparing results" << endl;
+  cout << "Comparing against max. absolute error: " << max_abs_err_c << endl;
 
-  // Compare the simulation results with the golden results
   int retval = 0;
   for (size_t i = 0; i < num_samples_c; i++) {
     // Check absolute error
-    double err = data_out_pilot[i] - data_gold_pilot[i];
-    cout << "err: " << err << endl;
-    if (abs(err) > max_abs_err_c) {
+    double err     = data_out_pilot[i] - data_gold_pilot[i];
+    double abs_err = abs(err);
+
+    if (abs_err > max_abs_err_c) {
       cerr << "Actual value [i] not matching the expected value!" << endl;
-      cerr << "Errors: act > max_err" << endl;
+      cerr << "Errors: " << abs_err << " actual > max_err " << max_abs_err_c
+           << endl;
       retval = -1;
       break;
     }
   }
 
   if (retval != 0) {
-    cout << "===> Test failed  !!!" << endl;
-    retval = 1;
+    cout << "===> Test failed <===\n" << endl;
+    retval = -1;
   } else {
-    cout << "===> Test passed !" << endl;
+    cout << "===> Test passed <===\n" << endl;
   }
 
   // Return 0 if the test passes
