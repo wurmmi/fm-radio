@@ -6,19 +6,18 @@
  */
 /*****************************************************************************/
 
-#include "main.hpp"
-
 #include <iomanip>
 #include <iostream>
 
 #include "fm_receiver.hpp"
+#include "helper/DataLoader.hpp"
 
 using namespace std;
 
 /* Constants */
 constexpr double n_sec_c = 0.005;
-const int fs_c           = 960000;  // TODO: check this
-const int fs_rx_c        = 120000;  // TODO: check this
+const int fs_c           = 960000;  // TODO: get this from file
+const int fs_rx_c        = 120000;  // TODO: get this from file
 
 constexpr int num_samples_fs_c = n_sec_c * fs_c;
 constexpr int num_samples_c    = n_sec_c * fs_rx_c;
@@ -39,24 +38,21 @@ int main() {
     // --------------------------------------------------------------------------
     cout << "--- Loading data from files" << endl;
 
-    ofstream fd_data_out;
-    vector<sample_t> data_out_pilot;
-
     cout << "num_samples_fs = " << num_samples_fs_c << endl;
     cout << "num_samples    = " << num_samples_c << endl;
 
     // Golden output data
     string filename = folder_gold + "rx_pilot.txt";
-
     vector<sample_t> data_gold_pilot =
-        loadDataFromFile(filename, num_samples_c);
+        DataLoader::loadDataFromFile(filename, num_samples_c);
 
     // Input data
     filename = folder_gold + "rx_fmChannelData.txt";
-
-    vector<sample_t> data_in_iq = loadDataFromFile(filename, num_samples_c);
+    vector<sample_t> data_in_iq =
+        DataLoader::loadDataFromFile(filename, num_samples_c);
 
     // Create output file
+    ofstream fd_data_out;
     string folder_output = "./output/";
     fd_data_out.open(folder_output + "data_out_rx_pilot.txt", ios::out);
     if (!fd_data_out.is_open()) {
@@ -71,6 +67,7 @@ int main() {
 
     // Apply stimuli, call the top-level function and save the results
     sample_t output;
+    vector<sample_t> data_out_pilot;
     for (size_t i = 0; i < num_samples_c; i++) {
       output = fm_receiver(data_in_iq[i]);
 

@@ -26,7 +26,7 @@ add_files      $SRC_DIR/fm_receiver.hpp
 # Testbench files
 file mkdir     $TB_DIR/output/
 add_files -tb  $TB_DIR/output/
-add_files -tb  $TB_DIR/main.hpp
+add_files -tb  $TB_DIR/helper/*.h
 add_files -tb  $TB_DIR/main.cpp                   -cflags $CPPFLAGS
 
 # Solution settings
