@@ -115,17 +115,19 @@ end
 if EnableWriteDataFiles
     disp('### Write data to files ###');
 
-    disp('--- Filter coefficients to VHDL');
     % Filter coefficients
-    %writeFilterCoeffsToVHDLFile(filter_diff, 'filter_diff', ...
-    %    '../../hardware/src/filter_coeff_pkgs/', fp_config);
-    writeFilterCoeffsToVHDLFile(filter_bp_pilot, 'filter_bp_pilot', ...
-        '../../hardware/src/filter_coeff_pkgs/', fp_config);
-    writeFilterCoeffsToVHDLFile(filter_lp_mono, 'filter_lp_mono', ...
-        '../../hardware/src/filter_coeff_pkgs/', fp_config);
-    writeFilterCoeffsToVHDLFile(filter_bp_lrdiff, 'filter_bp_lrdiff', ...
-        '../../hardware/src/filter_coeff_pkgs/', fp_config);
-    
+    disp('--- Filter coefficients to VHDL');
+    folder = '../../hardware/vhdl/src/filter_coeff_pkgs/';
+    writeFilterCoeffsToVHDLFile(filter_bp_pilot, 'filter_bp_pilot',  folder, fp_config);
+    writeFilterCoeffsToVHDLFile(filter_lp_mono,  'filter_lp_mono',   folder, fp_config);
+    writeFilterCoeffsToVHDLFile(filter_bp_lrdiff,'filter_bp_lrdiff', folder, fp_config);
+
+    disp('--- Filter coefficients to C++');
+    folder = '../../hardware/hls/src/filter_coeff_headers/';
+    writeFilterCoeffsToCPPFile(filter_bp_pilot, 'filter_bp_pilot', folder, fp_config);
+    writeFilterCoeffsToCPPFile(filter_lp_mono,  'filter_lp_mono',  folder, fp_config);
+    writeFilterCoeffsToCPPFile(filter_bp_lrdiff,'filter_bp_lrdiff',folder, fp_config);
+
     disp('--- Verification data');
     % Only write a fraction of the simulation time to file
     n_sec_file  = 0.005;

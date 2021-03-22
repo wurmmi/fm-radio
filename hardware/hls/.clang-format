@@ -1,0 +1,23 @@
+# A complete list of style options can be found at:
+# https://releases.llvm.org/6.0.0/tools/clang/docs/ClangFormatStyleOptions.html
+#
+# To see the effect of style options, the following tool can be used.
+# https://zed0.co.uk/clang-format-configurator/
+#
+
+---
+Language: Cpp
+Standard: Cpp11
+BasedOnStyle: Google
+
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+BinPackArguments: false
+BinPackParameters: false
+IncludeBlocks: Regroup
+AlignConsecutiveMacros: true
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: false
+AlignTrailingComments: true
+...
