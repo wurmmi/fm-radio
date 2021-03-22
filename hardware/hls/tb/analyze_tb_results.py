@@ -12,7 +12,7 @@ from helpers import *
 # Constants
 # --------------------------------------------------------------------------
 # Number of seconds to process
-n_sec = 0.001
+n_sec = 0.005
 
 # Sample rate (NOTE: set according to Matlab model!)
 fp_width_c = 16

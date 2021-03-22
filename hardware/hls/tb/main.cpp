@@ -7,6 +7,7 @@
 /*****************************************************************************/
 
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <vector>
 
@@ -66,7 +67,7 @@ int main() {
   if (num_read < num_samples_c) {
     cerr << "File 'data_gold_pilot' contains less elements than requested!"
          << endl;
-    cerr << num_read << " < " << num_samples_c << endl;
+    cerr << num_read << " actual < " << num_samples_c << " requested" << endl;
     return -1;
   }
 
@@ -89,7 +90,7 @@ int main() {
   num_read = data_in.size();
   if (num_read < num_samples_c) {
     cerr << "File 'data_in' contains less elements than requested!" << endl;
-    cerr << num_read << " < " << num_samples_c << endl;
+    cerr << num_read << " actual < " << num_samples_c << " requested" << endl;
     return -1;
   }
 
@@ -111,7 +112,9 @@ int main() {
     output = fm_receiver(data_in[i]);
 
     data_out_pilot.emplace_back(output);
-    fd_data_out << output << endl;
+    fd_data_out << std::fixed << std::setw(FP_WIDTH + 3)
+                << std::setprecision(FP_WIDTH_FRAC) << output.to_float()
+                << endl;
   }
   fd_data_out.close();
 

@@ -11,7 +11,8 @@
 --
 -- (1) FIR filter implementation
 --       03/18/2021  17:00 - 19:00    2:00 h
---       03/19/2021  09:30 -          x:xx h
+--       03/19/2021  09:30 - 18:00    8:30 h
+--       03/22/2021  09:00 - xxxx          h
 --
 -- (2) FM receiver implementation
 --
@@ -38,9 +39,9 @@ sample_t fm_receiver(sample_t in) {
           in, filter_bp_pilot_coeffs_c);
 
   // FIR filter lrdiff
-  sample_t lrdiff =
-      fir_filter_top<coeff_t, sample_t, acc_t, filter_bp_lrdiff_num_coeffs_c>(
-          in, filter_bp_lrdiff_coeffs_c);
+  // sample_t lrdiff =
+  //    fir_filter_top<coeff_t, sample_t, acc_t, filter_bp_lrdiff_num_coeffs_c>(
+  //        in, filter_bp_lrdiff_coeffs_c);
 
   return pilot;
 }
