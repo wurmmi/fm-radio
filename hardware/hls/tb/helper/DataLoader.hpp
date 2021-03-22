@@ -18,8 +18,8 @@ class DataLoader {
  private:
   /* data */
  public:
-  DataLoader() {}
-  ~DataLoader() {}
+  DataLoader()  = delete;
+  ~DataLoader() = delete;
 
   static std::vector<sample_t> loadDataFromFile(std::string filename,
                                                 uint32_t num_samples) {

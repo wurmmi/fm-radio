@@ -23,6 +23,7 @@
 
 #include <iostream>
 
+#include "../tb/helper/DataWriter.hpp"
 #include "filter_coeff_headers/filter_bp_lrdiff.h"
 #include "filter_coeff_headers/filter_bp_pilot.h"
 #include "utils/fir.hpp"
@@ -39,6 +40,9 @@ sample_t fm_receiver(sample_t in) {
 
   sample_t pilot =
       pilot_scale_factor_c * fir_pilot_inst(in, filter_bp_pilot_coeffs_c);
+
+  static DataWriter writer_data_out_pilot("data_out_rx_pilot.txt");
+  writer_data_out_pilot.write(pilot);
 
   // Recover lrdiff
   static FIR<coeff_t, sample_t, acc_t, filter_bp_lrdiff_num_coeffs_c>
