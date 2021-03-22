@@ -34,7 +34,7 @@ if [ "$ARG" == "hls_project" ]; then
   exit 0
 elif [ "$ARG" == "hls_sim" ]; then
   # Run HLS testbench
-  $VIVADO_HLS_BATCH $SCRIPT_PATH/hls_sim_csynth.tcl $VIVADO_HLS_PROJECT_NAME
+  $VIVADO_HLS_BATCH $SCRIPT_PATH/hls_sim.tcl $VIVADO_HLS_PROJECT_NAME
 
   # Analyze results
   cd $SCRIPT_PATH

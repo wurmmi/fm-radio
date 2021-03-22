@@ -68,38 +68,7 @@ int main() {
       writer_data_out_L.write(output);
     }
 
-    // --------------------------------------------------------------------------
-    // Compare results
-    // --------------------------------------------------------------------------
-    // cout << "--- Comparing results" << endl;
-    // cout << "Comparing against max. absolute error: " << max_abs_err_c <<
-    // endl;
-    //
-    // int failed_tests = 0;
-    //    for (size_t i = 0; i < num_samples_c; i++) {
-    //      // Check absolute error
-    //      double err     = data_out_pilot[i] - data_gold_pilot[i];
-    //      double abs_err = abs(err);
-    //
-    //      if (abs_err > max_abs_err_c) {
-    //        cerr << "Actual value [" << i << "] not matching the expected
-    //        value!"
-    //             << endl;
-    //        cerr << "Errors: " << abs_err << " actual > max_err " <<
-    //        max_abs_err_c
-    //             << endl;
-    //        failed_tests += 1;
-    //        break;
-    //      }
-    //    }
-
-    // if (failed_tests == 0) {
-    //  cout << "===> Test passed <===\n" << endl;
-    //} else {
-    //  cout << "===> Test failed <===\n" << endl;
-    //  return -1;
-    //}
-    cout << "Done." << endl;
+    cout << "--- Done." << endl;
   } catch (const std::exception& e) {
     cerr << "Exception occured: " << e.what() << endl;
     return -1;
