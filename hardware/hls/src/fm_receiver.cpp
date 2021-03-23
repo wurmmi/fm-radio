@@ -16,7 +16,8 @@
 --
 -- (2) FM receiver implementation
 --       03/22/2021  11:00 - 13:00    2:00 h
---                   14:00 - xxxx          h
+--                   14:00 - 16:00    2:00 h
+--       03/23/2021  08:30 - xxxxxxxxxxxxx h
 --
 */
 

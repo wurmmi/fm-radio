@@ -13,7 +13,7 @@ from helpers import *
 # --------------------------------------------------------------------------
 # Number of seconds to process
 n_sec = 0.001  # TODO: get this from file
-EnableFailOnError = True
+EnableFailOnError = False
 
 # Sample rate (NOTE: set according to Matlab model!)
 fp_width_c = 16
@@ -67,7 +67,7 @@ def analyze():
                                      max_error_abs=2**-5,
                                      max_error_norm=0.6,
                                      skip_n_samples=30,
-                                     data_name="pilot",
+                                     data_name="fm_demod",
                                      is_cocotb=False)
 
     # --------------------------------------------------------------------------
@@ -86,8 +86,8 @@ def analyze():
              show=True)
     # -----------------------------------------------------------------
     data = (
-        (tn, from_fixed_point(data_out_fm_demod_fp), "data_out_fm_demod"),
-        (tn, from_fixed_point(gold_fm_demod_fp), "gold_fm_demod")
+        (tn_fs, from_fixed_point(data_out_fm_demod_fp), "data_out_fm_demod"),
+        (tn_fs, from_fixed_point(gold_fm_demod_fp), "gold_fm_demod")
     )
     plotData(data, title="FM Demodulator",
              filename="../tb/output/plot_fm_demod.png",

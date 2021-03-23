@@ -67,6 +67,7 @@ int main() {
     sample_t audio_L;
     sample_t audio_R;
     for (size_t i = 0; i < num_samples_fs_c; i++) {
+      cout << i << " " << data_in_i[i] << " ## " << data_in_q[i] << endl;
       fm_receiver(data_in_i[i], data_in_q[i], audio_L, audio_R);
 
       writer_data_out_L.write(audio_L);
