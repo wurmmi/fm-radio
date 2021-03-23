@@ -107,8 +107,8 @@ def compareResultsOkay(gold, actual, fail_on_err,
 
         abs_err = abs(from_fixed_point(diff))
         if abs_err > max_error_abs:
-            msg = "Actual value [idx={}] is not matching the expected value! Errors: {:.5f} > {}.".format(
-                i, abs_err, max_error_abs)
+            msg = "'{}'s actual value [idx={}] is not matching the expected value! Errors: {:.5f} > {}.".format(
+                data_name, i, abs_err, max_error_abs)
             if fail_on_err:
                 raise test_fail(msg)
             log_warn(msg)

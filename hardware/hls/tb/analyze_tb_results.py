@@ -38,6 +38,9 @@ def analyze():
     filename = directory_gold + "rx_fm_demod.txt"
     gold_fm_demod_fp = loadDataFromFile(filename, num_samples_fs_c, fp_width_c, fp_width_frac_c)
 
+    filename = directory_gold + "rx_audio_mono.txt"
+    gold_audio_mono_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
+
     filename = directory_gold + "rx_pilot.txt"
     gold_pilot_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
 
@@ -48,6 +51,9 @@ def analyze():
     directory_tb = "../tb/output/"
     filename = directory_tb + "data_out_fm_demod.txt"
     data_out_fm_demod_fp = loadDataFromFile(filename, num_samples_fs_c, fp_width_c, fp_width_frac_c)
+
+    filename = directory_tb + "data_out_audio_mono.txt"
+    data_out_audio_mono_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
 
     filename = directory_tb + "data_out_pilot.txt"
     data_out_pilot_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
@@ -61,6 +67,7 @@ def analyze():
     # Shift loaded file-data to compensate shift to testbench-data
     # TODO: why is this necessary?
     move_n_right(gold_pilot_fp, 25, fp_width_c, fp_width_frac_c)
+    move_n_left(gold_audio_mono_fp, 13, fp_width_c, fp_width_frac_c)
     move_n_right(gold_carrier_38k_fp, 25, fp_width_c, fp_width_frac_c)
 
     ok_fm_demod = compareResultsOkay(gold_fm_demod_fp,
@@ -71,6 +78,15 @@ def analyze():
                                      skip_n_samples=30,
                                      data_name="fm_demod",
                                      is_cocotb=False)
+
+    ok_audio_mono = compareResultsOkay(gold_audio_mono_fp,
+                                       from_fixed_point(data_out_audio_mono_fp),
+                                       fail_on_err=EnableFailOnError,
+                                       max_error_abs=2**-5,
+                                       max_error_norm=0.5,
+                                       skip_n_samples=100,
+                                       data_name="audio_mono",
+                                       is_cocotb=False)
 
     ok_pilot = compareResultsOkay(gold_pilot_fp,
                                   from_fixed_point(data_out_pilot_fp),
@@ -84,9 +100,9 @@ def analyze():
     ok_carrier_38k = compareResultsOkay(gold_carrier_38k_fp,
                                         from_fixed_point(data_out_carrier_38k_fp),
                                         fail_on_err=EnableFailOnError,
-                                        max_error_abs=2**-5,
-                                        max_error_norm=0.06,
-                                        skip_n_samples=10,
+                                        max_error_abs=2**-3,
+                                        max_error_norm=0.9,
+                                        skip_n_samples=100,
                                         data_name="carrier_38k",
                                         is_cocotb=False)
 
@@ -95,8 +111,10 @@ def analyze():
     # --------------------------------------------------------------------------
 
     # TODO: Enable plots for debug
-    #ok_pilot = False
     #ok_fm_demod = False
+    #ok_audio_mono = False
+    #ok_pilot = False
+    #ok_carrier_38k = False
 
     tn_fs = np.arange(0, num_samples_fs_c) / fs_c
     tn = np.arange(0, num_samples_c) / fs_rx_c
@@ -108,6 +126,14 @@ def analyze():
     plotData(data, title="FM Demodulator",
              filename="../tb/output/plot_fm_demod.png",
              show=not ok_fm_demod)
+    # -----------------------------------------------------------------
+    data = (
+        (tn, from_fixed_point(data_out_audio_mono_fp), "data_out_audio_mono"),
+        (tn, from_fixed_point(gold_audio_mono_fp), "gold_audio_mono")
+    )
+    plotData(data, title="Audio Mono",
+             filename="../tb/output/plot_audio_mono.png",
+             show=not ok_audio_mono)
     # -----------------------------------------------------------------
     data = (
         (tn, from_fixed_point(data_out_pilot_fp), "data_out_pilot"),

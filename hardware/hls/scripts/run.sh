@@ -35,7 +35,10 @@ if [ "$ARG" == "hls_project" ]; then
 elif [ "$ARG" == "hls_sim" ]; then
   # Run HLS testbench
   $VIVADO_HLS_BATCH $SCRIPT_PATH/hls_sim.tcl $VIVADO_HLS_PROJECT_NAME
-
+  cd $SCRIPT_PATH
+  ./run.sh hls_sim_analyze
+  exit 0
+elif [ "$ARG" == "hls_sim_analyze" ]; then
   # Analyze results
   cd $SCRIPT_PATH
   source ../../vhdl/tb/setup_env.sh

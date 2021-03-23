@@ -12,6 +12,7 @@
 
 #include "../tb/helper/DataWriter.hpp"
 #include "channel_decoder/recover_carriers.hpp"
+#include "channel_decoder/recover_mono.hpp"
 #include "fm_receiver.hpp"
 
 using namespace std;
@@ -38,8 +39,16 @@ void channel_decoder(sample_t const& in_sample,
   recover_carriers(in_sample, carrier_38k, carrier_57k);
 
   // ------------------------------------------------------
+  // Recover mono audio
+  // ------------------------------------------------------
+  sample_t audio_mono = recover_mono(in_sample);
+
+  // ------------------------------------------------------
   // Debug
   // ------------------------------------------------------
   static DataWriter writer_data_out_carrier_38k("data_out_carrier_38k.txt");
   writer_data_out_carrier_38k.write(carrier_38k);
+
+  static DataWriter writer_data_out_audio_mono("data_out_audio_mono.txt");
+  writer_data_out_audio_mono.write(audio_mono);
 }
