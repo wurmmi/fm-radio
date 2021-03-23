@@ -26,16 +26,17 @@
 #include <iostream>
 
 #include "../tb/helper/DataWriter.hpp"
-#include "filter_coeff_headers/filter_bp_lrdiff.h"
 #include "filter_coeff_headers/filter_bp_pilot.h"
 #include "fm_demodulator.hpp"
-#include "utils/delay.hpp"
 #include "utils/fir.hpp"
 
 using namespace std;
 
 // TODO: get this from a global header file
 const ap_fixed<4, 4> pilot_scale_factor_c = 6;
+
+static FIR<coeff_t, sample_t, acc_t, filter_bp_pilot_num_coeffs_c>
+    fir_pilot_inst;
 
 void fm_receiver(sample_t const& in_i,
                  sample_t const& in_q,
@@ -48,24 +49,24 @@ void fm_receiver(sample_t const& in_i,
   sample_t fm_demod = fm_demodulator(in_i, in_q);
 
   // Recover pilot
-  static FIR<coeff_t, sample_t, acc_t, filter_bp_pilot_num_coeffs_c>
-      fir_pilot_inst;
 
   sample_t pilot =
       pilot_scale_factor_c * fir_pilot_inst(fm_demod, filter_bp_pilot_coeffs_c);
 
-  static DataWriter writer_data_out_pilot("data_out_rx_pilot.txt");
-  writer_data_out_pilot.write(pilot);
-
   // ------------------------------------------------------
   // Output
   // ------------------------------------------------------
+
   audio_L = 0;
   audio_R = 0;
 
   // ------------------------------------------------------
   // Debug
   // ------------------------------------------------------
+
   static DataWriter writer_data_out_fm_demod("data_out_fm_demod.txt");
   writer_data_out_fm_demod.write(fm_demod);
+
+  static DataWriter writer_data_out_pilot("data_out_rx_pilot.txt");
+  writer_data_out_pilot.write(pilot);
 }
