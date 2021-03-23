@@ -67,7 +67,11 @@ int main() {
     sample_t audio_L;
     sample_t audio_R;
     for (size_t i = 0; i < num_samples_fs_c; i++) {
-      cout << i << " " << data_in_i[i] << " ## " << data_in_q[i] << endl;
+      // printf("[%5d] i: %20.16f  ##  q: %20.16f\n",
+      //       i,
+      //       data_in_i[i].to_float(),
+      //       data_in_q[i].to_float());
+
       fm_receiver(data_in_i[i], data_in_q[i], audio_L, audio_R);
 
       writer_data_out_L.write(audio_L);
@@ -75,7 +79,7 @@ int main() {
     }
 
     cout << "--- Done." << endl;
-  } catch (const std::exception& e) {
+  } catch (const exception& e) {
     cerr << "Exception occured: " << e.what() << endl;
     return -1;
   }

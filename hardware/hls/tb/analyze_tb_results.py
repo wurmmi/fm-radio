@@ -52,6 +52,15 @@ def analyze():
     # --------------------------------------------------------------------------
     # Compare data
     # --------------------------------------------------------------------------
+    ok_fm_demod = compareResultsOkay(gold_fm_demod_fp,
+                                     from_fixed_point(data_out_fm_demod_fp),
+                                     fail_on_err=EnableFailOnError,
+                                     max_error_abs=2**-5,
+                                     max_error_norm=0.002,
+                                     skip_n_samples=30,
+                                     data_name="fm_demod",
+                                     is_cocotb=False)
+
     ok_pilot = compareResultsOkay(gold_pilot_fp,
                                   from_fixed_point(data_out_pilot_fp),
                                   fail_on_err=EnableFailOnError,
@@ -60,15 +69,6 @@ def analyze():
                                   skip_n_samples=30,
                                   data_name="pilot",
                                   is_cocotb=False)
-
-    ok_fm_demod = compareResultsOkay(gold_fm_demod_fp,
-                                     from_fixed_point(data_out_fm_demod_fp),
-                                     fail_on_err=EnableFailOnError,
-                                     max_error_abs=2**-5,
-                                     max_error_norm=0.6,
-                                     skip_n_samples=30,
-                                     data_name="fm_demod",
-                                     is_cocotb=False)
 
     # --------------------------------------------------------------------------
     # Plots
@@ -83,7 +83,7 @@ def analyze():
     )
     plotData(data, title="FM Demodulator",
              filename="../tb/output/plot_fm_demod.png",
-             show=True)
+             show=not ok_fm_demod)
     # -----------------------------------------------------------------
     data = (
         (tn, from_fixed_point(data_out_pilot_fp), "data_out_pilot"),
