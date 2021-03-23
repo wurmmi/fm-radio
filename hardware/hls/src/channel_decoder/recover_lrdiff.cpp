@@ -28,7 +28,7 @@ sample_t recover_lrdiff(sample_t const& in_sample, sample_t& in_carrier_38k) {
   // Lowpass
   static FIR<coeff_t, sample_t, acc_t, filter_lp_mono_num_coeffs_c>
       fir_mono_inst;
-  sample_t lrdiff = fir_lrdiff_inst(in_sample, filter_lp_mono_coeffs_c);
+  sample_t lrdiff = fir_mono_inst(lrdiff_mod_bb, filter_lp_mono_coeffs_c);
 
   // Output
   return lrdiff;

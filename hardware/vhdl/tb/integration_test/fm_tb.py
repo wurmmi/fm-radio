@@ -171,7 +171,6 @@ class FM_TB(object):
                                               skip_n_samples=30,
                                               data_name="fm_demod")
 
-        # Compare
         self.ok_decimator = compareResultsOkay(self.model.gold_decimator_fp,
                                                self.data_out_decimator,
                                                fail_on_err=self.EnableFailOnError,

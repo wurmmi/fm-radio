@@ -47,6 +47,9 @@ def analyze():
     filename = directory_gold + "rx_carrier38kHz.txt"
     gold_carrier_38k_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
 
+    filename = directory_gold + "rx_audio_lrdiff.txt"
+    gold_audio_lrdiff_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
+
     # Testbench result data
     directory_tb = "../tb/output/"
     filename = directory_tb + "data_out_fm_demod.txt"
@@ -61,6 +64,9 @@ def analyze():
     filename = directory_tb + "data_out_carrier_38k.txt"
     data_out_carrier_38k_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
 
+    filename = directory_tb + "data_out_audio_lrdiff.txt"
+    data_out_audio_lrdiff_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
+
     # --------------------------------------------------------------------------
     # Compare data
     # --------------------------------------------------------------------------
@@ -69,7 +75,9 @@ def analyze():
     move_n_right(gold_pilot_fp, 25, fp_width_c, fp_width_frac_c)
     move_n_left(gold_audio_mono_fp, 13, fp_width_c, fp_width_frac_c)
     move_n_right(gold_carrier_38k_fp, 25, fp_width_c, fp_width_frac_c)
+    move_n_left(gold_audio_lrdiff_fp, 13, fp_width_c, fp_width_frac_c)
 
+    # Compare
     ok_fm_demod = compareResultsOkay(gold_fm_demod_fp,
                                      from_fixed_point(data_out_fm_demod_fp),
                                      fail_on_err=EnableFailOnError,
@@ -106,6 +114,15 @@ def analyze():
                                         data_name="carrier_38k",
                                         is_cocotb=False)
 
+    ok_audio_lrdiff = compareResultsOkay(gold_audio_lrdiff_fp,
+                                         from_fixed_point(data_out_audio_lrdiff_fp),
+                                         fail_on_err=EnableFailOnError,
+                                         max_error_abs=2**-3,
+                                         max_error_norm=0.9,
+                                         skip_n_samples=100,
+                                         data_name="audio_lrdiff",
+                                         is_cocotb=False)
+
     # --------------------------------------------------------------------------
     # Plots
     # --------------------------------------------------------------------------
@@ -115,6 +132,7 @@ def analyze():
     #ok_audio_mono = False
     #ok_pilot = False
     #ok_carrier_38k = False
+    ok_audio_lrdiff = False
 
     tn_fs = np.arange(0, num_samples_fs_c) / fs_c
     tn = np.arange(0, num_samples_c) / fs_rx_c
@@ -144,12 +162,20 @@ def analyze():
              show=not ok_pilot)
     # -----------------------------------------------------------------
     data = (
-        (tn, from_fixed_point(data_out_carrier_38k_fp), "data_out_carrier38k"),
-        (tn, from_fixed_point(gold_carrier_38k_fp), "gold_carrier38k")
+        (tn, from_fixed_point(data_out_carrier_38k_fp), "data_out_carrier_38k"),
+        (tn, from_fixed_point(gold_carrier_38k_fp), "gold_carrier_38k")
     )
     plotData(data, title="Carrier 38kHz",
-             filename="../tb/output/plot_carrier38k.png",
+             filename="../tb/output/plot_carrier_38k.png",
              show=not ok_carrier_38k)
+    # -----------------------------------------------------------------
+    data = (
+        (tn, from_fixed_point(data_out_audio_lrdiff_fp), "data_out_audio_lrdiff"),
+        (tn, from_fixed_point(gold_audio_lrdiff_fp), "gold_audio_lrdiff")
+    )
+    plotData(data, title="Audio LR diff",
+             filename="../tb/output/plot_audio_lrdiff.png",
+             show=not ok_audio_lrdiff)
 
 
 if __name__ == "__main__":
