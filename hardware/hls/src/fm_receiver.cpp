@@ -64,13 +64,19 @@ void fm_receiver(sample_t const& in_i,
     // Output
     // ------------------------------------------------------
 
-    out_audio_L = 0;
-    out_audio_R = 0;
-  }
+    out_audio_L = audio_L;
+    out_audio_R = audio_R;
 
-  // ------------------------------------------------------
-  // Debug
-  // ------------------------------------------------------
+    // ------------------------------------------------------
+    // Debug
+    // ------------------------------------------------------
+
+    static DataWriter writer_data_out_audio_L("data_out_audio_L.txt");
+    writer_data_out_audio_L.write(audio_L);
+
+    static DataWriter writer_data_out_audio_R("data_out_audio_R.txt");
+    writer_data_out_audio_R.write(audio_R);
+  }
 
   static DataWriter writer_data_out_fm_demod("data_out_fm_demod.txt");
   writer_data_out_fm_demod.write(fm_demod);

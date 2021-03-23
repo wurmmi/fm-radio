@@ -15,13 +15,12 @@
 using namespace std;
 
 /* Constants */
-constexpr double n_sec_c = 0.010;
+constexpr double n_sec_c = 1.7;
 const int fs_c           = 960000;  // TODO: get this from file
 const int fs_rx_c        = 120000;  // TODO: get this from file
 
 constexpr int num_samples_fs_c = n_sec_c * fs_c;
 constexpr int num_samples_c    = n_sec_c * fs_rx_c;
-constexpr double max_abs_err_c = pow(2.0, -5);
 
 const string data_folder =
     "../../../../../../../../sim/matlab/verification_data/";

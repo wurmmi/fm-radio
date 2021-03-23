@@ -12,7 +12,7 @@ from helpers import *
 # Constants
 # --------------------------------------------------------------------------
 # Number of seconds to process
-n_sec = 0.010  # TODO: get this from file
+n_sec = 1.7  # TODO: get this from file
 EnableFailOnError = False
 
 # Sample rate (NOTE: set according to Matlab model!)
@@ -50,6 +50,12 @@ def analyze():
     filename = directory_gold + "rx_audio_lrdiff.txt"
     gold_audio_lrdiff_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
 
+    filename = directory_gold + "rx_audio_L.txt"
+    gold_audio_L_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
+
+    filename = directory_gold + "rx_audio_R.txt"
+    gold_audio_R_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
+
     # Testbench result data
     directory_tb = "../tb/output/"
     filename = directory_tb + "data_out_fm_demod.txt"
@@ -67,6 +73,12 @@ def analyze():
     filename = directory_tb + "data_out_audio_lrdiff.txt"
     data_out_audio_lrdiff_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
 
+    filename = directory_tb + "data_out_audio_L.txt"
+    data_out_audio_L_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
+
+    filename = directory_tb + "data_out_audio_R.txt"
+    data_out_audio_R_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
+
     # --------------------------------------------------------------------------
     # Compare data
     # --------------------------------------------------------------------------
@@ -76,6 +88,8 @@ def analyze():
     move_n_left(gold_audio_mono_fp, 13, fp_width_c, fp_width_frac_c)
     move_n_right(gold_carrier_38k_fp, 25, fp_width_c, fp_width_frac_c)
     move_n_left(gold_audio_lrdiff_fp, 13, fp_width_c, fp_width_frac_c)
+    move_n_left(gold_audio_L_fp, 13, fp_width_c, fp_width_frac_c)
+    move_n_left(gold_audio_R_fp, 13, fp_width_c, fp_width_frac_c)
 
     # Compare
     ok_fm_demod = compareResultsOkay(gold_fm_demod_fp,
@@ -123,6 +137,24 @@ def analyze():
                                          data_name="audio_lrdiff",
                                          is_cocotb=False)
 
+    ok_audio_L = compareResultsOkay(gold_audio_L_fp,
+                                    from_fixed_point(data_out_audio_L_fp),
+                                    fail_on_err=EnableFailOnError,
+                                    max_error_abs=2**-3,
+                                    max_error_norm=0.9,
+                                    skip_n_samples=100,
+                                    data_name="audio_L",
+                                    is_cocotb=False)
+
+    ok_audio_R = compareResultsOkay(gold_audio_R_fp,
+                                    from_fixed_point(data_out_audio_R_fp),
+                                    fail_on_err=EnableFailOnError,
+                                    max_error_abs=2**-3,
+                                    max_error_norm=0.9,
+                                    skip_n_samples=100,
+                                    data_name="audio_R",
+                                    is_cocotb=False)
+
     # --------------------------------------------------------------------------
     # Plots
     # --------------------------------------------------------------------------
@@ -132,7 +164,9 @@ def analyze():
     #ok_audio_mono = False
     #ok_pilot = False
     #ok_carrier_38k = False
-    ok_audio_lrdiff = False
+    #ok_audio_lrdiff = False
+    ok_audio_L = False
+    ok_audio_R = False
 
     tn_fs = np.arange(0, num_samples_fs_c) / fs_c
     tn = np.arange(0, num_samples_c) / fs_rx_c
@@ -176,6 +210,23 @@ def analyze():
     plotData(data, title="Audio LR diff",
              filename="../tb/output/plot_audio_lrdiff.png",
              show=not ok_audio_lrdiff)
+    # -----------------------------------------------------------------
+    data = (
+        (tn, from_fixed_point(data_out_audio_L_fp), "data_out_audio_L"),
+        (tn, from_fixed_point(gold_audio_L_fp), "gold_audio_L")
+    )
+    plotData(data, title="Audio L",
+             filename="../tb/output/plot_audio_L.png",
+             show=not ok_audio_L)
+
+    # -----------------------------------------------------------------
+    data = (
+        (tn, from_fixed_point(data_out_audio_R_fp), "data_out_audio_R"),
+        (tn, from_fixed_point(gold_audio_R_fp), "gold_audio_R")
+    )
+    plotData(data, title="Audio R",
+             filename="../tb/output/plot_audio_R.png",
+             show=not ok_audio_R)
 
 
 if __name__ == "__main__":
