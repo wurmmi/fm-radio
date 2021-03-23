@@ -35,19 +35,25 @@ def analyze():
     # Golden data
     directory_gold = "../../../sim/matlab/verification_data/"
 
-    filename = directory_gold + "rx_pilot.txt"
-    gold_pilot_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
-
     filename = directory_gold + "rx_fm_demod.txt"
     gold_fm_demod_fp = loadDataFromFile(filename, num_samples_fs_c, fp_width_c, fp_width_frac_c)
 
+    filename = directory_gold + "rx_pilot.txt"
+    gold_pilot_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
+
+    filename = directory_gold + "rx_carrier38kHz.txt"
+    gold_carrier_38k_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
+
     # Testbench result data
     directory_tb = "../tb/output/"
-    filename = directory_tb + "data_out_rx_pilot.txt"
-    data_out_pilot_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
-
     filename = directory_tb + "data_out_fm_demod.txt"
     data_out_fm_demod_fp = loadDataFromFile(filename, num_samples_fs_c, fp_width_c, fp_width_frac_c)
+
+    filename = directory_tb + "data_out_pilot.txt"
+    data_out_pilot_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
+
+    filename = directory_tb + "data_out_carrier_38k.txt"
+    data_out_carrier_38k_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
 
     # --------------------------------------------------------------------------
     # Compare data
@@ -55,6 +61,7 @@ def analyze():
     # Shift loaded file-data to compensate shift to testbench-data
     # TODO: why is this necessary?
     move_n_right(gold_pilot_fp, 25, fp_width_c, fp_width_frac_c)
+    move_n_right(gold_carrier_38k_fp, 25, fp_width_c, fp_width_frac_c)
 
     ok_fm_demod = compareResultsOkay(gold_fm_demod_fp,
                                      from_fixed_point(data_out_fm_demod_fp),
@@ -73,6 +80,15 @@ def analyze():
                                   skip_n_samples=100,
                                   data_name="pilot",
                                   is_cocotb=False)
+
+    ok_carrier_38k = compareResultsOkay(gold_carrier_38k_fp,
+                                        from_fixed_point(data_out_carrier_38k_fp),
+                                        fail_on_err=EnableFailOnError,
+                                        max_error_abs=2**-5,
+                                        max_error_norm=0.06,
+                                        skip_n_samples=10,
+                                        data_name="carrier_38k",
+                                        is_cocotb=False)
 
     # --------------------------------------------------------------------------
     # Plots
@@ -100,6 +116,14 @@ def analyze():
     plotData(data, title="Pilot",
              filename="../tb/output/plot_pilot.png",
              show=not ok_pilot)
+    # -----------------------------------------------------------------
+    data = (
+        (tn, from_fixed_point(data_out_carrier_38k_fp), "data_out_carrier38k"),
+        (tn, from_fixed_point(gold_carrier_38k_fp), "gold_carrier38k")
+    )
+    plotData(data, title="Carrier 38kHz",
+             filename="../tb/output/plot_carrier38k.png",
+             show=not ok_carrier_38k)
 
 
 if __name__ == "__main__":

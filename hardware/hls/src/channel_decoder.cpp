@@ -6,34 +6,40 @@
  */
 /*****************************************************************************/
 
+#include "channel_decoder.hpp"
+
 #include <iostream>
 
 #include "../tb/helper/DataWriter.hpp"
-#include "filter_coeff_headers/filter_bp_pilot.h"
+#include "channel_decoder/recover_carriers.hpp"
 #include "fm_receiver.hpp"
-#include "utils/fir.hpp"
 
 using namespace std;
 
-// TODO: get this from a global header file
-const ap_fixed<4, 4> pilot_scale_factor_c = 6;
+// TODO: remove this comment block
+// PYTHON NAMES
+//    data_out_fm_demod = []
+//    data_out_decimator = []
+//    data_out_audio_mono = []
+//    data_out_pilot = []
+//    data_out_carrier_38k = []
+//    data_out_audio_lrdiff = []
+//    data_out_audio_L = []
+//    data_out_audio_R = []
 
 void channel_decoder(sample_t const& in_sample,
                      sample_t& out_audio_L,
                      sample_t& out_audio_R) {
   // ------------------------------------------------------
-  // Recover pilot
+  // Recover carriers
   // ------------------------------------------------------
-  static FIR<coeff_t, sample_t, acc_t, filter_bp_pilot_num_coeffs_c>
-      fir_pilot_inst;
-
-  sample_t pilot = pilot_scale_factor_c *
-                   fir_pilot_inst(in_sample, filter_bp_pilot_coeffs_c);
+  sample_t carrier_38k;
+  sample_t carrier_57k;
+  recover_carriers(in_sample, carrier_38k, carrier_57k);
 
   // ------------------------------------------------------
   // Debug
   // ------------------------------------------------------
-
-  static DataWriter writer_data_out_pilot("data_out_rx_pilot.txt");
-  writer_data_out_pilot.write(pilot);
+  static DataWriter writer_data_out_carrier_38k("data_out_carrier_38k.txt");
+  writer_data_out_carrier_38k.write(carrier_38k);
 }
