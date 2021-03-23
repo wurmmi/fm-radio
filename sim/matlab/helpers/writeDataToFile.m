@@ -37,7 +37,7 @@ if isreal(data)
         data, fixdt(true, fp_config.width, fp_config.width_frac));
 
     % Write to file
-    fprintf(fileID, "%.32f\n", data_fp);
+    fprintf(fileID, "%.17f\n", data_fp);
 else
     % Convert to fixed point
     %data_fp_i = cast(real(data), 'like', fi([], true, fp_config.width, fp_config.width_frac));
@@ -50,8 +50,8 @@ else
 
     % Write to file
     for i=1:length(data_fp_i)
-        fprintf(fileID, "%.32f\n", data_fp_i(i));
-        fprintf(fileID, "%.32f\n", data_fp_q(i));
+        fprintf(fileID, "%.17f\n", data_fp_i(i));
+        fprintf(fileID, "%.17f\n", data_fp_q(i));
     end
 end
 
