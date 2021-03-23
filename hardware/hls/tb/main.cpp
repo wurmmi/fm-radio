@@ -14,6 +14,8 @@
 
 using namespace std;
 
+// TODO: runtime measurement with std::chrono
+
 /* Constants */
 constexpr double n_sec_c = 1.7;
 const int fs_c           = 960000;  // TODO: get this from file
