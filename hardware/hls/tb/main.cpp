@@ -15,7 +15,7 @@
 using namespace std;
 
 /* Constants */
-constexpr double n_sec_c = 0.001;
+constexpr double n_sec_c = 0.010;
 const int fs_c           = 960000;  // TODO: get this from file
 const int fs_rx_c        = 120000;  // TODO: get this from file
 

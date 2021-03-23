@@ -10,16 +10,22 @@
 
 using namespace std;
 
-sample_t decimator(sample_t const& in) {
+void decimator(sample_t const& in, sample_t& out, bool& out_valid) {
   static uint8_t count = 0;
   static sample_t decimated;
+  static bool valid = false;
 
   if (count >= osr_rx_c - 1) {
-    decimated = in;
+    // Output decimated value
     count     = 0;
+    decimated = in;
+    valid     = true;
   } else {
+    // No output
     count++;
+    valid = false;
   }
 
-  return decimated;
+  out_valid = valid;
+  out       = decimated;
 }

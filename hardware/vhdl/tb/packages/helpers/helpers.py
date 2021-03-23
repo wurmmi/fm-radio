@@ -119,16 +119,16 @@ def compareResultsOkay(gold, actual, fail_on_err,
     return True
 
 
-def move_n_right(data, num_of_zeros, fp_width, fp_width_frac):
-    for _ in range(0, num_of_zeros):
+def move_n_right(data, amount, fp_width, fp_width_frac):
+    for _ in range(0, amount):
         # insert at begin
         data.insert(0, to_fixed_point(0, fp_width, fp_width_frac))
         # remove end
         data.pop()
 
 
-def move_n_left(data, num_of_zeros, fp_width, fp_width_frac):
-    for _ in range(0, num_of_zeros):
+def move_n_left(data, amount, fp_width, fp_width_frac):
+    for _ in range(0, amount):
         # insert at end
         data.append(to_fixed_point(0, fp_width, fp_width_frac))
         # remove begin

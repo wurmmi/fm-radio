@@ -13,6 +13,6 @@
 
 const uint8_t osr_rx_c = 8;
 
-sample_t decimator(sample_t const& in);
+void decimator(sample_t const& in, sample_t& out, bool& valid);
 
 #endif /* _DECIMATOR_HPP */

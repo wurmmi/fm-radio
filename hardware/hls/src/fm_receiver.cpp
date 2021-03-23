@@ -52,30 +52,31 @@ void fm_receiver(sample_t const& in_i,
   // ------------------------------------------------------
   // Decimator
   // ------------------------------------------------------
+  sample_t fm_channel_data;
+  bool fm_channel_data_valid;
+  decimator(fm_demod, fm_channel_data, fm_channel_data_valid);
+  if (fm_channel_data_valid) {
+    // ------------------------------------------------------
+    // Recover pilot
+    // ------------------------------------------------------
 
-  sample_t fm_channel_data = decimator(fm_demod);
+    sample_t pilot = pilot_scale_factor_c *
+                     fir_pilot_inst(fm_channel_data, filter_bp_pilot_coeffs_c);
 
-  // ------------------------------------------------------
-  // Recover pilot
-  // ------------------------------------------------------
+    // ------------------------------------------------------
+    // Output
+    // ------------------------------------------------------
 
-  sample_t pilot = pilot_scale_factor_c *
-                   fir_pilot_inst(fm_channel_data, filter_bp_pilot_coeffs_c);
+    audio_L = 0;
+    audio_R = 0;
 
-  // ------------------------------------------------------
-  // Output
-  // ------------------------------------------------------
-
-  audio_L = 0;
-  audio_R = 0;
-
-  // ------------------------------------------------------
-  // Debug
-  // ------------------------------------------------------
+    // ------------------------------------------------------
+    // Debug
+    // ------------------------------------------------------
+    static DataWriter writer_data_out_pilot("data_out_rx_pilot.txt");
+    writer_data_out_pilot.write(pilot);
+  }
 
   static DataWriter writer_data_out_fm_demod("data_out_fm_demod.txt");
   writer_data_out_fm_demod.write(fm_demod);
-
-  static DataWriter writer_data_out_pilot("data_out_rx_pilot.txt");
-  writer_data_out_pilot.write(pilot);
 }
