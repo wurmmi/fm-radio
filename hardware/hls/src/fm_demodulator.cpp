@@ -14,12 +14,12 @@
 
 using namespace std;
 
-sample_t fm_demodulator(sample_t in_i, sample_t in_q) {
-  // Delay
-  static DELAY<sample_t, 3> delay_i_inst;
-  static DELAY<sample_t, 3> delay_q_inst;
+static DELAY<sample_t, 3> delay_i_inst;
+static DELAY<sample_t, 3> delay_q_inst;
 
-  sample_t i_sample_del = delay_i_inst(0);
+sample_t fm_demodulator(sample_t const& in_i, sample_t const& in_q) {
+  // Delay
+  sample_t i_sample_del = delay_i_inst(in_i);
   sample_t q_sample_del = delay_q_inst(in_q);
 
   // Differentiate
@@ -31,7 +31,6 @@ sample_t fm_demodulator(sample_t in_i, sample_t in_q) {
   sample_t demod_part_b = in_q * i_sample_diff;
 
   sample_t fm_demod = demod_part_a - demod_part_b;
-  // sample_t fm_demod = 0;
 
   return fm_demod;
 }

@@ -37,10 +37,10 @@ using namespace std;
 // TODO: get this from a global header file
 const ap_fixed<4, 4> pilot_scale_factor_c = 6;
 
-void fm_receiver(sample_t in_i,
-                 sample_t in_q,
-                 sample_t &audio_L,
-                 sample_t &audio_R) {
+void fm_receiver(sample_t const& in_i,
+                 sample_t const& in_q,
+                 sample_t& audio_L,
+                 sample_t& audio_R) {
   // ------------------------------------------------------
   // FM Demodulator
   // ------------------------------------------------------

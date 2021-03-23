@@ -11,9 +11,9 @@
 
 #include "fm_global.hpp"
 
-void fm_receiver(sample_t in_i,
-                 sample_t in_q,
-                 sample_t &audio_L,
-                 sample_t &audio_R);
+void fm_receiver(sample_t const& in_i,
+                 sample_t const& in_q,
+                 sample_t& audio_L,
+                 sample_t& audio_R);
 
 #endif /* _FM_RECEIVER_HPP */

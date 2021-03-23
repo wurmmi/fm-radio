@@ -22,6 +22,12 @@ class DELAY {
   sample_T shift_reg[delay_n_T];
 
  public:
+  DELAY() {
+    cout << "DELAY::CTOR" << endl;
+  }
+  ~DELAY() {
+    cout << "DELAY::DTOR" << endl;
+  }
   sample_T operator()(sample_T x);
 
   template <class sample_TT, uint8_t delay_n_TT>

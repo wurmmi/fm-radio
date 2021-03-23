@@ -29,6 +29,12 @@ class FIR {
   sample_T shift_reg[fir_n_T - 1];
 
  public:
+  FIR() {
+    cout << "FIR::CTOR" << endl;
+  }
+  ~FIR() {
+    cout << "FIR::DTOR" << endl;
+  }
   sample_T operator()(sample_T x, const coeff_T coeff[fir_n_T]);
 
   template <class coef_TT, class sample_TT, class acc_TT, uint8_t fir_n_TT>

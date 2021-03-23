@@ -24,14 +24,18 @@ class DataWriter {
   data_vec_t data;
 
  public:
-  DataWriter(std::string filename) {
+  DataWriter(std::string const& filename) {
+    std::cout << "DataWriter::CTOR" << std::endl;
+
     std::string filepath = folder_output + filename;
     ofs.open(filepath, std::ios::out);
     if (!ofs.is_open()) {
+      std::cout << "DataWriter::CTOR failed to open file" << std::endl;
       throw std::runtime_error("Failed to open file'" + filepath);
     }
   }
   ~DataWriter() {
+    std::cout << "DataWriter::DTOR" << std::endl;
     ofs.close();
   }
 
@@ -42,10 +46,6 @@ class DataWriter {
 
     // Store in local vector
     data.emplace_back(value);
-  }
-
-  data_vec_t const& getData() {
-    return data;
   }
 };
 
