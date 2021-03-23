@@ -26,23 +26,16 @@
 #include <iostream>
 
 #include "../tb/helper/DataWriter.hpp"
-#include "filter_coeff_headers/filter_bp_pilot.h"
+#include "channel_decoder.hpp"
 #include "fm_demodulator.hpp"
 #include "utils/decimator.hpp"
-#include "utils/fir.hpp"
 
 using namespace std;
 
-// TODO: get this from a global header file
-const ap_fixed<4, 4> pilot_scale_factor_c = 6;
-
-static FIR<coeff_t, sample_t, acc_t, filter_bp_pilot_num_coeffs_c>
-    fir_pilot_inst;
-
 void fm_receiver(sample_t const& in_i,
                  sample_t const& in_q,
-                 sample_t& audio_L,
-                 sample_t& audio_R) {
+                 sample_t& out_audio_L,
+                 sample_t& out_audio_R) {
   // ------------------------------------------------------
   // FM Demodulator
   // ------------------------------------------------------
@@ -52,30 +45,31 @@ void fm_receiver(sample_t const& in_i,
   // ------------------------------------------------------
   // Decimator
   // ------------------------------------------------------
+
   sample_t fm_channel_data;
   bool fm_channel_data_valid;
   decimator(fm_demod, fm_channel_data, fm_channel_data_valid);
+
   if (fm_channel_data_valid) {
     // ------------------------------------------------------
-    // Recover pilot
+    // Channel decoder
     // ------------------------------------------------------
 
-    sample_t pilot = pilot_scale_factor_c *
-                     fir_pilot_inst(fm_channel_data, filter_bp_pilot_coeffs_c);
+    sample_t audio_L;
+    sample_t audio_R;
+    channel_decoder(fm_channel_data, audio_L, audio_R);
 
     // ------------------------------------------------------
     // Output
     // ------------------------------------------------------
 
-    audio_L = 0;
-    audio_R = 0;
-
-    // ------------------------------------------------------
-    // Debug
-    // ------------------------------------------------------
-    static DataWriter writer_data_out_pilot("data_out_rx_pilot.txt");
-    writer_data_out_pilot.write(pilot);
+    out_audio_L = 0;
+    out_audio_R = 0;
   }
+
+  // ------------------------------------------------------
+  // Debug
+  // ------------------------------------------------------
 
   static DataWriter writer_data_out_fm_demod("data_out_fm_demod.txt");
   writer_data_out_fm_demod.write(fm_demod);

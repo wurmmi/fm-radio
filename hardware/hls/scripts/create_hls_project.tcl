@@ -27,9 +27,10 @@ add_files      $SRC_DIR/channel_decoder/recover_carriers.cpp   -cflags $CPPFLAGS
 add_files      $SRC_DIR/channel_decoder/recover_lrdiff.cpp     -cflags $CPPFLAGS
 add_files      $SRC_DIR/channel_decoder/recover_mono.cpp       -cflags $CPPFLAGS
 add_files      $SRC_DIR/channel_decoder/separate_lr_audio.cpp  -cflags $CPPFLAGS
+add_files      $SRC_DIR/channel_decoder.hpp
 add_files      $SRC_DIR/channel_decoder.cpp                    -cflags $CPPFLAGS
-add_files      $SRC_DIR/fm_receiver.cpp                        -cflags $CPPFLAGS
 add_files      $SRC_DIR/fm_receiver.hpp
+add_files      $SRC_DIR/fm_receiver.cpp                        -cflags $CPPFLAGS
 
 # Testbench files
 file mkdir     $TB_DIR/output/
