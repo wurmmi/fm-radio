@@ -28,6 +28,7 @@
 #include "../tb/helper/DataWriter.hpp"
 #include "filter_coeff_headers/filter_bp_pilot.h"
 #include "fm_demodulator.hpp"
+#include "utils/decimator.hpp"
 #include "utils/fir.hpp"
 
 using namespace std;
@@ -48,10 +49,18 @@ void fm_receiver(sample_t const& in_i,
 
   sample_t fm_demod = fm_demodulator(in_i, in_q);
 
-  // Recover pilot
+  // ------------------------------------------------------
+  // Decimator
+  // ------------------------------------------------------
 
-  sample_t pilot =
-      pilot_scale_factor_c * fir_pilot_inst(fm_demod, filter_bp_pilot_coeffs_c);
+  sample_t fm_channel_data = decimator(fm_demod);
+
+  // ------------------------------------------------------
+  // Recover pilot
+  // ------------------------------------------------------
+
+  sample_t pilot = pilot_scale_factor_c *
+                   fir_pilot_inst(fm_channel_data, filter_bp_pilot_coeffs_c);
 
   // ------------------------------------------------------
   // Output

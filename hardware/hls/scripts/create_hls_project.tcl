@@ -16,16 +16,18 @@ open_project -reset $project_name
 
 # Design files
 add_files      $SRC_DIR/filter_coeff_headers/
-add_files      $SRC_DIR/fm_demodulator.hpp
-add_files      $SRC_DIR/fm_demodulator.cpp                     -cflags $CPPFLAGS
+add_files      $SRC_DIR/fm_global.hpp
+add_files      $SRC_DIR/utils/decimator.hpp
+add_files      $SRC_DIR/utils/decimator.cpp                    -cflags $CPPFLAGS
+add_files      $SRC_DIR/utils/fir.hpp
+add_files      $SRC_DIR/utils/delay.hpp
+add_files      $SRC_DIR/utils/fm_demodulator.hpp
+add_files      $SRC_DIR/utils/fm_demodulator.cpp               -cflags $CPPFLAGS
 add_files      $SRC_DIR/channel_decoder/recover_carriers.cpp   -cflags $CPPFLAGS
 add_files      $SRC_DIR/channel_decoder/recover_lrdiff.cpp     -cflags $CPPFLAGS
 add_files      $SRC_DIR/channel_decoder/recover_mono.cpp       -cflags $CPPFLAGS
 add_files      $SRC_DIR/channel_decoder/separate_lr_audio.cpp  -cflags $CPPFLAGS
 add_files      $SRC_DIR/channel_decoder.cpp                    -cflags $CPPFLAGS
-add_files      $SRC_DIR/utils/fir.hpp
-add_files      $SRC_DIR/utils/delay.hpp
-add_files      $SRC_DIR/fm_global.hpp
 add_files      $SRC_DIR/fm_receiver.cpp                        -cflags $CPPFLAGS
 add_files      $SRC_DIR/fm_receiver.hpp
 
