@@ -69,14 +69,18 @@ def analyze():
                                   from_fixed_point(data_out_pilot_fp),
                                   fail_on_err=EnableFailOnError,
                                   max_error_abs=2**-5,
-                                  max_error_norm=2.5,
-                                  skip_n_samples=30,
+                                  max_error_norm=0.5,
+                                  skip_n_samples=100,
                                   data_name="pilot",
                                   is_cocotb=False)
 
     # --------------------------------------------------------------------------
     # Plots
     # --------------------------------------------------------------------------
+
+    # TODO: Enable plots for debug
+    #ok_pilot = False
+    #ok_fm_demod = False
 
     tn_fs = np.arange(0, num_samples_fs_c) / fs_c
     tn = np.arange(0, num_samples_c) / fs_rx_c
@@ -95,7 +99,7 @@ def analyze():
     )
     plotData(data, title="Pilot",
              filename="../tb/output/plot_pilot.png",
-             show=True)
+             show=not ok_pilot)
 
 
 if __name__ == "__main__":
