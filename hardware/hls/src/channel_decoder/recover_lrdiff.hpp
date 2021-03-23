@@ -1,20 +1,18 @@
 /*****************************************************************************/
 /**
- * @file    recover_lrdiff.cpp
+ * @file    recover_lrdiff.hpp
  * @author  Michael Wurm <wurm.michael95@gmail.com>
- * @brief   FM Receiver IP implementation.
+ * @brief   Recover LR Diff IP header.
  */
 /*****************************************************************************/
 
-#include <iostream>
+#ifndef _RECOVER_CARRIERS_HPP
+#define _RECOVER_CARRIERS_HPP
 
-#include "fm_receiver.hpp"
-#include "utils/fir.hpp"
-
-using namespace std;
+#include "fm_global.hpp"
 
 void recover_lrdiff(sample_t const& in_sample,
                     sample_t& in_carrier_38k,
-                    sample_t& out_lrdiff) {
-  return 0;
-}
+                    sample_t& out_lrdiff);
+
+#endif /* _RECOVER_CARRIERS_HPP */

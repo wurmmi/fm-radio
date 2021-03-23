@@ -1,18 +1,16 @@
 /*****************************************************************************/
 /**
- * @file    decimator.hpp
+ * @file    recover_mono.hpp
  * @author  Michael Wurm <wurm.michael95@gmail.com>
- * @brief   Decimator IP header.
+ * @brief   Recover Mono IP header.
  */
 /*****************************************************************************/
 
-#ifndef _DECIMATOR_HPP
-#define _DECIMATOR_HPP
+#ifndef _RECOVER_MONO_HPP
+#define _RECOVER_MONO_HPP
 
 #include "fm_global.hpp"
 
-const uint8_t osr_rx_c = 8;
+sample_t recover_mono(sample_t const& in_sample);
 
-void decimator(sample_t const& in_sample, sample_t& out, bool& valid);
-
-#endif /* _DECIMATOR_HPP */
+#endif /* _RECOVER_MONO_HPP */

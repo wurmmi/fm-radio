@@ -11,7 +11,7 @@
 
 #include "fm_global.hpp"
 
-void channel_decoder(sample_t const& sample_in,
+void channel_decoder(sample_t const& in_sample,
                      sample_t& out_audio_L,
                      sample_t& out_audio_R);
 

@@ -1,19 +1,19 @@
 /*****************************************************************************/
 /**
- * @file    separate_lr_audio.cpp
+ * @file    separate_lr_audio.hpp
  * @author  Michael Wurm <wurm.michael95@gmail.com>
- * @brief   Separate LR Audio IP implementation.
+ * @brief   Separate LR Audio IP header.
  */
 /*****************************************************************************/
 
-#include <iostream>
+#ifndef _SEPARATE_AUDIO_HPP
+#define _SEPARATE_AUDIO_HPP
 
-#include "fm_receiver.hpp"
-#include "utils/fir.hpp"
-
-using namespace std;
+#include "fm_global.hpp"
 
 void separate_lr_audio(sample_t const& in_mono,
                        sample_t const& in_lrdiff,
                        sample_t& out_audio_L,
-                       sample_t& out_audio_R) {}
+                       sample_t& out_audio_R);
+
+#endif /* _SEPARATE_AUDIO_HPP */

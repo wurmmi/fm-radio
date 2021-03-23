@@ -18,7 +18,7 @@ using namespace std;
 // TODO: get this from a global header file
 const ap_fixed<4, 4> pilot_scale_factor_c = 6;
 
-void channel_decoder(sample_t const& sample_in,
+void channel_decoder(sample_t const& in_sample,
                      sample_t& out_audio_L,
                      sample_t& out_audio_R) {
   // ------------------------------------------------------
@@ -28,7 +28,7 @@ void channel_decoder(sample_t const& sample_in,
       fir_pilot_inst;
 
   sample_t pilot = pilot_scale_factor_c *
-                   fir_pilot_inst(sample_in, filter_bp_pilot_coeffs_c);
+                   fir_pilot_inst(in_sample, filter_bp_pilot_coeffs_c);
 
   // ------------------------------------------------------
   // Debug

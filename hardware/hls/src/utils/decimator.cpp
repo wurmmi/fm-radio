@@ -10,7 +10,7 @@
 
 using namespace std;
 
-void decimator(sample_t const& sample_in, sample_t& out, bool& out_valid) {
+void decimator(sample_t const& in_sample, sample_t& out, bool& out_valid) {
   static uint8_t count = 0;
   static sample_t decimated;
   static bool valid = false;
@@ -18,7 +18,7 @@ void decimator(sample_t const& sample_in, sample_t& out, bool& out_valid) {
   if (count >= osr_rx_c - 1) {
     // Output decimated value
     count     = 0;
-    decimated = sample_in;
+    decimated = in_sample;
     valid     = true;
   } else {
     // No output
