@@ -78,19 +78,19 @@ def analyze():
     tn = np.arange(0, num_samples_c) / fs_rx_c
     # -----------------------------------------------------------------
     data = (
-        (tn, from_fixed_point(data_out_pilot_fp), "data_out_pilot"),
-        (tn, from_fixed_point(gold_pilot_fp), "gold_pilot")
-    )
-    plotData(data, title="Pilot",
-             filename="../tb/output/plot_pilot.png",
-             show=True)
-    # -----------------------------------------------------------------
-    data = (
         (tn_fs, from_fixed_point(data_out_fm_demod_fp), "data_out_fm_demod"),
         (tn_fs, from_fixed_point(gold_fm_demod_fp), "gold_fm_demod")
     )
     plotData(data, title="FM Demodulator",
              filename="../tb/output/plot_fm_demod.png",
+             show=True)
+    # -----------------------------------------------------------------
+    data = (
+        (tn, from_fixed_point(data_out_pilot_fp), "data_out_pilot"),
+        (tn, from_fixed_point(gold_pilot_fp), "gold_pilot")
+    )
+    plotData(data, title="Pilot",
+             filename="../tb/output/plot_pilot.png",
              show=True)
 
 

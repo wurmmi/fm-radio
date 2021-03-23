@@ -11,7 +11,7 @@
 
 #include <ap_fixed.h>
 
-#define FP_WIDTH      ((uint32_t)16)
+#define FP_WIDTH      ((uint32_t)17)
 #define FP_WIDTH_FRAC ((uint32_t)14)
 #define FP_WIDTH_INT  (FP_WIDTH - FP_WIDTH_FRAC)
 
