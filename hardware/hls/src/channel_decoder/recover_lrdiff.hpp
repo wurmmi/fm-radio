@@ -6,8 +6,8 @@
  */
 /*****************************************************************************/
 
-#ifndef _RECOVER_CARRIERS_HPP
-#define _RECOVER_CARRIERS_HPP
+#ifndef _RECOVER_LRDIFF_HPP
+#define _RECOVER_LRDIFF_HPP
 
 #include "fm_global.hpp"
 
@@ -15,4 +15,4 @@ void recover_lrdiff(sample_t const& in_sample,
                     sample_t& in_carrier_38k,
                     sample_t& out_lrdiff);
 
-#endif /* _RECOVER_CARRIERS_HPP */
+#endif /* _RECOVER_LRDIFF_HPP */

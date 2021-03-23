@@ -6,10 +6,7 @@
  */
 /*****************************************************************************/
 
-#include <iostream>
-
-#include "fm_receiver.hpp"
-#include "utils/fir.hpp"
+#include "separate_lr_audio.hpp"
 
 using namespace std;
 

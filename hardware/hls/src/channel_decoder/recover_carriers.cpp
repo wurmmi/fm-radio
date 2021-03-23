@@ -8,12 +8,8 @@
 
 #include "recover_carriers.hpp"
 
-#include <iostream>
-
 using namespace std;
 
 void recover_carriers(sample_t const& in_sample,
                       sample_t& out_carrier_38k,
-                      sample_t& out_carrier_57k) {
-  return 0;
-}
+                      sample_t& out_carrier_57k) {}

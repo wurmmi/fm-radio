@@ -23,9 +23,13 @@ add_files      $SRC_DIR/utils/fir.hpp
 add_files      $SRC_DIR/utils/delay.hpp
 add_files      $SRC_DIR/utils/fm_demodulator.hpp
 add_files      $SRC_DIR/utils/fm_demodulator.cpp               -cflags $CPPFLAGS
+add_files      $SRC_DIR/channel_decoder/recover_carriers.hpp
 add_files      $SRC_DIR/channel_decoder/recover_carriers.cpp   -cflags $CPPFLAGS
+add_files      $SRC_DIR/channel_decoder/recover_lrdiff.hpp
 add_files      $SRC_DIR/channel_decoder/recover_lrdiff.cpp     -cflags $CPPFLAGS
+add_files      $SRC_DIR/channel_decoder/recover_mono.hpp
 add_files      $SRC_DIR/channel_decoder/recover_mono.cpp       -cflags $CPPFLAGS
+add_files      $SRC_DIR/channel_decoder/separate_lr_audio.hpp
 add_files      $SRC_DIR/channel_decoder/separate_lr_audio.cpp  -cflags $CPPFLAGS
 add_files      $SRC_DIR/channel_decoder.hpp
 add_files      $SRC_DIR/channel_decoder.cpp                    -cflags $CPPFLAGS
