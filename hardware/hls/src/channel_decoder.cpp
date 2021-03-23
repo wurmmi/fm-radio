@@ -12,6 +12,7 @@
 
 #include "../tb/helper/DataWriter.hpp"
 #include "channel_decoder/recover_carriers.hpp"
+#include "channel_decoder/recover_lrdiff.hpp"
 #include "channel_decoder/recover_mono.hpp"
 #include "fm_receiver.hpp"
 
@@ -42,6 +43,11 @@ void channel_decoder(sample_t const& in_sample,
   // Recover mono audio
   // ------------------------------------------------------
   sample_t audio_mono = recover_mono(in_sample);
+
+  // ------------------------------------------------------
+  // Recover LR diff audio
+  // ------------------------------------------------------
+  sample_t audio_lrdiff = recover_lrdiff(in_sample, carrier_38k);
 
   // ------------------------------------------------------
   // Debug
