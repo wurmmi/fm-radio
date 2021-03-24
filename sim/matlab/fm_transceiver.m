@@ -35,7 +35,7 @@ dir_output  = "./matlab_output/";
 
 % Simulation options
 EnableWriteDataFiles = true;
-EnablePlots = true;
+EnablePlots          = true;
 
 EnableSenderSourceRecordedFile = false;
 EnableSenderSourceCreateSim    = true;
@@ -130,7 +130,7 @@ if EnableWriteDataFiles
 
     disp('--- Verification data');
     % Only write a fraction of the simulation time to file
-    n_sec_file  = 0.010;
+    n_sec_file  = 0.1;
     num_samples = n_sec_file * fs/osr_rx;
     
     % Test data
