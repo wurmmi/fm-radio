@@ -18,6 +18,6 @@ typedef sample_t coeff_t;
 typedef sample_t acc_t;
 
 const ap_fixed<4, 4> pilot_scale_factor_c = PILOT_SCALE_FACTOR;
-const ap_fixed<3, 1> carrier_38k_offset_c = CARRIER_38K_OFFSET;
+const ap_fixed<5, 2> carrier_38k_offset_c = CARRIER_38K_OFFSET;
 
 #endif /* _FM_GLOBAL_HPP */

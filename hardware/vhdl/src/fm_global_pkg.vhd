@@ -30,7 +30,7 @@ package fm_global_pkg is
 
   --! Pilot recovery
   constant pilot_scale_factor_c : u_sfixed(4 downto 0)  := to_sfixed(pilot_scale_factor_spec_c, 4, 0);
-  constant carrier_38k_offset_c : u_sfixed(0 downto -2) := to_sfixed(carrier_38k_offset_spec_c, 0, -2);
+  constant carrier_38k_offset_c : u_sfixed(2 downto -2) := to_sfixed(carrier_38k_offset_spec_c, 2, -2);
 
   --! Value
   subtype iq_value_t is u_sfixed(fp_width_int_c downto -fp_width_frac_c);
