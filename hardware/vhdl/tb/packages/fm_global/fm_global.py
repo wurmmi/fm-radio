@@ -2,8 +2,15 @@
 # (C) Michael Wurm 2021
 # *** DO NOT MODIFY ***
 
+# Global constants for FM Receiver IP and testbench
+# Package 'fm_global'
+
+# General
 fp_width_c      = 16
 fp_width_frac_c = 14
 fs_c            = 960000
 fs_rx_c         = 120000
 osr_rx_c        = 8
+
+# IP specific
+pilot_output_scale_c = 6

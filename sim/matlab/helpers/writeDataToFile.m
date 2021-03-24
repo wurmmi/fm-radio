@@ -1,7 +1,7 @@
 %-------------------------------------------------------------------------
 % File        : writeDataToFile.m
 % Author      : Michael Wurm <wurm.michael95@gmail.com>
-% Description : Writes data to file.
+% Description : Writes data to a file.
 %-------------------------------------------------------------------------
 
 function status = writeDataToFile(data, num_samples, filename, fp_config)

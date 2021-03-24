@@ -97,7 +97,8 @@ def analyze():
                                      fail_on_err=EnableFailOnError,
                                      max_error_abs=2**-5,
                                      max_error_norm=0.06,
-                                     skip_n_samples=30,
+                                     skip_n_samples_begin=30,
+                                     skip_n_samples_end=30,
                                      data_name="fm_demod",
                                      is_cocotb=False)
 
@@ -106,7 +107,8 @@ def analyze():
                                        fail_on_err=EnableFailOnError,
                                        max_error_abs=2**-5,
                                        max_error_norm=0.6,
-                                       skip_n_samples=100,
+                                       skip_n_samples_begin=100,
+                                       skip_n_samples_end=100,
                                        data_name="audio_mono",
                                        is_cocotb=False)
 
@@ -115,7 +117,8 @@ def analyze():
                                   fail_on_err=EnableFailOnError,
                                   max_error_abs=0.5,
                                   max_error_norm=3.0,
-                                  skip_n_samples=100,
+                                  skip_n_samples_begin=100,
+                                  skip_n_samples_end=100,
                                   data_name="pilot",
                                   is_cocotb=False)
 
@@ -124,7 +127,8 @@ def analyze():
                                         fail_on_err=EnableFailOnError,
                                         max_error_abs=0.7,
                                         max_error_norm=7.0,
-                                        skip_n_samples=100,
+                                        skip_n_samples_begin=100,
+                                        skip_n_samples_end=100,
                                         data_name="carrier_38k",
                                         is_cocotb=False)
 
@@ -133,7 +137,8 @@ def analyze():
                                          fail_on_err=EnableFailOnError,
                                          max_error_abs=2**-3,
                                          max_error_norm=0.9,
-                                         skip_n_samples=100,
+                                         skip_n_samples_begin=100,
+                                         skip_n_samples_end=100,
                                          data_name="audio_lrdiff",
                                          is_cocotb=False)
 
@@ -142,7 +147,8 @@ def analyze():
                                     fail_on_err=EnableFailOnError,
                                     max_error_abs=2**-3,
                                     max_error_norm=0.9,
-                                    skip_n_samples=100,
+                                    skip_n_samples_begin=100,
+                                    skip_n_samples_end=100,
                                     data_name="audio_L",
                                     is_cocotb=False)
 
@@ -151,7 +157,8 @@ def analyze():
                                     fail_on_err=EnableFailOnError,
                                     max_error_abs=2**-3,
                                     max_error_norm=0.9,
-                                    skip_n_samples=100,
+                                    skip_n_samples_begin=100,
+                                    skip_n_samples_end=100,
                                     data_name="audio_R",
                                     is_cocotb=False)
 

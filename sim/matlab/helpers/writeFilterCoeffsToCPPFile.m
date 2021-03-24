@@ -1,12 +1,12 @@
 %-------------------------------------------------------------------------
 % File        : writeFilterCoeffsToCPPFile.m
 % Author      : Michael Wurm <wurm.michael95@gmail.com>
-% Description : Writes filter coefficients to C++ header file.
+% Description : Writes filter coefficients to a C++ header file.
 %-------------------------------------------------------------------------
 
 function status = writeFilterCoeffsToCPPFile( ...
     coeffs, filtername, filedir, fp_config)
-%writeFilterCoeffsToCPPFile - Writes filter coefficients to C++ header file.
+%writeFilterCoeffsToCPPFile - Writes filter coefficients to a C++ header file.
 %   coeffs               ... data to be written
 %   filtername           ... name used for constant
 %   filedir              ... directory where to store the C++ header file

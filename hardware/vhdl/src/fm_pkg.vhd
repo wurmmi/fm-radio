@@ -11,6 +11,9 @@ use ieee.numeric_std.all;
 use ieee.fixed_pkg.all;
 use ieee.fixed_float_types.all;
 
+library work;
+use work.fm_global_pkg.all;
+
 package fm_pkg is
 
   ------------------------------------------------------------------------------
@@ -18,12 +21,15 @@ package fm_pkg is
   ------------------------------------------------------------------------------
 
   --! Oversampling rate fs:fs_rx
-  constant osr_rx_c : natural := 8;
+  constant osr_rx_c : natural := osr_rx_spec_c;
 
-  --! Fixed point bitwidth
-  constant fp_width_c      : natural := 16;
-  constant fp_width_frac_c : natural := 14;
-  constant fp_width_int_c  : natural := fp_width_c - fp_width_frac_c - 1;
+  --! Fixed point bitwidths
+  constant fp_width_c      : natural := fp_width_spec_c;
+  constant fp_width_frac_c : natural := fp_width_frac_spec_c;
+  constant fp_width_int_c  : natural := fp_width_int_spec_c;
+
+  --! Pilot recovery
+  constant pilot_scale_factor_c : u_sfixed(4 downto 0) := pilot_scale_factor_spec_c;
 
   --! Value
   subtype iq_value_t is u_sfixed(fp_width_int_c downto -fp_width_frac_c);

@@ -73,7 +73,7 @@ elif [ "$ARG" == "hls_export" ]; then
 else
   echo "===================================================================================="
   echo "(ERROR) Wrong or invalid argument."
-  echo "Usage: ./run.sh <hls_project|hls_sim|hls_synth|hls_export>"
+  echo "Usage: ./run.sh <hls_project|hls_sim|hls_sim_analyze|hls_sim_reload_plots|hls_synth|hls_export>"
   echo "===================================================================================="
   exit 1
 fi

@@ -1,12 +1,12 @@
 %-------------------------------------------------------------------------
 % File        : writeFilterCoeffsToVHDLFile.m
 % Author      : Michael Wurm <wurm.michael95@gmail.com>
-% Description : Writes filter coefficients to VHDL file.
+% Description : Writes filter coefficients to a VHDL file.
 %-------------------------------------------------------------------------
 
 function status = writeFilterCoeffsToVHDLFile( ...
     coeffs, filtername, filedir, fp_config)
-%writeFilterCoeffsToVHDLFile - Writes filter coefficients to VHDL file.
+%writeFilterCoeffsToVHDLFile - Writes filter coefficients to a VHDL file.
 %   coeffs               ... data to be written
 %   filtername           ... name used for VHDL entity and constant
 %   filedir              ... directory where to store the VHDL file

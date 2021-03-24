@@ -117,7 +117,7 @@ if EnableWriteDataFiles
 
     % Filter coefficients
     disp('--- Filter coefficients to VHDL');
-    folder = '../../hardware/vhdl/src/filter_coeff_pkgs/';
+    folder = '../../hardware/vhdl/src/packages/';
     writeFilterCoeffsToVHDLFile(filter_bp_pilot, 'filter_bp_pilot',  folder, fp_config);
     writeFilterCoeffsToVHDLFile(filter_lp_mono,  'filter_lp_mono',   folder, fp_config);
     writeFilterCoeffsToVHDLFile(filter_bp_lrdiff,'filter_bp_lrdiff', folder, fp_config);
@@ -134,7 +134,10 @@ if EnableWriteDataFiles
     disp('--- Constants to C++');
     % TODO
     disp('--- Constants to Python');
-    writeConstantsToPythonFile('../../hardware/vhdl/tb/packages/fm_global/fm_global.py', fp_config, fs, fs_rx, osr_rx);
+    writeConstantsToPythonFile('../../hardware/vhdl/tb/packages/fm_global/fm_global.py','fm_global', ...
+        fp_config, fs, fs_rx, osr_rx, pilot_scale_factor);
+    writeConstantsToVHDLFile(  '../../hardware/vhdl/src/packages/fm_global_pkg.vhd',        'fm_global', ...
+        fp_config, fs, fs_rx, osr_rx, pilot_scale_factor);
     
     disp('--- Verification data');
     % Only write a fraction of the simulation time to file
