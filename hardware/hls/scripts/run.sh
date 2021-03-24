@@ -5,6 +5,10 @@
 # Description : Abstraction of main actions on the Vivado project(s).
 ################################################################################
 
+# TODO: make a makefile out of this here
+# TODO: synthesize this and check results
+# TODO: synthesize VHDL and check results
+
 set -euo pipefail
 
 ARG=${1:-"unset"}
