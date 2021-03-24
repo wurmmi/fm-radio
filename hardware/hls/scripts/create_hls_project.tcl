@@ -16,6 +16,7 @@ open_project -reset $project_name
 
 # Design files
 add_files      $SRC_DIR/filter_coeff_headers/
+add_files      $SRC_DIR/fm_global_spec.hpp
 add_files      $SRC_DIR/fm_global.hpp
 add_files      $SRC_DIR/utils/decimator.hpp
 add_files      $SRC_DIR/utils/decimator.cpp                    -cflags $CPPFLAGS

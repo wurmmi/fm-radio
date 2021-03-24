@@ -123,7 +123,7 @@ rx_pilot = filter(filter_bp_pilot,1, rx_fmChannelData);
 %       transmitted with an amplitude of 10%.
 % --> 8 for optimum in sim (??)
 % --> 6 to keep < 1 for fp
-pilot_scale_factor = 6; %TODO: write this into _pkg.vhdl with filter coeffs
+pilot_scale_factor = 6;
 rx_pilot = rx_pilot * pilot_scale_factor; %TODO: adapt this value
 
 % Amplify again, if a de-emphasis filter is used.
@@ -137,7 +137,8 @@ end
 disp('-- Recover 38kHz subcarrier');
 
 % 38 kHz carrier
-rx_carrier38kHz = rx_pilot .* rx_pilot * 2 - 0.75;
+rx_carrier38kHz_offset = 0.75;
+rx_carrier38kHz = rx_pilot .* rx_pilot * 2 - rx_carrier38kHz_offset;
 
 if EnableRDSDecoder
     disp('-- Recover 57kHz subcarrier');

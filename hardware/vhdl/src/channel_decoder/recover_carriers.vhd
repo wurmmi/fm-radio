@@ -100,7 +100,7 @@ begin -- architecture rtl
         -- Create the 38kHz carrier
         if pilot_valid = '1' then
           carrier_38k <= ResizeTruncAbsVal(
-            pilot * pilot * to_sfixed(2, 2, 0) - to_sfixed(0.75, 0, -2), carrier_38k);
+            pilot * pilot * to_sfixed(2, 2, 0) - carrier_38k_offset_c, carrier_38k);
 
           carrier_38k_valid <= '1';
         end if;

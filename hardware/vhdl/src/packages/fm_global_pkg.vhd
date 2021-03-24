@@ -2,9 +2,6 @@
 -- (C) Michael Wurm 2021
 -- *** DO NOT MODIFY ***
 
-library ieee;
-use ieee.fixed_pkg.all;
-
 package fm_global_pkg is
 
   -- General
@@ -14,7 +11,8 @@ package fm_global_pkg is
   constant osr_rx_spec_c        : natural := 8;
 
   -- IP specific
-  constant pilot_scale_factor_spec_c : u_sfixed(4 downto 0) := to_sfixed(6, 4, 0);
+  constant pilot_scale_factor_spec_c : real := 6.00;
+  constant carrier_38k_offset_spec_c : real := 0.75;
 
 end package fm_global_pkg;
 

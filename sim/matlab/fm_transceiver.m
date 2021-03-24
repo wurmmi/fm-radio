@@ -135,9 +135,11 @@ if EnableWriteDataFiles
     % TODO
     disp('--- Constants to Python');
     writeConstantsToPythonFile('../../hardware/vhdl/tb/packages/fm_global/fm_global.py','fm_global', ...
-        fp_config, fs, fs_rx, osr_rx, pilot_scale_factor);
-    writeConstantsToVHDLFile(  '../../hardware/vhdl/src/packages/fm_global_pkg.vhd',        'fm_global', ...
-        fp_config, fs, fs_rx, osr_rx, pilot_scale_factor);
+        fp_config, fs, fs_rx, osr_rx, pilot_scale_factor, rx_carrier38kHz_offset);
+    writeConstantsToVHDLFile(  '../../hardware/vhdl/src/packages/fm_global_pkg.vhd',    'fm_global', ...
+        fp_config, fs, fs_rx, osr_rx, pilot_scale_factor, rx_carrier38kHz_offset);
+    writeConstantsToCPPFile(  '../../hardware/hls/src/fm_global_spec.hpp',                   'fm_global', ...
+        fp_config, fs, fs_rx, osr_rx, pilot_scale_factor, rx_carrier38kHz_offset);
     
     disp('--- Verification data');
     % Only write a fraction of the simulation time to file

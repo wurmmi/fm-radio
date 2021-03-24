@@ -14,3 +14,4 @@ osr_rx_c        = 8
 
 # IP specific
 pilot_output_scale_c = 6
+pilot_output_scale_c = 0.75

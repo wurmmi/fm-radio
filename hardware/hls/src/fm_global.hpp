@@ -11,12 +11,13 @@
 
 #include <ap_fixed.h>
 
-#define FP_WIDTH      ((uint32_t)16 + 1)
-#define FP_WIDTH_FRAC ((uint32_t)14 + 1)
-#define FP_WIDTH_INT  (FP_WIDTH - FP_WIDTH_FRAC)
+#include "fm_global_spec.hpp"
 
 typedef ap_fixed<FP_WIDTH, FP_WIDTH_INT> sample_t;
 typedef sample_t coeff_t;
 typedef sample_t acc_t;
+
+const ap_fixed<4, 4> pilot_scale_factor_c = PILOT_SCALE_FACTOR;
+const ap_fixed<3, 1> carrier_38k_offset_c = CARRIER_38K_OFFSET;
 
 #endif /* _FM_GLOBAL_HPP */

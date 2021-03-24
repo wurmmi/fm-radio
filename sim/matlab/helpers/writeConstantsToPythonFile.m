@@ -5,7 +5,8 @@
 %-------------------------------------------------------------------------
 
 function status = writeConstantsToPythonFile( ...
-    filename, package_name, fp_config, fs, fs_rx, osr_rx, pilot_scale_factor)
+    filename, package_name, fp_config, fs, fs_rx, osr_rx, ...
+    pilot_scale_factor, carrier_38k_offset)
 %writeConstantsToPythonFile - Writes constants to a Python file.
 %   filename             ... filename (obviously)
 %   fp_config.width      ... fixed point width
@@ -39,7 +40,7 @@ fprintf(fileID, "osr_rx_c        = %d\n", osr_rx);
 
 fprintf(fileID, "\n# IP specific\n");
 fprintf(fileID, "pilot_output_scale_c = %d\n", pilot_scale_factor);
-
+fprintf(fileID, "pilot_output_scale_c = %.2f\n", carrier_38k_offset);
 
 fclose(fileID);
 
