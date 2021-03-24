@@ -2,8 +2,8 @@
 // (C) Michael Wurm 2021
 // *** DO NOT MODIFY ***
 
-#ifndef _FM_GLOBAL_H
-#define _FM_GLOBAL_H
+#ifndef _FM_GLOBAL_SPEC_H
+#define _FM_GLOBAL_SPEC_H
 
 // Global constants for FM Receiver IP and testbench
 
@@ -16,4 +16,4 @@
 #define PILOT_SCALE_FACTOR (6)
 #define CARRIER_38K_OFFSET (0.75)
 
-#endif /* _FM_GLOBAL_H */
+#endif /* _FM_GLOBAL_SPEC_H */

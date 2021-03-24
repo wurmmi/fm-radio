@@ -11,7 +11,7 @@ use ieee.numeric_std.all;
 use ieee.fixed_pkg.all;
 
 library work;
-use work.fm_pkg.all;
+use work.fm_global_pkg.all;
 use work.filter_bp_pilot_pkg.all;
 
 entity recover_carriers is

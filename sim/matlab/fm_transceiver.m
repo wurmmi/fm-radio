@@ -129,16 +129,12 @@ if EnableWriteDataFiles
     writeFilterCoeffsToCPPFile(filter_bp_lrdiff,'filter_bp_lrdiff',folder, fp_config);
 
     % Simulation constants
-    disp('--- Constants to VHDL');
-    % TODO
-    disp('--- Constants to C++');
-    % TODO
-    disp('--- Constants to Python');
-    writeConstantsToPythonFile('../../hardware/vhdl/tb/packages/fm_global/fm_global.py','fm_global', ...
+    disp('--- Constants to VHDL/C++/Python');
+    writeConstantsToPythonFile('../../hardware/vhdl/tb/packages/fm_global/fm_global.py', 'fm_global_spec', ...
         fp_config, fs, fs_rx, osr_rx, pilot_scale_factor, rx_carrier38kHz_offset);
-    writeConstantsToVHDLFile(  '../../hardware/vhdl/src/packages/fm_global_pkg.vhd',    'fm_global', ...
+    writeConstantsToVHDLFile(  '../../hardware/vhdl/src/packages/fm_global_spec_pkg.vhd','fm_global_spec', ...
         fp_config, fs, fs_rx, osr_rx, pilot_scale_factor, rx_carrier38kHz_offset);
-    writeConstantsToCPPFile(  '../../hardware/hls/src/fm_global_spec.hpp',                   'fm_global', ...
+    writeConstantsToCPPFile(  '../../hardware/hls/src/fm_global_spec.hpp',               'fm_global_spec', ...
         fp_config, fs, fs_rx, osr_rx, pilot_scale_factor, rx_carrier38kHz_offset);
     
     disp('--- Verification data');

@@ -40,7 +40,7 @@ fprintf(fileID, "osr_rx_c        = %d\n", osr_rx);
 
 fprintf(fileID, "\n# IP specific\n");
 fprintf(fileID, "pilot_output_scale_c = %d\n", pilot_scale_factor);
-fprintf(fileID, "pilot_output_scale_c = %.2f\n", carrier_38k_offset);
+fprintf(fileID, "carrier_38k_offset_c = %.2f\n", carrier_38k_offset);
 
 fclose(fileID);
 

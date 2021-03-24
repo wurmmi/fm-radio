@@ -10,7 +10,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 library work;
-use work.fm_pkg.all;
+use work.fm_global_pkg.all;
 use work.filter_lp_mono_pkg.all;
 use work.filter_bp_lrdiff_pkg.all;
 

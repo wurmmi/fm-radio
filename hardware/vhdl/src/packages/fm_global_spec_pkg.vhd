@@ -2,7 +2,7 @@
 -- (C) Michael Wurm 2021
 -- *** DO NOT MODIFY ***
 
-package fm_global_pkg is
+package fm_global_spec_pkg is
 
   -- General
   constant fp_width_spec_c      : natural := 16;
@@ -14,7 +14,7 @@ package fm_global_pkg is
   constant pilot_scale_factor_spec_c : real := 6.00;
   constant carrier_38k_offset_spec_c : real := 0.75;
 
-end package fm_global_pkg;
+end package fm_global_spec_pkg;
 
-package body fm_global_pkg is
-end package body fm_global_pkg;
+package body fm_global_spec_pkg is
+end package body fm_global_spec_pkg;

@@ -3,7 +3,7 @@
 # *** DO NOT MODIFY ***
 
 # Global constants for FM Receiver IP and testbench
-# Package 'fm_global'
+# Package 'fm_global_spec'
 
 # General
 fp_width_c      = 16
@@ -14,4 +14,4 @@ osr_rx_c        = 8
 
 # IP specific
 pilot_output_scale_c = 6
-pilot_output_scale_c = 0.75
+carrier_38k_offset_c = 0.75
