@@ -79,7 +79,7 @@ def compareResultsOkay(gold, actual, fail_on_err,
 
     # Sanity check
     if len(actual) < len(gold):
-        msg = "Did not capture enough output values for '{}': {} actual, {} expected.".format(
+        msg = "Did not capture enough output values for {}: {} actual, {} expected.".format(
             data_name, len(actual), len(gold))
         if fail_on_err:
             raise test_fail(msg)
@@ -94,7 +94,7 @@ def compareResultsOkay(gold, actual, fail_on_err,
     norm_res = np.linalg.norm(
         np.array(from_fixed_point(gold)) - np.array(actual), 2)
     if norm_res > max_error_norm:
-        msg = "2-Norm for '{}' too large! {:.5f} > {}.".format(
+        msg = "FAIL results for {:15s}: 2-Norm too large! {:.5f} > {}.".format(
             data_name, norm_res, max_error_norm)
         if fail_on_err:
             raise test_fail(msg)
@@ -102,20 +102,22 @@ def compareResultsOkay(gold, actual, fail_on_err,
         return False
 
     # Compare absolute error
+    max_error_abs_found = 0
     for i in range(0, len(actual)):
         diff = gold[i] - actual[i]
 
         abs_err = abs(from_fixed_point(diff))
+        max_error_abs_found = max(max_error_abs_found, abs_err)
         if abs_err > max_error_abs:
-            msg = "'{}'s actual value [idx={}] is not matching the expected value! Errors: {:.5f} > {}.".format(
+            msg = "FAIL results for {:15s}: Actual value [idx={}] is not matching the expected value! Errors: {:.5f} > {}.".format(
                 data_name, i, abs_err, max_error_abs)
             if fail_on_err:
                 raise test_fail(msg)
             log_warn(msg)
             return False
 
-    log_info("OKAY results for '{}' (2-norm = {:.5f})".format(
-        data_name, norm_res))
+    log_info("OKAY results for {:15s}: 2-norm = {:.5f}, max_abs_err = {:.5f}".format(
+        data_name, norm_res, max_error_abs_found))
     return True
 
 
