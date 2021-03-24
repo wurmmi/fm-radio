@@ -63,7 +63,8 @@ def plotData(data, title="", filename="", show=True, block=True):
 
 def compareResultsOkay(gold, actual, fail_on_err,
                        max_error_abs, max_error_norm,
-                       skip_n_samples, data_name, is_cocotb=True):
+                       skip_n_samples_begin, skip_n_samples_end,
+                       data_name="data_name", is_cocotb=True):
     """
     Compares actual data against "golden data".
     Metrics: number of samples,
@@ -87,8 +88,10 @@ def compareResultsOkay(gold, actual, fail_on_err,
         return True
 
     # Skip first and last N samples
-    gold = gold[skip_n_samples:-skip_n_samples]
-    actual = actual[skip_n_samples:-skip_n_samples]
+    if skip_n_samples_end == 0:
+        skip_n_samples_end = 1  # cannot index with -0 in next lines
+    gold = gold[skip_n_samples_begin:-skip_n_samples_end]
+    actual = actual[skip_n_samples_begin:-skip_n_samples_end]
 
     # Compute 2-Norm
     norm_res = np.linalg.norm(

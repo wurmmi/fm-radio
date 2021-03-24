@@ -14,6 +14,7 @@ from cocotb.generators import repeat
 from cocotb.generators.bit import bit_toggler
 from cocotb.triggers import RisingEdge, Timer
 from fixed_point import *
+from fm_global import *
 from helpers import *
 
 from fm_tb import FM_TB
@@ -33,17 +34,13 @@ async def data_processing_test(dut):
     # Number of seconds to process
     n_sec = 0.001
 
-    # Fixed point settings
-    fp_width_c = 16
-    fp_width_frac_c = 14
-
     # --------------------------------------------------------------------------
     # Prepare environment
     # --------------------------------------------------------------------------
 
     timestamp_start = time.time()
 
-    tb = FM_TB(dut, n_sec, fp_width_c, fp_width_frac_c)
+    tb = FM_TB(dut, n_sec)
 
     # Generate clock
     clk_period = int(1 / tb.CLOCK_FREQ_MHZ * 1e3)
