@@ -128,6 +128,12 @@ if EnableWriteDataFiles
     writeFilterCoeffsToCPPFile(filter_lp_mono,  'filter_lp_mono',  folder, fp_config);
     writeFilterCoeffsToCPPFile(filter_bp_lrdiff,'filter_bp_lrdiff',folder, fp_config);
 
+    % Simulation constants
+    disp('--- Constants to VHDL');
+    % TODO
+    disp('--- Constants to C++');
+    % TODO
+    
     disp('--- Verification data');
     % Only write a fraction of the simulation time to file
     n_sec_file  = 0.1;
@@ -143,6 +149,8 @@ if EnableWriteDataFiles
     writeDataToFile(rx_audio_lrdiff,  num_samples,       './verification_data/rx_audio_lrdiff.txt',  fp_config);
     writeDataToFile(rx_audio_L,       num_samples,       './verification_data/rx_audio_L.txt',       fp_config);
     writeDataToFile(rx_audio_R,       num_samples,       './verification_data/rx_audio_R.txt',       fp_config);
+
+    disp('Done.');
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -151,4 +159,4 @@ end
 
 fm_analysis();
 
-disp('Done.');
+disp('### Done. ###');
