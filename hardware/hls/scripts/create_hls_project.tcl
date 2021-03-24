@@ -6,7 +6,7 @@
 
 set SRC_DIR  "../../src"
 set TB_DIR   "../../tb"
-set CPPFLAGS "--std=c++11 -I$SRC_DIR \
+set CPPFLAGS "-O --std=c++11 -I$SRC_DIR \
               -Wall -Wno-unused-label -Wno-unused-parameter"
 
 set project_name [lindex $argv 2]
