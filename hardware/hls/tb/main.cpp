@@ -6,6 +6,7 @@
  */
 /*****************************************************************************/
 
+#include <chrono>
 #include <iostream>
 
 #include "fm_receiver.hpp"
@@ -13,8 +14,6 @@
 #include "helper/DataWriter.hpp"
 
 using namespace std;
-
-// TODO: runtime measurement with std::chrono
 
 /* Constants */
 constexpr double n_sec_c = 1.7;
@@ -32,6 +31,8 @@ int main() {
   cout << "===============================================" << endl;
   cout << "### Running testbench ..." << endl;
   cout << "===============================================" << endl;
+
+  auto ts_start = chrono::high_resolution_clock::now();
 
   try {
     // --------------------------------------------------------------------------
@@ -79,7 +80,11 @@ int main() {
       writer_data_out_R.write(audio_R);
     }
 
+    auto ts_stop  = chrono::high_resolution_clock::now();
+    auto duration = chrono::duration_cast<chrono::seconds>(ts_stop - ts_start);
+
     cout << "--- Done." << endl;
+    cout << "--- Took " << duration.count() << " seconds." << endl;
   } catch (const exception& e) {
     cerr << "Exception occured: " << e.what() << endl;
     return -1;
