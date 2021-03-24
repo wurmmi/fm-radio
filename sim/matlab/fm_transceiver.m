@@ -133,6 +133,8 @@ if EnableWriteDataFiles
     % TODO
     disp('--- Constants to C++');
     % TODO
+    disp('--- Constants to Python');
+    writeConstantsToPythonFile('../../hardware/vhdl/tb/packages/fm_global/fm_global.py', fp_config, fs, fs_rx, osr_rx);
     
     disp('--- Verification data');
     % Only write a fraction of the simulation time to file

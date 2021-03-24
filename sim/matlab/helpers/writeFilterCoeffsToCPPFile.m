@@ -1,16 +1,17 @@
 %-------------------------------------------------------------------------
 % File        : writeFilterCoeffsToCPPFile.m
 % Author      : Michael Wurm <wurm.michael95@gmail.com>
-% Description : Writes filter coefficients to VHDL file.
+% Description : Writes filter coefficients to C++ header file.
 %-------------------------------------------------------------------------
 
-function status = writeFilterCoeffsToCPPFile(coeffs, filtername, filedir, fp_config)
-%writeFilterCoeffsToCPPFile - Writes filter coefficients to C++ file.
-%   data                 ... data to be written
-%   filtername           ... name used for VHDL entity and constant
-%   filedir              ... directory where to store the VHDL file
-%   fp_config.width      ... fixed point data width
-%   fp_config.width_frac ... fixed point data width of fractional part
+function status = writeFilterCoeffsToCPPFile( ...
+    coeffs, filtername, filedir, fp_config)
+%writeFilterCoeffsToCPPFile - Writes filter coefficients to C++ header file.
+%   coeffs               ... data to be written
+%   filtername           ... name used for constant
+%   filedir              ... directory where to store the C++ header file
+%   fp_config.width      ... fixed point width
+%   fp_config.width_frac ... fixed point width of fractional part
 
 fp_maximum = 0.999;
 coeff_max = max(coeffs);

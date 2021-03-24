@@ -5,22 +5,15 @@
 ################################################################################
 
 
-# from fixed_point import *
+from fm_global import *
 from helpers import *
 
 # --------------------------------------------------------------------------
 # Constants
 # --------------------------------------------------------------------------
 # Number of seconds to process
-n_sec = 0.1  # TODO: get this from file
+n_sec = 0.1
 EnableFailOnError = False
-
-# Sample rate (NOTE: set according to Matlab model!)
-fp_width_c = 16
-fp_width_frac_c = 14
-fs_rx_c = 120e3
-fs_c = 960e3
-
 
 # Derived constants
 num_samples_c = int(n_sec * fs_rx_c)

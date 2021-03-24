@@ -4,13 +4,14 @@
 % Description : Writes filter coefficients to VHDL file.
 %-------------------------------------------------------------------------
 
-function status = writeFilterCoeffsToVHDLFile(coeffs, filtername, filedir, fp_config)
+function status = writeFilterCoeffsToVHDLFile( ...
+    coeffs, filtername, filedir, fp_config)
 %writeFilterCoeffsToVHDLFile - Writes filter coefficients to VHDL file.
-%   data                 ... data to be written
+%   coeffs               ... data to be written
 %   filtername           ... name used for VHDL entity and constant
 %   filedir              ... directory where to store the VHDL file
-%   fp_config.width      ... fixed point data width
-%   fp_config.width_frac ... fixed point data width of fractional part
+%   fp_config.width      ... fixed point width
+%   fp_config.width_frac ... fixed point width of fractional part
 
 fp_maximum = 0.999;
 coeff_max = max(coeffs);
