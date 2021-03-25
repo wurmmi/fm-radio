@@ -5,6 +5,8 @@
 # brief:     Makefile for FM Receiver IP.
 #-------------------------------------------------------------------------------
 
+# TODO: move this file one directory higher
+
 GUI = 0
 
 SHELL        = /bin/bash
@@ -14,7 +16,7 @@ VIVADO_HLS_PROJECT_NAME = prj
 ENV_SETUP_SCRIPT        = ../../vhdl/tb/setup_env.sh
 
 GENERAL_OUT_DIR = ../generated
-PROJ_DIR        = $(GENERAL_OUT_DIR)/fm_receiver
+PROJ_DIR        = $(GENERAL_OUT_DIR)/fm_receiver_hls
 IP_DIR          = $(GENERAL_OUT_DIR)/ip
 
 IP_TOP         = fm_receiver
