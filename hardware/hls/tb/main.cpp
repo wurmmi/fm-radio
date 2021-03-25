@@ -6,24 +6,24 @@
  */
 /*****************************************************************************/
 
-#include <fstream>
-#include <iomanip>
+#include <chrono>
 #include <iostream>
-#include <vector>
 
-#include "fm_global.hpp"
 #include "fm_receiver.hpp"
+#include "helper/DataLoader.hpp"
+#include "helper/DataWriter.hpp"
 
 using namespace std;
 
 /* Constants */
-constexpr double n_sec_c       = 0.005;
-constexpr int fs_c             = 960000;  // TODO: check this
-constexpr int fs_rx_c          = 120000;  // TODO: check this
-constexpr int num_samples_fs_c = n_sec_c * fs_c;
-constexpr int num_samples_c    = n_sec_c * fs_rx_c;
+constexpr double n_sec_c = 0.1;
 
-constexpr double max_abs_err_c = pow(2.0, -5);
+const string data_folder =
+    "../../../../../../../../sim/matlab/verification_data/";
+
+/* Derived constants */
+constexpr int num_samples_fs_c = n_sec_c * FS;
+constexpr int num_samples_c    = n_sec_c * FS_RX;
 
 /* Testbench main function */
 int main() {
@@ -31,123 +31,58 @@ int main() {
   cout << "### Running testbench ..." << endl;
   cout << "===============================================" << endl;
 
-  // --------------------------------------------------------------------------
-  // Load data from files
-  // --------------------------------------------------------------------------
-  cout << "--- Loading data from files" << endl;
+  auto ts_start = chrono::high_resolution_clock::now();
 
-  ifstream fd_data_in;
-  ifstream fd_gold_pilot;
-  ofstream fd_data_out;
-  vector<sample_t> data_in;
-  vector<sample_t> data_gold_pilot;
-  vector<sample_t> data_out_pilot;
+  try {
+    // --------------------------------------------------------------------------
+    // Load data from files
+    // --------------------------------------------------------------------------
+    cout << "--- Loading data from files" << endl;
 
-  cout << "num_samples_fs = " << num_samples_fs_c << endl;
-  cout << "num_samples    = " << num_samples_c << endl;
+    cout << "num_samples_fs = " << num_samples_fs_c << endl;
+    cout << "num_samples    = " << num_samples_c << endl;
 
-  // Golden output data
-  string folder_gold = "../../../../../../../../sim/matlab/verification_data/";
-  fd_gold_pilot.open(folder_gold + "rx_pilot.txt", ios::in);
-  if (!fd_gold_pilot.is_open()) {
-    cerr << "Failed to open 'gold_pilot' file!" << endl;
-    return -1;
-  }
-  sample_t value = 0;
-  while (fd_gold_pilot >> value) {
-    data_gold_pilot.emplace_back(value);
+    // Input data
+    const string filename = data_folder + "rx_fm_bb.txt";
+    vector<sample_t> data_in_iq =
+        DataLoader::loadDataFromFile(filename, num_samples_fs_c * 2);
 
-    // Stop, if enough samples were read
-    if (data_gold_pilot.size() >= num_samples_c)
-      break;
-  }
-  fd_gold_pilot.close();
-
-  // Check if enough samples were read
-  size_t num_read = data_gold_pilot.size();
-  if (num_read < num_samples_c) {
-    cerr << "File 'data_gold_pilot' contains less elements than requested!"
-         << endl;
-    cerr << num_read << " actual < " << num_samples_c << " requested" << endl;
-    return -1;
-  }
-
-  // Input data
-  fd_data_in.open(folder_gold + "rx_fmChannelData.txt", ios::in);
-  if (!fd_data_in.is_open()) {
-    cerr << "Failed to open 'input' file!" << endl;
-    return -1;
-  }
-  value = 0;
-  while (fd_data_in >> value) {
-    data_in.emplace_back(value);
-
-    if (data_in.size() >= num_samples_c)
-      break;
-  }
-  fd_data_in.close();
-
-  // Check if enough samples were read
-  num_read = data_in.size();
-  if (num_read < num_samples_c) {
-    cerr << "File 'data_in' contains less elements than requested!" << endl;
-    cerr << num_read << " actual < " << num_samples_c << " requested" << endl;
-    return -1;
-  }
-
-  // Create output file
-  string folder_output = "./output/";
-  fd_data_out.open(folder_output + "data_out_rx_pilot.txt", ios::out);
-  if (!fd_data_out.is_open()) {
-    cerr << "Failed to open 'output' file!" << endl;
-    return -1;
-  }
-
-  // --------------------------------------------------------------------------
-  // Run test on DUT
-  // --------------------------------------------------------------------------
-  cout << "--- Running test on DUT" << endl;
-
-  // Apply stimuli, call the top-level function and save the results
-  sample_t output;
-  for (size_t i = 0; i < num_samples_c; i++) {
-    output = fm_receiver(data_in[i]);
-
-    data_out_pilot.emplace_back(output);
-    fd_data_out << std::fixed << std::setw(FP_WIDTH + 3)
-                << std::setprecision(FP_WIDTH_FRAC) << output.to_float()
-                << endl;
-  }
-  fd_data_out.close();
-
-  // --------------------------------------------------------------------------
-  // Compare results
-  // --------------------------------------------------------------------------
-  cout << "--- Comparing results" << endl;
-  cout << "Comparing against max. absolute error: " << max_abs_err_c << endl;
-
-  int retval = 0;
-  for (size_t i = 0; i < num_samples_c; i++) {
-    // Check absolute error
-    double err     = data_out_pilot[i] - data_gold_pilot[i];
-    double abs_err = abs(err);
-
-    if (abs_err > max_abs_err_c) {
-      cerr << "Actual value [i] not matching the expected value!" << endl;
-      cerr << "Errors: " << abs_err << " actual > max_err " << max_abs_err_c
-           << endl;
-      retval = -1;
-      break;
+    // Split interleaved I/Q samples (take every other)
+    vector<sample_t> data_in_i;
+    vector<sample_t> data_in_q;
+    for (size_t i = 0; i < data_in_iq.size(); i++) {
+      if (i % 2 == 0)
+        data_in_i.emplace_back(data_in_iq[i]);
+      else
+        data_in_q.emplace_back(data_in_iq[i]);
     }
+
+    // --------------------------------------------------------------------------
+    // Run test on DUT
+    // --------------------------------------------------------------------------
+    cout << "--- Running test on DUT" << endl;
+
+    // Apply stimuli, call the top-level function and save the results
+    DataWriter writer_data_out_L("data_out_rx_audio_L.txt");
+    DataWriter writer_data_out_R("data_out_rx_audio_R.txt");
+    sample_t audio_L;
+    sample_t audio_R;
+    for (size_t i = 0; i < num_samples_fs_c; i++) {
+      fm_receiver(data_in_i[i], data_in_q[i], audio_L, audio_R);
+
+      writer_data_out_L.write(audio_L);
+      writer_data_out_R.write(audio_R);
+    }
+
+    auto ts_stop  = chrono::high_resolution_clock::now();
+    auto duration = chrono::duration_cast<chrono::seconds>(ts_stop - ts_start);
+
+    cout << "--- Done." << endl;
+    cout << "--- Took " << duration.count() << " seconds." << endl;
+  } catch (const exception& e) {
+    cerr << "Exception occured: " << e.what() << endl;
+    return -1;
   }
 
-  if (retval != 0) {
-    cout << "===> Test failed <===\n" << endl;
-    retval = -1;
-  } else {
-    cout << "===> Test passed <===\n" << endl;
-  }
-
-  // Return 0 if the test passes
-  return retval;
+  return 0;
 }

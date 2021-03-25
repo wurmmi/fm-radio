@@ -9,7 +9,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 library work;
-use work.fm_pkg.all;
+use work.fm_global_pkg.all;
 
 --! @brief Entity declaration of delay_bit
 --! @details

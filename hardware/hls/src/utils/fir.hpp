@@ -2,7 +2,7 @@
 /**
  * @file    fir.hpp
  * @author  Michael Wurm <wurm.michael95@gmail.com>
- * @brief   FIR IP header.
+ * @brief   FIR IP.
  * @details Partially taken from Vivado HLS design examples, by Xilinx Inc.
  *          Can be found in the Vivado install directory under
  *          e.g. Xilinx/Vivado/2018.2/examples/coding/cpp_FIR
@@ -68,17 +68,5 @@ ostream& operator<<(ostream& ost,
   ost << "------------------" << endl;
   return ost;
 }
-
-///* Top-level function.
-// * Instantiates the FIR class with correct template parameters.
-// */
-// template <class coeff_T, class sample_T, class acc_T, uint8_t fir_n_T>
-// sample_T fir_filter_top(sample_T x, const coeff_T coeff[fir_n_T]) {
-//  static FIR<coeff_T, sample_T, acc_T, fir_n_T> fir_inst;
-//
-//  // cout << fir_inst;
-//
-//  return fir_inst(x, coeff);
-//}
 
 #endif /* _FIR_H */

@@ -1,16 +1,17 @@
 %-------------------------------------------------------------------------
 % File        : writeFilterCoeffsToVHDLFile.m
 % Author      : Michael Wurm <wurm.michael95@gmail.com>
-% Description : Writes filter coefficients to VHDL file.
+% Description : Writes filter coefficients to a VHDL file.
 %-------------------------------------------------------------------------
 
-function status = writeFilterCoeffsToVHDLFile(coeffs, filtername, filedir, fp_config)
-%writeFilterCoeffsToVHDLFile - Writes filter coefficients to VHDL file.
-%   data                 ... data to be written
+function status = writeFilterCoeffsToVHDLFile( ...
+    coeffs, filtername, filedir, fp_config)
+%writeFilterCoeffsToVHDLFile - Writes filter coefficients to a VHDL file.
+%   coeffs               ... data to be written
 %   filtername           ... name used for VHDL entity and constant
 %   filedir              ... directory where to store the VHDL file
-%   fp_config.width      ... fixed point data width
-%   fp_config.width_frac ... fixed point data width of fractional part
+%   fp_config.width      ... fixed point width
+%   fp_config.width_frac ... fixed point width of fractional part
 
 fp_maximum = 0.999;
 coeff_max = max(coeffs);
@@ -37,7 +38,7 @@ fprintf(fileID, [ ...
     '-- *** DO NOT MODIFY ***' newline ...
     newline ...
     'library work;' newline ...
-    'use work.fm_pkg.all;' newline ...
+    'use work.fm_global_pkg.all;' newline ...
     newline ...
     sprintf('package %s is\n\n', package_name) ...
     ]);

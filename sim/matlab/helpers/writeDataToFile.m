@@ -1,7 +1,7 @@
 %-------------------------------------------------------------------------
 % File        : writeDataToFile.m
 % Author      : Michael Wurm <wurm.michael95@gmail.com>
-% Description : Writes data to file.
+% Description : Writes data to a file.
 %-------------------------------------------------------------------------
 
 function status = writeDataToFile(data, num_samples, filename, fp_config)
@@ -13,10 +13,13 @@ function status = writeDataToFile(data, num_samples, filename, fp_config)
 %   fp_config.width_frac ... fixed point data width of fractional part
 
 fp_maximum = 0.999;
-data_max = max(data);
+data_max_re = max(real(data));
+data_max_im = max(imag(data));
 if fp_config.max_check
-    assert(data_max < fp_maximum, ...
-        "Max. value (%.5f) exceeds fixed point range! This will lead to overflows in the hardware.", data_max);
+    assert(data_max_re < fp_maximum, ...
+      "Max. real value (%.5f) exceeds fixed point range! This will lead to overflows in the hardware.", data_max_re);
+    assert(data_max_im < fp_maximum, ...
+      "Max. imag value (%.5f) exceeds fixed point range! This will lead to overflows in the hardware.", data_max_im);
 end
 
 fileID = fopen(filename, 'w');
@@ -34,7 +37,7 @@ if isreal(data)
         data, fixdt(true, fp_config.width, fp_config.width_frac));
 
     % Write to file
-    fprintf(fileID, "%.32f\n", data_fp);
+    fprintf(fileID, "%.17f\n", data_fp);
 else
     % Convert to fixed point
     %data_fp_i = cast(real(data), 'like', fi([], true, fp_config.width, fp_config.width_frac));
@@ -47,8 +50,8 @@ else
 
     % Write to file
     for i=1:length(data_fp_i)
-        fprintf(fileID, "%.32f\n", data_fp_i(i));
-        fprintf(fileID, "%.32f\n", data_fp_q(i));
+        fprintf(fileID, "%.17f\n", data_fp_i(i));
+        fprintf(fileID, "%.17f\n", data_fp_q(i));
     end
 end
 

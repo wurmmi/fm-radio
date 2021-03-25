@@ -29,8 +29,6 @@ def loadDataFromFile(filename, num_samples, bitwidth, bitwidth_frac):
             "File '{}' contains less elements than requested ({} < {}).".format(
                 filename, val_count, num_samples))
 
-    # TODO: print data before and after this, to check for any
-    #       value errors/inconsistency here, between file/matlab and tb..
     data = to_fixed_point(data, bitwidth, bitwidth_frac)
     return data
 
@@ -63,64 +61,77 @@ def plotData(data, title="", filename="", show=True, block=True):
 
 def compareResultsOkay(gold, actual, fail_on_err,
                        max_error_abs, max_error_norm,
-                       skip_n_samples, data_name):
+                       skip_n_samples_begin, skip_n_samples_end,
+                       data_name="data_name", is_cocotb=True):
     """
     Compares actual data against "golden data".
     Metrics: number of samples,
     """
+    if is_cocotb:
+        log_info = cocotb.log.info
+        log_warn = cocotb.log.warning
+        test_fail = cocotb.result.TestFailure
+    else:
+        log_info = print
+        log_warn = print
+        test_fail = Exception
 
     # Sanity check
     if len(actual) < len(gold):
-        msg = "Did not capture enough output values for '{}': {} actual, {} expected.".format(
+        msg = "Did not capture enough output values for {}: {} actual, {} expected.".format(
             data_name, len(actual), len(gold))
         if fail_on_err:
-            raise cocotb.result.TestFailure(msg)
-        cocotb.log.warning(msg)
+            raise test_fail(msg)
+        log_warn(msg)
         return True
 
     # Skip first and last N samples
-    gold = gold[skip_n_samples:-skip_n_samples]
-    actual = actual[skip_n_samples:-skip_n_samples]
+    if skip_n_samples_end == 0:
+        skip_n_samples_end = 1  # cannot index with -0 in next lines
+    gold = gold[skip_n_samples_begin:-skip_n_samples_end]
+    actual = actual[skip_n_samples_begin:-skip_n_samples_end]
 
     # Compute 2-Norm
     norm_res = np.linalg.norm(
         np.array(from_fixed_point(gold)) - np.array(actual), 2)
     if norm_res > max_error_norm:
-        msg = "2-Norm for '{}' too large! {:.5f} > {}.".format(
+        msg = "FAIL results for {:15s}: 2-Norm too large! {:.5f} > {}.".format(
             data_name, norm_res, max_error_norm)
         if fail_on_err:
-            raise cocotb.result.TestFailure(msg)
-        cocotb.log.warning(msg)
+            raise test_fail(msg)
+        log_warn(msg)
         return False
 
     # Compare absolute error
+    max_error_abs_found = 0
     for i in range(0, len(actual)):
         diff = gold[i] - actual[i]
 
         abs_err = abs(from_fixed_point(diff))
+        max_error_abs_found = max(max_error_abs_found, abs_err)
         if abs_err > max_error_abs:
-            msg = "Actual value [idx={}] is not matching the expected value! Errors: {:.5f} > {}.".format(
-                i, abs_err, max_error_abs)
+            msg = "FAIL results for {:15s}: Actual value [idx={}] is not matching the expected value! Errors: {:.5f} > {}.".format(
+                data_name, i, abs_err, max_error_abs)
             if fail_on_err:
-                raise cocotb.result.TestFailure(msg)
-            cocotb.log.warning(msg)
+                raise test_fail(msg)
+            log_warn(msg)
             return False
 
-    cocotb.log.info("OKAY results for '{}' (2-norm = {:.5f})".format(
-        data_name, norm_res))
+    log_info("OKAY results for {:15s}: 2-norm = {:.5f}, max_abs_err = {:.5f}".format(
+        data_name, norm_res, max_error_abs_found))
     return True
 
 
-def move_n_right(data, num_of_zeros, fp_width, fp_width_frac):
-    for _ in range(0, num_of_zeros):
+def move_n_right(data, amount, fp_width, fp_width_frac):
+    for _ in range(0, amount):
         # insert at begin
         data.insert(0, to_fixed_point(0, fp_width, fp_width_frac))
         # remove end
         data.pop()
 
 
-def move_n_left(data, num_of_zeros, fp_width, fp_width_frac):
-    for _ in range(0, num_of_zeros):
+def move_n_left(data, amount, fp_width, fp_width_frac):
+    for _ in range(0, amount):
         # insert at end
         data.append(to_fixed_point(0, fp_width, fp_width_frac))
         # remove begin

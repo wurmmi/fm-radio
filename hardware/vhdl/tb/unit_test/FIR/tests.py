@@ -14,6 +14,7 @@ from cocotb.generators import repeat
 from cocotb.generators.bit import bit_toggler
 from cocotb.triggers import RisingEdge, Timer
 from fixed_point import *
+from fm_global import *
 
 from fm_tb import FM_TB
 
@@ -32,18 +33,11 @@ async def fir_filter_test(dut):
     # Constants
     # --------------------------------------------------------------------------
 
-    # Number of samples to process
-    num_samples = 150
+    # Number of seconds to process
+    n_sec = 0.001
 
-    # Sample rate (set according to files in folder sim/matlab/verification_data/)
-    fs_rx_c = 120e3
-
-    # Fixed point settings
-    fp_width_c = 16
-    fp_width_frac_c = 14
-
-    # Other
-    output_scale_c = 6
+    # Derived constants
+    num_samples = int(n_sec * fs_rx_c)
 
     # --------------------------------------------------------------------------
     # Load data from files
@@ -101,7 +95,7 @@ async def fir_filter_test(dut):
     await tb.reset()
 
     # Fork the 'receiving part'
-    fir_out_fork = cocotb.fork(tb.read_fir_result(output_scale_c))
+    fir_out_fork = cocotb.fork(tb.read_fir_result(pilot_output_scale_c))
 
     # Send input data through filter
     dut._log.info("Sending input data through filter ...")
@@ -133,7 +127,7 @@ async def fir_filter_test(dut):
                  from_fixed_point(gold_data_o_fp), "b", label="gold_data_o_fp")
         plt.plot(np.arange(0, num_received) / fs_rx_c,
                  tb.data_out, "r", label="data_out")
-        plt.title("Carrier phase recovery")
+        plt.title("Pilot")
         plt.grid(True)
         plt.legend()
         fig.tight_layout()

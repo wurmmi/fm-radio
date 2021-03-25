@@ -11,7 +11,7 @@ use ieee.numeric_std.all;
 use ieee.fixed_pkg.all;
 
 library work;
-use work.fm_pkg.all;
+use work.fm_global_pkg.all;
 use work.filter_bp_pilot_pkg.all;
 
 entity recover_carriers is
@@ -35,10 +35,6 @@ architecture rtl of recover_carriers is
   --! @name Types and Constants
   -----------------------------------------------------------------------------
   --! @{
-
-  -- TODO: get this constant from pilot_pkg.vhdl
-  constant pilot_scale_factor_c : u_sfixed(4 downto 0) := to_sfixed(6, 4, 0);
-
   --! @}
   -----------------------------------------------------------------------------
   --! @name Internal Registers
@@ -104,7 +100,7 @@ begin -- architecture rtl
         -- Create the 38kHz carrier
         if pilot_valid = '1' then
           carrier_38k <= ResizeTruncAbsVal(
-            pilot * pilot * to_sfixed(2, 2, 0) - to_sfixed(0.75, 0, -2), carrier_38k);
+            pilot * pilot * to_sfixed(2, 2, 0) - carrier_38k_offset_c, carrier_38k);
 
           carrier_38k_valid <= '1';
         end if;

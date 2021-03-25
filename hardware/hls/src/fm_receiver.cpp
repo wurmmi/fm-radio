@@ -12,9 +12,13 @@
 -- (1) FIR filter implementation
 --       03/18/2021  17:00 - 19:00    2:00 h
 --       03/19/2021  09:30 - 18:00    8:30 h
---       03/22/2021  09:00 - xxxx          h
+--       03/22/2021  09:00 - 11:00    2:00 h
 --
 -- (2) FM receiver implementation
+--       03/22/2021  11:00 - 13:00    2:00 h
+--                   14:00 - 16:00    2:00 h
+--       03/23/2021  08:30 - 13:00    4:30 h
+--                   14:00 - 17:30    3:30 h
 --
 */
 
@@ -22,27 +26,58 @@
 
 #include <iostream>
 
-#include "filter_coeff_headers/filter_bp_lrdiff.h"
-#include "filter_coeff_headers/filter_bp_pilot.h"
-#include "utils/fir.hpp"
+#include "../tb/helper/DataWriter.hpp"
+#include "channel_decoder.hpp"
+#include "utils/decimator.hpp"
+#include "utils/fm_demodulator.hpp"
 
 using namespace std;
 
-// TODO: get this from a global header file
-const ap_fixed<4, 4> pilot_scale_factor_c = 6;
+void fm_receiver(sample_t const& in_i,
+                 sample_t const& in_q,
+                 sample_t& out_audio_L,
+                 sample_t& out_audio_R) {
+  // ------------------------------------------------------
+  // FM Demodulator
+  // ------------------------------------------------------
 
-sample_t fm_receiver(sample_t in) {
-  // Recover pilot
-  static FIR<coeff_t, sample_t, acc_t, filter_bp_pilot_num_coeffs_c>
-      fir_pilot_inst;
+  sample_t fm_demod = fm_demodulator(in_i, in_q);
 
-  sample_t pilot =
-      pilot_scale_factor_c * fir_pilot_inst(in, filter_bp_pilot_coeffs_c);
+  // ------------------------------------------------------
+  // Decimator
+  // ------------------------------------------------------
 
-  // Recover lrdiff
-  static FIR<coeff_t, sample_t, acc_t, filter_bp_lrdiff_num_coeffs_c>
-      fir_lrdiff_inst;
-  sample_t lrdiff = fir_lrdiff_inst(in, filter_bp_lrdiff_coeffs_c);
+  sample_t fm_channel_data;
+  bool fm_channel_data_valid;
+  decimator(fm_demod, fm_channel_data, fm_channel_data_valid);
 
-  return pilot;
+  if (fm_channel_data_valid) {
+    // ------------------------------------------------------
+    // Channel decoder
+    // ------------------------------------------------------
+
+    sample_t audio_L;
+    sample_t audio_R;
+    channel_decoder(fm_channel_data, audio_L, audio_R);
+
+    // ------------------------------------------------------
+    // Output
+    // ------------------------------------------------------
+
+    out_audio_L = audio_L;
+    out_audio_R = audio_R;
+
+    // ------------------------------------------------------
+    // Debug
+    // ------------------------------------------------------
+
+    static DataWriter writer_data_out_audio_L("data_out_audio_L.txt");
+    writer_data_out_audio_L.write(audio_L);
+
+    static DataWriter writer_data_out_audio_R("data_out_audio_R.txt");
+    writer_data_out_audio_R.write(audio_R);
+  }
+
+  static DataWriter writer_data_out_fm_demod("data_out_fm_demod.txt");
+  writer_data_out_fm_demod.write(fm_demod);
 }
