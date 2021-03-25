@@ -49,6 +49,6 @@ help: ##				- Show this help message.
 ##==============================================================================
 ##*** NOTE: Makefile requires following setup:
 ##
-##      - Vivado HLS (vivado_hls) can be found in PATH.
+##      - Vivado HLS (vivado) can be found in PATH.
 ##
 ##==============================================================================
