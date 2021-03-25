@@ -11,6 +11,8 @@
 #define FP_WIDTH      ((uint32_t)16 + 1)
 #define FP_WIDTH_FRAC ((uint32_t)14 + 1)
 #define FP_WIDTH_INT  (FP_WIDTH - FP_WIDTH_FRAC)
+#define FS            ((uint32_t)960000)
+#define FS_RX         ((uint32_t)120000)
 
 // IP specific
 #define PILOT_SCALE_FACTOR (6)
