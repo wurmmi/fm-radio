@@ -60,6 +60,9 @@ csim_reload_plots: ##				- Reload plots from latest csim.
 csynth: ## 					- Run C synthesis.
 	@$(call vivado_hls_batch,hls_csynth.tcl,$(VIVADO_HLS_PROJECT_NAME))
 
+cosim: ## 					- Run co-simulation.
+	@$(call vivado_hls_batch,hls_cosim.tcl,$(VIVADO_HLS_PROJECT_NAME))
+
 ip_export: ##					- Export IP files (UNTESTED).
 	@$(call vivado_hls_batch,ip_export.tcl,$(VIVADO_HLS_PROJECT_NAME) $(IP_TOP))
 	@rm -rf $(IP_DESTINATION)/*
