@@ -35,14 +35,14 @@ vivado_hls_batch = \
 ##Supported Targets
 ##-----------------
 
-all: hls_create_project hls_csim hls_csynth ##	- Default target.
+all: create_project csim csynth ##	- Default target.
 
-hls_create_project: ##				- Create HLS project.
+create_project: ##				- Create HLS project.
 	@mkdir -p $(PROJ_DIR)
 	@$(call vivado_hls_batch,create_hls_project.tcl,$(VIVADO_HLS_PROJECT_NAME))
 	@echo Done.
 
-hls_csim: ##					- Run C simulation.
+csim: ##					- Run C simulation.
 ifeq ($(GUI),1)
 	@cd $(PROJ_DIR) && vivado_hls -p $(VIVADO_HLS_PROJECT_NAME)
 	@echo Done.
@@ -57,11 +57,11 @@ hls_csim_analyze: ##				- Run analysis for latest csim.
 hls_csim_reload_plots: ##				- Reload plots from latest csim.
 	@source $(ENV_SETUP_SCRIPT) && python -c $(PYTHON_RELOAD_PLOTS_CODE)
 
-hls_csynth: ## 					- Run C synthesis.
+csynth: ## 					- Run C synthesis.
 	@$(call vivado_hls_batch,hls_csynth.tcl,$(VIVADO_HLS_PROJECT_NAME))
 
-hls_ip_export: ##					- Export IP files (UNTESTED).
-	@$(call vivado_hls_batch,hls_ip_export.tcl,$(VIVADO_HLS_PROJECT_NAME) $(IP_TOP))
+ip_export: ##					- Export IP files (UNTESTED).
+	@$(call vivado_hls_batch,ip_export.tcl,$(VIVADO_HLS_PROJECT_NAME) $(IP_TOP))
 	@rm -rf $(IP_DESTINATION)/*
 	@unzip -o $(IP_PACKAGE) -d $(IP_DESTINATION)
 	# Add a custom IP Logo for the Block Design
@@ -75,7 +75,7 @@ clean: ##						- Clean outputs.
 help: ##						- Show this help message.
 	@grep -h "##" Makefile | grep -v "\"##\"" | sed -e 's/##//g'
 
-.PHONY: hls_create_project hls_csim hls_csim_analyze hls_csim_reload_plots hls_csynth hls_ip_export clean help
+.PHONY: create_project csim hls_csim_analyze hls_csim_reload_plots csynth ip_export clean help
 
 ##
 ##==============================================================================

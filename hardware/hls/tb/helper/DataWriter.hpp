@@ -17,6 +17,13 @@
 
 using data_vec_t = std::vector<sample_t>;
 
+#ifdef __SYNTHESIS__
+class DataWriter {
+  void write() {}
+};
+
+#else
+
 class DataWriter {
  private:
   std::ofstream ofs;
@@ -44,5 +51,6 @@ class DataWriter {
     data.emplace_back(value);
   }
 };
+#endif
 
 #endif /* _DATAWRITER_HPP */

@@ -56,6 +56,8 @@ void channel_decoder(sample_t const& in_sample,
   // ------------------------------------------------------
   // Debug
   // ------------------------------------------------------
+
+#ifndef __SYNTHESIS__
   static DataWriter writer_data_out_carrier_38k("data_out_carrier_38k.txt");
   writer_data_out_carrier_38k.write(carrier_38k);
 
@@ -64,4 +66,11 @@ void channel_decoder(sample_t const& in_sample,
 
   static DataWriter writer_data_out_lrdiff("data_out_audio_lrdiff.txt");
   writer_data_out_lrdiff.write(audio_lrdiff);
+
+  static DataWriter writer_data_out_audio_L("data_out_audio_L.txt");
+  writer_data_out_audio_L.write(audio_L);
+
+  static DataWriter writer_data_out_audio_R("data_out_audio_R.txt");
+  writer_data_out_audio_R.write(audio_R);
+#endif
 }
