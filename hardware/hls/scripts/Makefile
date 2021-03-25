@@ -28,6 +28,9 @@ PYTHON_RELOAD_PLOTS_CODE = """from helpers import reload_all_plots_pickle; \
 vivado_hls_batch = \
 	@cd $(PROJ_DIR) && vivado_hls -f $(MAKEFILE_DIR)/$1 $2 $3
 
+analyze_tb_results = \
+	source $(ENV_SETUP_SCRIPT) && python ../tb/analyze_tb_results.py
+
 ##==============================================================================
 ##Makefile Help for FM Receiver.
 ##==============================================================================
@@ -48,11 +51,11 @@ ifeq ($(GUI),1)
 	@echo Done.
 else
 	@$(call vivado_hls_batch,hls_sim.tcl,$(VIVADO_HLS_PROJECT_NAME))
-	@source $(ENV_SETUP_SCRIPT) && python ../tb/analyze_tb_results.py
+	@$(call analyze_tb_results)
 endif
 
 csim_analyze: ##				- Run analysis for latest csim.
-	@source $(ENV_SETUP_SCRIPT) && python ../tb/analyze_tb_results.py
+	@$(call analyze_tb_results)
 
 csim_reload_plots: ##				- Reload plots from latest csim.
 	@source $(ENV_SETUP_SCRIPT) && python -c $(PYTHON_RELOAD_PLOTS_CODE)
@@ -62,13 +65,14 @@ csynth: ## 					- Run C synthesis.
 
 cosim: ## 					- Run co-simulation.
 	@$(call vivado_hls_batch,hls_cosim.tcl,$(VIVADO_HLS_PROJECT_NAME))
+	@$(call analyze_tb_results)
 
 ip_export: ##					- Export IP files (UNTESTED).
 	@$(call vivado_hls_batch,ip_export.tcl,$(VIVADO_HLS_PROJECT_NAME) $(IP_TOP))
 	@rm -rf $(IP_DESTINATION)/*
+	@mkdir -p $(IP_DESTINATION)
 	@unzip -o $(IP_PACKAGE) -d $(IP_DESTINATION)
-	# Add a custom IP Logo for the Block Design
-	#cp ./src/img/logo.png $IP_DESTINATION/misc/logo.png
+	cp ../doc/ip_logo.png $(IP_DESTINATION)/misc/logo.png
 
 ##
 clean: ##						- Clean outputs.
