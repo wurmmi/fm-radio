@@ -9,12 +9,7 @@ set ip_dir    [lindex $argv 1]
 set open_gui  [lindex $argv 2]
 
 set proj_name "proj"
-
 set device xc7z020clg484-1
-
-#cd $build_dir
-
-#source ../../bd/proj.tcl
 
 proc exitif {code} {
   global open_gui

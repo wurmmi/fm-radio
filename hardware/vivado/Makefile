@@ -30,6 +30,11 @@ create_project: ##		- Create Vivado project.
 	@mkdir -p $(VIVADO_DIR)
 	@$(call vivado,create_project.tcl,-tclargs $(VIVADO_DIR) $(IP_DIR) $(GUI))
 
+synth: ##		- Synthesize Vivado project.
+	@echo "Synthesize Vivado project ..."
+	@mkdir -p $(VIVADO_DIR)
+	@$(call vivado,synth.tcl,-tclargs $(VIVADO_DIR) $(IP_DIR) $(GUI))
+
 ##
 clean: ##				- Clean outputs.
 	@echo "Cleaning..."
