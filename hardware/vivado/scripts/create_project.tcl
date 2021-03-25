@@ -5,6 +5,7 @@
 #-------------------------------------------------------------------------------
 
 set build_dir [lindex $argv 0]
+<<<<<<< HEAD
 set ip_dir    [lindex $argv 1]
 set open_gui  [lindex $argv 2]
 
@@ -41,3 +42,10 @@ make_wrapper -files [get_files $design_name.bd] -top -import
 puts "### Block design created."
 
 exitif 0
+=======
+cd build_dir
+
+source ../bd/fm_receiver_project.tcl
+
+exit
+>>>>>>> vivado project
