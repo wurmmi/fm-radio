@@ -10,19 +10,11 @@ GUI = 0
 SHELL        = /bin/bash
 MAKEFILE_DIR = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
-VIVADO_HLS_PROJECT_NAME = prj
-ENV_SETUP_SCRIPT        = ../../vhdl/tb/setup_env.sh
-
-GENERAL_OUT_DIR = ../generated
-PROJ_DIR        = $(GENERAL_OUT_DIR)/fm_receiver_hls
-IP_DIR          = $(GENERAL_OUT_DIR)/ip
+GENERAL_OUT_DIR = ./generated
 VIVADO_DIR      = $(GENERAL_OUT_DIR)/vivado
+IP_DIR          = ../hls/generated/ip
 
-IP_TOP         = fm_receiver
-IP_PACKAGE     = $(PROJ_DIR)/**/**/impl/ip/*.zip
-IP_DESTINATION = $(IP_DIR)/$(IP_TOP)
-
-vivado = vivado -nojournal -nolog -notrace -mode batch -source ./scripts/$1.tcl $2
+vivado = vivado -nojournal -nolog -notrace -mode batch -source ./scripts/$1 $2
 
 ##==============================================================================
 ##Makefile Help for Vivado project.
@@ -31,26 +23,27 @@ vivado = vivado -nojournal -nolog -notrace -mode batch -source ./scripts/$1.tcl 
 ##Supported Targets
 ##-----------------
 
-all: create_project ##	- Default target.
+all: create_project ##		- Default target.
 
-project: ##				- Create Vivado project.
+create_project: ##		- Create Vivado project.
 	@echo "Creating Vivado project ..."
-	@$(call vivado,build,-tclargs 0 $(VIVADO_DIR) $(GUI))
+	@mkdir -p $(VIVADO_DIR)
+	@$(call vivado,create_project.tcl,-tclargs $(VIVADO_DIR) $(IP_DIR) $(GUI))
 
 ##
-clean: ##						- Clean outputs.
+clean: ##				- Clean outputs.
 	@echo "Cleaning..."
 	git clean -xdf ..
 
-help: ##						- Show this help message.
+help: ##				- Show this help message.
 	@grep -h "##" Makefile | grep -v "\"##\"" | sed -e 's/##//g'
 
-.PHONY: create_project csim csim_analyze csim_reload_plots csynth ip_export clean help
+.PHONY: create_project clean help
 
 ##
 ##==============================================================================
 ##*** NOTE: Makefile requires following setup:
 ##
-##      - Vivado HLS (vivado_hls) can be found in PATH.
+##      - Vivado HLS (vivado) can be found in PATH.
 ##
 ##==============================================================================

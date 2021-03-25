@@ -1,6 +1,6 @@
 
 ################################################################
-# This is a generated script based on design: fm_receiver_project
+# This is a generated script based on design: proj
 #
 # Though there are limitations about the generated script,
 # the main purpose of this utility is to make learning
@@ -50,7 +50,7 @@ if { $list_projs eq "" } {
 
 # CHANGE DESIGN NAME HERE
 variable design_name
-set design_name fm_receiver_project
+set design_name fm_receiver_proj
 
 # If you do not already have an existing IP Integrator design open,
 # you can create a design using the following command:
@@ -89,7 +89,7 @@ if { ${design_name} eq "" } {
    set errMsg "Design <$design_name> already exists in your project, please set the variable <design_name> to another value."
    set nRet 1
 } elseif { [get_files -quiet ${design_name}.bd] ne "" } {
-   # USE CASES: 
+   # USE CASES:
    #    6) Current opened design, has components, but diff names, design_name exists in project.
    #    7) No opened design, design_name exists in project.
 
@@ -123,7 +123,7 @@ set bCheckIPsPassed 1
 ##################################################################
 set bCheckIPs 1
 if { $bCheckIPs == 1 } {
-   set list_check_ips "\ 
+   set list_check_ips "\
 MWURM:hls:fm_receiver:1.0\
 xilinx.com:ip:processing_system7:5.5\
 xilinx.com:ip:proc_sys_reset:5.0\
