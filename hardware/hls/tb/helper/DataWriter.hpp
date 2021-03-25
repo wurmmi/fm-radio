@@ -18,12 +18,14 @@
 using data_vec_t = std::vector<sample_t>;
 
 #ifdef __SYNTHESIS__
+// Empty class for synthesis
 class DataWriter {
-  void write() {}
+ public:
+  DataWriter(std::string const&) {}
+  void write(sample_t) {}
 };
-
 #else
-
+// Implement class for simulation
 class DataWriter {
  private:
   std::ofstream ofs;
@@ -51,6 +53,6 @@ class DataWriter {
     data.emplace_back(value);
   }
 };
-#endif
+#endif /* __SYNTHESIS__ */
 
 #endif /* _DATAWRITER_HPP */
