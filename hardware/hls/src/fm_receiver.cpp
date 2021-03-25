@@ -28,8 +28,8 @@
 
 #include "../tb/helper/DataWriter.hpp"
 #include "channel_decoder.hpp"
-#include "fm_demodulator.hpp"
 #include "utils/decimator.hpp"
+#include "utils/fm_demodulator.hpp"
 
 using namespace std;
 

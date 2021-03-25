@@ -15,10 +15,18 @@ ENV_SETUP_SCRIPT = ../../vhdl/tb/setup_env.sh
 
 GENERAL_OUT_DIR=../generated
 PROJ_DIR=$(GENERAL_OUT_DIR)/fm_receiver
+IP_DIR=$(GENERAL_OUT_DIR)/ip
+
+IP_TOP = fm_receiver
+IP_PACKAGE = $(PROJ_DIR)/**/**/impl/ip/*.zip
+IP_DESTINATION = $(IP_DIR)/$(IP_TOP)
 
 PYTHON_RELOAD_PLOTS_CODE = """from helpers import reload_all_plots_pickle; \
                					 			reload_all_plots_pickle('../tb/output')\
             							 """
+
+vivado_hls_batch = \
+	@cd $(PROJ_DIR) && vivado_hls -f $(MAKEFILE_DIR)/$1 $2 $3
 
 ##--------------------------------------------------------------------
 ##Makefile Help for FM Receiver.
@@ -31,7 +39,7 @@ all: hls_create_project hls_csim ##	- Default target.
 
 hls_create_project: ##			- Create HLS project.
 	@mkdir -p $(PROJ_DIR)
-	@cd $(PROJ_DIR) && vivado_hls -f $(MAKEFILE_DIR)/create_hls_project.tcl $(VIVADO_HLS_PROJECT_NAME)
+	@$(call vivado_hls_batch,create_hls_project.tcl,$(VIVADO_HLS_PROJECT_NAME))
 	@echo Done.
 
 hls_csim: ##				- Run C simulation.
@@ -39,7 +47,7 @@ ifeq ($(GUI),1)
 	@cd $(PROJ_DIR) && vivado_hls -p $(VIVADO_HLS_PROJECT_NAME)
 	@echo Done.
 else
-	@cd $(PROJ_DIR) && vivado_hls -f $(MAKEFILE_DIR)/hls_sim.tcl $(VIVADO_HLS_PROJECT_NAME)
+	@$(call vivado_hls_batch,hls_sim.tcl,$(VIVADO_HLS_PROJECT_NAME))
 	@source $(ENV_SETUP_SCRIPT) && python ../tb/analyze_tb_results.py
 endif
 
@@ -50,7 +58,14 @@ hls_csim_reload_plots: ##			- Reload plots from latest csim.
 	@source $(ENV_SETUP_SCRIPT) && python -c $(PYTHON_RELOAD_PLOTS_CODE)
 
 hls_csynth: ## 				- Run C synthesis.
-	@cd $(PROJ_DIR) && vivado_hls -f $(MAKEFILE_DIR)/hls_csynth.tcl $(VIVADO_HLS_PROJECT_NAME)
+	@$(call vivado_hls_batch,hls_csynth.tcl,$(VIVADO_HLS_PROJECT_NAME))
+
+hls_ip_export: ##		- Export IP files (UNTESTED).
+	@$(call vivado_hls_batch,hls_ip_export.tcl,$(VIVADO_HLS_PROJECT_NAME) $(IP_TOP))
+	@rm -rf $(IP_DESTINATION)/*
+	@unzip -o $(IP_PACKAGE) -d $(IP_DESTINATION)
+	# Add a custom IP Logo for the Block Design
+	#cp ./src/img/logo.png $IP_DESTINATION/misc/logo.png
 
 ##
 clean: ##					- Clean outputs.

@@ -15,7 +15,9 @@ set project_name [lindex $argv 2]
 open_project -reset $project_name
 
 # Design files
-add_files      $SRC_DIR/filter_coeff_headers/
+add_files      $SRC_DIR/filter_coeff_headers/filter_bp_lrdiff.h
+add_files      $SRC_DIR/filter_coeff_headers/filter_bp_pilot.h
+add_files      $SRC_DIR/filter_coeff_headers/filter_lp_mono.h
 add_files      $SRC_DIR/fm_global_spec.hpp
 add_files      $SRC_DIR/fm_global.hpp
 add_files      $SRC_DIR/utils/decimator.hpp

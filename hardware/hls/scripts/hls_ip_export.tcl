@@ -1,18 +1,19 @@
 #-------------------------------------------------------------------------------
-# File        : hls_csynth.tcl
+# File        : hls_sim.tcl
 # Author      : Michael Wurm <wurm.michael95@gmail.com>
-# Description : Run C Synthesis for Vivado HLS project.
+# Description : Simulate Vivado HLS project.
 #-------------------------------------------------------------------------------
 
 set project_name [lindex $argv 2]
+set ip_name [lindex $argv 3]
 
 open_project $project_name
 open_solution "solution1"
 
 puts "###############################################################"
-puts " Running csynth"
+puts " Running IP export"
 puts "###############################################################"
 
-csynth_design
+export_design -format ip_catalog -ipname ip_name -vendor MWURM
 
 exit
