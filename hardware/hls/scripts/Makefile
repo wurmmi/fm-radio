@@ -51,10 +51,10 @@ else
 	@source $(ENV_SETUP_SCRIPT) && python ../tb/analyze_tb_results.py
 endif
 
-hls_csim_analyze: ##				- Run analysis for latest csim.
+csim_analyze: ##				- Run analysis for latest csim.
 	@source $(ENV_SETUP_SCRIPT) && python ../tb/analyze_tb_results.py
 
-hls_csim_reload_plots: ##				- Reload plots from latest csim.
+csim_reload_plots: ##				- Reload plots from latest csim.
 	@source $(ENV_SETUP_SCRIPT) && python -c $(PYTHON_RELOAD_PLOTS_CODE)
 
 csynth: ## 					- Run C synthesis.
@@ -75,7 +75,7 @@ clean: ##						- Clean outputs.
 help: ##						- Show this help message.
 	@grep -h "##" Makefile | grep -v "\"##\"" | sed -e 's/##//g'
 
-.PHONY: create_project csim hls_csim_analyze hls_csim_reload_plots csynth ip_export clean help
+.PHONY: create_project csim csim_analyze csim_reload_plots csynth ip_export clean help
 
 ##
 ##==============================================================================

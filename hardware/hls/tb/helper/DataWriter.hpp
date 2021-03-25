@@ -15,17 +15,16 @@
 
 #include "fm_global.hpp"
 
-using data_vec_t = std::vector<sample_t>;
-
 #ifdef __SYNTHESIS__
-// Empty class for synthesis
 class DataWriter {
  public:
   DataWriter(std::string const&) {}
   void write(sample_t) {}
 };
+
 #else
-// Implement class for simulation
+using data_vec_t = std::vector<sample_t>;
+
 class DataWriter {
  private:
   std::ofstream ofs;
