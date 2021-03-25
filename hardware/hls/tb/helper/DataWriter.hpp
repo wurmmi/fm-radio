@@ -25,6 +25,13 @@ class DataWriter {
 #else
 using data_vec_t = std::vector<sample_t>;
 
+#ifdef __SYNTHESIS__
+class DataWriter {
+  void write() {}
+};
+
+#else
+
 class DataWriter {
  private:
   std::ofstream ofs;
