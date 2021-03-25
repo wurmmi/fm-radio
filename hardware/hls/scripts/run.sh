@@ -17,10 +17,7 @@ GUI=${2:-"unset"}
 SCRIPT_PATH=$(realpath $(dirname $BASH_SOURCE))
 cd $SCRIPT_PATH
 
-VIVADO_HLS_PROJECT_NAME="prj"
 VIVADO_HLS_BATCH="vivado_hls -f"
-VIVADO_HLS_GUI="vivado_hls -p"
-VIVADO_HLS_GUI="vivado_hls -p"
 
 GENERAL_OUT_DIR=$SCRIPT_PATH/../generated
 PROJ_DIR=$GENERAL_OUT_DIR/fm_receiver
@@ -33,35 +30,7 @@ mkdir -p $IP_DIR
 cd $PROJ_DIR
 
 
-if [ "$ARG" == "hls_project" ]; then
-  $VIVADO_HLS_BATCH $SCRIPT_PATH/create_hls_project.tcl $VIVADO_HLS_PROJECT_NAME
-  exit 0
-elif [ "$ARG" == "hls_sim" ]; then
-  # Run HLS testbench
-  $VIVADO_HLS_BATCH $SCRIPT_PATH/hls_sim.tcl $VIVADO_HLS_PROJECT_NAME
-  cd $SCRIPT_PATH
-  ./run.sh hls_sim_analyze
-  exit 0
-elif [ "$ARG" == "hls_sim_analyze" ]; then
-  # Analyze results
-  cd $SCRIPT_PATH
-  source ../../vhdl/tb/setup_env.sh
-  python ../tb/analyze_tb_results.py
-  exit 0
-elif [ "$ARG" == "hls_sim_reload_plots" ]; then
-  cd $SCRIPT_PATH
-  source ../../vhdl/tb/setup_env.sh
-  python -c """from helpers import reload_all_plots_pickle; \
-               reload_all_plots_pickle('../tb/output')\
-            """
-  exit 0
-elif [ "$ARG" == "hls_gui" ]; then
-  $VIVADO_HLS_GUI $VIVADO_HLS_PROJECT_NAME
-  exit 0
-elif [ "$ARG" == "hls_synth" ]; then
-  $VIVADO_HLS_BATCH $SCRIPT_PATH/hls_synth.tcl
-  exit 0
-elif [ "$ARG" == "hls_export" ]; then
+if [ "$ARG" == "hls_export" ]; then
   $VIVADO_HLS_BATCH $SCRIPT_PATH/hls_export.tcl
 
   # Unpack the IP zip package
