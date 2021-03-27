@@ -47,11 +47,6 @@ async def data_processing_test(dut):
     clk = Clock(dut.clk_i, period=clk_period, units='ns')
     clk_gen = cocotb.fork(clk.start())
 
-    # Generate IQ input strobe
-    strobe_num_cycles_high = 1
-    strobe_num_cycles_low = tb.CLOCK_FREQ_MHZ * 1000 // tb.model.FS_KHZ - strobe_num_cycles_high
-    tb.iq_in_strobe.start(bit_toggler(repeat(strobe_num_cycles_high), repeat(strobe_num_cycles_low)))
-
     # --------------------------------------------------------------------------
     # Load data from files
     # --------------------------------------------------------------------------
@@ -93,7 +88,7 @@ async def data_processing_test(dut):
     dut._log.info("Sending IQ samples to FM Receiver IP ...")
 
     for i in range(0, len(data_in_iq)):
-        await RisingEdge(dut.S00_axis_tvalid)  # from tb.iq_in_strobe
+        await RisingEdge(dut.S00_axis_tready)
         dut.S00_axis_tdata <= data_in_iq[i]
 
     await RisingEdge(dut.fm_receiver_inst.channel_decoder_inst.audio_lrdiff_valid)

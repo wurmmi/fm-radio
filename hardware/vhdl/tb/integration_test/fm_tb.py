@@ -45,8 +45,6 @@ class FM_TB(object):
         assert (self.CLOCK_FREQ_MHZ * 1e3 / self.model.FS_RX_KHZ).is_integer(), \
             "Clock rate and fs_rx must have an integer relation!"
 
-        self.iq_in_strobe = BitDriver(self.dut.S00_axis_tvalid, self.dut.clk_i)
-
     @cocotb.coroutine
     async def reset(self):
         self.dut._log.info("Resetting DUT ...")
@@ -61,7 +59,6 @@ class FM_TB(object):
     @cocotb.coroutine
     async def assign_defaults(self):
         self.dut._log.info("Setting input port defaults ...")
-
 
     @cocotb.coroutine
     async def read_fm_demod_output(self):
