@@ -88,12 +88,7 @@ async def data_processing_test(dut):
     dut._log.info("Sending IQ samples to FM Receiver IP ...")
 
     for i in range(0, len(data_in_iq)):
-        await RisingEdge(dut.S00_axis_tready)
-        dut.S00_axis_tdata <= data_in_iq[i]
-        dut.S00_axis_tvalid <= 1
-
-        await RisingEdge(dut.clk_i)
-        dut.S00_axis_tvalid <= 0
+        await tb.axis_m.write(data_in_iq[i])
 
     await RisingEdge(dut.fm_receiver_inst.channel_decoder_inst.audio_lrdiff_valid)
 

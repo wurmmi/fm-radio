@@ -1,16 +1,17 @@
 [*]
 [*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
-[*] Thu Mar 18 14:06:15 2021
+[*] Sat Mar 27 18:40:18 2021
 [*]
-[dumpfile] "/home/mike/work/fm-radio/hardware/tb/integration_test/sim_build/waveform.ghw"
-[dumpfile_mtime] "Thu Mar 18 14:05:44 2021"
-[dumpfile_size] 1318274
-[savefile] "/home/mike/work/fm-radio/hardware/tb/integration_test/gtkwave/waveconfig.gtkw"
-[timestart] 0
+[dumpfile] "/home/mike/work/fm-radio/hardware/vhdl/tb/integration_test/sim_build/waveform.ghw"
+[dumpfile_mtime] "Sat Mar 27 18:35:36 2021"
+[dumpfile_size] 1302461
+[savefile] "/home/mike/work/fm-radio/hardware/vhdl/tb/integration_test/gtkwave/waveconfig.gtkw"
+[timestart] 3067000000
 [size] 1848 1016
 [pos] -1 -1
-*-32.554668 9020000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-28.554668 3177000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
+[treeopen] top.fm_receiver_top.
 [treeopen] top.fm_receiver_top.fm_receiver_inst.
 [treeopen] top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.
 [sst_width] 287
@@ -61,7 +62,7 @@ top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.iq_valid_i
 -
 -
 -
-@29
+@28
 top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.sample_del_valid
 @420
 top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.delay_vector_i_inst.addrcnt
@@ -103,5 +104,15 @@ top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-14]
 -
 @28
 top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono_valid
+top.fm_receiver_top.s0_axis_tready
+top.fm_receiver_top.s0_axis_tvalid
+@22
+#{top.fm_receiver_top.s0_axis_tdata[31:0]} top.fm_receiver_top.s0_axis_tdata[31] top.fm_receiver_top.s0_axis_tdata[30] top.fm_receiver_top.s0_axis_tdata[29] top.fm_receiver_top.s0_axis_tdata[28] top.fm_receiver_top.s0_axis_tdata[27] top.fm_receiver_top.s0_axis_tdata[26] top.fm_receiver_top.s0_axis_tdata[25] top.fm_receiver_top.s0_axis_tdata[24] top.fm_receiver_top.s0_axis_tdata[23] top.fm_receiver_top.s0_axis_tdata[22] top.fm_receiver_top.s0_axis_tdata[21] top.fm_receiver_top.s0_axis_tdata[20] top.fm_receiver_top.s0_axis_tdata[19] top.fm_receiver_top.s0_axis_tdata[18] top.fm_receiver_top.s0_axis_tdata[17] top.fm_receiver_top.s0_axis_tdata[16] top.fm_receiver_top.s0_axis_tdata[15] top.fm_receiver_top.s0_axis_tdata[14] top.fm_receiver_top.s0_axis_tdata[13] top.fm_receiver_top.s0_axis_tdata[12] top.fm_receiver_top.s0_axis_tdata[11] top.fm_receiver_top.s0_axis_tdata[10] top.fm_receiver_top.s0_axis_tdata[9] top.fm_receiver_top.s0_axis_tdata[8] top.fm_receiver_top.s0_axis_tdata[7] top.fm_receiver_top.s0_axis_tdata[6] top.fm_receiver_top.s0_axis_tdata[5] top.fm_receiver_top.s0_axis_tdata[4] top.fm_receiver_top.s0_axis_tdata[3] top.fm_receiver_top.s0_axis_tdata[2] top.fm_receiver_top.s0_axis_tdata[1] top.fm_receiver_top.s0_axis_tdata[0]
+@28
+top.fm_receiver_top.iq_valid
+@22
+#{top.fm_receiver_top.q_sample[1:-14]} top.fm_receiver_top.q_sample[1] top.fm_receiver_top.q_sample[0] top.fm_receiver_top.q_sample[-1] top.fm_receiver_top.q_sample[-2] top.fm_receiver_top.q_sample[-3] top.fm_receiver_top.q_sample[-4] top.fm_receiver_top.q_sample[-5] top.fm_receiver_top.q_sample[-6] top.fm_receiver_top.q_sample[-7] top.fm_receiver_top.q_sample[-8] top.fm_receiver_top.q_sample[-9] top.fm_receiver_top.q_sample[-10] top.fm_receiver_top.q_sample[-11] top.fm_receiver_top.q_sample[-12] top.fm_receiver_top.q_sample[-13] top.fm_receiver_top.q_sample[-14]
+@23
+#{top.fm_receiver_top.i_sample[1:-14]} top.fm_receiver_top.i_sample[1] top.fm_receiver_top.i_sample[0] top.fm_receiver_top.i_sample[-1] top.fm_receiver_top.i_sample[-2] top.fm_receiver_top.i_sample[-3] top.fm_receiver_top.i_sample[-4] top.fm_receiver_top.i_sample[-5] top.fm_receiver_top.i_sample[-6] top.fm_receiver_top.i_sample[-7] top.fm_receiver_top.i_sample[-8] top.fm_receiver_top.i_sample[-9] top.fm_receiver_top.i_sample[-10] top.fm_receiver_top.i_sample[-11] top.fm_receiver_top.i_sample[-12] top.fm_receiver_top.i_sample[-13] top.fm_receiver_top.i_sample[-14]
 [pattern_trace] 1
 [pattern_trace] 0

@@ -10,6 +10,22 @@ This thesis and the accompanying project is being elaborated in the Master's deg
 
 ----
 
+## Simulation
+
+### GNURadio
+
+### Matlab
+
+----
+
+## Hardware
+
+### VHDL
+
+### HLS
+
+----
+
 ## Contact
 
 Michael Wurm <<wurm.michael95@gmail.com>>

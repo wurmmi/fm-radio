@@ -7,6 +7,7 @@
 import cocotb
 from cocotb.drivers import BitDriver
 from cocotb.triggers import RisingEdge, Timer
+from cocotbext.axi4stream.drivers import Axi4StreamMaster
 from fixed_point import *
 from fm_global import *
 from helpers import *
@@ -40,6 +41,9 @@ class FM_TB(object):
         self.n_sec = n_sec
 
         self.model = FM_RECEIVER_MODEL(n_sec)
+
+        slave_interface_to_connect_to = "s0_axis"
+        self.axis_m = Axi4StreamMaster(dut, slave_interface_to_connect_to, dut.clk_i)
 
         # Derived constants
         assert (self.CLOCK_FREQ_MHZ * 1e3 / self.model.FS_RX_KHZ).is_integer(), \
@@ -184,7 +188,7 @@ class FM_TB(object):
                                            self.data_out_pilot,
                                            fail_on_err=self.EnableFailOnError,
                                            max_error_abs=2**-5,
-                                           max_error_norm=0.1,
+                                           max_error_norm=0.2,
                                            skip_n_samples_begin=80,
                                            skip_n_samples_end=0,
                                            data_name="pilot")
@@ -193,7 +197,7 @@ class FM_TB(object):
                                                  self.data_out_carrier_38k,
                                                  fail_on_err=self.EnableFailOnError,
                                                  max_error_abs=2**-3,
-                                                 max_error_norm=0.25,
+                                                 max_error_norm=0.5,
                                                  skip_n_samples_begin=80,
                                                  skip_n_samples_end=0,
                                                  data_name="carrier_38k")
