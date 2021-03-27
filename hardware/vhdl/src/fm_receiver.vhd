@@ -32,8 +32,6 @@ library work;
 use work.fm_global_pkg.all;
 
 entity fm_receiver is
-  generic (
-    compile_ifft_ip_core_g : boolean := true);
   port (
     clk_i : in std_ulogic;
     rst_i : in std_ulogic;
@@ -54,7 +52,6 @@ architecture rtl of fm_receiver is
   --! @name Types and Constants
   -----------------------------------------------------------------------------
   --! @{
-
   --! @}
   -----------------------------------------------------------------------------
   --! @name Internal Registers

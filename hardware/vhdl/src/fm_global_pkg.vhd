@@ -20,7 +20,16 @@ package fm_global_pkg is
   -- Types and Constants
   ------------------------------------------------------------------------------
 
-  --! Oversampling rate fs:fs_rx
+  --! System clock rate
+  constant clk_freq_system_c : natural := 100e6;
+
+  --! Sample rate
+  constant fs_c : natural := fs_spec_c;
+
+  --! Sample rate of Rx channel decoder
+  constant fs_rx_c : natural := fs_rx_spec_c;
+
+  --! Oversampling rate fs_c:fs_rx_c
   constant osr_rx_c : natural := osr_rx_spec_c;
 
   --! Fixed point bitwidths
