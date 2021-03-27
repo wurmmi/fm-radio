@@ -47,7 +47,7 @@ entity strobe_gen is
 begin
   assert(False)
   report "strobe_gen: period_g is = " & to_string(period_g, ns)
-    severity warning;
+    severity note;
 
   -- pragma translate_off
   assert ((1 sec / clk_freq_g) <= period_g)
