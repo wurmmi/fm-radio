@@ -32,7 +32,6 @@ update_ip_catalog
 set_property BOARD_PART em.avnet.com:zed:part0:1.4 [current_project]
 
 puts "--- - Creating block design"
-puts [pwd]
 source ./bd/$proj_name.tcl
 
 # Generate the wrapper
