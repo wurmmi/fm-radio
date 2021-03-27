@@ -45,8 +45,9 @@ entity strobe_gen is
   --! @}
 
 begin
-
-  report "strobe_gen: period_g is = " & time'image(period_g);
+  assert(False)
+  report "strobe_gen: period_g is = " & to_string(period_g, ns)
+    severity warning;
 
   -- pragma translate_off
   assert ((1 sec / clk_freq_g) <= period_g)
@@ -71,15 +72,8 @@ architecture rtl of strobe_gen is
   -----------------------------------------------------------------------------
   --! @{
 
-  signal count : unsigned(log_dualis(clks_per_strobe_c) downto 0);
-
-  --! @}
-  -----------------------------------------------------------------------------
-  --! @name Internal Wires
-  -----------------------------------------------------------------------------
-  --! @{
-
-  signal strobe : std_ulogic;
+  signal count  : unsigned(LogDualis(clks_per_strobe_c) downto 0) := (others => '0');
+  signal strobe : std_ulogic                                      := '0';
 
   --! @}
 
@@ -109,6 +103,7 @@ begin -- architecture rtl
           end if;
         end if;
       end if;
-    end process regs;
+    end if;
+  end process regs;
 
-  end architecture rtl;
+end architecture rtl;
