@@ -35,6 +35,9 @@ fprintf(fileID, "  -- General\n");
 fprintf(fileID, "  constant fp_width_spec_c      : natural := %d;\n", fp_config.width);
 fprintf(fileID, "  constant fp_width_frac_spec_c : natural := %d;\n", fp_config.width_frac);
 fprintf(fileID, "  constant fp_width_int_spec_c  : natural := %d;\n", fp_config.width - fp_config.width_frac - 1);
+
+fprintf(fileID, "  constant fs_spec_c            : natural := %d;\n", fs);
+fprintf(fileID, "  constant fs_rx_spec_c         : natural := %d;\n", fs_rx);
 fprintf(fileID, "  constant osr_rx_spec_c        : natural := %d;\n", osr_rx);
 
 fprintf(fileID, "\n  -- IP specific\n");

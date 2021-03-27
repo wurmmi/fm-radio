@@ -47,21 +47,24 @@ async def data_processing_test(dut):
     clk = Clock(dut.clk_i, period=clk_period, units='ns')
     clk_gen = cocotb.fork(clk.start())
 
-    # Generate IQ input strobe
-    strobe_num_cycles_high = 1
-    strobe_num_cycles_low = tb.CLOCK_FREQ_MHZ * 1000 // tb.model.FS_KHZ - strobe_num_cycles_high
-    tb.iq_in_strobe.start(bit_toggler(repeat(strobe_num_cycles_high), repeat(strobe_num_cycles_low)))
-
     # --------------------------------------------------------------------------
     # Load data from files
     # --------------------------------------------------------------------------
+    dut._log.info("Loading input data ...")
 
     filename = "../../../../sim/matlab/verification_data/rx_fm_bb.txt"
     data_fp = loadDataFromFile(filename, tb.model.num_samples_fs_c * 2, fp_width_c, fp_width_frac_c)
 
-    # Split interleaved I/Q samples (take every other)
+    # Get interleaved I/Q samples (take every other)
     data_in_i_fp = data_fp[0::2]  # start:end:step
     data_in_q_fp = data_fp[1::2]  # start:end:step
+
+    data_in_iq = []
+    for i in range(0, len(data_in_i_fp)):
+        low = int(fixed_to_int(data_in_i_fp[i]))
+        high = int(fixed_to_int(data_in_q_fp[i]))
+        value = (high << 16) + low
+        data_in_iq.append(value)
 
     # --------------------------------------------------------------------------
     # Run test on DUT
@@ -84,22 +87,20 @@ async def data_processing_test(dut):
     # Send input data through filter
     dut._log.info("Sending IQ samples to FM Receiver IP ...")
 
-    for i in range(0, len(data_in_i_fp)):
-        await RisingEdge(dut.iq_valid_i)
-        dut.i_sample_i <= int(fixed_to_int(data_in_i_fp[i]))
-        dut.q_sample_i <= int(fixed_to_int(data_in_q_fp[i]))
+    for i in range(0, len(data_in_iq)):
+        await tb.axis_m.write(data_in_iq[i])
 
-    await RisingEdge(dut.channel_decoder_inst.audio_lrdiff_valid)
+    await RisingEdge(dut.fm_receiver_inst.channel_decoder_inst.audio_lrdiff_valid)
 
-    # Stop other forked routines
-    await fm_demod_output_fork  # .join()
-    await decimator_output_fork  # .join()
-    await audio_mono_output_fork  # .join()
-    await pilot_output_fork  # .join()
-    await carrier_38k_output_fork  # .join()
-    await audio_lrdiff_output_fork  # .join()
-    await audio_L_output_fork  # .join()
-    await audio_R_output_fork  # .join()
+    # Await forked routines to stop
+    await fm_demod_output_fork
+    await decimator_output_fork
+    await audio_mono_output_fork
+    await pilot_output_fork
+    await carrier_38k_output_fork
+    await audio_lrdiff_output_fork
+    await audio_L_output_fork
+    await audio_R_output_fork
 
     # Measure time
     duration_s = int(time.time() - timestamp_start)

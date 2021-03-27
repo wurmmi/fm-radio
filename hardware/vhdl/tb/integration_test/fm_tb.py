@@ -7,6 +7,7 @@
 import cocotb
 from cocotb.drivers import BitDriver
 from cocotb.triggers import RisingEdge, Timer
+from cocotbext.axi4stream.drivers import Axi4StreamMaster
 from fixed_point import *
 from fm_global import *
 from helpers import *
@@ -41,11 +42,12 @@ class FM_TB(object):
 
         self.model = FM_RECEIVER_MODEL(n_sec)
 
+        slave_interface_to_connect_to = "s0_axis"
+        self.axis_m = Axi4StreamMaster(dut, slave_interface_to_connect_to, dut.clk_i)
+
         # Derived constants
         assert (self.CLOCK_FREQ_MHZ * 1e3 / self.model.FS_RX_KHZ).is_integer(), \
             "Clock rate and fs_rx must have an integer relation!"
-
-        self.iq_in_strobe = BitDriver(self.dut.iq_valid_i, self.dut.clk_i)
 
     @cocotb.coroutine
     async def reset(self):
@@ -62,15 +64,11 @@ class FM_TB(object):
     async def assign_defaults(self):
         self.dut._log.info("Setting input port defaults ...")
 
-        self.dut.iq_valid_i <= 0
-        self.dut.i_sample_i <= 0
-        self.dut.q_sample_i <= 0
-
     @cocotb.coroutine
     async def read_fm_demod_output(self):
         sampler = VHDL_SAMPLER("fm_demod", self.dut,
-                               self.dut.fm_demod,
-                               self.dut.fm_demod_valid,
+                               self.dut.fm_receiver_inst.fm_demod,
+                               self.dut.fm_receiver_inst.fm_demod_valid,
                                self.model.num_samples_fs_c,
                                fp_width_c, fp_width_frac_c)
 
@@ -79,8 +77,8 @@ class FM_TB(object):
     @cocotb.coroutine
     async def read_decimator_output(self):
         sampler = VHDL_SAMPLER("decimator", self.dut,
-                               self.dut.fm_channel_data,
-                               self.dut.fm_channel_data_valid,
+                               self.dut.fm_receiver_inst.fm_channel_data,
+                               self.dut.fm_receiver_inst.fm_channel_data_valid,
                                self.model.num_samples_c,
                                fp_width_c, fp_width_frac_c)
 
@@ -89,8 +87,8 @@ class FM_TB(object):
     @cocotb.coroutine
     async def read_audio_mono_output(self):
         sampler = VHDL_SAMPLER("audio_mono", self.dut,
-                               self.dut.channel_decoder_inst.audio_mono,
-                               self.dut.channel_decoder_inst.audio_mono_valid,
+                               self.dut.fm_receiver_inst.channel_decoder_inst.audio_mono,
+                               self.dut.fm_receiver_inst.channel_decoder_inst.audio_mono_valid,
                                self.model.num_samples_c,
                                fp_width_c, fp_width_frac_c)
 
@@ -99,8 +97,8 @@ class FM_TB(object):
     @cocotb.coroutine
     async def read_pilot_output(self):
         sampler = VHDL_SAMPLER("pilot", self.dut,
-                               self.dut.channel_decoder_inst.recover_carriers_inst.pilot,
-                               self.dut.channel_decoder_inst.recover_carriers_inst.pilot_valid,
+                               self.dut.fm_receiver_inst.channel_decoder_inst.recover_carriers_inst.pilot,
+                               self.dut.fm_receiver_inst.channel_decoder_inst.recover_carriers_inst.pilot_valid,
                                self.model.num_samples_c,
                                fp_width_c, fp_width_frac_c)
 
@@ -109,8 +107,8 @@ class FM_TB(object):
     @cocotb.coroutine
     async def read_carrier_38k_output(self):
         sampler = VHDL_SAMPLER("carrier_38k", self.dut,
-                               self.dut.channel_decoder_inst.recover_carriers_inst.carrier_38k,
-                               self.dut.channel_decoder_inst.recover_carriers_inst.carrier_38k_valid,
+                               self.dut.fm_receiver_inst.channel_decoder_inst.recover_carriers_inst.carrier_38k,
+                               self.dut.fm_receiver_inst.channel_decoder_inst.recover_carriers_inst.carrier_38k_valid,
                                self.model.num_samples_c,
                                fp_width_c, fp_width_frac_c)
 
@@ -119,8 +117,8 @@ class FM_TB(object):
     @cocotb.coroutine
     async def read_audio_lrdiff_output(self):
         sampler = VHDL_SAMPLER("audio_lrdiff", self.dut,
-                               self.dut.channel_decoder_inst.audio_lrdiff,
-                               self.dut.channel_decoder_inst.audio_lrdiff_valid,
+                               self.dut.fm_receiver_inst.channel_decoder_inst.audio_lrdiff,
+                               self.dut.fm_receiver_inst.channel_decoder_inst.audio_lrdiff_valid,
                                self.model.num_samples_c,
                                fp_width_c, fp_width_frac_c)
 
@@ -129,8 +127,8 @@ class FM_TB(object):
     @cocotb.coroutine
     async def read_audio_L_output(self):
         sampler_L = VHDL_SAMPLER("audio_L", self.dut,
-                                 self.dut.audio_L_o,
-                                 self.dut.audio_valid_o,
+                                 self.dut.fm_receiver_inst.audio_L_o,
+                                 self.dut.fm_receiver_inst.audio_valid_o,
                                  self.model.num_samples_c,
                                  fp_width_c, fp_width_frac_c)
 
@@ -139,8 +137,8 @@ class FM_TB(object):
     @cocotb.coroutine
     async def read_audio_R_output(self):
         sampler_R = VHDL_SAMPLER("audio_R", self.dut,
-                                 self.dut.audio_R_o,
-                                 self.dut.audio_valid_o,
+                                 self.dut.fm_receiver_inst.audio_R_o,
+                                 self.dut.fm_receiver_inst.audio_valid_o,
                                  self.model.num_samples_c,
                                  fp_width_c, fp_width_frac_c)
 
@@ -190,7 +188,7 @@ class FM_TB(object):
                                            self.data_out_pilot,
                                            fail_on_err=self.EnableFailOnError,
                                            max_error_abs=2**-5,
-                                           max_error_norm=0.1,
+                                           max_error_norm=0.2,
                                            skip_n_samples_begin=80,
                                            skip_n_samples_end=0,
                                            data_name="pilot")
@@ -199,7 +197,7 @@ class FM_TB(object):
                                                  self.data_out_carrier_38k,
                                                  fail_on_err=self.EnableFailOnError,
                                                  max_error_abs=2**-3,
-                                                 max_error_norm=0.25,
+                                                 max_error_norm=0.5,
                                                  skip_n_samples_begin=80,
                                                  skip_n_samples_end=0,
                                                  data_name="carrier_38k")
