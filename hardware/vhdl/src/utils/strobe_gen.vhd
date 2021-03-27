@@ -81,7 +81,10 @@ begin -- architecture rtl
 
   strobe_o <= strobe;
 
-  -- Count the number of Clk cycles from strobe pulse to strobe pulse.
+  ------------------------------------------------------------------------------
+  -- Registers
+  ------------------------------------------------------------------------------
+
   regs : process (clk_i) is
     procedure reset is
     begin
@@ -94,6 +97,7 @@ begin -- architecture rtl
         reset;
       else
         if enable_i = '1' then
+          -- Count the number of Clk cycles from strobe pulse to strobe pulse.
           if count = clks_per_strobe_c - 1 then
             count  <= (others => '0');
             strobe <= '1';

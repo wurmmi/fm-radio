@@ -26,9 +26,9 @@ entity fm_receiver_top is
     rst_i : in std_ulogic;
 
     -- AXI Stream input
-    S00_axis_tready : out std_ulogic;
-    S00_axis_tdata  : in std_ulogic_vector(31 downto 0);
-    S00_axis_tvalid : in std_ulogic;
+    s0_axis_tready : out std_ulogic;
+    s0_axis_tdata  : in std_ulogic_vector(31 downto 0);
+    s0_axis_tvalid : in std_ulogic;
 
     -- Output
     audio_L_o     : out sample_t;
@@ -40,18 +40,27 @@ end entity fm_receiver_top;
 architecture rtl of fm_receiver_top is
 
   -----------------------------------------------------------------------------
-  --! @name Internal Wires
+  --! @name Internal Registers
   -----------------------------------------------------------------------------
   --! @{
 
   signal req_sample : std_ulogic;
 
-  signal i_sample : sample_t;
-  signal q_sample : sample_t;
+  signal i_sample    : sample_t;
+  signal q_sample    : sample_t;
+  signal iq_valid_sr : std_ulogic_vector(1 downto 0);
 
   signal audio_L     : sample_t;
   signal audio_R     : sample_t;
   signal audio_valid : std_ulogic;
+
+  --! @}
+  -----------------------------------------------------------------------------
+  --! @name Internal Wires
+  -----------------------------------------------------------------------------
+  --! @{
+
+  signal iq_valid : std_ulogic;
 
   --! @}
 
@@ -61,7 +70,7 @@ begin -- architecture rtl
   -- Outputs
   ------------------------------------------------------------------------------
 
-  S00_axis_tready <= req_sample;
+  s0_axis_tready <= req_sample;
 
   audio_L_o     <= audio_L;
   audio_R_o     <= audio_R;
@@ -71,8 +80,35 @@ begin -- architecture rtl
   -- Signal Assignments
   -----------------------------------------------------------------------------
 
-  i_sample <= to_sfixed(S00_axis_tdata(15 downto 0), i_sample);
-  q_sample <= to_sfixed(S00_axis_tdata(31 downto 16), q_sample);
+  -- Detect rising edge
+  iq_valid <= not iq_valid_sr(1) and iq_valid_sr(0);
+
+  ------------------------------------------------------------------------------
+  -- Registers
+  ------------------------------------------------------------------------------
+
+  regs : process (clk_i) is
+    procedure reset is
+    begin
+      i_sample    <= (others => '0');
+      q_sample    <= (others => '0');
+      iq_valid_sr <= (others => '0');
+    end procedure reset;
+  begin -- process regs
+    if rising_edge(clk_i) then
+      if rst_i = '1' then
+        reset;
+      else
+        -- Defaults
+        iq_valid_sr <= iq_valid_sr(0) & s0_axis_tvalid;
+
+        if s0_axis_tvalid = '1' then
+          i_sample <= to_sfixed(s0_axis_tdata(15 downto 0), i_sample);
+          q_sample <= to_sfixed(s0_axis_tdata(31 downto 16), q_sample);
+        end if;
+      end if;
+    end if;
+  end process regs;
 
   ------------------------------------------------------------------------------
   -- Instantiations
@@ -98,7 +134,7 @@ begin -- architecture rtl
 
       i_sample_i => i_sample,
       q_sample_i => q_sample,
-      iq_valid_i => S00_axis_tvalid,
+      iq_valid_i => iq_valid,
 
       audio_L_o     => audio_L,
       audio_R_o     => audio_R,
