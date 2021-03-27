@@ -2,14 +2,14 @@
 --! @file      fm_receiver_top.vhd
 --! @author    Michael Wurm <wurm.michael95@gmail.com>
 --! @copyright 2021 Michael Wurm
---! @brief     FM Receiver Top-level implementation.
+--! @brief     FM Receiver top-level implementation.
 -------------------------------------------------------------------------------
 
 -------------------------------------------------------------------------------
 -- TIME LOGGING
 --
--- (1) FM receiver top (interface) implementation
---       03/27/2021  15:30 - xxxxx    5:00 h
+-- (1) FM receiver top (Axi stream interface) implementation
+--       03/27/2021  15:30 - 17:30    2:00 h
 --
 
 library ieee;
