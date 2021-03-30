@@ -11,12 +11,8 @@
 
 #include "fm_global.hpp"
 
-typedef struct {
-  sample_t i;
-  sample_t q;
-} iq_sample_t;
-
-void fm_receiver(iq_sample_t const& sample_in,
+void fm_receiver(sample_t const& in_i,
+                 sample_t const& in_q,
                  sample_t& out_audio_L,
                  sample_t& out_audio_R);
 

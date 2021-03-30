@@ -68,7 +68,6 @@ int main() {
     sample_t audio_R;
     for (size_t i = 0; i < num_samples_fs_c; i++) {
       fm_receiver_top(data_in[i], audio_L, audio_R);
-      printf("IQ : %x\n", data_in[i]);
 
       writer_data_out_L.write(audio_L);
       writer_data_out_R.write(audio_R);
