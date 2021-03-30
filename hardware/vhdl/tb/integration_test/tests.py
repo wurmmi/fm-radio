@@ -59,11 +59,12 @@ async def data_processing_test(dut):
     data_in_i_fp = data_fp[0::2]  # start:end:step
     data_in_q_fp = data_fp[1::2]  # start:end:step
 
+    # Combine IQ samples
     data_in_iq = []
     for i in range(0, len(data_in_i_fp)):
-        low = int(fixed_to_int(data_in_i_fp[i]))
-        high = int(fixed_to_int(data_in_q_fp[i]))
-        value = (high << 16) + low
+        in_i = int(fixed_to_int(data_in_i_fp[i]))
+        in_q = int(fixed_to_int(data_in_q_fp[i]))
+        value = (in_q << 16) + in_i
         data_in_iq.append(value)
 
     # --------------------------------------------------------------------------

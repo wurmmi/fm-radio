@@ -26,6 +26,19 @@ This thesis and the accompanying project is being elaborated in the Master's deg
 
 ----
 
+## Software requirements
+
+ GNURadio,
+ Matlab,
+ GHDL,
+ cocotb + cocotbext [https://github.com/corna/cocotbext-axi4stream](https://github.com/corna/cocotbext-axi4stream)
+ gtkwave
+
+ Vivado,
+ Vivado HLS
+
+----
+
 ## Contact
 
 Michael Wurm <<wurm.michael95@gmail.com>>

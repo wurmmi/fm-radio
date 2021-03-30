@@ -12,7 +12,7 @@ from helpers import *
 # Constants
 # --------------------------------------------------------------------------
 # Number of seconds to process
-n_sec = 0.1
+n_sec = 0.001  # TODO: remove this here and simply use all samples from each file.
 EnableFailOnError = False
 
 # Derived constants

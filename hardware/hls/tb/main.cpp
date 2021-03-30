@@ -16,7 +16,7 @@
 using namespace std;
 
 /* Constants */
-constexpr double n_sec_c = 0.1;
+constexpr double n_sec_c = 0.001;
 
 const string data_folder =
     "../../../../../../../../sim/matlab/verification_data/";
@@ -48,13 +48,12 @@ int main() {
         DataLoader::loadDataFromFile(filename, num_samples_fs_c * 2);
 
     // Split interleaved I/Q samples (take every other)
-    vector<sample_t> data_in_i;
-    vector<sample_t> data_in_q;
-    for (size_t i = 0; i < data_in_iq.size(); i++) {
-      if (i % 2 == 0)
-        data_in_i.emplace_back(data_in_iq[i]);
-      else
-        data_in_q.emplace_back(data_in_iq[i]);
+    vector<iq_sample_t> data_in;
+    iq_sample_t in;
+    for (size_t i = 0; i < data_in_iq.size(); i += 2) {
+      in.i = data_in_iq[i];
+      in.q = data_in_iq[i + 1];
+      data_in.emplace_back(in);
     }
 
     // --------------------------------------------------------------------------
@@ -68,7 +67,8 @@ int main() {
     sample_t audio_L;
     sample_t audio_R;
     for (size_t i = 0; i < num_samples_fs_c; i++) {
-      fm_receiver(data_in_i[i], data_in_q[i], audio_L, audio_R);
+      fm_receiver(data_in[i], audio_L, audio_R);
+      printf("IQ : %x\n", data_in[i]);
 
       writer_data_out_L.write(audio_L);
       writer_data_out_R.write(audio_R);

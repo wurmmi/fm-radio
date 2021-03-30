@@ -22,8 +22,6 @@
 --
 */
 
-// TODO: implement top-level with AXI stream
-
 #include "fm_receiver.hpp"
 
 #include <iostream>
@@ -35,10 +33,17 @@
 
 using namespace std;
 
-void fm_receiver(sample_t const& in_i,
-                 sample_t const& in_q,
+void fm_receiver(iq_sample_t const& sample_in,
                  sample_t& out_audio_L,
                  sample_t& out_audio_R) {
+#pragma HLS INTERFACE ap_vld port = out_audio_L
+#pragma HLS INTERFACE ap_vld port = out_audio_R
+#pragma HLS INTERFACE axis port   = sample_in
+
+  // Split IQ samples
+  sample_t in_i = sample_in.i;
+  sample_t in_q = sample_in.q;
+
   // ------------------------------------------------------
   // FM Demodulator
   // ------------------------------------------------------
