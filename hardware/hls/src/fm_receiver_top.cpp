@@ -29,6 +29,7 @@ void fm_receiver_top(iq_sample_t const& sample_in,
 #pragma HLS INTERFACE ap_vld port = out_audio_L
 #pragma HLS INTERFACE ap_vld port = out_audio_R
 #pragma HLS INTERFACE axis port   = sample_in
+#pragma HLS DATA_PACK variable    = sample_in
 
   // Split IQ samples
   sample_t in_i = sample_in.i;

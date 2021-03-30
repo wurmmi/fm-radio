@@ -52,7 +52,7 @@ add_files -tb  $TB_DIR/main.cpp                   -cflags $CPPFLAGS
 # Solution settings
 open_solution -reset "solution1"
 
-set_top fm_receiver
+set_top fm_receiver_top
 set_part {xc7z020clg484-1}
 create_clock -period 10 -name default
 config_rtl -reset control -reset_level low

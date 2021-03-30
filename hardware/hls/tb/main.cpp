@@ -16,7 +16,7 @@
 using namespace std;
 
 /* Constants */
-constexpr double n_sec_c = 0.001;
+constexpr double n_sec_c = 0.1;
 
 const string data_folder =
     "../../../../../../../../sim/matlab/verification_data/";
@@ -49,11 +49,11 @@ int main() {
 
     // Split interleaved I/Q samples (take every other)
     vector<iq_sample_t> data_in;
-    iq_sample_t in;
+    iq_sample_t sample_in;
     for (size_t i = 0; i < data_in_iq.size(); i += 2) {
-      in.i = data_in_iq[i];
-      in.q = data_in_iq[i + 1];
-      data_in.emplace_back(in);
+      sample_in.i = data_in_iq[i];
+      sample_in.q = data_in_iq[i + 1];
+      data_in.emplace_back(sample_in);
     }
 
     // --------------------------------------------------------------------------
