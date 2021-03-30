@@ -2,14 +2,14 @@
 /**
  * @file    fm_receiver_top.cpp
  * @author  Michael Wurm <wurm.michael95@gmail.com>
- * @brief   FM Receiver IP implementation.
+ * @brief   FM Receiver top-level wrapper implementation.
  */
 /*****************************************************************************/
 
 /*
 -- TIME LOGGING
 --
--- (1) FM receiver top (Axi stream interface) implementation
+-- (1) FM receiver top (AXI stream interface) implementation
 --       03/30/2021  15:30 - 19:00    2:00 h
 --
 */

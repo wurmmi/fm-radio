@@ -8,7 +8,7 @@
 -------------------------------------------------------------------------------
 -- TIME LOGGING
 --
--- (1) FM receiver top (Axi stream interface) implementation
+-- (1) FM receiver top (AXI stream interface) implementation
 --       03/27/2021  15:30 - 17:30    2:00 h
 --
 
