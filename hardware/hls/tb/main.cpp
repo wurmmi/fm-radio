@@ -9,7 +9,7 @@
 #include <chrono>
 #include <iostream>
 
-#include "fm_receiver.hpp"
+#include "fm_receiver_top.hpp"
 #include "helper/DataLoader.hpp"
 #include "helper/DataWriter.hpp"
 
@@ -67,7 +67,7 @@ int main() {
     sample_t audio_L;
     sample_t audio_R;
     for (size_t i = 0; i < num_samples_fs_c; i++) {
-      fm_receiver(data_in[i], audio_L, audio_R);
+      fm_receiver_top(data_in[i], audio_L, audio_R);
       printf("IQ : %x\n", data_in[i]);
 
       writer_data_out_L.write(audio_L);
