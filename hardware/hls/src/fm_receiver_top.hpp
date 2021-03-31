@@ -9,6 +9,8 @@
 #ifndef _FM_RECEIVER_TOP_HPP
 #define _FM_RECEIVER_TOP_HPP
 
+#include <hls_stream.h>
+
 #include "fm_global.hpp"
 
 typedef struct {
@@ -16,7 +18,7 @@ typedef struct {
   sample_t q;
 } iq_sample_t;
 
-void fm_receiver_top(iq_sample_t const& sample_in,
+void fm_receiver_top(hls::stream<iq_sample_t>& sample_in,
                      sample_t& out_audio_L,
                      sample_t& out_audio_R);
 

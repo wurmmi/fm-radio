@@ -10,7 +10,8 @@
 -- TIME LOGGING
 --
 -- (1) FM receiver top (AXI stream interface) implementation
---       03/30/2021  15:30 - 19:00    2:00 h
+--       03/30/2021  15:30 - 20:00    4:30 h
+--       03/31/2021  14:30 - xx:xx    x:xx h
 --
 */
 
@@ -23,7 +24,7 @@
 
 using namespace std;
 
-void fm_receiver_top(iq_sample_t const& sample_in,
+void fm_receiver_top(hls::stream<iq_sample_t>& sample_in,
                      sample_t& out_audio_L,
                      sample_t& out_audio_R) {
 #pragma HLS INTERFACE ap_vld port = out_audio_L
@@ -31,9 +32,13 @@ void fm_receiver_top(iq_sample_t const& sample_in,
 #pragma HLS INTERFACE axis port   = sample_in
 #pragma HLS DATA_PACK variable    = sample_in
 
-  // Split IQ samples
-  sample_t in_i = sample_in.i;
-  sample_t in_q = sample_in.q;
+  // ------------------------------------------------------
+  // Read input and split IQ samples
+  // ------------------------------------------------------
+
+  iq_sample_t in = sample_in.read();
+  sample_t in_i  = in.i;
+  sample_t in_q  = in.q;
 
   // ------------------------------------------------------
   // FM Receiver IP

@@ -48,12 +48,12 @@ int main() {
         DataLoader::loadDataFromFile(filename, num_samples_fs_c * 2);
 
     // Split interleaved I/Q samples (take every other)
-    vector<iq_sample_t> data_in;
+    hls::stream<iq_sample_t> stream_data_in;
     iq_sample_t sample_in;
     for (size_t i = 0; i < data_in_iq.size(); i += 2) {
       sample_in.i = data_in_iq[i];
       sample_in.q = data_in_iq[i + 1];
-      data_in.emplace_back(sample_in);
+      stream_data_in << sample_in;
     }
 
     // --------------------------------------------------------------------------
@@ -66,8 +66,8 @@ int main() {
     DataWriter writer_data_out_R("data_out_rx_audio_R.txt");
     sample_t audio_L;
     sample_t audio_R;
-    for (size_t i = 0; i < num_samples_fs_c; i++) {
-      fm_receiver_top(data_in[i], audio_L, audio_R);
+    while (!stream_data_in.empty()) {
+      fm_receiver_top(stream_data_in, audio_L, audio_R);
 
       writer_data_out_L.write(audio_L);
       writer_data_out_R.write(audio_R);
