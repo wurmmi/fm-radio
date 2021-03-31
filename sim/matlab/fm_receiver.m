@@ -90,7 +90,7 @@ assert(fs_rx > 53e3 * 2,    'Sampling frequency fs_rx too low --> Nyquist!');
 
 rx_fmChannelData = calcDecimation(rx_fm_demod, osr_rx, EnableManualDecimation);
 
-% TODO: check where this comes from.....
+% TODO: check where this comes from..... (is needed to match VHDL/HLS simulation..)
 rx_fmChannelData = [zeros(12,1); rx_fmChannelData(1:end-12)];
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

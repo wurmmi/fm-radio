@@ -16,7 +16,11 @@
 using namespace std;
 
 /* Constants */
+#ifdef __RTL_SIMULATION__
+constexpr double n_sec_c = 0.001;
+#else
 constexpr double n_sec_c = 0.1;
+#endif
 
 const string data_folder =
     "../../../../../../../../sim/matlab/verification_data/";

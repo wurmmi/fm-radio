@@ -4,11 +4,7 @@
 # Description : Create Vivado HLS project.
 #-------------------------------------------------------------------------------
 
-set SRC_DIR  "../../src"
-set TB_DIR   "../../tb"
-set CPPFLAGS "-O --std=c++11 -I$SRC_DIR \
-              -Wall -Wno-unused-label -Wno-unused-parameter \
-              -Wno-mismatched-tags"
+source ../../scripts/hls_defines.tcl
 
 set project_name [lindex $argv 2]
 
