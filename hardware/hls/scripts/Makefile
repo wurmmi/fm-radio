@@ -18,6 +18,7 @@ ENV_SETUP_SCRIPT        = ../../vhdl/tb/setup_env.sh
 GENERAL_OUT_DIR = ../generated
 PROJ_DIR        = $(GENERAL_OUT_DIR)/fm_receiver_hls
 IP_DIR          = $(GENERAL_OUT_DIR)/ip
+WAVE_DIR        = $(PROJ_DIR)/prj/solution1/sim/vhdl
 
 IP_TOP         = fm_receiver
 IP_PACKAGE     = $(PROJ_DIR)/**/**/impl/ip/*.zip
@@ -65,8 +66,9 @@ csynth: ## 				- Run C synthesis.
 	@$(call vivado_hls_batch,hls_csynth.tcl,$(VIVADO_HLS_PROJECT_NAME))
 
 cosim: ## 				- Run co-simulation.
-	@$(call vivado_hls_batch,hls_cosim.tcl,$(VIVADO_HLS_PROJECT_NAME))
-	@$(call analyze_tb_results)
+	#@$(call vivado_hls_batch,hls_cosim.tcl,$(VIVADO_HLS_PROJECT_NAME))
+	#@$(call analyze_tb_results)
+	@cd $(WAVE_DIR) && vivado -source hls_cosim_open_wave.tcl
 
 ip_export: ##				- Export IP files (UNTESTED).
 	@$(call vivado_hls_batch,ip_export.tcl,$(VIVADO_HLS_PROJECT_NAME) $(IP_TOP))
@@ -83,12 +85,13 @@ clean: ##					- Clean outputs.
 help: ##					- Show this help message.
 	@grep -h "##" Makefile | grep -v "\"##\"" | sed -e 's/##//g'
 
-.PHONY: create_project csim csim_analyze csim_reload_plots csynth ip_export clean help
+.PHONY: all create_project gui csim csim_analyze csim_reload_plots csynth ip_export clean help
 
 ##
 ##==============================================================================
 ##*** NOTE: Makefile requires following setup:
 ##
 ##      - Vivado HLS (vivado_hls) can be found in PATH.
+##      - Vivado (vivado) can be found in PATH.
 ##
 ##==============================================================================

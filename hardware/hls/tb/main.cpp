@@ -16,7 +16,7 @@
 using namespace std;
 
 /* Constants */
-constexpr double n_sec_c = 0.1;
+constexpr double n_sec_c = 0.001;
 
 const string data_folder =
     "../../../../../../../../sim/matlab/verification_data/";
