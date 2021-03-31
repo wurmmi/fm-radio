@@ -21,6 +21,8 @@ add_files      $SRC_DIR/filter_coeff_headers/filter_bp_pilot.h
 add_files      $SRC_DIR/filter_coeff_headers/filter_lp_mono.h
 add_files      $SRC_DIR/fm_global_spec.hpp
 add_files      $SRC_DIR/fm_global.hpp
+add_files      $SRC_DIR/utils/strobe_gen.hpp
+add_files      $SRC_DIR/utils/strobe_gen.cpp                   -cflags $CPPFLAGS
 add_files      $SRC_DIR/utils/decimator.hpp
 add_files      $SRC_DIR/utils/decimator.cpp                    -cflags $CPPFLAGS
 add_files      $SRC_DIR/utils/fir.hpp

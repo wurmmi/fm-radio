@@ -11,7 +11,7 @@
 
 #include <stdint.h>
 
-const uint8_t num_wait_cycles_c = 8;
+const uint8_t num_wait_cycles_c = 15;
 
 bool strobe_gen();
 

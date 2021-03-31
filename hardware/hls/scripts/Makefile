@@ -5,7 +5,7 @@
 # brief:     Makefile for FM Receiver IP.
 #-------------------------------------------------------------------------------
 
-# TODO: move this file one directory higher
+# TODO: move this file one directory higher (?)
 
 GUI = 0
 
@@ -73,9 +73,10 @@ cosim: ## 				- Run co-simulation.
 	@echo Done.
 
 cosim_open_wave: ##			- Open waveform of co-simulation.
+	@echo "Opening waveform..."
 	@cd $(WAVE_DIR) && vivado -source $(MAKEFILE_DIR)/hls_cosim_open_wave.tcl
 
-ip_export: ##				- Export IP files (UNTESTED).
+ip_export: ##				- Export IP files.
 	@$(call vivado_hls_batch,ip_export.tcl,$(VIVADO_HLS_PROJECT_NAME) $(IP_TOP))
 	@rm -rf $(IP_DESTINATION)/*
 	@mkdir -p $(IP_DESTINATION)

@@ -13,6 +13,6 @@ puts "###############################################################"
 puts " Running cosim_design"
 puts "###############################################################"
 
-cosim_design -wave_debug -trace_level port -rtl vhdl -tool xsim
+cosim_design -wave_debug -trace_level all -rtl vhdl -tool xsim
 
 exit
