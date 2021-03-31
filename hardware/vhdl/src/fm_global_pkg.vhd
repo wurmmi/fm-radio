@@ -32,6 +32,9 @@ package fm_global_pkg is
   --! Oversampling rate fs_c:fs_rx_c
   constant osr_rx_c : natural := osr_rx_spec_c;
 
+  --! Oversampling rate fs_rx_c:fs_audio_c
+  constant osr_audio_c : natural := osr_audio_spec_c;
+
   --! Fixed point bitwidths
   constant fp_width_c      : natural := fp_width_spec_c;
   constant fp_width_frac_c : natural := fp_width_frac_spec_c;

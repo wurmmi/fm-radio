@@ -11,7 +11,9 @@
 --
 -- (1) FM receiver top (AXI stream interface) implementation
 --       03/30/2021  15:30 - 20:00    4:30 h
---       03/31/2021  14:30 - xx:xx    x:xx h
+--       03/31/2021  14:30 - 18:00    3:30 h  trying to find out how/when
+--                                            top-level function is called
+--                                            with clk cycles
 --
 */
 

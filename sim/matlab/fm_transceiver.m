@@ -135,18 +135,19 @@ if EnableWriteDataFiles
     disp('--- Verification data');
     % Only write a fraction of the simulation time to file
     n_sec_file  = 0.1;
-    num_samples = n_sec_file * fs/osr_rx;
+    num_samples = n_sec_file * fs_rx;
+    num_samples_audio = n_sec_file * fs_audio;
     
     % Test data
     writeDataToFile(rx_fm_bb,         num_samples*osr_rx,'./verification_data/rx_fm_bb.txt',         fp_config);
     writeDataToFile(rx_fm_demod,      num_samples*osr_rx,'./verification_data/rx_fm_demod.txt',      fp_config);
     writeDataToFile(rx_fmChannelData, num_samples,       './verification_data/rx_fmChannelData.txt', fp_config);
-    writeDataToFile(rx_audio_mono,    num_samples,       './verification_data/rx_audio_mono.txt',    fp_config);
+    writeDataToFile(rx_audio_mono,    num_samples_audio, './verification_data/rx_audio_mono.txt',    fp_config);
     writeDataToFile(rx_pilot,         num_samples,       './verification_data/rx_pilot.txt',         fp_config);
     writeDataToFile(rx_carrier38kHz,  num_samples,       './verification_data/rx_carrier38kHz.txt',  fp_config);
-    writeDataToFile(rx_audio_lrdiff,  num_samples,       './verification_data/rx_audio_lrdiff.txt',  fp_config);
-    writeDataToFile(rx_audio_L,       num_samples,       './verification_data/rx_audio_L.txt',       fp_config);
-    writeDataToFile(rx_audio_R,       num_samples,       './verification_data/rx_audio_R.txt',       fp_config);
+    writeDataToFile(rx_audio_lrdiff,  num_samples_audio, './verification_data/rx_audio_lrdiff.txt',  fp_config);
+    writeDataToFile(rx_audio_L,       num_samples_audio, './verification_data/rx_audio_L.txt',       fp_config);
+    writeDataToFile(rx_audio_R,       num_samples_audio, './verification_data/rx_audio_R.txt',       fp_config);
 
     disp('Done.');
 end

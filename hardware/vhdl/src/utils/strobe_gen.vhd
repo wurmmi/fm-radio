@@ -45,11 +45,11 @@ entity strobe_gen is
   --! @}
 
 begin
-  assert(False)
-  report "strobe_gen: period_g is = " & to_string(period_g, ns)
-    severity note;
 
   -- pragma translate_off
+  --  assert(False)
+  --  report "strobe_gen: period_g is = " & to_string(period_g, ns)
+  --    severity note;
   assert ((1 sec / clk_freq_g) <= period_g)
   report "strobe_gen: The Clk frequency is to low to generate such a short strobe cycle."
     severity error;

@@ -38,7 +38,10 @@ architecture rtl of recover_mono is
   signal mono_valid : std_ulogic;
 
   signal mono_delayed       : sample_t;
-  signal mono_valid_delayed : std_ulogic;
+  signal mono_delayed_valid : std_ulogic;
+
+  signal mono_decimated       : sample_t;
+  signal mono_decimated_valid : std_ulogic;
 
   --! @}
 
@@ -48,8 +51,8 @@ begin -- architecture rtl
   -- Outputs
   ------------------------------------------------------------------------------
 
-  mono_o       <= mono_delayed;
-  mono_valid_o <= mono_valid_delayed;
+  mono_o       <= mono_decimated;
+  mono_valid_o <= mono_decimated_valid;
 
   ------------------------------------------------------------------------------
   -- Instantiations
@@ -79,6 +82,19 @@ begin -- architecture rtl
       iValDry => mono_valid,
 
       oDwet   => mono_delayed,
-      oValWet => mono_valid_delayed);
+      oValWet => mono_delayed_valid);
+
+  decimator_inst : entity work.decimator
+    generic map(
+      decimation_g => osr_audio_c)
+    port map(
+      clk_i => clk_i,
+      rst_i => rst_i,
+
+      sample_i       => mono_delayed,
+      sample_valid_i => mono_delayed_valid,
+
+      sample_o       => mono_decimated,
+      sample_valid_o => mono_decimated_valid);
 
 end architecture rtl;
