@@ -13,6 +13,7 @@ from fixed_point import from_fixed_point, to_fixed_point
 def loadDataFromFile(filename, num_samples, bitwidth, bitwidth_frac):
     """
     Loads data from a file and converts it to fixed_point.
+    Set num_samples to -1 to load entire file.
     """
     data = []
     with open(filename) as fd:
@@ -21,10 +22,10 @@ def loadDataFromFile(filename, num_samples, bitwidth, bitwidth_frac):
             data.append(float(line.strip('\n')))
             val_count += 1
             # Stop after required number of samples
-            if val_count >= num_samples:
+            if num_samples != -1 and val_count >= num_samples:
                 break
 
-    if val_count < num_samples:
+    if num_samples != -1 and val_count < num_samples:
         raise cocotb.result.TestFailure(
             "File '{}' contains less elements than requested ({} < {}).".format(
                 filename, val_count, num_samples))

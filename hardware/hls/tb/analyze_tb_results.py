@@ -11,13 +11,7 @@ from helpers import *
 # --------------------------------------------------------------------------
 # Constants
 # --------------------------------------------------------------------------
-# Number of seconds to process
-n_sec = 0.001  # TODO: remove this here and simply use all samples from each file.
 EnableFailOnError = False
-
-# Derived constants
-num_samples_c = int(n_sec * fs_rx_c)
-num_samples_fs_c = int(n_sec * fs_c)
 
 
 def analyze():
@@ -29,6 +23,40 @@ def analyze():
     # Load data from files
     # --------------------------------------------------------------------------
     print("--- Loading data from files")
+
+    # Testbench result data
+    directory_tb = "../tb/output/"
+    filename = directory_tb + "data_out_fm_demod.txt"
+    data_out_fm_demod_fp = loadDataFromFile(filename, -1, fp_width_c, fp_width_frac_c)
+
+    filename = directory_tb + "data_out_audio_mono.txt"
+    data_out_audio_mono_fp = loadDataFromFile(filename, -1, fp_width_c, fp_width_frac_c)
+
+    filename = directory_tb + "data_out_pilot.txt"
+    data_out_pilot_fp = loadDataFromFile(filename, -1, fp_width_c, fp_width_frac_c)
+
+    filename = directory_tb + "data_out_carrier_38k.txt"
+    data_out_carrier_38k_fp = loadDataFromFile(filename, -1, fp_width_c, fp_width_frac_c)
+
+    filename = directory_tb + "data_out_audio_lrdiff.txt"
+    data_out_audio_lrdiff_fp = loadDataFromFile(filename, -1, fp_width_c, fp_width_frac_c)
+
+    filename = directory_tb + "data_out_audio_L.txt"
+    data_out_audio_L_fp = loadDataFromFile(filename, -1, fp_width_c, fp_width_frac_c)
+
+    filename = directory_tb + "data_out_audio_R.txt"
+    data_out_audio_R_fp = loadDataFromFile(filename, -1, fp_width_c, fp_width_frac_c)
+
+    # Check number of samples that were found in the files
+    num_samples_c = len(data_out_pilot_fp)
+    num_samples_fs_c = len(data_out_fm_demod_fp)
+
+    # Sanity checks
+    assert num_samples_fs_c // num_samples_c == osr_rx_c, \
+        "File lengths don't match osr_rx_c ..."
+
+    n_sec = num_samples_c / fs_rx_c
+    print(f"Loaded {n_sec} seconds worth of data.")
 
     # Golden data
     directory_gold = "../../../sim/matlab/verification_data/"
@@ -53,29 +81,6 @@ def analyze():
 
     filename = directory_gold + "rx_audio_R.txt"
     gold_audio_R_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
-
-    # Testbench result data
-    directory_tb = "../tb/output/"
-    filename = directory_tb + "data_out_fm_demod.txt"
-    data_out_fm_demod_fp = loadDataFromFile(filename, num_samples_fs_c, fp_width_c, fp_width_frac_c)
-
-    filename = directory_tb + "data_out_audio_mono.txt"
-    data_out_audio_mono_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
-
-    filename = directory_tb + "data_out_pilot.txt"
-    data_out_pilot_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
-
-    filename = directory_tb + "data_out_carrier_38k.txt"
-    data_out_carrier_38k_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
-
-    filename = directory_tb + "data_out_audio_lrdiff.txt"
-    data_out_audio_lrdiff_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
-
-    filename = directory_tb + "data_out_audio_L.txt"
-    data_out_audio_L_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
-
-    filename = directory_tb + "data_out_audio_R.txt"
-    data_out_audio_R_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
 
     # --------------------------------------------------------------------------
     # Compare data
