@@ -100,11 +100,6 @@ if EnableRxAudioReplay
     rx_audioReplay(:,1) = rx_audio_L;
     rx_audioReplay(:,2) = rx_audio_R;
     
-    % Downsample for PC soundcard
-    osr_audio = 3;
-    fs_audio = fs_rx/osr_audio;
-    rx_audioReplay = resample(rx_audioReplay, 1, osr_audio);
-    
     sound(rx_audioReplay, fs_audio);
 end
 

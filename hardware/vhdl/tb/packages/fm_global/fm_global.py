@@ -17,5 +17,5 @@ osr_rx_c        = 8
 osr_audio_c     = 3
 
 # IP specific
-pilot_output_scale_c = 6
+pilot_output_scale_c = 8
 carrier_38k_offset_c = 0.75

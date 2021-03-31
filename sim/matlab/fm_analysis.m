@@ -137,20 +137,20 @@ if EnableSenderSourceCreateSim
 end
 ax3 = subplot(6,1,3);
 hold on;
-plot(tnRx/fs_rx, rx_audio_lrdiff, 'b', 'DisplayName', 'rx\_audio\_lrdiff');
-plot(tnRx/fs_rx, rx_audio_mono, 'r', 'DisplayName', 'rx\_audio\_mono');
+plot(tnAudio/fs_audio, rx_audio_lrdiff, 'b', 'DisplayName', 'rx\_audio\_lrdiff');
+plot(tnAudio/fs_audio, rx_audio_mono, 'r', 'DisplayName', 'rx\_audio\_mono');
 ylabel('amplitude');
 grid on; legend();
 ax4 = subplot(6,1,4);
-plot(tnRx/fs_rx, rx_audio_mono, 'b', 'DisplayName', 'rx\_audio\_mono');
+plot(tnAudio/fs_audio, rx_audio_mono, 'b', 'DisplayName', 'rx\_audio\_mono');
 grid on; legend();
 ax5 = subplot(6,1,5);
-plot(tnRx/fs_rx, rx_audio_L, 'r', 'DisplayName', 'rx\_audio\_L');
+plot(tnAudio/fs_audio, rx_audio_L, 'r', 'DisplayName', 'rx\_audio\_L');
 ymax = max(rx_audio_L);
 ylim([-ymax,ymax]);
 grid on; legend();
 ax6 = subplot(6,1,6);
-plot(tnRx/fs_rx, rx_audio_R, 'g', 'DisplayName', 'rx\_audio\_R');
+plot(tnAudio/fs_audio, rx_audio_R, 'g', 'DisplayName', 'rx\_audio\_R');
 ylim([-ymax,ymax]);
 xlabel('time [s]');
 grid on; legend();

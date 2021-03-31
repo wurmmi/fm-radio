@@ -123,7 +123,7 @@ rx_pilot = filter(filter_bp_pilot,1, rx_fmChannelData);
 %       transmitted with an amplitude of 10%.
 % --> 8 for optimum in sim (??)
 % --> 6 to keep < 1 for fp
-pilot_scale_factor = 6;
+pilot_scale_factor = 8;
 rx_pilot = rx_pilot * pilot_scale_factor; %TODO: adapt this value
 
 % Amplify again, if a de-emphasis filter is used.
@@ -173,7 +173,7 @@ if EnableRDSDecoder
 end
 
 % For test purpose only.
-pilot_local          = cos(2*pi*19e3/fs_rx*tnRx + phi_pilot);
+pilot_local           = cos(2*pi*19e3/fs_rx*tnRx + phi_pilot);
 rx_carrier38kHz_local = cos(2*pi*38e3/fs_rx*tnRx + phi_pilot*2);
 rx_carrier57kHz_local = cos(2*pi*57e3/fs_rx*tnRx + phi_pilot*3);
 
@@ -251,6 +251,14 @@ filter_bp_lrdiff_groupdelay = (length(filter_bp_lrdiff)-1)/2;
 
 % Compensate the group delay
 rx_audio_mono = [zeros(filter_bp_lrdiff_groupdelay,1); rx_audio_mono(1:end-filter_bp_lrdiff_groupdelay)];
+
+% Downsample
+osr_audio = 3;
+fs_audio  = fs_rx/osr_audio;
+tnAudio   = (0:1:n_sec*fs_audio-1)';
+
+rx_audio_mono   = calcDecimation(rx_audio_mono,   osr_audio, EnableManualDecimation);
+rx_audio_lrdiff = calcDecimation(rx_audio_lrdiff, osr_audio, EnableManualDecimation);
 
 % Compute left and right channel signals
 rx_audio_L = rx_audio_mono + rx_audio_lrdiff;

@@ -20,7 +20,7 @@
 #define OSR_AUDIO     ((uint32_t)3)
 
 // IP specific
-#define PILOT_SCALE_FACTOR (6)
+#define PILOT_SCALE_FACTOR (8)
 #define CARRIER_38K_OFFSET (0.75)
 
 #endif /* _FM_GLOBAL_SPEC_H */

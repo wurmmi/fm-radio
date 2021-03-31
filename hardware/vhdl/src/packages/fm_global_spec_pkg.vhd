@@ -17,7 +17,7 @@ package fm_global_spec_pkg is
   constant osr_audio_spec_c     : natural := 3;
 
   -- IP specific
-  constant pilot_scale_factor_spec_c : real := 6.00;
+  constant pilot_scale_factor_spec_c : real := 8.00;
   constant carrier_38k_offset_spec_c : real := 0.75;
 
 end package fm_global_spec_pkg;
