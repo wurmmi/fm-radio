@@ -42,34 +42,33 @@ analyze_tb_results = \
 
 all: create_project csim csynth ##	- Default target.
 
-create_project: ##				- Create HLS project.
+create_project: ##			- Create HLS project.
 	@mkdir -p $(PROJ_DIR)
 	@$(call vivado_hls_batch,create_hls_project.tcl,$(VIVADO_HLS_PROJECT_NAME))
 	@echo Done.
 
-csim: ##					- Run C simulation.
-ifeq ($(GUI),1)
+gui: ##					- Open HLS project in GUI.
 	@cd $(PROJ_DIR) && vivado_hls -p $(VIVADO_HLS_PROJECT_NAME)
 	@echo Done.
-else
+
+csim: ##					- Run C simulation.
 	@$(call vivado_hls_batch,hls_sim.tcl,$(VIVADO_HLS_PROJECT_NAME))
 	@$(call analyze_tb_results)
-endif
 
 csim_analyze: ##				- Run analysis for latest csim.
 	@$(call analyze_tb_results)
 
-csim_reload_plots: ##				- Reload plots from latest csim.
+csim_reload_plots: ##			- Reload plots from latest csim.
 	@source $(ENV_SETUP_SCRIPT) && python -c $(PYTHON_RELOAD_PLOTS_CODE)
 
-csynth: ## 					- Run C synthesis.
+csynth: ## 				- Run C synthesis.
 	@$(call vivado_hls_batch,hls_csynth.tcl,$(VIVADO_HLS_PROJECT_NAME))
 
-cosim: ## 					- Run co-simulation.
+cosim: ## 				- Run co-simulation.
 	@$(call vivado_hls_batch,hls_cosim.tcl,$(VIVADO_HLS_PROJECT_NAME))
 	@$(call analyze_tb_results)
 
-ip_export: ##					- Export IP files (UNTESTED).
+ip_export: ##				- Export IP files (UNTESTED).
 	@$(call vivado_hls_batch,ip_export.tcl,$(VIVADO_HLS_PROJECT_NAME) $(IP_TOP))
 	@rm -rf $(IP_DESTINATION)/*
 	@mkdir -p $(IP_DESTINATION)
@@ -77,11 +76,11 @@ ip_export: ##					- Export IP files (UNTESTED).
 	cp ../doc/ip_logo.png $(IP_DESTINATION)/misc/logo.png
 
 ##
-clean: ##						- Clean outputs.
+clean: ##					- Clean outputs.
 	@echo "Cleaning..."
 	git clean -xdf ..
 
-help: ##						- Show this help message.
+help: ##					- Show this help message.
 	@grep -h "##" Makefile | grep -v "\"##\"" | sed -e 's/##//g'
 
 .PHONY: create_project csim csim_analyze csim_reload_plots csynth ip_export clean help
