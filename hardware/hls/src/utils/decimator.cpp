@@ -15,7 +15,7 @@ void decimator(sample_t const& in_sample, sample_t& out, bool& out_valid) {
   static sample_t decimated;
   static bool valid = false;
 
-  if (count >= osr_rx_c - 1) {
+  if (count >= OSR_RX - 1) {
     // Output decimated value
     count     = 0;
     decimated = in_sample;

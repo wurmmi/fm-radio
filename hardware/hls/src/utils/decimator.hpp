@@ -11,8 +11,6 @@
 
 #include "fm_global.hpp"
 
-const uint8_t osr_rx_c = 8;
-
 void decimator(sample_t const& in_sample, sample_t& out, bool& valid);
 
 #endif /* _DECIMATOR_HPP */

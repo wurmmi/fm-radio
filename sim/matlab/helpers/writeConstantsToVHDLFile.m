@@ -5,7 +5,8 @@
 %-------------------------------------------------------------------------
 
 function status = writeConstantsToVHDLFile( ...
-    filename, package_name, fp_config, fs, fs_rx, osr_rx, ...
+    filename, package_name, fp_config, ...
+    fs, fs_rx, fs_audio, osr_rx, osr_audio, ...
     pilot_scale_factor, carrier_38k_offset)
 %writeConstantsToVHDLFile - Writes constants to a VHDL file.
 %   filename             ... filename (obviously)
@@ -35,12 +36,16 @@ fprintf(fileID, "  -- General\n");
 fprintf(fileID, "  constant fp_width_spec_c      : natural := %d;\n", fp_config.width);
 fprintf(fileID, "  constant fp_width_frac_spec_c : natural := %d;\n", fp_config.width_frac);
 fprintf(fileID, "  constant fp_width_int_spec_c  : natural := %d;\n", fp_config.width - fp_config.width_frac - 1);
-
+fprintf(fileID, "\n");
 fprintf(fileID, "  constant fs_spec_c            : natural := %d;\n", fs);
 fprintf(fileID, "  constant fs_rx_spec_c         : natural := %d;\n", fs_rx);
+fprintf(fileID, "  constant fs_audio_spec_c      : natural := %d;\n", fs_audio);
+fprintf(fileID, "\n");
 fprintf(fileID, "  constant osr_rx_spec_c        : natural := %d;\n", osr_rx);
+fprintf(fileID, "  constant osr_audio_spec_c     : natural := %d;\n", osr_audio);
+fprintf(fileID, "\n");
 
-fprintf(fileID, "\n  -- IP specific\n");
+fprintf(fileID, "  -- IP specific\n");
 fprintf(fileID, "  constant pilot_scale_factor_spec_c : real := %.2f;\n", pilot_scale_factor);
 fprintf(fileID, "  constant carrier_38k_offset_spec_c : real := %.2f;\n", carrier_38k_offset);
 

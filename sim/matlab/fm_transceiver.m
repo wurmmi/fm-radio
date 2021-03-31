@@ -101,11 +101,11 @@ if EnableRxAudioReplay
     rx_audioReplay(:,2) = rx_audio_R;
     
     % Downsample for PC soundcard
-    osr_replay = 3;
-    fs_audioReplay = fs_rx/osr_replay;
-    rx_audioReplay = resample(rx_audioReplay, 1, osr_replay);
+    osr_audio = 3;
+    fs_audio = fs_rx/osr_audio;
+    rx_audioReplay = resample(rx_audioReplay, 1, osr_audio);
     
-    sound(rx_audioReplay, fs_audioReplay);
+    sound(rx_audioReplay, fs_audio);
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -131,11 +131,11 @@ if EnableWriteDataFiles
     % Simulation constants
     disp('--- Constants to VHDL/C++/Python');
     writeConstantsToPythonFile('../../hardware/vhdl/tb/packages/fm_global/fm_global.py', 'fm_global_spec', ...
-        fp_config, fs, fs_rx, osr_rx, pilot_scale_factor, rx_carrier38kHz_offset);
+        fp_config, fs, fs_rx, fs_audio, osr_rx, osr_audio, pilot_scale_factor, rx_carrier38kHz_offset);
     writeConstantsToVHDLFile(  '../../hardware/vhdl/src/packages/fm_global_spec_pkg.vhd','fm_global_spec', ...
-        fp_config, fs, fs_rx, osr_rx, pilot_scale_factor, rx_carrier38kHz_offset);
+        fp_config, fs, fs_rx, fs_audio, osr_rx, osr_audio, pilot_scale_factor, rx_carrier38kHz_offset);
     writeConstantsToCPPFile(  '../../hardware/hls/src/fm_global_spec.hpp',               'fm_global_spec', ...
-        fp_config, fs, fs_rx, osr_rx, pilot_scale_factor, rx_carrier38kHz_offset);
+        fp_config, fs, fs_rx, fs_audio, osr_rx, osr_audio, pilot_scale_factor, rx_carrier38kHz_offset);
     
     disp('--- Verification data');
     % Only write a fraction of the simulation time to file
