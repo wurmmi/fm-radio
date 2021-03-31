@@ -25,13 +25,15 @@
 
 using namespace std;
 
-void fm_receiver_top(hls::stream<iq_sample_t>& sample_in,
-                     sample_t& out_audio_L,
-                     sample_t& out_audio_R) {
-#pragma HLS INTERFACE ap_vld port = out_audio_L
-#pragma HLS INTERFACE ap_vld port = out_audio_R
-#pragma HLS INTERFACE axis port   = sample_in
-#pragma HLS DATA_PACK variable    = sample_in
+void fm_receiver_top(hls::stream<iq_sample_t>& iq_in,
+                     hls::stream<audio_sample_t>& audio_out) {
+#pragma HLS INTERFACE ap_ctrl_none port = return
+
+#pragma HLS INTERFACE axis port = audio_out
+#pragma HLS DATA_PACK variable  = audio_out
+
+#pragma HLS INTERFACE axis port = iq_in
+#pragma HLS DATA_PACK variable  = iq_in
 
   static bool toggle = false;
 
@@ -42,7 +44,7 @@ void fm_receiver_top(hls::stream<iq_sample_t>& sample_in,
     // Read input and split IQ samples
     // ------------------------------------------------------
 
-    iq_sample_t in = sample_in.read();
+    iq_sample_t in = iq_in.read();
     sample_t in_i  = in.i;
     sample_t in_q  = in.q;
 
@@ -58,7 +60,7 @@ void fm_receiver_top(hls::stream<iq_sample_t>& sample_in,
     // Output
     // ------------------------------------------------------
 
-    out_audio_L = audio_L;
-    out_audio_R = audio_R;
+    audio_sample_t audio_sample = {audio_L, audio_R};
+    audio_out.write(audio_sample);
   }
 }

@@ -52,6 +52,7 @@ gui: ##					- Open HLS project in GUI.
 	@cd $(PROJ_DIR) && vivado_hls -p $(VIVADO_HLS_PROJECT_NAME)
 
 csim: ##					- Run C simulation.
+	@rm -f ../tb/output/*
 	@$(call vivado_hls_batch,hls_sim.tcl,$(VIVADO_HLS_PROJECT_NAME))
 	@$(call analyze_tb_results)
 	@echo Done.

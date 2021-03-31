@@ -8,8 +8,6 @@
 
 #include "strobe_gen.hpp"
 
-using namespace std;
-
 bool strobe_gen() {
   static uint8_t count = 0;
 

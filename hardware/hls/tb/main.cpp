@@ -16,7 +16,7 @@
 using namespace std;
 
 /* Constants */
-constexpr double n_sec_c = 0.001;
+constexpr double n_sec_c = 0.1;
 
 const string data_folder =
     "../../../../../../../../sim/matlab/verification_data/";
@@ -66,11 +66,16 @@ int main() {
     DataWriter writer_data_out_R("data_out_rx_audio_R.txt");
     sample_t audio_L;
     sample_t audio_R;
+    hls::stream<audio_sample_t> stream_data_out;
     while (!stream_data_in.empty()) {
-      fm_receiver_top(stream_data_in, audio_L, audio_R);
+      fm_receiver_top(stream_data_in, stream_data_out);
+    }
 
-      writer_data_out_L.write(audio_L);
-      writer_data_out_R.write(audio_R);
+    // Store output stream to file
+    while (!stream_data_out.empty()) {
+      audio_sample_t audio_sample = stream_data_out.read();
+      writer_data_out_L.write(audio_sample.L);
+      writer_data_out_R.write(audio_sample.R);
     }
 
     auto ts_stop  = chrono::high_resolution_clock::now();

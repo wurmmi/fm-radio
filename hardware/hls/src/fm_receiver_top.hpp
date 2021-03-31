@@ -18,8 +18,12 @@ typedef struct {
   sample_t q;
 } iq_sample_t;
 
-void fm_receiver_top(hls::stream<iq_sample_t>& sample_in,
-                     sample_t& out_audio_L,
-                     sample_t& out_audio_R);
+typedef struct {
+  sample_t L;
+  sample_t R;
+} audio_sample_t;
+
+void fm_receiver_top(hls::stream<iq_sample_t>& iq_in,
+                     hls::stream<audio_sample_t>& audio_out);
 
 #endif /* _FM_RECEIVER_TOP_HPP */

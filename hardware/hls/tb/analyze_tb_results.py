@@ -56,7 +56,7 @@ def analyze():
         "File lengths don't match osr_rx_c ..."
 
     n_sec = num_samples_c / fs_rx_c
-    print(f"Loaded {n_sec} seconds worth of data.")
+    print(f"Loaded {n_sec} seconds worth of data!")
 
     # Golden data
     directory_gold = "../../../sim/matlab/verification_data/"
