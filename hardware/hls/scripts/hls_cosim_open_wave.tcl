@@ -13,4 +13,4 @@ set wcfg_file "fm_receiver_top.wcfg"
 
 current_fileset
 open_wave_database $wdb_file
-open_wave_config $wcfg_file
+#open_wave_config $wcfg_file

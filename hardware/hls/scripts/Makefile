@@ -41,8 +41,8 @@ analyze_tb_results = \
 ##Supported Targets
 ##-----------------
 
-all: create_project csim csynth ##	- Default target.
-
+all: create_project csim csynth cosim ##	- Default target.
+##
 create_project: ##			- Create HLS project.
 	@mkdir -p $(PROJ_DIR)
 	@$(call vivado_hls_batch,create_hls_project.tcl,$(VIVADO_HLS_PROJECT_NAME))
@@ -50,25 +50,30 @@ create_project: ##			- Create HLS project.
 
 gui: ##					- Open HLS project in GUI.
 	@cd $(PROJ_DIR) && vivado_hls -p $(VIVADO_HLS_PROJECT_NAME)
-	@echo Done.
 
 csim: ##					- Run C simulation.
 	@$(call vivado_hls_batch,hls_sim.tcl,$(VIVADO_HLS_PROJECT_NAME))
 	@$(call analyze_tb_results)
+	@echo Done.
 
 csim_analyze: ##				- Run analysis for latest csim.
 	@$(call analyze_tb_results)
+	@echo Done.
 
 csim_reload_plots: ##			- Reload plots from latest csim.
 	@source $(ENV_SETUP_SCRIPT) && python -c $(PYTHON_RELOAD_PLOTS_CODE)
 
 csynth: ## 				- Run C synthesis.
 	@$(call vivado_hls_batch,hls_csynth.tcl,$(VIVADO_HLS_PROJECT_NAME))
+	@echo Done.
 
 cosim: ## 				- Run co-simulation.
-	#@$(call vivado_hls_batch,hls_cosim.tcl,$(VIVADO_HLS_PROJECT_NAME))
-	#@$(call analyze_tb_results)
-	@cd $(WAVE_DIR) && vivado -source hls_cosim_open_wave.tcl
+	@$(call vivado_hls_batch,hls_cosim.tcl,$(VIVADO_HLS_PROJECT_NAME))
+	@$(call analyze_tb_results)
+	@echo Done.
+
+cosim_open_wave: ##			- Open waveform of co-simulation.
+	@cd $(WAVE_DIR) && vivado -source $(MAKEFILE_DIR)/hls_cosim_open_wave.tcl
 
 ip_export: ##				- Export IP files (UNTESTED).
 	@$(call vivado_hls_batch,ip_export.tcl,$(VIVADO_HLS_PROJECT_NAME) $(IP_TOP))
@@ -76,16 +81,19 @@ ip_export: ##				- Export IP files (UNTESTED).
 	@mkdir -p $(IP_DESTINATION)
 	@unzip -o $(IP_PACKAGE) -d $(IP_DESTINATION)
 	cp ../doc/ip_logo.png $(IP_DESTINATION)/misc/logo.png
+	@echo Done.
 
 ##
 clean: ##					- Clean outputs.
 	@echo "Cleaning..."
 	git clean -xdf ..
+	@echo Done.
 
 help: ##					- Show this help message.
 	@grep -h "##" Makefile | grep -v "\"##\"" | sed -e 's/##//g'
 
-.PHONY: all create_project gui csim csim_analyze csim_reload_plots csynth ip_export clean help
+.PHONY: all create_project gui csim csim_analyze csim_reload_plots csynth \
+				cosim cosim_open_wave ip_export clean help
 
 ##
 ##==============================================================================
