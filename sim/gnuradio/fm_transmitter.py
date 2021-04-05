@@ -47,7 +47,7 @@ import rds
 
 from gnuradio import qtgui
 
-class fm_sender(gr.top_block, Qt.QWidget):
+class fm_transmitter(gr.top_block, Qt.QWidget):
 
     def __init__(self):
         gr.top_block.__init__(self, "FM Sender")
@@ -70,7 +70,7 @@ class fm_sender(gr.top_block, Qt.QWidget):
         self.top_grid_layout = Qt.QGridLayout()
         self.top_layout.addLayout(self.top_grid_layout)
 
-        self.settings = Qt.QSettings("GNU Radio", "fm_sender")
+        self.settings = Qt.QSettings("GNU Radio", "fm_transmitter")
 
         try:
             if StrictVersion(Qt.qVersion()) < StrictVersion("5.0.0"):
@@ -377,7 +377,7 @@ class fm_sender(gr.top_block, Qt.QWidget):
 
 
     def closeEvent(self, event):
-        self.settings = Qt.QSettings("GNU Radio", "fm_sender")
+        self.settings = Qt.QSettings("GNU Radio", "fm_transmitter")
         self.settings.setValue("geometry", self.saveGeometry())
         event.accept()
 
@@ -494,7 +494,7 @@ class fm_sender(gr.top_block, Qt.QWidget):
 
 
 
-def main(top_block_cls=fm_sender, options=None):
+def main(top_block_cls=fm_transmitter, options=None):
 
     if StrictVersion("4.5.0") <= StrictVersion(Qt.qVersion()) < StrictVersion("5.0.0"):
         style = gr.prefs().get_string('qtgui', 'style', 'raster')
