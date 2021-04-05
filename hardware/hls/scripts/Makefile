@@ -61,7 +61,7 @@ csim_analyze: ##				- Run analysis for latest csim.
 	@$(call analyze_tb_results)
 	@echo Done.
 
-csim_reload_plots: ##			- Reload plots from latest csim.
+reload_plots: ##			- Reload plots from latest csim/co-sim.
 	@source $(ENV_SETUP_SCRIPT) && python -c $(PYTHON_RELOAD_PLOTS_CODE)
 
 csynth: ## 				- Run C synthesis.
@@ -94,7 +94,7 @@ clean: ##					- Clean outputs.
 help: ##					- Show this help message.
 	@grep -h "##" Makefile | grep -v "\"##\"" | sed -e 's/##//g'
 
-.PHONY: all create_project gui csim csim_analyze csim_reload_plots csynth \
+.PHONY: all create_project gui csim csim_analyze reload_plots csynth \
 				cosim cosim_open_wave ip_export clean help
 
 ##
