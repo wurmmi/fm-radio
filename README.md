@@ -47,24 +47,65 @@ An FM receiver is implemented in three levels of abstraction.
     The receiver is implemented in VHDL.
     This requires deep knowledge about the inner workings of an FPGA, as well as DSP.
 
+The following sections provide detailed information about the specific implementations and their development environment.
+
 ### GNURadio
+
+The GNURadio Companion software is used to implement a transmitter and a receiver. \
+To actually run the block-design on hardware, two devices are used. \
+An RTL-SDR dongle is used for the receiver, and an Ettus USRP B200mini is used for the transmitter.
+
+#### Transmitter
+
+TODO: explain the input sources (file and local PC audio)
+
+1. Open the `fm_transmitter.grc` project in the GNURadio Companion GUI.
+2. Make sure the USRP B200mini is connected to your PC.
+3. Execute the flowgraph.
+4. Use a regular FM receiver device to receive the signal and listen to 'your' radio station!
+
+#### Receiver
+
+1. Open the `fm_receiver.grc` project in the GNURadio Companion GUI.
+2. Make sure the RTL-SDR is connected to your PC.
+3. Execute the flowgraph.
+4. Your PC audio should now play the radio station at the selected frequency.
 
 ### VHDL
 
+#### Testbench
+
+explain cocotb, ghdl, gtkwave
+source setup_env.sh for python env, then make any target
+
 ### HLS
+
+#### Testbench
+
+vivado hls tb, any make target
 
 ----
 
 ## Software requirements
 
- GNURadio,
- Matlab,
- GHDL,
- cocotb + cocotbext [https://github.com/corna/cocotbext-axi4stream](https://github.com/corna/cocotbext-axi4stream)
- gtkwave
+TODO: add version numbers and install commands
 
- Vivado,
- Vivado HLS
+- GNURadio (3.8.2.0 (Python 3.8.5)),
+- Matlab,
+- GHDL,
+- cocotb + cocotbext [https://github.com/corna/cocotbext-axi4stream](https://github.com/corna/cocotbext-axi4stream)
+- gtkwave
+- Vivado 2018.2,
+- Vivado HLS 2018.2
+
+## Hardware requirements
+
+- **RTL-SDR** \
+  There are many different producers and vendors of devices, that support RTL-SDR. This project uses a version with an R820T2 tuner, and an RTL2832U chipset. Find a list of supported devices following [this link](3).
+
+- **Ettus USRP B200mini** \
+  A powerful SDR that is supported by GNURadio.\
+  For more details, please follow [this link](4).
 
 ----
 
@@ -76,3 +117,5 @@ Michael Wurm <<wurm.michael95@gmail.com>>
 
 [1]: doc/img/fhooe-logo-small.png
 [2]: https://www.fh-ooe.at/en/hagenberg-campus/studiengaenge/master/embedded-systems-design/
+[3]: https://www.rtl-sdr.com/buy-rtl-sdr-dvb-t-dongles/
+[4]: https://www.ettus.com/all-products/usrp-b200mini/
