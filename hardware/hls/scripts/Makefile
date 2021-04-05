@@ -41,43 +41,43 @@ analyze_tb_results = \
 ##Supported Targets
 ##-----------------
 
-all: create_project csim csynth cosim ##	- Default target.
+all: create_project csim csynth cosim ip_export ##	- Default target.
 ##
-create_project: ##			- Create HLS project.
+create_project: ##					- Create HLS project.
 	@mkdir -p $(PROJ_DIR)
 	@$(call vivado_hls_batch,create_hls_project.tcl,$(VIVADO_HLS_PROJECT_NAME))
 	@echo Done.
 
-gui: ##					- Open HLS project in GUI.
+gui: ##							- Open HLS project in GUI.
 	@cd $(PROJ_DIR) && vivado_hls -p $(VIVADO_HLS_PROJECT_NAME)
 
-csim: ##					- Run C simulation.
+csim: ##							- Run C simulation.
 	@rm -f ../tb/output/*
 	@$(call vivado_hls_batch,hls_sim.tcl,$(VIVADO_HLS_PROJECT_NAME))
 	@$(call analyze_tb_results)
 	@echo Done.
 
-csim_analyze: ##				- Run analysis for latest csim.
+csim_analyze: ##						- Run analysis for latest csim.
 	@$(call analyze_tb_results)
 	@echo Done.
 
-reload_plots: ##			- Reload plots from latest csim/co-sim.
+reload_plots: ##						- Reload plots from latest csim/co-sim.
 	@source $(ENV_SETUP_SCRIPT) && python -c $(PYTHON_RELOAD_PLOTS_CODE)
 
-csynth: ## 				- Run C synthesis.
+csynth: ## 						- Run C synthesis.
 	@$(call vivado_hls_batch,hls_csynth.tcl,$(VIVADO_HLS_PROJECT_NAME))
 	@echo Done.
 
-cosim: ## 				- Run co-simulation.
+cosim: ## 						- Run co-simulation.
 	@$(call vivado_hls_batch,hls_cosim.tcl,$(VIVADO_HLS_PROJECT_NAME))
 	@$(call analyze_tb_results)
 	@echo Done.
 
-cosim_open_wave: ##			- Open waveform of co-simulation.
+cosim_open_wave: ##					- Open waveform of co-simulation.
 	@echo "Opening waveform..."
 	@cd $(WAVE_DIR) && vivado -source $(MAKEFILE_DIR)/hls_cosim_open_wave.tcl
 
-ip_export: ##				- Export IP files.
+ip_export: ##						- Export IP files.
 	@$(call vivado_hls_batch,ip_export.tcl,$(VIVADO_HLS_PROJECT_NAME) $(IP_TOP))
 	@rm -rf $(IP_DESTINATION)/*
 	@mkdir -p $(IP_DESTINATION)
@@ -86,12 +86,12 @@ ip_export: ##				- Export IP files.
 	@echo Done.
 
 ##
-clean: ##					- Clean outputs.
+clean: ##							- Clean outputs.
 	@echo "Cleaning..."
 	git clean -xdf ..
 	@echo Done.
 
-help: ##					- Show this help message.
+help: ##							- Show this help message.
 	@grep -h "##" Makefile | grep -v "\"##\"" | sed -e 's/##//g'
 
 .PHONY: all create_project gui csim csim_analyze reload_plots csynth \
