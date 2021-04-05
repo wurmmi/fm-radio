@@ -10,7 +10,7 @@ This thesis and the accompanying project is being elaborated in the Master's deg
 
 ----
 
-## System Design
+## Matlab System Design
 
 The MathWorks Matlab software is used to build a platform that can be used for the system design.
 Matlab is a powerful software to perform this kind of system design approach.
@@ -48,6 +48,8 @@ An FM receiver is implemented in three levels of abstraction.
     This requires deep knowledge about the inner workings of an FPGA, as well as DSP.
 
 The following sections provide detailed information about the specific implementations and their development environment.
+
+TODO: move this into the respective directory's READMEs.
 
 ### GNURadio
 
