@@ -48,12 +48,15 @@ def analyze():
     data_out_audio_R_fp = loadDataFromFile(filename, -1, fp_width_c, fp_width_frac_c)
 
     # Check number of samples that were found in the files
+    num_samples_audio_c = len(data_out_audio_mono_fp)
     num_samples_c = len(data_out_pilot_fp)
     num_samples_fs_c = len(data_out_fm_demod_fp)
 
     # Sanity checks
     assert num_samples_fs_c // num_samples_c == osr_rx_c, \
         "File lengths don't match osr_rx_c ..."
+    assert num_samples_c // num_samples_audio_c == osr_audio_c, \
+        "File lengths don't match osr_audio_c ..."
 
     n_sec = num_samples_c / fs_rx_c
     print(f"Loaded {n_sec} seconds worth of data!")
@@ -65,7 +68,7 @@ def analyze():
     gold_fm_demod_fp = loadDataFromFile(filename, num_samples_fs_c, fp_width_c, fp_width_frac_c)
 
     filename = directory_gold + "rx_audio_mono.txt"
-    gold_audio_mono_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
+    gold_audio_mono_fp = loadDataFromFile(filename, num_samples_audio_c, fp_width_c, fp_width_frac_c)
 
     filename = directory_gold + "rx_pilot.txt"
     gold_pilot_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
@@ -74,13 +77,13 @@ def analyze():
     gold_carrier_38k_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
 
     filename = directory_gold + "rx_audio_lrdiff.txt"
-    gold_audio_lrdiff_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
+    gold_audio_lrdiff_fp = loadDataFromFile(filename, num_samples_audio_c, fp_width_c, fp_width_frac_c)
 
     filename = directory_gold + "rx_audio_L.txt"
-    gold_audio_L_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
+    gold_audio_L_fp = loadDataFromFile(filename, num_samples_audio_c, fp_width_c, fp_width_frac_c)
 
     filename = directory_gold + "rx_audio_R.txt"
-    gold_audio_R_fp = loadDataFromFile(filename, num_samples_c, fp_width_c, fp_width_frac_c)
+    gold_audio_R_fp = loadDataFromFile(filename, num_samples_audio_c, fp_width_c, fp_width_frac_c)
 
     # --------------------------------------------------------------------------
     # Compare data
@@ -89,12 +92,12 @@ def analyze():
 
     # Shift loaded file-data to compensate shift to testbench-data
     # TODO: why is this necessary?
-    move_n_right(gold_pilot_fp, 25, fp_width_c, fp_width_frac_c)
-    move_n_right(gold_carrier_38k_fp, 25, fp_width_c, fp_width_frac_c)
-    move_n_left(gold_audio_mono_fp, 13, fp_width_c, fp_width_frac_c)
-    move_n_left(gold_audio_lrdiff_fp, 13, fp_width_c, fp_width_frac_c)
-    move_n_left(gold_audio_L_fp, 13, fp_width_c, fp_width_frac_c)
-    move_n_left(gold_audio_R_fp, 13, fp_width_c, fp_width_frac_c)
+    move_n_left(gold_pilot_fp, 16, fp_width_c, fp_width_frac_c)
+    move_n_left(gold_carrier_38k_fp, 16, fp_width_c, fp_width_frac_c)
+    move_n_left(gold_audio_mono_fp, 5, fp_width_c, fp_width_frac_c)
+    move_n_left(gold_audio_lrdiff_fp, 5, fp_width_c, fp_width_frac_c)
+    move_n_left(gold_audio_L_fp, 5, fp_width_c, fp_width_frac_c)
+    move_n_left(gold_audio_R_fp, 5, fp_width_c, fp_width_frac_c)
 
     # Compare
     ok_fm_demod = compareResultsOkay(gold_fm_demod_fp,
@@ -131,7 +134,7 @@ def analyze():
                                         from_fixed_point(data_out_carrier_38k_fp),
                                         fail_on_err=EnableFailOnError,
                                         max_error_abs=0.7,
-                                        max_error_norm=7.0,
+                                        max_error_norm=7.5,
                                         skip_n_samples_begin=100,
                                         skip_n_samples_end=100,
                                         data_name="carrier_38k",
@@ -183,6 +186,7 @@ def analyze():
 
     tn_fs = np.arange(0, num_samples_fs_c) / fs_c
     tn = np.arange(0, num_samples_c) / fs_rx_c
+    tn_audio = np.arange(0, num_samples_audio_c) / fs_audio_c
     # -----------------------------------------------------------------
     data = (
         (tn_fs, from_fixed_point(data_out_fm_demod_fp), "data_out_fm_demod"),
@@ -193,8 +197,8 @@ def analyze():
              show=not ok_fm_demod)
     # -----------------------------------------------------------------
     data = (
-        (tn, from_fixed_point(data_out_audio_mono_fp), "data_out_audio_mono"),
-        (tn, from_fixed_point(gold_audio_mono_fp), "gold_audio_mono")
+        (tn_audio, from_fixed_point(data_out_audio_mono_fp), "data_out_audio_mono"),
+        (tn_audio, from_fixed_point(gold_audio_mono_fp), "gold_audio_mono")
     )
     plotData(data, title="Audio Mono",
              filename="../tb/output/plot_audio_mono.png",
@@ -217,16 +221,16 @@ def analyze():
              show=not ok_carrier_38k)
     # -----------------------------------------------------------------
     data = (
-        (tn, from_fixed_point(data_out_audio_lrdiff_fp), "data_out_audio_lrdiff"),
-        (tn, from_fixed_point(gold_audio_lrdiff_fp), "gold_audio_lrdiff")
+        (tn_audio, from_fixed_point(data_out_audio_lrdiff_fp), "data_out_audio_lrdiff"),
+        (tn_audio, from_fixed_point(gold_audio_lrdiff_fp), "gold_audio_lrdiff")
     )
     plotData(data, title="Audio LR diff",
              filename="../tb/output/plot_audio_lrdiff.png",
              show=not ok_audio_lrdiff)
     # -----------------------------------------------------------------
     data = (
-        (tn, from_fixed_point(data_out_audio_L_fp), "data_out_audio_L"),
-        (tn, from_fixed_point(gold_audio_L_fp), "gold_audio_L")
+        (tn_audio, from_fixed_point(data_out_audio_L_fp), "data_out_audio_L"),
+        (tn_audio, from_fixed_point(gold_audio_L_fp), "gold_audio_L")
     )
     plotData(data, title="Audio L",
              filename="../tb/output/plot_audio_L.png",
@@ -234,8 +238,8 @@ def analyze():
 
     # -----------------------------------------------------------------
     data = (
-        (tn, from_fixed_point(data_out_audio_R_fp), "data_out_audio_R"),
-        (tn, from_fixed_point(gold_audio_R_fp), "gold_audio_R")
+        (tn_audio, from_fixed_point(data_out_audio_R_fp), "data_out_audio_R"),
+        (tn_audio, from_fixed_point(gold_audio_R_fp), "gold_audio_R")
     )
     plotData(data, title="Audio R",
              filename="../tb/output/plot_audio_R.png",

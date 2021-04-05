@@ -37,9 +37,11 @@ void fm_receiver_top(hls::stream<iq_sample_t>& iq_in,
 #pragma HLS INTERFACE axis port = iq_in
 #pragma HLS DATA_PACK variable  = iq_in
 
+  // NOTE: This is used to determine how often this function is called.
+  //       The toggle flag can be compared against the input clock.
+  // TODO: remove this debug toggle
   static bool toggle = false;
-
-  toggle = !toggle;
+  toggle             = !toggle;
 
   if (strobe_gen()) {
     // ------------------------------------------------------

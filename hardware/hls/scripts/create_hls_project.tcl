@@ -20,7 +20,6 @@ add_files      $SRC_DIR/fm_global.hpp
 add_files      $SRC_DIR/utils/strobe_gen.hpp
 add_files      $SRC_DIR/utils/strobe_gen.cpp                   -cflags $CPPFLAGS
 add_files      $SRC_DIR/utils/decimator.hpp
-add_files      $SRC_DIR/utils/decimator.cpp                    -cflags $CPPFLAGS
 add_files      $SRC_DIR/utils/fir.hpp
 add_files      $SRC_DIR/utils/delay.hpp
 add_files      $SRC_DIR/utils/fm_demodulator.hpp
