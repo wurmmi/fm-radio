@@ -20,6 +20,8 @@
 --       03/23/2021  08:30 - 13:00    4:30 h
 --                   14:00 - 17:30    3:30 h
 --
+-- (3) Audio decimation
+--       04/05/2021  17:00 - 18:00    1:00 h
 */
 
 #include "fm_receiver.hpp"
@@ -49,6 +51,7 @@ void fm_receiver(sample_t const& in_i,
 
   sample_t fm_channel_data;
   bool fm_channel_data_valid;
+  static DECIMATOR<OSR_RX> decimator;
   decimator(fm_demod, fm_channel_data, fm_channel_data_valid);
 
   if (fm_channel_data_valid) {

@@ -11,8 +11,35 @@
 
 #include "fm_global.hpp"
 
-const uint8_t osr_rx_c = 8;
+template <uint32_t decimation_T>
+class DECIMATOR {
+ private:
+  uint8_t count = 0;
+  sample_t decimated;
+  bool valid = false;
 
-void decimator(sample_t const& in_sample, sample_t& out, bool& valid);
+ public:
+  void operator()(sample_t const& in_sample, sample_t& out, bool& out_valid);
+};
+
+// DECIMATOR main algorithm
+template <uint32_t decimation_T>
+void DECIMATOR<decimation_T>::operator()(sample_t const& in_sample,
+                                         sample_t& out,
+                                         bool& out_valid) {
+  if (count >= decimation_T - 1) {
+    // Output decimated value
+    count     = 0;
+    decimated = in_sample;
+    valid     = true;
+  } else {
+    // No output
+    count++;
+    valid = false;
+  }
+
+  out_valid = valid;
+  out       = decimated;
+}
 
 #endif /* _DECIMATOR_HPP */

@@ -18,14 +18,15 @@ class VHDL_SAMPLER(object):
                  signal,
                  signal_valid,
                  num_expected,
-                 fp_width, fp_width_frac):
+                 fp_width, fp_width_frac, show_progress_after_num=100):
         self.data_name = data_name
         self.dut = dut
         self._signal = signal
         self._signal_valid = signal_valid
         self.fp_width_c = fp_width
         self.fp_width_frac_c = fp_width_frac
-        self.num_expected = num_expected
+        self.num_expected_c = num_expected
+        self.show_progress_after_num_c = show_progress_after_num
 
     @cocotb.coroutine
     async def read_vhdl_output(self, data):
@@ -34,10 +35,10 @@ class VHDL_SAMPLER(object):
             data.append(
                 int_to_fixed(self._signal.value.signed_integer, self.fp_width_c, self.fp_width_frac_c))
 
-            # print every 100th number to show progress
+            # print every Nth number to show progress
             size = len(data)
-            if size % 100 == 0:
+            if size % self.show_progress_after_num_c == 0:
                 self.dut._log.info("Progress {}: {}".format(self.data_name, size))
 
-            if size >= self.num_expected:
+            if size >= self.num_expected_c:
                 break

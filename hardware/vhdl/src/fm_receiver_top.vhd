@@ -8,7 +8,7 @@
 -------------------------------------------------------------------------------
 -- TIME LOGGING
 --
--- (1) FM receiver top (Axi stream interface) implementation
+-- (1) FM receiver top (AXI stream interface) implementation
 --       03/27/2021  15:30 - 17:30    2:00 h
 --
 
@@ -76,9 +76,9 @@ begin -- architecture rtl
   audio_R_o     <= audio_R;
   audio_valid_o <= audio_valid;
 
-  -----------------------------------------------------------------------------
+  ------------------------------------------------------------------------------
   -- Signal Assignments
-  -----------------------------------------------------------------------------
+  ------------------------------------------------------------------------------
 
   -- Detect rising edge
   iq_valid <= not iq_valid_sr(1) and iq_valid_sr(0);

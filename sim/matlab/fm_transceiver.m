@@ -100,12 +100,7 @@ if EnableRxAudioReplay
     rx_audioReplay(:,1) = rx_audio_L;
     rx_audioReplay(:,2) = rx_audio_R;
     
-    % Downsample for PC soundcard
-    osr_replay = 3;
-    fs_audioReplay = fs_rx/osr_replay;
-    rx_audioReplay = resample(rx_audioReplay, 1, osr_replay);
-    
-    sound(rx_audioReplay, fs_audioReplay);
+    sound(rx_audioReplay, fs_audio);
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -131,27 +126,28 @@ if EnableWriteDataFiles
     % Simulation constants
     disp('--- Constants to VHDL/C++/Python');
     writeConstantsToPythonFile('../../hardware/vhdl/tb/packages/fm_global/fm_global.py', 'fm_global_spec', ...
-        fp_config, fs, fs_rx, osr_rx, pilot_scale_factor, rx_carrier38kHz_offset);
+        fp_config, fs, fs_rx, fs_audio, osr_rx, osr_audio, pilot_scale_factor, rx_carrier38kHz_offset);
     writeConstantsToVHDLFile(  '../../hardware/vhdl/src/packages/fm_global_spec_pkg.vhd','fm_global_spec', ...
-        fp_config, fs, fs_rx, osr_rx, pilot_scale_factor, rx_carrier38kHz_offset);
+        fp_config, fs, fs_rx, fs_audio, osr_rx, osr_audio, pilot_scale_factor, rx_carrier38kHz_offset);
     writeConstantsToCPPFile(  '../../hardware/hls/src/fm_global_spec.hpp',               'fm_global_spec', ...
-        fp_config, fs, fs_rx, osr_rx, pilot_scale_factor, rx_carrier38kHz_offset);
+        fp_config, fs, fs_rx, fs_audio, osr_rx, osr_audio, pilot_scale_factor, rx_carrier38kHz_offset);
     
     disp('--- Verification data');
     % Only write a fraction of the simulation time to file
     n_sec_file  = 0.1;
-    num_samples = n_sec_file * fs/osr_rx;
+    num_samples = n_sec_file * fs_rx;
+    num_samples_audio = n_sec_file * fs_audio;
     
     % Test data
     writeDataToFile(rx_fm_bb,         num_samples*osr_rx,'./verification_data/rx_fm_bb.txt',         fp_config);
     writeDataToFile(rx_fm_demod,      num_samples*osr_rx,'./verification_data/rx_fm_demod.txt',      fp_config);
     writeDataToFile(rx_fmChannelData, num_samples,       './verification_data/rx_fmChannelData.txt', fp_config);
-    writeDataToFile(rx_audio_mono,    num_samples,       './verification_data/rx_audio_mono.txt',    fp_config);
+    writeDataToFile(rx_audio_mono,    num_samples_audio, './verification_data/rx_audio_mono.txt',    fp_config);
     writeDataToFile(rx_pilot,         num_samples,       './verification_data/rx_pilot.txt',         fp_config);
     writeDataToFile(rx_carrier38kHz,  num_samples,       './verification_data/rx_carrier38kHz.txt',  fp_config);
-    writeDataToFile(rx_audio_lrdiff,  num_samples,       './verification_data/rx_audio_lrdiff.txt',  fp_config);
-    writeDataToFile(rx_audio_L,       num_samples,       './verification_data/rx_audio_L.txt',       fp_config);
-    writeDataToFile(rx_audio_R,       num_samples,       './verification_data/rx_audio_R.txt',       fp_config);
+    writeDataToFile(rx_audio_lrdiff,  num_samples_audio, './verification_data/rx_audio_lrdiff.txt',  fp_config);
+    writeDataToFile(rx_audio_L,       num_samples_audio, './verification_data/rx_audio_L.txt',       fp_config);
+    writeDataToFile(rx_audio_R,       num_samples_audio, './verification_data/rx_audio_R.txt',       fp_config);
 
     disp('Done.');
 end

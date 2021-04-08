@@ -9,14 +9,18 @@
 #include <chrono>
 #include <iostream>
 
-#include "fm_receiver.hpp"
+#include "fm_receiver_top.hpp"
 #include "helper/DataLoader.hpp"
 #include "helper/DataWriter.hpp"
 
 using namespace std;
 
 /* Constants */
+#ifdef __RTL_SIMULATION__
+constexpr double n_sec_c = 0.001;
+#else
 constexpr double n_sec_c = 0.1;
+#endif
 
 const string data_folder =
     "../../../../../../../../sim/matlab/verification_data/";
@@ -48,13 +52,12 @@ int main() {
         DataLoader::loadDataFromFile(filename, num_samples_fs_c * 2);
 
     // Split interleaved I/Q samples (take every other)
-    vector<sample_t> data_in_i;
-    vector<sample_t> data_in_q;
-    for (size_t i = 0; i < data_in_iq.size(); i++) {
-      if (i % 2 == 0)
-        data_in_i.emplace_back(data_in_iq[i]);
-      else
-        data_in_q.emplace_back(data_in_iq[i]);
+    hls::stream<iq_sample_t> stream_data_in;
+    iq_sample_t sample_in;
+    for (size_t i = 0; i < data_in_iq.size(); i += 2) {
+      sample_in.i = data_in_iq[i];
+      sample_in.q = data_in_iq[i + 1];
+      stream_data_in << sample_in;
     }
 
     // --------------------------------------------------------------------------
@@ -67,11 +70,16 @@ int main() {
     DataWriter writer_data_out_R("data_out_rx_audio_R.txt");
     sample_t audio_L;
     sample_t audio_R;
-    for (size_t i = 0; i < num_samples_fs_c; i++) {
-      fm_receiver(data_in_i[i], data_in_q[i], audio_L, audio_R);
+    hls::stream<audio_sample_t> stream_data_out;
+    while (!stream_data_in.empty()) {
+      fm_receiver_top(stream_data_in, stream_data_out);
+    }
 
-      writer_data_out_L.write(audio_L);
-      writer_data_out_R.write(audio_R);
+    // Store output stream to file
+    while (!stream_data_out.empty()) {
+      audio_sample_t audio_sample = stream_data_out.read();
+      writer_data_out_L.write(audio_sample.L);
+      writer_data_out_R.write(audio_sample.R);
     }
 
     auto ts_stop  = chrono::high_resolution_clock::now();

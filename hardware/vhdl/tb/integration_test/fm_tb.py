@@ -89,8 +89,8 @@ class FM_TB(object):
         sampler = VHDL_SAMPLER("audio_mono", self.dut,
                                self.dut.fm_receiver_inst.channel_decoder_inst.audio_mono,
                                self.dut.fm_receiver_inst.channel_decoder_inst.audio_mono_valid,
-                               self.model.num_samples_c,
-                               fp_width_c, fp_width_frac_c)
+                               self.model.num_samples_audio_c,
+                               fp_width_c, fp_width_frac_c, 10)
 
         await sampler.read_vhdl_output(self.data_out_audio_mono)
 
@@ -119,8 +119,8 @@ class FM_TB(object):
         sampler = VHDL_SAMPLER("audio_lrdiff", self.dut,
                                self.dut.fm_receiver_inst.channel_decoder_inst.audio_lrdiff,
                                self.dut.fm_receiver_inst.channel_decoder_inst.audio_lrdiff_valid,
-                               self.model.num_samples_c,
-                               fp_width_c, fp_width_frac_c)
+                               self.model.num_samples_audio_c,
+                               fp_width_c, fp_width_frac_c, 10)
 
         await sampler.read_vhdl_output(self.data_out_audio_lrdiff)
 
@@ -129,8 +129,8 @@ class FM_TB(object):
         sampler_L = VHDL_SAMPLER("audio_L", self.dut,
                                  self.dut.fm_receiver_inst.audio_L_o,
                                  self.dut.fm_receiver_inst.audio_valid_o,
-                                 self.model.num_samples_c,
-                                 fp_width_c, fp_width_frac_c)
+                                 self.model.num_samples_audio_c,
+                                 fp_width_c, fp_width_frac_c, 10)
 
         await sampler_L.read_vhdl_output(self.data_out_audio_L)
 
@@ -139,8 +139,8 @@ class FM_TB(object):
         sampler_R = VHDL_SAMPLER("audio_R", self.dut,
                                  self.dut.fm_receiver_inst.audio_R_o,
                                  self.dut.fm_receiver_inst.audio_valid_o,
-                                 self.model.num_samples_c,
-                                 fp_width_c, fp_width_frac_c)
+                                 self.model.num_samples_audio_c,
+                                 fp_width_c, fp_width_frac_c, 10)
 
         await sampler_R.read_vhdl_output(self.data_out_audio_R)
 
@@ -149,12 +149,12 @@ class FM_TB(object):
         # TODO: why is this necessary?
         move_n_right(self.model.gold_fm_demod_fp, 2, fp_width_c, fp_width_frac_c)
         move_n_left(self.model.gold_decimator_fp, 0, fp_width_c, fp_width_frac_c)
-        move_n_left(self.model.gold_audio_mono_fp, 13, fp_width_c, fp_width_frac_c)
+        move_n_left(self.model.gold_audio_mono_fp, 5, fp_width_c, fp_width_frac_c)
         move_n_left(self.model.gold_pilot_fp, 0, fp_width_c, fp_width_frac_c)
         move_n_left(self.model.gold_carrier_38k_fp, 0, fp_width_c, fp_width_frac_c)
-        move_n_left(self.model.gold_audio_lrdiff_fp, 13, fp_width_c, fp_width_frac_c)
-        move_n_left(self.model.gold_audio_L_fp, 12, fp_width_c, fp_width_frac_c)
-        move_n_left(self.model.gold_audio_R_fp, 12, fp_width_c, fp_width_frac_c)
+        move_n_left(self.model.gold_audio_lrdiff_fp, 5, fp_width_c, fp_width_frac_c)
+        move_n_left(self.model.gold_audio_L_fp, 5, fp_width_c, fp_width_frac_c)
+        move_n_left(self.model.gold_audio_R_fp, 5, fp_width_c, fp_width_frac_c)
 
         # Compare
         self.ok_fm_demod = compareResultsOkay(self.model.gold_fm_demod_fp,
@@ -214,7 +214,7 @@ class FM_TB(object):
         self.ok_audio_L = compareResultsOkay(self.model.gold_audio_L_fp,
                                              self.data_out_audio_L,
                                              fail_on_err=self.EnableFailOnError,
-                                             max_error_abs=2**-5,
+                                             max_error_abs=2**-4,
                                              max_error_norm=0.06,
                                              skip_n_samples_begin=10,
                                              skip_n_samples_end=10,
@@ -223,7 +223,7 @@ class FM_TB(object):
         self.ok_audio_R = compareResultsOkay(self.model.gold_audio_R_fp,
                                              self.data_out_audio_R,
                                              fail_on_err=self.EnableFailOnError,
-                                             max_error_abs=2**-5,
+                                             max_error_abs=2**-4,
                                              max_error_norm=0.06,
                                              skip_n_samples_begin=10,
                                              skip_n_samples_end=10,
@@ -245,6 +245,7 @@ class FM_TB(object):
 
         tn_fs = np.arange(0, self.model.num_samples_fs_c) / fs_c
         tn = np.arange(0, self.model.num_samples_c) / fs_rx_c
+        tn_audio = np.arange(0, self.model.num_samples_audio_c) / fs_audio_c
         # -----------------------------------------------------------------
         data = (
             (tn_fs, self.data_out_fm_demod, "data_out_fm_demod"),
@@ -265,8 +266,8 @@ class FM_TB(object):
 
         # -----------------------------------------------------------------
         data = (
-            (tn, self.data_out_audio_mono, "data_out_audio_mono"),
-            (tn, from_fixed_point(self.model.gold_audio_mono_fp), "gold_audio_mono_fp")
+            (tn_audio, self.data_out_audio_mono, "data_out_audio_mono"),
+            (tn_audio, from_fixed_point(self.model.gold_audio_mono_fp), "gold_audio_mono_fp")
         )
         plotData(data, title="Audio Mono",
                  filename="sim_build/plot_audio_mono.png",
@@ -292,8 +293,8 @@ class FM_TB(object):
 
         # -----------------------------------------------------------------
         data = (
-            (tn, self.data_out_audio_lrdiff, "data_out_audio_lrdiff"),
-            (tn, from_fixed_point(self.model.gold_audio_lrdiff_fp), "gold_audio_lrdiff_fp")
+            (tn_audio, self.data_out_audio_lrdiff, "data_out_audio_lrdiff"),
+            (tn_audio, from_fixed_point(self.model.gold_audio_lrdiff_fp), "gold_audio_lrdiff_fp")
         )
         plotData(data, title="Audio LR Diff",
                  filename="sim_build/plot_audio_lrdiff.png",
@@ -301,8 +302,8 @@ class FM_TB(object):
 
         # -----------------------------------------------------------------
         data = (
-            (tn, self.data_out_audio_L, "data_out_audio_L"),
-            (tn, from_fixed_point(self.model.gold_audio_L_fp), "gold_audio_L_fp")
+            (tn_audio, self.data_out_audio_L, "data_out_audio_L"),
+            (tn_audio, from_fixed_point(self.model.gold_audio_L_fp), "gold_audio_L_fp")
         )
         plotData(data, title="Audio L",
                  filename="sim_build/plot_audio_L.png",
@@ -310,8 +311,8 @@ class FM_TB(object):
 
         # -----------------------------------------------------------------
         data = (
-            (tn, self.data_out_audio_R, "data_out_audio_R"),
-            (tn, from_fixed_point(self.model.gold_audio_R_fp), "gold_audio_R_fp")
+            (tn_audio, self.data_out_audio_R, "data_out_audio_R"),
+            (tn_audio, from_fixed_point(self.model.gold_audio_R_fp), "gold_audio_R_fp")
         )
         plotData(data, title="Audio R",
                  filename="sim_build/plot_audio_R.png",

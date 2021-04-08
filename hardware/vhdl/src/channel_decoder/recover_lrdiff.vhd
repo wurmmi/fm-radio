@@ -58,6 +58,9 @@ architecture rtl of recover_lrdiff is
   signal lrdiff       : sample_t;
   signal lrdiff_valid : std_ulogic;
 
+  signal lrdiff_decimated       : sample_t;
+  signal lrdiff_decimated_valid : std_ulogic;
+
   --! @}
 
 begin -- architecture rtl
@@ -66,8 +69,8 @@ begin -- architecture rtl
   -- Outputs
   ------------------------------------------------------------------------------
 
-  lrdiff_o       <= lrdiff;
-  lrdiff_valid_o <= lrdiff_valid;
+  lrdiff_o       <= lrdiff_decimated;
+  lrdiff_valid_o <= lrdiff_decimated_valid;
 
   ------------------------------------------------------------------------------
   -- Registers
@@ -132,5 +135,18 @@ begin -- architecture rtl
 
       oDwet   => lrdiff,
       oValWet => lrdiff_valid);
+
+  decimator_inst : entity work.decimator
+    generic map(
+      decimation_g => osr_audio_c)
+    port map(
+      clk_i => clk_i,
+      rst_i => rst_i,
+
+      sample_i       => lrdiff,
+      sample_valid_i => lrdiff_valid,
+
+      sample_o       => lrdiff_decimated,
+      sample_valid_o => lrdiff_decimated_valid);
 
 end architecture rtl;
