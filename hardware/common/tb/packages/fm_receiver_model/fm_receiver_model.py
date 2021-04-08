@@ -10,17 +10,30 @@ from helpers import *
 
 
 class FM_RECEIVER_MODEL(object):
-    def __init__(self, n_sec):
+    def __init__(self, n_sec, golden_data_directory, is_cocotb=True):
+        # Adapt logging functions
+        if is_cocotb:
+            self.log_info = cocotb.log.info
+            self.log_warn = cocotb.log.warning
+            self.test_fail = cocotb.result.TestFailure
+        else:
+            self.log_info = print
+            self.log_warn = print
+            self.test_fail = Exception
+
         # Derived constants
         self.num_samples_audio_c = int(n_sec * fs_audio_c)
         self.num_samples_c = int(n_sec * fs_rx_c)
         self.num_samples_fs_c = int(n_sec * fs_c)
 
-        self.loadModelData()
+        if n_sec == -1:
+            self.num_samples_audio_c = -1
+            self.num_samples_c = -1
+            self.num_samples_fs_c = -1
 
-    def loadModelData(self):
-        directory = "../../../../sim/matlab/verification_data/"
+        self.loadModelData(golden_data_directory)
 
+    def loadModelData(self, directory):
         filename = directory + "rx_fm_demod.txt"
         self.gold_fm_demod_fp = loadDataFromFile(filename, self.num_samples_fs_c, fp_width_c, fp_width_frac_c)
 
@@ -45,5 +58,5 @@ class FM_RECEIVER_MODEL(object):
         filename = directory + "rx_audio_R.txt"
         self.gold_audio_R_fp = loadDataFromFile(filename, self.num_samples_audio_c, fp_width_c, fp_width_frac_c)
 
-        cocotb.log.info("num_samples_fs: {}, num_samples: {}, num_samples_audio: {} ".format(
+        self.log_info("Loaded data! num_samples_fs: {}, num_samples: {}, num_samples_audio: {} ".format(
             self.num_samples_fs_c, self.num_samples_c, self.num_samples_audio_c))

@@ -68,6 +68,7 @@ def compareResultsOkay(gold, actual, fail_on_err,
     Compares actual data against "golden data".
     Metrics: number of samples,
     """
+    # Adapt logging functions
     if is_cocotb:
         log_info = cocotb.log.info
         log_warn = cocotb.log.warning

@@ -1,13 +1,12 @@
 ################################################################################
-# File        : analyze_tb_results.py
+# File        : tb_analyzer_helper.py
 # Author      : Michael Wurm <wurm.michael95@gmail.com>
-# Description : Analyze data output of HLS testbench.
+# Description : Helper functions for tb_analyzer
 ################################################################################
 
 
 from fixed_point import *
 from fm_global import *
-from fm_receiver_model import FM_RECEIVER_MODEL
 from helpers import *
 
 # --------------------------------------------------------------------------

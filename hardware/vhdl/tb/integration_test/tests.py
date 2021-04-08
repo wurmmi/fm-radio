@@ -37,7 +37,6 @@ async def data_processing_test(dut):
     # --------------------------------------------------------------------------
     # Prepare environment
     # --------------------------------------------------------------------------
-
     timestamp_start = time.time()
 
     tb = FM_TB(dut, n_sec)

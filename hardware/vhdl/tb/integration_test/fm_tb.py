@@ -10,10 +10,9 @@ from cocotb.triggers import RisingEdge, Timer
 from cocotbext.axi4stream.drivers import Axi4StreamMaster
 from fixed_point import *
 from fm_global import *
+from fm_receiver_model import FM_RECEIVER_MODEL
 from helpers import *
 from vhdl_sampler import VHDL_SAMPLER
-
-from fm_receiver_model import FM_RECEIVER_MODEL
 
 
 class FM_TB(object):
@@ -40,7 +39,8 @@ class FM_TB(object):
         self.dut = dut
         self.n_sec = n_sec
 
-        self.model = FM_RECEIVER_MODEL(n_sec)
+        golden_data_directory = "../../../../sim/matlab/verification_data/"
+        self.model = FM_RECEIVER_MODEL(n_sec, golden_data_directory)
 
         slave_interface_to_connect_to = "s0_axis"
         self.axis_m = Axi4StreamMaster(dut, slave_interface_to_connect_to, dut.clk_i)
