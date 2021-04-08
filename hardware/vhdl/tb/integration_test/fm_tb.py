@@ -244,7 +244,7 @@ class FM_TB(object):
         #self.ok_decimator = False
 
         tn_fs = np.arange(0, self.model.num_samples_fs_c) / fs_c
-        tn = np.arange(0, self.model.num_samples_c) / fs_rx_c
+        tn_rx = np.arange(0, self.model.num_samples_c) / fs_rx_c
         tn_audio = np.arange(0, self.model.num_samples_audio_c) / fs_audio_c
         # -----------------------------------------------------------------
         data = (
@@ -257,8 +257,8 @@ class FM_TB(object):
 
         # -----------------------------------------------------------------
         data = (
-            (tn, self.data_out_decimator, "data_out_decimator"),
-            (tn, from_fixed_point(self.model.gold_decimator_fp), "gold_decimator_fp")
+            (tn_rx, self.data_out_decimator, "data_out_decimator"),
+            (tn_rx, from_fixed_point(self.model.gold_decimator_fp), "gold_decimator_fp")
         )
         plotData(data, title="Decimator",
                  filename="sim_build/plot_decimator.png",
@@ -275,8 +275,8 @@ class FM_TB(object):
 
         # -----------------------------------------------------------------
         data = (
-            (tn, self.data_out_pilot, "data_out_pilot"),
-            (tn, from_fixed_point(self.model.gold_pilot_fp), "gold_pilot_fp")
+            (tn_rx, self.data_out_pilot, "data_out_pilot"),
+            (tn_rx, from_fixed_point(self.model.gold_pilot_fp), "gold_pilot_fp")
         )
         plotData(data, title="Pilot",
                  filename="sim_build/plot_pilot.png",
@@ -284,8 +284,8 @@ class FM_TB(object):
 
         # -----------------------------------------------------------------
         data = (
-            (tn, self.data_out_carrier_38k, "data_out_carrier_38k"),
-            (tn, from_fixed_point(self.model.gold_carrier_38k_fp), "gold_carrier_38k_fp")
+            (tn_rx, self.data_out_carrier_38k, "data_out_carrier_38k"),
+            (tn_rx, from_fixed_point(self.model.gold_carrier_38k_fp), "gold_carrier_38k_fp")
         )
         plotData(data, title="Carrier 38kHz",
                  filename="sim_build/plot_carrier_38k.png",
