@@ -4,7 +4,7 @@ A master thesis project.
 
 The main focus is to compare key metrics of an FM radio receiver implementation in VHDL versus high-level synthesis (HLS).
 
-This thesis and the accompanying project is being elaborated in the Master's degree programme "Embedded Systems Design" at the University of Applied Sciences Upper Austria, Campus Hagenberg.
+This thesis and the accompanying project is being elaborated by Michael Wurm, in the Master's degree programme "Embedded Systems Design" at the University of Applied Sciences Upper Austria, Campus Hagenberg.
 
 [![FH Hagenberg Logo][1]][2]
 
