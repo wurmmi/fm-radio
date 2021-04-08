@@ -1,19 +1,18 @@
 #-------------------------------------------------------------------------------
-# File        : hls_sim.tcl
+# File        : hls_cosim.tcl
 # Author      : Michael Wurm <wurm.michael95@gmail.com>
-# Description : Simulate Vivado HLS project.
+# Description : Co-Simulate Vivado HLS project.
 #-------------------------------------------------------------------------------
 
 set project_name [lindex $argv 2]
-set ip_name [lindex $argv 3]
 
 open_project $project_name
 open_solution "solution1"
 
 puts "###############################################################"
-puts " Running IP export"
+puts " Running cosim_design"
 puts "###############################################################"
 
-export_design -format ip_catalog -ipname ip_name -vendor MWURM
+cosim_design
 
 exit

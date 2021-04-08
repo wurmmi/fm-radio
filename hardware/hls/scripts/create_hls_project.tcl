@@ -7,7 +7,8 @@
 set SRC_DIR  "../../src"
 set TB_DIR   "../../tb"
 set CPPFLAGS "-O --std=c++11 -I$SRC_DIR \
-              -Wall -Wno-unused-label -Wno-unused-parameter"
+              -Wall -Wno-unused-label -Wno-unused-parameter \
+              -Wno-mismatched-tags"
 
 set project_name [lindex $argv 2]
 

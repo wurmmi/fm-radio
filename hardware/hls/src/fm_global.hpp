@@ -9,6 +9,15 @@
 #ifndef _FM_GLOBAL_HPP
 #define _FM_GLOBAL_HPP
 
+/* ------------------------------ */
+/* NOTE:
+ * This is a workaround for an issue with the gmp-library.
+ * https://forums.xilinx.com/t5/High-Level-Synthesis-HLS/Vivado-2015-3-HLS-Bug-gmp-h/td-p/661141
+ */
+#include <gmp.h>
+#define __gmp_const const
+/* ------------------------------ */
+
 #include <ap_fixed.h>
 
 #include "fm_global_spec.hpp"

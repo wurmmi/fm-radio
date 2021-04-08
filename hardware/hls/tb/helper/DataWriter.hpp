@@ -15,6 +15,14 @@
 
 #include "fm_global.hpp"
 
+#ifdef __SYNTHESIS__
+class DataWriter {
+ public:
+  DataWriter(std::string const&) {}
+  void write(sample_t) {}
+};
+
+#else
 using data_vec_t = std::vector<sample_t>;
 
 class DataWriter {
@@ -44,5 +52,6 @@ class DataWriter {
     data.emplace_back(value);
   }
 };
+#endif /* __SYNTHESIS__ */
 
 #endif /* _DATAWRITER_HPP */
