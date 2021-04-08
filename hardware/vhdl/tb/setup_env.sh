@@ -15,9 +15,10 @@ fi
 
 echo "### Python environment"
 
-export PYTHONPATH=$PROJECT_ROOT/hardware/vhdl/tb/packages/fixed_point
-export PYTHONPATH=$PYTHONPATH:$PROJECT_ROOT/hardware/vhdl/tb/packages/helpers
+export PYTHONPATH=
+export PYTHONPATH=$PYTHONPATH:$PROJECT_ROOT/hardware/common/tb/packages/fixed_point
+export PYTHONPATH=$PYTHONPATH:$PROJECT_ROOT/hardware/common/tb/packages/helpers
+export PYTHONPATH=$PYTHONPATH:$PROJECT_ROOT/hardware/common/tb/packages/fm_global
 export PYTHONPATH=$PYTHONPATH:$PROJECT_ROOT/hardware/vhdl/tb/packages/vhdl_sampler
-export PYTHONPATH=$PYTHONPATH:$PROJECT_ROOT/hardware/vhdl/tb/packages/fm_global
 
 echo "Done."

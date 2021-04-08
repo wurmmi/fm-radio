@@ -23,8 +23,10 @@ if ~EnablePlots
 end
 
 % Create output folder to save figures
-if ~exist(dir_output, 'dir')
-    mkdir(dir_output)
+if EnableSavePlotsToPng
+    if ~exist(dir_output, 'dir')
+        mkdir(dir_output)
+    end
 end
 
 %% Calculations

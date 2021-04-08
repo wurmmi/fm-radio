@@ -18,8 +18,8 @@ class FM_TB(object):
     # Variables
     data_out = []
 
-    assert (CLOCK_FREQ_MHZ * 1e3 / FS_RX_KHZ).is_integer(), \
-        "Clock rate and fs_rx must have an integer relation!"
+    assert (CLOCK_FREQ_MHZ * 1000 / FS_RX_KHZ).is_integer(), \
+        "Clock rate and fs_rx_c must have an integer relation!"
 
     def __del__(self):
         pass

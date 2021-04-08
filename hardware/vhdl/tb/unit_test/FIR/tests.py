@@ -83,7 +83,7 @@ async def fir_filter_test(dut):
 
     # Generate FIR input strobe
     strobe_num_cycles_high = 1
-    strobe_num_cycles_low = tb.CLOCK_FREQ_MHZ * 1000 // tb.FS_RX_KHZ - strobe_num_cycles_high
+    strobe_num_cycles_low = tb.CLOCK_FREQ_MHZ * 1e3 // fs_rx_c - strobe_num_cycles_high
     tb.fir_in_strobe.start(bit_toggler(repeat(strobe_num_cycles_high), repeat(strobe_num_cycles_low)))
 
     # --------------------------------------------------------------------------

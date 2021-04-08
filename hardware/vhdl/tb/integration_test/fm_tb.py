@@ -46,8 +46,8 @@ class FM_TB(object):
         self.axis_m = Axi4StreamMaster(dut, slave_interface_to_connect_to, dut.clk_i)
 
         # Derived constants
-        assert (self.CLOCK_FREQ_MHZ * 1e3 / self.model.FS_RX_KHZ).is_integer(), \
-            "Clock rate and fs_rx must have an integer relation!"
+        assert (self.CLOCK_FREQ_MHZ * 1e9 / fs_rx_c).is_integer(), \
+            "Clock rate and fs_rx_c must have an integer relation!"
 
     @cocotb.coroutine
     async def reset(self):
