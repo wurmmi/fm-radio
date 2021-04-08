@@ -5,6 +5,7 @@
 ################################################################################
 
 
+from fixed_point import *
 from fm_global import *
 from helpers import *
 

@@ -4,13 +4,9 @@
 % Description : FM-Radio Sender and Receiver
 %-------------------------------------------------------------------------
 
-% TODO: make everything fixed point
-
-% TODO: change/optimize things for better HW implementation
-
 % TODO: draw a block diagram
 
-% TODO: find a benchmark to compare against
+% TODO: find a benchmark to compare against (--> sent vs. received)
 
 %% Prepare environment
 clear;
@@ -125,7 +121,7 @@ if EnableWriteDataFiles
 
     % Simulation constants
     disp('--- Constants to VHDL/C++/Python');
-    writeConstantsToPythonFile('../../hardware/vhdl/tb/packages/fm_global/fm_global.py', 'fm_global_spec', ...
+    writeConstantsToPythonFile('../../hardware/common/tb/packages/fm_global/fm_global.py', 'fm_global_spec', ...
         fp_config, fs, fs_rx, fs_audio, osr_rx, osr_audio, pilot_scale_factor, rx_carrier38kHz_offset);
     writeConstantsToVHDLFile(  '../../hardware/vhdl/src/packages/fm_global_spec_pkg.vhd','fm_global_spec', ...
         fp_config, fs, fs_rx, fs_audio, osr_rx, osr_audio, pilot_scale_factor, rx_carrier38kHz_offset);
