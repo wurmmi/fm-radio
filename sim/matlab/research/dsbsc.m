@@ -109,9 +109,9 @@ msg_del = [zeros(grp_delay,1); msg(1:end-grp_delay)];
 
 phi_pilot = phi_rx;
 
-carrier19k = cos(2*pi*19e3/fs*tn + phi_pilot  );
-carrier38k = cos(2*pi*38e3/fs*tn + phi_pilot*2);
-carrier57k = cos(2*pi*57e3/fs*tn + phi_pilot*3);
+carrier_19k = cos(2*pi*19e3/fs*tn + phi_pilot  );
+carrier_38k = cos(2*pi*38e3/fs*tn + phi_pilot*2);
+carrier_57k = cos(2*pi*57e3/fs*tn + phi_pilot*3);
 
 %=========================================================================
 %% Analysis
@@ -136,7 +136,7 @@ fig_time_tx = figure('Name',fig_title);
 hold on;
 plot(tn/fs, txCarrier, 'r', 'DisplayName', 'txCarrier');
 plot(tn/fs, msg,       'g', 'DisplayName', 'msg');
-plot(tn/fs, tx,        'b',   'DisplayName', 'tx');
+plot(tn/fs, tx,        'b', 'DisplayName', 'tx');
 grid on;
 xlim([1/fmsg*2,1/fmsg*5]);
 title(fig_title);
@@ -165,9 +165,9 @@ if EnablePlotPhaseShiftTest
     fig_time_carr_test = figure('Name',fig_title);
     hold on;
     plot(tn/fs, cos(2*pi*19e3/fs*tn), 'm', 'DisplayName', 'rx pilot','LineWidth',2);
-    plot(tn/fs, carrier19k, 'r', 'DisplayName', 'carrier19k (local)');
-    plot(tn/fs, carrier38k, 'g', 'DisplayName', 'carrier38k (local)');
-    plot(tn/fs, carrier57k, 'b', 'DisplayName', 'carrier57k (local)');
+    plot(tn/fs, carrier_19k, 'r', 'DisplayName', 'carrier_19k (local)');
+    plot(tn/fs, carrier_38k, 'g', 'DisplayName', 'carrier_38k (local)');
+    plot(tn/fs, carrier_57k, 'b', 'DisplayName', 'carrier_57k (local)');
     grid on;
     xlim([0,1/19e3*2]);
     title(fig_title);

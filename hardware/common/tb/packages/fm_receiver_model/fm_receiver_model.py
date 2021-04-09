@@ -7,6 +7,7 @@
 import cocotb
 import helpers as helper
 from fm_global import *
+from tb_data_result_loader import TB_DATA_RESULT_LOADER
 
 
 class FM_RECEIVER_MODEL():
@@ -24,58 +25,28 @@ class FM_RECEIVER_MODEL():
             self.test_fail = Exception
 
         # Derived constants
+        self.n_sec = n_sec
         self.num_samples_audio_c = int(n_sec * fs_audio_c)
         self.num_samples_c = int(n_sec * fs_rx_c)
         self.num_samples_fs_c = int(n_sec * fs_c)
 
-        if n_sec == -1:
-            self.num_samples_audio_c = -1
-            self.num_samples_c = -1
-            self.num_samples_fs_c = -1
-
         self.loadModelData(golden_data_directory)
-
-    def loadModelData(self, directory):
-        #######
-        # NOTE: Keep this list consistent with the list in TB_DATA_RESULT_LOADER !
-        #######
-        self.data = [
-            {
-                'name': 'fm_demod',
-                'data': helper.loadDataFromFile(directory + "rx_fm_demod.txt", self.num_samples_fs_c, fp_width_c, fp_width_frac_c)
-            },
-            {
-                'name': 'fm_channel_data',
-                'data': helper.loadDataFromFile(directory + "rx_fm_channel_data.txt", self.num_samples_c, fp_width_c, fp_width_frac_c)
-            },
-            {
-                'name': 'audio_mono',
-                'data': helper.loadDataFromFile(directory + "rx_audio_mono.txt", self.num_samples_audio_c, fp_width_c, fp_width_frac_c)
-            },
-            {
-                'name': 'pilot',
-                'data': helper.loadDataFromFile(directory + "rx_pilot.txt", self.num_samples_c, fp_width_c, fp_width_frac_c)
-            },
-            {
-                'name': 'carrier_38k',
-                'data': helper.loadDataFromFile(directory + "rx_carrier38kHz.txt", self.num_samples_c, fp_width_c, fp_width_frac_c)
-            },
-            {
-                'name': 'audio_lrdiff',
-                'data': helper.loadDataFromFile(directory + "rx_audio_lrdiff.txt", self.num_samples_audio_c, fp_width_c, fp_width_frac_c)
-            },
-            {
-                'name': 'audio_L',
-                'data': helper.loadDataFromFile(directory + "rx_audio_L.txt", self.num_samples_audio_c, fp_width_c, fp_width_frac_c)
-            },
-            {
-                'name': 'audio_R',
-                'data': helper.loadDataFromFile(directory + "rx_audio_R.txt", self.num_samples_audio_c, fp_width_c, fp_width_frac_c)
-            }
-        ]
 
         self.log_info("Loaded data! num_samples_fs: {}, num_samples: {}, num_samples_audio: {} ".format(
             self.num_samples_fs_c, self.num_samples_c, self.num_samples_audio_c))
+
+    def loadModelData(self, directory):
+        temp = TB_DATA_RESULT_LOADER()
+
+        self.data = []
+        for dataset in temp.data:
+            filename = directory + "rx_{}.txt".format(dataset['name'])
+            num_samples = int(self.n_sec * dataset['fs'])
+
+            new_dataset = {}
+            new_dataset['name'] = dataset['name']
+            new_dataset['data'] = helper.loadDataFromFile(filename, num_samples, fp_width_c, fp_width_frac_c)
+            self.data.append(new_dataset)
 
     def shift_data(self, data_name, amount):
         # Find the dataset to be shifted

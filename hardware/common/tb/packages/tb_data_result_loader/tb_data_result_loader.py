@@ -11,9 +11,6 @@ from fm_global import *
 
 class TB_DATA_RESULT_LOADER():
     def __init__(self):
-        #######
-        # NOTE: Keep this list consistent with the list in FM_RECEIVER_MODEL !
-        #######
         self.data = [
             {
                 'name': "fm_demod",

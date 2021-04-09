@@ -70,8 +70,8 @@ if EnableSenderSourceCreateSim
     audioLRDiff = audioDataL - audioDataR;
     
     % Modulate it to 38 kHz
-    carrier38kHzTx = cos(2*pi*38e3/fs*tn);
-    audioLRDiffMod = audioLRDiff .* carrier38kHzTx;
+    carrier_38kHzTx = cos(2*pi*38e3/fs*tn);
+    audioLRDiffMod = audioLRDiff .* carrier_38kHzTx;
     
     %% Radio Data Signal (RDS)
     % TODO

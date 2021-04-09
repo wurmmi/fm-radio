@@ -44,6 +44,7 @@ int main() {
     cout << "--- Loading data from files" << endl;
 
     cout << "num_samples_fs = " << num_samples_fs_c << endl;
+    cout << "num_samples_fs = " << num_samples_fs_c << endl;
     cout << "num_samples    = " << num_samples_c << endl;
 
     // Input data

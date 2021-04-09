@@ -114,7 +114,7 @@ filter_bp_pilot = getBPfilter( ...
 rx_pilot = filter(filter_bp_pilot,1, rx_fmChannelData);
 
 % TODO: compensate rx_pilot filter delay, before multiplication!!
-%       (rx_pilot, and thus carrier38k, is shifted with respect to 
+%       (rx_pilot, and thus carrier_38k, is shifted with respect to 
 %        rx_audio_lrdiff_bpfilt, IF THE GROUP DELAYS of 
 %        filter_bp_pilot and filter_bp_lrdiff ARE DIFFERENT)
 
@@ -137,8 +137,8 @@ end
 disp('-- Recover 38kHz subcarrier');
 
 % 38 kHz carrier
-rx_carrier38kHz_offset = 0.75;
-rx_carrier38kHz = rx_pilot .* rx_pilot * 2 - rx_carrier38kHz_offset;
+rx_carrier_38kHz_offset = 0.75;
+rx_carrier_38kHz = rx_pilot .* rx_pilot * 2 - rx_carrier_38kHz_offset;
 
 if EnableRDSDecoder
     disp('-- Recover 57kHz subcarrier');
@@ -148,7 +148,7 @@ if EnableRDSDecoder
     end
     
     % 57 kHz carrier
-    rx_carrier57kHz = rx_carrier38kHz .* rx_pilot * 2 - 1;
+    rx_carrier_57kHz = rx_carrier_38kHz .* rx_pilot * 2 - 1;
     
     % Create the lowpass filter
     filter_name = sprintf("%s%s",dir_filters,"lowpass_57kHz.mat");
@@ -162,20 +162,20 @@ if EnableRDSDecoder
         cutoff_freqs, fs_rx, fp_config, EnableFilterAnalyzeGUI);
     
     % Filter (lowpass 1.5kHz)
-    rx_carrier57kHz = filter(filter_hp_57k,1, rx_carrier57kHz);
+    rx_carrier_57kHz = filter(filter_hp_57k,1, rx_carrier_57kHz);
     
     % TODO: delay all other carriers and the rx signal (rx_fmChannelData)
     %       to compensate for the HP filter.
     % NOTE: Using a "circshift" as a workaround for now.
     %       This cannot be done in hardware!
     filter_hp57k_groupdelay = (length(filter_hp_57k)-1)/2;
-    rx_carrier57kHz = circshift(rx_carrier57kHz, -filter_hp57k_groupdelay);
+    rx_carrier_57kHz = circshift(rx_carrier_57kHz, -filter_hp57k_groupdelay);
 end
 
 % For test purpose only.
-pilot_local           = cos(2*pi*19e3/fs_rx*tnRx + phi_pilot);
-rx_carrier38kHz_local = cos(2*pi*38e3/fs_rx*tnRx + phi_pilot*2);
-rx_carrier57kHz_local = cos(2*pi*57e3/fs_rx*tnRx + phi_pilot*3);
+pilot_local            = cos(2*pi*19e3/fs_rx*tnRx + phi_pilot);
+rx_carrier_38kHz_local = cos(2*pi*38e3/fs_rx*tnRx + phi_pilot*2);
+rx_carrier_57kHz_local = cos(2*pi*57e3/fs_rx*tnRx + phi_pilot*3);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% RDS decoder
@@ -228,13 +228,13 @@ filter_bp_lrdiff = getBPfilter( ...
 rx_audio_lrdiff_bpfilt = filter(filter_bp_lrdiff,1, rx_fmChannelData);
 
 % Modulate down to baseband
-rx_audio_lrdiff_mod = 2 * rx_audio_lrdiff_bpfilt .* rx_carrier38kHz;
+rx_audio_lrdiff_mod = 2 * rx_audio_lrdiff_bpfilt .* rx_carrier_38kHz;
 
 % Filter (lowpass 15kHz)
 rx_audio_lrdiff = filter(filter_lp_mono,1, rx_audio_lrdiff_mod);
 
 % TODO: check, why this is inverted, depending on the sample rate..
-%       --> because of delay of pilot/carrier38k ???
+%       --> because of delay of pilot/carrier_38k ???
 %rx_audio_lrdiff = -1 * rx_audio_lrdiff;
 
 

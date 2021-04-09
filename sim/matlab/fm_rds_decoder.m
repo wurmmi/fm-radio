@@ -37,7 +37,7 @@ filter_bp_rds = getBPfilter( ...
 rx_rds = filter(filter_bp_rds,1, rx_fmChannelData);
 
 % Modulate down to baseband
-rx_rds_mod = 2 * rx_rds .* carrier57kHzRx;
+rx_rds_mod = 2 * rx_rds .* carrier_57kHzRx;
 
 % Downsample
 osr_rds = 5;
