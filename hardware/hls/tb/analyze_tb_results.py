@@ -10,6 +10,7 @@ from fm_global import *
 from fm_receiver_model import FM_RECEIVER_MODEL
 from helpers import *
 from tb_analyzer_helper import TB_ANALYZER_HELPER
+from tb_data_result_loader import TB_DATA_RESULT_LOADER
 
 # --------------------------------------------------------------------------
 # Constants
@@ -31,31 +32,14 @@ def analyze():
     print("- Testbench output data")
 
     directory_tb = "../tb/output/"
-    filename = directory_tb + "data_out_fm_demod.txt"
-    data_out_fm_demod_fp = loadDataFromFile(filename, -1, fp_width_c, fp_width_frac_c)
-
-    filename = directory_tb + "data_out_audio_mono.txt"
-    data_out_audio_mono_fp = loadDataFromFile(filename, -1, fp_width_c, fp_width_frac_c)
-
-    filename = directory_tb + "data_out_pilot.txt"
-    data_out_pilot_fp = loadDataFromFile(filename, -1, fp_width_c, fp_width_frac_c)
-
-    filename = directory_tb + "data_out_carrier_38k.txt"
-    data_out_carrier_38k_fp = loadDataFromFile(filename, -1, fp_width_c, fp_width_frac_c)
-
-    filename = directory_tb + "data_out_audio_lrdiff.txt"
-    data_out_audio_lrdiff_fp = loadDataFromFile(filename, -1, fp_width_c, fp_width_frac_c)
-
-    filename = directory_tb + "data_out_audio_L.txt"
-    data_out_audio_L_fp = loadDataFromFile(filename, -1, fp_width_c, fp_width_frac_c)
-
-    filename = directory_tb + "data_out_audio_R.txt"
-    data_out_audio_R_fp = loadDataFromFile(filename, -1, fp_width_c, fp_width_frac_c)
+    tb_result_loader = TB_DATA_RESULT_LOADER()
+    tb_result_loader.load_data_from_file(directory_tb)
 
     # Check number of samples that were found in the files
-    num_samples_audio_c = len(data_out_audio_mono_fp)
-    num_samples_c = len(data_out_pilot_fp)
-    num_samples_fs_c = len(data_out_fm_demod_fp)
+    # NOTE: Make sure to use correct indexes, according to TB_DATA_RESULT_LOADER
+    num_samples_audio_c = len(tb_result_loader.data[1]['data'])  # audio_mono
+    num_samples_c = len(tb_result_loader.data[2]['data'])  # pilot
+    num_samples_fs_c = len(tb_result_loader.data[0]['data'])  # fm_demod
 
     # Sanity checks
     assert num_samples_fs_c // num_samples_c == osr_rx_c, \
@@ -77,54 +61,14 @@ def analyze():
     # --------------------------------------------------------------------------
     print("--- Comparing golden data with testbench results")
 
-    tb_analyzer_helper = TB_ANALYZER_HELPER(
-        num_samples_audio_c, num_samples_c, num_samples_fs_c)
-
-    tb_data = [
-        {
-            'name': "fm_demod",
-            'data': data_out_fm_demod_fp,
-            'fs': fs_c
-        },
-        {
-            'name': "audio_mono",
-            'data': data_out_audio_mono_fp,
-            'fs': fs_audio_c
-        },
-        {
-            'name': "pilot",
-            'data': data_out_pilot_fp,
-            'fs': fs_rx_c
-        },
-        {
-            'name': "carrier_38k",
-            'data': data_out_carrier_38k_fp,
-            'fs': fs_rx_c
-        },
-        {
-            'name': "audio_lrdiff",
-            'data': data_out_audio_lrdiff_fp,
-            'fs': fs_audio_c
-        },
-        {
-            'name': "audio_L",
-            'data': data_out_audio_L_fp,
-            'fs': fs_audio_c
-        },
-        {
-            'name': "audio_R",
-            'data': data_out_audio_R_fp,
-            'fs': fs_audio_c
-        }
-    ]
-
-    tb_analyzer_helper.compare_data(model, tb_data)
+    tb_analyzer_helper = TB_ANALYZER_HELPER(num_samples_audio_c, num_samples_c, num_samples_fs_c)
+    tb_analyzer_helper.compare_data(model, tb_result_loader)
 
     # --------------------------------------------------------------------------
     # Plots
     # --------------------------------------------------------------------------
     print("--- Plots")
-    tb_analyzer_helper.generate_plots(model, tb_data)
+    tb_analyzer_helper.generate_plots(model, tb_result_loader)
 
 
 if __name__ == "__main__":

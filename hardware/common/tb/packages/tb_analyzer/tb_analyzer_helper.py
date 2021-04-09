@@ -21,7 +21,7 @@ class TB_ANALYZER_HELPER():
         self.num_samples_c = num_samples
         self.num_samples_fs_c = num_samples_fs
 
-    def compare_data(self, model, tb_data):
+    def compare_data(self, model, tb_result_loader):
         # Shift loaded file-data to compensate shift to testbench-data
         # TODO: why is this necessary?
         move_n_left(model.gold_pilot_fp, 16, fp_width_c, fp_width_frac_c)
