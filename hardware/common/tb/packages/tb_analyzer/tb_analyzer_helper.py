@@ -18,7 +18,7 @@ EnableFailOnError = False
 
 
 class TB_ANALYZER_HELPER():
-    def __init__(self, model, tb_result_loader, is_cocotb):
+    def __init__(self, model, tb_data_handler, is_cocotb):
         # Adapt logging functions
         self.is_cocotb = is_cocotb
         if self.is_cocotb:
@@ -31,7 +31,7 @@ class TB_ANALYZER_HELPER():
             self.test_fail = Exception
 
         self.model = model
-        self.tb_result_loader = tb_result_loader
+        self.tb_data_handler = tb_data_handler
 
     def compare_data(self):
         # Shift loaded file-data to compensate shift to testbench-data
@@ -58,11 +58,11 @@ class TB_ANALYZER_HELPER():
         # Compare
         for i in range(0, len(self.model.data)):
             model_dataset = self.model.data[i]
-            tb_dataset = self.tb_result_loader.data[i]
+            tb_dataset = self.tb_data_handler.data[i]
 
             # Sanity check
             msg = "Comparing wrong datasets!! {:>12s} <=> {:12s}\n".format(model_dataset['name'], tb_dataset['name'])
-            msg += "Check consistency of the list in TB_DATA_RESULT_LOADER and FM_RECEIVER_MODEL"
+            msg += "Check consistency of the list in TB_DATA_HANDLER and FM_RECEIVER_MODEL"
             assert model_dataset['name'] == tb_dataset['name'], msg
 
             tb_dataset['result_okay'] = \
@@ -77,19 +77,20 @@ class TB_ANALYZER_HELPER():
                                           is_cocotb=self.is_cocotb)
 
     def generate_plots(self, directory):
-        # TODO: Enable plots for debug (check corresponding indexes)
-        # self.tb_result_loader.data[0]['result_okay'] = False
-        # self.tb_result_loader.data[1]['result_okay'] = False
-        # self.tb_result_loader.data[2]['result_okay'] = False
-        # self.tb_result_loader.data[3]['result_okay'] = False
-        # self.tb_result_loader.data[4]['result_okay'] = False
-        # self.tb_result_loader.data[5]['result_okay'] = False
-        # self.tb_result_loader.data[6]['result_okay'] = False
+        # TODO: Enable plots for debug
+        # TODO: use lookup function for this
+        # helper.get_dataset_by_name(self.tb_data_handler.data)['result_okay'] = False
+        # helper.get_dataset_by_name(self.tb_data_handler.data)['result_okay'] = False
+        # helper.get_dataset_by_name(self.tb_data_handler.data)['result_okay'] = False
+        # helper.get_dataset_by_name(self.tb_data_handler.data)['result_okay'] = False
+        # helper.get_dataset_by_name(self.tb_data_handler.data)['result_okay'] = False
+        # helper.get_dataset_by_name(self.tb_data_handler.data)['result_okay'] = False
+        # helper.get_dataset_by_name(self.tb_data_handler.data)['result_okay'] = False
 
         # Plot
         for i in range(0, len(self.model.data)):
             model_dataset = self.model.data[i]
-            tb_dataset = self.tb_result_loader.data[i]
+            tb_dataset = self.tb_data_handler.data[i]
 
             self.log_info(f"Creating plot for {tb_dataset['name']}")
 

@@ -9,7 +9,7 @@ import helpers as helper
 from fm_global import *
 from fm_receiver_model import FM_RECEIVER_MODEL
 from tb_analyzer_helper import TB_ANALYZER_HELPER
-from tb_data_result_loader import TB_DATA_RESULT_LOADER
+from tb_data_handler import TB_DATA_HANDLER
 
 # --------------------------------------------------------------------------
 # Constants
@@ -31,13 +31,13 @@ def analyze():
     print("- Testbench output data")
 
     directory_tb = "../tb/output/"
-    tb_result_loader = TB_DATA_RESULT_LOADER()
-    tb_result_loader.load_data_from_file(directory_tb)
+    tb_data_handler = TB_DATA_HANDLER()
+    tb_data_handler.load_data_from_file(directory_tb)
 
     # Check number of samples that were found in the files
-    num_samples_audio_c = len(helper.get_dataset_by_name(tb_result_loader.data, 'audio_mono'))
-    num_samples_rx_c = len(helper.get_dataset_by_name(tb_result_loader.data, 'pilot'))
-    num_samples_fs_c = len(helper.get_dataset_by_name(tb_result_loader.data, 'fm_demod'))
+    num_samples_audio_c = len(helper.get_dataset_by_name(tb_data_handler.data, 'audio_mono'))
+    num_samples_rx_c = len(helper.get_dataset_by_name(tb_data_handler.data, 'pilot'))
+    num_samples_fs_c = len(helper.get_dataset_by_name(tb_data_handler.data, 'fm_demod'))
 
     # Sanity checks
     assert num_samples_fs_c // num_samples_rx_c == osr_rx_c, \
@@ -59,7 +59,7 @@ def analyze():
     # --------------------------------------------------------------------------
     print("--- Comparing golden data with testbench results")
 
-    tb_analyzer_helper = TB_ANALYZER_HELPER(model, tb_result_loader, is_cocotb=False)
+    tb_analyzer_helper = TB_ANALYZER_HELPER(model, tb_data_handler, is_cocotb=False)
     tb_analyzer_helper.compare_data()
 
     # --------------------------------------------------------------------------

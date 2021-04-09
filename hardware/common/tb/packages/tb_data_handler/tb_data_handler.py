@@ -1,5 +1,5 @@
 ################################################################################
-# File        : tb_data_result_loader.py
+# File        : tb_data_handler.py
 # Author      : Michael Wurm <wurm.michael95@gmail.com>
 # Description : Data results from testbench.
 #               Loads the from file, or gets it from cocotb.
@@ -9,7 +9,7 @@ import helpers as helper
 from fm_global import *
 
 
-class TB_DATA_RESULT_LOADER():
+class TB_DATA_HANDLER():
     def __init__(self):
         self.data = [
             {

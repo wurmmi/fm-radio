@@ -7,7 +7,7 @@
 import cocotb
 import helpers as helper
 from fm_global import *
-from tb_data_result_loader import TB_DATA_RESULT_LOADER
+from tb_data_handler import TB_DATA_HANDLER
 
 
 class FM_RECEIVER_MODEL():
@@ -36,7 +36,7 @@ class FM_RECEIVER_MODEL():
             self.num_samples_fs_c, self.num_samples_rx_c, self.num_samples_audio_c))
 
     def loadModelData(self, directory):
-        temp = TB_DATA_RESULT_LOADER()
+        temp = TB_DATA_HANDLER()
 
         self.data = []
         for dataset in temp.data:

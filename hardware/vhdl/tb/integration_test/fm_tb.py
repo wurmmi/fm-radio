@@ -11,7 +11,7 @@ from cocotbext.axi4stream.drivers import Axi4StreamMaster
 from fm_global import *
 from fm_receiver_model import FM_RECEIVER_MODEL
 from tb_analyzer_helper import TB_ANALYZER_HELPER
-from tb_data_result_loader import TB_DATA_RESULT_LOADER
+from tb_data_handler import TB_DATA_HANDLER
 from vhdl_sampler import VHDL_SAMPLER
 
 
@@ -42,9 +42,9 @@ class FM_TB():
         self.axis_m = Axi4StreamMaster(dut, slave_interface_to_connect_to, dut.clk_i)
 
         # Variables
-        self.tb_result_loader = TB_DATA_RESULT_LOADER()
+        self.tb_data_handler = TB_DATA_HANDLER()
 
-        self.tb_analyzer_helper = TB_ANALYZER_HELPER(self.model, self.tb_result_loader, is_cocotb=True)
+        self.tb_analyzer_helper = TB_ANALYZER_HELPER(self.model, self.tb_data_handler, is_cocotb=True)
 
     @cocotb.coroutine
     async def reset(self):
@@ -70,7 +70,7 @@ class FM_TB():
                                fp_width_c, fp_width_frac_c)
 
         await sampler.read_vhdl_output(
-            helper.get_dataset_by_name(self.tb_result_loader.data, 'fm_demod'))
+            helper.get_dataset_by_name(self.tb_data_handler.data, 'fm_demod'))
 
     @cocotb.coroutine
     async def read_fm_channel_data_output(self):
@@ -81,7 +81,7 @@ class FM_TB():
                                fp_width_c, fp_width_frac_c)
 
         await sampler.read_vhdl_output(
-            helper.get_dataset_by_name(self.tb_result_loader.data, 'fm_channel_data'))
+            helper.get_dataset_by_name(self.tb_data_handler.data, 'fm_channel_data'))
 
     @cocotb.coroutine
     async def read_audio_mono_output(self):
@@ -92,7 +92,7 @@ class FM_TB():
                                fp_width_c, fp_width_frac_c, 10)
 
         await sampler.read_vhdl_output(
-            helper.get_dataset_by_name(self.tb_result_loader.data, 'audio_mono'))
+            helper.get_dataset_by_name(self.tb_data_handler.data, 'audio_mono'))
 
     @cocotb.coroutine
     async def read_pilot_output(self):
@@ -103,7 +103,7 @@ class FM_TB():
                                fp_width_c, fp_width_frac_c)
 
         await sampler.read_vhdl_output(
-            helper.get_dataset_by_name(self.tb_result_loader.data, 'pilot'))
+            helper.get_dataset_by_name(self.tb_data_handler.data, 'pilot'))
 
     @cocotb.coroutine
     async def read_carrier_38k_output(self):
@@ -114,7 +114,7 @@ class FM_TB():
                                fp_width_c, fp_width_frac_c)
 
         await sampler.read_vhdl_output(
-            helper.get_dataset_by_name(self.tb_result_loader.data, 'carrier_38k'))
+            helper.get_dataset_by_name(self.tb_data_handler.data, 'carrier_38k'))
 
     @cocotb.coroutine
     async def read_audio_lrdiff_output(self):
@@ -125,7 +125,7 @@ class FM_TB():
                                fp_width_c, fp_width_frac_c, 10)
 
         await sampler.read_vhdl_output(
-            helper.get_dataset_by_name(self.tb_result_loader.data, 'audio_lrdiff'))
+            helper.get_dataset_by_name(self.tb_data_handler.data, 'audio_lrdiff'))
 
     @cocotb.coroutine
     async def read_audio_L_output(self):
@@ -136,7 +136,7 @@ class FM_TB():
                                  fp_width_c, fp_width_frac_c, 10)
 
         await sampler_L.read_vhdl_output(
-            helper.get_dataset_by_name(self.tb_result_loader.data, 'audio_L'))
+            helper.get_dataset_by_name(self.tb_data_handler.data, 'audio_L'))
 
     @cocotb.coroutine
     async def read_audio_R_output(self):
@@ -147,7 +147,7 @@ class FM_TB():
                                  fp_width_c, fp_width_frac_c, 10)
 
         await sampler_R.read_vhdl_output(
-            helper.get_dataset_by_name(self.tb_result_loader.data, 'audio_R'))
+            helper.get_dataset_by_name(self.tb_data_handler.data, 'audio_R'))
 
     def compareData(self):
         self.tb_analyzer_helper.compare_data()
