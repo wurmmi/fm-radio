@@ -28,6 +28,7 @@ class TB_ANALYZER_HELPER():
             self.log_warn = print
             self.test_fail = Exception
 
+        # TODO: get these directly from the model - it has them!!
         self.num_samples_audio_c = num_samples_audio
         self.num_samples_c = num_samples
         self.num_samples_fs_c = num_samples_fs
@@ -35,14 +36,14 @@ class TB_ANALYZER_HELPER():
     def compare_data(self, model, tb_result_loader):
         # Shift loaded file-data to compensate shift to testbench-data
         # TODO: why is this necessary?
-        model.shift_data('fm_demod', 0)
-        # model.shift_data('decimator', 0)
-        model.shift_data('pilot', -16)
-        model.shift_data('carrier_38k', -16)
-        model.shift_data('audio_mono', -5)
-        model.shift_data('audio_lrdiff', -5)
-        model.shift_data('audio_L', -5)
-        model.shift_data('audio_R', -5)
+        model.shift_data('fm_demod', 0)        # vhdl +2
+        # model.shift_data('decimator', 0)     # vhdl  0
+        model.shift_data('pilot', -16)         # vhdl  0
+        model.shift_data('carrier_38k', -16)   # vhdl  0
+        model.shift_data('audio_mono', -5)     # vhdl -5
+        model.shift_data('audio_lrdiff', -5)   # vhdl -5
+        model.shift_data('audio_L', -5)        # vhdl -5
+        model.shift_data('audio_R', -5)        # vhdl -5
 
         # Compare
         for i in range(0, len(model.data)):
@@ -54,7 +55,7 @@ class TB_ANALYZER_HELPER():
                 "Comparing wrong datasets!! {:>12s} <=> {:12s}".format(model_dataset['name'], tb_dataset['name'])
 
             tb_dataset['result_okay'] = compareResultsOkay(model_dataset['data'],
-                                                           from_fixed_point(tb_dataset['data']),
+                                                           tb_dataset['data'],
                                                            fail_on_err=EnableFailOnError,
                                                            max_error_abs=tb_dataset['max_error_abs'],
                                                            max_error_norm=tb_dataset['max_error_norm'],
@@ -82,7 +83,7 @@ class TB_ANALYZER_HELPER():
 
             tn = np.arange(0, len(tb_dataset['data'])) / tb_dataset['fs']
             data_to_plot = (
-                (tn, from_fixed_point(tb_dataset['data']), "data_out_{}".format(tb_dataset['name'])),
+                (tn, tb_dataset['data'], "data_out_{}".format(tb_dataset['name'])),
                 (tn, from_fixed_point(model_dataset['data']), "model.gold_{}".format(model_dataset['name']))
             )
             plotData(data_to_plot,

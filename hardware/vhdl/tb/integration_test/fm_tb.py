@@ -12,6 +12,8 @@ from fixed_point import *
 from fm_global import *
 from fm_receiver_model import FM_RECEIVER_MODEL
 from helpers import *
+from tb_analyzer_helper import TB_ANALYZER_HELPER
+from tb_data_result_loader import TB_DATA_RESULT_LOADER
 from vhdl_sampler import VHDL_SAMPLER
 
 
@@ -20,16 +22,6 @@ class FM_TB(object):
     CLOCK_FREQ_MHZ = 48
     EnableFailOnError = False
     EnablePlots = True
-
-    # Variables
-    data_out_fm_demod = []
-    data_out_decimator = []
-    data_out_audio_mono = []
-    data_out_pilot = []
-    data_out_carrier_38k = []
-    data_out_audio_lrdiff = []
-    data_out_audio_L = []
-    data_out_audio_R = []
 
     def __del__(self):
         pass
@@ -48,6 +40,18 @@ class FM_TB(object):
         # Derived constants
         assert (self.CLOCK_FREQ_MHZ * 1e9 / fs_rx_c).is_integer(), \
             "Clock rate and fs_rx_c must have an integer relation!"
+
+        # Variables
+        self.tb_result_loader = TB_DATA_RESULT_LOADER()
+
+        self.data_out_fm_demod = self.tb_result_loader.data[0]['data']
+        self.data_out_decimator = []
+        self.data_out_audio_mono = self.tb_result_loader.data[1]['data']
+        self.data_out_pilot = self.tb_result_loader.data[2]['data']
+        self.data_out_carrier_38k = self.tb_result_loader.data[3]['data']
+        self.data_out_audio_lrdiff = self.tb_result_loader.data[4]['data']
+        self.data_out_audio_L = self.tb_result_loader.data[5]['data']
+        self.data_out_audio_R = self.tb_result_loader.data[6]['data']
 
     @cocotb.coroutine
     async def reset(self):
@@ -145,89 +149,94 @@ class FM_TB(object):
         await sampler_R.read_vhdl_output(self.data_out_audio_R)
 
     def compareData(self):
+        tb_analyzer_helper = TB_ANALYZER_HELPER(self.model.num_samples_audio_c,
+                                                self.model.num_samples_c,
+                                                self.model.num_samples_fs_c, is_cocotb=True)
+        tb_analyzer_helper.compare_data(self.model, self.tb_result_loader)
+
         # Shift loaded file-data to compensate shift to testbench-data
         # TODO: why is this necessary?
-        move_n_right(self.model.gold_fm_demod_fp, 2, fp_width_c, fp_width_frac_c)
-        move_n_left(self.model.gold_decimator_fp, 0, fp_width_c, fp_width_frac_c)
-        move_n_left(self.model.gold_pilot_fp, 0, fp_width_c, fp_width_frac_c)
-        move_n_left(self.model.gold_carrier_38k_fp, 0, fp_width_c, fp_width_frac_c)
-        move_n_left(self.model.gold_audio_mono_fp, 5, fp_width_c, fp_width_frac_c)
-        move_n_left(self.model.gold_audio_lrdiff_fp, 5, fp_width_c, fp_width_frac_c)
-        move_n_left(self.model.gold_audio_L_fp, 5, fp_width_c, fp_width_frac_c)
-        move_n_left(self.model.gold_audio_R_fp, 5, fp_width_c, fp_width_frac_c)
+        #move_n_right(self.model.gold_fm_demod_fp, 2, fp_width_c, fp_width_frac_c)
+        #move_n_left(self.model.gold_decimator_fp, 0, fp_width_c, fp_width_frac_c)
+        #move_n_left(self.model.gold_pilot_fp, 0, fp_width_c, fp_width_frac_c)
+        #move_n_left(self.model.gold_carrier_38k_fp, 0, fp_width_c, fp_width_frac_c)
+        #move_n_left(self.model.gold_audio_mono_fp, 5, fp_width_c, fp_width_frac_c)
+        #move_n_left(self.model.gold_audio_lrdiff_fp, 5, fp_width_c, fp_width_frac_c)
+        #move_n_left(self.model.gold_audio_L_fp, 5, fp_width_c, fp_width_frac_c)
+        #move_n_left(self.model.gold_audio_R_fp, 5, fp_width_c, fp_width_frac_c)
 
-        # Compare
-        self.ok_fm_demod = compareResultsOkay(self.model.gold_fm_demod_fp,
-                                              self.data_out_fm_demod,
-                                              fail_on_err=self.EnableFailOnError,
-                                              max_error_abs=2**-5,
-                                              max_error_norm=0.06,
-                                              skip_n_samples_begin=30,
-                                              skip_n_samples_end=30,
-                                              data_name="fm_demod")
+        # # Compare
+        # self.ok_fm_demod = compareResultsOkay(self.model.gold_fm_demod_fp,
+        #                                       self.data_out_fm_demod,
+        #                                       fail_on_err=self.EnableFailOnError,
+        #                                       max_error_abs=2**-5,
+        #                                       max_error_norm=0.06,
+        #                                       skip_n_samples_begin=30,
+        #                                       skip_n_samples_end=30,
+        #                                       data_name="fm_demod")
 
-        self.ok_decimator = compareResultsOkay(self.model.gold_decimator_fp,
-                                               self.data_out_decimator,
-                                               fail_on_err=self.EnableFailOnError,
-                                               max_error_abs=2**-5,
-                                               max_error_norm=0.06,
-                                               skip_n_samples_begin=30,
-                                               skip_n_samples_end=30,
-                                               data_name="decimator")
+        # self.ok_decimator = compareResultsOkay(self.model.gold_decimator_fp,
+        #                                        self.data_out_decimator,
+        #                                        fail_on_err=self.EnableFailOnError,
+        #                                        max_error_abs=2**-5,
+        #                                        max_error_norm=0.06,
+        #                                        skip_n_samples_begin=30,
+        #                                        skip_n_samples_end=30,
+        #                                        data_name="decimator")
 
-        self.ok_audio_mono = compareResultsOkay(self.model.gold_audio_mono_fp,
-                                                self.data_out_audio_mono,
-                                                fail_on_err=self.EnableFailOnError,
-                                                max_error_abs=2**-5,
-                                                max_error_norm=0.06,
-                                                skip_n_samples_begin=10,
-                                                skip_n_samples_end=10,
-                                                data_name="audio_mono")
+        # self.ok_audio_mono = compareResultsOkay(self.model.gold_audio_mono_fp,
+        #                                         self.data_out_audio_mono,
+        #                                         fail_on_err=self.EnableFailOnError,
+        #                                         max_error_abs=2**-5,
+        #                                         max_error_norm=0.06,
+        #                                         skip_n_samples_begin=10,
+        #                                         skip_n_samples_end=10,
+        #                                         data_name="audio_mono")
 
-        self.ok_pilot = compareResultsOkay(self.model.gold_pilot_fp,
-                                           self.data_out_pilot,
-                                           fail_on_err=self.EnableFailOnError,
-                                           max_error_abs=2**-5,
-                                           max_error_norm=0.2,
-                                           skip_n_samples_begin=80,
-                                           skip_n_samples_end=0,
-                                           data_name="pilot")
+        # self.ok_pilot = compareResultsOkay(self.model.gold_pilot_fp,
+        #                                    self.data_out_pilot,
+        #                                    fail_on_err=self.EnableFailOnError,
+        #                                    max_error_abs=2**-5,
+        #                                    max_error_norm=0.2,
+        #                                    skip_n_samples_begin=80,
+        #                                    skip_n_samples_end=0,
+        #                                    data_name="pilot")
 
-        self.ok_carrier_38k = compareResultsOkay(self.model.gold_carrier_38k_fp,
-                                                 self.data_out_carrier_38k,
-                                                 fail_on_err=self.EnableFailOnError,
-                                                 max_error_abs=2**-3,
-                                                 max_error_norm=0.5,
-                                                 skip_n_samples_begin=80,
-                                                 skip_n_samples_end=0,
-                                                 data_name="carrier_38k")
+        # self.ok_carrier_38k = compareResultsOkay(self.model.gold_carrier_38k_fp,
+        #                                          self.data_out_carrier_38k,
+        #                                          fail_on_err=self.EnableFailOnError,
+        #                                          max_error_abs=2**-3,
+        #                                          max_error_norm=0.5,
+        #                                          skip_n_samples_begin=80,
+        #                                          skip_n_samples_end=0,
+        #                                          data_name="carrier_38k")
 
-        self.ok_audio_lrdiff = compareResultsOkay(self.model.gold_audio_lrdiff_fp,
-                                                  self.data_out_audio_lrdiff,
-                                                  fail_on_err=self.EnableFailOnError,
-                                                  max_error_abs=2**-5,
-                                                  max_error_norm=0.06,
-                                                  skip_n_samples_begin=10,
-                                                  skip_n_samples_end=10,
-                                                  data_name="audio_lrdiff")
+        # self.ok_audio_lrdiff = compareResultsOkay(self.model.gold_audio_lrdiff_fp,
+        #                                           self.data_out_audio_lrdiff,
+        #                                           fail_on_err=self.EnableFailOnError,
+        #                                           max_error_abs=2**-5,
+        #                                           max_error_norm=0.06,
+        #                                           skip_n_samples_begin=10,
+        #                                           skip_n_samples_end=10,
+        #                                           data_name="audio_lrdiff")
 
-        self.ok_audio_L = compareResultsOkay(self.model.gold_audio_L_fp,
-                                             self.data_out_audio_L,
-                                             fail_on_err=self.EnableFailOnError,
-                                             max_error_abs=2**-4,
-                                             max_error_norm=0.06,
-                                             skip_n_samples_begin=10,
-                                             skip_n_samples_end=10,
-                                             data_name="audio_L")
+        # self.ok_audio_L = compareResultsOkay(self.model.gold_audio_L_fp,
+        #                                      self.data_out_audio_L,
+        #                                      fail_on_err=self.EnableFailOnError,
+        #                                      max_error_abs=2**-4,
+        #                                      max_error_norm=0.06,
+        #                                      skip_n_samples_begin=10,
+        #                                      skip_n_samples_end=10,
+        #                                      data_name="audio_L")
 
-        self.ok_audio_R = compareResultsOkay(self.model.gold_audio_R_fp,
-                                             self.data_out_audio_R,
-                                             fail_on_err=self.EnableFailOnError,
-                                             max_error_abs=2**-4,
-                                             max_error_norm=0.06,
-                                             skip_n_samples_begin=10,
-                                             skip_n_samples_end=10,
-                                             data_name="audio_R")
+        # self.ok_audio_R = compareResultsOkay(self.model.gold_audio_R_fp,
+        #                                      self.data_out_audio_R,
+        #                                      fail_on_err=self.EnableFailOnError,
+        #                                      max_error_abs=2**-4,
+        #                                      max_error_norm=0.06,
+        #                                      skip_n_samples_begin=10,
+        #                                      skip_n_samples_end=10,
+        #                                      data_name="audio_R")
 
     def generatePlots(self):
         if not self.EnablePlots:

@@ -10,7 +10,7 @@ import numpy as np
 from fixed_point import from_fixed_point, to_fixed_point
 
 
-def loadDataFromFile(filename, num_samples, bitwidth, bitwidth_frac):
+def loadDataFromFile(filename, num_samples, bitwidth, bitwidth_frac, use_fixed=True):
     """
     Loads data from a file and converts it to fixed_point.
     Set num_samples to -1 to load entire file.
@@ -29,8 +29,8 @@ def loadDataFromFile(filename, num_samples, bitwidth, bitwidth_frac):
         raise cocotb.result.TestFailure(
             "File '{}' contains less elements than requested ({} < {}).".format(
                 filename, val_count, num_samples))
-
-    data = to_fixed_point(data, bitwidth, bitwidth_frac)
+    if use_fixed:
+        data = to_fixed_point(data, bitwidth, bitwidth_frac)
     return data
 
 
