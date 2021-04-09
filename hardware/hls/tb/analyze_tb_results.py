@@ -61,8 +61,8 @@ def analyze():
     # --------------------------------------------------------------------------
     print("--- Comparing golden data with testbench results")
 
-    tb_analyzer_helper = TB_ANALYZER_HELPER(num_samples_audio_c, num_samples_c, num_samples_fs_c, is_cocotb=False)
-    tb_analyzer_helper.compare_data(model, tb_result_loader)
+    tb_analyzer_helper = TB_ANALYZER_HELPER(model, tb_result_loader, is_cocotb=False)
+    tb_analyzer_helper.compare_data()
 
     # --------------------------------------------------------------------------
     # Plots
@@ -70,7 +70,7 @@ def analyze():
     print("--- Plots")
 
     directory_plot_output = "../tb/output"
-    tb_analyzer_helper.generate_plots(model, tb_result_loader, directory_plot_output)
+    tb_analyzer_helper.generate_plots(directory_plot_output)
 
 
 if __name__ == "__main__":

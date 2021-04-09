@@ -44,9 +44,6 @@ class FM_TB(object):
         self.axis_m = Axi4StreamMaster(dut, slave_interface_to_connect_to, dut.clk_i)
 
         # Variables
-        self.tb_analyzer_helper = TB_ANALYZER_HELPER(self.model.num_samples_audio_c,
-                                                     self.model.num_samples_c,
-                                                     self.model.num_samples_fs_c, is_cocotb=True)
         self.tb_result_loader = TB_DATA_RESULT_LOADER()
 
         self.data_out_fm_demod = self.tb_result_loader.data[0]['data']
@@ -57,6 +54,8 @@ class FM_TB(object):
         self.data_out_audio_lrdiff = self.tb_result_loader.data[4]['data']
         self.data_out_audio_L = self.tb_result_loader.data[5]['data']
         self.data_out_audio_R = self.tb_result_loader.data[6]['data']
+
+        self.tb_analyzer_helper = TB_ANALYZER_HELPER(self.model, self.tb_result_loader, is_cocotb=True)
 
     @cocotb.coroutine
     async def reset(self):
@@ -154,13 +153,11 @@ class FM_TB(object):
         await sampler_R.read_vhdl_output(self.data_out_audio_R)
 
     def compareData(self):
-        self.tb_analyzer_helper.compare_data(self.model, self.tb_result_loader)
+        self.tb_analyzer_helper.compare_data()
 
     def generatePlots(self):
         if not self.EnablePlots:
             return
 
         directory_plot_output = "./sim_build"
-        self.tb_analyzer_helper.generate_plots(self.model,
-                                               self.tb_result_loader,
-                                               directory_plot_output)
+        self.tb_analyzer_helper.generate_plots(directory_plot_output)
