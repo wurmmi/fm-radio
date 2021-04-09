@@ -5,6 +5,7 @@
 ################################################################################
 
 
+import helpers as helper
 from fm_global import *
 from fm_receiver_model import FM_RECEIVER_MODEL
 from tb_analyzer_helper import TB_ANALYZER_HELPER
@@ -34,10 +35,9 @@ def analyze():
     tb_result_loader.load_data_from_file(directory_tb)
 
     # Check number of samples that were found in the files
-    # NOTE: Make sure to use correct indexes, according to TB_DATA_RESULT_LOADER
-    num_samples_audio_c = len(tb_result_loader.data[1]['data'])  # audio_mono
-    num_samples_c = len(tb_result_loader.data[2]['data'])        # pilot
-    num_samples_fs_c = len(tb_result_loader.data[0]['data'])     # fm_demod
+    num_samples_audio_c = len(helper.get_dataset_by_name(tb_result_loader.data, 'audio_mono'))
+    num_samples_c = len(helper.get_dataset_by_name(tb_result_loader.data, 'pilot'))
+    num_samples_fs_c = len(helper.get_dataset_by_name(tb_result_loader.data, 'fm_demod'))
 
     # Sanity checks
     assert num_samples_fs_c // num_samples_c == osr_rx_c, \

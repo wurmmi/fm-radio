@@ -22,8 +22,8 @@ class TB_ANALYZER_HELPER():
         # Adapt logging functions
         self.is_cocotb = is_cocotb
         if self.is_cocotb:
-            self.log_info = cocotb.log.info
-            self.log_warn = cocotb.log.warning
+            self.log_info = cocotb.logging.info
+            self.log_warn = cocotb.logging.warning
             self.test_fail = cocotb.result.TestFailure
         else:
             self.log_info = print
@@ -47,7 +47,7 @@ class TB_ANALYZER_HELPER():
             self.model.shift_data('audio_R', -5)
         else:
             self.model.shift_data('fm_demod', 0)
-            self.model.shift_data('fm_channel_data', 0)
+            self.model.shift_data('fm_channel_data', -13)
             self.model.shift_data('pilot', -16)
             self.model.shift_data('carrier_38k', -16)
             self.model.shift_data('audio_mono', -5)
