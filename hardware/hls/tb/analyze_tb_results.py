@@ -36,16 +36,16 @@ def analyze():
 
     # Check number of samples that were found in the files
     num_samples_audio_c = len(helper.get_dataset_by_name(tb_result_loader.data, 'audio_mono'))
-    num_samples_c = len(helper.get_dataset_by_name(tb_result_loader.data, 'pilot'))
+    num_samples_rx_c = len(helper.get_dataset_by_name(tb_result_loader.data, 'pilot'))
     num_samples_fs_c = len(helper.get_dataset_by_name(tb_result_loader.data, 'fm_demod'))
 
     # Sanity checks
-    assert num_samples_fs_c // num_samples_c == osr_rx_c, \
+    assert num_samples_fs_c // num_samples_rx_c == osr_rx_c, \
         "File lengths don't match osr_rx_c ..."
-    assert num_samples_c // num_samples_audio_c == osr_audio_c, \
+    assert num_samples_rx_c // num_samples_audio_c == osr_audio_c, \
         "File lengths don't match osr_audio_c ..."
 
-    n_sec = num_samples_c / fs_rx_c
+    n_sec = num_samples_rx_c / fs_rx_c
     print(f"Loaded {n_sec} seconds worth of data!")
 
     # Golden data

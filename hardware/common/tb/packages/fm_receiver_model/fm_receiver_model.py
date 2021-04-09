@@ -27,13 +27,13 @@ class FM_RECEIVER_MODEL():
         # Derived constants
         self.n_sec = n_sec
         self.num_samples_audio_c = int(n_sec * fs_audio_c)
-        self.num_samples_c = int(n_sec * fs_rx_c)
+        self.num_samples_rx_c = int(n_sec * fs_rx_c)
         self.num_samples_fs_c = int(n_sec * fs_c)
 
         self.loadModelData(golden_data_directory)
 
         self.log_info("Loaded data! num_samples_fs: {}, num_samples: {}, num_samples_audio: {} ".format(
-            self.num_samples_fs_c, self.num_samples_c, self.num_samples_audio_c))
+            self.num_samples_fs_c, self.num_samples_rx_c, self.num_samples_audio_c))
 
     def loadModelData(self, directory):
         temp = TB_DATA_RESULT_LOADER()

@@ -77,7 +77,7 @@ class FM_TB():
         sampler = VHDL_SAMPLER("fm_channel_data", self.dut,
                                self.dut.fm_receiver_inst.fm_channel_data,
                                self.dut.fm_receiver_inst.fm_channel_data_valid,
-                               self.model.num_samples_c,
+                               self.model.num_samples_rx_c,
                                fp_width_c, fp_width_frac_c)
 
         await sampler.read_vhdl_output(
@@ -99,7 +99,7 @@ class FM_TB():
         sampler = VHDL_SAMPLER("pilot", self.dut,
                                self.dut.fm_receiver_inst.channel_decoder_inst.recover_carriers_inst.pilot,
                                self.dut.fm_receiver_inst.channel_decoder_inst.recover_carriers_inst.pilot_valid,
-                               self.model.num_samples_c,
+                               self.model.num_samples_rx_c,
                                fp_width_c, fp_width_frac_c)
 
         await sampler.read_vhdl_output(
@@ -110,7 +110,7 @@ class FM_TB():
         sampler = VHDL_SAMPLER("carrier_38k", self.dut,
                                self.dut.fm_receiver_inst.channel_decoder_inst.recover_carriers_inst.carrier_38k,
                                self.dut.fm_receiver_inst.channel_decoder_inst.recover_carriers_inst.carrier_38k_valid,
-                               self.model.num_samples_c,
+                               self.model.num_samples_rx_c,
                                fp_width_c, fp_width_frac_c)
 
         await sampler.read_vhdl_output(
