@@ -34,29 +34,55 @@ class FM_RECEIVER_MODEL(object):
         self.loadModelData(golden_data_directory)
 
     def loadModelData(self, directory):
-        filename = directory + "rx_fm_demod.txt"
-        self.gold_fm_demod_fp = loadDataFromFile(filename, self.num_samples_fs_c, fp_width_c, fp_width_frac_c)
-
-        filename = directory + "rx_fmChannelData.txt"
-        self.gold_decimator_fp = loadDataFromFile(filename, self.num_samples_c, fp_width_c, fp_width_frac_c)
-
-        filename = directory + "rx_audio_mono.txt"
-        self.gold_audio_mono_fp = loadDataFromFile(filename, self.num_samples_audio_c, fp_width_c, fp_width_frac_c)
-
-        filename = directory + "rx_pilot.txt"
-        self.gold_pilot_fp = loadDataFromFile(filename, self.num_samples_c, fp_width_c, fp_width_frac_c)
-
-        filename = directory + "rx_carrier38kHz.txt"
-        self.gold_carrier_38k_fp = loadDataFromFile(filename, self.num_samples_c, fp_width_c, fp_width_frac_c)
-
-        filename = directory + "rx_audio_lrdiff.txt"
-        self.gold_audio_lrdiff_fp = loadDataFromFile(filename, self.num_samples_audio_c, fp_width_c, fp_width_frac_c)
-
-        filename = directory + "rx_audio_L.txt"
-        self.gold_audio_L_fp = loadDataFromFile(filename, self.num_samples_audio_c, fp_width_c, fp_width_frac_c)
-
-        filename = directory + "rx_audio_R.txt"
-        self.gold_audio_R_fp = loadDataFromFile(filename, self.num_samples_audio_c, fp_width_c, fp_width_frac_c)
+        #######
+        # NOTE: Keep this list consistent with the list in TB_DATA_RESULT_LOADER !
+        #######
+        self.data = [
+            {
+                'name': 'fm_demod',
+                'data': loadDataFromFile(directory + "rx_fm_demod.txt", self.num_samples_fs_c, fp_width_c, fp_width_frac_c)
+            },
+            # {
+            #    'name': 'decimator',
+            #    'data': loadDataFromFile(directory + "rx_fmChannelData.txt", self.num_samples_c, fp_width_c, fp_width_frac_c)
+            # },
+            {
+                'name': 'audio_mono',
+                'data': loadDataFromFile(directory + "rx_audio_mono.txt", self.num_samples_audio_c, fp_width_c, fp_width_frac_c)
+            },
+            {
+                'name': 'pilot',
+                'data': loadDataFromFile(directory + "rx_pilot.txt", self.num_samples_c, fp_width_c, fp_width_frac_c)
+            },
+            {
+                'name': 'carrier_38k',
+                'data': loadDataFromFile(directory + "rx_carrier38kHz.txt", self.num_samples_c, fp_width_c, fp_width_frac_c)
+            },
+            {
+                'name': 'audio_lrdiff',
+                'data': loadDataFromFile(directory + "rx_audio_lrdiff.txt", self.num_samples_audio_c, fp_width_c, fp_width_frac_c)
+            },
+            {
+                'name': 'audio_L',
+                'data': loadDataFromFile(directory + "rx_audio_L.txt", self.num_samples_audio_c, fp_width_c, fp_width_frac_c)
+            },
+            {
+                'name': 'audio_R',
+                'data': loadDataFromFile(directory + "rx_audio_R.txt", self.num_samples_audio_c, fp_width_c, fp_width_frac_c)
+            }
+        ]
 
         self.log_info("Loaded data! num_samples_fs: {}, num_samples: {}, num_samples_audio: {} ".format(
             self.num_samples_fs_c, self.num_samples_c, self.num_samples_audio_c))
+
+    def shift_data(self, data_name, amount):
+        # Find the dataset to be shifted
+        dataset = [x for x in self.data if x['name'] == data_name]
+        if len(dataset) == 0:
+            raise self.test_fail("Could not find dataset with name: '{}' !!".format(data_name))
+
+        # Shift
+        if amount >= 0:
+            move_n_right(dataset, amount, fp_width_c, fp_width_frac_c)
+        else:
+            move_n_left(dataset, amount, fp_width_c, fp_width_frac_c)

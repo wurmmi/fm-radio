@@ -61,7 +61,7 @@ def analyze():
     # --------------------------------------------------------------------------
     print("--- Comparing golden data with testbench results")
 
-    tb_analyzer_helper = TB_ANALYZER_HELPER(num_samples_audio_c, num_samples_c, num_samples_fs_c)
+    tb_analyzer_helper = TB_ANALYZER_HELPER(num_samples_audio_c, num_samples_c, num_samples_fs_c, is_cocotb=False)
     tb_analyzer_helper.compare_data(model, tb_result_loader)
 
     # --------------------------------------------------------------------------

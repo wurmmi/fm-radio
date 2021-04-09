@@ -149,9 +149,9 @@ class FM_TB(object):
         # TODO: why is this necessary?
         move_n_right(self.model.gold_fm_demod_fp, 2, fp_width_c, fp_width_frac_c)
         move_n_left(self.model.gold_decimator_fp, 0, fp_width_c, fp_width_frac_c)
-        move_n_left(self.model.gold_audio_mono_fp, 5, fp_width_c, fp_width_frac_c)
         move_n_left(self.model.gold_pilot_fp, 0, fp_width_c, fp_width_frac_c)
         move_n_left(self.model.gold_carrier_38k_fp, 0, fp_width_c, fp_width_frac_c)
+        move_n_left(self.model.gold_audio_mono_fp, 5, fp_width_c, fp_width_frac_c)
         move_n_left(self.model.gold_audio_lrdiff_fp, 5, fp_width_c, fp_width_frac_c)
         move_n_left(self.model.gold_audio_L_fp, 5, fp_width_c, fp_width_frac_c)
         move_n_left(self.model.gold_audio_R_fp, 5, fp_width_c, fp_width_frac_c)
