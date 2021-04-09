@@ -15,10 +15,12 @@ class FM_RECEIVER_MODEL():
         if is_cocotb:
             self.log_info = cocotb.log.info
             self.log_warn = cocotb.log.warning
+            self.log_error = cocotb.log.error
             self.test_fail = cocotb.result.TestFailure
         else:
             self.log_info = print
             self.log_warn = print
+            self.log_error = print
             self.test_fail = Exception
 
         # Derived constants
@@ -77,10 +79,7 @@ class FM_RECEIVER_MODEL():
 
     def shift_data(self, data_name, amount):
         # Find the dataset to be shifted
-        dataset = [x for x in self.data if x['name'] == data_name]
-        if len(dataset) == 0:
-            raise self.test_fail("Could not find dataset with name: '{}' !!".format(data_name))
-        dataset = dataset[0]['data']
+        dataset = helper.get_dataset_by_name(self.data, data_name, self.log_error)
 
         # Shift
         if amount >= 0:

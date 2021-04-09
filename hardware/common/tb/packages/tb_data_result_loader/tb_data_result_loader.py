@@ -85,10 +85,3 @@ class TB_DATA_RESULT_LOADER():
         for dataset in self.data:
             filename = directory + f"data_out_{dataset['name']}.txt"
             dataset['data'] = helper.loadDataFromFile(filename, -1, fp_width_c, fp_width_frac_c, use_fixed=False)
-
-    def get_dataset_by_name(self, data_name):
-        # Find the dataset with the matching data_name
-        dataset = [x for x in self.data if x['name'] == data_name]
-        if len(dataset) == 0:
-            raise self.test_fail("Could not find dataset with name: '{}' !!".format(data_name))
-        return dataset[0]['data']
