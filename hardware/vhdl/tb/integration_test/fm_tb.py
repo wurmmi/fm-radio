@@ -31,17 +31,22 @@ class FM_TB(object):
         self.dut = dut
         self.n_sec = n_sec
 
-        golden_data_directory = "../../../../sim/matlab/verification_data/"
-        self.model = FM_RECEIVER_MODEL(n_sec, golden_data_directory)
-
-        slave_interface_to_connect_to = "s0_axis"
-        self.axis_m = Axi4StreamMaster(dut, slave_interface_to_connect_to, dut.clk_i)
-
-        # Derived constants
+        # Sanity checks
         assert (self.CLOCK_FREQ_MHZ * 1e9 / fs_rx_c).is_integer(), \
             "Clock rate and fs_rx_c must have an integer relation!"
 
+        # Instantiate model
+        golden_data_directory = "../../../../sim/matlab/verification_data/"
+        self.model = FM_RECEIVER_MODEL(n_sec, golden_data_directory)
+
+        # Connect AXI interface
+        slave_interface_to_connect_to = "s0_axis"
+        self.axis_m = Axi4StreamMaster(dut, slave_interface_to_connect_to, dut.clk_i)
+
         # Variables
+        self.tb_analyzer_helper = TB_ANALYZER_HELPER(self.model.num_samples_audio_c,
+                                                     self.model.num_samples_c,
+                                                     self.model.num_samples_fs_c, is_cocotb=True)
         self.tb_result_loader = TB_DATA_RESULT_LOADER()
 
         self.data_out_fm_demod = self.tb_result_loader.data[0]['data']
@@ -149,96 +154,13 @@ class FM_TB(object):
         await sampler_R.read_vhdl_output(self.data_out_audio_R)
 
     def compareData(self):
-        tb_analyzer_helper = TB_ANALYZER_HELPER(self.model.num_samples_audio_c,
-                                                self.model.num_samples_c,
-                                                self.model.num_samples_fs_c, is_cocotb=True)
-        tb_analyzer_helper.compare_data(self.model, self.tb_result_loader)
+        self.tb_analyzer_helper.compare_data(self.model, self.tb_result_loader)
 
     def generatePlots(self):
         if not self.EnablePlots:
             return
 
-        # TODO: Enable plots for debug
-        #self.ok_fm_demod = False
-        #self.ok_audio_mono = False
-        #self.ok_pilot = False
-        #self.ok_carrier_38k = False
-        #self.ok_audio_lrdiff = False
-        #self.ok_audio_L = False
-        #self.ok_audio_R = False
-        #self.ok_decimator = False
-
-        tn_fs = np.arange(0, self.model.num_samples_fs_c) / fs_c
-        tn_rx = np.arange(0, self.model.num_samples_c) / fs_rx_c
-        tn_audio = np.arange(0, self.model.num_samples_audio_c) / fs_audio_c
-        # -----------------------------------------------------------------
-        data = (
-            (tn_fs, self.data_out_fm_demod, "data_out_fm_demod"),
-            (tn_fs, from_fixed_point(self.model.gold_fm_demod_fp), "gold_fm_demod_fp")
-        )
-        plotData(data, title="FM Demodulator",
-                 filename="sim_build/plot_fm_demod.png",
-                 show=(not self.ok_fm_demod))
-
-        # -----------------------------------------------------------------
-        data = (
-            (tn_rx, self.data_out_decimator, "data_out_decimator"),
-            (tn_rx, from_fixed_point(self.model.gold_decimator_fp), "gold_decimator_fp")
-        )
-        plotData(data, title="Decimator",
-                 filename="sim_build/plot_decimator.png",
-                 show=(not self.ok_decimator))
-
-        # -----------------------------------------------------------------
-        data = (
-            (tn_audio, self.data_out_audio_mono, "data_out_audio_mono"),
-            (tn_audio, from_fixed_point(self.model.gold_audio_mono_fp), "gold_audio_mono_fp")
-        )
-        plotData(data, title="Audio Mono",
-                 filename="sim_build/plot_audio_mono.png",
-                 show=(not self.ok_audio_mono))
-
-        # -----------------------------------------------------------------
-        data = (
-            (tn_rx, self.data_out_pilot, "data_out_pilot"),
-            (tn_rx, from_fixed_point(self.model.gold_pilot_fp), "gold_pilot_fp")
-        )
-        plotData(data, title="Pilot",
-                 filename="sim_build/plot_pilot.png",
-                 show=(not self.ok_pilot))
-
-        # -----------------------------------------------------------------
-        data = (
-            (tn_rx, self.data_out_carrier_38k, "data_out_carrier_38k"),
-            (tn_rx, from_fixed_point(self.model.gold_carrier_38k_fp), "gold_carrier_38k_fp")
-        )
-        plotData(data, title="Carrier 38kHz",
-                 filename="sim_build/plot_carrier_38k.png",
-                 show=(not self.ok_carrier_38k))
-
-        # -----------------------------------------------------------------
-        data = (
-            (tn_audio, self.data_out_audio_lrdiff, "data_out_audio_lrdiff"),
-            (tn_audio, from_fixed_point(self.model.gold_audio_lrdiff_fp), "gold_audio_lrdiff_fp")
-        )
-        plotData(data, title="Audio LR Diff",
-                 filename="sim_build/plot_audio_lrdiff.png",
-                 show=(not self.ok_audio_lrdiff))
-
-        # -----------------------------------------------------------------
-        data = (
-            (tn_audio, self.data_out_audio_L, "data_out_audio_L"),
-            (tn_audio, from_fixed_point(self.model.gold_audio_L_fp), "gold_audio_L_fp")
-        )
-        plotData(data, title="Audio L",
-                 filename="sim_build/plot_audio_L.png",
-                 show=(not self.ok_audio_L))
-
-        # -----------------------------------------------------------------
-        data = (
-            (tn_audio, self.data_out_audio_R, "data_out_audio_R"),
-            (tn_audio, from_fixed_point(self.model.gold_audio_R_fp), "gold_audio_R_fp")
-        )
-        plotData(data, title="Audio R",
-                 filename="sim_build/plot_audio_R.png",
-                 show=(not self.ok_audio_R))
+        directory_plot_output = "./sim_build"
+        self.tb_analyzer_helper.generate_plots(self.model,
+                                               self.tb_result_loader,
+                                               directory_plot_output)

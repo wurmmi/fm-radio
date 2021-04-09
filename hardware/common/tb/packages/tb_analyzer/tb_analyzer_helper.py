@@ -64,7 +64,7 @@ class TB_ANALYZER_HELPER():
                                                            data_name=tb_dataset['name'],
                                                            is_cocotb=self.is_cocotb)
 
-    def generate_plots(self, model, tb_result_loader):
+    def generate_plots(self, model, tb_result_loader, directory):
         # TODO: Enable plots for debug (check corresponding indexes)
         # tb_result_loader.data[0]['result_okay'] = False
         # tb_result_loader.data[1]['result_okay'] = False
@@ -88,5 +88,5 @@ class TB_ANALYZER_HELPER():
             )
             plotData(data_to_plot,
                      title=tb_dataset['name'],
-                     filename="../tb/output/plot_{}.png".format(tb_dataset['name']),
+                     filename="{}/plot_{}.png".format(directory, tb_dataset['name']),
                      show=not tb_dataset['result_okay'])

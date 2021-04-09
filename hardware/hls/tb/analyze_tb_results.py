@@ -68,7 +68,9 @@ def analyze():
     # Plots
     # --------------------------------------------------------------------------
     print("--- Plots")
-    tb_analyzer_helper.generate_plots(model, tb_result_loader)
+
+    directory_plot_output = "../tb/output"
+    tb_analyzer_helper.generate_plots(model, tb_result_loader, directory_plot_output)
 
 
 if __name__ == "__main__":
