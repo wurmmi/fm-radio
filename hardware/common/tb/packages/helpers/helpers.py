@@ -125,6 +125,7 @@ def compareResultsOkay(gold, actual, fail_on_err,
 
 
 def move_n_right(data, amount, fp_width, fp_width_frac):
+    assert amount >= 0, "Amount must be a >=0 integer!!"
     for _ in range(0, amount):
         # insert at begin
         data.insert(0, to_fixed_point(0, fp_width, fp_width_frac))
@@ -133,6 +134,7 @@ def move_n_right(data, amount, fp_width, fp_width_frac):
 
 
 def move_n_left(data, amount, fp_width, fp_width_frac):
+    assert amount >= 0, "Amount must be a >=0 integer!!"
     for _ in range(0, amount):
         # insert at end
         data.append(to_fixed_point(0, fp_width, fp_width_frac))

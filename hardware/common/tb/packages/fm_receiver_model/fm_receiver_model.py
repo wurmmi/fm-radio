@@ -86,4 +86,4 @@ class FM_RECEIVER_MODEL(object):
         if amount >= 0:
             move_n_right(dataset, amount, fp_width_c, fp_width_frac_c)
         else:
-            move_n_left(dataset, amount, fp_width_c, fp_width_frac_c)
+            move_n_left(dataset, -amount, fp_width_c, fp_width_frac_c)
