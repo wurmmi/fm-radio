@@ -72,7 +72,7 @@ async def data_processing_test(dut):
 
     # Fork the 'receiving parts'
     fm_demod_output_fork = cocotb.fork(tb.read_fm_demod_output())
-    decimator_output_fork = cocotb.fork(tb.read_decimator_output())
+    fm_channel_data_output_fork = cocotb.fork(tb.read_fm_channel_data_output())
     audio_mono_output_fork = cocotb.fork(tb.read_audio_mono_output())
     pilot_output_fork = cocotb.fork(tb.read_pilot_output())
     carrier_38k_output_fork = cocotb.fork(tb.read_carrier_38k_output())
@@ -90,7 +90,7 @@ async def data_processing_test(dut):
 
     # Await forked routines to stop
     await fm_demod_output_fork
-    await decimator_output_fork
+    await fm_channel_data_output_fork
     await audio_mono_output_fork
     await pilot_output_fork
     await carrier_38k_output_fork

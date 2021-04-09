@@ -55,7 +55,7 @@ def analyze():
     model = FM_RECEIVER_MODEL(n_sec, golden_data_directory, is_cocotb=False)
 
     # --------------------------------------------------------------------------
-    # Compare data
+    # Compare results
     # --------------------------------------------------------------------------
     print("--- Comparing golden data with testbench results")
 

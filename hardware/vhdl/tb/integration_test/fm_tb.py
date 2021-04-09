@@ -44,13 +44,13 @@ class FM_TB():
         self.tb_result_loader = TB_DATA_RESULT_LOADER()
 
         self.data_out_fm_demod = self.tb_result_loader.data[0]['data']
-        self.data_out_decimator = []
-        self.data_out_audio_mono = self.tb_result_loader.data[1]['data']
-        self.data_out_pilot = self.tb_result_loader.data[2]['data']
-        self.data_out_carrier_38k = self.tb_result_loader.data[3]['data']
-        self.data_out_audio_lrdiff = self.tb_result_loader.data[4]['data']
-        self.data_out_audio_L = self.tb_result_loader.data[5]['data']
-        self.data_out_audio_R = self.tb_result_loader.data[6]['data']
+        self.data_out_fm_channel_data = self.tb_result_loader.data[1]['data']
+        self.data_out_audio_mono = self.tb_result_loader.data[2]['data']
+        self.data_out_pilot = self.tb_result_loader.data[3]['data']
+        self.data_out_carrier_38k = self.tb_result_loader.data[4]['data']
+        self.data_out_audio_lrdiff = self.tb_result_loader.data[5]['data']
+        self.data_out_audio_L = self.tb_result_loader.data[6]['data']
+        self.data_out_audio_R = self.tb_result_loader.data[7]['data']
 
         self.tb_analyzer_helper = TB_ANALYZER_HELPER(self.model, self.tb_result_loader, is_cocotb=True)
 
@@ -80,14 +80,14 @@ class FM_TB():
         await sampler.read_vhdl_output(self.data_out_fm_demod)
 
     @cocotb.coroutine
-    async def read_decimator_output(self):
-        sampler = VHDL_SAMPLER("decimator", self.dut,
+    async def read_fm_channel_data_output(self):
+        sampler = VHDL_SAMPLER("fm_channel_data", self.dut,
                                self.dut.fm_receiver_inst.fm_channel_data,
                                self.dut.fm_receiver_inst.fm_channel_data_valid,
                                self.model.num_samples_c,
                                fp_width_c, fp_width_frac_c)
 
-        await sampler.read_vhdl_output(self.data_out_decimator)
+        await sampler.read_vhdl_output(self.data_out_fm_channel_data)
 
     @cocotb.coroutine
     async def read_audio_mono_output(self):

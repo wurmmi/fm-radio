@@ -42,10 +42,10 @@ class FM_RECEIVER_MODEL():
                 'name': 'fm_demod',
                 'data': helper.loadDataFromFile(directory + "rx_fm_demod.txt", self.num_samples_fs_c, fp_width_c, fp_width_frac_c)
             },
-            # {
-            #    'name': 'decimator',
-            #    'data': helper.loadDataFromFile(directory + "rx_fmChannelData.txt", self.num_samples_c, fp_width_c, fp_width_frac_c)
-            # },
+            {
+                'name': 'fm_channel_data',
+                'data': helper.loadDataFromFile(directory + "rx_fm_channel_data.txt", self.num_samples_c, fp_width_c, fp_width_frac_c)
+            },
             {
                 'name': 'audio_mono',
                 'data': helper.loadDataFromFile(directory + "rx_audio_mono.txt", self.num_samples_audio_c, fp_width_c, fp_width_frac_c)

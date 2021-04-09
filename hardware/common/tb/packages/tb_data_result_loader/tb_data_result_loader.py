@@ -24,6 +24,14 @@ class TB_DATA_RESULT_LOADER():
                 'result_okay': False
             },
             {
+                'name': "fm_channel_data",
+                'data': [],
+                'fs': fs_rx_c,
+                'max_error_abs': 2**-5,
+                'max_error_norm': 0.6,
+                'result_okay': False
+            },
+            {
                 'name': "audio_mono",
                 'data': [],
                 'fs': fs_audio_c,

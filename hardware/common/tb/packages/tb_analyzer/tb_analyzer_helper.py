@@ -38,7 +38,7 @@ class TB_ANALYZER_HELPER():
         # TODO: why is this necessary?
         if self.is_cocotb:
             self.model.shift_data('fm_demod', 2)
-            # self.model.shift_data('decimator', 0)
+            self.model.shift_data('fm_channel_data', 0)
             self.model.shift_data('pilot', 0)
             self.model.shift_data('carrier_38k', 0)
             self.model.shift_data('audio_mono', -5)
@@ -47,7 +47,7 @@ class TB_ANALYZER_HELPER():
             self.model.shift_data('audio_R', -5)
         else:
             self.model.shift_data('fm_demod', 0)
-            # self.model.shift_data('decimator', 0)
+            self.model.shift_data('fm_channel_data', 0)
             self.model.shift_data('pilot', -16)
             self.model.shift_data('carrier_38k', -16)
             self.model.shift_data('audio_mono', -5)
