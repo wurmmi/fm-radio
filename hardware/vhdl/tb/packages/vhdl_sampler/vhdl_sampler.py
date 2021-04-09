@@ -10,7 +10,7 @@ from fixed_point import *
 from helpers import *
 
 
-class VHDL_SAMPLER(object):
+class VHDL_SAMPLER():
     def __del__(self):
         pass
 

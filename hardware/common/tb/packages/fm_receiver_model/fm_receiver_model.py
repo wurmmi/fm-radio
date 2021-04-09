@@ -9,7 +9,7 @@ from fm_global import *
 from helpers import *
 
 
-class FM_RECEIVER_MODEL(object):
+class FM_RECEIVER_MODEL():
     def __init__(self, n_sec, golden_data_directory, is_cocotb=True):
         # Adapt logging functions
         if is_cocotb:

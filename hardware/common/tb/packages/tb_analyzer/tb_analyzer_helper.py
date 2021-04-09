@@ -32,18 +32,26 @@ class TB_ANALYZER_HELPER():
         self.tb_result_loader = tb_result_loader
 
     def compare_data(self):
-        # TODO: get a parameter from somewhere for the shift amounts
-
         # Shift loaded file-data to compensate shift to testbench-data
         # TODO: why is this necessary?
-        self.model.shift_data('fm_demod', 0)        # vhdl +2
-        # self.model.shift_data('decimator', 0)     # vhdl  0
-        self.model.shift_data('pilot', -16)         # vhdl  0
-        self.model.shift_data('carrier_38k', -16)   # vhdl  0
-        self.model.shift_data('audio_mono', -5)     # vhdl -5
-        self.model.shift_data('audio_lrdiff', -5)   # vhdl -5
-        self.model.shift_data('audio_L', -5)        # vhdl -5
-        self.model.shift_data('audio_R', -5)        # vhdl -5
+        if self.is_cocotb:
+            self.model.shift_data('fm_demod', 2)
+            # self.model.shift_data('decimator', 0)
+            self.model.shift_data('pilot', 0)
+            self.model.shift_data('carrier_38k', 0)
+            self.model.shift_data('audio_mono', -5)
+            self.model.shift_data('audio_lrdiff', -5)
+            self.model.shift_data('audio_L', -5)
+            self.model.shift_data('audio_R', -5)
+        else:
+            self.model.shift_data('fm_demod', 0)
+            # self.model.shift_data('decimator', 0)
+            self.model.shift_data('pilot', -16)
+            self.model.shift_data('carrier_38k', -16)
+            self.model.shift_data('audio_mono', -5)
+            self.model.shift_data('audio_lrdiff', -5)
+            self.model.shift_data('audio_L', -5)
+            self.model.shift_data('audio_R', -5)
 
         # Compare
         for i in range(0, len(self.model.data)):
@@ -51,16 +59,17 @@ class TB_ANALYZER_HELPER():
             tb_dataset = self.tb_result_loader.data[i]
 
             # Sanity check
-            assert model_dataset['name'] == tb_dataset['name'], \
-                "Comparing wrong datasets!! {:>12s} <=> {:12s}".format(model_dataset['name'], tb_dataset['name'])
+            msg = "Comparing wrong datasets!! {:>12s} <=> {:12s}\n".format(model_dataset['name'], tb_dataset['name'])
+            msg += "Check consistency of the list in TB_DATA_RESULT_LOADER and FM_RECEIVER_MODEL"
+            assert model_dataset['name'] == tb_dataset['name'], msg
 
             tb_dataset['result_okay'] = compareResultsOkay(model_dataset['data'],
                                                            tb_dataset['data'],
                                                            fail_on_err=EnableFailOnError,
                                                            max_error_abs=tb_dataset['max_error_abs'],
                                                            max_error_norm=tb_dataset['max_error_norm'],
-                                                           skip_n_samples_begin=30,
-                                                           skip_n_samples_end=30,
+                                                           skip_n_samples_begin=30,  # TODO: get param, or depending on fs
+                                                           skip_n_samples_end=30,  # TODO: get param, or depending on fs
                                                            data_name=tb_dataset['name'],
                                                            is_cocotb=self.is_cocotb)
 

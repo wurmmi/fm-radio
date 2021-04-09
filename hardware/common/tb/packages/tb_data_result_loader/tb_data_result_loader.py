@@ -44,7 +44,7 @@ class TB_DATA_RESULT_LOADER():
                 'name': "carrier_38k",
                 'data': [],
                 'fs': fs_rx_c,
-                'max_error_abs': 0.5,  # 0.7 vhdl 2**-3
+                'max_error_abs': 0.5,  # todo 0.7 vhdl 2**-3
                 'max_error_norm': 7.5,  # todo vhdl 0.5
                 'result_okay': False
             },

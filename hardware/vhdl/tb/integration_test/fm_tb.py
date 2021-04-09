@@ -17,7 +17,7 @@ from tb_data_result_loader import TB_DATA_RESULT_LOADER
 from vhdl_sampler import VHDL_SAMPLER
 
 
-class FM_TB(object):
+class FM_TB():
     # Constants
     CLOCK_FREQ_MHZ = 48
     EnableFailOnError = False

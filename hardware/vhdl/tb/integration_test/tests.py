@@ -42,8 +42,8 @@ async def data_processing_test(dut):
     tb = FM_TB(dut, n_sec)
 
     # Generate clock
-    clk_period_ps = round(1 / tb.CLOCK_FREQ_MHZ * 1e3)
-    clk = Clock(dut.clk_i, period=clk_period_ps, units='ns')
+    clk_period_ns = round(1 / tb.CLOCK_FREQ_MHZ * 1e3)
+    clk = Clock(dut.clk_i, period=clk_period_ns, units='ns')
     clk_gen = cocotb.fork(clk.start())
 
     # --------------------------------------------------------------------------
