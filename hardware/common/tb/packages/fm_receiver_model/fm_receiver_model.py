@@ -5,8 +5,8 @@
 ################################################################################
 
 import cocotb
+import helpers as helper
 from fm_global import *
-from helpers import *
 
 
 class FM_RECEIVER_MODEL():
@@ -40,35 +40,35 @@ class FM_RECEIVER_MODEL():
         self.data = [
             {
                 'name': 'fm_demod',
-                'data': loadDataFromFile(directory + "rx_fm_demod.txt", self.num_samples_fs_c, fp_width_c, fp_width_frac_c)
+                'data': helper.loadDataFromFile(directory + "rx_fm_demod.txt", self.num_samples_fs_c, fp_width_c, fp_width_frac_c)
             },
             # {
             #    'name': 'decimator',
-            #    'data': loadDataFromFile(directory + "rx_fmChannelData.txt", self.num_samples_c, fp_width_c, fp_width_frac_c)
+            #    'data': helper.loadDataFromFile(directory + "rx_fmChannelData.txt", self.num_samples_c, fp_width_c, fp_width_frac_c)
             # },
             {
                 'name': 'audio_mono',
-                'data': loadDataFromFile(directory + "rx_audio_mono.txt", self.num_samples_audio_c, fp_width_c, fp_width_frac_c)
+                'data': helper.loadDataFromFile(directory + "rx_audio_mono.txt", self.num_samples_audio_c, fp_width_c, fp_width_frac_c)
             },
             {
                 'name': 'pilot',
-                'data': loadDataFromFile(directory + "rx_pilot.txt", self.num_samples_c, fp_width_c, fp_width_frac_c)
+                'data': helper.loadDataFromFile(directory + "rx_pilot.txt", self.num_samples_c, fp_width_c, fp_width_frac_c)
             },
             {
                 'name': 'carrier_38k',
-                'data': loadDataFromFile(directory + "rx_carrier38kHz.txt", self.num_samples_c, fp_width_c, fp_width_frac_c)
+                'data': helper.loadDataFromFile(directory + "rx_carrier38kHz.txt", self.num_samples_c, fp_width_c, fp_width_frac_c)
             },
             {
                 'name': 'audio_lrdiff',
-                'data': loadDataFromFile(directory + "rx_audio_lrdiff.txt", self.num_samples_audio_c, fp_width_c, fp_width_frac_c)
+                'data': helper.loadDataFromFile(directory + "rx_audio_lrdiff.txt", self.num_samples_audio_c, fp_width_c, fp_width_frac_c)
             },
             {
                 'name': 'audio_L',
-                'data': loadDataFromFile(directory + "rx_audio_L.txt", self.num_samples_audio_c, fp_width_c, fp_width_frac_c)
+                'data': helper.loadDataFromFile(directory + "rx_audio_L.txt", self.num_samples_audio_c, fp_width_c, fp_width_frac_c)
             },
             {
                 'name': 'audio_R',
-                'data': loadDataFromFile(directory + "rx_audio_R.txt", self.num_samples_audio_c, fp_width_c, fp_width_frac_c)
+                'data': helper.loadDataFromFile(directory + "rx_audio_R.txt", self.num_samples_audio_c, fp_width_c, fp_width_frac_c)
             }
         ]
 
@@ -84,6 +84,6 @@ class FM_RECEIVER_MODEL():
         dataset = dataset[0]['data']
         # Shift
         if amount >= 0:
-            move_n_right(dataset, amount, fp_width_c, fp_width_frac_c)
+            helper.move_n_right(dataset, amount, fp_width_c, fp_width_frac_c)
         else:
-            move_n_left(dataset, -amount, fp_width_c, fp_width_frac_c)
+            helper.move_n_left(dataset, -amount, fp_width_c, fp_width_frac_c)

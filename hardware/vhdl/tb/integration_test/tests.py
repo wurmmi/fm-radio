@@ -7,15 +7,11 @@
 import time
 
 import cocotb
-import matplotlib.pyplot as plt
-import numpy as np
+import helpers as helper
 from cocotb.clock import Clock
-from cocotb.generators import repeat
-from cocotb.generators.bit import bit_toggler
-from cocotb.triggers import RisingEdge, Timer
-from fixed_point import *
+from cocotb.triggers import RisingEdge
+from fixed_point import fixed_to_int
 from fm_global import *
-from helpers import *
 
 from fm_tb import FM_TB
 
@@ -52,7 +48,7 @@ async def data_processing_test(dut):
     dut._log.info("Loading input data ...")
 
     filename = "../../../../sim/matlab/verification_data/rx_fm_bb.txt"
-    data_fp = loadDataFromFile(filename, tb.model.num_samples_fs_c * 2, fp_width_c, fp_width_frac_c)
+    data_fp = helper.loadDataFromFile(filename, tb.model.num_samples_fs_c * 2, fp_width_c, fp_width_frac_c)
 
     # Get interleaved I/Q samples (take every other)
     data_in_i_fp = data_fp[0::2]  # start:end:step

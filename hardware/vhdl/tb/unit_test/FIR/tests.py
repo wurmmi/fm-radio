@@ -12,8 +12,8 @@ import numpy as np
 from cocotb.clock import Clock
 from cocotb.generators import repeat
 from cocotb.generators.bit import bit_toggler
-from cocotb.triggers import RisingEdge, Timer
-from fixed_point import *
+from cocotb.triggers import RisingEdge
+from fixed_point import fixed_to_int, from_fixed_point, to_fixed_point
 from fm_global import *
 
 from fm_tb import FM_TB

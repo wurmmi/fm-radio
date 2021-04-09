@@ -5,9 +5,11 @@
 ################################################################################
 
 
+import cocotb
+import helpers as helper
+import numpy as np
 from fixed_point import from_fixed_point
 from fm_global import *
-from helpers import *  # todo import helpers as helpers
 
 # --------------------------------------------------------------------------
 # Constants
@@ -63,15 +65,16 @@ class TB_ANALYZER_HELPER():
             msg += "Check consistency of the list in TB_DATA_RESULT_LOADER and FM_RECEIVER_MODEL"
             assert model_dataset['name'] == tb_dataset['name'], msg
 
-            tb_dataset['result_okay'] = compareResultsOkay(model_dataset['data'],
-                                                           tb_dataset['data'],
-                                                           fail_on_err=EnableFailOnError,
-                                                           max_error_abs=tb_dataset['max_error_abs'],
-                                                           max_error_norm=tb_dataset['max_error_norm'],
-                                                           skip_n_samples_begin=30,  # TODO: get param, or depending on fs
-                                                           skip_n_samples_end=30,  # TODO: get param, or depending on fs
-                                                           data_name=tb_dataset['name'],
-                                                           is_cocotb=self.is_cocotb)
+            tb_dataset['result_okay'] = \
+                helper.compareResultsOkay(model_dataset['data'],
+                                          tb_dataset['data'],
+                                          fail_on_err=EnableFailOnError,
+                                          max_error_abs=tb_dataset['max_error_abs'],
+                                          max_error_norm=tb_dataset['max_error_norm'],
+                                          skip_n_samples_begin=30,  # TODO: get param, or depending on fs
+                                          skip_n_samples_end=30,   # TODO: get param, or depending on fs
+                                          data_name=tb_dataset['name'],
+                                          is_cocotb=self.is_cocotb)
 
     def generate_plots(self, directory):
         # TODO: Enable plots for debug (check corresponding indexes)
@@ -95,7 +98,7 @@ class TB_ANALYZER_HELPER():
                 (tn, tb_dataset['data'], "data_out_{}".format(tb_dataset['name'])),
                 (tn, from_fixed_point(model_dataset['data']), "self.model.gold_{}".format(model_dataset['name']))
             )
-            plotData(data_to_plot,
-                     title=tb_dataset['name'],
-                     filename="{}/plot_{}.png".format(directory, tb_dataset['name']),
-                     show=not tb_dataset['result_okay'])
+            helper.plotData(data_to_plot,
+                            title=tb_dataset['name'],
+                            filename="{}/plot_{}.png".format(directory, tb_dataset['name']),
+                            show=not tb_dataset['result_okay'])

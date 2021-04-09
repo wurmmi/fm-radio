@@ -6,8 +6,7 @@
 
 import cocotb
 from cocotb.triggers import RisingEdge
-from fixed_point import *
-from helpers import *
+from fixed_point import int_to_fixed
 
 
 class VHDL_SAMPLER():
