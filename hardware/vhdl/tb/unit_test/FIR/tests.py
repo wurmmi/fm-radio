@@ -42,7 +42,7 @@ async def fir_filter_test(dut):
     # --------------------------------------------------------------------------
     # Load data from files
     # --------------------------------------------------------------------------
-    filename = "../../../../../sim/matlab/verification_data/rx_fmChannelData.txt"
+    filename = "../../../../../sim/matlab/verification_data/rx_fm_channel_data.txt"
     data_i = []
     with open(filename) as fd:
         val_count = 0

@@ -80,8 +80,8 @@ class FM_RECEIVER_MODEL():
         dataset = [x for x in self.data if x['name'] == data_name]
         if len(dataset) == 0:
             raise self.test_fail("Could not find dataset with name: '{}' !!".format(data_name))
-
         dataset = dataset[0]['data']
+
         # Shift
         if amount >= 0:
             helper.move_n_right(dataset, amount, fp_width_c, fp_width_frac_c)

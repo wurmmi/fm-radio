@@ -43,15 +43,6 @@ class FM_TB():
         # Variables
         self.tb_result_loader = TB_DATA_RESULT_LOADER()
 
-        self.data_out_fm_demod = self.tb_result_loader.data[0]['data']
-        self.data_out_fm_channel_data = self.tb_result_loader.data[1]['data']
-        self.data_out_audio_mono = self.tb_result_loader.data[2]['data']
-        self.data_out_pilot = self.tb_result_loader.data[3]['data']
-        self.data_out_carrier_38k = self.tb_result_loader.data[4]['data']
-        self.data_out_audio_lrdiff = self.tb_result_loader.data[5]['data']
-        self.data_out_audio_L = self.tb_result_loader.data[6]['data']
-        self.data_out_audio_R = self.tb_result_loader.data[7]['data']
-
         self.tb_analyzer_helper = TB_ANALYZER_HELPER(self.model, self.tb_result_loader, is_cocotb=True)
 
     @cocotb.coroutine
@@ -77,7 +68,8 @@ class FM_TB():
                                self.model.num_samples_fs_c,
                                fp_width_c, fp_width_frac_c)
 
-        await sampler.read_vhdl_output(self.data_out_fm_demod)
+        await sampler.read_vhdl_output(
+            self.tb_result_loader.get_dataset_by_name('fm_demod'))
 
     @cocotb.coroutine
     async def read_fm_channel_data_output(self):
@@ -87,7 +79,8 @@ class FM_TB():
                                self.model.num_samples_c,
                                fp_width_c, fp_width_frac_c)
 
-        await sampler.read_vhdl_output(self.data_out_fm_channel_data)
+        await sampler.read_vhdl_output(
+            self.tb_result_loader.get_dataset_by_name('fm_channel_data'))
 
     @cocotb.coroutine
     async def read_audio_mono_output(self):
@@ -97,7 +90,8 @@ class FM_TB():
                                self.model.num_samples_audio_c,
                                fp_width_c, fp_width_frac_c, 10)
 
-        await sampler.read_vhdl_output(self.data_out_audio_mono)
+        await sampler.read_vhdl_output(
+            self.tb_result_loader.get_dataset_by_name('audio_mono'))
 
     @cocotb.coroutine
     async def read_pilot_output(self):
@@ -107,7 +101,8 @@ class FM_TB():
                                self.model.num_samples_c,
                                fp_width_c, fp_width_frac_c)
 
-        await sampler.read_vhdl_output(self.data_out_pilot)
+        await sampler.read_vhdl_output(
+            self.tb_result_loader.get_dataset_by_name('pilot'))
 
     @cocotb.coroutine
     async def read_carrier_38k_output(self):
@@ -117,7 +112,8 @@ class FM_TB():
                                self.model.num_samples_c,
                                fp_width_c, fp_width_frac_c)
 
-        await sampler.read_vhdl_output(self.data_out_carrier_38k)
+        await sampler.read_vhdl_output(
+            self.tb_result_loader.get_dataset_by_name('carrier_38k'))
 
     @cocotb.coroutine
     async def read_audio_lrdiff_output(self):
@@ -127,7 +123,8 @@ class FM_TB():
                                self.model.num_samples_audio_c,
                                fp_width_c, fp_width_frac_c, 10)
 
-        await sampler.read_vhdl_output(self.data_out_audio_lrdiff)
+        await sampler.read_vhdl_output(
+            self.tb_result_loader.get_dataset_by_name('audio_lrdiff'))
 
     @cocotb.coroutine
     async def read_audio_L_output(self):
@@ -137,7 +134,8 @@ class FM_TB():
                                  self.model.num_samples_audio_c,
                                  fp_width_c, fp_width_frac_c, 10)
 
-        await sampler_L.read_vhdl_output(self.data_out_audio_L)
+        await sampler_L.read_vhdl_output(
+            self.tb_result_loader.get_dataset_by_name('audio_L'))
 
     @cocotb.coroutine
     async def read_audio_R_output(self):
@@ -147,7 +145,8 @@ class FM_TB():
                                  self.model.num_samples_audio_c,
                                  fp_width_c, fp_width_frac_c, 10)
 
-        await sampler_R.read_vhdl_output(self.data_out_audio_R)
+        await sampler_R.read_vhdl_output(
+            self.tb_result_loader.get_dataset_by_name('audio_R'))
 
     def compareData(self):
         self.tb_analyzer_helper.compare_data()
