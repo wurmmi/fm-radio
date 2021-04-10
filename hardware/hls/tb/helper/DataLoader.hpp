@@ -47,7 +47,8 @@ class DataLoader {
       const std::string msg = "File '" + filename +
                               "' contains less elements than requested!\n" +
                               std::to_string(num_read) + " actual < " +
-                              std::to_string(num_samples) + " requested";
+                              std::to_string(num_samples) + " requested\n" +
+                              "Run Matlab to create more data!";
       throw std::runtime_error(msg);
     }
 

@@ -125,7 +125,4 @@ begin -- architecture rtl
       oDwet   => pilot_fir,
       oValWet => pilot_fir_valid);
 
-  -- TODO: inst delay??
-  --       to compensate the filter delays (bp_pilot 51 < bp_lrdiff 73)
-
 end architecture rtl;

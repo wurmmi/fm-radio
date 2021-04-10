@@ -7,6 +7,7 @@
 
 # TODO: move this file one directory higher (?)
 
+# --- Defines ---
 GUI = 0
 
 SHELL        = /bin/bash
@@ -28,11 +29,19 @@ PYTHON_RELOAD_PLOTS_CODE = """from helpers import reload_all_plots_pickle; \
                					 			reload_all_plots_pickle('../tb/output') \
             							 """
 
+# --- Functions ---
 vivado_hls_batch = \
 	@cd $(PROJ_DIR) && vivado_hls -f $(MAKEFILE_DIR)/$1 $2 $3
 
 analyze_tb_results = \
 	source $(ENV_SETUP_SCRIPT) && python ../tb/analyze_tb_results.py
+
+CLANG_FORMAT_FILES = $$(find ../ -type f -name "*.[ch]pp" -o -name "*.[ch]")
+run_clang_format =                      \
+	for file in $(CLANG_FORMAT_FILES); do \
+		echo "Formatting $${file}";         \
+		clang-format -i "$${file}";         \
+	done                                  \
 
 ##==============================================================================
 ##Makefile Help for FM Receiver.
@@ -84,6 +93,10 @@ ip_export: ##						- Export IP files.
 	@unzip -o $(IP_PACKAGE) -d $(IP_DESTINATION)
 	cp ../doc/ip_logo.png $(IP_DESTINATION)/misc/logo.png
 	@echo Done.
+
+##
+clang-format: ##						- Format all the C/C++ sources.
+	@$(call run_clang_format)
 
 ##
 clean: ##							- Clean outputs.

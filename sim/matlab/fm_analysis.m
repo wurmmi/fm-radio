@@ -23,8 +23,10 @@ if ~EnablePlots
 end
 
 % Create output folder to save figures
-if ~exist(dir_output, 'dir')
-    mkdir(dir_output)
+if EnableSavePlotsToPng
+    if ~exist(dir_output, 'dir')
+        mkdir(dir_output)
+    end
 end
 
 %% Calculations
@@ -316,13 +318,13 @@ end
 fig_title = 'Carrier phase recovery';
 fig_rx_time_rds = figure('Name',fig_title);
 hold on;
-plot(tnRx/fs_rx, rx_pilot,             'm',   'DisplayName', 'carrier19kHz (rec.)', 'LineWidth',2);
-plot(tnRx/fs_rx, pilot_local,          'm--', 'DisplayName', 'carrier19kHz (local)');
-plot(tnRx/fs_rx, rx_carrier38kHz,       'b',  'DisplayName', 'carrier38kHz (rec.)', 'LineWidth',2);
-plot(tnRx/fs_rx, rx_carrier38kHz_local, 'b--','DisplayName', 'carrier38kHz (local)');
+plot(tnRx/fs_rx, rx_pilot,             'm',   'DisplayName', 'carrier_19kHz (rec.)', 'LineWidth',2);
+plot(tnRx/fs_rx, pilot_local,          'm--', 'DisplayName', 'carrier_19kHz (local)');
+plot(tnRx/fs_rx, rx_carrier_38kHz,       'b',  'DisplayName', 'carrier_38kHz (rec.)', 'LineWidth',2);
+plot(tnRx/fs_rx, rx_carrier_38kHz_local, 'b--','DisplayName', 'carrier_38kHz (local)');
 if EnableRDSDecoder
-    plot(tnRx/fs_rx, rx_carrier57kHz,       'g',   'DisplayName', 'carrier57kHz (rec.)', 'LineWidth',2);
-    plot(tnRx/fs_rx, rx_carrier57kHz_local, 'g--', 'DisplayName', 'carrier57kHz (local)');
+    plot(tnRx/fs_rx, rx_carrier_57kHz,       'g',   'DisplayName', 'carrier_57kHz (rec.)', 'LineWidth',2);
+    plot(tnRx/fs_rx, rx_carrier_57kHz_local, 'g--', 'DisplayName', 'carrier_57kHz (local)');
 end
 grid on;
 title(fig_title);

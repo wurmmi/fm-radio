@@ -92,8 +92,6 @@ begin -- architecture rtl
 
         -- Modulate down to baseband
         -- TODO: check when carier_38k_i is valid, or store it here internally
-        -- TODO: Note the inverted output here!
-        --       (This is according to the Matlab model.)
         if lrdiff_bpfilt_valid = '1' then
           lrdiff_mod_bb <= ResizeTruncAbsVal(
             lrdiff_bpfilt * carrier_38k_i * to_sfixed(2, 2, 0), lrdiff_mod_bb);

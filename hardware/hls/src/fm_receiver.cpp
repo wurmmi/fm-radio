@@ -69,11 +69,16 @@ void fm_receiver(sample_t const& in_i,
 
     out_audio_L = audio_L;
     out_audio_R = audio_R;
-  }
 
-  // ------------------------------------------------------
-  // Debug
-  // ------------------------------------------------------
+    // ------------------------------------------------------
+    // Debug
+    // ------------------------------------------------------
+
+#ifndef __SYNTHESIS__
+    static DataWriter writer_data_out_fm_demod("data_out_fm_channel_data.txt");
+    writer_data_out_fm_demod.write(fm_channel_data);
+#endif
+  }
 
 #ifndef __SYNTHESIS__
   static DataWriter writer_data_out_fm_demod("data_out_fm_demod.txt");

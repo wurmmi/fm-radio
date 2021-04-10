@@ -26,8 +26,9 @@ const string data_folder =
     "../../../../../../../../sim/matlab/verification_data/";
 
 /* Derived constants */
-constexpr int num_samples_fs_c = n_sec_c * FS;
-constexpr int num_samples_c    = n_sec_c * FS_RX;
+constexpr int num_samples_fs_c    = n_sec_c * FS;
+constexpr int num_samples_rx_c    = n_sec_c * FS_RX;
+constexpr int num_samples_audio_c = n_sec_c * FS_AUDIO;
 
 /* Testbench main function */
 int main() {
@@ -43,8 +44,9 @@ int main() {
     // --------------------------------------------------------------------------
     cout << "--- Loading data from files" << endl;
 
-    cout << "num_samples_fs = " << num_samples_fs_c << endl;
-    cout << "num_samples    = " << num_samples_c << endl;
+    cout << "num_samples_fs    = " << num_samples_fs_c << endl;
+    cout << "num_samples_rx    = " << num_samples_rx_c << endl;
+    cout << "num_samples_audio = " << num_samples_audio_c << endl;
 
     // Input data
     const string filename = data_folder + "rx_fm_bb.txt";

@@ -4,18 +4,15 @@
 # Description : Testcases for the FM Receiver IP.
 ################################################################################
 
+
 import time
 
 import cocotb
-import matplotlib.pyplot as plt
-import numpy as np
+import helpers as helper
 from cocotb.clock import Clock
-from cocotb.generators import repeat
-from cocotb.generators.bit import bit_toggler
-from cocotb.triggers import RisingEdge, Timer
-from fixed_point import *
+from cocotb.triggers import RisingEdge
+from fixed_point import fixed_to_int
 from fm_global import *
-from helpers import *
 
 from fm_tb import FM_TB
 
@@ -37,14 +34,13 @@ async def data_processing_test(dut):
     # --------------------------------------------------------------------------
     # Prepare environment
     # --------------------------------------------------------------------------
-
     timestamp_start = time.time()
 
     tb = FM_TB(dut, n_sec)
 
     # Generate clock
-    clk_period = int(1 / tb.CLOCK_FREQ_MHZ * 1e3)
-    clk = Clock(dut.clk_i, period=clk_period, units='ns')
+    clk_period_ns = round(1 / tb.CLOCK_FREQ_MHZ * 1e3)
+    clk = Clock(dut.clk_i, period=clk_period_ns, units='ns')
     clk_gen = cocotb.fork(clk.start())
 
     # --------------------------------------------------------------------------
@@ -53,7 +49,7 @@ async def data_processing_test(dut):
     dut._log.info("Loading input data ...")
 
     filename = "../../../../sim/matlab/verification_data/rx_fm_bb.txt"
-    data_fp = loadDataFromFile(filename, tb.model.num_samples_fs_c * 2, fp_width_c, fp_width_frac_c)
+    data_fp = helper.loadDataFromFile(filename, tb.model.num_samples_fs_c * 2, fp_width_c, fp_width_frac_c)
 
     # Get interleaved I/Q samples (take every other)
     data_in_i_fp = data_fp[0::2]  # start:end:step
@@ -77,7 +73,7 @@ async def data_processing_test(dut):
 
     # Fork the 'receiving parts'
     fm_demod_output_fork = cocotb.fork(tb.read_fm_demod_output())
-    decimator_output_fork = cocotb.fork(tb.read_decimator_output())
+    fm_channel_data_output_fork = cocotb.fork(tb.read_fm_channel_data_output())
     audio_mono_output_fork = cocotb.fork(tb.read_audio_mono_output())
     pilot_output_fork = cocotb.fork(tb.read_pilot_output())
     carrier_38k_output_fork = cocotb.fork(tb.read_carrier_38k_output())
@@ -95,7 +91,7 @@ async def data_processing_test(dut):
 
     # Await forked routines to stop
     await fm_demod_output_fork
-    await decimator_output_fork
+    await fm_channel_data_output_fork
     await audio_mono_output_fork
     await pilot_output_fork
     await carrier_38k_output_fork

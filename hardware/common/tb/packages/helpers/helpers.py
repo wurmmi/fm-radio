@@ -4,16 +4,17 @@
 # Description : Library for common helper functions.
 ################################################################################
 
+
 import cocotb
 import matplotlib.pyplot as plt
 import numpy as np
 from fixed_point import from_fixed_point, to_fixed_point
 
 
-def loadDataFromFile(filename, num_samples, bitwidth, bitwidth_frac):
+def loadDataFromFile(filename, num_samples, bitwidth, bitwidth_frac, use_fixed=True):
     """
     Loads data from a file and converts it to fixed_point.
-    Set num_samples to -1 to load entire file.
+    Set num_samples to a negative value to load entire file.
     """
     data = []
     with open(filename) as fd:
@@ -22,16 +23,24 @@ def loadDataFromFile(filename, num_samples, bitwidth, bitwidth_frac):
             data.append(float(line.strip('\n')))
             val_count += 1
             # Stop after required number of samples
-            if num_samples != -1 and val_count >= num_samples:
+            if num_samples >= 0 and val_count >= num_samples:
                 break
 
-    if num_samples != -1 and val_count < num_samples:
+    if num_samples >= 0 and val_count < num_samples:
         raise cocotb.result.TestFailure(
-            "File '{}' contains less elements than requested ({} < {}).".format(
+            "File '{}' contains less elements than requested ({} < {}). Run Matlab to create more data!".format(
                 filename, val_count, num_samples))
-
-    data = to_fixed_point(data, bitwidth, bitwidth_frac)
+    if use_fixed:
+        data = to_fixed_point(data, bitwidth, bitwidth_frac)
     return data
+
+
+def get_dataset_by_name(datalist, data_name, log_func=cocotb.logging.error):
+    # Find the dataset with the matching data_name
+    dataset = [x for x in datalist if x['name'] == data_name]
+    if len(dataset) == 0:
+        log_func("Could not find dataset with name: '{}' !!".format(data_name))
+    return dataset[0]['data']
 
 
 def plotData(data, title="", filename="", show=True, block=True):
@@ -68,9 +77,10 @@ def compareResultsOkay(gold, actual, fail_on_err,
     Compares actual data against "golden data".
     Metrics: number of samples,
     """
+    # Adapt logging functions
     if is_cocotb:
-        log_info = cocotb.log.info
-        log_warn = cocotb.log.warning
+        log_info = cocotb.logging.info
+        log_warn = cocotb.logging.warning
         test_fail = cocotb.result.TestFailure
     else:
         log_info = print
@@ -124,6 +134,7 @@ def compareResultsOkay(gold, actual, fail_on_err,
 
 
 def move_n_right(data, amount, fp_width, fp_width_frac):
+    assert amount >= 0, "Amount must be a >=0 integer!!"
     for _ in range(0, amount):
         # insert at begin
         data.insert(0, to_fixed_point(0, fp_width, fp_width_frac))
@@ -132,6 +143,7 @@ def move_n_right(data, amount, fp_width, fp_width_frac):
 
 
 def move_n_left(data, amount, fp_width, fp_width_frac):
+    assert amount >= 0, "Amount must be a >=0 integer!!"
     for _ in range(0, amount):
         # insert at end
         data.append(to_fixed_point(0, fp_width, fp_width_frac))

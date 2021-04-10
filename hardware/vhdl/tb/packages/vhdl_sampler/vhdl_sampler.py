@@ -4,13 +4,13 @@
 # Description : Sampler - samples data from VHDL.
 ################################################################################
 
+
 import cocotb
 from cocotb.triggers import RisingEdge
-from fixed_point import *
-from helpers import *
+from fixed_point import int_to_fixed
 
 
-class VHDL_SAMPLER(object):
+class VHDL_SAMPLER():
     def __del__(self):
         pass
 
