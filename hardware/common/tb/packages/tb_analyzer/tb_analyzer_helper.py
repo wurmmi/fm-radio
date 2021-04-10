@@ -78,14 +78,14 @@ class TB_ANALYZER_HELPER():
 
     def generate_plots(self, directory):
         # TODO: Enable plots for debug
-        # TODO: use lookup function for this
-        # helper.get_dataset_by_name(self.tb_data_handler.data)['result_okay'] = False
-        # helper.get_dataset_by_name(self.tb_data_handler.data)['result_okay'] = False
-        # helper.get_dataset_by_name(self.tb_data_handler.data)['result_okay'] = False
-        # helper.get_dataset_by_name(self.tb_data_handler.data)['result_okay'] = False
-        # helper.get_dataset_by_name(self.tb_data_handler.data)['result_okay'] = False
-        # helper.get_dataset_by_name(self.tb_data_handler.data)['result_okay'] = False
-        # helper.get_dataset_by_name(self.tb_data_handler.data)['result_okay'] = False
+        # helper.get_dataset_by_name(self.tb_data_handler.data, 'fm_demod')['result_okay']        = False
+        # helper.get_dataset_by_name(self.tb_data_handler.data, 'fm_channel_data')['result_okay'] = False
+        # helper.get_dataset_by_name(self.tb_data_handler.data, 'audio_mono')['result_okay']      = False
+        # helper.get_dataset_by_name(self.tb_data_handler.data, 'pilot')['result_okay']           = False
+        # helper.get_dataset_by_name(self.tb_data_handler.data, 'carrier_38k')['result_okay']     = False
+        # helper.get_dataset_by_name(self.tb_data_handler.data, 'audio_lrdiff')['result_okay']    = False
+        # helper.get_dataset_by_name(self.tb_data_handler.data, 'audio_L')['result_okay']         = False
+        # helper.get_dataset_by_name(self.tb_data_handler.data, 'audio_R')['result_okay']         = False
 
         # Plot
         for i in range(0, len(self.model.data)):
