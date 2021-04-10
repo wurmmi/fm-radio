@@ -72,7 +72,7 @@ class TB_ANALYZER_HELPER():
                                           max_error_abs=tb_dataset['max_error_abs'],
                                           max_error_norm=tb_dataset['max_error_norm'],
                                           skip_n_samples_begin=30,  # TODO: get param, or depending on fs
-                                          skip_n_samples_end=30,   # TODO: get param, or depending on fs
+                                          skip_n_samples_end=30,    # TODO: get param, or depending on fs
                                           data_name=tb_dataset['name'],
                                           is_cocotb=self.is_cocotb)
 

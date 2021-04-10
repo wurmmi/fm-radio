@@ -5,12 +5,14 @@
 #               Loads the from file, or gets it from cocotb.
 ################################################################################
 
+
 import helpers as helper
 from fm_global import *
 
 
 class TB_DATA_HANDLER():
     def __init__(self):
+        # NOTE: Extend this list, to analyze more DUT signals in the testbench.
         self.data = [
             {
                 'name': "fm_demod",
