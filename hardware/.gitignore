@@ -23,3 +23,4 @@ dspfir
 # Vivado
 generated/
 output/
+vivado/**/*.str
