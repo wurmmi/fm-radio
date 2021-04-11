@@ -10,9 +10,8 @@ GUI = 0
 SHELL        = /bin/bash
 MAKEFILE_DIR = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
-GENERAL_OUT_DIR = ./generated
-VIVADO_DIR      = $(GENERAL_OUT_DIR)/vivado
-IP_DIR          = ../hls/generated/ip
+VIVADO_DIR = ./generated/vivado
+IP_DIR     = ./ip
 
 vivado = vivado -nojournal -nolog -notrace -mode batch -source ./scripts/$1 $2
 

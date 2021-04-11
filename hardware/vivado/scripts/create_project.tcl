@@ -30,7 +30,14 @@ if {[file exists $build_dir/$proj_name.xpr]} {
   create_project $proj_name $build_dir -part $device -force
 
   set_property target_language VHDL [current_project]
-  set_property ip_repo_paths $ip_dir [current_project]
+
+  set ip_paths [list \
+      $ip_dir/fm_receiver \
+      $ip_dir/lib/myIPCores_0_0_0/myI2STx_1.0 \
+      $ip_dir/lib/myIPCores_0_0_0/myPrescaler_1.0 \
+      $ip_dir/lib/myIPCores_0_0_0/mySPIRxTx_1.0 \
+  ]
+  set_property ip_repo_paths $ip_paths [current_project]
   update_ip_catalog
 
   set_property BOARD_PART em.avnet.com:zed:part0:1.4 [current_project]

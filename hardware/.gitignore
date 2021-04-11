@@ -8,12 +8,12 @@
 
 # cocotb
 sim_build/
-*.lst
-*.xml
+vhdl/**/*.lst
+vhdl/**/*.xml
+vhdl/**/*.txt
 *.o
 __pycache__
 
-*.txt
 
 fm_receiver_top
 dspfir
