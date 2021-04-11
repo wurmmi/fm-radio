@@ -23,14 +23,13 @@ vivado = vivado -nojournal -nolog -notrace -mode batch -source ./scripts/$1 $2
 ##Supported Targets
 ##-----------------
 
-all: create_project ##		- Default target.
+all: project ##			- Default target.
 
-create_project: ##		- Create Vivado project.
-	@echo "Creating Vivado project ..."
+project: ##			- Create/Open Vivado project.
 	@mkdir -p $(VIVADO_DIR)
 	@$(call vivado,create_project.tcl,-tclargs $(VIVADO_DIR) $(IP_DIR) $(GUI))
 
-synth: ##		- Synthesize Vivado project.
+synth: ##				- Synthesize Vivado project.
 	@echo "Synthesize Vivado project ..."
 	@mkdir -p $(VIVADO_DIR)
 	@$(call vivado,synth.tcl,-tclargs $(VIVADO_DIR) $(IP_DIR) $(GUI))
@@ -38,12 +37,12 @@ synth: ##		- Synthesize Vivado project.
 ##
 clean: ##				- Clean outputs.
 	@echo "Cleaning..."
-	git clean -xdf ..
+	git clean -xdf
 
 help: ##				- Show this help message.
 	@grep -h "##" Makefile | grep -v "\"##\"" | sed -e 's/##//g'
 
-.PHONY: create_project clean help
+.PHONY: project clean help
 
 ##
 ##==============================================================================

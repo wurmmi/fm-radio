@@ -16,10 +16,9 @@ MAKEFILE_DIR = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 VIVADO_HLS_PROJECT_NAME = prj
 ENV_SETUP_SCRIPT        = ../../vhdl/tb/setup_env.sh
 
-GENERAL_OUT_DIR = ../generated
-PROJ_DIR        = $(GENERAL_OUT_DIR)/fm_receiver_hls
-IP_DIR          = $(GENERAL_OUT_DIR)/ip
-WAVE_DIR        = $(PROJ_DIR)/prj/solution1/sim/vhdl
+PROJ_DIR = ../generated/fm_receiver_hls
+IP_DIR   = ../../vivado/ip
+WAVE_DIR = $(PROJ_DIR)/prj/solution1/sim/vhdl
 
 IP_TOP         = fm_receiver
 IP_PACKAGE     = $(PROJ_DIR)/**/**/impl/ip/*.zip
