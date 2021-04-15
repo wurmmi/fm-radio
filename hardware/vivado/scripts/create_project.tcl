@@ -42,7 +42,7 @@ if {[file exists $build_dir/$proj_name.xpr]} {
 
   set_property BOARD_PART em.avnet.com:zed:part0:1.4 [current_project]
 
-#TODO: add *.xdc for pin assignments
+  add_files -fileset constrs_1 -norecurse "./dc/zedboard.xdc"
 
   puts "--- - Creating block design"
   source ./bd/$proj_name.tcl
