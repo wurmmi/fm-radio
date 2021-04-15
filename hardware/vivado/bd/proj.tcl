@@ -127,6 +127,7 @@ if { $bCheckIPs == 1 } {
 xilinx.com:ip:axi_fifo_mm_s:4.1\
 MWURM:hls:fm_receiver:1.0\
 xilinx.com:user:myI2STx:1.0\
+xilinx.com:user:myPrescaler:1.0\
 xilinx.com:ip:processing_system7:5.5\
 xilinx.com:ip:proc_sys_reset:5.0\
 "
@@ -197,6 +198,7 @@ proc create_root_design { parentCell } {
 
   # Create ports
   set bclk [ create_bd_port -dir O bclk ]
+  set heartbeat [ create_bd_port -dir O heartbeat ]
   set lclk [ create_bd_port -dir O lclk ]
   set sdata [ create_bd_port -dir O sdata ]
 
@@ -217,6 +219,13 @@ proc create_root_design { parentCell } {
 
   # Create instance: myI2STx_0, and set properties
   set myI2STx_0 [ create_bd_cell -type ip -vlnv xilinx.com:user:myI2STx:1.0 myI2STx_0 ]
+
+  # Create instance: myPrescaler_0, and set properties
+  set myPrescaler_0 [ create_bd_cell -type ip -vlnv xilinx.com:user:myPrescaler:1.0 myPrescaler_0 ]
+  set_property -dict [ list \
+   CONFIG.CounterWidth {27} \
+   CONFIG.ResetValue {50000000} \
+ ] $myPrescaler_0
 
   # Create instance: processing_system7_0, and set properties
   set processing_system7_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.5 processing_system7_0 ]
@@ -638,7 +647,8 @@ proc create_root_design { parentCell } {
   connect_bd_net -net myI2STx_0_bclk [get_bd_ports bclk] [get_bd_pins myI2STx_0/bclk]
   connect_bd_net -net myI2STx_0_lrclk [get_bd_ports lclk] [get_bd_pins myI2STx_0/lrclk]
   connect_bd_net -net myI2STx_0_sdata [get_bd_ports sdata] [get_bd_pins myI2STx_0/sdata]
-  connect_bd_net -net processing_system7_0_FCLK_CLK0 [get_bd_pins axi_fifo_mm_s_0/s_axi_aclk] [get_bd_pins fm_receiver_0/ap_clk] [get_bd_pins myI2STx_0/s00_axis_aclk] [get_bd_pins processing_system7_0/FCLK_CLK0] [get_bd_pins processing_system7_0/M_AXI_GP0_ACLK] [get_bd_pins ps7_0_axi_periph/ACLK] [get_bd_pins ps7_0_axi_periph/M00_ACLK] [get_bd_pins ps7_0_axi_periph/S00_ACLK] [get_bd_pins rst_ps7_0_50M/slowest_sync_clk]
+  connect_bd_net -net myPrescaler_0_prescale [get_bd_ports heartbeat] [get_bd_pins myPrescaler_0/prescale]
+  connect_bd_net -net processing_system7_0_FCLK_CLK0 [get_bd_pins axi_fifo_mm_s_0/s_axi_aclk] [get_bd_pins fm_receiver_0/ap_clk] [get_bd_pins myI2STx_0/s00_axis_aclk] [get_bd_pins myPrescaler_0/clk] [get_bd_pins processing_system7_0/FCLK_CLK0] [get_bd_pins processing_system7_0/M_AXI_GP0_ACLK] [get_bd_pins ps7_0_axi_periph/ACLK] [get_bd_pins ps7_0_axi_periph/M00_ACLK] [get_bd_pins ps7_0_axi_periph/S00_ACLK] [get_bd_pins rst_ps7_0_50M/slowest_sync_clk]
   connect_bd_net -net processing_system7_0_FCLK_RESET0_N [get_bd_pins processing_system7_0/FCLK_RESET0_N] [get_bd_pins rst_ps7_0_50M/ext_reset_in]
   connect_bd_net -net rst_ps7_0_50M_interconnect_aresetn [get_bd_pins ps7_0_axi_periph/ARESETN] [get_bd_pins rst_ps7_0_50M/interconnect_aresetn]
   connect_bd_net -net rst_ps7_0_50M_peripheral_aresetn [get_bd_pins axi_fifo_mm_s_0/s_axi_aresetn] [get_bd_pins fm_receiver_0/ap_rst_n] [get_bd_pins myI2STx_0/s00_axis_aresetn] [get_bd_pins ps7_0_axi_periph/M00_ARESETN] [get_bd_pins ps7_0_axi_periph/S00_ARESETN] [get_bd_pins rst_ps7_0_50M/peripheral_aresetn]
