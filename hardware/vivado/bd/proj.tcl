@@ -89,7 +89,7 @@ if { ${design_name} eq "" } {
    set errMsg "Design <$design_name> already exists in your project, please set the variable <design_name> to another value."
    set nRet 1
 } elseif { [get_files -quiet ${design_name}.bd] ne "" } {
-   # USE CASES:
+   # USE CASES: 
    #    6) Current opened design, has components, but diff names, design_name exists in project.
    #    7) No opened design, design_name exists in project.
 
@@ -123,9 +123,10 @@ set bCheckIPsPassed 1
 ##################################################################
 set bCheckIPs 1
 if { $bCheckIPs == 1 } {
-   set list_check_ips "\
+   set list_check_ips "\ 
 xilinx.com:ip:axi_fifo_mm_s:4.1\
 MWURM:hls:fm_receiver_hls:0.1\
+MWURM:vhdl:fm_receiver_vhdl:0.1\
 xilinx.com:user:myI2STx:1.0\
 xilinx.com:user:myPrescaler:1.0\
 xilinx.com:ip:processing_system7:5.5\
@@ -214,8 +215,11 @@ proc create_root_design { parentCell } {
    CONFIG.C_USE_TX_CTRL {0} \
  ] $axi_fifo_mm_s_0
 
-  # Create instance: fm_receiver, and set properties
-  set fm_receiver [ create_bd_cell -type ip -vlnv MWURM:hls:fm_receiver:1.0 fm_receiver ]
+  # Create instance: fm_receiver_hls, and set properties
+  set fm_receiver_hls [ create_bd_cell -type ip -vlnv MWURM:hls:fm_receiver_hls:0.1 fm_receiver_hls ]
+
+  # Create instance: fm_receiver_vhdl, and set properties
+  set fm_receiver_vhdl [ create_bd_cell -type ip -vlnv MWURM:vhdl:fm_receiver_vhdl:0.1 fm_receiver_vhdl ]
 
   # Create instance: myI2STx_0, and set properties
   set myI2STx_0 [ create_bd_cell -type ip -vlnv xilinx.com:user:myI2STx:1.0 myI2STx_0 ]
@@ -635,8 +639,8 @@ proc create_root_design { parentCell } {
   set rst_ps7_0_50M [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 rst_ps7_0_50M ]
 
   # Create interface connections
-  connect_bd_intf_net -intf_net axi_fifo_mm_s_0_AXI_STR_TXD [get_bd_intf_pins axi_fifo_mm_s_0/AXI_STR_TXD] [get_bd_intf_pins fm_receiver/iq_in_V]
-  connect_bd_intf_net -intf_net fm_receiver_0_audio_out_V [get_bd_intf_pins fm_receiver/audio_out_V] [get_bd_intf_pins myI2STx_0/S00_AXIS]
+  connect_bd_intf_net -intf_net axi_fifo_mm_s_0_AXI_STR_TXD [get_bd_intf_pins axi_fifo_mm_s_0/AXI_STR_TXD] [get_bd_intf_pins fm_receiver_hls/iq_in_V]
+  connect_bd_intf_net -intf_net fm_receiver_0_audio_out_V [get_bd_intf_pins fm_receiver_hls/audio_out_V] [get_bd_intf_pins myI2STx_0/S00_AXIS]
   connect_bd_intf_net -intf_net processing_system7_0_DDR [get_bd_intf_ports DDR] [get_bd_intf_pins processing_system7_0/DDR]
   connect_bd_intf_net -intf_net processing_system7_0_FIXED_IO [get_bd_intf_ports FIXED_IO] [get_bd_intf_pins processing_system7_0/FIXED_IO]
   connect_bd_intf_net -intf_net processing_system7_0_M_AXI_GP0 [get_bd_intf_pins processing_system7_0/M_AXI_GP0] [get_bd_intf_pins ps7_0_axi_periph/S00_AXI]
@@ -648,10 +652,10 @@ proc create_root_design { parentCell } {
   connect_bd_net -net myI2STx_0_lrclk [get_bd_ports lclk] [get_bd_pins myI2STx_0/lrclk]
   connect_bd_net -net myI2STx_0_sdata [get_bd_ports sdata] [get_bd_pins myI2STx_0/sdata]
   connect_bd_net -net myPrescaler_0_prescale [get_bd_ports heartbeat] [get_bd_pins myPrescaler_0/prescale]
-  connect_bd_net -net processing_system7_0_FCLK_CLK0 [get_bd_pins axi_fifo_mm_s_0/s_axi_aclk] [get_bd_pins fm_receiver/ap_clk] [get_bd_pins myI2STx_0/s00_axis_aclk] [get_bd_pins myPrescaler_0/clk] [get_bd_pins processing_system7_0/FCLK_CLK0] [get_bd_pins processing_system7_0/M_AXI_GP0_ACLK] [get_bd_pins ps7_0_axi_periph/ACLK] [get_bd_pins ps7_0_axi_periph/M00_ACLK] [get_bd_pins ps7_0_axi_periph/S00_ACLK] [get_bd_pins rst_ps7_0_50M/slowest_sync_clk]
+  connect_bd_net -net processing_system7_0_FCLK_CLK0 [get_bd_pins axi_fifo_mm_s_0/s_axi_aclk] [get_bd_pins fm_receiver_hls/ap_clk] [get_bd_pins fm_receiver_vhdl/clk_i] [get_bd_pins myI2STx_0/s00_axis_aclk] [get_bd_pins myPrescaler_0/clk] [get_bd_pins processing_system7_0/FCLK_CLK0] [get_bd_pins processing_system7_0/M_AXI_GP0_ACLK] [get_bd_pins ps7_0_axi_periph/ACLK] [get_bd_pins ps7_0_axi_periph/M00_ACLK] [get_bd_pins ps7_0_axi_periph/S00_ACLK] [get_bd_pins rst_ps7_0_50M/slowest_sync_clk]
   connect_bd_net -net processing_system7_0_FCLK_RESET0_N [get_bd_pins processing_system7_0/FCLK_RESET0_N] [get_bd_pins rst_ps7_0_50M/ext_reset_in]
   connect_bd_net -net rst_ps7_0_50M_interconnect_aresetn [get_bd_pins ps7_0_axi_periph/ARESETN] [get_bd_pins rst_ps7_0_50M/interconnect_aresetn]
-  connect_bd_net -net rst_ps7_0_50M_peripheral_aresetn [get_bd_pins axi_fifo_mm_s_0/s_axi_aresetn] [get_bd_pins fm_receiver/ap_rst_n] [get_bd_pins myI2STx_0/s00_axis_aresetn] [get_bd_pins ps7_0_axi_periph/M00_ARESETN] [get_bd_pins ps7_0_axi_periph/S00_ARESETN] [get_bd_pins rst_ps7_0_50M/peripheral_aresetn]
+  connect_bd_net -net rst_ps7_0_50M_peripheral_aresetn [get_bd_pins axi_fifo_mm_s_0/s_axi_aresetn] [get_bd_pins fm_receiver_hls/ap_rst_n] [get_bd_pins fm_receiver_vhdl/rst_i] [get_bd_pins myI2STx_0/s00_axis_aresetn] [get_bd_pins ps7_0_axi_periph/M00_ARESETN] [get_bd_pins ps7_0_axi_periph/S00_ARESETN] [get_bd_pins rst_ps7_0_50M/peripheral_aresetn]
 
   # Create address segments
   create_bd_addr_seg -range 0x00010000 -offset 0x43C00000 [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs axi_fifo_mm_s_0/S_AXI/Mem0] SEG_axi_fifo_mm_s_0_Mem0
