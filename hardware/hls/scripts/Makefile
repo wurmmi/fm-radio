@@ -2,7 +2,7 @@
 # file:      Makefile
 # author:    Michael Wurm <wurm.michael95@gmail.com>
 # copyright: 2021 Michael Wurm
-# brief:     Makefile for FM Receiver IP.
+# brief:     Makefile for FM Receiver IP (HLS).
 #-------------------------------------------------------------------------------
 
 # TODO: move this file one directory higher (?)
@@ -20,7 +20,7 @@ PROJ_DIR = ../generated/fm_receiver_hls
 IP_DIR   = ../../vivado/ip
 WAVE_DIR = $(PROJ_DIR)/prj/solution1/sim/vhdl
 
-IP_TOP         = fm_receiver
+IP_TOP         = fm_receiver_hls
 IP_PACKAGE     = $(PROJ_DIR)/**/**/impl/ip/*.zip
 IP_DESTINATION = $(IP_DIR)/$(IP_TOP)
 

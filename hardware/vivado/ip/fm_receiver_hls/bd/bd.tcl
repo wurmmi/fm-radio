@@ -6,7 +6,7 @@
 # ==============================================================
 
 source -notrace [file join [file dirname [get_property XML_FILE_NAME [get_ipdefs -all -quiet xilinx.com:ip:xbip_utils:3.0]]] "common_tcl/common.tcl"]
-common_tcl::gen_procs MWURM:hls:fm_receiver:1.0
+common_tcl::gen_procs MWURM:hls:fm_receiver_hls:0.1
 
 source_subcore_ipfile xilinx.com:ip:xbip_utils:3.0 "common_tcl/vip.tcl"
 
