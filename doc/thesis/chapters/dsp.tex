@@ -151,14 +151,108 @@ The information about the frequency spectrum was taken from \cite{ref_fm_broadca
 
 %%%%%%%%%%%%%%%%%%%%
 \section{Algorithms for Digital FM Demodulation}
-  see literature/FmDemodulator.pdf (Sect. 3.3)
-  see literature/00476180 Digital FM Demodulator for FM, TV, and Wireless.pdf (Sect. II and III)
+  %see literature/FmDemodulator.pdf (Sect. 3.3)
+  %see literature/00476180 Digital FM Demodulator for FM, TV, and Wireless.pdf (Sect. II and III)
 
-  %%%%%%%%%%%%%%%%%%%%
-  \subsection{Baseband Delay Demodulator}
-  %%%%%%%%%%%%%%%%%%%%
-  \subsection{Phase-Adapter Demodulator}
-  %%%%%%%%%%%%%%%%%%%%
-  \subsection{Phase-Locked Loop (PLL)}
-  %%%%%%%%%%%%%%%%%%%%
-  \subsection{Mixed Demodulator}
+An FM signal that is received, for example from an antenna, needs to be demodulated in order to decode its actual data content.
+In general, an FM demodulator serves the purpose to transform a frequency modulated signal (FM) into an amplitude modulated signal (AM), so that AM signal processing techniques can be applied afterwards.\\
+
+The radio frequency antenna signal usually needs to be amplified, bandpass-filtered, and down-converted to baseband, using subsampling and quadrature-mixing, or similar strategies.
+This part of the signal processing chain is assumed to be working correctly and is out of the scope of this chapter. %TODO: write up/down conversion in other chapter?
+The FM signal that is evaluated here is assumed to be a quadrature-mixed signal in baseband, which means that inphase and quadrature (I/Q) signals are available.
+
+%TODO: show downconversion path (maybe as a figure?)
+%https://www.veron.nl/wp-content/uploads/2014/01/FmDemodulator.pdf
+
+In the following sections, two digital FM demodulator variants are described.
+
+% TODO: add img/discrimination_method_bd2.png here (?)
+
+%%%%%%%%%%%%%%%%%%%%
+\subsection{Frequency Discriminator}
+
+
+A frequency discriminator can be defined as a black box component, that generates an output that is directly proportional to the frequency of the input FM signal.
+Different strategies can be implemented in this black box component - the discriminator.
+Here, a differentiator with a subsequent envelope detector is used, which is shown in Fig.\ref{fig_bd_freq_discriminator}.
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=7cm]{img/discrimination_method_bd1.jpg}
+  \caption{Frequency discriminator block diagram \cite{ref_fig_freq_discriminator}}
+  \label{fig_bd_freq_discriminator}
+\end{figure}
+
+% TODO: check which one i'm describing
+%%%%%%%%%%%%%%%%%%%%
+\subsubsection{this one}
+%%%%%%%%%%%%%%%%%%%%
+%\subsubsection{Baseband Delay Demodulator}
+%%%%%%%%%%%%%%%%%%%%
+%\subsubsection{Phase-Adapter Demodulator}
+%%%%%%%%%%%%%%%%%%%%
+%\subsubsection{Phase-Locked Loop (PLL)}
+%%%%%%%%%%%%%%%%%%%%
+%\subsubsection{Mixed Demodulator}
+
+This type of demodulator converts the FM signal into an AM signal, but still leaves an FM content.
+The transformation that happens here can be expressed in a formula, by simply differentiating Eq.\ref{equ_fm_func}.
+This operation, with simple algebraic transformations, results in
+\begin{equation}
+  \frac{d s(t)}{dt} = A_c 2 \pi \Big[f_c + k_f m(t) \Big] sin \Big(\omega_c t + 2 \pi k_f \int m(t) dt -pi \Big)
+  \label{equ:fm_demod_discriminator}
+\end{equation}
+
+An important requirement for the differentiator is, that the input signal is of a constant amplitude \cite{ref_schnyder_haller}.
+The transmitted signal is subject to random additive noise on the transmission channel.
+The differentiator would deliver wrong results because of this noise, when substracting two consecutive samples, as described in Eq.\ref{equ:differentiator_two_samples}.
+To achieve a constant amplitude, the received complex baseband signal $s(t)$ can be normalized to a value of one.
+\begin{equation}
+  s_{norm} = \frac{s}{|s|} = \frac{A(n)\ e^{j\phi_{FM}(n)}}{|{A(n)\ e^{j\phi_{FM}(n)}|}} = e^{j\phi_{FM}(n)}
+\end{equation}
+\begin{equation}
+  e^{j\phi_{FM}(n)} = |1|
+\end{equation}
+
+A differentiation in hardware is simply performed by substracting two consecutive samples, like
+\begin{equation}
+  \frac{d s(t)}{dt} = s(t) - s(t-\Delta t)
+  \label{equ:differentiator_two_samples}
+\end{equation}
+where $\Delta t$ is the inverse of the sample frequency.\\ %TODO: check this (i'm using a 3-tap FIR in FPGA)
+
+The differentiated signal Eq.\ref{equ:fm_demod_discriminator} consist of an AM and an FM content.
+The FM part is described by the sine function.
+The more important part is the AM part, which resembles the message signal.
+It is described by the term within the square brackets.
+
+The differentiated signal Eq.\ref{equ:fm_demod_discriminator} in time-domain is shown in the top left diagram in Fig.\ref{fig_time_domain_envelope_detect}.
+This signal needs to be fed into an envelope detector, as seen in Fig.\ref{fig_bd_freq_discriminator}.
+The envelope detector extracts the envelope by removing the high frequency portion.
+The method implemented in Fig.\ref{fig_time_domain_envelope_detect} is one of the most simple ones and is usually referred to as 'Asynchronous Half-Wave Envelope Detector'\cite{ref_envelope_detector}.
+It consists of a thresholding unit to remove negative values and a conventional lowpass filter.
+In analog implementations, the thresholding unit is a diode.
+The lowpass' cutoff frequency needs to be adapted to the envelope signals' maximum frequency, since it needs to be able to follow the signal, but also sufficiently smooth out the rectified signal.
+
+Different methods may be implemented for the envelope detector.
+For example, an 'Asynchronous Full-Wave Envelope Detector' can be used.
+Therefore, the previous method only needs to swap the thresholding unit with an unit that calculates an absolut value.
+In that architecture, a full-wave rectification is performed on the signal, which significantly improves the envelope detection accuracy \cite{ref_envelope_detector}.
+The envelope is followed more exactly, because of the higher power that is available in the signal, since the entire signal is taken into account, and not only the positive half, as in the previous half-wave method.
+
+\begin{figure}[!h]
+  \centering
+    \includegraphics[width=8.8cm]{img/envelope-detect-time-domain.jpg}
+  \caption{Time-domain signals in envelope detection \cite{ref_roppel}}
+  \label{fig_time_domain_envelope_detect}
+\end{figure}
+
+
+\subsection{Phase-Locked Loop}
+A Phase-Locked Loop (PLL) can also be used to transform an FM signal to AM.
+A PLL is a feedback loop that is usually used to generate an output signal that has a fixed phase reference to its input.
+In the case of FM demodulation, the loop filter is configured to be able to follow the frequency variations on the input, which is directly related to the encoded information.
+The output of the PLL directly delivers an AM signal, which corresponds to the transmitted information. \cite{ref_schnyder_haller}
+
+Due to the limited space in this paper, FM demodulation with a PLL is not described into more detail.
+
