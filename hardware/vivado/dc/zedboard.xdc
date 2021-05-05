@@ -4,6 +4,8 @@
 # description: Pin constraints for Zedboard
 #-------------------------------------------------------------------------------
 
+#TODO: add constraints for the Zedboard board
+# NOTE: (check for a assignment example ONLINE! )
 
 #===============================================================================
 # Pin Assignments

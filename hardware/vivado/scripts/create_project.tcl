@@ -5,7 +5,7 @@
 #-------------------------------------------------------------------------------
 
 set build_dir [lindex $argv 0]
-set ip_dir    [lindex $argv 1]
+set ip_dirs    [lindex $argv 1]
 set open_gui  [lindex $argv 2]
 
 set proj_name "proj"
@@ -31,7 +31,7 @@ if {[file exists $build_dir/$proj_name.xpr]} {
 
   set_property target_language VHDL [current_project]
 
-  set_property ip_repo_paths $ip_dir [current_project]
+  set_property ip_repo_paths {$ip_dirs} [current_project]
   update_ip_catalog
 
   set_property BOARD_PART em.avnet.com:zed:part0:1.4 [current_project]

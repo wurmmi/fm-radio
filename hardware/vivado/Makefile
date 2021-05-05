@@ -10,8 +10,8 @@ GUI = 0
 SHELL        = /bin/bash
 MAKEFILE_DIR = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
-VIVADO_DIR = ./generated/vivado
-IP_DIR     = ./ip
+VIVADO_DIR = ./generated
+IP_DIRS     = "./ip ../vhdl"
 
 vivado = vivado -nojournal -nolog -notrace -mode batch -source ./scripts/$1 $2
 
@@ -26,12 +26,12 @@ all: project ##			- Default target.
 
 project: ##			- Create/Open Vivado project.
 	@mkdir -p $(VIVADO_DIR)
-	@$(call vivado,create_project.tcl,-tclargs $(VIVADO_DIR) $(IP_DIR) $(GUI))
+	@$(call vivado,create_project.tcl,-tclargs $(VIVADO_DIR) $(IP_DIRS) $(GUI))
 
 synth: ##				- Synthesize Vivado project.
 	@echo "Synthesize Vivado project ..."
 	@mkdir -p $(VIVADO_DIR)
-	@$(call vivado,synth.tcl,-tclargs $(VIVADO_DIR) $(IP_DIR) $(GUI))
+	@$(call vivado,synth.tcl,-tclargs $(VIVADO_DIR) $(GUI))
 
 ##
 clean: ##				- Clean outputs.

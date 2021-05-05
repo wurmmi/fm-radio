@@ -72,9 +72,9 @@ begin -- architecture rtl
 
   s0_axis_tready <= req_sample;
 
-  audio_L_o     <= audio_L;
-  audio_R_o     <= audio_R;
-  audio_valid_o <= audio_valid;
+  audio_L_o     <= std_ulogic_vector(to_slv(audio_L));
+  audio_R_o     <= std_ulogic_vector(to_slv(audio_R));
+  audio_valid_o <= std_ulogic(audio_valid);
 
   ------------------------------------------------------------------------------
   -- Signal Assignments
