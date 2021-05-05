@@ -244,7 +244,7 @@ aximum {}} value 17} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>0f05e113</spirit:value>
+            <spirit:value>7743f2d1</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -286,7 +286,7 @@ aximum {}} value 17} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>0f05e113</spirit:value>
+            <spirit:value>7743f2d1</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -770,14 +770,17 @@ aximum {}} value 17} bitoffset {attribs {resolve_type immediate dependency {} fo
       </xilinx:taxonomies>
       <xilinx:displayName>fm_receiver_hls</xilinx:displayName>
       <xilinx:definitionSource>HLS</xilinx:definitionSource>
-      <xilinx:coreRevision>2105051058</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2021-05-05T08:58:58Z</xilinx:coreCreationDateTime>
+      <xilinx:coreRevision>2105051059</xilinx:coreRevision>
+      <xilinx:coreCreationDateTime>2021-05-05T09:23:57Z</xilinx:coreCreationDateTime>
+      <xilinx:tags>
+        <xilinx:tag xilinx:name="MWURM:hls:fm_receiver_hls:0.1_ARCHIVE_LOCATION">/home/mike/work/fm-radio/hardware/vivado/ip/fm_receiver_hls</xilinx:tag>
+      </xilinx:tags>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2018.2</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="70818f95"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="67a27047"/>
-      <xilinx:checksum xilinx:scope="ports" xilinx:value="7f89c5c8"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="41cf89d3"/>
+      <xilinx:checksum xilinx:scope="ports" xilinx:value="d661f02b"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="9b99cfc7"/>
     </xilinx:packagingInfo>
   </spirit:vendorExtensions>

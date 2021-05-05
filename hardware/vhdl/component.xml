@@ -52,7 +52,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>21a3ae84</spirit:value>
+            <spirit:value>56607a94</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -68,7 +68,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>acc55e39</spirit:value>
+            <spirit:value>910ccf16</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -83,6 +83,34 @@
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
             <spirit:value>f92e9879</spirit:value>
+          </spirit:parameter>
+        </spirit:parameters>
+      </spirit:view>
+      <spirit:view>
+        <spirit:name>xilinx_miscfiles</spirit:name>
+        <spirit:displayName>Miscellaneous</spirit:displayName>
+        <spirit:envIdentifier>:vivado.xilinx.com:misc.files</spirit:envIdentifier>
+        <spirit:fileSetRef>
+          <spirit:localName>xilinx_miscfiles_view_fileset</spirit:localName>
+        </spirit:fileSetRef>
+        <spirit:parameters>
+          <spirit:parameter>
+            <spirit:name>viewChecksum</spirit:name>
+            <spirit:value>7743f2d1</spirit:value>
+          </spirit:parameter>
+        </spirit:parameters>
+      </spirit:view>
+      <spirit:view>
+        <spirit:name>xilinx_utilityxitfiles</spirit:name>
+        <spirit:displayName>Utility XIT/TTCL</spirit:displayName>
+        <spirit:envIdentifier>:vivado.xilinx.com:xit.util</spirit:envIdentifier>
+        <spirit:fileSetRef>
+          <spirit:localName>xilinx_utilityxitfiles_view_fileset</spirit:localName>
+        </spirit:fileSetRef>
+        <spirit:parameters>
+          <spirit:parameter>
+            <spirit:name>viewChecksum</spirit:name>
+            <spirit:value>7743f2d1</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -213,155 +241,155 @@
     <spirit:fileSet>
       <spirit:name>xilinx_anylanguagesynthesis_view_fileset</spirit:name>
       <spirit:file>
-        <spirit:name>src/dc/fm_receiver_vhdl_ooc.xdc</spirit:name>
+        <spirit:name>dc/fm_receiver_vhdl_ooc.xdc</spirit:name>
         <spirit:userFileType>xdc</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/packages/fm_global_spec_pkg.vhd</spirit:name>
+        <spirit:name>rtl/packages/fm_global_spec_pkg.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/fm_global_pkg.vhd</spirit:name>
+        <spirit:name>rtl/fm_global_pkg.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/packages/filter_bp_pilot_pkg.vhd</spirit:name>
+        <spirit:name>rtl/packages/filter_bp_pilot_pkg.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/utils/DspFir.vhd</spirit:name>
+        <spirit:name>rtl/utils/DspFir.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/packages/filter_lp_mono_pkg.vhd</spirit:name>
+        <spirit:name>rtl/packages/filter_lp_mono_pkg.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/packages/filter_bp_lrdiff_pkg.vhd</spirit:name>
+        <spirit:name>rtl/packages/filter_bp_lrdiff_pkg.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/utils/delay_vector.vhd</spirit:name>
+        <spirit:name>rtl/utils/delay_vector.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/utils/decimator.vhd</spirit:name>
+        <spirit:name>rtl/utils/decimator.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/channel_decoder/recover_mono.vhd</spirit:name>
+        <spirit:name>rtl/channel_decoder/recover_mono.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/channel_decoder/recover_carriers.vhd</spirit:name>
+        <spirit:name>rtl/channel_decoder/recover_carriers.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/channel_decoder/recover_lrdiff.vhd</spirit:name>
+        <spirit:name>rtl/channel_decoder/recover_lrdiff.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/channel_decoder/separate_lr_audio.vhd</spirit:name>
+        <spirit:name>rtl/channel_decoder/separate_lr_audio.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/channel_decoder.vhd</spirit:name>
+        <spirit:name>rtl/channel_decoder.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/utils/delay_bit.vhd</spirit:name>
+        <spirit:name>rtl/utils/delay_bit.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/fm_demodulator.vhd</spirit:name>
+        <spirit:name>rtl/fm_demodulator.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/fm_receiver.vhd</spirit:name>
+        <spirit:name>rtl/fm_receiver.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/utils/strobe_gen.vhd</spirit:name>
+        <spirit:name>rtl/utils/strobe_gen.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/fm_receiver_top.vhd</spirit:name>
+        <spirit:name>rtl/fm_receiver_top.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_8d8ed7a6</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_0898226e</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>
       <spirit:name>xilinx_anylanguagebehavioralsimulation_view_fileset</spirit:name>
       <spirit:file>
-        <spirit:name>src/rtl/packages/fm_global_spec_pkg.vhd</spirit:name>
+        <spirit:name>rtl/packages/fm_global_spec_pkg.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/fm_global_pkg.vhd</spirit:name>
+        <spirit:name>rtl/fm_global_pkg.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/packages/filter_bp_pilot_pkg.vhd</spirit:name>
+        <spirit:name>rtl/packages/filter_bp_pilot_pkg.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/utils/DspFir.vhd</spirit:name>
+        <spirit:name>rtl/utils/DspFir.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/packages/filter_lp_mono_pkg.vhd</spirit:name>
+        <spirit:name>rtl/packages/filter_lp_mono_pkg.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/packages/filter_bp_lrdiff_pkg.vhd</spirit:name>
+        <spirit:name>rtl/packages/filter_bp_lrdiff_pkg.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/utils/delay_vector.vhd</spirit:name>
+        <spirit:name>rtl/utils/delay_vector.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/utils/decimator.vhd</spirit:name>
+        <spirit:name>rtl/utils/decimator.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/channel_decoder/recover_mono.vhd</spirit:name>
+        <spirit:name>rtl/channel_decoder/recover_mono.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/channel_decoder/recover_carriers.vhd</spirit:name>
+        <spirit:name>rtl/channel_decoder/recover_carriers.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/channel_decoder/recover_lrdiff.vhd</spirit:name>
+        <spirit:name>rtl/channel_decoder/recover_lrdiff.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/channel_decoder/separate_lr_audio.vhd</spirit:name>
+        <spirit:name>rtl/channel_decoder/separate_lr_audio.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/channel_decoder.vhd</spirit:name>
+        <spirit:name>rtl/channel_decoder.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/utils/delay_bit.vhd</spirit:name>
+        <spirit:name>rtl/utils/delay_bit.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/fm_demodulator.vhd</spirit:name>
+        <spirit:name>rtl/fm_demodulator.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/fm_receiver.vhd</spirit:name>
+        <spirit:name>rtl/fm_receiver.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/utils/strobe_gen.vhd</spirit:name>
+        <spirit:name>rtl/utils/strobe_gen.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>src/rtl/fm_receiver_top.vhd</spirit:name>
+        <spirit:name>rtl/fm_receiver_top.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
     </spirit:fileSet>
@@ -372,6 +400,21 @@
         <spirit:fileType>tclSource</spirit:fileType>
         <spirit:userFileType>CHECKSUM_f92e9879</spirit:userFileType>
         <spirit:userFileType>XGUI_VERSION_2</spirit:userFileType>
+      </spirit:file>
+    </spirit:fileSet>
+    <spirit:fileSet>
+      <spirit:name>xilinx_miscfiles_view_fileset</spirit:name>
+      <spirit:file>
+        <spirit:name>misc/logo.png</spirit:name>
+        <spirit:userFileType>image</spirit:userFileType>
+      </spirit:file>
+    </spirit:fileSet>
+    <spirit:fileSet>
+      <spirit:name>xilinx_utilityxitfiles_view_fileset</spirit:name>
+      <spirit:file>
+        <spirit:name>misc/logo.png</spirit:name>
+        <spirit:userFileType>image</spirit:userFileType>
+        <spirit:userFileType>LOGO</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
   </spirit:fileSets>
@@ -403,11 +446,11 @@
         <xilinx:xpmLibrary>XPM_CDC</xilinx:xpmLibrary>
         <xilinx:xpmLibrary>XPM_MEMORY</xilinx:xpmLibrary>
       </xilinx:xpmLibraries>
-      <xilinx:coreRevision>1</xilinx:coreRevision>
+      <xilinx:coreRevision>3</xilinx:coreRevision>
       <xilinx:upgrades>
         <xilinx:canUpgradeFrom>user.org:user:fm_receiver_top:1.0</xilinx:canUpgradeFrom>
       </xilinx:upgrades>
-      <xilinx:coreCreationDateTime>2021-05-05T08:36:28Z</xilinx:coreCreationDateTime>
+      <xilinx:coreCreationDateTime>2021-05-05T09:24:04Z</xilinx:coreCreationDateTime>
       <xilinx:tags>
         <xilinx:tag xilinx:name="nopcore"/>
         <xilinx:tag xilinx:name="user.org:user:fm_receiver_top:1.0_ARCHIVE_LOCATION">/home/mike/work/fm-radio/hardware/vhdl</xilinx:tag>
@@ -421,7 +464,7 @@
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2018.2</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="9a9c9ee2"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="08f5656b"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="41fa01c7"/>
       <xilinx:checksum xilinx:scope="ports" xilinx:value="d42b344b"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="134b76fe"/>
     </xilinx:packagingInfo>
