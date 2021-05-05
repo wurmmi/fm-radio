@@ -2,26 +2,77 @@
 \chapter{Signal Processing Theory}
 \label{cha:TheThesis}
 
-  \section{Modulation from Baseband to RF}
-  \section{Modulation from RF to Baseband}
+%%%%%%%%%%%%%%%%%%%%
+\section{Modulation from Baseband to RF}
 
-  \section{Frequency Modulation (FM)}
-  see literature/Present\_lec6\_AM\_FM.pdf\\
-  see lectures out of HSD/ESD
+%%%%%%%%%%%%%%%%%%%%
+\section{Modulation from RF to Baseband}
 
-  Frequency modulation (FM) is a widely used standard to transmit data streams.
-  The probably best known usecase therefore is commercial broadcast radio, where an audio stream is transmitted.
-  Devices to receive these streams are available starting from affordable low prices to the public.
+%%%%%%%%%%%%%%%%%%%%
+\section{Frequency Modulation in Broadcasting}
+  %see literature/Present\_lec6\_AM\_FM.pdf\\
+  %see lectures out of HSD/ESD
 
+Frequency modulation (FM) is a widely used standard to transmit data streams.
+The probably best known usecase therefore is commercial broadcast radio, where an audio stream is transmitted.
+Devices to receive these streams are available for low prices to the public.
 
-    \subsection{Mathematical description}
-    \subsection{Frequency Band, Channel allocation/distribution}
+This chaper describes the main properties of broadcast FM, such as the mathematical description, frequency bands that are used, or the specific frequency parts within a channel spectrum.
 
-  \section{Algorithms for Digital FM Demodulation}
-    see literature/FmDemodulator.pdf (Sect. 3.3)
-    see literature/00476180 Digital FM Demodulator for FM, TV, and Wireless.pdf (Sect. II and III)
+%%%%%%%%%%%%%%%%%%%%
+\subsection{Mathematical description}
 
-    \subsection{Baseband Delay Demodulator}
-    \subsection{Phase-Adapter Demodulator}
-    \subsection{Phase-Locked Loop (PLL)}
-    \subsection{Mixed Demodulator}
+The mathematical description of an FM baseband signal can be described with the formulas presented in this section.
+FM encodes the information content in its instantanious frequency.
+This means that the measured frequency at any moment in time represents a specific value of a transmitted message.
+For a general classification, FM belongs to the group of angle, or phase modulated signals (PM).
+The simple reason therefor is, that a frequency has a direct relationship to an angle, if the signal is seen on a unit circle.\\
+
+The instantanious frequency $f_i$ of an FM signal can be described as
+\begin{equation}
+  f_i = f_c + \Delta f \cdot m(t)
+\end{equation}
+where $f_c$ is the carrier- or center frequency, $\Delta f$ is the maximum frequency deviation and $m(t)$ is the information or message signal that is to be transmitted.
+Simply looking at this equation, the frequency deviation, which is sometimes also called the swing, varies in the range between $f_c \pm \Delta f$.
+
+Considering the relationship between frequency and angle, as described above, and after some simple substitutions which will not be described into detail here, the equation for a generic frequency modulated wave is the following
+\begin{equation}
+  s(t) = A_c\ cos \Big( 2 \pi f_c t + 2 \pi k_f \int m(t) dt \Big)
+  \label{equ:fm_func}
+\end{equation}
+where $A_c$ is the amplitude of the resulting FM signal and $k_f$ is the frequency sensitivity factor.
+This sensitivity factor has a direct relationship with the modulation index $\beta$.
+\begin{equation}
+  \beta = \frac{\Delta f}{f_m} = \frac{k_f A_m}{f_m}
+\end{equation}
+where $f_m$ is the highest existing frequency, or the bandwidth of the information signal.
+
+Formula \ref{equ:fm_func} describes a frequency modulated signal with a generic message signal $m(t)$.
+A widely used example application of FM is broadcast radio, where audio streams are transmitted.
+An audio stream can be described as a cosine wave.
+Therefor, the information signal that is to be transmitted in broadcast radio can be represented as a cosine wave in the form of
+\begin{equation}
+  m(t) = A_m\ cos(2 \pi f_m t).
+\end{equation}
+By inserting this message signal into the generic FM formula \ref{equ:fm_func}, the final equation for an FM signal transforms into the following form.
+\begin{equation}
+  y(t) = A_c\ cos \Big(2 \pi f_c t + \beta\ sin(2 \pi f_m t)\Big )
+\end{equation}
+Several formulas, as well as their derivations are described according to \cite{ref_FM_Maths_Info_1}\cite{ref_FMMaths2}.
+
+%%%%%%%%%%%%%%%%%%%%
+\subsection{Frequency Band, Channel allocation/distribution}
+
+%%%%%%%%%%%%%%%%%%%%
+\section{Algorithms for Digital FM Demodulation}
+  see literature/FmDemodulator.pdf (Sect. 3.3)
+  see literature/00476180 Digital FM Demodulator for FM, TV, and Wireless.pdf (Sect. II and III)
+
+  %%%%%%%%%%%%%%%%%%%%
+  \subsection{Baseband Delay Demodulator}
+  %%%%%%%%%%%%%%%%%%%%
+  \subsection{Phase-Adapter Demodulator}
+  %%%%%%%%%%%%%%%%%%%%
+  \subsection{Phase-Locked Loop (PLL)}
+  %%%%%%%%%%%%%%%%%%%%
+  \subsection{Mixed Demodulator}
