@@ -19,24 +19,24 @@ endif
 
 # VHDL sources in compile order
 VHDL_SOURCES =
-VHDL_SOURCES += $(CURDIR)/../../src/rtl/packages/fm_global_spec_pkg.vhd
-VHDL_SOURCES += $(CURDIR)/../../src/rtl/fm_global_pkg.vhd
-VHDL_SOURCES += $(CURDIR)/../../src/rtl/packages/filter_lp_mono_pkg.vhd
-VHDL_SOURCES += $(CURDIR)/../../src/rtl/packages/filter_bp_pilot_pkg.vhd
-VHDL_SOURCES += $(CURDIR)/../../src/rtl/packages/filter_bp_lrdiff_pkg.vhd
-VHDL_SOURCES += $(CURDIR)/../../src/rtl/utils/delay_bit.vhd
-VHDL_SOURCES += $(CURDIR)/../../src/rtl/utils/delay_vector.vhd
-VHDL_SOURCES += $(CURDIR)/../../src/rtl/utils/DspFir.vhd
-VHDL_SOURCES += $(CURDIR)/../../src/rtl/utils/decimator.vhd
-VHDL_SOURCES += $(CURDIR)/../../src/rtl/utils/strobe_gen.vhd
-VHDL_SOURCES += $(CURDIR)/../../src/rtl/channel_decoder/recover_carriers.vhd
-VHDL_SOURCES += $(CURDIR)/../../src/rtl/channel_decoder/recover_lrdiff.vhd
-VHDL_SOURCES += $(CURDIR)/../../src/rtl/channel_decoder/recover_mono.vhd
-VHDL_SOURCES += $(CURDIR)/../../src/rtl/channel_decoder/separate_lr_audio.vhd
-VHDL_SOURCES += $(CURDIR)/../../src/rtl/channel_decoder.vhd
-VHDL_SOURCES += $(CURDIR)/../../src/rtl/fm_demodulator.vhd
-VHDL_SOURCES += $(CURDIR)/../../src/rtl/fm_receiver.vhd
-VHDL_SOURCES += $(CURDIR)/../../src/rtl/fm_receiver_top.vhd
+VHDL_SOURCES += $(CURDIR)/../../rtl/packages/fm_global_spec_pkg.vhd
+VHDL_SOURCES += $(CURDIR)/../../rtl/fm_global_pkg.vhd
+VHDL_SOURCES += $(CURDIR)/../../rtl/packages/filter_lp_mono_pkg.vhd
+VHDL_SOURCES += $(CURDIR)/../../rtl/packages/filter_bp_pilot_pkg.vhd
+VHDL_SOURCES += $(CURDIR)/../../rtl/packages/filter_bp_lrdiff_pkg.vhd
+VHDL_SOURCES += $(CURDIR)/../../rtl/utils/delay_bit.vhd
+VHDL_SOURCES += $(CURDIR)/../../rtl/utils/delay_vector.vhd
+VHDL_SOURCES += $(CURDIR)/../../rtl/utils/DspFir.vhd
+VHDL_SOURCES += $(CURDIR)/../../rtl/utils/decimator.vhd
+VHDL_SOURCES += $(CURDIR)/../../rtl/utils/strobe_gen.vhd
+VHDL_SOURCES += $(CURDIR)/../../rtl/channel_decoder/recover_carriers.vhd
+VHDL_SOURCES += $(CURDIR)/../../rtl/channel_decoder/recover_lrdiff.vhd
+VHDL_SOURCES += $(CURDIR)/../../rtl/channel_decoder/recover_mono.vhd
+VHDL_SOURCES += $(CURDIR)/../../rtl/channel_decoder/separate_lr_audio.vhd
+VHDL_SOURCES += $(CURDIR)/../../rtl/channel_decoder.vhd
+VHDL_SOURCES += $(CURDIR)/../../rtl/fm_demodulator.vhd
+VHDL_SOURCES += $(CURDIR)/../../rtl/fm_receiver.vhd
+VHDL_SOURCES += $(CURDIR)/../../rtl/fm_receiver_top.vhd
 
 # Set toplevel module in VHDL
 TOPLEVEL = fm_receiver_top
