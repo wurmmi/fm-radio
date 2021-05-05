@@ -9,7 +9,7 @@
 # cocotb
 sim_build/
 vhdl/**/*.lst
-vhdl/**/*.xml
+vhdl/tb/**/*.xml
 vhdl/**/*.txt
 *.o
 __pycache__
@@ -24,3 +24,4 @@ dspfir
 generated/
 output/
 vivado/**/*.str
+.Xil/

@@ -31,8 +31,8 @@ entity fm_receiver_top is
     s0_axis_tvalid : in std_ulogic;
 
     -- Output
-    audio_L_o     : out sample_t;
-    audio_R_o     : out sample_t;
+    audio_L_o     : out std_ulogic_vector(15 downto 0);
+    audio_R_o     : out std_ulogic_vector(15 downto 0);
     audio_valid_o : out std_ulogic);
 
 end entity fm_receiver_top;
