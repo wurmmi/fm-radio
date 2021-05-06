@@ -17,6 +17,7 @@
 *.bcf
 *.run.xml
 *.synctex
+*.synctex(busy)
 *.tps
 
 lines-of-code-analysis/output/

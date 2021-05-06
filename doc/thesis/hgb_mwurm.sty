@@ -1,0 +1,21 @@
+%% hgb_mwurm.sty
+%% This file is developed by Michael Wurm, to extend the Hagenberg Thesis package
+%% Author: Michael Wurm (wurm.michael95@gmail.com)
+%% File encoding: ASCII
+
+\ProvidesPackage{hgb_mwurm}[2021/05/06]%%AUTO
+
+\RequirePackage{xargs}  % for more than one optional argument in \newcommandx
+
+
+% usage:  \includepicture [width=1] [angle=0] {caption text} {filepath} {label}
+% example:  \includepicture [0.75] [0] {A nice picture.} {img/img.png} {figure_label}
+\newcommandx{\includepicture}[5][1=1,2=0]
+{
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=#1\textwidth,angle=#2]{\string"#5"}
+		\caption{#3}
+	  \label{fig:#4}
+	\end{figure}
+}

@@ -1,14 +1,14 @@
-%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Signal Processing Theory}
 \label{cha:TheThesis}
 
-%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Modulation from Baseband to RF}
 
-%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Modulation from RF to Baseband}
 
-%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Frequency Modulation in Broadcasting}
   %see literature/Present\_lec6\_AM\_FM.pdf\\
   %see lectures out of HSD/ESD
@@ -19,7 +19,7 @@ Devices to receive these streams are available for low prices to the public.
 
 This chaper describes the main properties of broadcast FM, such as the mathematical description, frequency bands that are used, or the specific frequency parts within a channel spectrum.
 
-%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Mathematical description}
 
 The mathematical description of an FM baseband signal can be described with the formulas presented in this section.
@@ -48,20 +48,20 @@ This sensitivity factor has a direct relationship with the modulation index $\be
 where $f_m$ is the highest existing frequency, or the bandwidth of the information signal.
 % More info on modulation index: https://fas.org/man/dod-101/navy/docs/es310/FM.htm
 
-Formula \ref{equ:fm_func} describes a frequency modulated signal with a generic message signal $m(t)$.
+Formula \eqref{equ:fm_func} describes a frequency modulated signal with a generic message signal $m(t)$.
 A widely used example application of FM is broadcast radio, where audio streams are transmitted.
 An audio stream can be described as a cosine wave.
 Therefor, the information signal that is to be transmitted in broadcast radio can be represented as a cosine wave in the form of
 \begin{equation}
   m(t) = A_m\ cos(2 \pi f_m t).
 \end{equation}
-By inserting this message signal into the generic FM formula \ref{equ:fm_func}, the final equation for an FM signal transforms into the following form.
+By inserting this message signal into the generic FM formula \eqref{equ:fm_func}, the final equation for an FM signal transforms into the following form.
 \begin{equation}
   y(t) = A_c\ cos \Big(2 \pi f_c t + \beta\ sin(2 \pi f_m t)\Big )
 \end{equation}
 Several formulas, as well as their derivations are described according to \cite{ref_FM_Maths_Info_1}\cite{ref_FMMaths2}.
 
-%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Frequency Band}
 
 The frequency band that is used for FM broadcasting is defined worldwide and spans from 87.5 to 108 MHz.
@@ -81,7 +81,7 @@ If a free range is found, the transmitter may start sending an FM signal with th
 %https://www.ris.bka.gv.at/GeltendeFassung.wxe?Abfrage=Bundesnormen&Gesetzesnummer=20008807
 
 
-%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Frequency Spectrum of a Broadcast FM Channel}
 
 The entire FM broadcasting band from 87.5 to 108 MHz divides into multiple channels which can be used.
@@ -149,7 +149,7 @@ It is used to transmit additional information about the channel, such as the rad
 \noindent
 The information about the frequency spectrum was taken from \cite{ref_fm_broadcast_tutorial_and_basics}.
 
-%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Algorithms for Digital FM Demodulation}
   %see literature/FmDemodulator.pdf (Sect. 3.3)
   %see literature/00476180 Digital FM Demodulator for FM, TV, and Wireless.pdf (Sect. II and III)
@@ -168,44 +168,38 @@ In the following sections, two digital FM demodulator variants are described.
 
 % TODO: add img/discrimination_method_bd2.png here (?)
 
-%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Frequency Discriminator}
 
+A frequency discriminator generates an output that is directly proportional to the frequency of the input FM signal.
+In other words, it converts FM to AM.
+The discriminator consists of two main parts - a differentiator and an envelope detector.
+Different strategies can be implemented for both parts.
+A block diagram for a frequency discriminator with its two main parts is shown in Fig.\ref{fig:bd_freq_discriminator}.
 
-A frequency discriminator can be defined as a black box component, that generates an output that is directly proportional to the frequency of the input FM signal.
-Different strategies can be implemented in this black box component - the discriminator.
-Here, a differentiator with a subsequent envelope detector is used, which is shown in Fig.\ref{fig_bd_freq_discriminator}.
+\includepicture [0.6] [0] {Frequency discriminator block diagram \cite{ref_fig_freq_discriminator}} {bd_freq_discriminator} {img/discrimination_method_bd1.jpg}
 
-\begin{figure}[!h]
-  \centering
-  \includegraphics[width=7cm]{img/discrimination_method_bd1.jpg}
-  \caption{Frequency discriminator block diagram \cite{ref_fig_freq_discriminator}}
-  \label{fig_bd_freq_discriminator}
-\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Differentiator}
 
-% TODO: check which one i'm describing
-%%%%%%%%%%%%%%%%%%%%
-\subsubsection{this one}
-%%%%%%%%%%%%%%%%%%%%
-%\subsubsection{Baseband Delay Demodulator}
-%%%%%%%%%%%%%%%%%%%%
-%\subsubsection{Phase-Adapter Demodulator}
-%%%%%%%%%%%%%%%%%%%%
-%\subsubsection{Phase-Locked Loop (PLL)}
-%%%%%%%%%%%%%%%%%%%%
-%\subsubsection{Mixed Demodulator}
-
-This type of demodulator converts the FM signal into an AM signal, but still leaves an FM content.
-The transformation that happens here can be expressed in a formula, by simply differentiating Eq.\ref{equ_fm_func}.
-This operation, with simple algebraic transformations, results in
+The differentiator already converts the FM signal into an AM signal, but still leaves an FM content.
+The transformation that happens here can be expressed in a formula, by simply differentiating Eq.\eqref{equ:fm_func}.
+This operation, with some additional simple algebraic transformations, results in
 \begin{equation}
   \frac{d s(t)}{dt} = A_c 2 \pi \Big[f_c + k_f m(t) \Big] sin \Big(\omega_c t + 2 \pi k_f \int m(t) dt -pi \Big)
   \label{equ:fm_demod_discriminator}
 \end{equation}
 
+This formula shows the AM and an FM contents clearly.
+The FM part is described by the sine function, with its argument.
+The more important part is the AM part, which resembles the message signal.
+It is described by the term within the square brackets.
+
+A time-domain example for this signal is shown in the top left diagram in Fig.\ref{fig:time_domain_envelope_detect}.\\
+
 An important requirement for the differentiator is, that the input signal is of a constant amplitude \cite{ref_schnyder_haller}.
 The transmitted signal is subject to random additive noise on the transmission channel.
-The differentiator would deliver wrong results because of this noise, when substracting two consecutive samples, as described in Eq.\ref{equ:differentiator_two_samples}.
+The differentiator would deliver wrong results because of this noise, when substracting two consecutive samples, as described in Eq.\eqref{equ:differentiator_two_samples}.
 To achieve a constant amplitude, the received complex baseband signal $s(t)$ can be normalized to a value of one.
 \begin{equation}
   s_{norm} = \frac{s}{|s|} = \frac{A(n)\ e^{j\phi_{FM}(n)}}{|{A(n)\ e^{j\phi_{FM}(n)}|}} = e^{j\phi_{FM}(n)}
@@ -214,42 +208,44 @@ To achieve a constant amplitude, the received complex baseband signal $s(t)$ can
   e^{j\phi_{FM}(n)} = |1|
 \end{equation}
 
-A differentiation in hardware is simply performed by substracting two consecutive samples, like
+In a hardware implementation, a differentiation is simply performed by substracting two consecutive samples, like
 \begin{equation}
   \frac{d s(t)}{dt} = s(t) - s(t-\Delta t)
   \label{equ:differentiator_two_samples}
 \end{equation}
 where $\Delta t$ is the inverse of the sample frequency.\\ %TODO: check this (i'm using a 3-tap FIR in FPGA)
 
-The differentiated signal Eq.\ref{equ:fm_demod_discriminator} consist of an AM and an FM content.
-The FM part is described by the sine function.
-The more important part is the AM part, which resembles the message signal.
-It is described by the term within the square brackets.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Envelope Detector}
 
-The differentiated signal Eq.\ref{equ:fm_demod_discriminator} in time-domain is shown in the top left diagram in Fig.\ref{fig_time_domain_envelope_detect}.
-This signal needs to be fed into an envelope detector, as seen in Fig.\ref{fig_bd_freq_discriminator}.
-The envelope detector extracts the envelope by removing the high frequency portion.
-The method implemented in Fig.\ref{fig_time_domain_envelope_detect} is one of the most simple ones and is usually referred to as 'Asynchronous Half-Wave Envelope Detector'\cite{ref_envelope_detector}.
+The differentiated signal still consists of a FM part, as explained above, using Eq.\eqref{equ:fm_demod_discriminator}.
+In order to remove this high-frequeny part and extract the low-frequency envelope, the signal needs to be fed into an envelope detector.
+A block diagram is shown in Fig.\ref{fig:bd_freq_discriminator}.
+
+The method implemented in Fig.\ref{fig:time_domain_envelope_detect} is one of the most simple ones and is usually referred to as `Asynchronous Half-Wave Envelope Detector'\cite{ref_envelope_detector}.
 It consists of a thresholding unit to remove negative values and a conventional lowpass filter.
 In analog implementations, the thresholding unit is a diode.
-The lowpass' cutoff frequency needs to be adapted to the envelope signals' maximum frequency, since it needs to be able to follow the signal, but also sufficiently smooth out the rectified signal.
+The cutoff frequency of the lowpass needs to be adapted to the envelope signals' maximum frequency.
+It needs to be able to follow the signal, but also sufficiently smooth out the rectified signal.\\
 
 Different methods may be implemented for the envelope detector.
-For example, an 'Asynchronous Full-Wave Envelope Detector' can be used.
-Therefore, the previous method only needs to swap the thresholding unit with an unit that calculates an absolut value.
+For example, an `Asynchronous Full-Wave Envelope Detector' can be used.
+Therefore, the previous method only needs to swap the thresholding unit with an unit that calculates the absolut value.
 In that architecture, a full-wave rectification is performed on the signal, which significantly improves the envelope detection accuracy \cite{ref_envelope_detector}.
 The envelope is followed more exactly, because of the higher power that is available in the signal, since the entire signal is taken into account, and not only the positive half, as in the previous half-wave method.
 
-\begin{figure}[!h]
-  \centering
-    \includegraphics[width=8.8cm]{img/envelope-detect-time-domain.jpg}
-  \caption{Time-domain signals in envelope detection \cite{ref_roppel}}
-  \label{fig_time_domain_envelope_detect}
-\end{figure}
+\includepicture [0.75] [0] {Time-domain signals in envelope detection \cite{ref_roppel}} {time_domain_envelope_detect} {img/envelope-detect-time-domain.jpg}
 
-%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Phase-Locked Loop}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\subsubsection{Baseband Delay Demodulator}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\subsubsection{Phase-Adapter Demodulator}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\subsubsection{Mixed Demodulator}
 
+%TODO: explain a PLL in some more detail (block diagram)
 A Phase-Locked Loop (PLL) can also be used to transform an FM signal to an AM signal.
 A PLL is a feedback loop that is usually used to generate an output signal that has a fixed phase reference to its input.
 In the case of FM demodulation, the loop filter in the feedback branch is configured to be able to follow the frequency variations on the input, which is directly related to the encoded information.
@@ -257,16 +253,16 @@ The output of the PLL directly delivers an AM signal, which corresponds to the t
 
 FM demodulation with a PLL is not described into more detail, since this thesis is focussing on the concept of an entire system architecture.
 
-%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Demodulation of Broadcast FM}
 
 This chapter describes the demodulation of the information content of an FM broadcast channel, as it is used in commercial FM radio broadcasting.
 The assumption here is, that the actual FM demodulation, as described in chapter \ref{sec_fm_sig_demod} is already done correctly.
 A frequency spectrum of an FM channel is shown in Fig.\ref{fig_channel_baseband_freqs} above.
 
-explaine multiplex signal somewhere
+explain multiplex signal somewhere
 
-%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Mono}
 \label{subsec:demod_mono}
   The first part of the channel frequency spectrum is the mono audio signal. It is summation signal of the left and right audio channel.
@@ -277,12 +273,13 @@ explaine multiplex signal somewhere
   Demodulating an FM channel to recover a stereo audio signal requires a more sophisticated approach.
   In the channel frequency spectrum, there are two main parts of the audio signal - the sum and difference of the left and right audio channel signals.
   To combine these to a stereo signal, the following equations can be applied.
-  \begin{equation*}
-    L = (L+R) + (L-R) = (2)L
-  \end{equation*}
+
   \begin{equation}
-    R = (L+R) - (L-R) = (2)R
-    \label{equ_stereo_from_sum_diff}
+    \begin{split}
+      L = (L+R) + (L-R) = (2)L \\
+      R = (L+R) - (L-R) = (2)R
+      \label{equ_stereo_from_sum_diff}
+    \end{split}
   \end{equation}
 
   The block diagram in Fig.\ref{fig_bd_stereo_demod} illustrates the signal processing chain for stereo audio. In the block diagram, $x(t)$ represents the multiplex signal from the FM demodulator. Signals $x_l(t)$ and $x_r(t)$ describe the left and right audio signal, respectively.
@@ -302,5 +299,5 @@ explaine multiplex signal somewhere
   It is then modulated to baseband by the previously generated 38 kHz subcarrier.
   Subsequently, a lowpass limits the signal to the audio signal bandwidth of 15 kHz.
   The lower branch lowpass-filters the summation signal.
-  The rightmost part in the diagram performs the combination of summation and difference signals, according to Eq.\ref{equ_stereo_from_sum_diff}.
+  The rightmost part in the diagram performs the combination of summation and difference signals, according to Eq.\eqref{equ_stereo_from_sum_diff}.
 

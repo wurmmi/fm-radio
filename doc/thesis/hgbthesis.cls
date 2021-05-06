@@ -72,7 +72,7 @@
 
 \newcommand{\@advisor}{}					% empty by default
 \newcommand{\advisor}[1]{%
-	\renewcommand{\@advisor}{#1}		
+	\renewcommand{\@advisor}{#1}  
 }
 
 \newcommand{\thesisnumber}[1]{%
@@ -315,7 +315,7 @@ This work is published under the conditions of the
 	{\license{\@ccLicenseAt}} % german CC license text
 	{\license{\@ccLicenseEn}} % english CC license text (default)
 }
-	
+ 
 \cclicense	% Creative Commons License (default)
 
 \newcommand{\@makelicense}{ 
@@ -503,5 +503,6 @@ This work is published under the conditions of the
 \RequirePackage{hgbabbrev}
 \RequirePackage{hgblistings}
 \RequirePackage{hgbbib}
+\RequirePackage{hgb_mwurm}
 
 \endinput
