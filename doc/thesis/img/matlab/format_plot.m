@@ -1,24 +1,26 @@
 %-------------------------------------------------------------------------
-% File        : do_plot.m
+% File        : format_plot.m
 % Author      : Michael Wurm <wurm.michael95@gmail.com>
-% Description : Plot helper.
+% Description : Plot format helper.
 %-------------------------------------------------------------------------
 
-function [fig] = do_plot(fig)
+function [fig] = format_plot(fig,fig_title,fontsize)
 
 ax = gca;
 ax.XAxisLocation = 'origin';
 ax.YAxisLocation = 'origin';
-%box on;
+%box off;
+
+% get axis limits for label positions
+Ylm=ylim();
+Xlm=xlim();
+Xlb=mean(Xlm);
+Ylb=0.99*Ylm(1);
+
 title(fig_title, 'FontSize',fontsize);
-Ylm=ylim();                          % get x, y axis limits 
-Xlm=xlim();                          % so can position relative instead of absolute
-Xlb=mean(Xlm);                       % set horizontally at midpoint
-Ylb=0.99*Ylm(1);                     % and just 1% below minimum y value
 xlabel('time [s]','FontSize',fontsize, 'Position',[Xlb Ylb],'HorizontalAlignment','center');
 ylabel('amplitude','FontSize',fontsize);
 set(gca,'XTickLabel',[],'YTickLabel',[])
-legend();
-saveas(fig_time_rf, sprintf("%s/%s",dir_output, "fig_time_rf.png"));
+%legend();
 
 end
