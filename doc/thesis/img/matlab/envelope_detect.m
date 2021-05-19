@@ -16,7 +16,9 @@ addpath(genpath('../../../../sim/matlab/helpers/'));
 
 % Simulation Options
 EnableFilterAnalyzeGUI = false;
-EnableShowFigures      = false;
+EnableShowFigures      = true;
+EnablePlotSaveSVG      = true;
+EnablePlotSavePNG      = false;
 
 % Common
 fs = 1e6;
@@ -85,8 +87,8 @@ plot(tn/fs, rf_signal, 'b',   'LineWidth',1, 'DisplayName', 'rf\_signal');
 xlim([-0.1/fmsg,3/fmsg]);
 ylim([-3,3]);
 fig_time_rf = format_plot(fig_time_rf,fig_title,fontsize);
-saveas(fig_time_rf, sprintf("%s/%s",dir_output, "fig_1_time_rf.svg"),'svg');
-exportgraphics(fig_time_rf, sprintf("%s/%s",dir_output, "fig_1_time_rf.png"));
+if EnablePlotSaveSVG saveas(fig_time_rf, sprintf("%s/%s",dir_output, "fig_1_time_rf.svg"),'svg'); end
+if EnablePlotSavePNG exportgraphics(fig_time_rf, sprintf("%s/%s",dir_output, "fig_1_time_rf.png")); end
 
 fig_title = 'Half-wave rectified';
 fig_time_rf_thresh = figure('Name',fig_title);
@@ -96,8 +98,8 @@ plot(tn/fs, rf_signal_thresh, 'b', 'LineWidth',1, 'DisplayName', 'rf\_signal\_th
 xlim([-0.1/fmsg,3/fmsg]);
 ylim([-1,3]);
 fig_time_rf_thresh = format_plot(fig_time_rf_thresh,fig_title,fontsize);
-saveas(fig_time_rf_thresh, sprintf("%s/%s",dir_output, "fig_2_time_rf_thresh.svg"),'svg');
-exportgraphics(fig_time_rf_thresh, sprintf("%s/%s",dir_output, "fig_2_time_rf_thresh.png"));
+if EnablePlotSaveSVG saveas(fig_time_rf_thresh, sprintf("%s/%s",dir_output, "fig_2_time_rf_thresh.svg"),'svg'); end
+if EnablePlotSavePNG exportgraphics(fig_time_rf_thresh, sprintf("%s/%s",dir_output, "fig_2_time_rf_thresh.png")); end
 
 fig_title = 'Detected envelope';
 fig_time_envelope = figure('Name',fig_title);
@@ -106,8 +108,8 @@ plot(tn/fs, envelope, 'r', 'LineWidth',2, 'DisplayName', 'envelope');
 xlim([-0.1/fmsg,3/fmsg]);
 ylim([-1,3]);
 fig_time_envelope = format_plot(fig_time_envelope,fig_title,fontsize);
-saveas(fig_time_envelope, sprintf("%s/%s",dir_output, "fig_3_time_envelope.svg"),'svg');
-exportgraphics(fig_time_envelope, sprintf("%s/%s",dir_output, "fig_3_time_envelope.png"));
+if EnablePlotSaveSVG saveas(fig_time_envelope, sprintf("%s/%s",dir_output, "fig_3_time_envelope.svg"),'svg'); end
+if EnablePlotSavePNG exportgraphics(fig_time_envelope, sprintf("%s/%s",dir_output, "fig_3_time_envelope.png")); end
 
 
 %-------------------------------------------------------------------------
