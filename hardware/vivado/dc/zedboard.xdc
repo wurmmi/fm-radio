@@ -13,13 +13,13 @@
 
 # --- Audio interface ----------------------------------------------------------
 
-set_property PACKAGE_PIN AA6     [get_ports bclk]
-set_property PACKAGE_PIN Y6      [get_ports lrclk]
-set_property PACKAGE_PIN Y8      [get_ports sdata]
+#set_property PACKAGE_PIN AA6     [get_ports i2s_bclk_o]
+#set_property PACKAGE_PIN Y6      [get_ports i2s_lrclk_o]
+#set_property PACKAGE_PIN Y8      [get_ports i2s_sdata_o]
 
 # --- Other --------------------------------------------------------------------
 
-set_property PACKAGE_PIN T22 [get_ports heartbeat]
+#set_property PACKAGE_PIN T22 [get_ports heartbeat]
 
 #===============================================================================
 # IOSTANDARD Constraints
@@ -27,10 +27,10 @@ set_property PACKAGE_PIN T22 [get_ports heartbeat]
 
 # --- Audio interface ------------------------------------------------------------
 
-set_property IOSTANDARD LVCMOS33 [get_ports bclk]
-set_property IOSTANDARD LVCMOS33 [get_ports lrclk]
-set_property IOSTANDARD LVCMOS33 [get_ports sdata]
+#set_property IOSTANDARD LVCMOS33 [get_ports bclk]
+#set_property IOSTANDARD LVCMOS33 [get_ports lrclk]
+#set_property IOSTANDARD LVCMOS33 [get_ports sdata]
 
 # --- Other --------------------------------------------------------------------
 
-set_property IOSTANDARD LVCMOS33 [get_ports heartbeat]
+#set_property IOSTANDARD LVCMOS33 [get_ports heartbeat]
