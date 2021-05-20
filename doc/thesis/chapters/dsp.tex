@@ -27,12 +27,12 @@ The band limitation needs to be given at the transmitting antenna, to minimize i
 The frequency needs to be high, to radiate the signal by an antenna.
 
 On the receiver side, once the signal reaches the antenna of a receiver, there are further similarities.
-The antenna signal needs to be amplified and filtered.
+The antenna signal needs to be amplified and filtered at first.
 Both steps depend on the antenna characteristics, but usually the received signal is of relatively low power, and the antenna receives a wider range of frequencies than required.
 The filter therefor selects the frequency area that is of interest.
 Another reason for the filter is to avoid spectral replicas in the subsequent modulation, or down-conversion.
 Here, the front-end often down-converts to a low intermediate frequency, instead of directly going to baseband.
-The intermediate frequency is then modulated, or mixed, down to baseband later in the digital domain, which brings advantages in the downstream processing chain. %TODO check this or explain more which advantages (HF to BB directly --> i/q complex signal? ; HF to IF to BB --> real signal ) ??
+The intermediate frequency is then shifted down to baseband by a modulator later in the digital domain, which brings advantages in the downstream processing chain. %TODO check this or explain more which advantages (HF to BB directly --> i/q complex signal? ; HF to IF to BB --> real signal ) ??
 
 These three steps - amplification, filtering and down-conversion - are usually done in the analog domain, since digital circuits cannot work with such high frequencies.
 After the analog signal is down-converted to baseband, it needs to be digitized.
