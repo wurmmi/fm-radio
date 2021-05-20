@@ -2,11 +2,52 @@
 \chapter{Signal Processing Theory}
 \label{cha:TheThesis}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Modulation from Baseband to RF}
+This chapter describes techniques of signal processing, which are required to receive and decode an FM broadcast radio signal.
+The entire signal processing chain from the antenna, through the analog front-end, to the digital processing parts is explained.
+However, the main focus is put on the digital signal processing part, since this is also the main focus of the practical implementation of this thesis.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Modulation from RF to Baseband}
+\section{Overview}
+
+Wireless transmission systems usually transmit their signals over the air.
+Various frequency bands and different types of modulation are being used for this purpose.
+The choice of frequency, as well as the choice of the modulation type, have impacts on the transmission characteristics.
+Depending on these choices, positive effects can be achieved in the amount of data that can be sent over the transmission channel, for example.
+Another advantage is the ability to adapt the ongoing transmission to the changing characteristics of the channel.
+This is especially useful for mobile receivers, since the signals path is inherently changing over time there, which leads to challenging conditions for the receiver.
+Additionally, varying signal strength, or multipath propagation may occur.
+Multipath propagation is caused by reflections of the signal, which - for example - can occur on a house facade, or a large vehicle that is passing by.
+The receiver then gets a signal, that is a summation of the direct path and the reflected path - a signal from multiple paths.
+Besides that, environmental impacts, such as rain or fog have an effect on the transmission channel and thus the received signal.\\
+
+Many more factors could be listed, and an elaboration of the various modulation types can fill entire books.
+However, with all these different facts, there are things that they all have in common.
+On the transmitter side, all these signals are transmitted in a band-limited, high frequency signal.
+The band limitation needs to be given at the transmitting antenna, to minimize interference to other bands in the frequency spectrum.
+The frequency needs to be high, to radiate the signal by an antenna.
+
+On the receiver side, once the signal reaches the antenna of a receiver, there are further similarities.
+In order to decode the actual data content of the signals, they need to be converted down to become a baseband signal.
+Again, there are multiple ways to achieve that.
+In baseband, the signal can then be further processed, until the data content of interest is visible.
+
+The block diagram in Fig.\ref{fig:bd_dsp_overview} gives a high-level overview of a receiver structure.
+
+\includepicture [0.5] [0] {An overview of the signal processing chain.} {bd_dsp_overview} {img/draw.io/bd_dsp_overview}
+
+% TODO: block diagram of receiver
+% Antenna -->
+% --> Analog Frontend (gain, filter, mixer to baseband)
+% --> Digital Signal Processing
+% --> Output (e.g. speakers)
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Antenna signal to }
+
+block diagram of superheterodyne
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Oversampling / Sample Rate Reduction}
@@ -268,6 +309,7 @@ FM demodulation with a PLL is not described into more detail, since this thesis 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Demodulation of Broadcast FM}
+%TODO: once FM is converted to AM, traditional AM DSP techniques can be employed
 
 This chapter describes the demodulation of the information content of an FM broadcast channel, as it is used in commercial FM radio broadcasting.
 The assumption here is, that the actual FM demodulation, as described in chapter \ref{sec:algorithms-for-digital-fm-demodulation} is already done correctly.
