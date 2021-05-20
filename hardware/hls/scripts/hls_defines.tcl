@@ -11,5 +11,6 @@ set CPPFLAGS "-O0 --std=c++11 -I$SRC_DIR     \
               -Wall                          \
               -Wno-unused-label              \
               -Wno-unused-parameter          \
-              -Wno-mismatched-tags          \
-              -fsanitize=undefined"
+              -Wno-mismatched-tags"          \
+
+#              -fsanitize=undefined"
