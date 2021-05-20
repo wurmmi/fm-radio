@@ -108,7 +108,7 @@ if EnableWriteDataFiles
 
     % Filter coefficients
     disp('--- Filter coefficients to VHDL');
-    folder = '../../hardware/vhdl/src/packages/';
+    folder = '../../hardware/vhdl/rtl/packages';
     writeFilterCoeffsToVHDLFile(filter_bp_pilot, 'filter_bp_pilot',  folder, fp_config);
     writeFilterCoeffsToVHDLFile(filter_lp_mono,  'filter_lp_mono',   folder, fp_config);
     writeFilterCoeffsToVHDLFile(filter_bp_lrdiff,'filter_bp_lrdiff', folder, fp_config);
@@ -123,7 +123,7 @@ if EnableWriteDataFiles
     disp('--- Constants to VHDL/C++/Python');
     writeConstantsToPythonFile('../../hardware/common/tb/packages/fm_global/fm_global.py', 'fm_global_spec', ...
         fp_config, fs, fs_rx, fs_audio, osr_rx, osr_audio, pilot_scale_factor, rx_carrier_38kHz_offset);
-    writeConstantsToVHDLFile(  '../../hardware/vhdl/src/packages/fm_global_spec_pkg.vhd','fm_global_spec', ...
+    writeConstantsToVHDLFile(  '../../hardware/vhdl/rtl/packages/fm_global_spec_pkg.vhd','fm_global_spec', ...
         fp_config, fs, fs_rx, fs_audio, osr_rx, osr_audio, pilot_scale_factor, rx_carrier_38kHz_offset);
     writeConstantsToCPPFile(  '../../hardware/hls/src/fm_global_spec.hpp',               'fm_global_spec', ...
         fp_config, fs, fs_rx, fs_audio, osr_rx, osr_audio, pilot_scale_factor, rx_carrier_38kHz_offset);

@@ -40,12 +40,12 @@ fprintf(fileID, "#define FP_WIDTH      ((uint32_t)%d + 1)\n", fp_config.width);
 fprintf(fileID, "#define FP_WIDTH_FRAC ((uint32_t)%d + 1)\n", fp_config.width_frac);
 fprintf(fileID, "#define FP_WIDTH_INT  (FP_WIDTH - FP_WIDTH_FRAC)\n");
 fprintf(fileID, "\n");
-fprintf(fileID, "#define FS            ((uint32_t)%d)\n", fs);
-fprintf(fileID, "#define FS_RX         ((uint32_t)%d)\n", fs_rx);
-fprintf(fileID, "#define FS_AUDIO      ((uint32_t)%d)\n", fs_audio);
+fprintf(fileID, "#define FS       ((uint32_t)%d)\n", fs);
+fprintf(fileID, "#define FS_RX    ((uint32_t)%d)\n", fs_rx);
+fprintf(fileID, "#define FS_AUDIO ((uint32_t)%d)\n", fs_audio);
 fprintf(fileID, "\n");
-fprintf(fileID, "#define OSR_RX        ((uint32_t)%d)\n", osr_rx);
-fprintf(fileID, "#define OSR_AUDIO     ((uint32_t)%d)\n", osr_audio);
+fprintf(fileID, "#define OSR_RX    ((uint32_t)%d)\n", osr_rx);
+fprintf(fileID, "#define OSR_AUDIO ((uint32_t)%d)\n", osr_audio);
 fprintf(fileID, "\n");
 
 fprintf(fileID, "// IP specific\n");
