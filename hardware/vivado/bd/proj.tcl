@@ -198,15 +198,15 @@ proc create_root_design { parentCell } {
   set FIXED_IO [ create_bd_intf_port -mode Master -vlnv xilinx.com:display_processing_system7:fixedio_rtl:1.0 FIXED_IO ]
 
   # Create ports
-  set LED0_heartbeat [ create_bd_port -dir O LED0_heartbeat ]
   set i2s_bclk_o [ create_bd_port -dir O i2s_bclk_o ]
   set i2s_lrclk_o [ create_bd_port -dir O i2s_lrclk_o ]
-  set i2s_mclk [ create_bd_port -dir O i2s_mclk ]
   set i2s_sdata_o [ create_bd_port -dir O i2s_sdata_o ]
-  set spi_miso [ create_bd_port -dir I -type data spi_miso ]
-  set spi_mosi [ create_bd_port -dir O -type data spi_mosi ]
-  set spi_sclk [ create_bd_port -dir O -type data spi_sclk ]
-  set spi_ss [ create_bd_port -dir O -type intr spi_ss ]
+  set led0_heartbeat_o [ create_bd_port -dir O led0_heartbeat_o ]
+  set spi_mclk_o [ create_bd_port -dir O spi_mclk_o ]
+  set spi_miso_i [ create_bd_port -dir I -type data spi_miso_i ]
+  set spi_mosi_o [ create_bd_port -dir O -type data spi_mosi_o ]
+  set spi_sclk_o [ create_bd_port -dir O -type data spi_sclk_o ]
+  set spi_ss_o [ create_bd_port -dir O -type intr spi_ss_o ]
 
   # Create instance: axi_fifo_mm_s_0, and set properties
   set axi_fifo_mm_s_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_fifo_mm_s:4.1 axi_fifo_mm_s_0 ]
@@ -678,15 +678,15 @@ proc create_root_design { parentCell } {
 
   # Create port connections
   connect_bd_net -net axi_fifo_mm_s_0_interrupt [get_bd_pins axi_fifo_mm_s_1/interrupt] [get_bd_pins processing_system7_0/IRQ_F2P]
-  connect_bd_net -net miso_0_1 [get_bd_ports spi_miso] [get_bd_pins mySPIRxTx_0/miso]
+  connect_bd_net -net miso_0_1 [get_bd_ports spi_miso_i] [get_bd_pins mySPIRxTx_0/miso]
   connect_bd_net -net myI2STx_0_bclk [get_bd_ports i2s_bclk_o] [get_bd_pins myI2STx_0/bclk]
   connect_bd_net -net myI2STx_0_lrclk [get_bd_ports i2s_lrclk_o] [get_bd_pins myI2STx_0/lrclk]
   connect_bd_net -net myI2STx_0_sdata [get_bd_ports i2s_sdata_o] [get_bd_pins myI2STx_0/sdata]
-  connect_bd_net -net myPrescaler_0_prescale [get_bd_ports LED0_heartbeat] [get_bd_pins myPrescaler_0/prescale]
-  connect_bd_net -net myPrescaler_1_prescale [get_bd_ports i2s_mclk] [get_bd_pins myPrescaler_1/prescale]
-  connect_bd_net -net mySPIRxTx_0_mosi [get_bd_ports spi_mosi] [get_bd_pins mySPIRxTx_0/mosi]
-  connect_bd_net -net mySPIRxTx_0_sclk [get_bd_ports spi_sclk] [get_bd_pins mySPIRxTx_0/sclk]
-  connect_bd_net -net mySPIRxTx_0_ss [get_bd_ports spi_ss] [get_bd_pins mySPIRxTx_0/ss]
+  connect_bd_net -net myPrescaler_0_prescale [get_bd_ports led0_heartbeat_o] [get_bd_pins myPrescaler_0/prescale]
+  connect_bd_net -net myPrescaler_1_prescale [get_bd_ports spi_mclk_o] [get_bd_pins myPrescaler_1/prescale]
+  connect_bd_net -net mySPIRxTx_0_mosi [get_bd_ports spi_mosi_o] [get_bd_pins mySPIRxTx_0/mosi]
+  connect_bd_net -net mySPIRxTx_0_sclk [get_bd_ports spi_sclk_o] [get_bd_pins mySPIRxTx_0/sclk]
+  connect_bd_net -net mySPIRxTx_0_ss [get_bd_ports spi_ss_o] [get_bd_pins mySPIRxTx_0/ss]
   connect_bd_net -net processing_system7_0_FCLK_CLK0 [get_bd_pins axi_fifo_mm_s_0/s_axi_aclk] [get_bd_pins axi_fifo_mm_s_1/s_axi_aclk] [get_bd_pins fm_receiver_hls/ap_clk] [get_bd_pins myI2STx_0/s00_axis_aclk] [get_bd_pins myPrescaler_0/clk] [get_bd_pins myPrescaler_1/clk] [get_bd_pins mySPIRxTx_0/axis_aclk] [get_bd_pins processing_system7_0/FCLK_CLK0] [get_bd_pins processing_system7_0/M_AXI_GP0_ACLK] [get_bd_pins ps7_0_axi_periph/ACLK] [get_bd_pins ps7_0_axi_periph/M00_ACLK] [get_bd_pins ps7_0_axi_periph/M01_ACLK] [get_bd_pins ps7_0_axi_periph/S00_ACLK] [get_bd_pins rst_ps7_0_50M/slowest_sync_clk]
   connect_bd_net -net processing_system7_0_FCLK_RESET0_N [get_bd_pins processing_system7_0/FCLK_RESET0_N] [get_bd_pins rst_ps7_0_50M/ext_reset_in]
   connect_bd_net -net rst_ps7_0_50M_interconnect_aresetn [get_bd_pins ps7_0_axi_periph/ARESETN] [get_bd_pins rst_ps7_0_50M/interconnect_aresetn]
