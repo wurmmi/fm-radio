@@ -27,20 +27,24 @@ The band limitation needs to be given at the transmitting antenna, to minimize i
 The frequency needs to be high, to radiate the signal by an antenna.
 
 On the receiver side, once the signal reaches the antenna of a receiver, there are further similarities.
-In order to decode the actual data content of the signals, they need to be converted down to become a baseband signal.
-Again, there are multiple ways to achieve that.
-In baseband, the signal can then be further processed, until the data content of interest is visible.
+The antenna signal needs to be amplified and filtered.
+Both steps depend on the antenna characteristics, but usually the received signal is of relatively low power, and the antenna receives a wider range of frequencies than required.
+The filter therefor selects the frequency area that is of interest.
+Another reason for the filter is to avoid spectral replicas in the subsequent modulation, or down-conversion.
+Here, the front-end often down-converts to a low intermediate frequency, instead of directly going to baseband.
+The intermediate frequency is then modulated, or mixed, down to baseband later in the digital domain, which brings advantages in the downstream processing chain. %TODO check this or explain more which advantages (HF to BB directly --> i/q complex signal? ; HF to IF to BB --> real signal ) ??
 
+These three steps - amplification, filtering and down-conversion - are usually done in the analog domain, since digital circuits cannot work with such high frequencies.
+After the analog signal is down-converted to baseband, it needs to be digitized.
+This is done by an analog-digital-converter (ADC).
+
+After the signal is processed to digital baseband, the received signal can finally be decoded to get the actual data content.
+This decoding process depends on the respective modulation type that is used.\\
+
+\noindent
 The block diagram in Fig.\ref{fig:bd_dsp_overview} gives a high-level overview of a receiver structure.
 
-\includepicture [0.5] [0] {An overview of the signal processing chain.} {bd_dsp_overview} {img/draw.io/bd_dsp_overview}
-
-% TODO: block diagram of receiver
-% Antenna -->
-% --> Analog Frontend (gain, filter, mixer to baseband)
-% --> Digital Signal Processing
-% --> Output (e.g. speakers)
-
+\includepicture [1.0] [0] {An overview of the signal processing chain.} {bd_dsp_overview} {img/draw.io/bd_dsp_overview}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
