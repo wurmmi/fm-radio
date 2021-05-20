@@ -43,7 +43,7 @@ class DataWriter {
     ofs.close();
   }
 
-  void write(sample_t value) {
+  void write(sample_t const value) {
     // Write to file
     ofs << std::fixed << std::setw(FP_WIDTH + 3)
         << std::setprecision(FP_WIDTH_FRAC) << value.to_float() << std::endl;
