@@ -770,8 +770,8 @@ aximum {}} value 17} bitoffset {attribs {resolve_type immediate dependency {} fo
       </xilinx:taxonomies>
       <xilinx:displayName>fm_receiver_hls</xilinx:displayName>
       <xilinx:definitionSource>HLS</xilinx:definitionSource>
-      <xilinx:coreRevision>2105201643</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2021-05-20T14:43:13Z</xilinx:coreCreationDateTime>
+      <xilinx:coreRevision>2105201729</xilinx:coreRevision>
+      <xilinx:coreCreationDateTime>2021-05-20T15:29:37Z</xilinx:coreCreationDateTime>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2018.2</xilinx:xilinxVersion>
