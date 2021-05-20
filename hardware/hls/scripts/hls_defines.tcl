@@ -7,6 +7,9 @@
 set SRC_DIR  "../../src"
 set TB_DIR   "../../tb"
 
-set CPPFLAGS "-O --std=c++11 -I$SRC_DIR \
-              -Wall -Wno-unused-label -Wno-unused-parameter \
-              -Wno-mismatched-tags"
+set CPPFLAGS "-O0 --std=c++11 -I$SRC_DIR     \
+              -Wall                          \
+              -Wno-unused-label              \
+              -Wno-unused-parameter          \
+              -Wno-mismatched-tags          \
+              -fsanitize=undefined"

@@ -45,8 +45,9 @@ class DataWriter {
 
   void write(sample_t const value) {
     // Write to file
-    ofs << std::fixed << std::setw(FP_WIDTH + 3)
-        << std::setprecision(FP_WIDTH_FRAC) << value.to_float() << std::endl;
+    ofs  //<< std::fixed
+         //<< std::setw(FP_WIDTH + 3)
+        << std::setprecision(FP_WIDTH) << value.to_float() << std::endl;
 
     // Store in local vector
     data.emplace_back(value);

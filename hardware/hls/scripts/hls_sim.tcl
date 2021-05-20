@@ -18,6 +18,6 @@ puts "###############################################################"
 # Revert the workaround, described in "hls_cosim.tcl"
 add_files -tb $TB_DIR/main.cpp -cflags $CPPFLAGS
 
-csim_design -clean
+csim_design -clean -ldflags {-fsanitize=undefined}
 
 exit
