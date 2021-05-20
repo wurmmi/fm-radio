@@ -43,7 +43,8 @@ void fm_receiver(sample_t const& in_i,
   // FM Demodulator
   // ------------------------------------------------------
 
-  sample_t fm_demod = fm_demodulator(in_i, in_q);
+  iq_sample_t iq    = {in_i, in_q};
+  sample_t fm_demod = fm_demodulator(iq);
 
   // ------------------------------------------------------
   // Decimator

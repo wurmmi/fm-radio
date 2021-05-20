@@ -14,11 +14,6 @@
 #include "fm_global.hpp"
 
 typedef struct {
-  sample_t i;
-  sample_t q;
-} iq_sample_t;
-
-typedef struct {
   sample_t L;
   sample_t R;
 } audio_sample_t;
