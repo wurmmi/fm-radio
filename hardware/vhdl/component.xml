@@ -430,7 +430,7 @@
         <xilinx:family xilinx:lifeCycle="Pre-Production">zynquplus</xilinx:family>
       </xilinx:supportedFamilies>
       <xilinx:taxonomies>
-        <xilinx:taxonomy>/UserIP</xilinx:taxonomy>
+        <xilinx:taxonomy>/VHDL IP</xilinx:taxonomy>
       </xilinx:taxonomies>
       <xilinx:displayName>fm_receiver_vhdl</xilinx:displayName>
       <xilinx:definitionSource>package_project</xilinx:definitionSource>
