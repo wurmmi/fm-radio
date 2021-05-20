@@ -95,7 +95,7 @@
       <spirit:parameters>
         <spirit:parameter>
           <spirit:name>TDATA_NUM_BYTES</spirit:name>
-          <spirit:value spirit:id="BUSIFPARAM_VALUE.IQ_IN_V.TDATA_NUM_BYTES">5</spirit:value>
+          <spirit:value spirit:id="BUSIFPARAM_VALUE.IQ_IN_V.TDATA_NUM_BYTES">4</spirit:value>
         </spirit:parameter>
         <spirit:parameter>
           <spirit:name>TUSER_WIDTH</spirit:name>
@@ -106,7 +106,7 @@
           <spirit:value spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.IQ_IN_V.LAYERED_METADATA">xilinx.com:interface:datatypes:1.0 {TDATA {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type automatic dependency {} format long minimum {} maximum {}} value 0} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} struct {field_i {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value i} enabled {attribs {resolve_type i
 mmediate dependency {} format bool minimum {} maximum {}} value true} datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 17} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} real {fixed {fractwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 15} sig
 ned {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value true}}}}} field_q {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value q} enabled {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value true} datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} m
-aximum {}} value 17} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 17} real {fixed {fractwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 15} signed {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value true}}}}}}}}}</spirit:value>
+aximum {}} value 17} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 16} real {fixed {fractwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 15} signed {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value true}}}}}}}}}</spirit:value>
         </spirit:parameter>
       </spirit:parameters>
     </spirit:busInterface>
@@ -144,7 +144,7 @@ aximum {}} value 17} bitoffset {attribs {resolve_type immediate dependency {} fo
       <spirit:parameters>
         <spirit:parameter>
           <spirit:name>TDATA_NUM_BYTES</spirit:name>
-          <spirit:value spirit:id="BUSIFPARAM_VALUE.AUDIO_OUT_V.TDATA_NUM_BYTES">5</spirit:value>
+          <spirit:value spirit:id="BUSIFPARAM_VALUE.AUDIO_OUT_V.TDATA_NUM_BYTES">4</spirit:value>
         </spirit:parameter>
         <spirit:parameter>
           <spirit:name>TUSER_WIDTH</spirit:name>
@@ -155,7 +155,7 @@ aximum {}} value 17} bitoffset {attribs {resolve_type immediate dependency {} fo
           <spirit:value spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.AUDIO_OUT_V.LAYERED_METADATA">xilinx.com:interface:datatypes:1.0 {TDATA {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type automatic dependency {} format long minimum {} maximum {}} value 0} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} struct {field_L {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value L} enabled {attribs {resolve_type i
 mmediate dependency {} format bool minimum {} maximum {}} value true} datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 17} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} real {fixed {fractwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 15} sig
 ned {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value true}}}}} field_R {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value R} enabled {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value true} datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} m
-aximum {}} value 17} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 17} real {fixed {fractwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 15} signed {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value true}}}}}}}}}</spirit:value>
+aximum {}} value 17} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 16} real {fixed {fractwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 15} signed {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value true}}}}}}}}}</spirit:value>
         </spirit:parameter>
       </spirit:parameters>
     </spirit:busInterface>
@@ -174,7 +174,7 @@ aximum {}} value 17} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>917a45a6</spirit:value>
+            <spirit:value>5fecb685</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -190,7 +190,7 @@ aximum {}} value 17} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>91a04d5d</spirit:value>
+            <spirit:value>b6e42183</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -206,7 +206,7 @@ aximum {}} value 17} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>218f556f</spirit:value>
+            <spirit:value>21ad9c20</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -222,7 +222,7 @@ aximum {}} value 17} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>eae79522</spirit:value>
+            <spirit:value>e4c32793</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -244,7 +244,7 @@ aximum {}} value 17} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>7743f2d1</spirit:value>
+            <spirit:value>0f05e113</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -286,7 +286,7 @@ aximum {}} value 17} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>7743f2d1</spirit:value>
+            <spirit:value>0f05e113</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -349,7 +349,7 @@ aximum {}} value 17} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:wire>
           <spirit:direction>in</spirit:direction>
           <spirit:vector>
-            <spirit:left spirit:format="long">39</spirit:left>
+            <spirit:left spirit:format="long">31</spirit:left>
             <spirit:right spirit:format="long">0</spirit:right>
           </spirit:vector>
           <spirit:wireTypeDefs>
@@ -392,7 +392,7 @@ aximum {}} value 17} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:wire>
           <spirit:direction>out</spirit:direction>
           <spirit:vector>
-            <spirit:left spirit:format="long">39</spirit:left>
+            <spirit:left spirit:format="long">31</spirit:left>
             <spirit:right spirit:format="long">0</spirit:right>
           </spirit:vector>
           <spirit:wireTypeDefs>
@@ -628,7 +628,7 @@ aximum {}} value 17} bitoffset {attribs {resolve_type immediate dependency {} fo
       <spirit:file>
         <spirit:name>hdl/vhdl/fm_receiver_top.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_b4397f11</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_d9e2eee5</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>
@@ -770,17 +770,14 @@ aximum {}} value 17} bitoffset {attribs {resolve_type immediate dependency {} fo
       </xilinx:taxonomies>
       <xilinx:displayName>fm_receiver_hls</xilinx:displayName>
       <xilinx:definitionSource>HLS</xilinx:definitionSource>
-      <xilinx:coreRevision>2105051059</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2021-05-05T09:23:57Z</xilinx:coreCreationDateTime>
-      <xilinx:tags>
-        <xilinx:tag xilinx:name="MWURM:hls:fm_receiver_hls:0.1_ARCHIVE_LOCATION">/home/mike/work/fm-radio/hardware/vivado/ip/fm_receiver_hls</xilinx:tag>
-      </xilinx:tags>
+      <xilinx:coreRevision>2105201643</xilinx:coreRevision>
+      <xilinx:coreCreationDateTime>2021-05-20T14:43:13Z</xilinx:coreCreationDateTime>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2018.2</xilinx:xilinxVersion>
-      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="70818f95"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="41cf89d3"/>
-      <xilinx:checksum xilinx:scope="ports" xilinx:value="d661f02b"/>
+      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="6b1ceeed"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="354d91c6"/>
+      <xilinx:checksum xilinx:scope="ports" xilinx:value="93413dfb"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="9b99cfc7"/>
     </xilinx:packagingInfo>
   </spirit:vendorExtensions>

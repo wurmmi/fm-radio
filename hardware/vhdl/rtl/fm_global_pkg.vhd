@@ -45,9 +45,9 @@ package fm_global_pkg is
   constant carrier_38k_offset_c : u_sfixed(2 downto -2) := to_sfixed(carrier_38k_offset_spec_c, 2, -2);
 
   --! Value
-  subtype iq_value_t is u_sfixed(fp_width_int_c downto -fp_width_frac_c);
+  subtype iq_value_t is u_sfixed(fp_width_int_c - 1 downto -fp_width_frac_c);
 
-  subtype sample_t is u_sfixed(fp_width_int_c downto -fp_width_frac_c);
+  subtype sample_t is u_sfixed(fp_width_int_c - 1 downto -fp_width_frac_c);
 
   subtype fract_real is real range
   - 1.0 to 0.99999999999999999999999999999999999999999999999999999999999999999;

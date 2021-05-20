@@ -13,7 +13,7 @@ use ieee.std_logic_unsigned.all;
 entity fm_receiver_fir_pcud_ram is 
     generic(
             MEM_TYPE    : string := "block"; 
-            DWIDTH     : integer := 17; 
+            DWIDTH     : integer := 16; 
             AWIDTH     : integer := 7; 
             MEM_SIZE    : integer := 72
     ); 
@@ -75,7 +75,7 @@ use IEEE.std_logic_1164.all;
 
 entity fm_receiver_fir_pcud is
     generic (
-        DataWidth : INTEGER := 17;
+        DataWidth : INTEGER := 16;
         AddressRange : INTEGER := 72;
         AddressWidth : INTEGER := 7);
     port (

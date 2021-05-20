@@ -68,186 +68,186 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-input  [16:0] in_i_V_read;
-input  [16:0] in_q_V_read;
-output  [16:0] ap_return_0;
-output  [16:0] ap_return_1;
+input  [15:0] in_i_V_read;
+input  [15:0] in_q_V_read;
+output  [15:0] ap_return_0;
+output  [15:0] ap_return_1;
 
 reg ap_done;
 reg ap_idle;
 reg ap_ready;
-reg[16:0] ap_return_0;
-reg[16:0] ap_return_1;
+reg[15:0] ap_return_0;
+reg[15:0] ap_return_1;
 
 (* fsm_encoding = "none" *) reg   [40:0] ap_CS_fsm;
 wire    ap_CS_fsm_state1;
 reg   [2:0] decimator_count;
-reg   [16:0] decimator_decimated_s;
+reg   [15:0] decimator_decimated_s;
 reg    fir_pilot_inst_shift_ce0;
 reg    fir_pilot_inst_shift_we0;
-wire   [16:0] fir_pilot_inst_shift_q0;
+wire   [15:0] fir_pilot_inst_shift_q0;
 reg    filter_bp_pilot_coef_ce0;
-wire   [16:0] filter_bp_pilot_coef_q0;
+wire   [15:0] filter_bp_pilot_coef_q0;
 reg    fir_mono_inst_shift_s_ce0;
 reg    fir_mono_inst_shift_s_we0;
-wire   [16:0] fir_mono_inst_shift_s_q0;
+wire   [15:0] fir_mono_inst_shift_s_q0;
 reg    filter_lp_mono_coeff_ce0;
-wire   [16:0] filter_lp_mono_coeff_q0;
+wire   [15:0] filter_lp_mono_coeff_q0;
 reg    fir_lrdiff_inst_shif_ce0;
 reg    fir_lrdiff_inst_shif_we0;
-wire   [16:0] fir_lrdiff_inst_shif_q0;
+wire   [15:0] fir_lrdiff_inst_shif_q0;
 reg    filter_bp_lrdiff_coe_ce0;
-wire   [16:0] filter_bp_lrdiff_coe_q0;
-wire   [16:0] fir_mono_inst_shift_1_q0;
-wire   [16:0] filter_lp_mono_coeff_1_q0;
+wire   [15:0] filter_bp_lrdiff_coe_q0;
+wire   [15:0] fir_mono_inst_shift_1_q0;
+wire   [15:0] filter_lp_mono_coeff_1_q0;
 reg   [7:0] decimator_mono_audio_1;
-reg   [16:0] decimator_mono_audio;
+reg   [15:0] decimator_mono_audio;
 reg   [7:0] decimator_lrdiff_cou;
-reg   [16:0] decimator_lrdiff_dec;
+reg   [15:0] decimator_lrdiff_dec;
 reg   [1:0] delay_i_inst_shift_r_address0;
 reg    delay_i_inst_shift_r_ce0;
 reg    delay_i_inst_shift_r_we0;
-reg   [16:0] delay_i_inst_shift_r_d0;
-wire   [16:0] delay_i_inst_shift_r_q0;
+reg   [15:0] delay_i_inst_shift_r_d0;
+wire   [15:0] delay_i_inst_shift_r_q0;
 reg   [1:0] delay_i_inst_shift_r_address1;
 reg    delay_i_inst_shift_r_ce1;
 reg    delay_i_inst_shift_r_we1;
-wire   [16:0] delay_i_inst_shift_r_q1;
+wire   [15:0] delay_i_inst_shift_r_q1;
 reg   [1:0] delay_q_inst_shift_r_address0;
 reg    delay_q_inst_shift_r_ce0;
 reg    delay_q_inst_shift_r_we0;
-reg   [16:0] delay_q_inst_shift_r_d0;
-wire   [16:0] delay_q_inst_shift_r_q0;
+reg   [15:0] delay_q_inst_shift_r_d0;
+wire   [15:0] delay_q_inst_shift_r_q0;
 reg   [1:0] delay_q_inst_shift_r_address1;
 reg    delay_q_inst_shift_r_ce1;
 reg    delay_q_inst_shift_r_we1;
-wire   [16:0] delay_q_inst_shift_r_q1;
+wire   [15:0] delay_q_inst_shift_r_q1;
 reg   [5:0] delay_inst_shift_reg_address0;
 reg    delay_inst_shift_reg_ce0;
 reg    delay_inst_shift_reg_we0;
-reg   [16:0] delay_inst_shift_reg_d0;
-wire   [16:0] delay_inst_shift_reg_q0;
+reg   [15:0] delay_inst_shift_reg_d0;
+wire   [15:0] delay_inst_shift_reg_q0;
 reg   [5:0] delay_inst_shift_reg_address1;
 reg    delay_inst_shift_reg_ce1;
 reg    delay_inst_shift_reg_we1;
-reg   [16:0] delay_inst_shift_reg_d1;
-wire   [16:0] delay_inst_shift_reg_q1;
-reg   [16:0] reg_366;
+reg   [15:0] delay_inst_shift_reg_d1;
+wire   [15:0] delay_inst_shift_reg_q1;
+reg   [15:0] reg_366;
 wire    ap_CS_fsm_state2;
 wire    ap_CS_fsm_state3;
-reg   [16:0] reg_372;
-reg   [16:0] reg_378;
+reg   [15:0] reg_372;
+reg   [15:0] reg_378;
 wire    ap_CS_fsm_state7;
 wire    ap_CS_fsm_state24;
-reg   [16:0] p_Val2_4_reg_710;
-reg   [16:0] p_Val2_5_reg_715;
-reg   [16:0] fm_channel_data_V_reg_723;
+reg   [15:0] p_Val2_4_reg_710;
+reg   [15:0] p_Val2_5_reg_715;
+reg   [15:0] fm_channel_data_V_reg_723;
 wire    ap_CS_fsm_state5;
-reg   [16:0] mono_delayed_V_reg_728;
+reg   [15:0] mono_delayed_V_reg_728;
 wire    ap_CS_fsm_state6;
-reg   [16:0] delay_inst_shift_reg_2_reg_734;
-reg   [16:0] delay_inst_shift_reg_3_reg_739;
+reg   [15:0] delay_inst_shift_reg_2_reg_734;
+reg   [15:0] delay_inst_shift_reg_3_reg_739;
 wire    ap_CS_fsm_state8;
-reg   [16:0] delay_inst_shift_reg_4_reg_744;
-reg   [16:0] delay_inst_shift_reg_5_reg_749;
+reg   [15:0] delay_inst_shift_reg_4_reg_744;
+reg   [15:0] delay_inst_shift_reg_5_reg_749;
 wire    ap_CS_fsm_state9;
-reg   [16:0] delay_inst_shift_reg_6_reg_754;
-reg   [16:0] delay_inst_shift_reg_7_reg_759;
+reg   [15:0] delay_inst_shift_reg_6_reg_754;
+reg   [15:0] delay_inst_shift_reg_7_reg_759;
 wire    ap_CS_fsm_state10;
-reg   [16:0] delay_inst_shift_reg_8_reg_764;
-reg   [16:0] delay_inst_shift_reg_9_reg_769;
+reg   [15:0] delay_inst_shift_reg_8_reg_764;
+reg   [15:0] delay_inst_shift_reg_9_reg_769;
 wire    ap_CS_fsm_state11;
-reg   [16:0] delay_inst_shift_reg_10_reg_774;
-reg   [16:0] delay_inst_shift_reg_11_reg_779;
+reg   [15:0] delay_inst_shift_reg_10_reg_774;
+reg   [15:0] delay_inst_shift_reg_11_reg_779;
 wire    ap_CS_fsm_state12;
-reg   [16:0] delay_inst_shift_reg_12_reg_784;
-reg   [16:0] delay_inst_shift_reg_13_reg_789;
+reg   [15:0] delay_inst_shift_reg_12_reg_784;
+reg   [15:0] delay_inst_shift_reg_13_reg_789;
 wire    ap_CS_fsm_state13;
-reg   [16:0] delay_inst_shift_reg_14_reg_794;
-reg   [16:0] delay_inst_shift_reg_15_reg_799;
+reg   [15:0] delay_inst_shift_reg_14_reg_794;
+reg   [15:0] delay_inst_shift_reg_15_reg_799;
 wire    ap_CS_fsm_state14;
-reg   [16:0] delay_inst_shift_reg_16_reg_804;
-reg   [16:0] delay_inst_shift_reg_17_reg_809;
+reg   [15:0] delay_inst_shift_reg_16_reg_804;
+reg   [15:0] delay_inst_shift_reg_17_reg_809;
 wire    ap_CS_fsm_state15;
-reg   [16:0] delay_inst_shift_reg_18_reg_814;
-reg   [16:0] delay_inst_shift_reg_19_reg_819;
+reg   [15:0] delay_inst_shift_reg_18_reg_814;
+reg   [15:0] delay_inst_shift_reg_19_reg_819;
 wire    ap_CS_fsm_state16;
-reg   [16:0] delay_inst_shift_reg_20_reg_824;
-reg   [16:0] delay_inst_shift_reg_21_reg_829;
+reg   [15:0] delay_inst_shift_reg_20_reg_824;
+reg   [15:0] delay_inst_shift_reg_21_reg_829;
 wire    ap_CS_fsm_state17;
-reg   [16:0] delay_inst_shift_reg_22_reg_834;
-reg   [16:0] delay_inst_shift_reg_23_reg_839;
+reg   [15:0] delay_inst_shift_reg_22_reg_834;
+reg   [15:0] delay_inst_shift_reg_23_reg_839;
 wire    ap_CS_fsm_state18;
-reg   [16:0] delay_inst_shift_reg_24_reg_844;
-reg   [16:0] delay_inst_shift_reg_25_reg_849;
+reg   [15:0] delay_inst_shift_reg_24_reg_844;
+reg   [15:0] delay_inst_shift_reg_25_reg_849;
 wire    ap_CS_fsm_state19;
-reg   [16:0] delay_inst_shift_reg_26_reg_854;
-reg   [16:0] delay_inst_shift_reg_27_reg_859;
+reg   [15:0] delay_inst_shift_reg_26_reg_854;
+reg   [15:0] delay_inst_shift_reg_27_reg_859;
 wire    ap_CS_fsm_state20;
-reg   [16:0] delay_inst_shift_reg_28_reg_864;
-reg   [16:0] delay_inst_shift_reg_29_reg_869;
+reg   [15:0] delay_inst_shift_reg_28_reg_864;
+reg   [15:0] delay_inst_shift_reg_29_reg_869;
 wire    ap_CS_fsm_state21;
-reg   [16:0] delay_inst_shift_reg_30_reg_874;
-reg   [16:0] delay_inst_shift_reg_31_reg_879;
+reg   [15:0] delay_inst_shift_reg_30_reg_874;
+reg   [15:0] delay_inst_shift_reg_31_reg_879;
 wire    ap_CS_fsm_state22;
-reg   [16:0] delay_inst_shift_reg_32_reg_884;
-reg   [16:0] delay_inst_shift_reg_33_reg_889;
+reg   [15:0] delay_inst_shift_reg_32_reg_884;
+reg   [15:0] delay_inst_shift_reg_33_reg_889;
 wire    ap_CS_fsm_state23;
-reg   [16:0] delay_inst_shift_reg_34_reg_894;
-wire  signed [30:0] OP1_V_3_cast_fu_687_p2;
-reg  signed [30:0] OP1_V_3_cast_reg_899;
+reg   [15:0] delay_inst_shift_reg_34_reg_894;
+wire  signed [28:0] OP1_V_3_cast_fu_687_p2;
+reg  signed [28:0] OP1_V_3_cast_reg_899;
 wire    ap_CS_fsm_state37;
 wire    grp_operator_s_fu_343_ap_idle;
 wire    grp_operator_s_fu_343_ap_ready;
 wire    grp_operator_s_fu_343_ap_done;
-reg  signed [16:0] carrier_38k_V_reg_904;
+reg  signed [15:0] carrier_38k_V_reg_904;
 wire    ap_CS_fsm_state38;
-reg   [16:0] p_0_i3_i_reg_909;
+reg   [15:0] p_0_i3_i_reg_909;
 wire    ap_CS_fsm_state39;
 wire    grp_operator_s_fu_343_ap_start;
-wire   [6:0] grp_operator_s_fu_343_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_address0;
-wire    grp_operator_s_fu_343_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_ce0;
-wire    grp_operator_s_fu_343_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_we0;
-wire   [16:0] grp_operator_s_fu_343_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_d0;
-reg   [16:0] grp_operator_s_fu_343_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_q0;
+wire   [6:0] grp_operator_s_fu_343_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_address0;
+wire    grp_operator_s_fu_343_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_ce0;
+wire    grp_operator_s_fu_343_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_we0;
+wire   [15:0] grp_operator_s_fu_343_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_d0;
+reg   [15:0] grp_operator_s_fu_343_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_q0;
 wire   [6:0] grp_operator_s_fu_343_coeff_V_address0;
 wire    grp_operator_s_fu_343_coeff_V_ce0;
-reg   [16:0] grp_operator_s_fu_343_coeff_V_q0;
-wire  signed [16:0] grp_operator_s_fu_343_ap_return;
+reg   [15:0] grp_operator_s_fu_343_coeff_V_q0;
+wire  signed [15:0] grp_operator_s_fu_343_ap_return;
 wire    grp_operator_s_fu_357_ap_start;
 wire    grp_operator_s_fu_357_ap_done;
 wire    grp_operator_s_fu_357_ap_idle;
 wire    grp_operator_s_fu_357_ap_ready;
-wire   [6:0] grp_operator_s_fu_357_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_address0;
-wire    grp_operator_s_fu_357_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_ce0;
-wire    grp_operator_s_fu_357_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_we0;
-wire   [16:0] grp_operator_s_fu_357_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_d0;
+wire   [6:0] grp_operator_s_fu_357_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_address0;
+wire    grp_operator_s_fu_357_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_ce0;
+wire    grp_operator_s_fu_357_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_we0;
+wire   [15:0] grp_operator_s_fu_357_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_d0;
 wire   [6:0] grp_operator_s_fu_357_coeff_V_address0;
 wire    grp_operator_s_fu_357_coeff_V_ce0;
-wire   [16:0] grp_operator_s_fu_357_ap_return;
+wire   [15:0] grp_operator_s_fu_357_ap_return;
 wire   [0:0] ap_phi_mux_fm_channel_data_vali_phi_fu_306_p4;
 reg   [0:0] fm_channel_data_vali_reg_301;
 wire    ap_CS_fsm_state4;
 wire   [0:0] tmp_i_fu_437_p2;
-wire   [16:0] audio_L_V_fu_647_p2;
-reg   [16:0] ap_phi_mux_ssdm_int_V_write_ass_phi_fu_319_p6;
-reg   [16:0] ssdm_int_V_write_ass_reg_315;
+wire   [15:0] audio_L_V_fu_647_p2;
+reg   [15:0] ap_phi_mux_ssdm_int_V_write_ass_phi_fu_319_p6;
+reg   [15:0] ssdm_int_V_write_ass_reg_315;
 wire    ap_CS_fsm_state41;
 reg    ap_block_state41_on_subcall_done;
 wire   [0:0] brmerge_demorgan_i_fu_641_p2;
-wire   [16:0] audio_R_V_fu_654_p2;
-reg   [16:0] ap_phi_mux_ssdm_int_V_write_ass_1_phi_fu_333_p6;
-reg   [16:0] ssdm_int_V_write_ass_1_reg_329;
+wire   [15:0] audio_R_V_fu_654_p2;
+reg   [15:0] ap_phi_mux_ssdm_int_V_write_ass_1_phi_fu_333_p6;
+reg   [15:0] ssdm_int_V_write_ass_1_reg_329;
 reg    grp_operator_s_fu_343_ap_start_reg;
 wire    ap_CS_fsm_state36;
 wire    ap_CS_fsm_state40;
 reg    grp_operator_s_fu_357_ap_start_reg;
 wire   [2:0] tmp_i_10_fu_443_p2;
-wire   [16:0] fm_demod_V_fu_429_p2;
+wire   [15:0] fm_demod_V_fu_429_p2;
 wire   [7:0] DECIMATOR_count_writ_fu_563_p3;
-wire   [16:0] p_Val2_8_fu_556_p3;
+wire   [15:0] p_Val2_8_fu_556_p3;
 wire   [7:0] DECIMATOR_count_writ_1_fu_621_p3;
-wire   [16:0] p_Val2_9_fu_613_p3;
+wire   [15:0] p_Val2_9_fu_613_p3;
 wire    ap_CS_fsm_state25;
 wire    ap_CS_fsm_state26;
 wire    ap_CS_fsm_state27;
@@ -259,61 +259,61 @@ wire    ap_CS_fsm_state32;
 wire    ap_CS_fsm_state33;
 wire    ap_CS_fsm_state34;
 wire    ap_CS_fsm_state35;
-wire  signed [16:0] p_Val2_7_i_fu_383_p0;
-wire  signed [16:0] p_Val2_i_fu_389_p0;
-wire  signed [16:0] p_Val2_i_fu_389_p2;
-wire  signed [31:0] p_Val2_2_fu_673_p2;
-wire  signed [16:0] p_Val2_7_i_fu_383_p2;
-wire  signed [31:0] p_Val2_3_fu_680_p2;
-wire   [16:0] tmp_1_fu_471_p2;
-wire   [16:0] p_Val2_i_i_fu_477_p2;
-wire   [31:0] p_Val2_6_fu_487_p3;
-wire   [31:0] addconv_i_i_fu_494_p2;
-wire  signed [30:0] r_V_fu_693_p2;
+wire  signed [15:0] p_Val2_7_i_fu_383_p0;
+wire  signed [15:0] p_Val2_i_fu_389_p0;
+wire  signed [15:0] p_Val2_i_fu_389_p2;
+wire  signed [29:0] p_Val2_2_fu_673_p2;
+wire  signed [15:0] p_Val2_7_i_fu_383_p2;
+wire  signed [29:0] p_Val2_3_fu_680_p2;
+wire   [15:0] tmp_1_fu_471_p2;
+wire   [15:0] p_Val2_i_i_fu_477_p2;
+wire   [29:0] p_Val2_6_fu_487_p3;
+wire   [29:0] addconv_i_i_fu_494_p2;
+wire  signed [28:0] r_V_fu_693_p2;
 wire   [6:0] tmp_2_fu_534_p4;
 wire   [0:0] audio_mono_dec_valid_fu_544_p2;
-wire   [7:0] tmp_i_i_fu_550_p2;
+wire   [7:0] tmp_i4_i_fu_550_p2;
 wire   [6:0] tmp_3_fu_591_p4;
 wire   [0:0] audio_lrdiff_dec_val_fu_601_p2;
-wire   [7:0] tmp_i5_i_fu_607_p2;
-wire  signed [16:0] OP1_V_3_cast_fu_687_p0;
-wire  signed [30:0] tmp_fu_483_p1;
-wire  signed [16:0] OP1_V_3_cast_fu_687_p1;
-reg   [16:0] ap_return_0_preg;
-reg   [16:0] ap_return_1_preg;
+wire   [7:0] tmp_i6_i_fu_607_p2;
+wire  signed [15:0] OP1_V_3_cast_fu_687_p0;
+wire  signed [28:0] tmp_fu_483_p1;
+wire  signed [15:0] OP1_V_3_cast_fu_687_p1;
+reg   [15:0] ap_return_0_preg;
+reg   [15:0] ap_return_1_preg;
 reg   [40:0] ap_NS_fsm;
 
 // power-on initialization
 initial begin
 #0 ap_CS_fsm = 41'd1;
 #0 decimator_count = 3'd0;
-#0 decimator_decimated_s = 17'd0;
+#0 decimator_decimated_s = 16'd0;
 #0 decimator_mono_audio_1 = 8'd0;
-#0 decimator_mono_audio = 17'd0;
+#0 decimator_mono_audio = 16'd0;
 #0 decimator_lrdiff_cou = 8'd0;
-#0 decimator_lrdiff_dec = 17'd0;
+#0 decimator_lrdiff_dec = 16'd0;
 #0 grp_operator_s_fu_343_ap_start_reg = 1'b0;
 #0 grp_operator_s_fu_357_ap_start_reg = 1'b0;
-#0 ap_return_0_preg = 17'd0;
-#0 ap_return_1_preg = 17'd0;
+#0 ap_return_0_preg = 16'd0;
+#0 ap_return_1_preg = 16'd0;
 end
 
 fm_receiver_fir_pcud #(
-    .DataWidth( 17 ),
+    .DataWidth( 16 ),
     .AddressRange( 72 ),
     .AddressWidth( 7 ))
 fir_pilot_inst_shift_U(
     .clk(ap_clk),
     .reset(ap_rst),
-    .address0(grp_operator_s_fu_343_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_address0),
+    .address0(grp_operator_s_fu_343_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_address0),
     .ce0(fir_pilot_inst_shift_ce0),
     .we0(fir_pilot_inst_shift_we0),
-    .d0(grp_operator_s_fu_343_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_d0),
+    .d0(grp_operator_s_fu_343_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_d0),
     .q0(fir_pilot_inst_shift_q0)
 );
 
 fm_receiver_filtedEe #(
-    .DataWidth( 17 ),
+    .DataWidth( 16 ),
     .AddressRange( 73 ),
     .AddressWidth( 7 ))
 filter_bp_pilot_coef_U(
@@ -325,21 +325,21 @@ filter_bp_pilot_coef_U(
 );
 
 fm_receiver_fir_pcud #(
-    .DataWidth( 17 ),
+    .DataWidth( 16 ),
     .AddressRange( 72 ),
     .AddressWidth( 7 ))
 fir_mono_inst_shift_s_U(
     .clk(ap_clk),
     .reset(ap_rst),
-    .address0(grp_operator_s_fu_343_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_address0),
+    .address0(grp_operator_s_fu_343_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_address0),
     .ce0(fir_mono_inst_shift_s_ce0),
     .we0(fir_mono_inst_shift_s_we0),
-    .d0(grp_operator_s_fu_343_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_d0),
+    .d0(grp_operator_s_fu_343_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_d0),
     .q0(fir_mono_inst_shift_s_q0)
 );
 
 fm_receiver_filtefYi #(
-    .DataWidth( 17 ),
+    .DataWidth( 16 ),
     .AddressRange( 73 ),
     .AddressWidth( 7 ))
 filter_lp_mono_coeff_U(
@@ -351,21 +351,21 @@ filter_lp_mono_coeff_U(
 );
 
 fm_receiver_fir_pcud #(
-    .DataWidth( 17 ),
+    .DataWidth( 16 ),
     .AddressRange( 72 ),
     .AddressWidth( 7 ))
 fir_lrdiff_inst_shif_U(
     .clk(ap_clk),
     .reset(ap_rst),
-    .address0(grp_operator_s_fu_343_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_address0),
+    .address0(grp_operator_s_fu_343_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_address0),
     .ce0(fir_lrdiff_inst_shif_ce0),
     .we0(fir_lrdiff_inst_shif_we0),
-    .d0(grp_operator_s_fu_343_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_d0),
+    .d0(grp_operator_s_fu_343_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_d0),
     .q0(fir_lrdiff_inst_shif_q0)
 );
 
 fm_receiver_filtehbi #(
-    .DataWidth( 17 ),
+    .DataWidth( 16 ),
     .AddressRange( 73 ),
     .AddressWidth( 7 ))
 filter_bp_lrdiff_coe_U(
@@ -377,21 +377,21 @@ filter_bp_lrdiff_coe_U(
 );
 
 fm_receiver_fir_pcud #(
-    .DataWidth( 17 ),
+    .DataWidth( 16 ),
     .AddressRange( 72 ),
     .AddressWidth( 7 ))
 fir_mono_inst_shift_1_U(
     .clk(ap_clk),
     .reset(ap_rst),
-    .address0(grp_operator_s_fu_357_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_address0),
-    .ce0(grp_operator_s_fu_357_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_ce0),
-    .we0(grp_operator_s_fu_357_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_we0),
-    .d0(grp_operator_s_fu_357_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_d0),
+    .address0(grp_operator_s_fu_357_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_address0),
+    .ce0(grp_operator_s_fu_357_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_ce0),
+    .we0(grp_operator_s_fu_357_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_we0),
+    .d0(grp_operator_s_fu_357_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_d0),
     .q0(fir_mono_inst_shift_1_q0)
 );
 
 fm_receiver_filtefYi #(
-    .DataWidth( 17 ),
+    .DataWidth( 16 ),
     .AddressRange( 73 ),
     .AddressWidth( 7 ))
 filter_lp_mono_coeff_1_U(
@@ -403,7 +403,7 @@ filter_lp_mono_coeff_1_U(
 );
 
 fm_receiver_delaykbM #(
-    .DataWidth( 17 ),
+    .DataWidth( 16 ),
     .AddressRange( 3 ),
     .AddressWidth( 2 ))
 delay_i_inst_shift_r_U(
@@ -422,7 +422,7 @@ delay_i_inst_shift_r_U(
 );
 
 fm_receiver_delaykbM #(
-    .DataWidth( 17 ),
+    .DataWidth( 16 ),
     .AddressRange( 3 ),
     .AddressWidth( 2 ))
 delay_q_inst_shift_r_U(
@@ -441,7 +441,7 @@ delay_q_inst_shift_r_U(
 );
 
 fm_receiver_delaymb6 #(
-    .DataWidth( 17 ),
+    .DataWidth( 16 ),
     .AddressRange( 36 ),
     .AddressWidth( 6 ))
 delay_inst_shift_reg_U(
@@ -466,11 +466,11 @@ operator_s grp_operator_s_fu_343(
     .ap_done(grp_operator_s_fu_343_ap_done),
     .ap_idle(grp_operator_s_fu_343_ap_idle),
     .ap_ready(grp_operator_s_fu_343_ap_ready),
-    .FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_address0(grp_operator_s_fu_343_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_address0),
-    .FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_ce0(grp_operator_s_fu_343_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_ce0),
-    .FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_we0(grp_operator_s_fu_343_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_we0),
-    .FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_d0(grp_operator_s_fu_343_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_d0),
-    .FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_q0(grp_operator_s_fu_343_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_q0),
+    .FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_address0(grp_operator_s_fu_343_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_address0),
+    .FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_ce0(grp_operator_s_fu_343_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_ce0),
+    .FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_we0(grp_operator_s_fu_343_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_we0),
+    .FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_d0(grp_operator_s_fu_343_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_d0),
+    .FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_q0(grp_operator_s_fu_343_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_q0),
     .x_V(fm_channel_data_V_reg_723),
     .coeff_V_address0(grp_operator_s_fu_343_coeff_V_address0),
     .coeff_V_ce0(grp_operator_s_fu_343_coeff_V_ce0),
@@ -485,11 +485,11 @@ operator_s grp_operator_s_fu_357(
     .ap_done(grp_operator_s_fu_357_ap_done),
     .ap_idle(grp_operator_s_fu_357_ap_idle),
     .ap_ready(grp_operator_s_fu_357_ap_ready),
-    .FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_address0(grp_operator_s_fu_357_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_address0),
-    .FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_ce0(grp_operator_s_fu_357_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_ce0),
-    .FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_we0(grp_operator_s_fu_357_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_we0),
-    .FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_d0(grp_operator_s_fu_357_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_d0),
-    .FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_q0(fir_mono_inst_shift_1_q0),
+    .FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_address0(grp_operator_s_fu_357_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_address0),
+    .FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_ce0(grp_operator_s_fu_357_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_ce0),
+    .FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_we0(grp_operator_s_fu_357_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_we0),
+    .FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_d0(grp_operator_s_fu_357_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_d0),
+    .FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_q0(fir_mono_inst_shift_1_q0),
     .x_V(p_0_i3_i_reg_909),
     .coeff_V_address0(grp_operator_s_fu_357_coeff_V_address0),
     .coeff_V_ce0(grp_operator_s_fu_357_coeff_V_ce0),
@@ -500,9 +500,9 @@ operator_s grp_operator_s_fu_357(
 fm_receiver_top_mncg #(
     .ID( 1 ),
     .NUM_STAGE( 1 ),
-    .din0_WIDTH( 17 ),
-    .din1_WIDTH( 17 ),
-    .dout_WIDTH( 32 ))
+    .din0_WIDTH( 16 ),
+    .din1_WIDTH( 16 ),
+    .dout_WIDTH( 30 ))
 fm_receiver_top_mncg_U6(
     .din0(p_Val2_i_fu_389_p2),
     .din1(in_i_V_read),
@@ -512,9 +512,9 @@ fm_receiver_top_mncg_U6(
 fm_receiver_top_mncg #(
     .ID( 1 ),
     .NUM_STAGE( 1 ),
-    .din0_WIDTH( 17 ),
-    .din1_WIDTH( 17 ),
-    .dout_WIDTH( 32 ))
+    .din0_WIDTH( 16 ),
+    .din1_WIDTH( 16 ),
+    .dout_WIDTH( 30 ))
 fm_receiver_top_mncg_U7(
     .din0(in_q_V_read),
     .din1(p_Val2_7_i_fu_383_p2),
@@ -524,9 +524,9 @@ fm_receiver_top_mncg_U7(
 fm_receiver_top_mocq #(
     .ID( 1 ),
     .NUM_STAGE( 1 ),
-    .din0_WIDTH( 17 ),
-    .din1_WIDTH( 17 ),
-    .dout_WIDTH( 31 ))
+    .din0_WIDTH( 16 ),
+    .din1_WIDTH( 16 ),
+    .dout_WIDTH( 29 ))
 fm_receiver_top_mocq_U8(
     .din0(OP1_V_3_cast_fu_687_p0),
     .din1(OP1_V_3_cast_fu_687_p1),
@@ -536,9 +536,9 @@ fm_receiver_top_mocq_U8(
 fm_receiver_top_mocq #(
     .ID( 1 ),
     .NUM_STAGE( 1 ),
-    .din0_WIDTH( 17 ),
-    .din1_WIDTH( 17 ),
-    .dout_WIDTH( 31 ))
+    .din0_WIDTH( 16 ),
+    .din1_WIDTH( 16 ),
+    .dout_WIDTH( 29 ))
 fm_receiver_top_mocq_U9(
     .din0(carrier_38k_V_reg_904),
     .din1(grp_operator_s_fu_343_ap_return),
@@ -555,7 +555,7 @@ end
 
 always @ (posedge ap_clk) begin
     if (ap_rst == 1'b1) begin
-        ap_return_0_preg <= 17'd0;
+        ap_return_0_preg <= 16'd0;
     end else begin
         if (((1'b0 == ap_block_state41_on_subcall_done) & (1'b1 == ap_CS_fsm_state41))) begin
             ap_return_0_preg <= ap_phi_mux_ssdm_int_V_write_ass_phi_fu_319_p6;
@@ -565,7 +565,7 @@ end
 
 always @ (posedge ap_clk) begin
     if (ap_rst == 1'b1) begin
-        ap_return_1_preg <= 17'd0;
+        ap_return_1_preg <= 16'd0;
     end else begin
         if (((1'b0 == ap_block_state41_on_subcall_done) & (1'b1 == ap_CS_fsm_state41))) begin
             ap_return_1_preg <= ap_phi_mux_ssdm_int_V_write_ass_1_phi_fu_333_p6;
@@ -641,7 +641,7 @@ end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state38)) begin
-        carrier_38k_V_reg_904 <= {{addconv_i_i_fu_494_p2[31:15]}};
+        carrier_38k_V_reg_904 <= {{addconv_i_i_fu_494_p2[29:14]}};
     end
 end
 
@@ -792,14 +792,14 @@ end
 
 always @ (posedge ap_clk) begin
     if (((grp_operator_s_fu_343_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state39))) begin
-        p_0_i3_i_reg_909 <= {{r_V_fu_693_p2[30:14]}};
+        p_0_i3_i_reg_909 <= {{r_V_fu_693_p2[28:13]}};
     end
 end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state3)) begin
-        p_Val2_4_reg_710 <= {{p_Val2_2_fu_673_p2[31:15]}};
-        p_Val2_5_reg_715 <= {{p_Val2_3_fu_680_p2[31:15]}};
+        p_Val2_4_reg_710 <= {{p_Val2_2_fu_673_p2[29:14]}};
+        p_Val2_5_reg_715 <= {{p_Val2_3_fu_680_p2[29:14]}};
     end
 end
 
@@ -1294,7 +1294,7 @@ end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state39)) begin
-        fir_lrdiff_inst_shif_ce0 = grp_operator_s_fu_343_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_ce0;
+        fir_lrdiff_inst_shif_ce0 = grp_operator_s_fu_343_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_ce0;
     end else begin
         fir_lrdiff_inst_shif_ce0 = 1'b0;
     end
@@ -1302,7 +1302,7 @@ end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state39)) begin
-        fir_lrdiff_inst_shif_we0 = grp_operator_s_fu_343_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_we0;
+        fir_lrdiff_inst_shif_we0 = grp_operator_s_fu_343_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_we0;
     end else begin
         fir_lrdiff_inst_shif_we0 = 1'b0;
     end
@@ -1310,7 +1310,7 @@ end
 
 always @ (*) begin
     if (((fm_channel_data_vali_reg_301 == 1'd1) & (1'b1 == ap_CS_fsm_state41))) begin
-        fir_mono_inst_shift_s_ce0 = grp_operator_s_fu_343_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_ce0;
+        fir_mono_inst_shift_s_ce0 = grp_operator_s_fu_343_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_ce0;
     end else begin
         fir_mono_inst_shift_s_ce0 = 1'b0;
     end
@@ -1318,7 +1318,7 @@ end
 
 always @ (*) begin
     if (((fm_channel_data_vali_reg_301 == 1'd1) & (1'b1 == ap_CS_fsm_state41))) begin
-        fir_mono_inst_shift_s_we0 = grp_operator_s_fu_343_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_we0;
+        fir_mono_inst_shift_s_we0 = grp_operator_s_fu_343_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_we0;
     end else begin
         fir_mono_inst_shift_s_we0 = 1'b0;
     end
@@ -1326,7 +1326,7 @@ end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state37)) begin
-        fir_pilot_inst_shift_ce0 = grp_operator_s_fu_343_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_ce0;
+        fir_pilot_inst_shift_ce0 = grp_operator_s_fu_343_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_ce0;
     end else begin
         fir_pilot_inst_shift_ce0 = 1'b0;
     end
@@ -1334,7 +1334,7 @@ end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state37)) begin
-        fir_pilot_inst_shift_we0 = grp_operator_s_fu_343_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_we0;
+        fir_pilot_inst_shift_we0 = grp_operator_s_fu_343_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_we0;
     end else begin
         fir_pilot_inst_shift_we0 = 1'b0;
     end
@@ -1342,13 +1342,13 @@ end
 
 always @ (*) begin
     if (((fm_channel_data_vali_reg_301 == 1'd1) & (1'b1 == ap_CS_fsm_state41))) begin
-        grp_operator_s_fu_343_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_q0 = fir_mono_inst_shift_s_q0;
+        grp_operator_s_fu_343_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_q0 = fir_mono_inst_shift_s_q0;
     end else if ((1'b1 == ap_CS_fsm_state39)) begin
-        grp_operator_s_fu_343_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_q0 = fir_lrdiff_inst_shif_q0;
+        grp_operator_s_fu_343_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_q0 = fir_lrdiff_inst_shif_q0;
     end else if ((1'b1 == ap_CS_fsm_state37)) begin
-        grp_operator_s_fu_343_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_q0 = fir_pilot_inst_shift_q0;
+        grp_operator_s_fu_343_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_q0 = fir_pilot_inst_shift_q0;
     end else begin
-        grp_operator_s_fu_343_FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_q0 = 'bx;
+        grp_operator_s_fu_343_FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_q0 = 'bx;
     end
 end
 
@@ -1515,15 +1515,15 @@ always @ (*) begin
     endcase
 end
 
-assign DECIMATOR_count_writ_1_fu_621_p3 = ((audio_lrdiff_dec_val_fu_601_p2[0:0] === 1'b1) ? 8'd0 : tmp_i5_i_fu_607_p2);
+assign DECIMATOR_count_writ_1_fu_621_p3 = ((audio_lrdiff_dec_val_fu_601_p2[0:0] === 1'b1) ? 8'd0 : tmp_i6_i_fu_607_p2);
 
-assign DECIMATOR_count_writ_fu_563_p3 = ((audio_mono_dec_valid_fu_544_p2[0:0] === 1'b1) ? 8'd0 : tmp_i_i_fu_550_p2);
+assign DECIMATOR_count_writ_fu_563_p3 = ((audio_mono_dec_valid_fu_544_p2[0:0] === 1'b1) ? 8'd0 : tmp_i4_i_fu_550_p2);
 
 assign OP1_V_3_cast_fu_687_p0 = tmp_fu_483_p1;
 
 assign OP1_V_3_cast_fu_687_p1 = tmp_fu_483_p1;
 
-assign addconv_i_i_fu_494_p2 = ($signed(32'd3489660928) + $signed(p_Val2_6_fu_487_p3));
+assign addconv_i_i_fu_494_p2 = ($signed(30'd872415232) + $signed(p_Val2_6_fu_487_p3));
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -1643,9 +1643,9 @@ assign p_Val2_i_fu_389_p0 = in_q_V_read;
 
 assign p_Val2_i_fu_389_p2 = ($signed(p_Val2_i_fu_389_p0) - $signed(reg_372));
 
-assign p_Val2_i_i_fu_477_p2 = (17'd0 - tmp_1_fu_471_p2);
+assign p_Val2_i_i_fu_477_p2 = (16'd0 - tmp_1_fu_471_p2);
 
-assign tmp_1_fu_471_p2 = grp_operator_s_fu_343_ap_return << 17'd3;
+assign tmp_1_fu_471_p2 = grp_operator_s_fu_343_ap_return << 16'd3;
 
 assign tmp_2_fu_534_p4 = {{decimator_mono_audio_1[7:1]}};
 
@@ -1653,12 +1653,12 @@ assign tmp_3_fu_591_p4 = {{decimator_lrdiff_cou[7:1]}};
 
 assign tmp_fu_483_p1 = $signed(p_Val2_i_i_fu_477_p2);
 
-assign tmp_i5_i_fu_607_p2 = (8'd1 + decimator_lrdiff_cou);
+assign tmp_i4_i_fu_550_p2 = (8'd1 + decimator_mono_audio_1);
+
+assign tmp_i6_i_fu_607_p2 = (8'd1 + decimator_lrdiff_cou);
 
 assign tmp_i_10_fu_443_p2 = (decimator_count + 3'd1);
 
 assign tmp_i_fu_437_p2 = ((decimator_count == 3'd7) ? 1'b1 : 1'b0);
-
-assign tmp_i_i_fu_550_p2 = (8'd1 + decimator_mono_audio_1);
 
 endmodule //fm_receiver

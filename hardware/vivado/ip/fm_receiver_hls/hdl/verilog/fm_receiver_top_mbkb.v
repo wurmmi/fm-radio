@@ -8,10 +8,10 @@
 `timescale 1 ns / 1 ps
 
 module fm_receiver_top_mbkb_DSP48_0(
-    input  [17 - 1:0] in0,
-    input  [17 - 1:0] in1,
-    input  [32 - 1:0] in2,
-    output [32 - 1:0]  dout);
+    input  [16 - 1:0] in0,
+    input  [16 - 1:0] in1,
+    input  [30 - 1:0] in2,
+    output [30 - 1:0]  dout);
 
 wire signed [25 - 1:0]     a;
 wire signed [18 - 1:0]     b;

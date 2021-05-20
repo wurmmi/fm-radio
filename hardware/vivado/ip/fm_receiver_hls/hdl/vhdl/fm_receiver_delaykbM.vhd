@@ -13,7 +13,7 @@ use ieee.std_logic_unsigned.all;
 entity fm_receiver_delaykbM_ram is 
     generic(
             MEM_TYPE    : string := "block"; 
-            DWIDTH     : integer := 17; 
+            DWIDTH     : integer := 16; 
             AWIDTH     : integer := 2; 
             MEM_SIZE    : integer := 3
     ); 
@@ -105,7 +105,7 @@ use IEEE.std_logic_1164.all;
 
 entity fm_receiver_delaykbM is
     generic (
-        DataWidth : INTEGER := 17;
+        DataWidth : INTEGER := 16;
         AddressRange : INTEGER := 3;
         AddressWidth : INTEGER := 2);
     port (

@@ -8,7 +8,7 @@
 `timescale 1 ns / 1 ps
 module fm_receiver_delaymb6_ram (addr0, ce0, d0, we0, q0, addr1, ce1, d1, we1, q1,  clk);
 
-parameter DWIDTH = 17;
+parameter DWIDTH = 16;
 parameter AWIDTH = 6;
 parameter MEM_SIZE = 36;
 
@@ -80,7 +80,7 @@ module fm_receiver_delaymb6(
     d1,
     q1);
 
-parameter DataWidth = 32'd17;
+parameter DataWidth = 32'd16;
 parameter AddressRange = 32'd36;
 parameter AddressWidth = 32'd6;
 input reset;

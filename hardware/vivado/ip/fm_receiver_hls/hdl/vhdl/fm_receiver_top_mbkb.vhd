@@ -11,10 +11,10 @@ use IEEE.numeric_std.all;
 
 entity fm_receiver_top_mbkb_DSP48_0 is
 port (
-    in0:  in  std_logic_vector(17 - 1 downto 0);
-    in1:  in  std_logic_vector(17 - 1 downto 0);
-    in2:  in  std_logic_vector(32 - 1 downto 0);
-    dout: out std_logic_vector(32 - 1 downto 0));
+    in0:  in  std_logic_vector(16 - 1 downto 0);
+    in1:  in  std_logic_vector(16 - 1 downto 0);
+    in2:  in  std_logic_vector(30 - 1 downto 0);
+    dout: out std_logic_vector(30 - 1 downto 0));
 
 end entity;
 
@@ -32,7 +32,7 @@ c  <= signed(resize(unsigned(in2), 48));
 m  <= a * b;
 p  <= m + c;
 
-dout <= std_logic_vector(resize(unsigned(p), 32));
+dout <= std_logic_vector(resize(unsigned(p), 30));
 
 end architecture;
 

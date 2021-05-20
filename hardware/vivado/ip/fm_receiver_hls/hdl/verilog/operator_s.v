@@ -14,11 +14,11 @@ module operator_s (
         ap_done,
         ap_idle,
         ap_ready,
-        FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_address0,
-        FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_ce0,
-        FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_we0,
-        FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_d0,
-        FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_q0,
+        FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_address0,
+        FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_ce0,
+        FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_we0,
+        FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_d0,
+        FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_q0,
         x_V,
         coeff_V_address0,
         coeff_V_ce0,
@@ -38,26 +38,26 @@ input   ap_start;
 output   ap_done;
 output   ap_idle;
 output   ap_ready;
-output  [6:0] FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_address0;
-output   FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_ce0;
-output   FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_we0;
-output  [16:0] FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_d0;
-input  [16:0] FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_q0;
-input  [16:0] x_V;
+output  [6:0] FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_address0;
+output   FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_ce0;
+output   FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_we0;
+output  [15:0] FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_d0;
+input  [15:0] FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_q0;
+input  [15:0] x_V;
 output  [6:0] coeff_V_address0;
 output   coeff_V_ce0;
-input  [16:0] coeff_V_q0;
-output  [16:0] ap_return;
+input  [15:0] coeff_V_q0;
+output  [15:0] ap_return;
 
 reg ap_done;
 reg ap_idle;
 reg ap_ready;
-reg[6:0] FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_address0;
-reg FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_ce0;
-reg FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_we0;
-reg[16:0] FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_d0;
+reg[6:0] FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_address0;
+reg FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_ce0;
+reg FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_we0;
+reg[15:0] FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_d0;
 reg coeff_V_ce0;
-reg[16:0] ap_return;
+reg[15:0] ap_return;
 
 (* fsm_encoding = "none" *) reg   [4:0] ap_CS_fsm;
 wire    ap_CS_fsm_state1;
@@ -70,36 +70,36 @@ wire   [0:0] tmp_fu_134_p3;
 wire    ap_CS_fsm_state3;
 wire   [7:0] grp_fu_123_p2;
 reg   [7:0] i_1_reg_242;
-reg  signed [16:0] coeff_V_load_reg_247;
+reg  signed [15:0] coeff_V_load_reg_247;
 wire    ap_CS_fsm_state4;
 wire    ap_CS_fsm_state5;
-reg   [16:0] p_Val2_s_reg_89;
+reg   [15:0] p_Val2_s_reg_89;
 wire  signed [7:0] ap_phi_mux_i_phi_fu_105_p4;
 reg  signed [7:0] i_reg_101;
-reg  signed [16:0] p_s_reg_113;
+reg  signed [15:0] p_s_reg_113;
 wire   [63:0] tmp_2_fu_148_p1;
 wire   [63:0] tmp_4_fu_159_p1;
 wire   [0:0] tmp_3_fu_153_p2;
 wire   [63:0] tmp_5_fu_163_p1;
 reg  signed [7:0] grp_fu_123_p0;
-wire  signed [31:0] grp_fu_191_p3;
-wire   [31:0] grp_fu_191_p2;
-reg   [16:0] ap_return_preg;
+wire  signed [29:0] grp_fu_191_p3;
+wire   [29:0] grp_fu_191_p2;
+reg   [15:0] ap_return_preg;
 reg   [4:0] ap_NS_fsm;
 
 // power-on initialization
 initial begin
 #0 ap_CS_fsm = 5'd1;
-#0 ap_return_preg = 17'd0;
+#0 ap_return_preg = 16'd0;
 end
 
 fm_receiver_top_mbkb #(
     .ID( 1 ),
     .NUM_STAGE( 1 ),
-    .din0_WIDTH( 17 ),
-    .din1_WIDTH( 17 ),
-    .din2_WIDTH( 32 ),
-    .dout_WIDTH( 32 ))
+    .din0_WIDTH( 16 ),
+    .din1_WIDTH( 16 ),
+    .din2_WIDTH( 30 ),
+    .dout_WIDTH( 30 ))
 fm_receiver_top_mbkb_U1(
     .din0(coeff_V_load_reg_247),
     .din1(p_s_reg_113),
@@ -117,7 +117,7 @@ end
 
 always @ (posedge ap_clk) begin
     if (ap_rst == 1'b1) begin
-        ap_return_preg <= 17'd0;
+        ap_return_preg <= 16'd0;
     end else begin
         if (((tmp_fu_134_p3 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
             ap_return_preg <= p_Val2_s_reg_89;
@@ -135,15 +135,15 @@ end
 
 always @ (posedge ap_clk) begin
     if ((1'b1 == ap_CS_fsm_state5)) begin
-        p_Val2_s_reg_89 <= {{grp_fu_191_p3[31:15]}};
+        p_Val2_s_reg_89 <= {{grp_fu_191_p3[29:14]}};
     end else if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
-        p_Val2_s_reg_89 <= 17'd0;
+        p_Val2_s_reg_89 <= 16'd0;
     end
 end
 
 always @ (posedge ap_clk) begin
     if (((tmp_s_reg_220 == 1'd0) & (1'b1 == ap_CS_fsm_state3))) begin
-        p_s_reg_113 <= FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_q0;
+        p_s_reg_113 <= FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_q0;
     end else if (((tmp_fu_134_p3 == 1'd0) & (tmp_s_fu_142_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
         p_s_reg_113 <= x_V;
     end
@@ -175,39 +175,39 @@ end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state3)) begin
-        FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_address0 = tmp_4_fu_159_p1;
+        FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_address0 = tmp_4_fu_159_p1;
     end else if (((tmp_fu_134_p3 == 1'd0) & (tmp_s_fu_142_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
-        FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_address0 = 64'd0;
+        FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_address0 = 64'd0;
     end else if (((tmp_fu_134_p3 == 1'd0) & (tmp_s_fu_142_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state2))) begin
-        FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_address0 = tmp_2_fu_148_p1;
+        FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_address0 = tmp_2_fu_148_p1;
     end else begin
-        FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_address0 = 'bx;
+        FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_address0 = 'bx;
     end
 end
 
 always @ (*) begin
     if (((1'b1 == ap_CS_fsm_state3) | ((tmp_fu_134_p3 == 1'd0) & (tmp_s_fu_142_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2)) | ((tmp_fu_134_p3 == 1'd0) & (tmp_s_fu_142_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state2)))) begin
-        FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_ce0 = 1'b1;
+        FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_ce0 = 1'b1;
     end else begin
-        FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_ce0 = 1'b0;
+        FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_ce0 = 1'b0;
     end
 end
 
 always @ (*) begin
     if ((1'b1 == ap_CS_fsm_state3)) begin
-        FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_d0 = FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_q0;
+        FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_d0 = FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_q0;
     end else if (((tmp_fu_134_p3 == 1'd0) & (tmp_s_fu_142_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2))) begin
-        FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_d0 = x_V;
+        FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_d0 = x_V;
     end else begin
-        FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_d0 = 'bx;
+        FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_d0 = 'bx;
     end
 end
 
 always @ (*) begin
     if ((((tmp_3_fu_153_p2 == 1'd0) & (tmp_s_reg_220 == 1'd0) & (1'b1 == ap_CS_fsm_state3)) | ((tmp_fu_134_p3 == 1'd0) & (tmp_s_fu_142_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state2)))) begin
-        FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_we0 = 1'b1;
+        FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_we0 = 1'b1;
     end else begin
-        FIR_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_ap_fixed_17_2_5_3_0_I_shift_reg_V_we0 = 1'b0;
+        FIR_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_ap_fixed_16_2_5_3_0_I_shift_reg_V_we0 = 1'b0;
     end
 end
 
@@ -308,7 +308,7 @@ assign coeff_V_address0 = tmp_5_fu_163_p1;
 
 assign grp_fu_123_p2 = ($signed(grp_fu_123_p0) + $signed(8'd255));
 
-assign grp_fu_191_p2 = {{p_Val2_s_reg_89}, {15'd0}};
+assign grp_fu_191_p2 = {{p_Val2_s_reg_89}, {14'd0}};
 
 assign i_cast_fu_130_p1 = i_reg_101;
 

@@ -13,10 +13,10 @@ entity fm_receiver_top is
 port (
     ap_clk : IN STD_LOGIC;
     ap_rst_n : IN STD_LOGIC;
-    iq_in_V_TDATA : IN STD_LOGIC_VECTOR (39 downto 0);
+    iq_in_V_TDATA : IN STD_LOGIC_VECTOR (31 downto 0);
     iq_in_V_TVALID : IN STD_LOGIC;
     iq_in_V_TREADY : OUT STD_LOGIC;
-    audio_out_V_TDATA : OUT STD_LOGIC_VECTOR (39 downto 0);
+    audio_out_V_TDATA : OUT STD_LOGIC_VECTOR (31 downto 0);
     audio_out_V_TVALID : OUT STD_LOGIC;
     audio_out_V_TREADY : IN STD_LOGIC );
 end;
@@ -25,7 +25,7 @@ end;
 architecture behav of fm_receiver_top is 
     attribute CORE_GENERATION_INFO : STRING;
     attribute CORE_GENERATION_INFO of behav : architecture is
-    "fm_receiver_top,hls_ip_2018_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xc7z020clg484-1,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=8.486688,HLS_SYN_LAT=309,HLS_SYN_TPT=none,HLS_SYN_MEM=11,HLS_SYN_DSP=6,HLS_SYN_FF=1388,HLS_SYN_LUT=1760,HLS_VERSION=2018_2}";
+    "fm_receiver_top,hls_ip_2018_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xc7z020clg484-1,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=8.457000,HLS_SYN_LAT=309,HLS_SYN_TPT=none,HLS_SYN_MEM=11,HLS_SYN_DSP=6,HLS_SYN_FF=1295,HLS_SYN_LUT=1750,HLS_VERSION=2018_2}";
     constant ap_const_logic_1 : STD_LOGIC := '1';
     constant ap_const_logic_0 : STD_LOGIC := '0';
     constant ap_ST_fsm_state1 : STD_LOGIC_VECTOR (3 downto 0) := "0001";
@@ -46,17 +46,17 @@ architecture behav of fm_receiver_top is
     constant ap_const_lv32_0 : STD_LOGIC_VECTOR (31 downto 0) := "00000000000000000000000000000000";
     constant ap_const_lv8_D : STD_LOGIC_VECTOR (7 downto 0) := "00001101";
     constant ap_const_lv8_1 : STD_LOGIC_VECTOR (7 downto 0) := "00000001";
-    constant ap_const_lv32_11 : STD_LOGIC_VECTOR (31 downto 0) := "00000000000000000000000000010001";
-    constant ap_const_lv32_21 : STD_LOGIC_VECTOR (31 downto 0) := "00000000000000000000000000100001";
+    constant ap_const_lv32_10 : STD_LOGIC_VECTOR (31 downto 0) := "00000000000000000000000000010000";
+    constant ap_const_lv32_1F : STD_LOGIC_VECTOR (31 downto 0) := "00000000000000000000000000011111";
 
     signal ap_rst_n_inv : STD_LOGIC;
-    signal iq_in_V_0_data_out : STD_LOGIC_VECTOR (39 downto 0);
+    signal iq_in_V_0_data_out : STD_LOGIC_VECTOR (31 downto 0);
     signal iq_in_V_0_vld_in : STD_LOGIC;
     signal iq_in_V_0_vld_out : STD_LOGIC;
     signal iq_in_V_0_ack_in : STD_LOGIC;
     signal iq_in_V_0_ack_out : STD_LOGIC;
-    signal iq_in_V_0_payload_A : STD_LOGIC_VECTOR (39 downto 0);
-    signal iq_in_V_0_payload_B : STD_LOGIC_VECTOR (39 downto 0);
+    signal iq_in_V_0_payload_A : STD_LOGIC_VECTOR (31 downto 0);
+    signal iq_in_V_0_payload_B : STD_LOGIC_VECTOR (31 downto 0);
     signal iq_in_V_0_sel_rd : STD_LOGIC := '0';
     signal iq_in_V_0_sel_wr : STD_LOGIC := '0';
     signal iq_in_V_0_sel : STD_LOGIC;
@@ -64,13 +64,13 @@ architecture behav of fm_receiver_top is
     signal iq_in_V_0_load_B : STD_LOGIC;
     signal iq_in_V_0_state : STD_LOGIC_VECTOR (1 downto 0) := "00";
     signal iq_in_V_0_state_cmp_full : STD_LOGIC;
-    signal audio_out_V_1_data_out : STD_LOGIC_VECTOR (39 downto 0);
+    signal audio_out_V_1_data_out : STD_LOGIC_VECTOR (31 downto 0);
     signal audio_out_V_1_vld_in : STD_LOGIC;
     signal audio_out_V_1_vld_out : STD_LOGIC;
     signal audio_out_V_1_ack_in : STD_LOGIC;
     signal audio_out_V_1_ack_out : STD_LOGIC;
-    signal audio_out_V_1_payload_A : STD_LOGIC_VECTOR (39 downto 0);
-    signal audio_out_V_1_payload_B : STD_LOGIC_VECTOR (39 downto 0);
+    signal audio_out_V_1_payload_A : STD_LOGIC_VECTOR (31 downto 0);
+    signal audio_out_V_1_payload_B : STD_LOGIC_VECTOR (31 downto 0);
     signal audio_out_V_1_sel_rd : STD_LOGIC := '0';
     signal audio_out_V_1_sel_wr : STD_LOGIC := '0';
     signal audio_out_V_1_sel : STD_LOGIC;
@@ -91,26 +91,25 @@ architecture behav of fm_receiver_top is
     attribute fsm_encoding of ap_CS_fsm_state3 : signal is "none";
     signal ap_CS_fsm_state4 : STD_LOGIC;
     attribute fsm_encoding of ap_CS_fsm_state4 : signal is "none";
-    signal tmp_i_reg_220 : STD_LOGIC_VECTOR (0 downto 0);
+    signal tmp_i_reg_216 : STD_LOGIC_VECTOR (0 downto 0);
     signal tmp_i_fu_157_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal ap_CS_fsm_state1 : STD_LOGIC;
     attribute fsm_encoding of ap_CS_fsm_state1 : signal is "none";
-    signal in_i_V_fu_183_p1 : STD_LOGIC_VECTOR (16 downto 0);
-    signal in_i_V_reg_224 : STD_LOGIC_VECTOR (16 downto 0);
-    signal in_q_V_reg_229 : STD_LOGIC_VECTOR (16 downto 0);
-    signal tmp_1_cast_fu_215_p1 : STD_LOGIC_VECTOR (39 downto 0);
+    signal in_i_V_fu_183_p1 : STD_LOGIC_VECTOR (15 downto 0);
+    signal in_i_V_reg_220 : STD_LOGIC_VECTOR (15 downto 0);
+    signal in_q_V_reg_225 : STD_LOGIC_VECTOR (15 downto 0);
+    signal tmp_1_fu_207_p3 : STD_LOGIC_VECTOR (31 downto 0);
     signal grp_fm_receiver_fu_97_ap_idle : STD_LOGIC;
     signal grp_fm_receiver_fu_97_ap_ready : STD_LOGIC;
     signal grp_fm_receiver_fu_97_ap_done : STD_LOGIC;
     signal grp_fm_receiver_fu_97_ap_start : STD_LOGIC;
-    signal grp_fm_receiver_fu_97_ap_return_0 : STD_LOGIC_VECTOR (16 downto 0);
-    signal grp_fm_receiver_fu_97_ap_return_1 : STD_LOGIC_VECTOR (16 downto 0);
+    signal grp_fm_receiver_fu_97_ap_return_0 : STD_LOGIC_VECTOR (15 downto 0);
+    signal grp_fm_receiver_fu_97_ap_return_1 : STD_LOGIC_VECTOR (15 downto 0);
     signal grp_fm_receiver_fu_97_ap_start_reg : STD_LOGIC := '0';
     signal toggle_assign_fu_141_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal storemerge_i_fu_169_p3 : STD_LOGIC_VECTOR (7 downto 0);
     signal ap_block_state4_io : BOOLEAN;
     signal tmp_1_i_fu_163_p2 : STD_LOGIC_VECTOR (7 downto 0);
-    signal tmp_1_fu_207_p3 : STD_LOGIC_VECTOR (33 downto 0);
     signal ap_NS_fsm : STD_LOGIC_VECTOR (3 downto 0);
 
     component fm_receiver IS
@@ -121,10 +120,10 @@ architecture behav of fm_receiver_top is
         ap_done : OUT STD_LOGIC;
         ap_idle : OUT STD_LOGIC;
         ap_ready : OUT STD_LOGIC;
-        in_i_V_read : IN STD_LOGIC_VECTOR (16 downto 0);
-        in_q_V_read : IN STD_LOGIC_VECTOR (16 downto 0);
-        ap_return_0 : OUT STD_LOGIC_VECTOR (16 downto 0);
-        ap_return_1 : OUT STD_LOGIC_VECTOR (16 downto 0) );
+        in_i_V_read : IN STD_LOGIC_VECTOR (15 downto 0);
+        in_q_V_read : IN STD_LOGIC_VECTOR (15 downto 0);
+        ap_return_0 : OUT STD_LOGIC_VECTOR (15 downto 0);
+        ap_return_1 : OUT STD_LOGIC_VECTOR (15 downto 0) );
     end component;
 
 
@@ -138,8 +137,8 @@ begin
         ap_done => grp_fm_receiver_fu_97_ap_done,
         ap_idle => grp_fm_receiver_fu_97_ap_idle,
         ap_ready => grp_fm_receiver_fu_97_ap_ready,
-        in_i_V_read => in_i_V_reg_224,
-        in_q_V_read => in_q_V_reg_229,
+        in_i_V_read => in_i_V_reg_220,
+        in_q_V_read => in_q_V_reg_225,
         ap_return_0 => grp_fm_receiver_fu_97_ap_return_0,
         ap_return_1 => grp_fm_receiver_fu_97_ap_return_1);
 
@@ -274,7 +273,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if ((audio_out_V_1_load_A = ap_const_logic_1)) then
-                audio_out_V_1_payload_A <= tmp_1_cast_fu_215_p1;
+                audio_out_V_1_payload_A <= tmp_1_fu_207_p3;
             end if;
         end if;
     end process;
@@ -282,7 +281,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if ((audio_out_V_1_load_B = ap_const_logic_1)) then
-                audio_out_V_1_payload_B <= tmp_1_cast_fu_215_p1;
+                audio_out_V_1_payload_B <= tmp_1_fu_207_p3;
             end if;
         end if;
     end process;
@@ -291,7 +290,7 @@ begin
         if (ap_clk'event and ap_clk = '1') then
             if ((ap_const_logic_1 = ap_CS_fsm_state1)) then
                 count <= storemerge_i_fu_169_p3;
-                tmp_i_reg_220 <= tmp_i_fu_157_p2;
+                tmp_i_reg_216 <= tmp_i_fu_157_p2;
                 toggle <= toggle_assign_fu_141_p2;
             end if;
         end if;
@@ -300,8 +299,8 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((ap_const_logic_1 = ap_CS_fsm_state2) and (iq_in_V_0_vld_out = ap_const_logic_1))) then
-                in_i_V_reg_224 <= in_i_V_fu_183_p1;
-                in_q_V_reg_229 <= iq_in_V_0_data_out(33 downto 17);
+                in_i_V_reg_220 <= in_i_V_fu_183_p1;
+                in_q_V_reg_225 <= iq_in_V_0_data_out(31 downto 16);
             end if;
         end if;
     end process;
@@ -358,9 +357,9 @@ begin
     ap_CS_fsm_state3 <= ap_CS_fsm(2);
     ap_CS_fsm_state4 <= ap_CS_fsm(3);
 
-    ap_block_state4_io_assign_proc : process(audio_out_V_1_ack_in, tmp_i_reg_220)
+    ap_block_state4_io_assign_proc : process(audio_out_V_1_ack_in, tmp_i_reg_216)
     begin
-                ap_block_state4_io <= ((tmp_i_reg_220 = ap_const_lv1_1) and (audio_out_V_1_ack_in = ap_const_logic_0));
+                ap_block_state4_io <= ((tmp_i_reg_216 = ap_const_lv1_1) and (audio_out_V_1_ack_in = ap_const_logic_0));
     end process;
 
 
@@ -398,9 +397,9 @@ begin
     audio_out_V_1_vld_out <= audio_out_V_1_state(0);
     audio_out_V_TDATA <= audio_out_V_1_data_out;
 
-    audio_out_V_TDATA_blk_n_assign_proc : process(audio_out_V_1_state, ap_CS_fsm_state3, ap_CS_fsm_state4, tmp_i_reg_220)
+    audio_out_V_TDATA_blk_n_assign_proc : process(audio_out_V_1_state, ap_CS_fsm_state3, ap_CS_fsm_state4, tmp_i_reg_216)
     begin
-        if (((ap_const_logic_1 = ap_CS_fsm_state3) or ((tmp_i_reg_220 = ap_const_lv1_1) and (ap_const_logic_1 = ap_CS_fsm_state4)))) then 
+        if (((ap_const_logic_1 = ap_CS_fsm_state3) or ((tmp_i_reg_216 = ap_const_lv1_1) and (ap_const_logic_1 = ap_CS_fsm_state4)))) then 
             audio_out_V_TDATA_blk_n <= audio_out_V_1_state(1);
         else 
             audio_out_V_TDATA_blk_n <= ap_const_logic_1;
@@ -409,7 +408,7 @@ begin
 
     audio_out_V_TVALID <= audio_out_V_1_state(0);
     grp_fm_receiver_fu_97_ap_start <= grp_fm_receiver_fu_97_ap_start_reg;
-    in_i_V_fu_183_p1 <= iq_in_V_0_data_out(17 - 1 downto 0);
+    in_i_V_fu_183_p1 <= iq_in_V_0_data_out(16 - 1 downto 0);
     iq_in_V_0_ack_in <= iq_in_V_0_state(1);
 
     iq_in_V_0_ack_out_assign_proc : process(iq_in_V_0_vld_out, ap_CS_fsm_state2)
@@ -451,8 +450,6 @@ begin
     storemerge_i_fu_169_p3 <= 
         ap_const_lv8_0 when (tmp_i_fu_157_p2(0) = '1') else 
         tmp_1_i_fu_163_p2;
-        tmp_1_cast_fu_215_p1 <= std_logic_vector(IEEE.numeric_std.resize(signed(tmp_1_fu_207_p3),40));
-
     tmp_1_fu_207_p3 <= (grp_fm_receiver_fu_97_ap_return_1 & grp_fm_receiver_fu_97_ap_return_0);
     tmp_1_i_fu_163_p2 <= std_logic_vector(unsigned(count) + unsigned(ap_const_lv8_1));
     tmp_i_fu_157_p2 <= "1" when (unsigned(count) > unsigned(ap_const_lv8_D)) else "0";

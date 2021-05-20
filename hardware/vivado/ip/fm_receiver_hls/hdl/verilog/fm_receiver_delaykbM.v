@@ -8,7 +8,7 @@
 `timescale 1 ns / 1 ps
 module fm_receiver_delaykbM_ram (addr0, ce0, d0, we0, q0, addr1, ce1, d1, we1, q1,  clk);
 
-parameter DWIDTH = 17;
+parameter DWIDTH = 16;
 parameter AWIDTH = 2;
 parameter MEM_SIZE = 3;
 
@@ -80,7 +80,7 @@ module fm_receiver_delaykbM(
     d1,
     q1);
 
-parameter DataWidth = 32'd17;
+parameter DataWidth = 32'd16;
 parameter AddressRange = 32'd3;
 parameter AddressWidth = 32'd2;
 input reset;

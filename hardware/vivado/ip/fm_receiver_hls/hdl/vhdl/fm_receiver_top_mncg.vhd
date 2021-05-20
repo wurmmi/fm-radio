@@ -5,23 +5,23 @@ use IEEE.numeric_std.all;
 
 entity fm_receiver_top_mncg_DSP48_1 is
 port (
-    a: in std_logic_vector(17 - 1 downto 0);
-    b: in std_logic_vector(17 - 1 downto 0);
-    p: out std_logic_vector(32 - 1 downto 0));
+    a: in std_logic_vector(16 - 1 downto 0);
+    b: in std_logic_vector(16 - 1 downto 0);
+    p: out std_logic_vector(30 - 1 downto 0));
 
 end entity;
 
 architecture behav of fm_receiver_top_mncg_DSP48_1 is
-    signal a_cvt: signed(17 - 1 downto 0);
-    signal b_cvt: signed(17 - 1 downto 0);
-    signal p_cvt: signed(32 - 1 downto 0);
+    signal a_cvt: signed(16 - 1 downto 0);
+    signal b_cvt: signed(16 - 1 downto 0);
+    signal p_cvt: signed(30 - 1 downto 0);
 
 
 begin
 
     a_cvt <= signed(a);
     b_cvt <= signed(b);
-    p_cvt <= signed (resize(unsigned (signed (a_cvt) * signed (b_cvt)), 32));
+    p_cvt <= signed (resize(unsigned (signed (a_cvt) * signed (b_cvt)), 30));
     p <= std_logic_vector(p_cvt);
 
 end architecture;

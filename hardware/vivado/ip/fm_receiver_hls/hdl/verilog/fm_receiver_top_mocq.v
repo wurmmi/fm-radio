@@ -2,9 +2,9 @@
 `timescale 1 ns / 1 ps
 
   module fm_receiver_top_mocq_DSP48_2(a, b, p);
-input signed [17 - 1 : 0] a;
-input signed [17 - 1 : 0] b;
-output signed [31 - 1 : 0] p;
+input signed [16 - 1 : 0] a;
+input signed [16 - 1 : 0] b;
+output signed [29 - 1 : 0] p;
 
 assign p = $signed (a) * $signed (b);
 

@@ -9,7 +9,7 @@
 (* rom_style = "block" *) module fm_receiver_filtefYi_rom (
 addr0, ce0, q0, clk);
 
-parameter DWIDTH = 17;
+parameter DWIDTH = 16;
 parameter AWIDTH = 7;
 parameter MEM_SIZE = 73;
 
@@ -47,7 +47,7 @@ module fm_receiver_filtefYi(
     ce0,
     q0);
 
-parameter DataWidth = 32'd17;
+parameter DataWidth = 32'd16;
 parameter AddressRange = 32'd73;
 parameter AddressWidth = 32'd7;
 input reset;
