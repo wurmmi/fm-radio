@@ -8,12 +8,7 @@ set build_dir [lindex $argv 0]
 
 set proj_name "proj"
 set parallel_jobs 4
-
-# Create build result folder
-set build_finish_time [clock format [clock seconds] -format %Y%m%d_%H%M%S]
-set result_dir $build_dir/reports_$build_finish_time
-file mkdir $result_dir
-
+if {0} {
 # Open project
 if {[catch {
   open_project $build_dir/$proj_name.xpr
@@ -74,7 +69,7 @@ if {[catch {
 puts "--- - Creating reports"
 open_run impl_1
 
-report_utilization -hierarchical -hierarchical_percentages -file $result_dir/report_utilization.rpt
+report_utilization -hierarchical -hierarchical_percentages -file report_utilization_hierarchical.rpt
 
 if {[catch {
   puts "--- - Creating bitstream"
@@ -85,20 +80,33 @@ if {[catch {
   puts "(MWURM) ERROR: Bitstream generation failed."
   exit 1
 }
-
+}
 puts "--- - Copying build results"
+
+# Create build result folder
+set build_finish_time [clock format [clock seconds] -format %Y%m%d_%H%M%S]
+set result_dir $build_dir/results
+file mkdir $result_dir
 
 puts "Reports ..."
 set build_output_dir $build_dir/$proj_name.runs/impl_1
 set report_files [ list                                             \
   "$build_output_dir/${proj_name}_wrapper_utilization_placed.rpt"   \
+  "$build_output_dir/report_utilization_hierarchical.rpt"           \
 ]
 
-file copy $report_files $result_dir
+foreach report_file $report_files {
+  file copy -force $report_file $result_dir
+}
 
 puts "Binaries ..."
-file copy $build_output_dir/${proj_name}_wrapper.bit $result_dir
-file copy $build_output_dir/${proj_name}_wrapper.hwdef $result_dir
+file copy -force $build_output_dir/${proj_name}_wrapper.bit $result_dir/
+file copy -force $build_output_dir/${proj_name}_wrapper.hwdef $result_dir/
+
+puts "Preparing for SDK ..."
+set sdk_bin_dir $build_dir/../sdk/latest_bin
+file copy -force $result_dir/${proj_name}_wrapper.hwdef $sdk_bin_dir/${proj_name}_wrapper.hdf
+file copy -force $result_dir/${proj_name}_wrapper.bit $sdk_bin_dir/
 
 puts "(MWURM) Done."
 exit 0

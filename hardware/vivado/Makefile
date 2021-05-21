@@ -37,7 +37,7 @@ sdk: ##				- Create/Open SDK project.
 	@echo "Creating SDK ..."
 	@xsdk -batch -source ./scripts/create_sdk.tcl
 ifeq ($(GUI),1)
-	@xsdk -workspace $(VIVADO_DIR)/sdk
+	@xsdk -workspace ./sdk
 endif
 
 ##
