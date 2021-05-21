@@ -26,3 +26,4 @@ output/
 vivado/**/*.str
 .Xil/
 Packages/
+*.log
