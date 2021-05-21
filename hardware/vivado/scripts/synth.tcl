@@ -9,11 +9,12 @@ set build_dir [lindex $argv 0]
 set proj_name "proj"
 set parallel_jobs 4
 
+if {0} {
 # Open project
 if {[catch {
   open_project $build_dir/$proj_name.xpr
 } ]} {
-  puts "(VideoSigXilinx) ERROR: Couldn't open project."
+  puts "(MWURM) ERROR: Couldn't open project."
   exit 1
 }
 
@@ -34,8 +35,8 @@ if {[catch {
       while {[gets $fp line] >= 0} {
         incr line_ctr
         if {[string match -nocase {*ERROR:*} $line]} {
-          puts "(VideoSigXilinx) An error occured in file '$runme_log_file', line $line_ctr."
-          puts "(VideoSigXilinx) The error reads: $line"
+          puts "(MWURM) An error occured in file '$runme_log_file', line $line_ctr."
+          puts "(MWURM) The error reads: $line"
           close $fp
           exit 1
         }
@@ -44,7 +45,7 @@ if {[catch {
     }
   }
 } ]} {
-  puts "(VideoSigXilinx) ERROR: Synthesis failed."
+  puts "(MWURM) ERROR: Synthesis failed."
   exit 1
 }
 
@@ -58,11 +59,11 @@ if {[catch {
   wait_on_run impl_1
 
   if {[get_property PROGRESS [get_runs impl_1]] != "100%"} {
-    puts "(VideoSigXilinx) ERROR: Implementation returned with progress lower than 100%."
+    puts "(MWURM) ERROR: Implementation returned with progress lower than 100%."
     exit 1
   }
 } ]} {
-  puts "(VideoSigXilinx) ERROR: Implementation failed."
+  puts "(MWURM) ERROR: Implementation failed."
   exit 1
 }
 
@@ -72,9 +73,19 @@ if {[catch {
   launch_runs impl_1 -to_step write_bitstream -jobs $parallel_jobs
   wait_on_run impl_1
 } ]} {
-  puts "(VideoSigXilinx) ERROR: Bitstream generation failed."
+  puts "(MWURM) ERROR: Bitstream generation failed."
   exit 1
 }
+}
 
-puts "(VideoSigXilinx) Done."
+puts "--- - Copying reports"
+set build_finish_time [clock format [clock seconds] -format %y%m%d_%H%M%S]
+set report_folder $build_dir/reports_$build_finish_time
+file mkdir $report_folder
+
+foreach report_file [glob $build_dir/$proj_name.runs/*/*.rpt] {
+  file copy $report_file $report_folder
+}
+
+puts "(MWURM) Done."
 exit 0
