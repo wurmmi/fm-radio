@@ -14,7 +14,11 @@
 --       03/31/2021  14:30 - 18:00    3:30 h  trying to find out how/when
 --                                            top-level function is called
 --                                            with clk cycles
---
+-- (2) Debug Error with Bitwidth
+--       05/21/2021  14:00 - 19:00    5:00 h  Not sure what the error was.
+--                                            Parallel delay I/Q didn't work.
+--                                            Order of every 2nd data was wrong.
+--                                            Using a single delay fixed it.
 */
 
 #include "fm_receiver_top.hpp"
