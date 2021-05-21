@@ -178,7 +178,7 @@ set_property PACKAGE_PIN AB5 [get_ports {spi_miso_i}];  # "AC-SDA"
 # ----------------------------------------------------------------------------
 # User LEDs - Bank 33
 # ----------------------------------------------------------------------------
-set_property PACKAGE_PIN T22 [get_ports {led0_heartbeat}];  # "LD0"
+set_property PACKAGE_PIN T22 [get_ports {led0_heartbeat_o}];  # "LD0"
 #set_property PACKAGE_PIN T21 [get_ports {LD1}];  # "LD1"
 #set_property PACKAGE_PIN U22 [get_ports {LD2}];  # "LD2"
 #set_property PACKAGE_PIN U21 [get_ports {LD3}];  # "LD3"
