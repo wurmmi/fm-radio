@@ -33,6 +33,13 @@ synth: ##				- Synthesize Vivado project.
 	@mkdir -p $(VIVADO_DIR)
 	@$(call vivado,synth.tcl,-tclargs $(VIVADO_DIR) $(GUI))
 
+sdk: ##				- Create/Open SDK project.
+	@echo "Creating SDK ..."
+	@xsdk -batch -source ./scripts/create_sdk.tcl
+ifeq ($(GUI),1)
+	@xsdk -workspace $(VIVADO_DIR)/sdk
+endif
+
 ##
 clean: ##				- Clean outputs.
 	@echo "Cleaning..."
@@ -41,7 +48,7 @@ clean: ##				- Clean outputs.
 help: ##				- Show this help message.
 	@grep -h "##" Makefile | grep -v "\"##\"" | sed -e 's/##//g'
 
-.PHONY: project clean help
+.PHONY: project synth sdk clean help
 
 ##
 ##==============================================================================
