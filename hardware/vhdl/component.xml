@@ -37,6 +37,50 @@
         </spirit:portMap>
       </spirit:portMaps>
     </spirit:busInterface>
+    <spirit:busInterface>
+      <spirit:name>clk_i</spirit:name>
+      <spirit:displayName>clk_i</spirit:displayName>
+      <spirit:busType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="clock" spirit:version="1.0"/>
+      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="clock_rtl" spirit:version="1.0"/>
+      <spirit:slave/>
+      <spirit:portMaps>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>CLK</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>clk_i</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+      </spirit:portMaps>
+      <spirit:parameters>
+        <spirit:parameter>
+          <spirit:name>FREQ_HZ</spirit:name>
+          <spirit:value spirit:id="BUSIFPARAM_VALUE.CLK_I.FREQ_HZ"/>
+        </spirit:parameter>
+        <spirit:parameter>
+          <spirit:name>ASSOCIATED_BUSIF</spirit:name>
+          <spirit:value spirit:id="BUSIFPARAM_VALUE.CLK_I.ASSOCIATED_BUSIF">s0_axis</spirit:value>
+        </spirit:parameter>
+      </spirit:parameters>
+    </spirit:busInterface>
+    <spirit:busInterface>
+      <spirit:name>rst_i</spirit:name>
+      <spirit:displayName>rst_i</spirit:displayName>
+      <spirit:busType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="reset" spirit:version="1.0"/>
+      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="reset_rtl" spirit:version="1.0"/>
+      <spirit:slave/>
+      <spirit:portMaps>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>RST</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>rst_i</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+      </spirit:portMaps>
+    </spirit:busInterface>
   </spirit:busInterfaces>
   <spirit:model>
     <spirit:views>
@@ -52,7 +96,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>362c68b9</spirit:value>
+            <spirit:value>ebfadc96</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -68,7 +112,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>25087717</spirit:value>
+            <spirit:value>7ed66f7d</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -438,11 +482,13 @@
         <xilinx:xpmLibrary>XPM_CDC</xilinx:xpmLibrary>
         <xilinx:xpmLibrary>XPM_MEMORY</xilinx:xpmLibrary>
       </xilinx:xpmLibraries>
-      <xilinx:coreRevision>4</xilinx:coreRevision>
+      <xilinx:vendorDisplayName>M.Wurm</xilinx:vendorDisplayName>
+      <xilinx:vendorURL>https://www.linkedin.com/in/michael-wurm</xilinx:vendorURL>
+      <xilinx:coreRevision>5</xilinx:coreRevision>
       <xilinx:upgrades>
         <xilinx:canUpgradeFrom>user.org:user:fm_receiver_top:1.0</xilinx:canUpgradeFrom>
       </xilinx:upgrades>
-      <xilinx:coreCreationDateTime>2021-05-20T12:30:40Z</xilinx:coreCreationDateTime>
+      <xilinx:coreCreationDateTime>2021-05-21T09:23:04Z</xilinx:coreCreationDateTime>
       <xilinx:tags>
         <xilinx:tag xilinx:name="nopcore"/>
         <xilinx:tag xilinx:name="user.org:user:fm_receiver_top:1.0_ARCHIVE_LOCATION">/home/mike/work/fm-radio/hardware/vhdl</xilinx:tag>
@@ -455,8 +501,8 @@
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2018.2</xilinx:xilinxVersion>
-      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="9a9c9ee2"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="df70926e"/>
+      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="3d02dc8e"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="9e0b2a46"/>
       <xilinx:checksum xilinx:scope="ports" xilinx:value="0d12595f"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="134b76fe"/>
     </xilinx:packagingInfo>
