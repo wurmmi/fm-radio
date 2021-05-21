@@ -25,3 +25,4 @@ generated/
 output/
 vivado/**/*.str
 .Xil/
+Packages/
