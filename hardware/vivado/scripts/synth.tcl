@@ -78,14 +78,24 @@ if {[catch {
 }
 }
 
-puts "--- - Copying reports"
-set build_finish_time [clock format [clock seconds] -format %y%m%d_%H%M%S]
-set report_folder $build_dir/reports_$build_finish_time
-file mkdir $report_folder
+puts "--- - Copying build results"
 
-foreach report_file [glob $build_dir/$proj_name.runs/*/*.rpt] {
-  file copy $report_file $report_folder
-}
+# Create output folder
+set build_finish_time [clock format [clock seconds] -format %y%m%d_%H%M%S]
+set result_dir $build_dir/reports_$build_finish_time
+file mkdir $result_dir
+
+# Reports
+set build_output_dir $build_dir/$proj_name.runs/impl_1
+set report_files [ list                                             \
+  "$build_output_dir/${proj_name}_wrapper_utilization_placed.rpt"   \
+]
+
+file copy $report_files $result_dir
+
+# Binaries
+file copy $build_output_dir/${proj_name}_wrapper.bit $result_dir
+file copy $build_output_dir/${proj_name}_wrapper.hwdef $result_dir
 
 puts "(MWURM) Done."
 exit 0
