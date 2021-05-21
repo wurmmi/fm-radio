@@ -7,7 +7,7 @@
 
 `timescale 1 ns / 1 ps 
 
-(* CORE_GENERATION_INFO="fm_receiver_top,hls_ip_2018_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xc7z020clg484-1,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=8.457000,HLS_SYN_LAT=309,HLS_SYN_TPT=none,HLS_SYN_MEM=11,HLS_SYN_DSP=6,HLS_SYN_FF=1295,HLS_SYN_LUT=1750,HLS_VERSION=2018_2}" *)
+(* CORE_GENERATION_INFO="fm_receiver_top,hls_ip_2018_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xc7z020clg484-1,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=0.978000,HLS_SYN_LAT=2,HLS_SYN_TPT=none,HLS_SYN_MEM=0,HLS_SYN_DSP=0,HLS_SYN_FF=140,HLS_SYN_LUT=113,HLS_VERSION=2018_2}" *)
 
 module fm_receiver_top (
         ap_clk,
@@ -20,10 +20,9 @@ module fm_receiver_top (
         audio_out_V_TREADY
 );
 
-parameter    ap_ST_fsm_state1 = 4'd1;
-parameter    ap_ST_fsm_state2 = 4'd2;
-parameter    ap_ST_fsm_state3 = 4'd4;
-parameter    ap_ST_fsm_state4 = 4'd8;
+parameter    ap_ST_fsm_state1 = 3'd1;
+parameter    ap_ST_fsm_state2 = 3'd2;
+parameter    ap_ST_fsm_state3 = 3'd4;
 
 input   ap_clk;
 input   ap_rst_n;
@@ -64,32 +63,13 @@ wire    audio_out_V_1_load_B;
 reg   [1:0] audio_out_V_1_state;
 wire    audio_out_V_1_state_cmp_full;
 reg   [0:0] toggle;
-reg   [7:0] count;
 reg    iq_in_V_TDATA_blk_n;
-(* fsm_encoding = "none" *) reg   [3:0] ap_CS_fsm;
+(* fsm_encoding = "none" *) reg   [2:0] ap_CS_fsm;
 wire    ap_CS_fsm_state2;
 reg    audio_out_V_TDATA_blk_n;
 wire    ap_CS_fsm_state3;
-wire    ap_CS_fsm_state4;
-reg   [0:0] tmp_i_reg_216;
-wire   [0:0] tmp_i_fu_157_p2;
-wire    ap_CS_fsm_state1;
-wire   [15:0] in_i_V_fu_183_p1;
-reg   [15:0] in_i_V_reg_220;
-reg   [15:0] in_q_V_reg_225;
-wire   [31:0] tmp_1_fu_207_p3;
-wire    grp_fm_receiver_fu_97_ap_idle;
-wire    grp_fm_receiver_fu_97_ap_ready;
-wire    grp_fm_receiver_fu_97_ap_done;
-wire    grp_fm_receiver_fu_97_ap_start;
-wire   [15:0] grp_fm_receiver_fu_97_ap_return_0;
-wire   [15:0] grp_fm_receiver_fu_97_ap_return_1;
-reg    grp_fm_receiver_fu_97_ap_start_reg;
-wire   [0:0] toggle_assign_fu_141_p2;
-wire   [7:0] storemerge_i_fu_169_p3;
-reg    ap_block_state4_io;
-wire   [7:0] tmp_1_i_fu_163_p2;
-reg   [3:0] ap_NS_fsm;
+wire   [0:0] toggle_assign_fu_50_p2;
+reg   [2:0] ap_NS_fsm;
 
 // power-on initialization
 initial begin
@@ -100,23 +80,8 @@ initial begin
 #0 audio_out_V_1_sel_wr = 1'b0;
 #0 audio_out_V_1_state = 2'd0;
 #0 toggle = 1'd0;
-#0 count = 8'd0;
-#0 ap_CS_fsm = 4'd1;
-#0 grp_fm_receiver_fu_97_ap_start_reg = 1'b0;
+#0 ap_CS_fsm = 3'd1;
 end
-
-fm_receiver grp_fm_receiver_fu_97(
-    .ap_clk(ap_clk),
-    .ap_rst(ap_rst_n_inv),
-    .ap_start(grp_fm_receiver_fu_97_ap_start),
-    .ap_done(grp_fm_receiver_fu_97_ap_done),
-    .ap_idle(grp_fm_receiver_fu_97_ap_idle),
-    .ap_ready(grp_fm_receiver_fu_97_ap_ready),
-    .in_i_V_read(in_i_V_reg_220),
-    .in_q_V_read(in_q_V_reg_225),
-    .ap_return_0(grp_fm_receiver_fu_97_ap_return_0),
-    .ap_return_1(grp_fm_receiver_fu_97_ap_return_1)
-);
 
 always @ (posedge ap_clk) begin
     if (ap_rst_n_inv == 1'b1) begin
@@ -152,24 +117,12 @@ always @ (posedge ap_clk) begin
     end else begin
         if ((((audio_out_V_1_state == 2'd2) & (audio_out_V_1_vld_in == 1'b0)) | ((audio_out_V_1_state == 2'd3) & (audio_out_V_1_vld_in == 1'b0) & (audio_out_V_1_ack_out == 1'b1)))) begin
             audio_out_V_1_state <= 2'd2;
-        end else if ((((audio_out_V_1_state == 2'd1) & (audio_out_V_1_ack_out == 1'b0)) | ((audio_out_V_1_state == 2'd3) & (audio_out_V_1_ack_out == 1'b0) & (audio_out_V_1_vld_in == 1'b1)))) begin
+        end else if ((((audio_out_V_1_state == 2'd3) & (audio_out_V_1_ack_out == 1'b0) & (audio_out_V_1_vld_in == 1'b1)) | ((audio_out_V_1_state == 2'd1) & (audio_out_V_1_ack_out == 1'b0)))) begin
             audio_out_V_1_state <= 2'd1;
-        end else if (((~((audio_out_V_1_vld_in == 1'b0) & (audio_out_V_1_ack_out == 1'b1)) & ~((audio_out_V_1_ack_out == 1'b0) & (audio_out_V_1_vld_in == 1'b1)) & (audio_out_V_1_state == 2'd3)) | ((audio_out_V_1_state == 2'd1) & (audio_out_V_1_ack_out == 1'b1)) | ((audio_out_V_1_state == 2'd2) & (audio_out_V_1_vld_in == 1'b1)))) begin
+        end else if ((((audio_out_V_1_state == 2'd2) & (audio_out_V_1_vld_in == 1'b1)) | (~((audio_out_V_1_vld_in == 1'b0) & (audio_out_V_1_ack_out == 1'b1)) & ~((audio_out_V_1_ack_out == 1'b0) & (audio_out_V_1_vld_in == 1'b1)) & (audio_out_V_1_state == 2'd3)) | ((audio_out_V_1_state == 2'd1) & (audio_out_V_1_ack_out == 1'b1)))) begin
             audio_out_V_1_state <= 2'd3;
         end else begin
             audio_out_V_1_state <= 2'd2;
-        end
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if (ap_rst_n_inv == 1'b1) begin
-        grp_fm_receiver_fu_97_ap_start_reg <= 1'b0;
-    end else begin
-        if (((1'b1 == ap_CS_fsm_state2) & (iq_in_V_0_vld_out == 1'b1))) begin
-            grp_fm_receiver_fu_97_ap_start_reg <= 1'b1;
-        end else if ((grp_fm_receiver_fu_97_ap_ready == 1'b1)) begin
-            grp_fm_receiver_fu_97_ap_start_reg <= 1'b0;
         end
     end
 end
@@ -212,28 +165,13 @@ end
 
 always @ (posedge ap_clk) begin
     if ((audio_out_V_1_load_A == 1'b1)) begin
-        audio_out_V_1_payload_A <= tmp_1_fu_207_p3;
+        audio_out_V_1_payload_A <= iq_in_V_0_data_out;
     end
 end
 
 always @ (posedge ap_clk) begin
     if ((audio_out_V_1_load_B == 1'b1)) begin
-        audio_out_V_1_payload_B <= tmp_1_fu_207_p3;
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if ((1'b1 == ap_CS_fsm_state1)) begin
-        count <= storemerge_i_fu_169_p3;
-        tmp_i_reg_216 <= tmp_i_fu_157_p2;
-        toggle <= toggle_assign_fu_141_p2;
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if (((1'b1 == ap_CS_fsm_state2) & (iq_in_V_0_vld_out == 1'b1))) begin
-        in_i_V_reg_220 <= in_i_V_fu_183_p1;
-        in_q_V_reg_225 <= {{iq_in_V_0_data_out[31:16]}};
+        audio_out_V_1_payload_B <= iq_in_V_0_data_out;
     end
 end
 
@@ -249,6 +187,12 @@ always @ (posedge ap_clk) begin
     end
 end
 
+always @ (posedge ap_clk) begin
+    if (((audio_out_V_1_ack_in == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
+        toggle <= toggle_assign_fu_50_p2;
+    end
+end
+
 always @ (*) begin
     if ((audio_out_V_1_sel == 1'b1)) begin
         audio_out_V_1_data_out = audio_out_V_1_payload_B;
@@ -258,7 +202,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((~((audio_out_V_1_ack_in == 1'b0) | (grp_fm_receiver_fu_97_ap_done == 1'b0)) & (1'b1 == ap_CS_fsm_state3))) begin
+    if ((~((audio_out_V_1_ack_in == 1'b0) | (iq_in_V_0_vld_out == 1'b0)) & (1'b1 == ap_CS_fsm_state2))) begin
         audio_out_V_1_vld_in = 1'b1;
     end else begin
         audio_out_V_1_vld_in = 1'b0;
@@ -266,7 +210,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state3) | ((tmp_i_reg_216 == 1'd1) & (1'b1 == ap_CS_fsm_state4)))) begin
+    if (((1'b1 == ap_CS_fsm_state3) | (1'b1 == ap_CS_fsm_state2))) begin
         audio_out_V_TDATA_blk_n = audio_out_V_1_state[1'd1];
     end else begin
         audio_out_V_TDATA_blk_n = 1'b1;
@@ -274,7 +218,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state2) & (iq_in_V_0_vld_out == 1'b1))) begin
+    if ((~((audio_out_V_1_ack_in == 1'b0) | (iq_in_V_0_vld_out == 1'b0)) & (1'b1 == ap_CS_fsm_state2))) begin
         iq_in_V_0_ack_out = 1'b1;
     end else begin
         iq_in_V_0_ack_out = 1'b0;
@@ -300,31 +244,20 @@ end
 always @ (*) begin
     case (ap_CS_fsm)
         ap_ST_fsm_state1 : begin
-            if (((tmp_i_fu_157_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1))) begin
-                ap_NS_fsm = ap_ST_fsm_state4;
-            end else begin
-                ap_NS_fsm = ap_ST_fsm_state2;
-            end
+            ap_NS_fsm = ap_ST_fsm_state2;
         end
         ap_ST_fsm_state2 : begin
-            if (((1'b1 == ap_CS_fsm_state2) & (iq_in_V_0_vld_out == 1'b1))) begin
+            if ((~((audio_out_V_1_ack_in == 1'b0) | (iq_in_V_0_vld_out == 1'b0)) & (1'b1 == ap_CS_fsm_state2))) begin
                 ap_NS_fsm = ap_ST_fsm_state3;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state2;
             end
         end
         ap_ST_fsm_state3 : begin
-            if ((~((audio_out_V_1_ack_in == 1'b0) | (grp_fm_receiver_fu_97_ap_done == 1'b0)) & (1'b1 == ap_CS_fsm_state3))) begin
-                ap_NS_fsm = ap_ST_fsm_state4;
-            end else begin
-                ap_NS_fsm = ap_ST_fsm_state3;
-            end
-        end
-        ap_ST_fsm_state4 : begin
-            if ((~((1'b1 == ap_block_state4_io) | (audio_out_V_1_ack_in == 1'b0)) & (1'b1 == ap_CS_fsm_state4))) begin
+            if (((audio_out_V_1_ack_in == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
                 ap_NS_fsm = ap_ST_fsm_state1;
             end else begin
-                ap_NS_fsm = ap_ST_fsm_state4;
+                ap_NS_fsm = ap_ST_fsm_state3;
             end
         end
         default : begin
@@ -333,17 +266,9 @@ always @ (*) begin
     endcase
 end
 
-assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
-
 assign ap_CS_fsm_state2 = ap_CS_fsm[32'd1];
 
 assign ap_CS_fsm_state3 = ap_CS_fsm[32'd2];
-
-assign ap_CS_fsm_state4 = ap_CS_fsm[32'd3];
-
-always @ (*) begin
-    ap_block_state4_io = ((tmp_i_reg_216 == 1'd1) & (audio_out_V_1_ack_in == 1'b0));
-end
 
 always @ (*) begin
     ap_rst_n_inv = ~ap_rst_n;
@@ -367,10 +292,6 @@ assign audio_out_V_TDATA = audio_out_V_1_data_out;
 
 assign audio_out_V_TVALID = audio_out_V_1_state[1'd0];
 
-assign grp_fm_receiver_fu_97_ap_start = grp_fm_receiver_fu_97_ap_start_reg;
-
-assign in_i_V_fu_183_p1 = iq_in_V_0_data_out[15:0];
-
 assign iq_in_V_0_ack_in = iq_in_V_0_state[1'd1];
 
 assign iq_in_V_0_load_A = (iq_in_V_0_state_cmp_full & ~iq_in_V_0_sel_wr);
@@ -387,14 +308,6 @@ assign iq_in_V_0_vld_out = iq_in_V_0_state[1'd0];
 
 assign iq_in_V_TREADY = iq_in_V_0_state[1'd1];
 
-assign storemerge_i_fu_169_p3 = ((tmp_i_fu_157_p2[0:0] === 1'b1) ? 8'd0 : tmp_1_i_fu_163_p2);
-
-assign tmp_1_fu_207_p3 = {{grp_fm_receiver_fu_97_ap_return_1}, {grp_fm_receiver_fu_97_ap_return_0}};
-
-assign tmp_1_i_fu_163_p2 = (count + 8'd1);
-
-assign tmp_i_fu_157_p2 = ((count > 8'd13) ? 1'b1 : 1'b0);
-
-assign toggle_assign_fu_141_p2 = (toggle ^ 1'd1);
+assign toggle_assign_fu_50_p2 = (toggle ^ 1'd1);
 
 endmodule //fm_receiver_top

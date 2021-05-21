@@ -47,6 +47,15 @@ void fm_receiver_top(hls::stream<iq_sample_t>& iq_in,
   static bool toggle = false;
   toggle             = !toggle;
 
+  // Forwarding test
+  iq_sample_t fw_iq_in = iq_in.read();
+
+  audio_sample_t fw_iq_out = {fw_iq_in.i, fw_iq_in.q};
+
+  audio_out.write(fw_iq_out);
+
+  /*
+
   if (strobe_gen()) {
     // ------------------------------------------------------
     // Read input and split IQ samples
@@ -71,4 +80,5 @@ void fm_receiver_top(hls::stream<iq_sample_t>& iq_in,
     audio_sample_t audio_sample = {audio_L, audio_R};
     audio_out.write(audio_sample);
   }
+  */
 }

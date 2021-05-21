@@ -44,7 +44,7 @@ puts "(MWURM) Importing other sources..."
 # The following command could probably be replaced with
 # 'createlib' in the future (library project).
 # This would also remove the need to gitignore imported source files.
-importsources -name $app_name -path src/
+#importsources -name $app_name -path src/
 
 puts "(MWURM) Loaded projects:"
 set projects [getprojects]
