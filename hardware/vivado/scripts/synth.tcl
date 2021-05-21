@@ -8,7 +8,7 @@ set build_dir [lindex $argv 0]
 
 set proj_name "proj"
 set parallel_jobs 4
-if {0} {
+
 # Open project
 if {[catch {
   open_project $build_dir/$proj_name.xpr
@@ -69,7 +69,7 @@ if {[catch {
 puts "--- - Creating reports"
 open_run impl_1
 
-report_utilization -hierarchical -hierarchical_percentages -file report_utilization_hierarchical.rpt
+report_utilization -hierarchical -hierarchical_percentages -file $build_dir/$proj_name.runs/impl_1/report_utilization_hierarchical.rpt
 
 if {[catch {
   puts "--- - Creating bitstream"
@@ -80,7 +80,7 @@ if {[catch {
   puts "(MWURM) ERROR: Bitstream generation failed."
   exit 1
 }
-}
+
 puts "--- - Copying build results"
 
 # Create build result folder

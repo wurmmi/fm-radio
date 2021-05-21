@@ -22,7 +22,7 @@ vivado = vivado -nojournal -nolog -notrace -mode batch -source ./scripts/$1 $2
 ##Supported Targets
 ##-----------------
 
-all: project ##			- Default target.
+all: project synth sdk ##		- Default target.
 
 project: ##			- Create/Open Vivado project.
 	@mkdir -p $(VIVADO_DIR)
