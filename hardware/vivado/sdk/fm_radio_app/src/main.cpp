@@ -4,9 +4,10 @@
 
 #include <FreeRTOS.h>
 #include <task.h>
-#include <xil_printf.h>
 
 #include <iostream>
+
+#include "adau1761.h"
 
 using namespace std;
 
@@ -34,5 +35,8 @@ int main() {
               &task_1);
 
   vTaskStartScheduler();
+  cout << "ERROR: vTaskStartScheduler() returned!" << endl;
+  while (true) {
+  };
   return 0;
 }
