@@ -70,10 +70,6 @@ bool adau1761::init_fifos() {
 
   // Check FIFO 0 status and clear interrupts
   status = XLlFifo_Status(&mDevConfig.fifo_spi);
-  // if (status != XST_SUCCESS) {
-  //  printf("Status of FIFO 0 not okay. (status = %x)\n", status);
-  //  return false;
-  //}
   printf("Clearing interrupts of FIFO 0\n");
   XLlFifo_IntClear(&mDevConfig.fifo_spi, 0xffffffff);
 
@@ -95,10 +91,6 @@ bool adau1761::init_fifos() {
 
   // Check FIFO 1 status and clear interrupts
   status = XLlFifo_Status(&mDevConfig.fifo_i2s);
-  // if (status != XST_SUCCESS) {
-  //  printf("Status of FIFO 1 not okay. (status = %x)\n", status);
-  //  return false;
-  //}
   printf("Clearing interrupts of FIFO 1\n");
   XLlFifo_IntClear(&mDevConfig.fifo_i2s, 0xffffffff);
 
@@ -219,9 +211,9 @@ bool adau1761::setup_fifo_interrupts() {
     return false;
   }
 
-  int Status = XScuGic_CfgInitialize(
+  int status = XScuGic_CfgInitialize(
       &mDevConfig.irqCtrl, IntcConfig, IntcConfig->CpuBaseAddress);
-  if (Status != XST_SUCCESS) {
+  if (status != XST_SUCCESS) {
     printf("XScuGic_CfgInitialize() failed\n");
     return false;
   }
@@ -232,11 +224,11 @@ bool adau1761::setup_fifo_interrupts() {
   // Connect the device driver handler that will be called when an
   // interrupt for the device occurs, the handler defined above performs
   // the specific interrupt processing for the device.
-  Status = XScuGic_Connect(&mDevConfig.irqCtrl,
+  status = XScuGic_Connect(&mDevConfig.irqCtrl,
                            irq_id,
                            (Xil_InterruptHandler)irq_handler_fifo_callback,
                            this);
-  if (Status != XST_SUCCESS) {
+  if (status != XST_SUCCESS) {
     printf("XScuGic_Connect() failed\n");
     return false;
   }
@@ -270,7 +262,9 @@ bool adau1761::initialize() {
     return false;
 
   // FIFO interrupts setup
-  setup_fifo_interrupts();
+  status = setup_fifo_interrupts();
+  if (!status)
+    return false;
 
   return true;
 }

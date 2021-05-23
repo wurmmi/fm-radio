@@ -26,10 +26,16 @@ static void task_loop(void *) {
 }
 
 static void task_audio(void *) {
+  adau1761 adau_inst;
+
   while (true) {
     cout << "task_audio" << endl;
-    adau1761 adau_inst;
-    adau_inst.initialize();
+
+    bool success = adau_inst.initialize();
+    if (!success) {
+      cout << "ADAU1761 failed initialization!" << endl;
+      return;
+    }
 
     vTaskDelay(delay_ms_c);
   }
