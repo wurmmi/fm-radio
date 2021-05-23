@@ -51,7 +51,7 @@ void adau1761::write_spi(uint16_t addr, uint8_t value) {
 void adau1761::write_i2s(uint16_t left, uint16_t right) {
   while (!XLlFifo_iTxVacancy(&mDevConfig.fifo_i2s)) {
     // Don't do this in an interrupt routine...
-    // printf("I2S FIFO full. Waiting ... \n\r");
+    // printf("I2S FIFO full. Waiting ... \n");
   }
   XLlFifo_TxPutWord(&mDevConfig.fifo_i2s, ((u32)left << 16) | (u32)right);
   XLlFifo_iTxSetLen(&mDevConfig.fifo_i2s, 1 * mDevConfig.wordSize);
@@ -61,7 +61,7 @@ bool adau1761::init_fifos() {
   // Initialize FIFO 0
   XLlFifo_Config* pFIFO_0_Config =
       XLlFfio_LookupConfig(XPAR_AXI_FIFO_MM_S_0_DEVICE_ID);
-  uint32_t status = XLlFifo_CfgInitialize(
+  int status = XLlFifo_CfgInitialize(
       &mDevConfig.fifo_spi, pFIFO_0_Config, pFIFO_0_Config->BaseAddress);
   if (status != XST_SUCCESS) {
     cerr << "Could not initialize FIFO 0" << endl;
@@ -70,23 +70,23 @@ bool adau1761::init_fifos() {
 
   // Check FIFO 0 status and clear interrupts
   status = XLlFifo_Status(&mDevConfig.fifo_spi);
-  if (status != XST_SUCCESS) {
-    printf("Status of FIFO 0 not okay. (status = %x)", status);
-    return false;
-  }
-  printf("Clearing interrupts of FIFO 0");
+  // if (status != XST_SUCCESS) {
+  //  printf("Status of FIFO 0 not okay. (status = %x)\n", status);
+  //  return false;
+  //}
+  printf("Clearing interrupts of FIFO 0\n");
   XLlFifo_IntClear(&mDevConfig.fifo_spi, 0xffffffff);
 
   status = XLlFifo_Status(&mDevConfig.fifo_spi);
   if (status != XST_SUCCESS) {
-    printf("Status of FIFO 0 not okay. (status = %x)", status);
+    printf("Status of FIFO 0 not okay. (status = %x)\n", status);
     return false;
   }
 
   // Initialize FIFO 1
   XLlFifo_Config* pFIFO_1_Config =
-      XLlFfio_LookupConfig(XPAR_AXI_FIFO_MM_S_1_BASEADDR);
-  uint32_t status = XLlFifo_CfgInitialize(
+      XLlFfio_LookupConfig(XPAR_AXI_FIFO_MM_S_1_DEVICE_ID);
+  status = XLlFifo_CfgInitialize(
       &mDevConfig.fifo_i2s, pFIFO_1_Config, pFIFO_1_Config->BaseAddress);
   if (status != XST_SUCCESS) {
     cerr << "Could not initialize FIFO 1" << endl;
@@ -95,16 +95,16 @@ bool adau1761::init_fifos() {
 
   // Check FIFO 1 status and clear interrupts
   status = XLlFifo_Status(&mDevConfig.fifo_i2s);
-  if (status != XST_SUCCESS) {
-    printf("Status of FIFO 1 not okay. (status = %x)", status);
-    return false;
-  }
-  printf("Clearing interrupts of FIFO 1");
+  // if (status != XST_SUCCESS) {
+  //  printf("Status of FIFO 1 not okay. (status = %x)\n", status);
+  //  return false;
+  //}
+  printf("Clearing interrupts of FIFO 1\n");
   XLlFifo_IntClear(&mDevConfig.fifo_i2s, 0xffffffff);
 
   status = XLlFifo_Status(&mDevConfig.fifo_i2s);
   if (status != XST_SUCCESS) {
-    printf("Status of FIFO 1 not okay. (status = %x)", status);
+    printf("Status of FIFO 1 not okay. (status = %x)\n", status);
     return false;
   }
 
@@ -215,14 +215,14 @@ bool adau1761::setup_fifo_interrupts() {
   XScuGic_Config* IntcConfig =
       XScuGic_LookupConfig(XPAR_SCUGIC_SINGLE_DEVICE_ID);
   if (IntcConfig == nullptr) {
-    print("XScuGic_LookupConfig() failed\n\r");
+    printf("XScuGic_LookupConfig() failed\n");
     return false;
   }
 
   int Status = XScuGic_CfgInitialize(
       &mDevConfig.irqCtrl, IntcConfig, IntcConfig->CpuBaseAddress);
   if (Status != XST_SUCCESS) {
-    print("XScuGic_CfgInitialize() failed\n\r");
+    printf("XScuGic_CfgInitialize() failed\n");
     return false;
   }
 
@@ -237,7 +237,7 @@ bool adau1761::setup_fifo_interrupts() {
                            (Xil_InterruptHandler)irq_handler_fifo_callback,
                            this);
   if (Status != XST_SUCCESS) {
-    print("XScuGic_Connect() failed\n\r");
+    printf("XScuGic_Connect() failed\n");
     return false;
   }
 
@@ -253,6 +253,8 @@ bool adau1761::setup_fifo_interrupts() {
 
   // Enable exceptions.
   Xil_ExceptionEnable();
+
+  return true;
 }
 
 bool adau1761::initialize() {
@@ -269,4 +271,6 @@ bool adau1761::initialize() {
 
   // FIFO interrupts setup
   setup_fifo_interrupts();
+
+  return true;
 }

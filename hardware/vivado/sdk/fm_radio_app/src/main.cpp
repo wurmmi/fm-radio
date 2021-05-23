@@ -11,9 +11,11 @@
 
 using namespace std;
 
+#define STACK_SIZE 4096
 const TickType_t delay_ms_c = pdMS_TO_TICKS(1000);
 
-static TaskHandle_t task_1;
+static TaskHandle_t task_loop_handle;
+static TaskHandle_t task_audio_handle;
 
 static void task_loop(void *) {
   static uint32_t count = 0;
@@ -23,16 +25,32 @@ static void task_loop(void *) {
   }
 }
 
+static void task_audio(void *) {
+  while (true) {
+    cout << "task_audio" << endl;
+    adau1761 adau_inst;
+    adau_inst.initialize();
+
+    vTaskDelay(delay_ms_c);
+  }
+}
+
 int main() {
   cout << "cout Hello World!" << endl;
 
-  xTaskCreate(task_loop, /* The function that implements the task. */
-              (const char *)"task_loop", /* Text name for the task, provided to
-                                     assist debugging only. */
-              configMINIMAL_STACK_SIZE,  /* The stack allocated to the task. */
-              NULL, /* The task parameter is not used, so set to NULL. */
-              tskIDLE_PRIORITY, /* The task runs at the idle priority. */
-              &task_1);
+  xTaskCreate(task_loop,
+              (const char *)"task_loop",
+              configMINIMAL_STACK_SIZE,
+              NULL,
+              tskIDLE_PRIORITY,
+              &task_loop_handle);
+
+  xTaskCreate(task_audio,
+              (const char *)"task_audio",
+              STACK_SIZE,
+              NULL,
+              tskIDLE_PRIORITY,
+              &task_audio_handle);
 
   vTaskStartScheduler();
   cout << "ERROR: vTaskStartScheduler() returned!" << endl;
