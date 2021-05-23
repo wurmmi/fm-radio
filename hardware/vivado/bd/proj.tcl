@@ -683,7 +683,7 @@ proc create_root_design { parentCell } {
   connect_bd_net -net myI2STx_0_lrclk [get_bd_ports i2s_lrclk_o] [get_bd_pins myI2STx_0/lrclk]
   connect_bd_net -net myI2STx_0_sdata [get_bd_ports i2s_sdata_o] [get_bd_pins myI2STx_0/sdata]
   connect_bd_net -net myPrescaler_0_prescale [get_bd_ports led0_heartbeat_o] [get_bd_pins myPrescaler_0/prescale]
-  connect_bd_net -net myPrescaler_1_prescale [get_bd_ports spi_mclk_o] [get_bd_pins myPrescaler_1/prescale]
+  connect_bd_net -net myPrescaler_1_prescale [get_bd_ports spi_mclk_o] [get_bd_pins myI2STx_0/mclk] [get_bd_pins myPrescaler_1/prescale]
   connect_bd_net -net mySPIRxTx_0_mosi [get_bd_ports spi_mosi_o] [get_bd_pins mySPIRxTx_0/mosi]
   connect_bd_net -net mySPIRxTx_0_sclk [get_bd_ports spi_sclk_o] [get_bd_pins mySPIRxTx_0/sclk]
   connect_bd_net -net mySPIRxTx_0_ss [get_bd_ports spi_ss_o] [get_bd_pins mySPIRxTx_0/ss]
