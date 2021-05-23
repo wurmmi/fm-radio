@@ -40,7 +40,7 @@ class adau1761 {
   void init_fifo_buffer();
   bool init_adau1761();
   static void irq_handler_fifo_callback(void* data);
-  void write_fifo();
+  void write_buffer_to_fifo();
   void irq_handler_fifo();
   bool setup_fifo_interrupts();
 

@@ -173,7 +173,7 @@ void adau1761::irq_handler_fifo_callback(void* context) {
   static_cast<adau1761*>(context)->irq_handler_fifo();
 }
 
-void adau1761::write_fifo() {
+void adau1761::write_buffer_to_fifo() {
   for (auto const& elem : mDevConfig.fifo_buffer) {
     write_i2s(elem.left, elem.right);
   }
@@ -194,7 +194,7 @@ void adau1761::irq_handler_fifo() {
       // XLlFifo_IntClear(&This->fifo, XLLF_INT_TFPE_MASK);
     } else if (pending & XLLF_INT_TFPE_MASK) {
       // vacancy2 = XLlFifo_iTxVacancy( (&This->fifo));vacancy2count ++;
-      write_fifo();
+      write_buffer_to_fifo();
       // XLlFifo_IntClear(&This->fifo, XLLF_INT_TC_MASK);
       XLlFifo_IntClear(&mDevConfig.fifo_i2s, XLLF_INT_TFPE_MASK);
     } else if (pending & XLLF_INT_ERROR_MASK) {
@@ -250,6 +250,11 @@ bool adau1761::setup_fifo_interrupts() {
 
   // Enable exceptions.
   Xil_ExceptionEnable();
+
+  // Enable FIFO 1 interrupts
+  XLlFifo_IntEnable(&mDevConfig.fifo_i2s, XLLF_INT_ALL_MASK);
+
+  write_buffer_to_fifo();
 
   return true;
 }

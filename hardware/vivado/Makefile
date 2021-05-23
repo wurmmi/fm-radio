@@ -41,14 +41,18 @@ ifeq ($(GUI),1)
 endif
 
 ##
-clean: ##				- Clean outputs.
+clean-sdk: ##			- Clean all outputs of SDK.
+	@echo "Cleaning SDK stuff..."
+	git clean -xdf sdk/
+
+clean-all: ##			- Clean all outputs.
 	@echo "Cleaning..."
 	git clean -xdf
 
 help: ##				- Show this help message.
 	@grep -h "##" Makefile | grep -v "\"##\"" | sed -e 's/##//g'
 
-.PHONY: project synth sdk clean help
+.PHONY: project synth sdk clean-all help
 
 ##
 ##==============================================================================

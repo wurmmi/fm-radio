@@ -1,5 +1,7 @@
-/*
- * Empty C++ Application
+/**
+ * @file    main.cpp
+ * @author  Michael Wurm <wurm.michael95@gmail.com>
+ * @brief   Main entry point
  */
 
 #include <FreeRTOS.h>
@@ -20,7 +22,7 @@ static TaskHandle_t task_audio_handle;
 static void task_loop(void *) {
   static uint32_t count = 0;
   while (true) {
-    cout << "[" << count++ << "] looping ..." << endl;
+    cout << "Looping since " << count++ << " sec ..." << endl;
     vTaskDelay(delay_ms_c);
   }
 }
