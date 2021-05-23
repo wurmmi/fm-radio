@@ -7,10 +7,11 @@
 #ifndef _ADAU1761_H_
 #define _ADAU1761_H_
 
+#include <xscugic.h>
+
 #include <array>
 
-#include "xllfifo.h"
-#include "xscugic.h"
+#include "FifoHandler.h"
 
 #define NUM_FIFO_SAMPLES 128
 
@@ -31,24 +32,24 @@ typedef struct {
 class adau1761 {
  private:
   adau1761_config_t mDevConfig;
+  FifoHandler mAudioStreamFifo;
+  FifoHandler mConfigFifo;
 
   uint8_t read_spi(uint16_t addr);
   void write_spi(uint16_t addr, uint8_t value);
   void write_i2s(uint16_t left, uint16_t right);
 
-  bool init_fifos();
-  void init_fifo_buffer();
+  void init_audio_buffer();
   bool init_adau1761();
   static void irq_handler_fifo_callback(void* data);
   void write_buffer_to_fifo();
-  void irq_handler_fifo();
   bool setup_fifo_interrupts();
 
  public:
   adau1761();
   ~adau1761();
 
-  bool initialize();
+  bool Initialize();
 };
 
 #endif /* _ADAU1761_H_ */

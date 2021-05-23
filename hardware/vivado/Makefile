@@ -52,12 +52,13 @@ clean-all: ##			- Clean all outputs.
 help: ##				- Show this help message.
 	@grep -h "##" Makefile | grep -v "\"##\"" | sed -e 's/##//g'
 
-.PHONY: project synth sdk clean-all help
+.PHONY: project synth sdk clean-all clean-sdk help
 
 ##
 ##==============================================================================
 ##*** NOTE: Makefile requires following setup:
 ##
-##      - Vivado HLS (vivado) can be found in PATH.
+##      - Vivado (vivado) can be found in PATH.
+##      - Vivado HLS (vivado_hls) can be found in PATH.
 ##
 ##==============================================================================

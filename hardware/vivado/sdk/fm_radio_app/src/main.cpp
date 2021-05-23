@@ -44,7 +44,7 @@ static void task_audio(void *) {
 }
 
 int main() {
-  cout << "cout Hello World!" << endl;
+  cout << "Hello World!" << endl;
 
   xTaskCreate(task_loop,
               (const char *)"task_loop",

@@ -15,7 +15,9 @@
 
 using namespace std;
 
-adau1761::adau1761() {}
+adau1761::adau1761()
+    : mAudioStreamFifo(XPAR_AXI_FIFO_MM_S_1_DEVICE_ID),
+      mConfigFifo(XPAR_AXI_FIFO_MM_S_0_DEVICE_ID) {}
 
 adau1761::~adau1761() {}
 
@@ -60,52 +62,6 @@ void adau1761::write_i2s(uint16_t left, uint16_t right) {
   }
   XLlFifo_TxPutWord(&mDevConfig.fifo_i2s, ((u32)left << 16) | (u32)right);
   XLlFifo_iTxSetLen(&mDevConfig.fifo_i2s, 1 * mDevConfig.wordSize);
-}
-
-bool adau1761::init_fifos() {
-  // Initialize FIFO 0
-  XLlFifo_Config* pFIFO_0_Config =
-      XLlFfio_LookupConfig(XPAR_AXI_FIFO_MM_S_0_DEVICE_ID);
-  int status = XLlFifo_CfgInitialize(
-      &mDevConfig.fifo_spi, pFIFO_0_Config, pFIFO_0_Config->BaseAddress);
-  if (status != XST_SUCCESS) {
-    cerr << "Could not initialize FIFO 0" << endl;
-    return false;
-  }
-
-  // Check FIFO 0 status and clear interrupts
-  status = XLlFifo_Status(&mDevConfig.fifo_spi);
-  printf("Clearing interrupts of FIFO 0\n");
-  XLlFifo_IntClear(&mDevConfig.fifo_spi, 0xffffffff);
-
-  status = XLlFifo_Status(&mDevConfig.fifo_spi);
-  if (status != XST_SUCCESS) {
-    printf("Status of FIFO 0 not okay. (status = %x)\n", status);
-    return false;
-  }
-
-  // Initialize FIFO 1
-  XLlFifo_Config* pFIFO_1_Config =
-      XLlFfio_LookupConfig(XPAR_AXI_FIFO_MM_S_1_DEVICE_ID);
-  status = XLlFifo_CfgInitialize(
-      &mDevConfig.fifo_i2s, pFIFO_1_Config, pFIFO_1_Config->BaseAddress);
-  if (status != XST_SUCCESS) {
-    cerr << "Could not initialize FIFO 1" << endl;
-    return false;
-  }
-
-  // Check FIFO 1 status and clear interrupts
-  status = XLlFifo_Status(&mDevConfig.fifo_i2s);
-  printf("Clearing interrupts of FIFO 1\n");
-  XLlFifo_IntClear(&mDevConfig.fifo_i2s, 0xffffffff);
-
-  status = XLlFifo_Status(&mDevConfig.fifo_i2s);
-  if (status != XST_SUCCESS) {
-    printf("Status of FIFO 1 not okay. (status = %x)\n", status);
-    return false;
-  }
-
-  return true;
 }
 
 bool adau1761::init_adau1761() {
@@ -170,7 +126,7 @@ bool adau1761::init_adau1761() {
 }
 
 void adau1761::irq_handler_fifo_callback(void* context) {
-  static_cast<adau1761*>(context)->irq_handler_fifo();
+  static_cast<adau1761*>(context)->mAudioStreamFifo.irq_handler();
 }
 
 void adau1761::write_buffer_to_fifo() {
@@ -179,34 +135,7 @@ void adau1761::write_buffer_to_fifo() {
   }
 }
 
-void adau1761::irq_handler_fifo() {
-  uint32_t pending = XLlFifo_IntPending((&mDevConfig.fifo_i2s));
-  while (pending) {
-    if (pending & XLLF_INT_RC_MASK) {
-      // FifoRecvHandler(InstancePtr);
-      XLlFifo_IntClear(&mDevConfig.fifo_i2s, XLLF_INT_RC_MASK);
-    } else if (pending & XLLF_INT_TC_MASK) {
-      // vacancy1 = XLlFifo_iTxVacancy( (&This->fifo));vacancy1count ++;
-      // This->transmitFifo();
-      // TxSend2(InstancePtr);
-      // cout << "Tx Empty" << endl;
-      XLlFifo_IntClear(&mDevConfig.fifo_i2s, XLLF_INT_TC_MASK);
-      // XLlFifo_IntClear(&This->fifo, XLLF_INT_TFPE_MASK);
-    } else if (pending & XLLF_INT_TFPE_MASK) {
-      // vacancy2 = XLlFifo_iTxVacancy( (&This->fifo));vacancy2count ++;
-      write_buffer_to_fifo();
-      // XLlFifo_IntClear(&This->fifo, XLLF_INT_TC_MASK);
-      XLlFifo_IntClear(&mDevConfig.fifo_i2s, XLLF_INT_TFPE_MASK);
-    } else if (pending & XLLF_INT_ERROR_MASK) {
-      // FifoErrorHandler(InstancePtr, pending);
-      XLlFifo_IntClear(&mDevConfig.fifo_i2s, XLLF_INT_ERROR_MASK);
-    } else {
-      XLlFifo_IntClear(&mDevConfig.fifo_i2s, pending);
-    }
-    pending = XLlFifo_IntPending(&mDevConfig.fifo_i2s);
-  }
-}
-
+/** TODO: move this to FifoHandler*/
 bool adau1761::setup_fifo_interrupts() {
   // Initialize the interrupt controller driver so that it is ready to use.
   XScuGic_Config* IntcConfig =
@@ -259,7 +188,7 @@ bool adau1761::setup_fifo_interrupts() {
   return true;
 }
 
-void adau1761::init_fifo_buffer() {
+void adau1761::init_audio_buffer() {
   const double amp = 16384;
   int16_t left;
   int16_t right;
@@ -270,13 +199,17 @@ void adau1761::init_fifo_buffer() {
   }
 }
 
-bool adau1761::initialize() {
+bool adau1761::Initialize() {
   mDevConfig.chipAddr = 0;
   mDevConfig.wordSize = 4;
 
-  init_fifo_buffer();
+  init_audio_buffer();
 
-  bool status = init_fifos();
+  bool status = mAudioStreamFifo.Initialize();
+  if (!status)
+    return false;
+
+  status = mConfigFifo.Initialize();
   if (!status)
     return false;
 
