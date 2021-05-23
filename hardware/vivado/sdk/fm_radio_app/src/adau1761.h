@@ -37,6 +37,7 @@ class adau1761 {
   void write_i2s(uint16_t left, uint16_t right);
 
   bool init_fifos();
+  void init_fifo_buffer();
   bool init_adau1761();
   static void irq_handler_fifo_callback(void* data);
   void write_fifo();

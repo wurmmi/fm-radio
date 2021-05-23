@@ -6,7 +6,12 @@
 
 #include "adau1761.h"
 
+#include <cmath>
 #include <iostream>
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 using namespace std;
 
@@ -249,9 +254,22 @@ bool adau1761::setup_fifo_interrupts() {
   return true;
 }
 
+void adau1761::init_fifo_buffer() {
+  const double amp = 16384;
+  int16_t left;
+  int16_t right;
+  for (size_t i = 0; i < mDevConfig.fifo_buffer.size(); i++) {
+    left  = (int16_t)(cos((double)i / NUM_FIFO_SAMPLES * 2 * M_PI) * amp);
+    right = (int16_t)(sin((double)i / NUM_FIFO_SAMPLES * 2 * M_PI) * amp);
+    mDevConfig.fifo_buffer[i] = {(uint16_t)left, (uint16_t)right};
+  }
+}
+
 bool adau1761::initialize() {
   mDevConfig.chipAddr = 0;
   mDevConfig.wordSize = 4;
+
+  init_fifo_buffer();
 
   bool status = init_fifos();
   if (!status)
@@ -261,7 +279,6 @@ bool adau1761::initialize() {
   if (!status)
     return false;
 
-  // FIFO interrupts setup
   status = setup_fifo_interrupts();
   if (!status)
     return false;
