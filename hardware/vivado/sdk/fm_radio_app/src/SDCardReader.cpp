@@ -39,6 +39,9 @@ void SDCardReader::DiscoverFiles() {
   do {
     FILINFO fno;
     res = f_readdir(&dir, &fno);
+    cout << "res = " << res << endl;
+    cout << "fno.fname = " << fno.fname << endl;
+
     if (res != FR_OK || fno.fname[0] == 0) {
       break;
     }
