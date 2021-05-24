@@ -15,7 +15,10 @@
 
 using namespace std;
 
-AudioHandler::AudioHandler() {}
+AudioHandler::AudioHandler() {
+  Initialize();
+  FillAudioBuffer();
+}
 
 AudioHandler::~AudioHandler() {}
 
@@ -28,7 +31,7 @@ bool AudioHandler::Initialize() {
   return true;
 }
 
-void AudioHandler::InitAudioBuffer() {
+void AudioHandler::FillAudioBuffer() {
   const double amp = 16384;
   int16_t left;
   int16_t right;

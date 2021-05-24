@@ -17,14 +17,13 @@ class AudioHandler {
   ADAU1761 mAdau1761;
   audio_buffer_t mAudioBuffer;
 
-  void InitAudioBuffer();
+  bool Initialize();
+  void FillAudioBuffer();
   void AudioStreamEmptyCallback();
 
  public:
   AudioHandler();
   ~AudioHandler();
-
-  bool Initialize();
 };
 
 #endif /* _AUDIOHANDLER_H_ */

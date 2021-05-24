@@ -28,8 +28,7 @@ static void task_loop(void *) {
 }
 
 static void task_audio(void *) {
-  AudioHandler audioHandler;
-  audioHandler.Initialize();
+  static AudioHandler audioHandler;
 
   while (true) {
     cout << "task_audio" << endl;

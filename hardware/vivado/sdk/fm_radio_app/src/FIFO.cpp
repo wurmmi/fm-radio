@@ -6,6 +6,7 @@
 
 #include "FIFO.h"
 
+#include <cassert>
 #include <iostream>
 
 using namespace std;
@@ -32,7 +33,6 @@ bool FIFO::Initialize() {
 bool FIFO::clear_irqs() {
   // Clear interrupts and check interrupt status afterwards
   int status = XLlFifo_Status(&mDev);
-  printf("Clearing interrupts of FIFO\n");
   XLlFifo_IntClear(&mDev, 0xffffffff);
 
   status = XLlFifo_Status(&mDev);
@@ -41,10 +41,6 @@ bool FIFO::clear_irqs() {
     return false;
   }
   return true;
-}
-
-void FIFO::SetIrqCallback(std::function<void()> const& callback) {
-  mCallbackOnTxEmptyIRQ = callback;
 }
 
 void FIFO::irq_handler() {
@@ -75,7 +71,11 @@ void FIFO::irq_handler_callback(void* context) {
   static_cast<FIFO*>(context)->irq_handler();
 }
 
-bool FIFO::SetupInterrupts(uint32_t irq_id) {
+bool FIFO::SetupInterrupts(uint32_t irq_id,
+                           std::function<void()> const& isEmptyCallback) {
+  assert(isEmptyCallback);
+  mCallbackOnTxEmptyIRQ = isEmptyCallback;
+
   // Initialize the interrupt controller driver so that it is ready to use.
   XScuGic_Config* IntcConfig =
       XScuGic_LookupConfig(XPAR_SCUGIC_SINGLE_DEVICE_ID);
@@ -116,10 +116,11 @@ bool FIFO::SetupInterrupts(uint32_t irq_id) {
   // Enable exceptions.
   Xil_ExceptionEnable();
 
-  // Enable FIFO 1 interrupts
-  XLlFifo_IntEnable(&mDevConfig.fifo_i2s, XLLF_INT_ALL_MASK);
+  // Enable FIFO interrupts
+  XLlFifo_IntEnable(&mDev, XLLF_INT_ALL_MASK);
 
-  // write_buffer_to_fifo();
+  if (mCallbackOnTxEmptyIRQ != nullptr)
+    mCallbackOnTxEmptyIRQ();
 
   return true;
 }

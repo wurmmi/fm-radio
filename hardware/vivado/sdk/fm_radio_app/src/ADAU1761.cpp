@@ -6,7 +6,6 @@
 
 #include "ADAU1761.h"
 
-#include <functional>
 #include <iostream>
 
 using namespace std;
@@ -85,14 +84,10 @@ void ADAU1761::WriteAudioBuffer(audio_buffer_t const& buffer) {
 }
 
 bool ADAU1761::Initialize(function<void()> const& audioStreamEmptyCallback) {
-  mDevConfig.chipAddr = 0;
-
   // Configure audiostream FIFO
   bool status = mAudioStreamFifo.Initialize();
   if (!status)
     return false;
-  mAudioStreamFifo.SetIrqCallback(audioStreamEmptyCallback);
-  mAudioStreamFifo.SetupInterrupts(XPAR_FABRIC_AXI_FIFO_MM_S_1_INTERRUPT_INTR);
 
   // Configure config FIFO
   status = mConfigFifo.Initialize();
@@ -101,6 +96,11 @@ bool ADAU1761::Initialize(function<void()> const& audioStreamEmptyCallback) {
 
   // Configure ADAU1761 chip
   status = adau1761_chip_config();
+  if (!status)
+    return false;
+
+  status = mAudioStreamFifo.SetupInterrupts(
+      XPAR_FABRIC_AXI_FIFO_MM_S_1_INTERRUPT_INTR, audioStreamEmptyCallback);
   if (!status)
     return false;
 

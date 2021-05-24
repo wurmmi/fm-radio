@@ -7,16 +7,13 @@
 #ifndef _ADAU1761_H_
 #define _ADAU1761_H_
 
+#include <functional>
+
 #include "AudioStreamFIFO.h"
 #include "ConfigFIFO.h"
 
-typedef struct {
-  uint8_t chipAddr;
-} adau1761_config_t;
-
 class ADAU1761 {
  private:
-  adau1761_config_t mDevConfig;
   AudioStreamFIFO mAudioStreamFifo;
   ConfigFIFO mConfigFifo;
 
@@ -26,7 +23,7 @@ class ADAU1761 {
   ADAU1761();
   ~ADAU1761();
 
-  bool Initialize(function<void()> const& audioStreamEmptyCallback);
+  bool Initialize(std::function<void()> const& audioStreamEmptyCallback);
   void WriteAudioBuffer(audio_buffer_t const& buffer);
 };
 

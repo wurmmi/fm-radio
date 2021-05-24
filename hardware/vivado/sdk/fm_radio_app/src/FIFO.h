@@ -23,10 +23,6 @@ typedef struct {
 
 using audio_buffer_t = std::array<audio_sample_t, FIFO_NUM_SAMPLES>;
 
-/** TODO: This is a base class.
-/*       --> Derive ConfigFifo and AudioStreamFifo from it.
-/*       --> because of different read/write functions.
-*/
 class FIFO {
  private:
   XScuGic mIrqCtrl;
@@ -44,8 +40,8 @@ class FIFO {
   ~FIFO();
 
   bool Initialize();
-  void SetIrqCallback(std::function<void()> const& callback);
-  bool SetupInterrupts(uint32_t irq_id);
+  bool SetupInterrupts(uint32_t irq_id,
+                       std::function<void()> const& isEmptyCallback);
 };
 
 #endif /* _FIFO_H_ */

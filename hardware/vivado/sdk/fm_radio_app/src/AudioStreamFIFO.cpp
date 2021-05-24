@@ -20,5 +20,5 @@ void AudioStreamFIFO::write(audio_sample_t const& sample) {
     // printf("I2S FIFO full. Waiting ... \n");
   }
   XLlFifo_TxPutWord(&mDev, ((u32)left << 16) | (u32)right);
-  XLlFifo_iTxSetLen(&mDev, 1 * FIFO_STREAM_WORDSIZE);
+  XLlFifo_iTxSetLen(&mDev, 1 * FIFO_WORDSIZE);
 }
