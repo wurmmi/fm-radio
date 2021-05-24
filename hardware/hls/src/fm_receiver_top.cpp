@@ -14,7 +14,11 @@
 --       03/31/2021  14:30 - 18:00    3:30 h  trying to find out how/when
 --                                            top-level function is called
 --                                            with clk cycles
---
+-- (2) Debug Error with Bitwidth
+--       05/21/2021  14:00 - 19:00    5:00 h  Not sure what the error was.
+--                                            Parallel delay I/Q didn't work.
+--                                            Order of every 2nd data was wrong.
+--                                            Using a single delay fixed it.
 */
 
 #include "fm_receiver_top.hpp"
@@ -43,6 +47,15 @@ void fm_receiver_top(hls::stream<iq_sample_t>& iq_in,
   static bool toggle = false;
   toggle             = !toggle;
 
+  // Forwarding test
+  iq_sample_t fw_iq_in = iq_in.read();
+
+  audio_sample_t fw_iq_out = {fw_iq_in.i, fw_iq_in.q};
+
+  audio_out.write(fw_iq_out);
+
+  /*
+
   if (strobe_gen()) {
     // ------------------------------------------------------
     // Read input and split IQ samples
@@ -67,4 +80,5 @@ void fm_receiver_top(hls::stream<iq_sample_t>& iq_in,
     audio_sample_t audio_sample = {audio_L, audio_R};
     audio_out.write(audio_sample);
   }
+  */
 }

@@ -11,6 +11,6 @@
 
 #include "fm_global.hpp"
 
-sample_t fm_demodulator(sample_t const& in_i, sample_t const& in_q);
+sample_t fm_demodulator(iq_sample_t const& iq);
 
 #endif /* _FM_DEMODULATOR_HPP */

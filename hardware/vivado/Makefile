@@ -10,9 +10,8 @@ GUI = 0
 SHELL        = /bin/bash
 MAKEFILE_DIR = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
-GENERAL_OUT_DIR = ./generated
-VIVADO_DIR      = $(GENERAL_OUT_DIR)/vivado
-IP_DIR          = ../hls/generated/ip
+VIVADO_DIR = ./generated
+IP_DIRS     = "./ip ../vhdl"
 
 vivado = vivado -nojournal -nolog -notrace -mode batch -source ./scripts/$1 $2
 
@@ -23,32 +22,43 @@ vivado = vivado -nojournal -nolog -notrace -mode batch -source ./scripts/$1 $2
 ##Supported Targets
 ##-----------------
 
-all: create_project ##		- Default target.
+all: project synth sdk ##		- Default target.
 
-create_project: ##		- Create Vivado project.
-	@echo "Creating Vivado project ..."
+project: ##			- Create/Open Vivado project.
 	@mkdir -p $(VIVADO_DIR)
-	@$(call vivado,create_project.tcl,-tclargs $(VIVADO_DIR) $(IP_DIR) $(GUI))
+	@$(call vivado,create_project.tcl,-tclargs $(VIVADO_DIR) $(IP_DIRS) $(GUI))
 
-synth: ##		- Synthesize Vivado project.
+synth: ##				- Synthesize Vivado project.
 	@echo "Synthesize Vivado project ..."
 	@mkdir -p $(VIVADO_DIR)
-	@$(call vivado,synth.tcl,-tclargs $(VIVADO_DIR) $(IP_DIR) $(GUI))
+	@$(call vivado,synth.tcl,-tclargs $(VIVADO_DIR) $(GUI))
+
+sdk: ##				- Create/Open SDK project.
+	@echo "Creating SDK ..."
+	@xsdk -batch -source ./scripts/create_sdk.tcl
+ifeq ($(GUI),1)
+	@xsdk -workspace ./sdk
+endif
 
 ##
-clean: ##				- Clean outputs.
+clean-sdk: ##			- Clean all outputs of SDK.
+	@echo "Cleaning SDK stuff..."
+	git clean -xdf sdk/
+
+clean-all: ##			- Clean all outputs.
 	@echo "Cleaning..."
-	git clean -xdf ..
+	git clean -xdf
 
 help: ##				- Show this help message.
 	@grep -h "##" Makefile | grep -v "\"##\"" | sed -e 's/##//g'
 
-.PHONY: create_project clean help
+.PHONY: project synth sdk clean-all clean-sdk help
 
 ##
 ##==============================================================================
 ##*** NOTE: Makefile requires following setup:
 ##
-##      - Vivado HLS (vivado) can be found in PATH.
+##      - Vivado (vivado) can be found in PATH.
+##      - Vivado HLS (vivado_hls) can be found in PATH.
 ##
 ##==============================================================================

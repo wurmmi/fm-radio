@@ -19,10 +19,10 @@ endif
 
 # VHDL sources in compile order
 VHDL_SOURCES =
-VHDL_SOURCES += $(CURDIR)/../../../src/packages/fm_global_spec_pkg.vhd
-VHDL_SOURCES += $(CURDIR)/../../../src/fm_global_pkg.vhd
-VHDL_SOURCES += $(CURDIR)/../../../src/packages/filter_bp_pilot_pkg.vhd
-VHDL_SOURCES += $(CURDIR)/../../../src/utils/DspFir.vhd
+VHDL_SOURCES += $(CURDIR)/../../../rtl/packages/fm_global_spec_pkg.vhd
+VHDL_SOURCES += $(CURDIR)/../../../rtl/fm_global_pkg.vhd
+VHDL_SOURCES += $(CURDIR)/../../../rtl/packages/filter_bp_pilot_pkg.vhd
+VHDL_SOURCES += $(CURDIR)/../../../rtl/utils/DspFir.vhd
 
 # Set toplevel module in VHDL
 TOPLEVEL = dspfir

@@ -68,8 +68,8 @@ int main() {
     cout << "--- Running test on DUT" << endl;
 
     // Apply stimuli, call the top-level function and save the results
-    DataWriter writer_data_out_L("data_out_rx_audio_L.txt");
-    DataWriter writer_data_out_R("data_out_rx_audio_R.txt");
+    DataWriter writer_data_out_rx_audio_L("data_out_rx_audio_L.txt");
+    DataWriter writer_data_out_rx_audio_R("data_out_rx_audio_R.txt");
     sample_t audio_L;
     sample_t audio_R;
     hls::stream<audio_sample_t> stream_data_out;
@@ -80,8 +80,8 @@ int main() {
     // Store output stream to file
     while (!stream_data_out.empty()) {
       audio_sample_t audio_sample = stream_data_out.read();
-      writer_data_out_L.write(audio_sample.L);
-      writer_data_out_R.write(audio_sample.R);
+      writer_data_out_rx_audio_L.write(audio_sample.L);
+      writer_data_out_rx_audio_R.write(audio_sample.R);
     }
 
     auto ts_stop  = chrono::high_resolution_clock::now();

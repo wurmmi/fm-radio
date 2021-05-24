@@ -2,7 +2,7 @@
 # file:      Makefile
 # author:    Michael Wurm <wurm.michael95@gmail.com>
 # copyright: 2021 Michael Wurm
-# brief:     Makefile for FM Receiver IP.
+# brief:     Makefile for FM Receiver IP (HLS).
 #-------------------------------------------------------------------------------
 
 # TODO: move this file one directory higher (?)
@@ -16,12 +16,11 @@ MAKEFILE_DIR = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 VIVADO_HLS_PROJECT_NAME = prj
 ENV_SETUP_SCRIPT        = ../../vhdl/tb/setup_env.sh
 
-GENERAL_OUT_DIR = ../generated
-PROJ_DIR        = $(GENERAL_OUT_DIR)/fm_receiver_hls
-IP_DIR          = $(GENERAL_OUT_DIR)/ip
-WAVE_DIR        = $(PROJ_DIR)/prj/solution1/sim/vhdl
+PROJ_DIR = ../generated/fm_receiver_hls
+IP_DIR   = ../../vivado/ip
+WAVE_DIR = $(PROJ_DIR)/prj/solution1/sim/vhdl
 
-IP_TOP         = fm_receiver
+IP_TOP         = fm_receiver_hls
 IP_PACKAGE     = $(PROJ_DIR)/**/**/impl/ip/*.zip
 IP_DESTINATION = $(IP_DIR)/$(IP_TOP)
 

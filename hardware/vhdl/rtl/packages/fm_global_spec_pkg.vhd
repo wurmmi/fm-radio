@@ -7,7 +7,7 @@ package fm_global_spec_pkg is
   -- General
   constant fp_width_spec_c      : natural := 16;
   constant fp_width_frac_spec_c : natural := 14;
-  constant fp_width_int_spec_c  : natural := 1;
+  constant fp_width_int_spec_c  : natural := 2;
 
   constant fs_spec_c            : natural := 960000;
   constant fs_rx_spec_c         : natural := 120000;

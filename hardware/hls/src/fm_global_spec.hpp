@@ -8,9 +8,9 @@
 // Global constants for FM Receiver IP and testbench
 
 // General
-#define FP_WIDTH      ((uint32_t)16 + 1)
-#define FP_WIDTH_FRAC ((uint32_t)14 + 1)
-#define FP_WIDTH_INT  (FP_WIDTH - FP_WIDTH_FRAC)
+#define FP_WIDTH      ((uint32_t)16)
+#define FP_WIDTH_FRAC ((uint32_t)14)
+#define FP_WIDTH_INT  ((uint32_t)2)
 
 #define FS       ((uint32_t)960000)
 #define FS_RX    ((uint32_t)120000)

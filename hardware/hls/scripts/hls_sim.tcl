@@ -19,5 +19,6 @@ puts "###############################################################"
 add_files -tb $TB_DIR/main.cpp -cflags $CPPFLAGS
 
 csim_design -clean
+#-ldflags {-fsanitize=undefined}
 
 exit

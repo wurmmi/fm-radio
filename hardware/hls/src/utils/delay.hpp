@@ -3,7 +3,7 @@
  * @file    delay.hpp
  * @author  Michael Wurm <wurm.michael95@gmail.com>
  * @brief   Delay IP.
- * @details The delay is implemented, using a shift register.
+ * @details The delay is implemented using a shift register.
  */
 /*****************************************************************************/
 
@@ -15,7 +15,7 @@
 using namespace std;
 
 // Class DELAY definition
-template <class sample_T, uint8_t delay_n_T>
+template <typename sample_T, uint8_t delay_n_T>
 class DELAY {
  private:
  protected:
@@ -24,16 +24,16 @@ class DELAY {
  public:
   sample_T operator()(sample_T x);
 
-  template <class sample_TT, uint8_t delay_n_TT>
+  template <typename sample_TT, uint8_t delay_n_TT>
   friend ostream& operator<<(ostream& ost,
                              const DELAY<sample_TT, delay_n_TT>& f);
 };
 
 // DELAY main algorithm
-template <class sample_T, uint8_t delay_n_T>
+template <typename sample_T, uint8_t delay_n_T>
 sample_T DELAY<sample_T, delay_n_T>::operator()(sample_T x) {
 loop:
-  for (int i = 0; i < delay_n_T + 1; i++) {
+  for (uint8_t i = 0; i < delay_n_T + 1; i++) {
 #pragma HLS unroll
     shift_reg[i] = shift_reg[i + 1];
   }
@@ -43,7 +43,7 @@ loop:
 }
 
 // Operator for displaying results
-template <class sample_T, uint8_t delay_n_T>
+template <typename sample_T, uint8_t delay_n_T>
 ostream& operator<<(ostream& ost, const DELAY<sample_T, delay_n_T>& f) {
   for (int i = 0; i < delay_n_T + 1; i++) {
     ost << "shift_reg[" << i << "]= " << f.shift_reg[i] << endl;

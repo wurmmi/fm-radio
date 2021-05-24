@@ -14,6 +14,12 @@ puts "###############################################################"
 puts " Running IP export"
 puts "###############################################################"
 
-export_design -format ip_catalog -ipname $ip_name -vendor MWURM
+export_design -format ip_catalog              \
+              -vendor "MWURM"                 \
+              -library "hls"                  \
+              -ipname "$ip_name"              \
+              -display_name "$ip_name"        \
+              -version "0.1"                  \
+              -description "FM Receiver HLS"
 
 exit

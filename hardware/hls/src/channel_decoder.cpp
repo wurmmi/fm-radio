@@ -79,8 +79,8 @@ void channel_decoder(sample_t const& in_sample,
     static DataWriter writer_data_out_audio_mono("data_out_audio_mono.txt");
     writer_data_out_audio_mono.write(audio_mono);
 
-    static DataWriter writer_data_out_lrdiff("data_out_audio_lrdiff.txt");
-    writer_data_out_lrdiff.write(audio_lrdiff);
+    static DataWriter writer_data_out_audio_lrdiff("data_out_audio_lrdiff.txt");
+    writer_data_out_audio_lrdiff.write(audio_lrdiff);
 
     static DataWriter writer_data_out_audio_L("data_out_audio_L.txt");
     writer_data_out_audio_L.write(audio_L);

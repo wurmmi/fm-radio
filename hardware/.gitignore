@@ -8,12 +8,12 @@
 
 # cocotb
 sim_build/
-*.lst
-*.xml
+vhdl/**/*.lst
+vhdl/tb/**/*.xml
+vhdl/**/*.txt
 *.o
 __pycache__
 
-*.txt
 
 fm_receiver_top
 dspfir
@@ -23,3 +23,7 @@ dspfir
 # Vivado
 generated/
 output/
+vivado/**/*.str
+.Xil/
+Packages/
+*.log

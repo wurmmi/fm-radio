@@ -22,18 +22,18 @@ use work.fm_global_pkg.all;
 
 entity fm_receiver_top is
   port (
-    clk_i : in std_ulogic;
-    rst_i : in std_ulogic;
+    clk_i : in std_logic;
+    rst_i : in std_logic;
 
     -- AXI Stream input
-    s0_axis_tready : out std_ulogic;
-    s0_axis_tdata  : in std_ulogic_vector(31 downto 0);
-    s0_axis_tvalid : in std_ulogic;
+    s0_axis_tready : out std_logic;
+    s0_axis_tdata  : in std_logic_vector(31 downto 0);
+    s0_axis_tvalid : in std_logic;
 
     -- Output
-    audio_L_o     : out sample_t;
-    audio_R_o     : out sample_t;
-    audio_valid_o : out std_ulogic);
+    audio_L_o     : out std_logic_vector(15 downto 0);
+    audio_R_o     : out std_logic_vector(15 downto 0);
+    audio_valid_o : out std_logic);
 
 end entity fm_receiver_top;
 
@@ -72,9 +72,9 @@ begin -- architecture rtl
 
   s0_axis_tready <= req_sample;
 
-  audio_L_o     <= audio_L;
-  audio_R_o     <= audio_R;
-  audio_valid_o <= audio_valid;
+  audio_L_o     <= std_logic_vector(to_slv(audio_L));
+  audio_R_o     <= std_logic_vector(to_slv(audio_R));
+  audio_valid_o <= std_logic(audio_valid);
 
   ------------------------------------------------------------------------------
   -- Signal Assignments

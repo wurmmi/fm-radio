@@ -43,7 +43,8 @@ void fm_receiver(sample_t const& in_i,
   // FM Demodulator
   // ------------------------------------------------------
 
-  sample_t fm_demod = fm_demodulator(in_i, in_q);
+  iq_sample_t iq    = {in_i, in_q};
+  sample_t fm_demod = fm_demodulator(iq);
 
   // ------------------------------------------------------
   // Decimator
@@ -75,8 +76,9 @@ void fm_receiver(sample_t const& in_i,
     // ------------------------------------------------------
 
 #ifndef __SYNTHESIS__
-    static DataWriter writer_data_out_fm_demod("data_out_fm_channel_data.txt");
-    writer_data_out_fm_demod.write(fm_channel_data);
+    static DataWriter writer_data_out_fm_channel_data(
+        "data_out_fm_channel_data.txt");
+    writer_data_out_fm_channel_data.write(fm_channel_data);
 #endif
   }
 
