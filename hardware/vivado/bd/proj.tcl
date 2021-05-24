@@ -124,7 +124,9 @@ set bCheckIPsPassed 1
 set bCheckIPs 1
 if { $bCheckIPs == 1 } {
    set list_check_ips "\ 
+xilinx.com:ip:axi_dma:7.1\
 xilinx.com:ip:axi_fifo_mm_s:4.1\
+xilinx.com:ip:smartconnect:1.0\
 MWURM:hls:fm_receiver_hls:0.1\
 xilinx.com:user:myI2STx:1.0\
 xilinx.com:user:myPrescaler:1.0\
@@ -208,17 +210,13 @@ proc create_root_design { parentCell } {
   set spi_sclk_o [ create_bd_port -dir O -type data spi_sclk_o ]
   set spi_ss_o [ create_bd_port -dir O -type intr spi_ss_o ]
 
-  # Create instance: axi_fifo_mm_s_0, and set properties
-  set axi_fifo_mm_s_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_fifo_mm_s:4.1 axi_fifo_mm_s_0 ]
+  # Create instance: axi_dma_0, and set properties
+  set axi_dma_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_dma:7.1 axi_dma_0 ]
   set_property -dict [ list \
-   CONFIG.C_HAS_AXIS_TDEST {false} \
-   CONFIG.C_HAS_AXIS_TSTRB {true} \
-   CONFIG.C_RX_FIFO_DEPTH {512} \
-   CONFIG.C_RX_FIFO_PE_THRESHOLD {2} \
-   CONFIG.C_RX_FIFO_PF_THRESHOLD {507} \
-   CONFIG.C_USE_RX_DATA {1} \
-   CONFIG.C_USE_TX_CTRL {0} \
- ] $axi_fifo_mm_s_0
+   CONFIG.c_include_s2mm {0} \
+   CONFIG.c_sg_include_stscntrl_strm {0} \
+   CONFIG.c_sg_length_width {23} \
+ ] $axi_dma_0
 
   # Create instance: axi_fifo_mm_s_1, and set properties
   set axi_fifo_mm_s_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_fifo_mm_s:4.1 axi_fifo_mm_s_1 ]
@@ -231,6 +229,12 @@ proc create_root_design { parentCell } {
    CONFIG.C_USE_RX_DATA {0} \
    CONFIG.C_USE_TX_CTRL {0} \
  ] $axi_fifo_mm_s_1
+
+  # Create instance: axi_smc, and set properties
+  set axi_smc [ create_bd_cell -type ip -vlnv xilinx.com:ip:smartconnect:1.0 axi_smc ]
+  set_property -dict [ list \
+   CONFIG.NUM_SI {2} \
+ ] $axi_smc
 
   # Create instance: fm_receiver_hls, and set properties
   set fm_receiver_hls [ create_bd_cell -type ip -vlnv MWURM:hls:fm_receiver_hls:0.1 fm_receiver_hls ]
@@ -332,7 +336,7 @@ proc create_root_design { parentCell } {
    CONFIG.PCW_FCLK3_PERIPHERAL_DIVISOR1 {1} \
    CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ {100.000000} \
    CONFIG.PCW_FPGA1_PERIPHERAL_FREQMHZ {150.000000} \
-   CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {50.000000} \
+   CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ {50} \
    CONFIG.PCW_FPGA_FCLK0_ENABLE {1} \
    CONFIG.PCW_FPGA_FCLK1_ENABLE {0} \
    CONFIG.PCW_FPGA_FCLK2_ENABLE {0} \
@@ -586,7 +590,7 @@ proc create_root_design { parentCell } {
    CONFIG.PCW_QSPI_GRP_SS1_ENABLE {0} \
    CONFIG.PCW_QSPI_PERIPHERAL_DIVISOR0 {5} \
    CONFIG.PCW_QSPI_PERIPHERAL_ENABLE {1} \
-   CONFIG.PCW_QSPI_PERIPHERAL_FREQMHZ {200.000000} \
+   CONFIG.PCW_QSPI_PERIPHERAL_FREQMHZ {200} \
    CONFIG.PCW_QSPI_QSPI_IO {MIO 1 .. 6} \
    CONFIG.PCW_SD0_GRP_CD_ENABLE {1} \
    CONFIG.PCW_SD0_GRP_CD_IO {MIO 47} \
@@ -653,6 +657,7 @@ proc create_root_design { parentCell } {
    CONFIG.PCW_USB_RESET_SELECT {Share reset pin} \
    CONFIG.PCW_USE_FABRIC_INTERRUPT {1} \
    CONFIG.PCW_USE_M_AXI_GP0 {1} \
+   CONFIG.PCW_USE_S_AXI_GP0 {1} \
    CONFIG.preset {ZedBoard} \
  ] $processing_system7_0
 
@@ -666,18 +671,20 @@ proc create_root_design { parentCell } {
   set rst_ps7_0_50M [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 rst_ps7_0_50M ]
 
   # Create interface connections
+  connect_bd_intf_net -intf_net axi_dma_0_M_AXIS_MM2S [get_bd_intf_pins axi_dma_0/M_AXIS_MM2S] [get_bd_intf_pins mySPIRxTx_0/S00_AXIS]
+  connect_bd_intf_net -intf_net axi_dma_0_M_AXI_MM2S [get_bd_intf_pins axi_dma_0/M_AXI_MM2S] [get_bd_intf_pins axi_smc/S01_AXI]
+  connect_bd_intf_net -intf_net axi_dma_0_M_AXI_SG [get_bd_intf_pins axi_dma_0/M_AXI_SG] [get_bd_intf_pins axi_smc/S00_AXI]
   connect_bd_intf_net -intf_net axi_fifo_mm_s_0_AXI_STR_TXD [get_bd_intf_pins axi_fifo_mm_s_1/AXI_STR_TXD] [get_bd_intf_pins fm_receiver_hls/iq_in_V]
-  connect_bd_intf_net -intf_net axi_fifo_mm_s_0_AXI_STR_TXD1 [get_bd_intf_pins axi_fifo_mm_s_0/AXI_STR_TXD] [get_bd_intf_pins mySPIRxTx_0/S00_AXIS]
+  connect_bd_intf_net -intf_net axi_smc_M00_AXI [get_bd_intf_pins axi_smc/M00_AXI] [get_bd_intf_pins processing_system7_0/S_AXI_GP0]
   connect_bd_intf_net -intf_net fm_receiver_0_audio_out_V [get_bd_intf_pins fm_receiver_hls/audio_out_V] [get_bd_intf_pins myI2STx_0/S00_AXIS]
-  connect_bd_intf_net -intf_net mySPIRxTx_0_M00_AXIS [get_bd_intf_pins axi_fifo_mm_s_0/AXI_STR_RXD] [get_bd_intf_pins mySPIRxTx_0/M00_AXIS]
   connect_bd_intf_net -intf_net processing_system7_0_DDR [get_bd_intf_ports DDR] [get_bd_intf_pins processing_system7_0/DDR]
   connect_bd_intf_net -intf_net processing_system7_0_FIXED_IO [get_bd_intf_ports FIXED_IO] [get_bd_intf_pins processing_system7_0/FIXED_IO]
   connect_bd_intf_net -intf_net processing_system7_0_M_AXI_GP0 [get_bd_intf_pins processing_system7_0/M_AXI_GP0] [get_bd_intf_pins ps7_0_axi_periph/S00_AXI]
-  connect_bd_intf_net -intf_net ps7_0_axi_periph_M00_AXI [get_bd_intf_pins axi_fifo_mm_s_0/S_AXI] [get_bd_intf_pins ps7_0_axi_periph/M00_AXI]
+  connect_bd_intf_net -intf_net ps7_0_axi_periph_M00_AXI [get_bd_intf_pins axi_dma_0/S_AXI_LITE] [get_bd_intf_pins ps7_0_axi_periph/M00_AXI]
   connect_bd_intf_net -intf_net ps7_0_axi_periph_M01_AXI [get_bd_intf_pins axi_fifo_mm_s_1/S_AXI] [get_bd_intf_pins ps7_0_axi_periph/M01_AXI]
 
   # Create port connections
-  connect_bd_net -net axi_fifo_mm_s_0_interrupt [get_bd_pins axi_fifo_mm_s_1/interrupt] [get_bd_pins processing_system7_0/IRQ_F2P]
+  connect_bd_net -net axi_dma_0_mm2s_introut [get_bd_pins axi_dma_0/mm2s_introut] [get_bd_pins processing_system7_0/IRQ_F2P]
   connect_bd_net -net miso_0_1 [get_bd_ports spi_miso_i] [get_bd_pins mySPIRxTx_0/miso]
   connect_bd_net -net myI2STx_0_bclk [get_bd_ports i2s_bclk_o] [get_bd_pins myI2STx_0/bclk]
   connect_bd_net -net myI2STx_0_lrclk [get_bd_ports i2s_lrclk_o] [get_bd_pins myI2STx_0/lrclk]
@@ -687,13 +694,15 @@ proc create_root_design { parentCell } {
   connect_bd_net -net mySPIRxTx_0_mosi [get_bd_ports spi_mosi_o] [get_bd_pins mySPIRxTx_0/mosi]
   connect_bd_net -net mySPIRxTx_0_sclk [get_bd_ports spi_sclk_o] [get_bd_pins mySPIRxTx_0/sclk]
   connect_bd_net -net mySPIRxTx_0_ss [get_bd_ports spi_ss_o] [get_bd_pins mySPIRxTx_0/ss]
-  connect_bd_net -net processing_system7_0_FCLK_CLK0 [get_bd_pins axi_fifo_mm_s_0/s_axi_aclk] [get_bd_pins axi_fifo_mm_s_1/s_axi_aclk] [get_bd_pins fm_receiver_hls/ap_clk] [get_bd_pins myI2STx_0/s00_axis_aclk] [get_bd_pins myPrescaler_0/clk] [get_bd_pins myPrescaler_1/clk] [get_bd_pins mySPIRxTx_0/axis_aclk] [get_bd_pins processing_system7_0/FCLK_CLK0] [get_bd_pins processing_system7_0/M_AXI_GP0_ACLK] [get_bd_pins ps7_0_axi_periph/ACLK] [get_bd_pins ps7_0_axi_periph/M00_ACLK] [get_bd_pins ps7_0_axi_periph/M01_ACLK] [get_bd_pins ps7_0_axi_periph/S00_ACLK] [get_bd_pins rst_ps7_0_50M/slowest_sync_clk]
+  connect_bd_net -net processing_system7_0_FCLK_CLK0 [get_bd_pins axi_dma_0/m_axi_mm2s_aclk] [get_bd_pins axi_dma_0/m_axi_sg_aclk] [get_bd_pins axi_dma_0/s_axi_lite_aclk] [get_bd_pins axi_fifo_mm_s_1/s_axi_aclk] [get_bd_pins axi_smc/aclk] [get_bd_pins fm_receiver_hls/ap_clk] [get_bd_pins myI2STx_0/s00_axis_aclk] [get_bd_pins myPrescaler_0/clk] [get_bd_pins myPrescaler_1/clk] [get_bd_pins mySPIRxTx_0/axis_aclk] [get_bd_pins processing_system7_0/FCLK_CLK0] [get_bd_pins processing_system7_0/M_AXI_GP0_ACLK] [get_bd_pins processing_system7_0/S_AXI_GP0_ACLK] [get_bd_pins ps7_0_axi_periph/ACLK] [get_bd_pins ps7_0_axi_periph/M00_ACLK] [get_bd_pins ps7_0_axi_periph/M01_ACLK] [get_bd_pins ps7_0_axi_periph/S00_ACLK] [get_bd_pins rst_ps7_0_50M/slowest_sync_clk]
   connect_bd_net -net processing_system7_0_FCLK_RESET0_N [get_bd_pins processing_system7_0/FCLK_RESET0_N] [get_bd_pins rst_ps7_0_50M/ext_reset_in]
   connect_bd_net -net rst_ps7_0_50M_interconnect_aresetn [get_bd_pins ps7_0_axi_periph/ARESETN] [get_bd_pins rst_ps7_0_50M/interconnect_aresetn]
-  connect_bd_net -net rst_ps7_0_50M_peripheral_aresetn [get_bd_pins axi_fifo_mm_s_0/s_axi_aresetn] [get_bd_pins axi_fifo_mm_s_1/s_axi_aresetn] [get_bd_pins fm_receiver_hls/ap_rst_n] [get_bd_pins myI2STx_0/s00_axis_aresetn] [get_bd_pins mySPIRxTx_0/axis_aresetn] [get_bd_pins ps7_0_axi_periph/M00_ARESETN] [get_bd_pins ps7_0_axi_periph/M01_ARESETN] [get_bd_pins ps7_0_axi_periph/S00_ARESETN] [get_bd_pins rst_ps7_0_50M/peripheral_aresetn]
+  connect_bd_net -net rst_ps7_0_50M_peripheral_aresetn [get_bd_pins axi_dma_0/axi_resetn] [get_bd_pins axi_fifo_mm_s_1/s_axi_aresetn] [get_bd_pins axi_smc/aresetn] [get_bd_pins fm_receiver_hls/ap_rst_n] [get_bd_pins myI2STx_0/s00_axis_aresetn] [get_bd_pins mySPIRxTx_0/axis_aresetn] [get_bd_pins ps7_0_axi_periph/M00_ARESETN] [get_bd_pins ps7_0_axi_periph/M01_ARESETN] [get_bd_pins ps7_0_axi_periph/S00_ARESETN] [get_bd_pins rst_ps7_0_50M/peripheral_aresetn]
 
   # Create address segments
-  create_bd_addr_seg -range 0x00010000 -offset 0x43C00000 [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs axi_fifo_mm_s_0/S_AXI/Mem0] SEG_axi_fifo_mm_s_0_Mem01
+  create_bd_addr_seg -range 0x20000000 -offset 0x00000000 [get_bd_addr_spaces axi_dma_0/Data_SG] [get_bd_addr_segs processing_system7_0/S_AXI_GP0/GP0_DDR_LOWOCM] SEG_processing_system7_0_GP0_DDR_LOWOCM
+  create_bd_addr_seg -range 0x20000000 -offset 0x00000000 [get_bd_addr_spaces axi_dma_0/Data_MM2S] [get_bd_addr_segs processing_system7_0/S_AXI_GP0/GP0_DDR_LOWOCM] SEG_processing_system7_0_GP0_DDR_LOWOCM
+  create_bd_addr_seg -range 0x00010000 -offset 0x40400000 [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs axi_dma_0/S_AXI_LITE/Reg] SEG_axi_dma_0_Reg
   create_bd_addr_seg -range 0x00010000 -offset 0x43C10000 [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs axi_fifo_mm_s_1/S_AXI/Mem0] SEG_axi_fifo_mm_s_1_Mem0
 
 
