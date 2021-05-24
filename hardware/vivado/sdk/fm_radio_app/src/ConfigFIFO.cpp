@@ -35,7 +35,7 @@ void ConfigFIFO::write(uint16_t addr, uint8_t value) {
   XLlFifo_TxPutWord(&mDev, (addr >> 8) & 0xFF);
   XLlFifo_TxPutWord(&mDev, addr & 0xFF);
   XLlFifo_TxPutWord(&mDev, value);
-  XLlFifo_iTxSetLen(&mDev, 4 * FIFO_CHIP_ADDR);
+  XLlFifo_iTxSetLen(&mDev, 4 * FIFO_WORDSIZE);
   while (XLlFifo_RxOccupancy(&mDev) != 4) {
   }
   XLlFifo_RxGetWord(&mDev);

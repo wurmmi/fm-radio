@@ -28,6 +28,7 @@ bool AudioHandler::Initialize() {
     cerr << "Could not initialize ADAU1761" << endl;
     return false;
   }
+  cout << "AudioHandler hardware initialization OKAY" << endl;
   return true;
 }
 

@@ -6,10 +6,6 @@
 
 #include "AudioStreamFIFO.h"
 
-#include <iostream>
-
-using namespace std;
-
 AudioStreamFIFO::AudioStreamFIFO(uint32_t device_id) : FIFO(device_id) {}
 
 AudioStreamFIFO::~AudioStreamFIFO() {}
@@ -19,6 +15,7 @@ void AudioStreamFIFO::write(audio_sample_t const& sample) {
     // Don't do this in an interrupt routine...
     // printf("I2S FIFO full. Waiting ... \n");
   }
-  XLlFifo_TxPutWord(&mDev, ((u32)left << 16) | (u32)right);
+
+  XLlFifo_TxPutWord(&mDev, ((u32)sample.left << 16) | (u32)sample.right);
   XLlFifo_iTxSetLen(&mDev, 1 * FIFO_WORDSIZE);
 }
