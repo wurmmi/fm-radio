@@ -37,11 +37,11 @@ bool AudioStreamDMA::Initialize() {
   u32 bd_count = XAxiDma_BdRingCntCalc(XAXIDMA_BD_MINIMUM_ALIGNMENT,
                                        (u32)sizeof(mBdBuffer));
 
-  int status = XAxiDma_BdRingCreate(txRingPtr,
-                                    (UINTPTR)mBdBuffer[0],
-                                    (UINTPTR)mBdBuffer[0],
-                                    XAXIDMA_BD_MINIMUM_ALIGNMENT,
-                                    bd_count);
+  status = XAxiDma_BdRingCreate(txRingPtr,
+                                (UINTPTR)mBdBuffer[0],
+                                (UINTPTR)mBdBuffer[0],
+                                XAXIDMA_BD_MINIMUM_ALIGNMENT,
+                                bd_count);
   if (status != XST_SUCCESS) {
     printf("Failed create BD ring\n");
     return false;

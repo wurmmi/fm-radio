@@ -21,8 +21,11 @@ bool SDCardReader::MountSDCard(uint8_t num_retries) {
     if (result != 0) {
       cout << "Couldn't mount SD Card. Press RETURN to try again" << endl;
       getchar();
+      continue;
     }
+    return true;
   }
+  return false;
 }
 
 void SDCardReader::DiscoverFiles() {
@@ -56,7 +59,7 @@ void SDCardReader::DiscoverFiles() {
 void SDCardReader::PrintAvailableFilenames() const {
   cout << "--- Available files on SD card: ---" << endl;
   for (uint32_t i = 0; i < mFilenames.size(); i++) {
-    printf("[%3d]: %s", i, mFilenames[i]);
+    printf("[%3d]: %s", (int)i, mFilenames[i].c_str());
   }
   cout << "-----------------------------------" << endl;
 }

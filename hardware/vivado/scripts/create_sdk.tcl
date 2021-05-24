@@ -37,6 +37,11 @@ if {![file exists "$bsp_name"]} {
   createbsp -name $bsp_name -hwproject $hw_name -proc ps7_cortexa9_0 -os freertos10_xilinx
 }
 
+puts "(MWURM) Adding libraries to BSP..."
+setlib -bsp $bsp_name -lib xilffs
+updatemss -mss $bsp_name/system.mss
+regenbsp -bsp $bsp_name
+
 puts "(MWURM) Importing main application..."
 importprojects $app_name
 

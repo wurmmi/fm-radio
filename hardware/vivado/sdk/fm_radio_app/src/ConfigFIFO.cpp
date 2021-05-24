@@ -20,8 +20,8 @@ uint8_t ConfigFIFO::read(uint16_t addr) {
   XLlFifo_TxPutWord(&mDev, addr & 0xFF);
   XLlFifo_TxPutWord(&mDev, 0);
   XLlFifo_iTxSetLen(&mDev, 4 * FIFO_WORDSIZE);
-  while (XLlFifo_RxOccupancy(&mDev) != 4) {
-  }
+ // while (XLlFifo_RxOccupancy(&mDev) != 4) {
+ // }
   XLlFifo_RxGetWord(&mDev);
   XLlFifo_RxGetWord(&mDev);
   XLlFifo_RxGetWord(&mDev);
@@ -36,8 +36,8 @@ void ConfigFIFO::write(uint16_t addr, uint8_t value) {
   XLlFifo_TxPutWord(&mDev, addr & 0xFF);
   XLlFifo_TxPutWord(&mDev, value);
   XLlFifo_iTxSetLen(&mDev, 4 * FIFO_WORDSIZE);
-  while (XLlFifo_RxOccupancy(&mDev) != 4) {
-  }
+  //while (XLlFifo_RxOccupancy(&mDev) != 4) {
+ // }
   XLlFifo_RxGetWord(&mDev);
   XLlFifo_RxGetWord(&mDev);
   XLlFifo_RxGetWord(&mDev);
