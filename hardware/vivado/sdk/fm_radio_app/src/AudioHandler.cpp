@@ -23,8 +23,7 @@ AudioHandler::AudioHandler() {
 AudioHandler::~AudioHandler() {}
 
 bool AudioHandler::Initialize() {
-  if (!mAdau1761.Initialize(
-          std::bind(&AudioHandler::AudioStreamEmptyCallback, this))) {
+  if (!mAdau1761.Initialize()) {
     cerr << "Could not initialize ADAU1761" << endl;
     return false;
   }
@@ -41,8 +40,4 @@ void AudioHandler::FillAudioBuffer() {
     right = (int16_t)(sin((double)i / FIFO_NUM_SAMPLES * 2 * M_PI) * amp);
     mAudioBuffer[i] = {(uint16_t)left, (uint16_t)right};
   }
-}
-
-void AudioHandler::AudioStreamEmptyCallback() {
-  mAdau1761.WriteAudioBuffer(mAudioBuffer);
 }

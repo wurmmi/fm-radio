@@ -10,9 +10,7 @@
 
 using namespace std;
 
-ADAU1761::ADAU1761()
-    : mAudioStreamFifo(XPAR_AXI_FIFO_MM_S_1_DEVICE_ID),
-      mConfigFifo(XPAR_AXI_FIFO_MM_S_0_DEVICE_ID) {}
+ADAU1761::ADAU1761() : mConfigFifo(XPAR_AXI_FIFO_MM_S_1_DEVICE_ID) {}
 
 ADAU1761::~ADAU1761() {}
 
@@ -77,30 +75,14 @@ bool ADAU1761::adau1761_chip_config() {
   return true;
 }
 
-void ADAU1761::WriteAudioBuffer(audio_buffer_t const& buffer) {
-  for (auto const& elem : buffer) {
-    mAudioStreamFifo.write(elem);
-  }
-}
-
-bool ADAU1761::Initialize(function<void()> const& audioStreamEmptyCallback) {
-  // Configure audiostream FIFO
-  bool status = mAudioStreamFifo.Initialize();
-  if (!status)
-    return false;
-
+bool ADAU1761::Initialize() {
   // Configure config FIFO
-  status = mConfigFifo.Initialize();
+  int status = mConfigFifo.Initialize();
   if (!status)
     return false;
 
   // Configure ADAU1761 chip
   status = adau1761_chip_config();
-  if (!status)
-    return false;
-
-  status = mAudioStreamFifo.SetupInterrupts(
-      XPAR_FABRIC_AXI_FIFO_MM_S_1_INTERRUPT_INTR, audioStreamEmptyCallback);
   if (!status)
     return false;
 
