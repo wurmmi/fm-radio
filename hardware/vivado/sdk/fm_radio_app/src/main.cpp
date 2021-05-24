@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include "AudioHandler.h"
+#include "SDCardReader.h"
 
 using namespace std;
 
@@ -29,6 +30,12 @@ static void task_loop(void *) {
 
 static void task_audio(void *) {
   static AudioHandler audioHandler;
+  static SDCardReader sdCardReader;
+
+  const uint8_t num_retries = 5;
+  sdCardReader.MountSDCard(num_retries);
+  sdCardReader.DiscoverFiles();
+  sdCardReader.PrintAvailableFilenames();
 
   while (true) {
     cout << "task_audio" << endl;
