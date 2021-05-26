@@ -10,7 +10,7 @@
 #include <xaxidma.h>
 
 // Size of the buffer which holds the DMA Buffer Descriptors (BDs)
-#define DMA_BUFFER_SIZE 4000
+#define DMA_BUFFER_SIZE 400
 
 typedef struct {
   uint8_t* buffer;

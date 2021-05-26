@@ -42,7 +42,7 @@
 								<option id="xilinx.gnu.compiler.symbols.defined.1752338572" name="Defined symbols (-D)" superClass="xilinx.gnu.compiler.symbols.defined" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="XDEBUG"/>
 								</option>
-								<option id="xilinx.gnu.compiler.symbols.undefined.1058277109" name="Undefined symbols (-U)" superClass="xilinx.gnu.compiler.symbols.undefined" valueType="undefDefinedSymbols"/>
+								<option id="xilinx.gnu.compiler.symbols.undefined.1058277109" name="Undefined symbols (-U)" superClass="xilinx.gnu.compiler.symbols.undefined"/>
 								<inputType id="xilinx.gnu.armv7.cxx.compiler.input.495390739" name="C++ source files" superClass="xilinx.gnu.armv7.cxx.compiler.input"/>
 							</tool>
 							<tool id="xilinx.gnu.armv7.toolchain.archiver.669987157" name="ARM v7 archiver" superClass="xilinx.gnu.armv7.toolchain.archiver"/>

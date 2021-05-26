@@ -12,10 +12,12 @@
 #include "AudioHandler.h"
 #include "AudioStreamDMA.h"
 #include "SDCardReader.h"
+#include "log.h"
 
 using namespace std;
 
-#define STACK_SIZE 4096
+#define STACK_SIZE ((uint32_t)4096 * 8)
+
 const TickType_t delay_ms_c = pdMS_TO_TICKS(1000);
 
 static TaskHandle_t task_loop_handle;
@@ -55,6 +57,10 @@ static void task_audio(void *) {
 }
 
 int main() {
+  /*--- System setup ---*/
+  Xil_DCacheEnable();
+
+  /*--- Program start ---*/
   cout << "Hello World!" << endl;
 
   xTaskCreate(task_loop,
@@ -72,8 +78,10 @@ int main() {
               &task_audio_handle);
 
   vTaskStartScheduler();
-  cout << "ERROR: vTaskStartScheduler() returned!" << endl;
+  LOG_ERROR("vTaskStartScheduler() returned unexpectedly!");
   while (true) {
   };
+
+  Xil_DCacheEnable();
   return 0;
 }
