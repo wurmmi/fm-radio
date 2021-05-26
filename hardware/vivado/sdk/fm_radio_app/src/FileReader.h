@@ -16,13 +16,13 @@ enum class FileType { UNKNOWN, WAV, TXT };
 
 class FileReader {
  private:
-  FATFS mFilesystem;
-  std::vector<std::string> mFilenames;
-  bool mMounted;
+  FIL mFile;
+  uint8_t* mBuffer     = nullptr;
+  uint32_t mBufferSize = 0;
 
   FileType GetFileType(std::string& filename);
-  void ReadWAV(FIL& file);
-  void ReadTXT(FIL& file);
+  void ReadWAV();
+  void ReadTXT();
 
  public:
   FileReader();
