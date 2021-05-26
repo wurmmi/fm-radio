@@ -23,10 +23,12 @@ bool AudioStreamDMA::Initialize() {
     return false;
   }
 
-  if (!XAxiDma_HasSg(&mDev))
-    cout << "Device configured as simple mode\n" << endl;
-  else
+  if (!XAxiDma_HasSg(&mDev)) {
+    cerr << "ERROR: Device configured as simple mode\n" << endl;
+    return false;
+  } else {
     cout << "Device has Scatter-Gather engine mode\n" << endl;
+  }
 
   XAxiDma_BdRing* txRingPtr = XAxiDma_GetTxRing(&mDev);
 
@@ -145,5 +147,5 @@ void AudioStreamDMA::Transmit(DMABuffer const& buffer, uint32_t n_repeats) {
     LOG_ERROR("Failed to hw");
   }
 
-  // pDevice->dmaWritten = TRUE;
+  mDmaWritten = true;
 }

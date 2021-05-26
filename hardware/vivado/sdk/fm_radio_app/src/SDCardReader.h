@@ -24,7 +24,9 @@ class SDCardReader {
 
   inline static const char* LOGICAL_DRIVE_0 = "0:/";
 
-  bool IsMountedAndFoundFiles();
+  bool IsMounted();
+  bool FoundFiles();
+  std::string GetShortFilename(std::string const& filename);
 
  public:
   SDCardReader();

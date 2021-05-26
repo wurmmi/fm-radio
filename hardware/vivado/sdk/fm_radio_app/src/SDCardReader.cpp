@@ -17,17 +17,19 @@ SDCardReader::SDCardReader() {
 
 SDCardReader::~SDCardReader() {}
 
-bool SDCardReader::IsMountedAndFoundFiles() {
-  bool ret = true;
+bool SDCardReader::IsMounted() {
   if (!mMounted) {
     cerr << "No SDCard mounted!" << endl;
-    ret = false;
   }
+  return mMounted;
+}
+
+bool SDCardReader::FoundFiles() {
   if (mFilenames.size() == 0) {
     cerr << "No files found on SD card!" << endl;
-    ret = false;
+    return false;
   }
-  return ret;
+  return true;
 }
 
 bool SDCardReader::MountSDCard(uint8_t num_retries) {
@@ -47,7 +49,7 @@ bool SDCardReader::MountSDCard(uint8_t num_retries) {
 }
 
 void SDCardReader::DiscoverFiles() {
-  if (!IsMountedAndFoundFiles()) {
+  if (!IsMounted()) {
     return;
   }
 
@@ -82,19 +84,39 @@ void SDCardReader::DiscoverFiles() {
     cout << "No files found." << endl;
 }
 
+string SDCardReader::GetShortFilename(string const& filename) {
+  string fn_upper = filename;
+  transform(filename.cbegin(), filename.cend(), fn_upper.begin(), ::toupper);
+
+  auto dot_idx     = fn_upper.find_last_of('.');
+  string extension = fn_upper.substr(dot_idx);
+  string name      = fn_upper.substr(0, dot_idx);
+
+  const uint8_t short_filename_length_c = 6;
+  if (name.length() >= short_filename_length_c)
+    name = name.substr(0, short_filename_length_c);
+
+  string short_name = name + "~1" + extension;
+  cout << "extension: " << extension << endl;
+  cout << "name: " << name << endl;
+  cout << "short_name: " << short_name << endl;
+  return short_name;
+}
+
 void SDCardReader::LoadFile(string const& filename) {
-  if (!IsMountedAndFoundFiles()) {
+  if (!IsMounted() || !FoundFiles()) {
     return;
   }
 
   // Check if this filename was previously discovered
-  auto iter = find(mFilenames.cbegin(), mFilenames.cend(), filename);
+  string filename_short = GetShortFilename(filename);
+  auto iter = find(mFilenames.cbegin(), mFilenames.cend(), filename_short);
   if (iter == mFilenames.cend()) {
-    cerr << "File '" << filename << "' does not exist." << endl;
+    cerr << "File '" << filename_short << "' does not exist." << endl;
     return;
   }
 
-  mFileReader.LoadFile(filename);
+  mFileReader.LoadFile(filename_short);
 }
 
 void SDCardReader::PrintAvailableFilenames() const {
