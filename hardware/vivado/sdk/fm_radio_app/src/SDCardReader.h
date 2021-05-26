@@ -12,13 +12,18 @@
 #include <string>
 #include <vector>
 
+#include "FileReader.h"
+
 class SDCardReader {
  private:
   FATFS mFilesystem;
   std::vector<std::string> mFilenames;
   bool mMounted;
+  FileReader mFileReader;
 
   inline static const char* LOGICAL_DRIVE_0 = "0:/";
+
+  bool IsMountedAndFoundFiles();
 
  public:
   SDCardReader();
@@ -26,6 +31,7 @@ class SDCardReader {
 
   bool MountSDCard(uint8_t num_retries);
   void DiscoverFiles();
+  void LoadFile(std::string& filename);
   void PrintAvailableFilenames() const;
 };
 

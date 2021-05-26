@@ -21,7 +21,7 @@ static TaskHandle_t task_loop_handle;
 static TaskHandle_t task_audio_handle;
 
 static void task_loop(void *) {
-  static uint32_t count = 0;
+  uint32_t count = 0;
   while (true) {
     cout << "Looping since " << count++ << " sec ..." << endl;
     vTaskDelay(delay_ms_c);
@@ -29,8 +29,8 @@ static void task_loop(void *) {
 }
 
 static void task_audio(void *) {
-  static AudioHandler audioHandler;
-  static SDCardReader sdCardReader;
+  AudioHandler audioHandler;
+  SDCardReader sdCardReader;
 
   const uint8_t num_retries = 5;
   sdCardReader.MountSDCard(num_retries);
