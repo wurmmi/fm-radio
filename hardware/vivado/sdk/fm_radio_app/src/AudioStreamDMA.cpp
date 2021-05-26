@@ -110,7 +110,7 @@ void AudioStreamDMA::Transmit(DMABuffer const& buffer, uint32_t n_repeats) {
   }
 
   XAxiDma_Bd* bd_cur_ptr = bd_ptr;
-  for (int i = 0; i < n_repeats; ++i) {
+  for (uint32_t i = 0; i < n_repeats; ++i) {
     status = XAxiDma_BdSetBufAddr(bd_cur_ptr, (UINTPTR)buffer.buffer);
     if (status != XST_SUCCESS) {
       LOG_ERROR("Tx set buffer addr failed");

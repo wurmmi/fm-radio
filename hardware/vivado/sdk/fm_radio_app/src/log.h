@@ -9,7 +9,7 @@
 
 #include <iostream>
 
-static void log_error(std::string const& func, std::string const& msg);
+void log_error(std::string const& func, std::string const& msg);
 
 #define LOG_ERROR(msg) log_error(__PRETTY_FUNCTION__, msg)
 

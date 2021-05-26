@@ -6,6 +6,6 @@
 
 #include "log.h"
 
-static void log_error(std::string const& func, std::string const& msg) {
-  printf("%s: %s\n", func, msg);
+void log_error(std::string const& func, std::string const& msg) {
+  printf("%s: %s\n", func.c_str(), msg.c_str());
 }

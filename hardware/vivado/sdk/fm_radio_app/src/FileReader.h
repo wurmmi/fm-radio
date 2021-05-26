@@ -22,7 +22,7 @@ class FileReader {
   uint8_t* mBuffer     = nullptr;
   uint32_t mBufferSize = 0;
 
-  FileType GetFileType(std::string& filename);
+  FileType GetFileType(std::string const& filename);
   void ReadWAV();
   void ReadTXT();
 
@@ -30,7 +30,7 @@ class FileReader {
   FileReader();
   ~FileReader();
 
-  void LoadFile(std::string& filename);
+  void LoadFile(std::string const& filename);
   DMABuffer GetBuffer();
 };
 

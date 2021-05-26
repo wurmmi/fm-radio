@@ -46,20 +46,22 @@ FileReader::~FileReader() {
   }
 }
 
-FileType FileReader::GetFileType(string& filename) {
-  transform(filename.begin(), filename.end(), filename.end(), ::tolower);
+FileType FileReader::GetFileType(string const& filename) {
+  string filename_lower = filename;
+  transform(
+      filename.cbegin(), filename.cend(), filename_lower.begin(), ::tolower);
 
-  if (filename.find(".txt") != string::npos) {
+  if (filename_lower.find(".txt") != string::npos) {
     return FileType::TXT;
   }
-  if (filename.find(".wav") != string::npos) {
+  if (filename_lower.find(".wav") != string::npos) {
     return FileType::WAV;
   }
 
   return FileType::UNKNOWN;
 }
 
-void FileReader::LoadFile(string& filename) {
+void FileReader::LoadFile(string const& filename) {
   // Handle file depending on its type
   FileType fileType = GetFileType(filename);
   if (fileType == FileType::UNKNOWN) {
@@ -104,12 +106,12 @@ void FileReader::ReadWAV() {
     return;
   }
 
-  if (header.riff != "RIFF") {
+  if (string(header.riff) != "RIFF") {
     LOG_ERROR("Illegal WAV file format, RIFF not found.");
     return;
   }
 
-  if (header.wave != "WAVE") {
+  if (string(header.wave) != "WAVE") {
     LOG_ERROR("Illegal WAV file format, WAVE not found.");
     return;
   }
@@ -129,7 +131,7 @@ void FileReader::ReadWAV() {
     }
 
     wav_fmt_chunk_t fmtChunk;
-    if (genericChunk.ckId == "fmt ") {
+    if (string(genericChunk.ckId) == "fmt ") {
       // "fmt" chunk is compulsory and contains information about the sample
       // format
       fres =
@@ -154,7 +156,7 @@ void FileReader::ReadWAV() {
         LOG_ERROR("Only 16 bit per samples supported");
         return;
       }
-    } else if (genericChunk.ckId == "data") {
+    } else if (string(genericChunk.ckId) == "data") {
       // "data" chunk contains the audio samples
       mBuffer = (uint8_t*)malloc(genericChunk.cksize);
       if (!mBuffer) {

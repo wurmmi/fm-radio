@@ -12,10 +12,10 @@
 // Size of the buffer which holds the DMA Buffer Descriptors (BDs)
 #define DMA_BUFFER_SIZE 4000
 
-typedef struct DMABuffer {
+typedef struct {
   uint8_t* buffer;
   uint32_t bufferSize;
-};
+} DMABuffer;
 
 class AudioStreamDMA {
  private:

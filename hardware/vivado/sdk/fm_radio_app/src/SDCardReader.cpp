@@ -105,6 +105,6 @@ void SDCardReader::PrintAvailableFilenames() const {
   cout << "-----------------------------------" << endl;
 }
 
-DMABuffer SDCARDReader::GetBuffer() {
+DMABuffer SDCardReader::GetBuffer() {
   return mFileReader.GetBuffer();
 }
