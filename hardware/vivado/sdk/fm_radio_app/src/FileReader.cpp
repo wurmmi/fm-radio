@@ -106,12 +106,12 @@ void FileReader::ReadWAV() {
     return;
   }
 
-  if (string(header.riff) != "RIFF") {
+  if (string{header.riff, sizeof(header.riff)} != "RIFF") {
     LOG_ERROR("Illegal WAV file format, RIFF not found.");
     return;
   }
 
-  if (string(header.wave) != "WAVE") {
+  if (string{header.wave, sizeof(header.riff)} != "WAVE") {
     LOG_ERROR("Illegal WAV file format, WAVE not found.");
     return;
   }
