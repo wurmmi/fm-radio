@@ -12,6 +12,11 @@
 // Size of the buffer which holds the DMA Buffer Descriptors (BDs)
 #define DMA_BUFFER_SIZE 4000
 
+typedef struct DMABuffer {
+  uint8_t* buffer;
+  uint32_t bufferSize;
+};
+
 class AudioStreamDMA {
  private:
   XAxiDma mDev;
@@ -20,11 +25,14 @@ class AudioStreamDMA {
   uint8_t mDeviceId;
   bool mDmaWritten;
 
+  void Transmit(DMABuffer const& buffer, uint32_t n_repeats);
+
  public:
   AudioStreamDMA(uint32_t device_id);
   ~AudioStreamDMA();
 
   bool Initialize();
+  void TransmitBlob(DMABuffer const& buffer);
 };
 
 #endif /* _AUDIOSTREAMDMA_H_ */

@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include "AudioHandler.h"
+#include "AudioStreamDMA.h"
 #include "SDCardReader.h"
 
 using namespace std;
@@ -36,6 +37,16 @@ static void task_audio(void *) {
   sdCardReader.MountSDCard(num_retries);
   sdCardReader.DiscoverFiles();
   sdCardReader.PrintAvailableFilenames();
+
+  sdCardReader.LoadFile("cantina_band.wav");
+
+  AudioStreamDMA streamDMA(XPAR_AXI_DMA_0_DEVICE_ID);
+  if (!streamDMA.Initialize()) {
+    cerr << "Error in DMA initialization" << endl;
+  }
+
+  DMABuffer buffer = sdCardReader.GetBuffer();
+  streamDMA.TransmitBlob(buffer);
 
   while (true) {
     cout << "task_audio" << endl;

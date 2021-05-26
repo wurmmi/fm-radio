@@ -12,6 +12,8 @@
 #include <string>
 #include <vector>
 
+#include "AudioStreamDMA.h"
+
 enum class FileType { UNKNOWN, WAV, TXT };
 
 class FileReader {
@@ -29,6 +31,7 @@ class FileReader {
   ~FileReader();
 
   void LoadFile(std::string& filename);
+  DMABuffer GetBuffer();
 };
 
 #endif /* _FILEREADER_H_ */

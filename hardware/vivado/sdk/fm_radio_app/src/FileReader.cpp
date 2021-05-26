@@ -39,7 +39,12 @@ typedef struct {
 
 FileReader::FileReader() {}
 
-FileReader::~FileReader() {}
+FileReader::~FileReader() {
+  if (mBuffer) {
+    free(mBuffer);
+    mBuffer = nullptr;
+  }
+}
 
 FileType FileReader::GetFileType(string& filename) {
   transform(filename.begin(), filename.end(), filename.end(), ::tolower);
@@ -180,4 +185,8 @@ void FileReader::ReadTXT() {
   cout << "Reading TXT file." << endl;
 
   // Sanity checks
+}
+
+DMABuffer FileReader::GetBuffer() {
+  return {mBuffer, mBufferSize};
 }

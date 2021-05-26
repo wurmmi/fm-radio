@@ -82,7 +82,7 @@ void SDCardReader::DiscoverFiles() {
     cout << "No files found." << endl;
 }
 
-void SDCardReader::LoadFile(string& filename) {
+void SDCardReader::LoadFile(string const& filename) {
   if (!IsMountedAndFoundFiles()) {
     return;
   }
@@ -103,4 +103,8 @@ void SDCardReader::PrintAvailableFilenames() const {
     printf("[%3d]: %s\n", (int)i, mFilenames[i].c_str());
   }
   cout << "-----------------------------------" << endl;
+}
+
+DMABuffer SDCARDReader::GetBuffer() {
+  return mFileReader.GetBuffer();
 }

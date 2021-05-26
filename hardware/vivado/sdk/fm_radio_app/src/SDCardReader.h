@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 
+#include "AudioStreamDMA.h"
 #include "FileReader.h"
 
 class SDCardReader {
@@ -31,8 +32,9 @@ class SDCardReader {
 
   bool MountSDCard(uint8_t num_retries);
   void DiscoverFiles();
-  void LoadFile(std::string& filename);
+  void LoadFile(std::string const& filename);
   void PrintAvailableFilenames() const;
+  DMABuffer GetBuffer();
 };
 
 #endif /* _SDCARDREADER_H_ */
