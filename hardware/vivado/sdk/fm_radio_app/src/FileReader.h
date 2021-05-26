@@ -25,6 +25,7 @@ class FileReader {
   FileType GetFileType(std::string const& filename);
   void ReadWAV();
   void ReadTXT();
+  void PrepareBufferData();
 
  public:
   FileReader();

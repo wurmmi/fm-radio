@@ -72,6 +72,8 @@ bool AudioStreamDMA::Initialize() {
 }
 
 void AudioStreamDMA::TransmitBlob(DMABuffer const& buffer) {
+  cout << "TransmitBlob: bufferSize = " << buffer.bufferSize << endl;
+
   XAxiDma_BdRing* txRingPtr = XAxiDma_GetTxRing(&mDev);
 
   uint32_t n_samples_remain = buffer.bufferSize;

@@ -15,25 +15,25 @@ using namespace std;
 
 typedef struct {
   char riff[4];
-  u32 riffSize;
+  uint32_t riffSize;
   char wave[4];
 } wav_header_t;
 
 typedef struct {
   char ckId[4];
-  u32 cksize;
+  uint32_t cksize;
 } wav_generic_chunk_t;
 
 typedef struct {
-  u16 wFormatTag;
-  u16 nChannels;
-  u32 nSamplesPerSec;
-  u32 nAvgBytesPerSec;
-  u16 nBlockAlign;
-  u16 wBitsPerSample;
-  u16 cbSize;
-  u16 wValidBitsPerSample;
-  u32 dwChannelMask;
+  uint16_t wFormatTag;
+  uint16_t nChannels;
+  uint32_t nSamplesPerSec;
+  uint32_t nAvgBytesPerSec;
+  uint16_t nBlockAlign;
+  uint16_t wBitsPerSample;
+  uint16_t cbSize;
+  uint16_t wValidBitsPerSample;
+  uint32_t dwChannelMask;
   u8 SubFormat[16];
 } wav_fmt_chunk_t;
 
@@ -79,6 +79,8 @@ void FileReader::LoadFile(string const& filename) {
   switch (fileType) {
     case FileType::WAV:
       ReadWAV();
+      cout << "Read " << mBufferSize << " bytes from WAV file " << filename
+           << endl;
       break;
     case FileType::TXT:
       ReadTXT();
@@ -131,7 +133,7 @@ void FileReader::ReadWAV() {
     }
 
     wav_fmt_chunk_t fmtChunk;
-    if (string(genericChunk.ckId) == "fmt ") {
+    if (string{genericChunk.ckId, sizeof(genericChunk.ckId)} == "fmt ") {
       // "fmt" chunk is compulsory and contains information about the sample
       // format
       fres =
@@ -156,7 +158,7 @@ void FileReader::ReadWAV() {
         LOG_ERROR("Only 16 bit per samples supported");
         return;
       }
-    } else if (string(genericChunk.ckId) == "data") {
+    } else if (string{genericChunk.ckId, sizeof(genericChunk.ckId)} == "data") {
       // "data" chunk contains the audio samples
       mBuffer = (uint8_t*)malloc(genericChunk.cksize);
       if (!mBuffer) {
@@ -189,6 +191,32 @@ void FileReader::ReadTXT() {
   // Sanity checks
 }
 
+void FileReader::PrepareBufferData() {
+  // Change the volume and swap left/right channel and polarity
+
+  int theVolume = 2;
+
+  uint32_t* pSource = (uint32_t*)mBuffer;
+  for (uint32_t i = 0; i < mBufferSize / 4; i++) {
+    short left  = (short)((pSource[i] >> 16) & 0xFFFF);
+    short right = (short)((pSource[i] >> 0) & 0xFFFF);
+    int left_i  = -(int)left * theVolume / 4;
+    int right_i = -(int)right * theVolume / 4;
+    if (left > 32767)
+      left = 32767;
+    if (left < -32767)
+      left = -32767;
+    if (right > 32767)
+      right = 32767;
+    if (right < -32767)
+      right = -32767;
+    left       = (short)left_i;
+    right      = (short)right_i;
+    pSource[i] = ((uint32_t)right << 16) + (uint32_t)left;
+  }
+}
+
 DMABuffer FileReader::GetBuffer() {
+  PrepareBufferData();
   return {mBuffer, mBufferSize};
 }
