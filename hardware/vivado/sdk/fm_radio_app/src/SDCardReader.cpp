@@ -19,7 +19,7 @@ SDCardReader::~SDCardReader() {}
 bool SDCardReader::MountSDCard(uint8_t num_retries) {
   while (num_retries--) {
     cout << "Mounting SD Card" << endl;
-    FRESULT result = f_mount(&mFilesystem, "0:/", 1);
+    FRESULT result = f_mount(&mFilesystem, LOGICAL_DRIVE_0, 1);
     if (result != 0) {
       cout << "Couldn't mount SD Card. Press RETURN to try again" << endl;
       getchar();
@@ -39,7 +39,7 @@ void SDCardReader::DiscoverFiles() {
   }
 
   DIR dir;
-  FRESULT res = f_opendir(&dir, "0:/");
+  FRESULT res = f_opendir(&dir, LOGICAL_DRIVE_0);
   if (res != FR_OK) {
     cout << "Couldn't read root directory." << endl;
     return;
@@ -48,17 +48,19 @@ void SDCardReader::DiscoverFiles() {
   do {
     FILINFO fno;
     res = f_readdir(&dir, &fno);
-    cout << "res = " << res << endl;
-    cout << "fno.fname = " << fno.fname << endl;
-
     if (res != FR_OK || fno.fname[0] == 0) {
       break;
     }
 
+    string filename = string(fno.fname);
+    cout << "filename = " << filename << endl;
+    mFilenames.emplace_back(filename);
+
     if (fno.fattrib & AM_DIR) {
-    } else if (string(fno.fname).find(".wav")) {
-    } else {
-      mFilenames.emplace_back(fno.fname);
+      cout << "Directory: " << filename << endl;
+    } else if (filename.find(".TXT") != string::npos ||
+               filename.find(".txt") != string::npos) {
+      cout << " --> is a *.txt file!" << endl;
     }
   } while (res == FR_OK);
 
@@ -71,7 +73,7 @@ void SDCardReader::DiscoverFiles() {
 void SDCardReader::PrintAvailableFilenames() const {
   cout << "--- Available files on SD card: ---" << endl;
   for (uint32_t i = 0; i < mFilenames.size(); i++) {
-    printf("[%3d]: %s", (int)i, mFilenames[i].c_str());
+    printf("[%3d]: %s\n", (int)i, mFilenames[i].c_str());
   }
   cout << "-----------------------------------" << endl;
 }

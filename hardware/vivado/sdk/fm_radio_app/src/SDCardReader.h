@@ -18,6 +18,8 @@ class SDCardReader {
   std::vector<std::string> mFilenames;
   bool mMounted;
 
+  inline static const char* LOGICAL_DRIVE_0 = "0:/";
+
  public:
   SDCardReader();
   ~SDCardReader();
