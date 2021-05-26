@@ -33,12 +33,16 @@
 							</tool>
 							<tool id="xilinx.gnu.armv7.cxx.toolchain.compiler.debug.1235598977" name="ARM v7 g++ compiler" superClass="xilinx.gnu.armv7.cxx.toolchain.compiler.debug">
 								<option defaultValue="gnu.c.optimization.level.none" id="xilinx.gnu.compiler.option.optimization.level.2040481180" name="Optimization Level" superClass="xilinx.gnu.compiler.option.optimization.level" valueType="enumerated"/>
-								<option id="xilinx.gnu.compiler.option.debugging.level.608423451" name="Debug Level" superClass="xilinx.gnu.compiler.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
+								<option id="xilinx.gnu.compiler.option.debugging.level.608423451" name="Debug Level" superClass="xilinx.gnu.compiler.option.debugging.level" value="gnu.c.debugging.level.default" valueType="enumerated"/>
 								<option id="xilinx.gnu.compiler.inferred.swplatform.includes.1005621784" name="Software Platform Include Path" superClass="xilinx.gnu.compiler.inferred.swplatform.includes" valueType="includePath">
 									<listOptionValue builtIn="false" value="../../freertos10_xilinx_bsp_0/ps7_cortexa9_0/include"/>
 								</option>
 								<option id="xilinx.gnu.compiler.misc.other.810002494" name="Other flags" superClass="xilinx.gnu.compiler.misc.other" value="-c -fmessage-length=0 -MT&quot;$@&quot; -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -std=c++1z" valueType="string"/>
 								<option id="xilinx.gnu.compiler.inferred.swplatform.flags.1220067898" name="Software Platform Inferred Flags" superClass="xilinx.gnu.compiler.inferred.swplatform.flags" value=" " valueType="string"/>
+								<option id="xilinx.gnu.compiler.symbols.defined.1752338572" name="Defined symbols (-D)" superClass="xilinx.gnu.compiler.symbols.defined" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="XDEBUG"/>
+								</option>
+								<option id="xilinx.gnu.compiler.symbols.undefined.1058277109" name="Undefined symbols (-U)" superClass="xilinx.gnu.compiler.symbols.undefined" valueType="undefDefinedSymbols"/>
 								<inputType id="xilinx.gnu.armv7.cxx.compiler.input.495390739" name="C++ source files" superClass="xilinx.gnu.armv7.cxx.compiler.input"/>
 							</tool>
 							<tool id="xilinx.gnu.armv7.toolchain.archiver.669987157" name="ARM v7 archiver" superClass="xilinx.gnu.armv7.toolchain.archiver"/>
