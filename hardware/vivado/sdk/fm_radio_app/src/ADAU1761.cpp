@@ -10,7 +10,8 @@
 
 using namespace std;
 
-ADAU1761::ADAU1761() : mConfigFifo(XPAR_AXI_FIFO_MM_S_1_DEVICE_ID) {}
+ADAU1761::ADAU1761()
+    : mConfigFifo(XPAR_AXI_FIFO_MM_S0_CONFIG_AUDIO_DEVICE_ID) {}
 ADAU1761::~ADAU1761() {}
 
 bool ADAU1761::adau1761_chip_config() {

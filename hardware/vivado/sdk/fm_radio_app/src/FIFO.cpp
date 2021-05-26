@@ -19,6 +19,9 @@ bool FIFO::Initialize() {
   XLlFifo_Config* pFifoConfig = XLlFfio_LookupConfig(mDeviceId);
   int status =
       XLlFifo_CfgInitialize(&mDev, pFifoConfig, pFifoConfig->BaseAddress);
+  cout << "FIFO base address: " << pFifoConfig->BaseAddress << endl;
+  cout << "FIFO axi4 base address: " << pFifoConfig->Axi4BaseAddress << endl;
+
   if (status != XST_SUCCESS) {
     cerr << "Could not initialize FIFO" << endl;
     return false;

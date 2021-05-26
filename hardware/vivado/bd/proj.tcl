@@ -226,7 +226,7 @@ proc create_root_design { parentCell } {
    CONFIG.C_RX_FIFO_DEPTH {512} \
    CONFIG.C_RX_FIFO_PE_THRESHOLD {2} \
    CONFIG.C_RX_FIFO_PF_THRESHOLD {507} \
-   CONFIG.C_USE_RX_DATA {0} \
+   CONFIG.C_USE_RX_DATA {1} \
    CONFIG.C_USE_TX_CTRL {0} \
  ] $axi_fifo_mm_s0_config_audio
 
@@ -677,6 +677,7 @@ proc create_root_design { parentCell } {
   connect_bd_intf_net -intf_net axi_fifo_mm_s_1_AXI_STR_TXD [get_bd_intf_pins axi_fifo_mm_s0_config_audio/AXI_STR_TXD] [get_bd_intf_pins mySPIRxTx_0/S00_AXIS]
   connect_bd_intf_net -intf_net axi_smc_M00_AXI [get_bd_intf_pins axi_smc/M00_AXI] [get_bd_intf_pins processing_system7_0/S_AXI_GP0]
   connect_bd_intf_net -intf_net fm_receiver_0_audio_out_V [get_bd_intf_pins fm_receiver_hls/audio_out_V] [get_bd_intf_pins myI2STx_0/S00_AXIS]
+  connect_bd_intf_net -intf_net mySPIRxTx_0_M00_AXIS [get_bd_intf_pins axi_fifo_mm_s0_config_audio/AXI_STR_RXD] [get_bd_intf_pins mySPIRxTx_0/M00_AXIS]
   connect_bd_intf_net -intf_net processing_system7_0_DDR [get_bd_intf_ports DDR] [get_bd_intf_pins processing_system7_0/DDR]
   connect_bd_intf_net -intf_net processing_system7_0_FIXED_IO [get_bd_intf_ports FIXED_IO] [get_bd_intf_pins processing_system7_0/FIXED_IO]
   connect_bd_intf_net -intf_net processing_system7_0_M_AXI_GP0 [get_bd_intf_pins processing_system7_0/M_AXI_GP0] [get_bd_intf_pins ps7_0_axi_periph/S00_AXI]
