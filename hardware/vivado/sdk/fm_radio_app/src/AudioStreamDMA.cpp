@@ -24,10 +24,10 @@ bool AudioStreamDMA::Initialize() {
   }
 
   if (!XAxiDma_HasSg(&mDev)) {
-    cerr << "ERROR: Device configured as simple mode\n" << endl;
+    cerr << "ERROR: Device configured as simple mode" << endl;
     return false;
   } else {
-    cout << "Device has Scatter-Gather engine mode\n" << endl;
+    cout << "Device has Scatter-Gather engine mode" << endl;
   }
 
   XAxiDma_BdRing* txRingPtr = XAxiDma_GetTxRing(&mDev);
@@ -42,8 +42,8 @@ bool AudioStreamDMA::Initialize() {
                                             (uint32_t)sizeof(mBdBuffer));
 
   status = XAxiDma_BdRingCreate(txRingPtr,
-                                (UINTPTR)mBdBuffer[0],
-                                (UINTPTR)mBdBuffer[0],
+                                (UINTPTR)&mBdBuffer[0],
+                                (UINTPTR)&mBdBuffer[0],
                                 XAXIDMA_BD_MINIMUM_ALIGNMENT,
                                 bd_count);
   if (status != XST_SUCCESS) {
