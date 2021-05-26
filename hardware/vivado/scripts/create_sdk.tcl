@@ -42,6 +42,14 @@ setlib -bsp $bsp_name -lib xilffs
 updatemss -mss $bsp_name/system.mss
 regenbsp -bsp $bsp_name
 
+puts "(MWURM) Editing options of FreeRTOS ..."
+configbsp -bsp $bsp_name/system.mss total_heap_size 512000
+
+# TODO: maybe do this only once (update and regen)
+updatemss -mss $bsp_name/system.mss
+regenbsp -bsp $bsp_name
+
+
 puts "(MWURM) Importing main application..."
 importprojects $app_name
 
