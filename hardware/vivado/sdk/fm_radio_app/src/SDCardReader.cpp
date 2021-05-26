@@ -10,7 +10,9 @@
 
 using namespace std;
 
-SDCardReader::SDCardReader() {}
+SDCardReader::SDCardReader() {
+  mMounted = false;
+}
 
 SDCardReader::~SDCardReader() {}
 
@@ -23,12 +25,19 @@ bool SDCardReader::MountSDCard(uint8_t num_retries) {
       getchar();
       continue;
     }
+    mMounted = true;
     return true;
   }
+  mMounted = false;
   return false;
 }
 
 void SDCardReader::DiscoverFiles() {
+  if (!mMounted) {
+    cerr << "No SDCard mounted!" << endl;
+    return;
+  }
+
   DIR dir;
   FRESULT res = f_opendir(&dir, "0:/");
   if (res != FR_OK) {

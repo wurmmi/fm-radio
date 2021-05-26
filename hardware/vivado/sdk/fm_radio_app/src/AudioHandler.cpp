@@ -24,7 +24,6 @@ AudioHandler::~AudioHandler() {}
 
 bool AudioHandler::Initialize() {
   if (!mAdau1761.Initialize()) {
-    cerr << "Could not initialize ADAU1761" << endl;
     return false;
   }
   cout << "AudioHandler hardware initialization OKAY" << endl;

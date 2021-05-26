@@ -15,17 +15,14 @@ ADAU1761::ADAU1761()
 ADAU1761::~ADAU1761() {}
 
 bool ADAU1761::adau1761_chip_config() {
-  cout << "read 0" << endl;
   // Enable SPI mode
   mConfigFifo.read(0x4000);
   mConfigFifo.read(0x4000);
   mConfigFifo.read(0x4000);
 
-  cout << "write 0" << endl;
   // Enable clock
   mConfigFifo.write(0x4000, 0x01);
 
-  cout << "write 1" << endl;
   // SLEWPD=1, ALCPD=1, DECPD=1, SOUTPD=1, INTPD=1, SINPD=1, SPPD=1
   mConfigFifo.write(0x40F9, 0x7F);
   // CLK1=0, CLK0=1
@@ -79,19 +76,21 @@ bool ADAU1761::adau1761_chip_config() {
 }
 
 bool ADAU1761::Initialize() {
-  cout << "Configuring the config-FIFO ..." << endl;
-  // Configure config FIFO
+  cout << "Configuring the Config-FIFO ..." << endl;
   int status = mConfigFifo.Initialize();
-  if (!status)
+  if (!status) {
+    cerr << "ERROR" << endl;
     return false;
-  cout << "Done" << endl;
+  }
+  cout << "Done." << endl;
 
   cout << "Configuring the ADAU1761 chip ..." << endl;
-  // Configure ADAU1761 chip
   status = adau1761_chip_config();
-  if (!status)
+  if (!status) {
+    cerr << "ERROR" << endl;
     return false;
-  cout << "Done" << endl;
+  }
+  cout << "Done." << endl;
 
   return true;
 }

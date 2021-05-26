@@ -16,6 +16,7 @@ class SDCardReader {
  private:
   FATFS mFilesystem;
   std::vector<std::string> mFilenames;
+  bool mMounted;
 
  public:
   SDCardReader();
