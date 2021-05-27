@@ -44,7 +44,7 @@ static void task_audio(void *) {
   sdCardReader.LoadFile("cantina_band.wav");
 
   AudioStreamDMA streamDMA(XPAR_AXI_DMA_0_DEVICE_ID);
-  if (!streamDMA.Initialize()) {
+  if (!streamDMA.Initialize(/** TODO: needs buffer size here */)) {
     cerr << "Error in DMA initialization" << endl;
   }
 

@@ -148,13 +148,9 @@ void AudioStreamDMA::TxIRQCallback(void* context) {
 }
 
 bool AudioStreamDMA::InterruptSetup() {
-  XScuGic_Config* IntcConfig;
-
-  /*
-   * Initialize the interrupt controller driver so that it is ready to
-   * use.
-   */
-  IntcConfig = XScuGic_LookupConfig(XPAR_SCUGIC_SINGLE_DEVICE_ID);
+  /* Initialize the interrupt controller driver so that it is ready to use. */
+  XScuGic_Config* IntcConfig =
+      XScuGic_LookupConfig(XPAR_SCUGIC_SINGLE_DEVICE_ID);
   if (IntcConfig == nullptr) {
     LOG_ERROR("failed XScuGic_LookupConfig()");
     return XST_FAILURE;
@@ -173,8 +169,6 @@ bool AudioStreamDMA::InterruptSetup() {
    * interrupt for the device occurs. The handler performs the specific
    * interrupt processing for the device.
    */
-  XAxiDma_BdRing* txRingPtr = XAxiDma_GetTxRing(&mDev);
-
   status = XScuGic_Connect(
       &mIntCtrl, mIntCtrlId, (Xil_InterruptHandler)TxIRQCallback, this);
   if (status != XST_SUCCESS) {
@@ -184,7 +178,6 @@ bool AudioStreamDMA::InterruptSetup() {
   XScuGic_Enable(&mIntCtrl, mIntCtrlId);
 
   /* Enable interrupts from the hardware */
-
   Xil_ExceptionInit();
   Xil_ExceptionRegisterHandler(XIL_EXCEPTION_ID_INT,
                                (Xil_ExceptionHandler)XScuGic_InterruptHandler,
@@ -229,6 +222,8 @@ bool AudioStreamDMA::Initialize() {
 }
 
 void AudioStreamDMA::TransmitBlob(DMABuffer const& buffer) {
+  /** TODO: rewrite this function according to example code */
+
   cout << "TransmitBlob: bufferSize = " << buffer.bufferSize << endl;
 
   XAxiDma_BdRing* txRingPtr = XAxiDma_GetTxRing(&mDev);
