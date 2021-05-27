@@ -26,7 +26,8 @@ static TaskHandle_t task_audio_handle;
 static void task_loop(void *) {
   uint32_t count = 0;
   while (true) {
-    cout << "Looping since " << count++ << " sec ..." << endl;
+    if (count % 30 == 0)
+      cout << "Looping since " << count++ << " sec ..." << endl;
     vTaskDelay(delay_ms_c);
   }
 }
@@ -47,12 +48,30 @@ static void task_audio(void *) {
     cerr << "Error in DMA initialization" << endl;
   }
 
-  DMABuffer buffer = sdCardReader.GetBuffer();
-  streamDMA.TransmitBlob(buffer);
-
   while (true) {
-    cout << "task_audio" << endl;
-    vTaskDelay(delay_ms_c);
+    // Show menu
+    printf("-------------- FM RADIO MENU -----------------\n");
+    printf("[p] ... play\n");
+    printf("[i] ... show information\n");
+    printf("----------------------------------------------\n");
+
+    // Process input choice
+    char choice = inbyte();
+    switch (choice) {
+      case 'p': {
+        DMABuffer buffer = sdCardReader.GetBuffer();
+        streamDMA.TransmitBlob(buffer);
+        printf("Playing ...");
+      } break;
+      case 'i':
+        printf("This program was developed by Michael Wurm.\n");
+        printf("Build date:  %s, %s\n", __DATE__, __TIME__);
+        break;
+
+      default:
+        printf("Unknown input.\n");
+        break;
+    }
   }
 }
 
