@@ -57,11 +57,12 @@ static void task_audio(void *) {
 
     // Process input choice
     char choice = inbyte();
+    printf("\n");
     switch (choice) {
       case 'p': {
         DMABuffer buffer = sdCardReader.GetBuffer();
         streamDMA.TransmitBlob(buffer);
-        printf("Playing ...");
+        printf("Playing ...\n");
       } break;
       case 'i':
         printf("This program was developed by Michael Wurm.\n");

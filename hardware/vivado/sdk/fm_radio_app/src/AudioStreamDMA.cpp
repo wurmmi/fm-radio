@@ -61,6 +61,13 @@ bool AudioStreamDMA::Initialize() {
     return false;
   }
 
+  // Enable Cyclic Mode
+  status = XAxiDma_SelectCyclicMode(&mDev, XAXIDMA_DEVICE_TO_DMA, 1);
+  if (status != XST_SUCCESS) {
+    printf("Failed to set cyclic mode\n");
+    return false;
+  }
+
   // Start the TX channel
   status = XAxiDma_BdRingStart(txRingPtr);
   // status = XAxiDma_StartBdRingHw(txRingPtr);
