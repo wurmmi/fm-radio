@@ -17,6 +17,7 @@ AudioStreamDMA::AudioStreamDMA(uint32_t device_id) : mDeviceId(device_id) {}
 AudioStreamDMA::~AudioStreamDMA() {}
 
 bool AudioStreamDMA::Initialize() {
+  cout << "Initialize DMA ..." << endl;
   int status = XAxiDma_CfgInitialize(&mDev, XAxiDma_LookupConfig(mDeviceId));
   if (status != XST_SUCCESS) {
     cout << "Failed to initialize DMA\n" << endl;
@@ -75,6 +76,7 @@ bool AudioStreamDMA::Initialize() {
     printf("Failed bd start\n");
   }
 
+  cout << "Done." << endl;
   return true;
 }
 
@@ -87,6 +89,10 @@ void AudioStreamDMA::TransmitBlob(DMABuffer const& buffer) {
   uint32_t max_block_size   = txRingPtr->MaxTransferLen / 4;
   uint32_t* p_block         = (uint32_t*)buffer.buffer;
 
+  cout << "n_samples_remain = " << n_samples_remain << endl;
+  cout << "max_block_size   = " << max_block_size << endl;
+
+  uint32_t transmit_count = 0;
   while (n_samples_remain > 0) {
     uint32_t nTransfer = max_block_size;
     if (n_samples_remain < max_block_size)
@@ -95,7 +101,11 @@ void AudioStreamDMA::TransmitBlob(DMABuffer const& buffer) {
     Transmit({(uint8_t*)p_block, nTransfer}, 1);
     n_samples_remain -= nTransfer;
     p_block += nTransfer;
+
+    transmit_count++;
   }
+  cout << "Done." << endl;
+  cout << "transmit_count = " << transmit_count << endl;
 }
 
 /**

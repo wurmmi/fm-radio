@@ -76,6 +76,7 @@ void FileReader::LoadFile(string const& filename) {
     return;
   }
 
+  // Read file depending on type
   switch (fileType) {
     case FileType::WAV:
       ReadWAV();
@@ -119,6 +120,11 @@ void FileReader::ReadWAV() {
   }
 
   /*--- Read chunks ---*/
+  uint32_t num_generic_chunks = 0;
+  uint32_t num_unknown_chunks = 0;
+  uint32_t num_fmt_chunks     = 0;
+  uint32_t num_data_chunks    = 0;
+
   while (1) {
     // Read WAV generic chunk
     wav_generic_chunk_t genericChunk;
@@ -132,9 +138,14 @@ void FileReader::ReadWAV() {
       break;
     }
 
+    num_generic_chunks++;
+
     wav_fmt_chunk_t fmtChunk;
     if (string{genericChunk.ckId, sizeof(genericChunk.ckId)} == "fmt ") {
-      // "fmt" chunk is compulsory and contains information about the sample
+      num_fmt_chunks++;
+
+      // "fmt" chunk is compulsory and contains information
+      // about the sample
       // format
       fres =
           f_read(&mFile, (void*)&fmtChunk, genericChunk.cksize, &n_bytes_read);
@@ -159,6 +170,8 @@ void FileReader::ReadWAV() {
         return;
       }
     } else if (string{genericChunk.ckId, sizeof(genericChunk.ckId)} == "data") {
+      num_data_chunks++;
+
       // "data" chunk contains the audio samples
       mBuffer = (uint8_t*)malloc(genericChunk.cksize);
       if (!mBuffer) {
@@ -180,9 +193,15 @@ void FileReader::ReadWAV() {
       // Unknown chunk: Just skip it
       DWORD fp = f_tell(&mFile);
       f_lseek(&mFile, fp + genericChunk.cksize);
+      num_unknown_chunks++;
     }
   }
   cout << "Done." << endl;
+  printf("number of WAV chunks: %ld generic, %ld unknown, %ld fmt, %ld data\n",
+         num_generic_chunks,
+         num_unknown_chunks,
+         num_fmt_chunks,
+         num_data_chunks);
 }
 
 void FileReader::ReadTXT() {

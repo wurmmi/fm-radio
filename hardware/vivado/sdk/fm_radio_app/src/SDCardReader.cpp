@@ -97,8 +97,8 @@ string SDCardReader::GetShortFilename(string const& filename) {
     name = name.substr(0, short_filename_length_c);
 
   string short_name = name + "~1" + extension;
+  cout << "filename: " << filename << endl;
   cout << "extension: " << extension << endl;
-  cout << "name: " << name << endl;
   cout << "short_name: " << short_name << endl;
   return short_name;
 }
