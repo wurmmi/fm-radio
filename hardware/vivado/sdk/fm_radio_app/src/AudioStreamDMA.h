@@ -35,7 +35,10 @@ class AudioStreamDMA {
   int mErrorState;
   DMABuffer mDataBuffer;
 
-  void Transmit(DMABuffer const& buffer, bool isFirst, bool isLast);
+  void Transmit(DMABuffer const& buffer,
+                bool isFirst,
+                bool isLast,
+                XAxiDma_Bd* bd_ptr);
 
   bool TxSetup();
   bool InterruptSetup();

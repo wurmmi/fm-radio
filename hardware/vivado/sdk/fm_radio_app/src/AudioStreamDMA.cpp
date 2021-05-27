@@ -242,6 +242,7 @@ void AudioStreamDMA::TransmitBlob() {
   uint32_t transmit_count = 0;
   bool isFirst            = true;
   bool isLast             = false;
+  XAxiDma_Bd* bd_ptr      = nullptr;
 
   while (n_samples_remain > 0) {
     uint32_t nTransfer = max_block_size;
@@ -249,13 +250,21 @@ void AudioStreamDMA::TransmitBlob() {
       nTransfer = n_samples_remain;
       isLast    = true;
     }
-    Transmit({(uint8_t*)p_block, nTransfer}, isFirst, isLast);
+    Transmit({(uint8_t*)p_block, nTransfer}, isFirst, isLast, bd_ptr);
     n_samples_remain -= nTransfer;
     p_block += nTransfer;
 
+    cout << "transmit_count = " << transmit_count << endl;
     transmit_count++;
     isFirst = false;
   }
+
+  // Give the BD to hardware
+  int status = XAxiDma_BdRingToHw(txRingPtr, transmit_count, bd_ptr);
+  if (status != XST_SUCCESS) {
+    LOG_ERROR("Failed to hw");
+  }
+
   cout << "Done." << endl;
   cout << "transmit_count = " << transmit_count << endl;
 }
@@ -266,8 +275,13 @@ void AudioStreamDMA::TransmitBlob() {
  */
 void AudioStreamDMA::Transmit(DMABuffer const& buffer,
                               bool isFirst,
-                              bool isLast) {
+                              bool isLast,
+                              XAxiDma_Bd* bd_ptr) {
   XAxiDma_BdRing* txRingPtr = XAxiDma_GetTxRing(&mDev);
+  if (isFirst)
+    cout << "first" << endl;
+  if (isLast)
+    cout << "last" << endl;
 
   // Free the processed BDs from previous run.
   // adau1761_dmaFreeProcessedBDs(pDevice);
@@ -277,7 +291,7 @@ void AudioStreamDMA::Transmit(DMABuffer const& buffer,
   Xil_DCacheFlushRange((uint32_t)buffer.buffer,
                        buffer.bufferSize * sizeof(uint32_t));
 
-  XAxiDma_Bd* bd_ptr                   = nullptr;
+  // XAxiDma_Bd* bd_ptr;
   uint32_t const num_of_bds_to_alloc_c = 1;
   int status = XAxiDma_BdRingAlloc(txRingPtr, num_of_bds_to_alloc_c, &bd_ptr);
   if (status != XST_SUCCESS) {
@@ -308,15 +322,16 @@ void AudioStreamDMA::Transmit(DMABuffer const& buffer,
     CrBits |= XAXIDMA_BD_CTRL_TXEOF_MASK;  // Last BD
   }
   XAxiDma_BdSetCtrl(bd_cur_ptr, CrBits);
-  XAxiDma_BdSetId(bd_cur_ptr, (UINTPTR)buffer.buffer);
+  XAxiDma_BdSetId(bd_cur_ptr,
+                  (UINTPTR)buffer.buffer); /** TODO: advance this pointer */
 
   bd_cur_ptr = (XAxiDma_Bd*)XAxiDma_BdRingNext(txRingPtr, bd_cur_ptr);
 
-  // Give the BD to hardware
-  status = XAxiDma_BdRingToHw(txRingPtr, num_of_bds_to_alloc_c, bd_ptr);
-  if (status != XST_SUCCESS) {
-    LOG_ERROR("Failed to hw");
-  }
+  //  // Give the BD to hardware
+  //  status = XAxiDma_BdRingToHw(txRingPtr, num_of_bds_to_alloc_c, bd_ptr);
+  //  if (status != XST_SUCCESS) {
+  //    LOG_ERROR("Failed to hw");
+  //  }
 
   mDmaWritten = true;
 }
