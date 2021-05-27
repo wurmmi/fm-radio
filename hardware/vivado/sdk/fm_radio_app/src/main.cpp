@@ -44,7 +44,11 @@ static void task_audio(void *) {
   sdCardReader.LoadFile("cantina_band.wav");
 
   AudioStreamDMA streamDMA(XPAR_AXI_DMA_0_DEVICE_ID);
-  if (!streamDMA.Initialize(/** TODO: needs buffer size here */)) {
+
+  DMABuffer buffer = sdCardReader.GetBuffer();
+
+  bool ret = streamDMA.Initialize(buffer);
+  if (!ret) {
     cerr << "Error in DMA initialization" << endl;
   }
 
@@ -60,8 +64,7 @@ static void task_audio(void *) {
     printf("\n");
     switch (choice) {
       case 'p': {
-        DMABuffer buffer = sdCardReader.GetBuffer();
-        streamDMA.TransmitBlob(buffer);
+        streamDMA.TransmitBlob();
         printf("Playing ...\n");
       } break;
       case 'i':

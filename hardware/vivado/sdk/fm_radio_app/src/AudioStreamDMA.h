@@ -11,9 +11,9 @@
 #include <xscugic.h>
 
 // Size of the buffer which holds the DMA Buffer Descriptors (BDs)
-#define DMA_BD_BUFFER_SIZE        400  // NUMBER_OF_BDS_TO_TRANSFER
-#define DMA_COALESCING_COUNT      400
-#define DMA_DELAY_TIMER_COUNT     100
+#define DMA_BD_BUFFER_SIZE        40   // NUMBER_OF_BDS_TO_TRANSFER
+#define DMA_COALESCING_COUNT      40   // valid range 1..255
+#define DMA_DELAY_TIMER_COUNT     100  // valid range 1..255
 #define DMA_RESET_TIMEOUT_COUNTER 10000
 
 typedef struct {
@@ -32,6 +32,7 @@ class AudioStreamDMA {
   uint8_t mDeviceId;
   bool mDmaWritten;
   int mErrorState;
+  DMABuffer mDataBuffer;
 
   void Transmit(DMABuffer const& buffer, uint32_t n_repeats);
 
@@ -45,8 +46,8 @@ class AudioStreamDMA {
   AudioStreamDMA(uint32_t device_id);
   ~AudioStreamDMA();
 
-  bool Initialize();
-  void TransmitBlob(DMABuffer const& buffer);
+  bool Initialize(DMABuffer const& dataBuffer);
+  void TransmitBlob();
 };
 
 #endif /* _AUDIOSTREAMDMA_H_ */

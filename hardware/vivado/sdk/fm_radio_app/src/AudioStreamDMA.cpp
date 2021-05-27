@@ -26,13 +26,13 @@ bool AudioStreamDMA::TxSetup() {
   // Disable all TX interrupts before TxBD space setup
   XAxiDma_BdRingIntDisable(txRingPtr, XAXIDMA_IRQ_ALL_MASK);
 
-  // Setup TxBD space
+  // Setup Tx BD space
   uint32_t bd_count = XAxiDma_BdRingCntCalc(XAXIDMA_BD_MINIMUM_ALIGNMENT,
                                             (uint32_t)sizeof(mBdBuffer));
   cout << "bd_count = " << bd_count << endl;
   if (bd_count != DMA_BD_BUFFER_SIZE) {
     LOG_ERROR("something went wrong here - sizes don't match");
-    return false;
+    //    return false;
   }
 
   int status = XAxiDma_BdRingCreate(txRingPtr,
@@ -153,13 +153,14 @@ bool AudioStreamDMA::InterruptSetup() {
       XScuGic_LookupConfig(XPAR_SCUGIC_SINGLE_DEVICE_ID);
   if (IntcConfig == nullptr) {
     LOG_ERROR("failed XScuGic_LookupConfig()");
-    return XST_FAILURE;
+    return false;
   }
 
   int status =
       XScuGic_CfgInitialize(&mIntCtrl, IntcConfig, IntcConfig->CpuBaseAddress);
   if (status != XST_SUCCESS) {
-    return XST_FAILURE;
+    LOG_ERROR("failed XScuGic_CfgInitialize()");
+    return false;
   }
 
   XScuGic_SetPriorityTriggerType(&mIntCtrl, mIntCtrlId, 0xA0, 0x3);
@@ -172,7 +173,8 @@ bool AudioStreamDMA::InterruptSetup() {
   status = XScuGic_Connect(
       &mIntCtrl, mIntCtrlId, (Xil_InterruptHandler)TxIRQCallback, this);
   if (status != XST_SUCCESS) {
-    return status;
+    LOG_ERROR("failed XScuGic_Connect()");
+    return false;
   }
 
   XScuGic_Enable(&mIntCtrl, mIntCtrlId);
@@ -185,10 +187,12 @@ bool AudioStreamDMA::InterruptSetup() {
 
   Xil_ExceptionEnable();
 
-  return XST_SUCCESS;
+  return true;
 }
 
-bool AudioStreamDMA::Initialize() {
+bool AudioStreamDMA::Initialize(DMABuffer const& dataBuffer) {
+  mDataBuffer = dataBuffer;
+
   cout << "Initialize DMA ..." << endl;
   int status = XAxiDma_CfgInitialize(&mDev, XAxiDma_LookupConfig(mDeviceId));
   if (status != XST_SUCCESS) {
@@ -211,7 +215,7 @@ bool AudioStreamDMA::Initialize() {
     return false;
   }
 
-  bool ret = InterruptSetup();
+  ret = InterruptSetup();
   if (!ret) {
     LOG_ERROR("InterruptSetup failed");
     return false;
@@ -221,16 +225,16 @@ bool AudioStreamDMA::Initialize() {
   return true;
 }
 
-void AudioStreamDMA::TransmitBlob(DMABuffer const& buffer) {
+void AudioStreamDMA::TransmitBlob() {
   /** TODO: rewrite this function according to example code */
 
-  cout << "TransmitBlob: bufferSize = " << buffer.bufferSize << endl;
+  cout << "TransmitBlob: bufferSize = " << mDataBuffer.bufferSize << endl;
 
   XAxiDma_BdRing* txRingPtr = XAxiDma_GetTxRing(&mDev);
 
-  uint32_t n_samples_remain = buffer.bufferSize;
+  uint32_t n_samples_remain = mDataBuffer.bufferSize;
   uint32_t max_block_size   = txRingPtr->MaxTransferLen / 4;
-  uint32_t* p_block         = (uint32_t*)buffer.buffer;
+  uint32_t* p_block         = (uint32_t*)mDataBuffer.buffer;
 
   cout << "n_samples_remain = " << n_samples_remain << endl;
   cout << "max_block_size   = " << max_block_size << endl;
@@ -297,7 +301,6 @@ void AudioStreamDMA::Transmit(DMABuffer const& buffer, uint32_t n_repeats) {
       CrBits |= XAXIDMA_BD_CTRL_TXEOF_MASK;  // Last BD
     }
     XAxiDma_BdSetCtrl(bd_cur_ptr, CrBits);
-
     XAxiDma_BdSetId(bd_cur_ptr, (UINTPTR)buffer.buffer);
 
     bd_cur_ptr = (XAxiDma_Bd*)XAxiDma_BdRingNext(txRingPtr, bd_cur_ptr);
