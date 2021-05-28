@@ -135,11 +135,12 @@ void WavReader::LoadFile(string const& filename) {
       num_data_chunks++;
 
       // "data" chunk contains all the audio samples
-      /** TODO: need to free this allocated memory somewhere! */
+      /** TODO: Use a better concept to free this allocated memory somewhere. */
       mBuffer = new uint8_t[genericChunk.cksize];
       if (!mBuffer) {
         LOG_ERROR("Could not allocate memory");
         f_close(&mFile);
+        delete[] mBuffer;
         return;
       }
       mBufferSize = genericChunk.cksize;
@@ -148,11 +149,13 @@ void WavReader::LoadFile(string const& filename) {
       if (fres != 0) {
         LOG_ERROR("Failed to read file");
         f_close(&mFile);
+        delete[] mBuffer;
         return;
       }
       if (n_bytes_read != mBufferSize) {
         LOG_ERROR("Didn't read the complete file");
         f_close(&mFile);
+        delete[] mBuffer;
         return;
       }
     } else {

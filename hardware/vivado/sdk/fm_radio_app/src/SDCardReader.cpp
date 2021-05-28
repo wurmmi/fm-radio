@@ -89,18 +89,26 @@ void SDCardReader::DiscoverFiles() {
 }
 
 string SDCardReader::GetShortFilename(string const& filename) {
+  /* Transform to upper case letters */
   string fn_upper = filename;
   transform(filename.cbegin(), filename.cend(), fn_upper.begin(), ::toupper);
 
+  /* Split name and extension */
   auto dot_idx     = fn_upper.find_last_of('.');
   string extension = fn_upper.substr(dot_idx);
   string name      = fn_upper.substr(0, dot_idx);
 
-  const uint8_t short_filename_length_c = 6;
-  if (name.length() >= short_filename_length_c)
-    name = name.substr(0, short_filename_length_c);
+  // Truncate name
+  const uint8_t short_filename_length_c = 8;
 
-  string short_name = name + "~1" + extension;
+  string short_name;
+  if (name.length() > short_filename_length_c) {
+    // too long: truncate and add "~1"
+    name       = name.substr(0, short_filename_length_c - 2);
+    short_name = name + "~1" + extension;
+  } else {
+    short_name = name + extension;
+  }
   LOG_DEBUG("filename  : %s", filename.c_str());
   LOG_DEBUG("extension : %s", extension.c_str());
   LOG_DEBUG("short_name: %s", short_name.c_str());

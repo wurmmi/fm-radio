@@ -41,11 +41,13 @@ void TxtReader::LoadFile(string const& filename) {
 
   /* Load entire file at once */
   UINT n_byte_read = 0;
-  mBuffer          = new uint8_t[fileSize];
+  /** TODO: Use a better concept to free this allocated memory somewhere. */
+  mBuffer = new uint8_t[fileSize];
 
   fres = f_read(&mFile, (void*)mBuffer, fileSize, &n_byte_read);
   if (fres) {
     LOG_ERROR("Error reading file! (error: %d)", fres);
+    f_close(&mFile);
     delete[] mBuffer;
     return;
   }
@@ -55,6 +57,7 @@ void TxtReader::LoadFile(string const& filename) {
     LOG_ERROR("Error reading file! (fileSize = %ld, n_byte_read = %d)",
               fileSize,
               (int)n_byte_read);
+    f_close(&mFile);
     delete[] mBuffer;
     return;
   }

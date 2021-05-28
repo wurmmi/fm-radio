@@ -42,6 +42,7 @@ static void task_audio(void *) {
   sdCardReader.DiscoverFiles();
   sdCardReader.PrintAvailableFilenames();
 
+  // sdCardReader.LoadFile("rx_fm_bb.wav");
   sdCardReader.LoadFile("cantina_band_44100.wav");
 
   AudioStreamDMA streamDMA(XPAR_AXI_DMA_0_DEVICE_ID);
