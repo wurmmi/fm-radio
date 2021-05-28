@@ -18,7 +18,7 @@ FileReader::FileReader() {}
 
 FileReader::~FileReader() {
   if (mBuffer) {
-    free(mBuffer);
+    delete[] mBuffer;
     mBuffer = nullptr;
   }
 }

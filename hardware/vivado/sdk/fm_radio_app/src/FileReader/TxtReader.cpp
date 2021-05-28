@@ -41,10 +41,12 @@ void TxtReader::LoadFile(string const& filename) {
 
   /* Load entire file at once */
   UINT n_byte_read = 0;
+  mBuffer          = new uint8_t[fileSize];
 
   fres = f_read(&mFile, (void*)mBuffer, fileSize, &n_byte_read);
   if (fres) {
     LOG_ERROR("Error reading file! (error: %d)", fres);
+    delete[] mBuffer;
     return;
   }
 
@@ -53,8 +55,10 @@ void TxtReader::LoadFile(string const& filename) {
     LOG_ERROR("Error reading file! (fileSize = %ld, n_byte_read = %d)",
               fileSize,
               (int)n_byte_read);
+    delete[] mBuffer;
     return;
   }
+  mBufferSize = fileSize;
 
   /** TODO: convert binary buffer to integers */
 
