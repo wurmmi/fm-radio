@@ -174,8 +174,9 @@ void FileReader::ReadWAV() {
     } else if (string{genericChunk.ckId, sizeof(genericChunk.ckId)} == "data") {
       num_data_chunks++;
 
-      // "data" chunk contains the audio samples
-      mBuffer = (uint8_t*)malloc(genericChunk.cksize);
+      // "data" chunk contains all the audio samples
+      /** TODO: need to free this allocated memory somewhere! */
+      mBuffer = new uint8_t[genericChunk.cksize];
       if (!mBuffer) {
         LOG_ERROR("Could not allocate memory");
         return;
@@ -192,7 +193,9 @@ void FileReader::ReadWAV() {
         return;
       }
     } else {
-      // Unknown chunk: Just skip it
+      LOG_DEBUG("skipping unknown chunk: %s", genericChunk.ckId);
+
+      // advance the file pointer
       DWORD fp = f_tell(&mFile);
       f_lseek(&mFile, fp + genericChunk.cksize);
       num_unknown_chunks++;

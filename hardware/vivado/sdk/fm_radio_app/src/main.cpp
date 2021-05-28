@@ -26,7 +26,7 @@ static TaskHandle_t task_audio_handle;
 static void task_loop(void *) {
   uint32_t count = 0;
   while (true) {
-    if ((count % 10) == 0)
+    if ((count % 20) == 0)
       LOG_INFO("Looping since %ld sec ...", count);
     count++;
     vTaskDelay(delay_ms_c);
