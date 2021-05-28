@@ -179,13 +179,13 @@ set_property PACKAGE_PIN AB5 [get_ports {spi_miso_i}];  # "AC-SDA"
 # User LEDs - Bank 33
 # ----------------------------------------------------------------------------
 set_property PACKAGE_PIN T22 [get_ports {led0_heartbeat_o}];  # "LD0"
-#set_property PACKAGE_PIN T21 [get_ports {LD1}];  # "LD1"
-#set_property PACKAGE_PIN U22 [get_ports {LD2}];  # "LD2"
-#set_property PACKAGE_PIN U21 [get_ports {LD3}];  # "LD3"
-#set_property PACKAGE_PIN V22 [get_ports {LD4}];  # "LD4"
-#set_property PACKAGE_PIN W22 [get_ports {LD5}];  # "LD5"
-#set_property PACKAGE_PIN U19 [get_ports {LD6}];  # "LD6"
-#set_property PACKAGE_PIN U14 [get_ports {LD7}];  # "LD7"
+set_property PACKAGE_PIN T21 [get_ports {fm_radio_led_o[0]}];  # "LD1"
+set_property PACKAGE_PIN U22 [get_ports {fm_radio_led_o[1]}];  # "LD2"
+set_property PACKAGE_PIN U21 [get_ports {fm_radio_led_o[2]}];  # "LD3"
+set_property PACKAGE_PIN V22 [get_ports {fm_radio_led_o[3]}];  # "LD4"
+set_property PACKAGE_PIN W22 [get_ports {fm_radio_led_o[4]}];  # "LD5"
+set_property PACKAGE_PIN U19 [get_ports {fm_radio_led_o[5]}];  # "LD6"
+set_property PACKAGE_PIN U14 [get_ports {fm_radio_led_o[6]}];  # "LD7"
 
 # ----------------------------------------------------------------------------
 # VGA Output - Bank 33
