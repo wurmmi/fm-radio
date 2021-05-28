@@ -45,20 +45,22 @@ void FileReader::PrepareBufferData() {
 
   uint32_t* pSource = (uint32_t*)mBuffer;
   for (uint32_t i = 0; i < mBufferSize / 4; i++) {
-    short left  = (short)((pSource[i] >> 16) & 0xFFFF);
-    short right = (short)((pSource[i] >> 0) & 0xFFFF);
-    int left_i  = -(int)left * theVolume / 4;
-    int right_i = -(int)right * theVolume / 4;
-    if (left > 32767)
-      left = 32767;
-    if (left < -32767)
-      left = -32767;
-    if (right > 32767)
-      right = 32767;
-    if (right < -32767)
-      right = -32767;
-    left       = (short)left_i;
-    right      = (short)right_i;
+    int16_t left  = (int16_t)((pSource[i] >> 16) & 0xFFFF);
+    int16_t right = (int16_t)((pSource[i] >> 0) & 0xFFFF);
+    int left_i    = -(int)left * theVolume / 4;
+    int right_i   = -(int)right * theVolume / 4;
+
+    //    if (left > 32767)
+    //      left = 32767;
+    //    if (left < -32767)
+    //      left = -32767;
+    //    if (right > 32767)
+    //      right = 32767;
+    //    if (right < -32767)
+    //      right = -32767;
+
+    left       = (int16_t)left_i;
+    right      = (int16_t)right_i;
     pSource[i] = ((uint32_t)right << 16) + (uint32_t)left;
   }
 }
