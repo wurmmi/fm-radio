@@ -7,7 +7,7 @@
 #ifndef _FMRADIOIP_H_
 #define _FMRADIOIP_H_
 
-#include <xfm_receiver_top.h>
+#include "xfm_receiver_top.h"
 
 enum class TLed { LED0, LED1, LED2, LED3, LED4, LED5, LED6, LED7, ALL };
 
