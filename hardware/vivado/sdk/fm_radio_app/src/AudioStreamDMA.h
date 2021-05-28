@@ -34,6 +34,7 @@ class AudioStreamDMA {
   bool mDmaWritten;
   int mErrorState;
   DMABuffer mDataBuffer;
+  uint32_t mNumRequiredBDs;
 
   void Transmit(DMABuffer const& buffer,
                 bool isFirst,
