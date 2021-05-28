@@ -29,7 +29,6 @@ class AudioStreamDMA {
   XAxiDma_Bd mBdBuffer[DMA_NUM_BD_MAX]
       __attribute__((aligned(XAXIDMA_BD_MINIMUM_ALIGNMENT)));
   uint8_t mDeviceId;
-  bool mDmaWritten;
   int mErrorState;
   DMABuffer mDataBuffer;
   uint32_t mNumRequiredBDs;
@@ -39,6 +38,7 @@ class AudioStreamDMA {
                 bool isLast,
                 XAxiDma_Bd* bd_ptr);
 
+  bool Initialize();
   bool TxSetup();
   bool InterruptSetup();
   static void TxIRQCallback(void* context);
@@ -49,8 +49,7 @@ class AudioStreamDMA {
   AudioStreamDMA(uint32_t device_id);
   ~AudioStreamDMA();
 
-  bool Initialize(DMABuffer const& dataBuffer);
-  void TransmitBlob();
+  void TransmitBlob(DMABuffer const& dataBuffer);
   void Stop();
 };
 

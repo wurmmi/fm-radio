@@ -14,7 +14,16 @@
 
 using namespace std;
 
-AudioStreamDMA::AudioStreamDMA(uint32_t device_id) : mDeviceId(device_id) {}
+AudioStreamDMA::AudioStreamDMA(uint32_t device_id) : mDeviceId(device_id) {
+  mDataBuffer.buffer     = nullptr;
+  mDataBuffer.bufferSize = 0;
+
+  bool ret = Initialize();
+  if (!ret) {
+    cerr << "Error in DMA initialization" << endl;
+    return;
+  }
+}
 
 AudioStreamDMA::~AudioStreamDMA() {}
 
@@ -199,9 +208,7 @@ bool AudioStreamDMA::InterruptSetup() {
   return true;
 }
 
-bool AudioStreamDMA::Initialize(DMABuffer const& dataBuffer) {
-  mDataBuffer = dataBuffer;
-
+bool AudioStreamDMA::Initialize() {
   cout << "Initialize DMA ..." << endl;
   int status = XAxiDma_CfgInitialize(&mDev, XAxiDma_LookupConfig(mDeviceId));
   if (status != XST_SUCCESS) {
@@ -216,15 +223,7 @@ bool AudioStreamDMA::Initialize(DMABuffer const& dataBuffer) {
     cout << "Device has Scatter-Gather engine mode" << endl;
   }
 
-  mDmaWritten = false;
-
-  bool ret = TxSetup();
-  if (!ret) {
-    LOG_ERROR("TxSetup failed");
-    return false;
-  }
-
-  ret = InterruptSetup();
+  bool ret = InterruptSetup();
   if (!ret) {
     LOG_ERROR("InterruptSetup failed");
     return false;
@@ -234,7 +233,15 @@ bool AudioStreamDMA::Initialize(DMABuffer const& dataBuffer) {
   return true;
 }
 
-void AudioStreamDMA::TransmitBlob() {
+void AudioStreamDMA::TransmitBlob(DMABuffer const& dataBuffer) {
+  mDataBuffer = dataBuffer;
+
+  bool ret = TxSetup();
+  if (!ret) {
+    LOG_ERROR("TxSetup failed");
+    return;
+  }
+
   XAxiDma_BdRing* txRingPtr = XAxiDma_GetTxRing(&mDev);
   if (mDataBuffer.bufferSize > txRingPtr->MaxTransferLen) {
     cerr << "BufferSize is larger than maximum transfer length!" << endl;
@@ -291,7 +298,6 @@ void AudioStreamDMA::TransmitBlob() {
     LOG_ERROR("Failed to hw");
   }
 
-  mDmaWritten = true;
   cout << "Done." << endl;
 }
 
