@@ -217,10 +217,10 @@ bool AudioStreamDMA::Initialize() {
   }
 
   if (!XAxiDma_HasSg(&mDev)) {
-    cerr << "ERROR: Device configured as simple mode" << endl;
+    LOG_ERROR("Device configured as simple mode");
     return false;
   } else {
-    cout << "Device has Scatter-Gather engine mode" << endl;
+    LOG_DEBUG("Device has Scatter-Gather engine mode");
   }
 
   bool ret = InterruptSetup();

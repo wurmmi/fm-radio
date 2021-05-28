@@ -27,7 +27,8 @@ static void task_loop(void *) {
   uint32_t count = 0;
   while (true) {
     if (count % 30 == 0)
-      cout << "Looping since " << count++ << " sec ..." << endl;
+      cout << "Looping since " << count << " sec ..." << endl;
+    count++;
     vTaskDelay(delay_ms_c);
   }
 }
@@ -46,15 +47,16 @@ static void task_audio(void *) {
   AudioStreamDMA streamDMA(XPAR_AXI_DMA_0_DEVICE_ID);
 
   while (true) {
-    // Show menu
+    /* Show menu */
     printf("-------------- FM RADIO MENU -----------------\n");
     printf("[p] ... play\n");
     printf("[s] ... stop\n");
     printf("[i] ... show information\n");
     printf("----------------------------------------------\n");
 
-    // Process input choice
-    printf("Choice: \n");
+    /* Process user input */
+    printf("Choice: ");
+    fflush(stdout);
     char choice = inbyte();
     printf("%c\n", choice);
     switch (choice) {
