@@ -122,10 +122,6 @@ void SDCardReader::LoadFile(string const& filename) {
 
   // Handle file depending on its type
   FileType fileType = FileReader::GetFileType(filename);
-  if (fileType == FileType::UNKNOWN) {
-    LOG_ERROR("Unknown filetype of file: %s", filename.c_str());
-    return;
-  }
 
   switch (fileType) {
     case FileType::WAV: {
@@ -139,6 +135,9 @@ void SDCardReader::LoadFile(string const& filename) {
 
     case FileType::UNKNOWN:
     default:
+      LOG_ERROR("Unknown filetype of file: %s (short: %s)",
+                filename.c_str(),
+                filename_short.c_str());
       break;
   }
 }

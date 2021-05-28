@@ -59,16 +59,19 @@ void WavReader::LoadFile(string const& filename) {
   fres = f_read(&mFile, (void*)&header, sizeof(header), &n_bytes_read);
   if (fres) {
     LOG_ERROR("Failed to read file.");
+    f_close(&mFile);
     return;
   }
 
   if (string{header.riff, sizeof(header.riff)} != "RIFF") {
     LOG_ERROR("Illegal WAV file format, RIFF not found.");
+    f_close(&mFile);
     return;
   }
 
   if (string{header.wave, sizeof(header.riff)} != "WAVE") {
     LOG_ERROR("Illegal WAV file format, WAVE not found.");
+    f_close(&mFile);
     return;
   }
 
@@ -85,6 +88,7 @@ void WavReader::LoadFile(string const& filename) {
         &mFile, (void*)&genericChunk, sizeof(genericChunk), &n_bytes_read);
     if (fres) {
       LOG_ERROR("Failed to read file.");
+      f_close(&mFile);
       return;
     } else if (n_bytes_read != sizeof(genericChunk)) {
       // probably reached EOF
@@ -104,22 +108,27 @@ void WavReader::LoadFile(string const& filename) {
           f_read(&mFile, (void*)&fmtChunk, genericChunk.cksize, &n_bytes_read);
       if (fres != 0) {
         LOG_ERROR("Failed to read file");
+        f_close(&mFile);
         return;
       }
       if (n_bytes_read != genericChunk.cksize) {
         LOG_ERROR("EOF reached");
+        f_close(&mFile);
         return;
       }
       if (fmtChunk.wFormatTag != 1) {
         LOG_ERROR("Unsupported format");
+        f_close(&mFile);
         return;
       }
       if (fmtChunk.nChannels != 2) {
         LOG_ERROR("Only stereo files supported");
+        f_close(&mFile);
         return;
       }
       if (fmtChunk.wBitsPerSample != 16) {
         LOG_ERROR("Only 16 bit per samples supported");
+        f_close(&mFile);
         return;
       }
     } else if (string{genericChunk.ckId, sizeof(genericChunk.ckId)} == "data") {
@@ -130,6 +139,7 @@ void WavReader::LoadFile(string const& filename) {
       mBuffer = new uint8_t[genericChunk.cksize];
       if (!mBuffer) {
         LOG_ERROR("Could not allocate memory");
+        f_close(&mFile);
         return;
       }
       mBufferSize = genericChunk.cksize;
@@ -137,10 +147,12 @@ void WavReader::LoadFile(string const& filename) {
       fres = f_read(&mFile, (void*)mBuffer, mBufferSize, &n_bytes_read);
       if (fres != 0) {
         LOG_ERROR("Failed to read file");
+        f_close(&mFile);
         return;
       }
       if (n_bytes_read != mBufferSize) {
         LOG_ERROR("Didn't read the complete file");
+        f_close(&mFile);
         return;
       }
     } else {
