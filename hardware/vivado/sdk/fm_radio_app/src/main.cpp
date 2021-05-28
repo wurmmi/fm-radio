@@ -45,17 +45,12 @@ static void task_audio(void *) {
 
   AudioStreamDMA streamDMA(XPAR_AXI_DMA_0_DEVICE_ID);
 
-  DMABuffer buffer = sdCardReader.GetBuffer();
-
-  bool ret = streamDMA.Initialize(buffer);
-  if (!ret) {
-    cerr << "Error in DMA initialization" << endl;
-  }
-
+  bool ret = false;
   while (true) {
     // Show menu
     printf("-------------- FM RADIO MENU -----------------\n");
     printf("[p] ... play\n");
+    printf("[s] ... stop\n");
     printf("[i] ... show information\n");
     printf("----------------------------------------------\n");
 
@@ -64,9 +59,18 @@ static void task_audio(void *) {
     printf("\n");
     switch (choice) {
       case 'p': {
+        DMABuffer buffer = sdCardReader.GetBuffer();
+        ret              = streamDMA.Initialize(buffer);
+        if (!ret) {
+          cerr << "Error in DMA initialization" << endl;
+        }
         streamDMA.TransmitBlob();
         printf("Playing ...\n");
       } break;
+      case 's':
+        streamDMA.Stop();
+        printf("Stopped.\n");
+        break;
       case 'i':
         printf("This program was developed by Michael Wurm.\n");
         printf("Build date:  %s, %s\n", __DATE__, __TIME__);

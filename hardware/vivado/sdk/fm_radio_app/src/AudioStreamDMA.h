@@ -51,6 +51,7 @@ class AudioStreamDMA {
 
   bool Initialize(DMABuffer const& dataBuffer);
   void TransmitBlob();
+  void Stop();
 };
 
 #endif /* _AUDIOSTREAMDMA_H_ */

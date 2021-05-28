@@ -334,3 +334,7 @@ void AudioStreamDMA::Transmit(DMABuffer const& buffer_cur,
   XAxiDma_BdSetCtrl(bd_ptr_cur, CrBits);
   XAxiDma_BdSetId(bd_ptr_cur, (UINTPTR)buffer_cur.buffer);
 }
+
+void AudioStreamDMA::Stop() {
+  XAxiDma_Reset(&mDev);
+}
