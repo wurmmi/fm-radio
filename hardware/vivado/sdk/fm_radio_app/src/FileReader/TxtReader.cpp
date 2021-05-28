@@ -6,23 +6,17 @@
 
 #include "TxtReader.h"
 
-// clang-format off
+#include <ff.h>
 
 #include <algorithm>
 #include <fstream>
 #include <iostream>
 
-#include "fm_global.hpp"
 #include "log.h"
-
-#include <ff.h>
-// clang-format on
 
 using namespace std;
 
-TxtReader::TxtReader() {
-  sample_t sample = 0.7;
-}
+TxtReader::TxtReader() {}
 
 TxtReader::~TxtReader() {}
 

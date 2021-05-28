@@ -46,7 +46,6 @@
 								<option id="xilinx.gnu.compiler.dircategory.includes.535300305" name="Include Paths" superClass="xilinx.gnu.compiler.dircategory.includes" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/FileReader}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${XILINX_VIVADO}/include&quot;"/>
 								</option>
 								<inputType id="xilinx.gnu.armv7.cxx.compiler.input.495390739" name="C++ source files" superClass="xilinx.gnu.armv7.cxx.compiler.input"/>
 							</tool>
