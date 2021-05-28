@@ -39,7 +39,7 @@ bool SDCardReader::MountSDCard(uint8_t num_retries) {
     LOG_DEBUG("Mounting SD Card");
     FRESULT result = f_mount(&mFilesystem, LOGICAL_DRIVE_0, 1);
     if (result != 0) {
-      cout << "Couldn't mount SD Card. Press RETURN to try again" << endl;
+      LOG_WARN("Couldn't mount SD Card. Press RETURN to try again");
       getchar();
       continue;
     }
@@ -73,9 +73,9 @@ void SDCardReader::DiscoverFiles() {
     string filename = string(fno.fname);
 
     if (fno.fattrib & AM_DIR) {
-      LOG_DEBUG("- found directory: %s", filename);
+      LOG_DEBUG("- found directory: %s", filename.c_str());
     } else {
-      LOG_DEBUG("- found file: %s", filename);
+      LOG_DEBUG("- found file: %s", filename.c_str());
       mFilenames.emplace_back(filename);
     }
   } while (res == FR_OK);
@@ -99,9 +99,9 @@ string SDCardReader::GetShortFilename(string const& filename) {
     name = name.substr(0, short_filename_length_c);
 
   string short_name = name + "~1" + extension;
-  LOG_DEBUG("filename  : %s", filename);
-  LOG_DEBUG("extension : %s", extension);
-  LOG_DEBUG("short_name: %s", short_name);
+  LOG_DEBUG("filename  : %s", filename.c_str());
+  LOG_DEBUG("extension : %s", extension.c_str());
+  LOG_DEBUG("short_name: %s", short_name.c_str());
   return short_name;
 }
 
@@ -114,7 +114,7 @@ void SDCardReader::LoadFile(string const& filename) {
   string filename_short = GetShortFilename(filename);
   auto iter = find(mFilenames.cbegin(), mFilenames.cend(), filename_short);
   if (iter == mFilenames.cend()) {
-    LOG_ERROR("File '%s' does not exist.", filename_short);
+    LOG_ERROR("File '%s' does not exist.", filename_short.c_str());
     return;
   }
 

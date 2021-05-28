@@ -9,20 +9,16 @@
 
 #include <iostream>
 
-#define ENABLE_DEBUG_MSG 0
+#define ENABLE_DEBUG_MSG 1
 
 #define LOG_ERROR(format, ...) \
-  printf("ERROR %s/%s" format "\n", __FILE__, __FUNCTION__, ##__VA_ARGS__)
+  printf("ERROR %s::%s" format "\n", __FILE__, __FUNCTION__, ##__VA_ARGS__)
 
-#define LOG_WARN(format, ...) \
-  printf("WARN %s/%s" format "\n", __FILE__, __FUNCTION__, ##__VA_ARGS__)
-
-#define LOG_INFO(format, ...) \
-  printf("INFO %s/%s" format "\n", __FILE__, __FUNCTION__, ##__VA_ARGS__)
+#define LOG_WARN(format, ...) printf("WARN: " format "\n", ##__VA_ARGS__)
+#define LOG_INFO(format, ...) printf("INFO: " format "\n", ##__VA_ARGS__)
 
 #if ENABLE_DEBUG_MSG == 1
-#define LOG_DEBUG(format, ...) \
-  printf("INFO %s/%s" format "\n", __FILE__, __FUNCTION__, ##__VA_ARGS__)
+#define LOG_DEBUG(format, ...) printf("DEBUG: " format "\n", ##__VA_ARGS__)
 #else
 #define LOG_DEBUG(format, ...) void();
 #endif

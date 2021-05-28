@@ -28,7 +28,7 @@ AudioStreamDMA::AudioStreamDMA(uint32_t device_id) : mDeviceId(device_id) {
 AudioStreamDMA::~AudioStreamDMA() {}
 
 void AudioStreamDMA::TxDoneCallback() {
-  cout << "TxDoneCallback: DMA Tx DONE" << endl;
+  LOG_INFO("TxDoneCallback: DMA Tx DONE");
 }
 
 bool AudioStreamDMA::TxSetup() {
@@ -42,9 +42,9 @@ bool AudioStreamDMA::TxSetup() {
               mNumRequiredBDs,
               DMA_NUM_BD_MAX);
 
-    cout << "bufferSize      = " << mDataBuffer.bufferSize << endl;
-    cout << "max_block_size  = " << max_block_size << endl;
-    cout << "mNumRequiredBDs = " << mNumRequiredBDs << endl;
+    LOG_ERROR("bufferSize      = %ld", mDataBuffer.bufferSize);
+    LOG_ERROR("max_block_size  = %ld", max_block_size);
+    LOG_ERROR("mNumRequiredBDs = %ld", mNumRequiredBDs);
     return false;
   }
 
@@ -58,7 +58,7 @@ bool AudioStreamDMA::TxSetup() {
                                     XAXIDMA_BD_MINIMUM_ALIGNMENT,
                                     mNumRequiredBDs);
   if (status != XST_SUCCESS) {
-    printf("Failed create BD ring\n");
+    LOG_ERROR("Failed create BD ring");
     return false;
   }
 
@@ -70,7 +70,7 @@ bool AudioStreamDMA::TxSetup() {
   XAxiDma_BdClear(&BdTemplate);
   status = XAxiDma_BdRingClone(txRingPtr, &BdTemplate);
   if (status != XST_SUCCESS) {
-    printf("Failed to clone BDs\n");
+    LOG_ERROR("Failed to clone BDs");
     return false;
   }
 
@@ -88,9 +88,8 @@ bool AudioStreamDMA::TxSetup() {
   status                    = XAxiDma_BdRingSetCoalesce(
       txRingPtr, coalescing_count, DMA_DELAY_TIMER_COUNT);
   if (status != XST_SUCCESS) {
-    xil_printf("Failed set coalescing %d/%d\n",
-               coalescing_count,
-               DMA_DELAY_TIMER_COUNT);
+    LOG_ERROR(
+        "Failed set coalescing %ld/%d", coalescing_count, DMA_DELAY_TIMER_COUNT);
     return XST_FAILURE;
   }
 
@@ -104,7 +103,7 @@ bool AudioStreamDMA::TxSetup() {
   /* Start the TX channel */
   status = XAxiDma_BdRingStart(txRingPtr);
   if (status != XST_SUCCESS) {
-    printf("Failed bd start\n");
+    LOG_ERROR("Failed BdRingStart");
   }
 
   return true;
@@ -209,10 +208,10 @@ bool AudioStreamDMA::InterruptSetup() {
 }
 
 bool AudioStreamDMA::Initialize() {
-  cout << "Initialize DMA ..." << endl;
+  LOG_DEBUG("Initialize DMA ...");
   int status = XAxiDma_CfgInitialize(&mDev, XAxiDma_LookupConfig(mDeviceId));
   if (status != XST_SUCCESS) {
-    cout << "Failed to initialize DMA\n" << endl;
+    LOG_ERROR("Failed to initialize DMA");
     return false;
   }
 
@@ -229,7 +228,7 @@ bool AudioStreamDMA::Initialize() {
     return false;
   }
 
-  cout << "Done." << endl;
+  LOG_DEBUG("Done.");
   return true;
 }
 
@@ -247,7 +246,7 @@ void AudioStreamDMA::TransmitBlob(DMABuffer const& dataBuffer) {
     cerr << "BufferSize is larger than maximum transfer length!" << endl;
     return;
   }
-  cout << "TransmitBlob: bufferSize = " << mDataBuffer.bufferSize << endl;
+  LOG_DEBUG("TransmitBlob: bufferSize = %ld", mDataBuffer.bufferSize);
 
   /* Flush the buffers before the DMA transfer, in case the Data Cache is
    * enabled */
@@ -269,7 +268,7 @@ void AudioStreamDMA::TransmitBlob(DMABuffer const& dataBuffer) {
   bool isLast             = false;
   uint32_t max_block_size = txRingPtr->MaxTransferLen;
 
-  cout << "n_bytes_remain  = " << n_bytes_remain << endl;
+  LOG_DEBUG("n_bytes_remain  = %ld", n_bytes_remain);
 
   uint32_t n_byte_to_transfer = max_block_size;
   for (uint8_t i = 0; i < mNumRequiredBDs; i++) {
@@ -287,7 +286,7 @@ void AudioStreamDMA::TransmitBlob(DMABuffer const& dataBuffer) {
     p_block += n_byte_to_transfer;
     bd_ptr_cur = (XAxiDma_Bd*)XAxiDma_BdRingNext(txRingPtr, bd_ptr_cur);
 
-    cout << "transmit_count = " << transmit_count << endl;
+    LOG_DEBUG("transmit_count = %ld", transmit_count);
     transmit_count++;
     isFirst = false;
   }
@@ -298,7 +297,7 @@ void AudioStreamDMA::TransmitBlob(DMABuffer const& dataBuffer) {
     LOG_ERROR("Failed to hw");
   }
 
-  cout << "Done." << endl;
+  LOG_DEBUG("Done.");
 }
 
 /**
@@ -309,11 +308,6 @@ void AudioStreamDMA::Transmit(DMABuffer const& buffer_cur,
                               bool isFirst,
                               bool isLast,
                               XAxiDma_Bd* bd_ptr_cur) {
-  if (isFirst)
-    cout << "first" << endl;
-  if (isLast)
-    cout << "last" << endl;
-
   int status = XAxiDma_BdSetBufAddr(bd_ptr_cur, (UINTPTR)buffer_cur.buffer);
   if (status != XST_SUCCESS) {
     LOG_ERROR("Tx set buffer addr failed");
@@ -331,9 +325,11 @@ void AudioStreamDMA::Transmit(DMABuffer const& buffer_cur,
 
   uint32_t CrBits = 0;
   if (isFirst) {
+    LOG_DEBUG("first");
     CrBits |= XAXIDMA_BD_CTRL_TXSOF_MASK;  // First BD
   }
   if (isLast) {
+    LOG_DEBUG("last");
     CrBits |= XAXIDMA_BD_CTRL_TXEOF_MASK;  // Last BD
   }
 

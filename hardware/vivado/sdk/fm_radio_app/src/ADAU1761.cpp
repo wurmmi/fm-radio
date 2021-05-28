@@ -8,6 +8,8 @@
 
 #include <iostream>
 
+#include "log.h"
+
 using namespace std;
 
 ADAU1761::ADAU1761()
@@ -68,7 +70,7 @@ bool ADAU1761::adau1761_chip_config() {
   // Check initialization status
   uint8_t rdata = mConfigFifo.read(0x4000);
   if (rdata != 0x01) {
-    cerr << "ERROR in ADAU1761 initialization." << endl;
+    LOG_ERROR("ERROR in ADAU1761 initialization.");
     return false;
   }
 
@@ -76,21 +78,21 @@ bool ADAU1761::adau1761_chip_config() {
 }
 
 bool ADAU1761::Initialize() {
-  cout << "Configuring the Config-FIFO ..." << endl;
+  LOG_DEBUG("Configuring the Config-FIFO ...");
   int status = mConfigFifo.Initialize();
   if (!status) {
-    cerr << "ERROR" << endl;
+    LOG_ERROR("ERROR");
     return false;
   }
-  cout << "Done." << endl;
+  LOG_DEBUG("Done.");
 
-  cout << "Configuring the ADAU1761 chip ..." << endl;
+  LOG_DEBUG("Configuring the ADAU1761 chip ...");
   status = adau1761_chip_config();
   if (!status) {
-    cerr << "ERROR" << endl;
+    LOG_ERROR("ERROR");
     return false;
   }
-  cout << "Done." << endl;
+  LOG_DEBUG("Done.");
 
   return true;
 }

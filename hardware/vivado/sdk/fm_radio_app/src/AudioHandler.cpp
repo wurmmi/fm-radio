@@ -9,6 +9,8 @@
 #include <cmath>
 #include <iostream>
 
+#include "log.h"
+
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
@@ -26,7 +28,7 @@ bool AudioHandler::Initialize() {
   if (!mAdau1761.Initialize()) {
     return false;
   }
-  cout << "AudioHandler hardware initialization OKAY" << endl;
+  LOG_DEBUG("AudioHandler hardware initialization OKAY");
   return true;
 }
 

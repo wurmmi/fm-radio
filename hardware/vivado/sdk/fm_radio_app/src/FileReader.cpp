@@ -80,8 +80,7 @@ void FileReader::LoadFile(string const& filename) {
   switch (fileType) {
     case FileType::WAV:
       ReadWAV();
-      cout << "Read " << mBufferSize << " bytes from WAV file " << filename
-           << endl;
+      LOG_DEBUG("Read %ld bytes from WAV file '%s'", mBufferSize, filename.c_str());
       break;
     case FileType::TXT:
       ReadTXT();
@@ -96,7 +95,7 @@ void FileReader::LoadFile(string const& filename) {
 }
 
 void FileReader::ReadWAV() {
-  cout << "Reading WAV file." << endl;
+  LOG_DEBUG("Reading WAV file.");
 
   /*--- Sanity checks ---*/
 
@@ -196,18 +195,18 @@ void FileReader::ReadWAV() {
       num_unknown_chunks++;
     }
   }
-  cout << "Done." << endl;
-  printf("number of WAV chunks: %ld generic, %ld unknown, %ld fmt, %ld data\n",
-         num_generic_chunks,
-         num_unknown_chunks,
-         num_fmt_chunks,
-         num_data_chunks);
+  LOG_DEBUG("Done.");
+  LOG_DEBUG(
+      "number of WAV chunks: %ld generic, %ld unknown, %ld fmt, %ld data\n",
+      num_generic_chunks,
+      num_unknown_chunks,
+      num_fmt_chunks,
+      num_data_chunks);
 }
 
 void FileReader::ReadTXT() {
-  cout << "Reading TXT file." << endl;
-
-  // Sanity checks
+  LOG_DEBUG("Reading TXT file.");
+  LOG_ERROR("NOT IMPLEMENTED YET");
 }
 
 void FileReader::PrepareBufferData() {

@@ -26,8 +26,8 @@ static TaskHandle_t task_audio_handle;
 static void task_loop(void *) {
   uint32_t count = 0;
   while (true) {
-    if (count % 30 == 0)
-      cout << "Looping since " << count << " sec ..." << endl;
+    if (count % 10 == 0)
+      LOG_INFO("Looping since %ld sec ...", count);
     count++;
     vTaskDelay(delay_ms_c);
   }
@@ -86,7 +86,7 @@ int main() {
   Xil_DCacheEnable();
 
   /*--- Program start ---*/
-  cout << "Hello World!" << endl;
+  LOG_INFO("Hello World!");
 
   xTaskCreate(task_loop,
               (const char *)"task_loop",
