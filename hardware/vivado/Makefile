@@ -60,5 +60,8 @@ help: ##				- Show this help message.
 ##
 ##      - Vivado (vivado) can be found in PATH.
 ##      - Vivado HLS (vivado_hls) can be found in PATH.
-##
+##      - Environment variables set:
+##          -- XILINX_VIVADO to install directory of vivado.
+##             e.g. export XILINX_VIVADO=/opt/Xilinx/Vivado/2018.2
+##			TODO: write a README for this
 ##==============================================================================

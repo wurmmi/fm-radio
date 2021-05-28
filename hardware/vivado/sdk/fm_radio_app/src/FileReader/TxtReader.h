@@ -7,8 +7,6 @@
 #ifndef _TXTREADER_H_
 #define _TXTREADER_H_
 
-#include <ff.h>
-
 #include <string>
 
 #include "FileReader.h"

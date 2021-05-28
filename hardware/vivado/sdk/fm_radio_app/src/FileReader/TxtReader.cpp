@@ -6,15 +6,23 @@
 
 #include "TxtReader.h"
 
+// clang-format off
+
 #include <algorithm>
 #include <fstream>
 #include <iostream>
 
+#include "fm_global.hpp"
 #include "log.h"
+
+#include <ff.h>
+// clang-format on
 
 using namespace std;
 
-TxtReader::TxtReader() {}
+TxtReader::TxtReader() {
+  sample_t sample = 0.7;
+}
 
 TxtReader::~TxtReader() {}
 
@@ -38,7 +46,7 @@ void TxtReader::LoadFile(string const& filename) {
   }
 
   /* Load entire file at once */
-  uint32_t n_byte_read = 0;
+  UINT n_byte_read = 0;
 
   fres = f_read(&mFile, (void*)mBuffer, fileSize, &n_byte_read);
   if (fres) {
@@ -48,9 +56,9 @@ void TxtReader::LoadFile(string const& filename) {
 
   /* Sanity checks */
   if (n_byte_read != fileSize) {
-    LOG_ERROR("Error reading file! (fileSize = %ld, n_byte_read = %ld)",
+    LOG_ERROR("Error reading file! (fileSize = %ld, n_byte_read = %d)",
               fileSize,
-              n_byte_read);
+              (int)n_byte_read);
     return;
   }
 

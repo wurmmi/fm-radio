@@ -291,7 +291,7 @@ void AudioStreamDMA::TransmitBlob(DMABuffer const& dataBuffer) {
     }
 
     DMABuffer buffer_cur = {(uint8_t*)p_block, n_byte_to_transfer};
-    Transmit(buffer_cur, true, true, bd_ptr_cur);
+    Transmit(buffer_cur, isFirst, isLast, bd_ptr_cur);
 
     n_bytes_remain -= n_byte_to_transfer;
     p_block += n_byte_to_transfer;
@@ -335,6 +335,13 @@ void AudioStreamDMA::Transmit(DMABuffer const& buffer_cur,
   }
 
   uint32_t CrBits = 0;
+  /** NOTE: Only using one BD per transfer.
+   *        Thus the current BD needs to have both bits set.
+   *        This may be changed in the future.
+   */
+  isFirst = true;
+  isLast  = false;
+
   if (isFirst) {
     LOG_DEBUG("first");
     CrBits |= XAXIDMA_BD_CTRL_TXSOF_MASK;  // First BD
