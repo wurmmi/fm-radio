@@ -100,6 +100,8 @@ bool AudioStreamDMA::TxSetup() {
  * completion interrupt presents, then it calls the callback function.
  */
 void AudioStreamDMA::TxIRQHandler() {
+  cout << "DMA TxIRQHandler" << endl;
+
   XAxiDma_BdRing* txRingPtr = XAxiDma_GetTxRing(&mDev);
 
   /* Read pending interrupts */
@@ -285,14 +287,13 @@ void AudioStreamDMA::TransmitBlob() {
   }
 
   // Give the BD to hardware
-  status = XAxiDma_BdRingToHw(txRingPtr, transmit_count, bd_ptr);
+  status = XAxiDma_BdRingToHw(txRingPtr, num_required_bds, bd_ptr);
   if (status != XST_SUCCESS) {
     LOG_ERROR("Failed to hw");
   }
 
   mDmaWritten = true;
   cout << "Done." << endl;
-  cout << "transmit_count = " << transmit_count << endl;
 }
 
 /**
