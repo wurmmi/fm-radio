@@ -9,7 +9,9 @@
 
 #include <iostream>
 
-#define LOG_ERROR(...) printf("ERROR %s: %s", __PRETTY_FUNCTION__, __VA_ARGS__)
-#define LOG_INFO(...)  printf("INFO  %s: %s", __PRETTY_FUNCTION__, __VA_ARGS__)
+#define LOG_ERROR(format, ...) \
+  printf("ERROR %s/%s" format "\n", __FILE__, __FUNCTION__, ##__VA_ARGS__)
+#define LOG_INFO(format, ...) \
+  printf("INFO %s/%s" format "\n", __FILE__, __FUNCTION__, ##__VA_ARGS__)
 
 #endif /* _LOG_H_ */

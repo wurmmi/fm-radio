@@ -29,7 +29,7 @@ bool AudioStreamDMA::TxSetup() {
   mNumRequiredBDs = ceil((float)mDataBuffer.bufferSize / max_block_size);
 
   if (mNumRequiredBDs > DMA_NUM_BD_MAX) {
-    LOG_ERROR("Cannot allocate %d BDs! Maximum is %d.",
+    LOG_ERROR("Cannot allocate %ld BDs! Maximum is %d.",
               mNumRequiredBDs,
               DMA_NUM_BD_MAX);
 
