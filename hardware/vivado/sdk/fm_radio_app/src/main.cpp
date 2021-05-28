@@ -11,6 +11,7 @@
 
 #include "AudioHandler.h"
 #include "AudioStreamDMA.h"
+#include "FMRadioIP.h"
 #include "SDCardReader.h"
 #include "log.h"
 
@@ -24,11 +25,14 @@ static TaskHandle_t task_loop_handle;
 static TaskHandle_t task_audio_handle;
 
 static void task_loop(void *) {
+  FMRadioIP fmRadioIP(XPAR_FM_RECEIVER_TOP_0_DEVICE_ID);
   uint32_t count = 0;
   while (true) {
     if ((count % 20) == 0)
       LOG_INFO("Looping since %ld sec ...", count);
     count++;
+
+    fmRadioIP.LED_Toggle(TLed::ALL);
     vTaskDelay(delay_ms_c);
   }
 }
