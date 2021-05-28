@@ -14,11 +14,15 @@
 --       03/31/2021  14:30 - 18:00    3:30 h  trying to find out how/when
 --                                            top-level function is called
 --                                            with clk cycles
+--
 -- (2) Debug Error with Bitwidth
 --       05/21/2021  14:00 - 19:00    5:00 h  Not sure what the error was.
 --                                            Parallel delay I/Q didn't work.
 --                                            Order of every 2nd data was wrong.
 --                                            Using a single delay fixed it.
+--
+-- (3) LED control
+--       05/28/2021  20:30 -
 */
 
 #include "fm_receiver_top.hpp"
@@ -32,14 +36,30 @@
 using namespace std;
 
 void fm_receiver_top(hls::stream<iq_sample_t>& iq_in,
-                     hls::stream<audio_sample_t>& audio_out) {
+                     hls::stream<audio_sample_t>& audio_out,
+                     uint8_t led_ctrl,
+                     uint8_t led_out) {
 #pragma HLS INTERFACE ap_ctrl_none port = return
+
+#pragma HLS INTERFACE axis port = iq_in
+#pragma HLS DATA_PACK variable  = iq_in
 
 #pragma HLS INTERFACE axis port = audio_out
 #pragma HLS DATA_PACK variable  = audio_out
 
-#pragma HLS INTERFACE axis port = iq_in
-#pragma HLS DATA_PACK variable  = iq_in
+#pragma HLS INTERFACE s_axilite port = led_ctrl bundle = CONFIG
+
+  /*-------------- LED control ---------------*/
+  led_out = led_ctrl;
+
+  /*----------- Forwarding test --------------*/
+  iq_sample_t fw_iq_in = iq_in.read();
+
+  audio_sample_t fw_iq_out = {fw_iq_in.i, fw_iq_in.q};
+
+  audio_out.write(fw_iq_out);
+
+  /*-------------- Other testing -------------*/
 
   // NOTE: This is used to determine how often this function is called.
   //       The toggle flag can be compared against the input clock.
@@ -47,15 +67,8 @@ void fm_receiver_top(hls::stream<iq_sample_t>& iq_in,
   static bool toggle = false;
   toggle             = !toggle;
 
-  // Forwarding test
-  iq_sample_t fw_iq_in = iq_in.read();
-
-  audio_sample_t fw_iq_out = {fw_iq_in.i, fw_iq_in.q};
-
-  audio_out.write(fw_iq_out);
-
+  /*---------------- FM radio ----------------*/
   /*
-
   if (strobe_gen()) {
     // ------------------------------------------------------
     // Read input and split IQ samples
