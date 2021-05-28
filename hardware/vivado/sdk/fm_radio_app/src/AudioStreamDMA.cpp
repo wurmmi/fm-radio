@@ -7,6 +7,7 @@
 #include "AudioStreamDMA.h"
 
 #include <cassert>
+#include <cmath>
 #include <iostream>
 
 #include "log.h"
@@ -233,19 +234,19 @@ void AudioStreamDMA::TransmitBlob() {
   }
   cout << "TransmitBlob: bufferSize = " << mDataBuffer.bufferSize << endl;
 
-  uint32_t n_samples_remain = mDataBuffer.bufferSize;
-  uint32_t max_block_size   = txRingPtr->MaxTransferLen / 4;
+  uint32_t n_bytes_remain = mDataBuffer.bufferSize;
+  uint32_t max_block_size = txRingPtr->MaxTransferLen;
 
-  uint32_t num_required_bds = mDataBuffer.bufferSize / max_block_size;
+  uint32_t num_required_bds =
+      ceil((float)mDataBuffer.bufferSize / max_block_size);
 
-  cout << "n_samples_remain = " << n_samples_remain << endl;
+  cout << "n_bytes_remain   = " << n_bytes_remain << endl;
   cout << "max_block_size   = " << max_block_size << endl;
-  cout << "num_required_bds  = " << num_required_bds << endl;
+  cout << "num_required_bds = " << num_required_bds << endl;
 
   /* Flush the buffers before the DMA transfer, in case the Data Cache is
    * enabled */
-  Xil_DCacheFlushRange((uint32_t)mDataBuffer.buffer,
-                       mDataBuffer.bufferSize * sizeof(uint32_t));
+  Xil_DCacheFlushRange((uint32_t)mDataBuffer.buffer, mDataBuffer.bufferSize);
 
   XAxiDma_Bd* bd_ptr;
   int status = XAxiDma_BdRingAlloc(txRingPtr, num_required_bds, &bd_ptr);
@@ -254,27 +255,28 @@ void AudioStreamDMA::TransmitBlob() {
     return;
   }
 
-  uint32_t* p_block       = (uint32_t*)mDataBuffer.buffer;
+  /* Create and fill the BDs with information */
+  UINTPTR p_block         = (UINTPTR)mDataBuffer.buffer;
   XAxiDma_Bd* bd_ptr_cur  = bd_ptr;
   uint32_t transmit_count = 0;
   bool isFirst            = true;
   bool isLast             = false;
 
-  uint32_t n_to_transfer = max_block_size;
+  uint32_t n_byte_to_transfer = max_block_size;
   for (uint8_t i = 0; i < num_required_bds; i++) {
     // Calculate bytes for current block
-    n_to_transfer = max_block_size;
-    if (n_samples_remain < max_block_size) {
-      n_to_transfer = n_samples_remain;
-      isLast        = true;
+    n_byte_to_transfer = max_block_size;
+    if (n_bytes_remain < max_block_size) {
+      n_byte_to_transfer = n_bytes_remain;
+      isLast             = true;
     }
 
-    DMABuffer buffer_cur = {(uint8_t*)p_block, n_to_transfer};
+    DMABuffer buffer_cur = {(uint8_t*)p_block, n_byte_to_transfer};
     // Transmit(buffer_cur, isFirst, isLast, bd_ptr);
     Transmit(buffer_cur, true, true, bd_ptr_cur);
 
-    n_samples_remain -= n_to_transfer;
-    p_block += n_to_transfer;
+    n_bytes_remain -= n_byte_to_transfer;
+    p_block += n_byte_to_transfer;
     bd_ptr_cur = (XAxiDma_Bd*)XAxiDma_BdRingNext(txRingPtr, bd_ptr_cur);
 
     cout << "transmit_count = " << transmit_count << endl;
@@ -314,9 +316,8 @@ void AudioStreamDMA::Transmit(DMABuffer const& buffer_cur,
 
   XAxiDma_BdRing* txRingPtr = XAxiDma_GetTxRing(&mDev);
 
-  status = XAxiDma_BdSetLength(bd_ptr_cur,
-                               buffer_cur.bufferSize * sizeof(uint32_t),
-                               txRingPtr->MaxTransferLen);
+  status = XAxiDma_BdSetLength(
+      bd_ptr_cur, buffer_cur.bufferSize, txRingPtr->MaxTransferLen);
   if (status != XST_SUCCESS) {
     LOG_ERROR("Tx set length failed");
     return;

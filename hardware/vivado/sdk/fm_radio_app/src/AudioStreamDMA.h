@@ -13,7 +13,7 @@
 // Size of the buffer which holds the DMA Buffer Descriptors (BDs)
 #define DMA_BD_BUFFER_SIZE        32
 #define DMA_NUM_BDS_PER_PKT       2
-#define DMA_COALESCING_COUNT      4    // valid range 1..255
+#define DMA_COALESCING_COUNT      1    // valid range 1..255
 #define DMA_DELAY_TIMER_COUNT     100  // valid range 0..255
 #define DMA_RESET_TIMEOUT_COUNTER 10000
 
