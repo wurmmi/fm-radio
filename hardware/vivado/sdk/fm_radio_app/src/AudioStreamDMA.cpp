@@ -6,6 +6,8 @@
 
 #include "AudioStreamDMA.h"
 
+#include <FreeRTOS.h>
+
 #include <cassert>
 #include <cmath>
 #include <iostream>
@@ -14,9 +16,17 @@
 
 using namespace std;
 
+// Interrupt controller of FreeRTOS
+extern XScuGic xInterruptController;
+
 AudioStreamDMA::AudioStreamDMA(uint32_t device_id) : mDeviceId(device_id) {
   mDataBuffer.buffer     = nullptr;
   mDataBuffer.bufferSize = 0;
+
+  /* Use the FreeRTOS interrupt controller here.
+   * Otherwise we would crash/overwrite all the interrupt settings of the OS.
+   */
+  mIntCtrl = &xInterruptController;
 
   bool ret = Initialize();
   if (!ret) {
@@ -88,8 +98,9 @@ bool AudioStreamDMA::TxSetup() {
   status                    = XAxiDma_BdRingSetCoalesce(
       txRingPtr, coalescing_count, DMA_DELAY_TIMER_COUNT);
   if (status != XST_SUCCESS) {
-    LOG_ERROR(
-        "Failed set coalescing %ld/%d", coalescing_count, DMA_DELAY_TIMER_COUNT);
+    LOG_ERROR("Failed set coalescing %ld/%d",
+              coalescing_count,
+              DMA_DELAY_TIMER_COUNT);
     return XST_FAILURE;
   }
 
@@ -174,13 +185,13 @@ bool AudioStreamDMA::InterruptSetup() {
   }
 
   int status =
-      XScuGic_CfgInitialize(&mIntCtrl, IntcConfig, IntcConfig->CpuBaseAddress);
+      XScuGic_CfgInitialize(mIntCtrl, IntcConfig, IntcConfig->CpuBaseAddress);
   if (status != XST_SUCCESS) {
     LOG_ERROR("failed XScuGic_CfgInitialize()");
     return false;
   }
 
-  XScuGic_SetPriorityTriggerType(&mIntCtrl, mIntCtrlId, 0xA0, 0x3);
+  XScuGic_SetPriorityTriggerType(mIntCtrl, mIntCtrlId, 0xA0, 0x3);
 
   /*
    * Connect the device driver handler that will be called when an
@@ -188,19 +199,19 @@ bool AudioStreamDMA::InterruptSetup() {
    * interrupt processing for the device.
    */
   status = XScuGic_Connect(
-      &mIntCtrl, mIntCtrlId, (Xil_InterruptHandler)TxIRQCallback, this);
+      mIntCtrl, mIntCtrlId, (Xil_InterruptHandler)TxIRQCallback, this);
   if (status != XST_SUCCESS) {
     LOG_ERROR("failed XScuGic_Connect()");
     return false;
   }
 
-  XScuGic_Enable(&mIntCtrl, mIntCtrlId);
+  XScuGic_Enable(mIntCtrl, mIntCtrlId);
 
   /* Enable interrupts from the hardware */
   Xil_ExceptionInit();
   Xil_ExceptionRegisterHandler(XIL_EXCEPTION_ID_INT,
                                (Xil_ExceptionHandler)XScuGic_InterruptHandler,
-                               (void*)&mIntCtrl);
+                               (void*)mIntCtrl);
 
   Xil_ExceptionEnable();
 

@@ -22,7 +22,7 @@ typedef struct {
 
 class AudioStreamDMA {
  private:
-  XScuGic mIntCtrl;
+  XScuGic* mIntCtrl;
   uint8_t const mIntCtrlId = XPAR_FABRIC_AXIDMA_0_VEC_ID;
 
   XAxiDma mDev;
