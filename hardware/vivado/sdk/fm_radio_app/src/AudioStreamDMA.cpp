@@ -30,7 +30,7 @@ AudioStreamDMA::AudioStreamDMA(uint32_t device_id) : mDeviceId(device_id) {
 
   bool ret = Initialize();
   if (!ret) {
-    cerr << "Error in DMA initialization" << endl;
+    LOG_ERROR("Error in DMA initialization");
     return;
   }
 }
@@ -254,7 +254,7 @@ void AudioStreamDMA::TransmitBlob(DMABuffer const& dataBuffer) {
 
   XAxiDma_BdRing* txRingPtr = XAxiDma_GetTxRing(&mDev);
   if (mDataBuffer.bufferSize > txRingPtr->MaxTransferLen) {
-    cerr << "BufferSize is larger than maximum transfer length!" << endl;
+    LOG_ERROR("BufferSize is larger than maximum transfer length!");
     return;
   }
   LOG_DEBUG("TransmitBlob: bufferSize = %ld", mDataBuffer.bufferSize);

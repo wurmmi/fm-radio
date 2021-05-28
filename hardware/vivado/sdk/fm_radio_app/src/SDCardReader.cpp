@@ -9,6 +9,8 @@
 #include <algorithm>
 #include <iostream>
 
+//#include "TxtReader.h"
+#include "WavReader.h"
 #include "log.h"
 
 using namespace std;
@@ -118,7 +120,25 @@ void SDCardReader::LoadFile(string const& filename) {
     return;
   }
 
-  mFileReader.LoadFile(filename_short);
+  // Handle file depending on its type
+  FileType fileType = FileReader::GetFileType(filename);
+  if (fileType == FileType::UNKNOWN) {
+    LOG_ERROR("Unknown filetype of file: ", filename.c_str());
+    return;
+  }
+
+  switch (fileType) {
+    case FileType::WAV: {
+      mFileReader = new WavReader();
+      mFileReader->LoadFile(filename);
+    } break;
+    case FileType::TXT:
+      break;
+
+    case FileType::UNKNOWN:
+    default:
+      break;
+  }
 }
 
 void SDCardReader::PrintAvailableFilenames() const {
@@ -130,5 +150,5 @@ void SDCardReader::PrintAvailableFilenames() const {
 }
 
 DMABuffer SDCardReader::GetBuffer() {
-  return mFileReader.GetBuffer();
+  return mFileReader->GetBuffer();
 }

@@ -20,7 +20,7 @@ class SDCardReader {
   FATFS mFilesystem;
   std::vector<std::string> mFilenames;
   bool mMounted;
-  FileReader mFileReader;
+  FileReader* mFileReader;
 
   inline static const char* LOGICAL_DRIVE_0 = "0:/";
 

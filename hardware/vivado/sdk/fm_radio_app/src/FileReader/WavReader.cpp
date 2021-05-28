@@ -1,10 +1,10 @@
 /**
- * @file    FileReader.cpp
+ * @file    WavReader.cpp
  * @author  Michael Wurm <wurm.michael95@gmail.com>
  * @brief   Class implementation
  */
 
-#include "FileReader.h"
+#include "WavReader.h"
 
 #include <algorithm>
 #include <iostream>
@@ -37,68 +37,19 @@ typedef struct {
   u8 SubFormat[16];
 } wav_fmt_chunk_t;
 
-FileReader::FileReader() {}
+WavReader::WavReader() {}
 
-FileReader::~FileReader() {
-  if (mBuffer) {
-    free(mBuffer);
-    mBuffer = nullptr;
-  }
-}
+WavReader::~WavReader() {}
 
-FileType FileReader::GetFileType(string const& filename) {
-  string filename_lower = filename;
-  transform(
-      filename.cbegin(), filename.cend(), filename_lower.begin(), ::tolower);
-
-  if (filename_lower.find(".txt") != string::npos) {
-    return FileType::TXT;
-  }
-  if (filename_lower.find(".wav") != string::npos) {
-    return FileType::WAV;
-  }
-
-  return FileType::UNKNOWN;
-}
-
-void FileReader::LoadFile(string const& filename) {
-  // Handle file depending on its type
-  FileType fileType = GetFileType(filename);
-  if (fileType == FileType::UNKNOWN) {
-    cerr << "Unknown filetype of file: " << filename << endl;
-    return;
-  }
+void WavReader::LoadFile(string const& filename) {
+  LOG_DEBUG("Reading WAV file.");
 
   // Open the file
   FRESULT fres = f_open(&mFile, filename.c_str(), FA_READ);
   if (fres) {
-    cerr << "Error opening file! (error: " << fres << ")" << endl;
+    LOG_ERROR("Error opening file! (error: %d)", fres);
     return;
   }
-
-  // Read file depending on type
-  switch (fileType) {
-    case FileType::WAV:
-      ReadWAV();
-      LOG_DEBUG(
-          "Read %ld bytes from WAV file '%s'", mBufferSize, filename.c_str());
-      break;
-    case FileType::TXT:
-      ReadTXT();
-      break;
-
-    case FileType::UNKNOWN:
-    default:
-      break;
-  }
-
-  PrepareBufferData();
-
-  f_close(&mFile);
-}
-
-void FileReader::ReadWAV() {
-  LOG_DEBUG("Reading WAV file.");
 
   /*--- Sanity checks ---*/
 
@@ -201,44 +152,15 @@ void FileReader::ReadWAV() {
       num_unknown_chunks++;
     }
   }
+  f_close(&mFile);
+
   LOG_DEBUG("Done.");
+  LOG_DEBUG("Read %ld bytes from WAV file '%s'", mBufferSize, filename.c_str());
   LOG_DEBUG("number of WAV chunks: %ld generic, %ld unknown, %ld fmt, %ld data",
             num_generic_chunks,
             num_unknown_chunks,
             num_fmt_chunks,
             num_data_chunks);
-}
 
-void FileReader::ReadTXT() {
-  LOG_DEBUG("Reading TXT file.");
-  LOG_ERROR("NOT IMPLEMENTED YET");
-}
-
-void FileReader::PrepareBufferData() {
-  // Change the volume and swap left/right channel and polarity
-
-  int theVolume = 2;
-
-  uint32_t* pSource = (uint32_t*)mBuffer;
-  for (uint32_t i = 0; i < mBufferSize / 4; i++) {
-    short left  = (short)((pSource[i] >> 16) & 0xFFFF);
-    short right = (short)((pSource[i] >> 0) & 0xFFFF);
-    int left_i  = -(int)left * theVolume / 4;
-    int right_i = -(int)right * theVolume / 4;
-    if (left > 32767)
-      left = 32767;
-    if (left < -32767)
-      left = -32767;
-    if (right > 32767)
-      right = 32767;
-    if (right < -32767)
-      right = -32767;
-    left       = (short)left_i;
-    right      = (short)right_i;
-    pSource[i] = ((uint32_t)right << 16) + (uint32_t)left;
-  }
-}
-
-DMABuffer FileReader::GetBuffer() {
-  return {mBuffer, mBufferSize};
+  PrepareBufferData();
 }

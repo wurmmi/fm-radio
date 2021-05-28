@@ -20,7 +20,7 @@ bool FIFO::Initialize() {
   int status =
       XLlFifo_CfgInitialize(&mDev, pFifoConfig, pFifoConfig->BaseAddress);
   if (status != XST_SUCCESS) {
-    cerr << "Could not initialize FIFO" << endl;
+    LOG_ERROR("Could not initialize FIFO");
     return false;
   }
 

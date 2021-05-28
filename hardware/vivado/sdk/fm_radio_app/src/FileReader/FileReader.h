@@ -10,7 +10,6 @@
 #include <ff.h>
 
 #include <string>
-#include <vector>
 
 #include "AudioStreamDMA.h"
 
@@ -18,20 +17,20 @@ enum class FileType { UNKNOWN, WAV, TXT };
 
 class FileReader {
  private:
+ protected:
   FIL mFile;
   uint8_t* mBuffer     = nullptr;
   uint32_t mBufferSize = 0;
 
-  FileType GetFileType(std::string const& filename);
-  void ReadWAV();
-  void ReadTXT();
   void PrepareBufferData();
 
  public:
   FileReader();
   ~FileReader();
 
-  void LoadFile(std::string const& filename);
+  static FileType GetFileType(std::string const& filename);
+
+  virtual void LoadFile(std::string const& filename) = 0;
   DMABuffer GetBuffer();
 };
 
