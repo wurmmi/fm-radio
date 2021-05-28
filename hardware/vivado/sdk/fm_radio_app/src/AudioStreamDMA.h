@@ -11,9 +11,7 @@
 #include <xscugic.h>
 
 // Size of the buffer which holds the DMA Buffer Descriptors (BDs)
-#define DMA_BD_BUFFER_SIZE        32
-#define DMA_NUM_BDS_PER_PKT       2
-#define DMA_COALESCING_COUNT      1    // valid range 1..255
+#define DMA_NUM_BD_MAX            32
 #define DMA_DELAY_TIMER_COUNT     100  // valid range 0..255
 #define DMA_RESET_TIMEOUT_COUNTER 10000
 
@@ -28,7 +26,7 @@ class AudioStreamDMA {
   uint8_t const mIntCtrlId = XPAR_FABRIC_AXIDMA_0_VEC_ID;
 
   XAxiDma mDev;
-  XAxiDma_Bd mBdBuffer[DMA_BD_BUFFER_SIZE]
+  XAxiDma_Bd mBdBuffer[DMA_NUM_BD_MAX]
       __attribute__((aligned(XAXIDMA_BD_MINIMUM_ALIGNMENT)));
   uint8_t mDeviceId;
   bool mDmaWritten;

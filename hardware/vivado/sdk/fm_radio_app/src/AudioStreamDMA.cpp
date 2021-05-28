@@ -19,32 +19,30 @@ AudioStreamDMA::AudioStreamDMA(uint32_t device_id) : mDeviceId(device_id) {}
 AudioStreamDMA::~AudioStreamDMA() {}
 
 void AudioStreamDMA::TxDoneCallback() {
-  cout << "################## DMA Tx DONE" << endl;
+  cout << "TxDoneCallback: DMA Tx DONE" << endl;
 }
 
 bool AudioStreamDMA::TxSetup() {
+  /* Calculate number of required BDs */
   XAxiDma_BdRing* txRingPtr = XAxiDma_GetTxRing(&mDev);
-
-  uint32_t max_block_size = txRingPtr->MaxTransferLen;
+  uint32_t max_block_size   = txRingPtr->MaxTransferLen;
   mNumRequiredBDs = ceil((float)mDataBuffer.bufferSize / max_block_size);
 
-  cout << "max_block_size  = " << max_block_size << endl;
-  cout << "mNumRequiredBDs = " << mNumRequiredBDs << endl;
+  if (mNumRequiredBDs > DMA_NUM_BD_MAX) {
+    LOG_ERROR("Cannot allocate %d BDs! Maximum is %d.",
+              mNumRequiredBDs,
+              DMA_NUM_BD_MAX);
 
-  // Disable all TX interrupts before TxBD space setup
+    cout << "bufferSize      = " << mDataBuffer.bufferSize << endl;
+    cout << "max_block_size  = " << max_block_size << endl;
+    cout << "mNumRequiredBDs = " << mNumRequiredBDs << endl;
+    return false;
+  }
+
+  // Disable all TX interrupts before Tx BD space setup
   XAxiDma_BdRingIntDisable(txRingPtr, XAXIDMA_IRQ_ALL_MASK);
 
-  // Setup Tx BD space (check how many BDs can fit into mBdBuffer region)
-  // uint32_t bd_count = XAxiDma_BdRingCntCalc(XAXIDMA_BD_MINIMUM_ALIGNMENT,
-  //                                          (uint32_t)sizeof(mBdBuffer));
-
-  // bd_count = mNumRequiredBDs;
-
-  // if (bd_count != DMA_BD_BUFFER_SIZE) {
-  //   LOG_ERROR("something went wrong here - sizes don't match");
-  //   return false;
-  // }
-
+  // Setup empty Tx BD space
   int status = XAxiDma_BdRingCreate(txRingPtr,
                                     (UINTPTR)&mBdBuffer[0],
                                     (UINTPTR)&mBdBuffer[0],
@@ -67,21 +65,22 @@ bool AudioStreamDMA::TxSetup() {
     return false;
   }
 
-  /*
+  /**
    * Set the coalescing threshold.
 
-   * We set the coalescing threshold to be the total number of packets.
-   * The receive side will only get one completion interrupt per cyclic
+   * We set the coalescing threshold to be the total number of BDs.
+   * Therefore, the we will only get one completion interrupt per cyclic
    * transfer.
    *
-   * If you would like to have multiple interrupts to happen, change
-   * the DMA_COALESCING_COUNT to be a smaller value.
+   * To have multiple interrupts per cyclic transfer, set the
+   * DMA_COALESCING_COUNT to a smaller value.
    */
-  status = XAxiDma_BdRingSetCoalesce(
-      txRingPtr, DMA_COALESCING_COUNT, DMA_DELAY_TIMER_COUNT);
+  uint32_t coalescing_count = mNumRequiredBDs;
+  status                    = XAxiDma_BdRingSetCoalesce(
+      txRingPtr, coalescing_count, DMA_DELAY_TIMER_COUNT);
   if (status != XST_SUCCESS) {
     xil_printf("Failed set coalescing %d/%d\n",
-               DMA_COALESCING_COUNT,
+               coalescing_count,
                DMA_DELAY_TIMER_COUNT);
     return XST_FAILURE;
   }
@@ -109,8 +108,6 @@ bool AudioStreamDMA::TxSetup() {
  * completion interrupt presents, then it calls the callback function.
  */
 void AudioStreamDMA::TxIRQHandler() {
-  cout << "DMA TxIRQHandler" << endl;
-
   XAxiDma_BdRing* txRingPtr = XAxiDma_GetTxRing(&mDev);
 
   /* Read pending interrupts */
@@ -277,7 +274,6 @@ void AudioStreamDMA::TransmitBlob() {
     }
 
     DMABuffer buffer_cur = {(uint8_t*)p_block, n_byte_to_transfer};
-    // Transmit(buffer_cur, isFirst, isLast, bd_ptr);
     Transmit(buffer_cur, true, true, bd_ptr_cur);
 
     n_bytes_remain -= n_byte_to_transfer;

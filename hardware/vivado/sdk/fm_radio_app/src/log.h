@@ -9,8 +9,7 @@
 
 #include <iostream>
 
-void log_error(std::string const& func, std::string const& msg);
-
-#define LOG_ERROR(msg) log_error(__PRETTY_FUNCTION__, msg)
+#define LOG_ERROR(...) printf("ERROR %s: %s", __PRETTY_FUNCTION__, __VA_ARGS__)
+#define LOG_INFO(...)  printf("INFO  %s: %s", __PRETTY_FUNCTION__, __VA_ARGS__)
 
 #endif /* _LOG_H_ */
