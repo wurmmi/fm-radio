@@ -200,6 +200,7 @@ proc create_root_design { parentCell } {
   set FIXED_IO [ create_bd_intf_port -mode Master -vlnv xilinx.com:display_processing_system7:fixedio_rtl:1.0 FIXED_IO ]
 
   # Create ports
+  set fm_radio_led_o [ create_bd_port -dir O -from 7 -to 0 -type data fm_radio_led_o ]
   set i2s_bclk_o [ create_bd_port -dir O i2s_bclk_o ]
   set i2s_lrclk_o [ create_bd_port -dir O i2s_lrclk_o ]
   set i2s_sdata_o [ create_bd_port -dir O i2s_sdata_o ]
@@ -687,6 +688,7 @@ proc create_root_design { parentCell } {
 
   # Create port connections
   connect_bd_net -net axi_dma_0_mm2s_introut [get_bd_pins axi_dma_0/mm2s_introut] [get_bd_pins processing_system7_0/IRQ_F2P]
+  connect_bd_net -net fm_receiver_hls_led_out [get_bd_ports fm_radio_led_o] [get_bd_pins fm_receiver_hls/led_out]
   connect_bd_net -net miso_0_1 [get_bd_ports spi_miso_i] [get_bd_pins mySPIRxTx_0/miso]
   connect_bd_net -net myI2STx_0_bclk [get_bd_ports i2s_bclk_o] [get_bd_pins myI2STx_0/bclk]
   connect_bd_net -net myI2STx_0_lrclk [get_bd_ports i2s_lrclk_o] [get_bd_pins myI2STx_0/lrclk]
@@ -723,6 +725,4 @@ proc create_root_design { parentCell } {
 
 create_root_design ""
 
-
-common::send_msg_id "BD_TCL-1000" "WARNING" "This Tcl script was generated from a block design that has not been validated. It is possible that design <$design_name> may result in errors during validation."
 
