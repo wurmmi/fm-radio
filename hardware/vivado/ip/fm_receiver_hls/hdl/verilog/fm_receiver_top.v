@@ -7,7 +7,7 @@
 
 `timescale 1 ns / 1 ps 
 
-(* CORE_GENERATION_INFO="fm_receiver_top,hls_ip_2018_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xc7z020clg484-1,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=0.978000,HLS_SYN_LAT=2,HLS_SYN_TPT=none,HLS_SYN_MEM=0,HLS_SYN_DSP=0,HLS_SYN_FF=140,HLS_SYN_LUT=113,HLS_VERSION=2018_2}" *)
+(* CORE_GENERATION_INFO="fm_receiver_top,hls_ip_2018_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xc7z020clg484-1,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=0.978000,HLS_SYN_LAT=2,HLS_SYN_TPT=none,HLS_SYN_MEM=0,HLS_SYN_DSP=0,HLS_SYN_FF=184,HLS_SYN_LUT=169,HLS_VERSION=2018_2}" *)
 
 module fm_receiver_top (
         ap_clk,
@@ -17,12 +17,36 @@ module fm_receiver_top (
         iq_in_V_TREADY,
         audio_out_V_TDATA,
         audio_out_V_TVALID,
-        audio_out_V_TREADY
+        audio_out_V_TREADY,
+        led_out,
+        s_axi_CONFIG_AWVALID,
+        s_axi_CONFIG_AWREADY,
+        s_axi_CONFIG_AWADDR,
+        s_axi_CONFIG_WVALID,
+        s_axi_CONFIG_WREADY,
+        s_axi_CONFIG_WDATA,
+        s_axi_CONFIG_WSTRB,
+        s_axi_CONFIG_ARVALID,
+        s_axi_CONFIG_ARREADY,
+        s_axi_CONFIG_ARADDR,
+        s_axi_CONFIG_RVALID,
+        s_axi_CONFIG_RREADY,
+        s_axi_CONFIG_RDATA,
+        s_axi_CONFIG_RRESP,
+        s_axi_CONFIG_BVALID,
+        s_axi_CONFIG_BREADY,
+        s_axi_CONFIG_BRESP
 );
 
 parameter    ap_ST_fsm_state1 = 3'd1;
 parameter    ap_ST_fsm_state2 = 3'd2;
 parameter    ap_ST_fsm_state3 = 3'd4;
+parameter    C_S_AXI_CONFIG_DATA_WIDTH = 32;
+parameter    C_S_AXI_CONFIG_ADDR_WIDTH = 5;
+parameter    C_S_AXI_DATA_WIDTH = 32;
+
+parameter C_S_AXI_CONFIG_WSTRB_WIDTH = (32 / 8);
+parameter C_S_AXI_WSTRB_WIDTH = (32 / 8);
 
 input   ap_clk;
 input   ap_rst_n;
@@ -32,6 +56,24 @@ output   iq_in_V_TREADY;
 output  [31:0] audio_out_V_TDATA;
 output   audio_out_V_TVALID;
 input   audio_out_V_TREADY;
+input  [7:0] led_out;
+input   s_axi_CONFIG_AWVALID;
+output   s_axi_CONFIG_AWREADY;
+input  [C_S_AXI_CONFIG_ADDR_WIDTH - 1:0] s_axi_CONFIG_AWADDR;
+input   s_axi_CONFIG_WVALID;
+output   s_axi_CONFIG_WREADY;
+input  [C_S_AXI_CONFIG_DATA_WIDTH - 1:0] s_axi_CONFIG_WDATA;
+input  [C_S_AXI_CONFIG_WSTRB_WIDTH - 1:0] s_axi_CONFIG_WSTRB;
+input   s_axi_CONFIG_ARVALID;
+output   s_axi_CONFIG_ARREADY;
+input  [C_S_AXI_CONFIG_ADDR_WIDTH - 1:0] s_axi_CONFIG_ARADDR;
+output   s_axi_CONFIG_RVALID;
+input   s_axi_CONFIG_RREADY;
+output  [C_S_AXI_CONFIG_DATA_WIDTH - 1:0] s_axi_CONFIG_RDATA;
+output  [1:0] s_axi_CONFIG_RRESP;
+output   s_axi_CONFIG_BVALID;
+input   s_axi_CONFIG_BREADY;
+output  [1:0] s_axi_CONFIG_BRESP;
 
  reg    ap_rst_n_inv;
 reg   [31:0] iq_in_V_0_data_out;
@@ -62,13 +104,14 @@ wire    audio_out_V_1_load_A;
 wire    audio_out_V_1_load_B;
 reg   [1:0] audio_out_V_1_state;
 wire    audio_out_V_1_state_cmp_full;
+wire   [7:0] led_ctrl;
 reg   [0:0] toggle;
 reg    iq_in_V_TDATA_blk_n;
 (* fsm_encoding = "none" *) reg   [2:0] ap_CS_fsm;
 wire    ap_CS_fsm_state2;
 reg    audio_out_V_TDATA_blk_n;
 wire    ap_CS_fsm_state3;
-wire   [0:0] toggle_assign_fu_50_p2;
+wire   [0:0] tmp_3_fu_58_p2;
 reg   [2:0] ap_NS_fsm;
 
 // power-on initialization
@@ -82,6 +125,33 @@ initial begin
 #0 toggle = 1'd0;
 #0 ap_CS_fsm = 3'd1;
 end
+
+fm_receiver_top_CONFIG_s_axi #(
+    .C_S_AXI_ADDR_WIDTH( C_S_AXI_CONFIG_ADDR_WIDTH ),
+    .C_S_AXI_DATA_WIDTH( C_S_AXI_CONFIG_DATA_WIDTH ))
+fm_receiver_top_CONFIG_s_axi_U(
+    .AWVALID(s_axi_CONFIG_AWVALID),
+    .AWREADY(s_axi_CONFIG_AWREADY),
+    .AWADDR(s_axi_CONFIG_AWADDR),
+    .WVALID(s_axi_CONFIG_WVALID),
+    .WREADY(s_axi_CONFIG_WREADY),
+    .WDATA(s_axi_CONFIG_WDATA),
+    .WSTRB(s_axi_CONFIG_WSTRB),
+    .ARVALID(s_axi_CONFIG_ARVALID),
+    .ARREADY(s_axi_CONFIG_ARREADY),
+    .ARADDR(s_axi_CONFIG_ARADDR),
+    .RVALID(s_axi_CONFIG_RVALID),
+    .RREADY(s_axi_CONFIG_RREADY),
+    .RDATA(s_axi_CONFIG_RDATA),
+    .RRESP(s_axi_CONFIG_RRESP),
+    .BVALID(s_axi_CONFIG_BVALID),
+    .BREADY(s_axi_CONFIG_BREADY),
+    .BRESP(s_axi_CONFIG_BRESP),
+    .ACLK(ap_clk),
+    .ARESET(ap_rst_n_inv),
+    .ACLK_EN(1'b1),
+    .led_ctrl(led_ctrl)
+);
 
 always @ (posedge ap_clk) begin
     if (ap_rst_n_inv == 1'b1) begin
@@ -189,7 +259,7 @@ end
 
 always @ (posedge ap_clk) begin
     if (((audio_out_V_1_ack_in == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
-        toggle <= toggle_assign_fu_50_p2;
+        toggle <= tmp_3_fu_58_p2;
     end
 end
 
@@ -308,6 +378,6 @@ assign iq_in_V_0_vld_out = iq_in_V_0_state[1'd0];
 
 assign iq_in_V_TREADY = iq_in_V_0_state[1'd1];
 
-assign toggle_assign_fu_50_p2 = (toggle ^ 1'd1);
+assign tmp_3_fu_58_p2 = (toggle ^ 1'd1);
 
 endmodule //fm_receiver_top
