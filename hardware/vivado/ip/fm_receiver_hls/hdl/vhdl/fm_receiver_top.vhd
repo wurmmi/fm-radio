@@ -23,7 +23,6 @@ port (
     audio_out_V_TVALID : OUT STD_LOGIC;
     audio_out_V_TREADY : IN STD_LOGIC;
     led_out : OUT STD_LOGIC_VECTOR (7 downto 0);
-    led_out_ap_vld : OUT STD_LOGIC;
     s_axi_CONFIG_AWVALID : IN STD_LOGIC;
     s_axi_CONFIG_AWREADY : OUT STD_LOGIC;
     s_axi_CONFIG_AWADDR : IN STD_LOGIC_VECTOR (C_S_AXI_CONFIG_ADDR_WIDTH-1 downto 0);
@@ -105,7 +104,7 @@ architecture behav of fm_receiver_top is
     signal audio_out_V_TDATA_blk_n : STD_LOGIC;
     signal ap_CS_fsm_state3 : STD_LOGIC;
     attribute fsm_encoding of ap_CS_fsm_state3 : signal is "none";
-    signal tmp_3_fu_76_p2 : STD_LOGIC_VECTOR (0 downto 0);
+    signal tmp_4_fu_78_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal ap_CS_fsm_state1 : STD_LOGIC;
     attribute fsm_encoding of ap_CS_fsm_state1 : signal is "none";
     signal ap_NS_fsm : STD_LOGIC_VECTOR (2 downto 0);
@@ -315,7 +314,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((audio_out_V_1_ack_in = ap_const_logic_1) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                toggle <= tmp_3_fu_76_p2;
+                toggle <= tmp_4_fu_78_p2;
             end if;
         end if;
     end process;
@@ -428,15 +427,5 @@ begin
 
     iq_in_V_TREADY <= iq_in_V_0_state(1);
     led_out <= led_ctrl;
-
-    led_out_ap_vld_assign_proc : process(ap_CS_fsm_state1)
-    begin
-        if ((ap_const_logic_1 = ap_CS_fsm_state1)) then 
-            led_out_ap_vld <= ap_const_logic_1;
-        else 
-            led_out_ap_vld <= ap_const_logic_0;
-        end if; 
-    end process;
-
-    tmp_3_fu_76_p2 <= (toggle xor ap_const_lv1_1);
+    tmp_4_fu_78_p2 <= (toggle xor ap_const_lv1_1);
 end behav;

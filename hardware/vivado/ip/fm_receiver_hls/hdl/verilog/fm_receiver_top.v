@@ -19,7 +19,6 @@ module fm_receiver_top (
         audio_out_V_TVALID,
         audio_out_V_TREADY,
         led_out,
-        led_out_ap_vld,
         s_axi_CONFIG_AWVALID,
         s_axi_CONFIG_AWREADY,
         s_axi_CONFIG_AWADDR,
@@ -58,7 +57,6 @@ output  [31:0] audio_out_V_TDATA;
 output   audio_out_V_TVALID;
 input   audio_out_V_TREADY;
 output  [7:0] led_out;
-output   led_out_ap_vld;
 input   s_axi_CONFIG_AWVALID;
 output   s_axi_CONFIG_AWREADY;
 input  [C_S_AXI_CONFIG_ADDR_WIDTH - 1:0] s_axi_CONFIG_AWADDR;
@@ -76,8 +74,6 @@ output  [1:0] s_axi_CONFIG_RRESP;
 output   s_axi_CONFIG_BVALID;
 input   s_axi_CONFIG_BREADY;
 output  [1:0] s_axi_CONFIG_BRESP;
-
-reg led_out_ap_vld;
 
  reg    ap_rst_n_inv;
 reg   [31:0] iq_in_V_0_data_out;
@@ -115,7 +111,7 @@ reg    iq_in_V_TDATA_blk_n;
 wire    ap_CS_fsm_state2;
 reg    audio_out_V_TDATA_blk_n;
 wire    ap_CS_fsm_state3;
-wire   [0:0] tmp_3_fu_76_p2;
+wire   [0:0] tmp_4_fu_78_p2;
 wire    ap_CS_fsm_state1;
 reg   [2:0] ap_NS_fsm;
 
@@ -264,7 +260,7 @@ end
 
 always @ (posedge ap_clk) begin
     if (((audio_out_V_1_ack_in == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
-        toggle <= tmp_3_fu_76_p2;
+        toggle <= tmp_4_fu_78_p2;
     end
 end
 
@@ -313,14 +309,6 @@ always @ (*) begin
         iq_in_V_TDATA_blk_n = iq_in_V_0_state[1'd0];
     end else begin
         iq_in_V_TDATA_blk_n = 1'b1;
-    end
-end
-
-always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state1)) begin
-        led_out_ap_vld = 1'b1;
-    end else begin
-        led_out_ap_vld = 1'b0;
     end
 end
 
@@ -395,6 +383,6 @@ assign iq_in_V_TREADY = iq_in_V_0_state[1'd1];
 
 assign led_out = led_ctrl;
 
-assign tmp_3_fu_76_p2 = (toggle ^ 1'd1);
+assign tmp_4_fu_78_p2 = (toggle ^ 1'd1);
 
 endmodule //fm_receiver_top
