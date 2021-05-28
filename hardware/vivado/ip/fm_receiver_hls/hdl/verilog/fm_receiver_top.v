@@ -7,7 +7,7 @@
 
 `timescale 1 ns / 1 ps 
 
-(* CORE_GENERATION_INFO="fm_receiver_top,hls_ip_2018_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xc7z020clg484-1,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=0.978000,HLS_SYN_LAT=2,HLS_SYN_TPT=none,HLS_SYN_MEM=0,HLS_SYN_DSP=0,HLS_SYN_FF=184,HLS_SYN_LUT=169,HLS_VERSION=2018_2}" *)
+(* CORE_GENERATION_INFO="fm_receiver_top,hls_ip_2018_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xc7z020clg484-1,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=1.000000,HLS_SYN_LAT=2,HLS_SYN_TPT=none,HLS_SYN_MEM=0,HLS_SYN_DSP=0,HLS_SYN_FF=184,HLS_SYN_LUT=169,HLS_VERSION=2018_2}" *)
 
 module fm_receiver_top (
         ap_clk,
@@ -19,6 +19,7 @@ module fm_receiver_top (
         audio_out_V_TVALID,
         audio_out_V_TREADY,
         led_out,
+        led_out_ap_vld,
         s_axi_CONFIG_AWVALID,
         s_axi_CONFIG_AWREADY,
         s_axi_CONFIG_AWADDR,
@@ -56,7 +57,8 @@ output   iq_in_V_TREADY;
 output  [31:0] audio_out_V_TDATA;
 output   audio_out_V_TVALID;
 input   audio_out_V_TREADY;
-input  [7:0] led_out;
+output  [7:0] led_out;
+output   led_out_ap_vld;
 input   s_axi_CONFIG_AWVALID;
 output   s_axi_CONFIG_AWREADY;
 input  [C_S_AXI_CONFIG_ADDR_WIDTH - 1:0] s_axi_CONFIG_AWADDR;
@@ -74,6 +76,8 @@ output  [1:0] s_axi_CONFIG_RRESP;
 output   s_axi_CONFIG_BVALID;
 input   s_axi_CONFIG_BREADY;
 output  [1:0] s_axi_CONFIG_BRESP;
+
+reg led_out_ap_vld;
 
  reg    ap_rst_n_inv;
 reg   [31:0] iq_in_V_0_data_out;
@@ -111,7 +115,8 @@ reg    iq_in_V_TDATA_blk_n;
 wire    ap_CS_fsm_state2;
 reg    audio_out_V_TDATA_blk_n;
 wire    ap_CS_fsm_state3;
-wire   [0:0] tmp_3_fu_58_p2;
+wire   [0:0] tmp_3_fu_76_p2;
+wire    ap_CS_fsm_state1;
 reg   [2:0] ap_NS_fsm;
 
 // power-on initialization
@@ -259,7 +264,7 @@ end
 
 always @ (posedge ap_clk) begin
     if (((audio_out_V_1_ack_in == 1'b1) & (1'b1 == ap_CS_fsm_state3))) begin
-        toggle <= tmp_3_fu_58_p2;
+        toggle <= tmp_3_fu_76_p2;
     end
 end
 
@@ -312,6 +317,14 @@ always @ (*) begin
 end
 
 always @ (*) begin
+    if ((1'b1 == ap_CS_fsm_state1)) begin
+        led_out_ap_vld = 1'b1;
+    end else begin
+        led_out_ap_vld = 1'b0;
+    end
+end
+
+always @ (*) begin
     case (ap_CS_fsm)
         ap_ST_fsm_state1 : begin
             ap_NS_fsm = ap_ST_fsm_state2;
@@ -335,6 +348,8 @@ always @ (*) begin
         end
     endcase
 end
+
+assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
 assign ap_CS_fsm_state2 = ap_CS_fsm[32'd1];
 
@@ -378,6 +393,8 @@ assign iq_in_V_0_vld_out = iq_in_V_0_state[1'd0];
 
 assign iq_in_V_TREADY = iq_in_V_0_state[1'd1];
 
-assign tmp_3_fu_58_p2 = (toggle ^ 1'd1);
+assign led_out = led_ctrl;
+
+assign tmp_3_fu_76_p2 = (toggle ^ 1'd1);
 
 endmodule //fm_receiver_top

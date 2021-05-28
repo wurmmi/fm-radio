@@ -343,7 +343,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
       <spirit:name>led_out</spirit:name>
       <spirit:busType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="data" spirit:version="1.0"/>
       <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="data_rtl" spirit:version="1.0"/>
-      <spirit:slave/>
+      <spirit:master/>
       <spirit:portMaps>
         <spirit:portMap>
           <spirit:logicalPort>
@@ -435,7 +435,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>3fe0ac41</spirit:value>
+            <spirit:value>32d6a1e7</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -451,7 +451,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>e0a2acff</spirit:value>
+            <spirit:value>fc2ae37b</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -467,7 +467,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>ca08aaab</spirit:value>
+            <spirit:value>033ca00f</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -483,7 +483,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>e4fcad32</spirit:value>
+            <spirit:value>ded39219</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -567,6 +567,19 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
       </spirit:view>
     </spirit:views>
     <spirit:ports>
+      <spirit:port>
+        <spirit:name>led_out_ap_vld</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>STD_LOGIC</spirit:typeName>
+              <spirit:viewNameRef>xilinx_verilogsynthesis</spirit:viewNameRef>
+              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
       <spirit:port>
         <spirit:name>s_axi_CONFIG_AWADDR</spirit:name>
         <spirit:wire>
@@ -931,7 +944,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
       <spirit:port>
         <spirit:name>led_out</spirit:name>
         <spirit:wire>
-          <spirit:direction>in</spirit:direction>
+          <spirit:direction>out</spirit:direction>
           <spirit:vector>
             <spirit:left spirit:format="long">7</spirit:left>
             <spirit:right spirit:format="long">0</spirit:right>
@@ -1001,7 +1014,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
       <spirit:file>
         <spirit:name>hdl/vhdl/fm_receiver_top.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_d09b7051</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_828fd492</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>
@@ -1128,15 +1141,15 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
       </xilinx:taxonomies>
       <xilinx:displayName>fm_receiver_hls</xilinx:displayName>
       <xilinx:definitionSource>HLS</xilinx:definitionSource>
-      <xilinx:coreRevision>2105282053</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2021-05-28T18:53:39Z</xilinx:coreCreationDateTime>
+      <xilinx:coreRevision>2105282110</xilinx:coreRevision>
+      <xilinx:coreCreationDateTime>2021-05-28T19:10:46Z</xilinx:coreCreationDateTime>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2018.2</xilinx:xilinxVersion>
-      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="5e4e65ec"/>
+      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="112cb9bd"/>
       <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="41654674"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="a6a728bb"/>
-      <xilinx:checksum xilinx:scope="ports" xilinx:value="1b7f501c"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="77b88bbe"/>
+      <xilinx:checksum xilinx:scope="ports" xilinx:value="307ca102"/>
       <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="33a0b57b"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="f4f42744"/>
     </xilinx:packagingInfo>

@@ -38,7 +38,7 @@ using namespace std;
 void fm_receiver_top(hls::stream<iq_sample_t>& iq_in,
                      hls::stream<audio_sample_t>& audio_out,
                      uint8_t led_ctrl,
-                     uint8_t led_out) {
+                     uint8_t& led_out) {
 #pragma HLS INTERFACE ap_ctrl_none port = return
 
 #pragma HLS INTERFACE axis port = iq_in
@@ -48,6 +48,7 @@ void fm_receiver_top(hls::stream<iq_sample_t>& iq_in,
 #pragma HLS DATA_PACK variable  = audio_out
 
 #pragma HLS INTERFACE s_axilite port = led_ctrl bundle = CONFIG
+#pragma HLS INTERFACE ap_none port                     = led_out
 
   /*-------------- LED control ---------------*/
   led_out = led_ctrl;
