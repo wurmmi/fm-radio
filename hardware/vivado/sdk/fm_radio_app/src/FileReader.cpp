@@ -80,7 +80,8 @@ void FileReader::LoadFile(string const& filename) {
   switch (fileType) {
     case FileType::WAV:
       ReadWAV();
-      LOG_DEBUG("Read %ld bytes from WAV file '%s'", mBufferSize, filename.c_str());
+      LOG_DEBUG(
+          "Read %ld bytes from WAV file '%s'", mBufferSize, filename.c_str());
       break;
     case FileType::TXT:
       ReadTXT();
@@ -196,12 +197,11 @@ void FileReader::ReadWAV() {
     }
   }
   LOG_DEBUG("Done.");
-  LOG_DEBUG(
-      "number of WAV chunks: %ld generic, %ld unknown, %ld fmt, %ld data\n",
-      num_generic_chunks,
-      num_unknown_chunks,
-      num_fmt_chunks,
-      num_data_chunks);
+  LOG_DEBUG("number of WAV chunks: %ld generic, %ld unknown, %ld fmt, %ld data",
+            num_generic_chunks,
+            num_unknown_chunks,
+            num_fmt_chunks,
+            num_data_chunks);
 }
 
 void FileReader::ReadTXT() {

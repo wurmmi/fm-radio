@@ -53,9 +53,9 @@ static void task_audio(void *) {
     printf("[s] ... stop\n");
     printf("[i] ... show information\n");
     printf("----------------------------------------------\n");
+    printf("Choice: ");
 
     /* Process user input */
-    printf("Choice: ");
     fflush(stdout);
     char choice = inbyte();
     printf("%c\n", choice);
@@ -63,11 +63,11 @@ static void task_audio(void *) {
       case 'p': {
         DMABuffer buffer = sdCardReader.GetBuffer();
         streamDMA.TransmitBlob(buffer);
-        printf("DMA playing in endless loop ...\n");
+        LOG_INFO("DMA playing in endless loop ...");
       } break;
       case 's':
         streamDMA.Stop();
-        printf("DMA stopped.\n");
+        LOG_INFO("DMA stopped.");
         break;
       case 'i':
         printf("This program was developed by Michael Wurm.\n");
@@ -75,7 +75,7 @@ static void task_audio(void *) {
         break;
 
       default:
-        printf("Unknown input.\n");
+        LOG_WARN("Unknown input.\n");
         break;
     }
   }
