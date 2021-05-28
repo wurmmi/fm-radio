@@ -16,7 +16,7 @@
 
 using namespace std;
 
-#define STACK_SIZE ((uint32_t)4096 * 8)
+#define STACK_SIZE ((uint16_t)65535)
 
 const TickType_t delay_ms_c = pdMS_TO_TICKS(1000);
 
@@ -42,7 +42,7 @@ static void task_audio(void *) {
   sdCardReader.DiscoverFiles();
   sdCardReader.PrintAvailableFilenames();
 
-  sdCardReader.LoadFile("cantina_band.wav");
+  sdCardReader.LoadFile("cantina_band_44100.wav");
 
   AudioStreamDMA streamDMA(XPAR_AXI_DMA_0_DEVICE_ID);
 

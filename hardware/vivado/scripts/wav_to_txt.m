@@ -11,7 +11,7 @@ clear; close all; clc;
 %% Load WAV and store as TXT
 
 filenames = {
-  '../sdk/fm_radio_app/resource/wav/cantina_band_44100',
+  '../sdk/fm_radio_app/resource/wav/cantina_band_44100', ...
   '../sdk/fm_radio_app/resource/wav/cantina_band_48000'
 };
 

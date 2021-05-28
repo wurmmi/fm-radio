@@ -56,7 +56,7 @@ void WavReader::LoadFile(string const& filename) {
   // WAV header
   wav_header_t header;
   UINT n_bytes_read;
-  FRESULT fres = f_read(&mFile, (void*)&header, sizeof(header), &n_bytes_read);
+  fres = f_read(&mFile, (void*)&header, sizeof(header), &n_bytes_read);
   if (fres) {
     LOG_ERROR("Failed to read file.");
     return;

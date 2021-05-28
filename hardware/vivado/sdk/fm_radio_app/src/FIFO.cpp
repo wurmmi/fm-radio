@@ -9,6 +9,8 @@
 #include <cassert>
 #include <iostream>
 
+#include "log.h"
+
 using namespace std;
 
 FIFO::FIFO(uint32_t device_id) : mDeviceId(device_id) {}

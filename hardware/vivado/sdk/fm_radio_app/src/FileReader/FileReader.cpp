@@ -38,13 +38,6 @@ FileType FileReader::GetFileType(string const& filename) {
   return FileType::UNKNOWN;
 }
 
-void FileReader::LoadFile(string const& filename) {
-  // Read file depending on type
-  // TODO
-
-  PrepareBufferData();
-}
-
 void FileReader::PrepareBufferData() {
   // Change the volume and swap left/right channel and polarity
 

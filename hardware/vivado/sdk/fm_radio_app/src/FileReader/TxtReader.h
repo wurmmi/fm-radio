@@ -4,8 +4,8 @@
  * @brief   Class definition
  */
 
-#ifndef _WAVREADER_H_
-#define _WAVREADER_H_
+#ifndef _TXTREADER_H_
+#define _TXTREADER_H_
 
 #include <ff.h>
 
@@ -22,4 +22,4 @@ class TxtReader : public FileReader {
   void LoadFile(std::string const& filename) override;
 };
 
-#endif /* _WAVREADER_H_ */
+#endif /* _TXTREADER_H_ */
