@@ -8,12 +8,12 @@
 
 #include <iostream>
 
+#include "log.h"
+
 using namespace std;
 
 ADAU1761::ADAU1761()
-    : mAudioStreamFifo(XPAR_AXI_FIFO_MM_S_1_DEVICE_ID),
-      mConfigFifo(XPAR_AXI_FIFO_MM_S_0_DEVICE_ID) {}
-
+    : mConfigFifo(XPAR_AXI_FIFO_MM_S0_CONFIG_AUDIO_DEVICE_ID) {}
 ADAU1761::~ADAU1761() {}
 
 bool ADAU1761::adau1761_chip_config() {
@@ -70,39 +70,29 @@ bool ADAU1761::adau1761_chip_config() {
   // Check initialization status
   uint8_t rdata = mConfigFifo.read(0x4000);
   if (rdata != 0x01) {
-    cerr << "ERROR in ADAU1761 initialization." << endl;
+    LOG_ERROR("ERROR in ADAU1761 initialization.");
     return false;
   }
 
   return true;
 }
 
-void ADAU1761::WriteAudioBuffer(audio_buffer_t const& buffer) {
-  for (auto const& elem : buffer) {
-    mAudioStreamFifo.write(elem);
+bool ADAU1761::Initialize() {
+  LOG_DEBUG("Configuring the Config-FIFO ...");
+  int status = mConfigFifo.Initialize();
+  if (!status) {
+    LOG_ERROR("ERROR");
+    return false;
   }
-}
+  LOG_DEBUG("Done.");
 
-bool ADAU1761::Initialize(function<void()> const& audioStreamEmptyCallback) {
-  // Configure audiostream FIFO
-  bool status = mAudioStreamFifo.Initialize();
-  if (!status)
-    return false;
-
-  // Configure config FIFO
-  status = mConfigFifo.Initialize();
-  if (!status)
-    return false;
-
-  // Configure ADAU1761 chip
+  LOG_DEBUG("Configuring the ADAU1761 chip ...");
   status = adau1761_chip_config();
-  if (!status)
+  if (!status) {
+    LOG_ERROR("ERROR");
     return false;
-
-  status = mAudioStreamFifo.SetupInterrupts(
-      XPAR_FABRIC_AXI_FIFO_MM_S_1_INTERRUPT_INTR, audioStreamEmptyCallback);
-  if (!status)
-    return false;
+  }
+  LOG_DEBUG("Done.");
 
   return true;
 }

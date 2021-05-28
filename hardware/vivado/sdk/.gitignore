@@ -25,3 +25,5 @@ RemoteSystemsTempFiles
 **/webtalk/
 *.log
 .sdk
+
+**/resource/**/*.txt

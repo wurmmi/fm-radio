@@ -9,6 +9,8 @@
 #include <cassert>
 #include <iostream>
 
+#include "log.h"
+
 using namespace std;
 
 FIFO::FIFO(uint32_t device_id) : mDeviceId(device_id) {}
@@ -20,7 +22,7 @@ bool FIFO::Initialize() {
   int status =
       XLlFifo_CfgInitialize(&mDev, pFifoConfig, pFifoConfig->BaseAddress);
   if (status != XST_SUCCESS) {
-    cerr << "Could not initialize FIFO" << endl;
+    LOG_ERROR("Could not initialize FIFO");
     return false;
   }
 

@@ -9,6 +9,8 @@
 #include <cmath>
 #include <iostream>
 
+#include "log.h"
+
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
@@ -23,12 +25,10 @@ AudioHandler::AudioHandler() {
 AudioHandler::~AudioHandler() {}
 
 bool AudioHandler::Initialize() {
-  if (!mAdau1761.Initialize(
-          std::bind(&AudioHandler::AudioStreamEmptyCallback, this))) {
-    cerr << "Could not initialize ADAU1761" << endl;
+  if (!mAdau1761.Initialize()) {
     return false;
   }
-  cout << "AudioHandler hardware initialization OKAY" << endl;
+  LOG_DEBUG("AudioHandler hardware initialization OKAY");
   return true;
 }
 
@@ -41,8 +41,4 @@ void AudioHandler::FillAudioBuffer() {
     right = (int16_t)(sin((double)i / FIFO_NUM_SAMPLES * 2 * M_PI) * amp);
     mAudioBuffer[i] = {(uint16_t)left, (uint16_t)right};
   }
-}
-
-void AudioHandler::AudioStreamEmptyCallback() {
-  mAdau1761.WriteAudioBuffer(mAudioBuffer);
 }

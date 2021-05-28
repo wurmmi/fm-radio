@@ -28,6 +28,7 @@ class FIFO {
   XScuGic mIrqCtrl;
   uint8_t mDeviceId;
   std::function<void()> mCallbackOnTxEmptyIRQ;
+
   bool clear_irqs();
   void irq_handler();
   static void irq_handler_callback(void* data);

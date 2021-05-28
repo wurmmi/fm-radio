@@ -16,7 +16,6 @@
 
 class DataLoader {
  private:
-  /* data */
  public:
   DataLoader()  = delete;
   ~DataLoader() = delete;

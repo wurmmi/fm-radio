@@ -9,12 +9,10 @@
 
 #include <functional>
 
-#include "AudioStreamFIFO.h"
 #include "ConfigFIFO.h"
 
 class ADAU1761 {
  private:
-  AudioStreamFIFO mAudioStreamFifo;
   ConfigFIFO mConfigFifo;
 
   bool adau1761_chip_config();
@@ -23,8 +21,7 @@ class ADAU1761 {
   ADAU1761();
   ~ADAU1761();
 
-  bool Initialize(std::function<void()> const& audioStreamEmptyCallback);
-  void WriteAudioBuffer(audio_buffer_t const& buffer);
+  bool Initialize();
 };
 
 #endif /* _ADAU1761_H_ */
