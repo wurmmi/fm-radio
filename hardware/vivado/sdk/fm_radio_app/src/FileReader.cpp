@@ -92,6 +92,8 @@ void FileReader::LoadFile(string const& filename) {
       break;
   }
 
+  PrepareBufferData();
+
   f_close(&mFile);
 }
 
@@ -235,6 +237,5 @@ void FileReader::PrepareBufferData() {
 }
 
 DMABuffer FileReader::GetBuffer() {
-  PrepareBufferData();
   return {mBuffer, mBufferSize};
 }
