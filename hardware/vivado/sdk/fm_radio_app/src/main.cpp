@@ -29,7 +29,7 @@ static void task_loop(void *) {
   uint32_t count = 0;
   while (true) {
     if ((count % 20) == 0)
-      LOG_INFO("Looping since %ld sec ...", count);
+      LOG_INFO("Looping since %ld sec   ...", count);
     count++;
 
     fmRadioIP.LED_Toggle(TLed::ALL);

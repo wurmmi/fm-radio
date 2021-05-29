@@ -45,6 +45,7 @@
 								<option id="xilinx.gnu.compiler.symbols.undefined.1058277109" name="Undefined symbols (-U)" superClass="xilinx.gnu.compiler.symbols.undefined"/>
 								<option id="xilinx.gnu.compiler.dircategory.includes.535300305" name="Include Paths" superClass="xilinx.gnu.compiler.dircategory.includes" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/}&quot;"/>
+									<listOptionValue builtIn="false" value="../../freertos10_xilinx_bsp_0/include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/FileReader}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/utils}&quot;"/>
 								</option>
