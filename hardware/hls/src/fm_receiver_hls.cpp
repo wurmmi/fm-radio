@@ -7,22 +7,30 @@
 /*****************************************************************************/
 
 /*
+clang-format off
 -- TIME LOGGING
 --
 -- (1) FM receiver top (AXI stream interface) implementation
 --       03/30/2021  15:30 - 20:00    4:30 h
---       03/31/2021  14:30 - 18:00    3:30 h  trying to find out how/when
---                                            top-level function is called
---                                            with clk cycles
+--       03/31/2021  14:30 - 18:00    3:30 h  trying to find out how/when top-level
+--                                            function is called with clk cycles
 --
 -- (2) Debug Error with Bitwidth
 --       05/21/2021  14:00 - 19:00    5:00 h  Not sure what the error was.
---                                            Parallel delay I/Q didn't work.
---                                            Order of every 2nd data was wrong.
+--                                            Parallel delay for I/Q didn't work.
+--                                            The order of every 2nd data value was wrong.
 --                                            Using a single delay fixed it.
 --
 -- (3) LED control
---       05/28/2021  20:30 -
+--       05/28/2021  20:00 - 22:00    2:00 h  Implementation of AXI4-lite HLS interface,
+--                                            with firmware support
+--
+--       05/28/2021  22:00 - 01:30    3:30 h  Fixing issue with auto-generated driver.
+         05/29/2021  14:00 - 20:00    6:00 h  It did not get imported into the SDK.
+                                              Problem was that HLS project and top-level
+                                              did not have the same name....
+--
+clang-format on
 */
 
 #include "fm_receiver_hls.hpp"
