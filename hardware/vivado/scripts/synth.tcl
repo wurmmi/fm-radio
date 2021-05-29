@@ -91,9 +91,9 @@ file mkdir $result_dir
 
 puts "Reports ..."
 set build_output_dir $build_dir/$proj_name.runs/impl_1
-set report_files [ list                                             \
-  "$build_output_dir/${top}_utilization_placed.rpt"   \
-  "$build_output_dir/report_utilization_hierarchical.rpt"           \
+set report_files [ list                                      \
+  "$build_output_dir/${top}_utilization_placed.rpt"          \
+  "$build_output_dir/report_utilization_hierarchical.rpt"    \
 ]
 
 foreach report_file $report_files {

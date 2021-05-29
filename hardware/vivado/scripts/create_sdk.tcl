@@ -37,9 +37,6 @@ if {![file exists "$bsp_name"]} {
   createbsp -name $bsp_name -hwproject $hw_name -proc ps7_cortexa9_0 -os freertos10_xilinx
 }
 
-puts "(MWURM) Importing main application..."
-importprojects $app_name
-
 puts "(MWURM) Adding libraries to BSP..."
 setlib -bsp $bsp_name -lib xilffs
 
@@ -49,6 +46,9 @@ configbsp -bsp $bsp_name/system.mss total_heap_size 512000
 puts "(MWURM) Update and re-generate BSP ..."
 updatemss -mss $bsp_name/system.mss
 regenbsp -bsp $bsp_name
+
+puts "(MWURM) Importing main application..."
+importprojects $app_name
 
 #puts "(MWURM) Importing other sources..."
 # The following command could probably be replaced with
