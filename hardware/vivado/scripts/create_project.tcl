@@ -46,7 +46,7 @@ if {[file exists $build_dir/$proj_name.xpr]} {
   make_wrapper -files [get_files $design_name.bd] -top -import
 
   regenerate_bd_layout
-  puts "### Block design created."
+  puts "Block design created."
 } ]} {
   puts "ERROR: Project creation failed."
   exitif 1

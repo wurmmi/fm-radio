@@ -9,6 +9,8 @@ set build_dir [lindex $argv 0]
 set proj_name "proj"
 set parallel_jobs 4
 
+set top ${proj_name}_wrapper
+
 # Open project
 if {[catch {
   open_project $build_dir/$proj_name.xpr
@@ -84,29 +86,32 @@ if {[catch {
 puts "--- - Copying build results"
 
 # Create build result folder
-set build_finish_time [clock format [clock seconds] -format %Y%m%d_%H%M%S]
 set result_dir $build_dir/results
 file mkdir $result_dir
 
 puts "Reports ..."
 set build_output_dir $build_dir/$proj_name.runs/impl_1
-set report_files [ list                                             \
-  "$build_output_dir/${proj_name}_wrapper_utilization_placed.rpt"   \
-  "$build_output_dir/report_utilization_hierarchical.rpt"           \
+set report_files [ list                                      \
+  "$build_output_dir/${top}_utilization_placed.rpt"          \
+  "$build_output_dir/report_utilization_hierarchical.rpt"    \
 ]
 
 foreach report_file $report_files {
   file copy -force $report_file $result_dir
 }
 
-puts "Binaries ..."
-file copy -force $build_output_dir/${proj_name}_wrapper.bit $result_dir/
-file copy -force $build_output_dir/${proj_name}_wrapper.hwdef $result_dir/
+puts "Preparing for SDK (binaries to SDK)..."
+# Copy binaries
+set latest_bin_sdk_dir $build_dir/../sdk/latest_bin
+file copy -force $build_output_dir/${top}.sysdef $latest_bin_sdk_dir/${top}.hdf
+file copy -force $build_output_dir/${top}.bit    $latest_bin_sdk_dir/
 
-puts "Preparing for SDK ..."
-set sdk_bin_dir $build_dir/../sdk/latest_bin
-file copy -force $result_dir/${proj_name}_wrapper.hwdef $sdk_bin_dir/${proj_name}_wrapper.hdf
-file copy -force $result_dir/${proj_name}_wrapper.bit $sdk_bin_dir/
+# Create a timestamp file
+set build_finish_time [clock format [clock seconds] -format "%Y/%m/%d %H:%M:%S"]
+set filename $latest_bin_sdk_dir/timestamp.txt
+set fileId [open $filename "w"]
+puts $fileId "Binaries built at: $build_finish_time"
+close $fileId
 
 puts "(MWURM) Done."
 exit 0

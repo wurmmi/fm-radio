@@ -9,7 +9,10 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-entity fm_receiver_top is
+entity fm_receiver_hls is
+generic (
+    C_S_AXI_CONFIG_ADDR_WIDTH : INTEGER := 5;
+    C_S_AXI_CONFIG_DATA_WIDTH : INTEGER := 32 );
 port (
     ap_clk : IN STD_LOGIC;
     ap_rst_n : IN STD_LOGIC;
@@ -18,14 +21,32 @@ port (
     iq_in_V_TREADY : OUT STD_LOGIC;
     audio_out_V_TDATA : OUT STD_LOGIC_VECTOR (31 downto 0);
     audio_out_V_TVALID : OUT STD_LOGIC;
-    audio_out_V_TREADY : IN STD_LOGIC );
+    audio_out_V_TREADY : IN STD_LOGIC;
+    led_out : OUT STD_LOGIC_VECTOR (7 downto 0);
+    s_axi_CONFIG_AWVALID : IN STD_LOGIC;
+    s_axi_CONFIG_AWREADY : OUT STD_LOGIC;
+    s_axi_CONFIG_AWADDR : IN STD_LOGIC_VECTOR (C_S_AXI_CONFIG_ADDR_WIDTH-1 downto 0);
+    s_axi_CONFIG_WVALID : IN STD_LOGIC;
+    s_axi_CONFIG_WREADY : OUT STD_LOGIC;
+    s_axi_CONFIG_WDATA : IN STD_LOGIC_VECTOR (C_S_AXI_CONFIG_DATA_WIDTH-1 downto 0);
+    s_axi_CONFIG_WSTRB : IN STD_LOGIC_VECTOR (C_S_AXI_CONFIG_DATA_WIDTH/8-1 downto 0);
+    s_axi_CONFIG_ARVALID : IN STD_LOGIC;
+    s_axi_CONFIG_ARREADY : OUT STD_LOGIC;
+    s_axi_CONFIG_ARADDR : IN STD_LOGIC_VECTOR (C_S_AXI_CONFIG_ADDR_WIDTH-1 downto 0);
+    s_axi_CONFIG_RVALID : OUT STD_LOGIC;
+    s_axi_CONFIG_RREADY : IN STD_LOGIC;
+    s_axi_CONFIG_RDATA : OUT STD_LOGIC_VECTOR (C_S_AXI_CONFIG_DATA_WIDTH-1 downto 0);
+    s_axi_CONFIG_RRESP : OUT STD_LOGIC_VECTOR (1 downto 0);
+    s_axi_CONFIG_BVALID : OUT STD_LOGIC;
+    s_axi_CONFIG_BREADY : IN STD_LOGIC;
+    s_axi_CONFIG_BRESP : OUT STD_LOGIC_VECTOR (1 downto 0) );
 end;
 
 
-architecture behav of fm_receiver_top is 
+architecture behav of fm_receiver_hls is 
     attribute CORE_GENERATION_INFO : STRING;
     attribute CORE_GENERATION_INFO of behav : architecture is
-    "fm_receiver_top,hls_ip_2018_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xc7z020clg484-1,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=0.978000,HLS_SYN_LAT=2,HLS_SYN_TPT=none,HLS_SYN_MEM=0,HLS_SYN_DSP=0,HLS_SYN_FF=140,HLS_SYN_LUT=113,HLS_VERSION=2018_2}";
+    "fm_receiver_hls,hls_ip_2018_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xc7z020clg484-1,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=1.000000,HLS_SYN_LAT=2,HLS_SYN_TPT=none,HLS_SYN_MEM=0,HLS_SYN_DSP=0,HLS_SYN_FF=184,HLS_SYN_LUT=169,HLS_VERSION=2018_2}";
     constant ap_const_logic_1 : STD_LOGIC := '1';
     constant ap_const_logic_0 : STD_LOGIC := '0';
     constant ap_ST_fsm_state1 : STD_LOGIC_VECTOR (2 downto 0) := "001";
@@ -39,6 +60,8 @@ architecture behav of fm_receiver_top is
     constant ap_const_lv2_1 : STD_LOGIC_VECTOR (1 downto 0) := "01";
     constant ap_const_lv32_1 : STD_LOGIC_VECTOR (31 downto 0) := "00000000000000000000000000000001";
     constant ap_const_lv32_2 : STD_LOGIC_VECTOR (31 downto 0) := "00000000000000000000000000000010";
+    constant C_S_AXI_DATA_WIDTH : INTEGER range 63 downto 0 := 20;
+    constant ap_const_lv32_0 : STD_LOGIC_VECTOR (31 downto 0) := "00000000000000000000000000000000";
     constant ap_const_boolean_1 : BOOLEAN := true;
 
     signal ap_rst_n_inv : STD_LOGIC;
@@ -70,6 +93,7 @@ architecture behav of fm_receiver_top is
     signal audio_out_V_1_load_B : STD_LOGIC;
     signal audio_out_V_1_state : STD_LOGIC_VECTOR (1 downto 0) := "00";
     signal audio_out_V_1_state_cmp_full : STD_LOGIC;
+    signal led_ctrl : STD_LOGIC_VECTOR (7 downto 0);
     signal toggle : STD_LOGIC_VECTOR (0 downto 0) := "0";
     signal iq_in_V_TDATA_blk_n : STD_LOGIC;
     signal ap_CS_fsm : STD_LOGIC_VECTOR (2 downto 0) := "001";
@@ -80,11 +104,69 @@ architecture behav of fm_receiver_top is
     signal audio_out_V_TDATA_blk_n : STD_LOGIC;
     signal ap_CS_fsm_state3 : STD_LOGIC;
     attribute fsm_encoding of ap_CS_fsm_state3 : signal is "none";
-    signal toggle_assign_fu_50_p2 : STD_LOGIC_VECTOR (0 downto 0);
+    signal tmp_4_fu_78_p2 : STD_LOGIC_VECTOR (0 downto 0);
+    signal ap_CS_fsm_state1 : STD_LOGIC;
+    attribute fsm_encoding of ap_CS_fsm_state1 : signal is "none";
     signal ap_NS_fsm : STD_LOGIC_VECTOR (2 downto 0);
+
+    component fm_receiver_hls_CONFIG_s_axi IS
+    generic (
+        C_S_AXI_ADDR_WIDTH : INTEGER;
+        C_S_AXI_DATA_WIDTH : INTEGER );
+    port (
+        AWVALID : IN STD_LOGIC;
+        AWREADY : OUT STD_LOGIC;
+        AWADDR : IN STD_LOGIC_VECTOR (C_S_AXI_ADDR_WIDTH-1 downto 0);
+        WVALID : IN STD_LOGIC;
+        WREADY : OUT STD_LOGIC;
+        WDATA : IN STD_LOGIC_VECTOR (C_S_AXI_DATA_WIDTH-1 downto 0);
+        WSTRB : IN STD_LOGIC_VECTOR (C_S_AXI_DATA_WIDTH/8-1 downto 0);
+        ARVALID : IN STD_LOGIC;
+        ARREADY : OUT STD_LOGIC;
+        ARADDR : IN STD_LOGIC_VECTOR (C_S_AXI_ADDR_WIDTH-1 downto 0);
+        RVALID : OUT STD_LOGIC;
+        RREADY : IN STD_LOGIC;
+        RDATA : OUT STD_LOGIC_VECTOR (C_S_AXI_DATA_WIDTH-1 downto 0);
+        RRESP : OUT STD_LOGIC_VECTOR (1 downto 0);
+        BVALID : OUT STD_LOGIC;
+        BREADY : IN STD_LOGIC;
+        BRESP : OUT STD_LOGIC_VECTOR (1 downto 0);
+        ACLK : IN STD_LOGIC;
+        ARESET : IN STD_LOGIC;
+        ACLK_EN : IN STD_LOGIC;
+        led_ctrl : OUT STD_LOGIC_VECTOR (7 downto 0) );
+    end component;
+
 
 
 begin
+    fm_receiver_hls_CONFIG_s_axi_U : component fm_receiver_hls_CONFIG_s_axi
+    generic map (
+        C_S_AXI_ADDR_WIDTH => C_S_AXI_CONFIG_ADDR_WIDTH,
+        C_S_AXI_DATA_WIDTH => C_S_AXI_CONFIG_DATA_WIDTH)
+    port map (
+        AWVALID => s_axi_CONFIG_AWVALID,
+        AWREADY => s_axi_CONFIG_AWREADY,
+        AWADDR => s_axi_CONFIG_AWADDR,
+        WVALID => s_axi_CONFIG_WVALID,
+        WREADY => s_axi_CONFIG_WREADY,
+        WDATA => s_axi_CONFIG_WDATA,
+        WSTRB => s_axi_CONFIG_WSTRB,
+        ARVALID => s_axi_CONFIG_ARVALID,
+        ARREADY => s_axi_CONFIG_ARREADY,
+        ARADDR => s_axi_CONFIG_ARADDR,
+        RVALID => s_axi_CONFIG_RVALID,
+        RREADY => s_axi_CONFIG_RREADY,
+        RDATA => s_axi_CONFIG_RDATA,
+        RRESP => s_axi_CONFIG_RRESP,
+        BVALID => s_axi_CONFIG_BVALID,
+        BREADY => s_axi_CONFIG_BREADY,
+        BRESP => s_axi_CONFIG_BRESP,
+        ACLK => ap_clk,
+        ARESET => ap_rst_n_inv,
+        ACLK_EN => ap_const_logic_1,
+        led_ctrl => led_ctrl);
+
 
 
 
@@ -232,7 +314,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((audio_out_V_1_ack_in = ap_const_logic_1) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                toggle <= toggle_assign_fu_50_p2;
+                toggle <= tmp_4_fu_78_p2;
             end if;
         end if;
     end process;
@@ -258,6 +340,7 @@ begin
                 ap_NS_fsm <= "XXX";
         end case;
     end process;
+    ap_CS_fsm_state1 <= ap_CS_fsm(0);
     ap_CS_fsm_state2 <= ap_CS_fsm(1);
     ap_CS_fsm_state3 <= ap_CS_fsm(2);
 
@@ -343,5 +426,6 @@ begin
     end process;
 
     iq_in_V_TREADY <= iq_in_V_0_state(1);
-    toggle_assign_fu_50_p2 <= (toggle xor ap_const_lv1_1);
+    led_out <= led_ctrl;
+    tmp_4_fu_78_p2 <= (toggle xor ap_const_lv1_1);
 end behav;

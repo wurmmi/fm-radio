@@ -15,8 +15,8 @@ vhdl/**/*.txt
 __pycache__
 
 
-fm_receiver_top
-dspfir
+**/integration_test/fm_receiver_top
+**/unit_test/FIR/dspfir
 
 ######## HLS ##########
 

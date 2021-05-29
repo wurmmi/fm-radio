@@ -19,6 +19,10 @@ FIFO::~FIFO() {}
 
 bool FIFO::Initialize() {
   XLlFifo_Config* pFifoConfig = XLlFfio_LookupConfig(mDeviceId);
+  if (pFifoConfig == nullptr) {
+    LOG_ERROR("failed LookupConfig()");
+    return false;
+  }
   int status =
       XLlFifo_CfgInitialize(&mDev, pFifoConfig, pFifoConfig->BaseAddress);
   if (status != XST_SUCCESS) {

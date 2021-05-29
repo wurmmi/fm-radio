@@ -22,4 +22,4 @@ export_design -format ip_catalog              \
               -version "0.1"                  \
               -description "FM Receiver HLS"
 
-exit
+exit 0
