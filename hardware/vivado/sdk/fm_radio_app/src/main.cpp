@@ -27,7 +27,6 @@ static TaskHandle_t task_audio_handle;
 static void task_loop(void *) {
   FMRadioIP fmRadioIP(XPAR_FM_RECEIVER_HLS_0_DEVICE_ID);
 
-  uint32_t count = 0;
   while (true) {
     fmRadioIP.LED_Toggle(TLed::LED1);
     vTaskDelay(delay_ms_c);
