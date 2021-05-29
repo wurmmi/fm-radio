@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "name": "LinuxCrossCompileXilinxSDK",
+            "includePath": [
+                "${default}"
+            ],
+            "defines": [],
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "linux-gcc-arm",
+            "forcedInclude": [
+                "${workspaceFolder}/.vscode/vscode-fake.h"
+            ]
+        }
+    ],
+    "version": 4
+}
