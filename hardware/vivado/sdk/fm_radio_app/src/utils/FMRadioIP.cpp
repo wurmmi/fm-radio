@@ -10,7 +10,9 @@
 
 using namespace std;
 
-FMRadioIP::FMRadioIP(uint32_t device_id) : mDeviceId(device_id) {}
+FMRadioIP::FMRadioIP(uint32_t device_id) : mDeviceId(device_id) {
+  Initialize();
+}
 
 FMRadioIP::~FMRadioIP() {}
 
@@ -37,7 +39,7 @@ void FMRadioIP::LED_SetOn(TLed led) {
 void FMRadioIP::LED_Toggle(TLed led) {
   uint32_t state = XFm_receiver_hls_Get_led_ctrl(&mDev);
 
-  state ^= ~(1 << (uint8_t)led);
+  state ^= (1 << (uint8_t)led);
   if (led == TLed::ALL)
     state ^= 0xFF;
 

@@ -6,6 +6,7 @@
                 "${default}"
             ],
             "defines": [],
+            "compilerPath": "/opt/Xilinx/SDK/2018.2/gnu/aarch32/lin/gcc-arm-none-eabi/bin/arm-none-eabi-g++",
             "cStandard": "gnu11",
             "cppStandard": "gnu++14",
             "intelliSenseMode": "linux-gcc-arm",
