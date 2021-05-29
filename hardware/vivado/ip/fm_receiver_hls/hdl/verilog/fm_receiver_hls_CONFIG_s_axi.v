@@ -6,7 +6,7 @@
 // ==============================================================
 
 `timescale 1ns/1ps
-module fm_receiver_top_CONFIG_s_axi
+module fm_receiver_hls_CONFIG_s_axi
 #(parameter
     C_S_AXI_ADDR_WIDTH = 5,
     C_S_AXI_DATA_WIDTH = 32

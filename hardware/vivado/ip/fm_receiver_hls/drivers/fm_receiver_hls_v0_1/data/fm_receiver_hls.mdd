@@ -7,12 +7,12 @@
 
 OPTION psf_version = 2.1;
 
-BEGIN driver fm_receiver_top
+BEGIN driver fm_receiver_hls
 
- OPTION supported_peripherals = (fm_receiver_top_v0_1 );
+ OPTION supported_peripherals = (fm_receiver_hls_v0_1 );
  OPTION driver_state = ACTIVE;
  OPTION copyfiles = all;
- OPTION name = fm_receiver_top;
+ OPTION name = fm_receiver_hls;
  OPTION version = 0.1;
 
 END driver

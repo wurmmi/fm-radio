@@ -9,7 +9,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-entity fm_receiver_top is
+entity fm_receiver_hls is
 generic (
     C_S_AXI_CONFIG_ADDR_WIDTH : INTEGER := 5;
     C_S_AXI_CONFIG_DATA_WIDTH : INTEGER := 32 );
@@ -43,10 +43,10 @@ port (
 end;
 
 
-architecture behav of fm_receiver_top is 
+architecture behav of fm_receiver_hls is 
     attribute CORE_GENERATION_INFO : STRING;
     attribute CORE_GENERATION_INFO of behav : architecture is
-    "fm_receiver_top,hls_ip_2018_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xc7z020clg484-1,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=1.000000,HLS_SYN_LAT=2,HLS_SYN_TPT=none,HLS_SYN_MEM=0,HLS_SYN_DSP=0,HLS_SYN_FF=184,HLS_SYN_LUT=169,HLS_VERSION=2018_2}";
+    "fm_receiver_hls,hls_ip_2018_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xc7z020clg484-1,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=1.000000,HLS_SYN_LAT=2,HLS_SYN_TPT=none,HLS_SYN_MEM=0,HLS_SYN_DSP=0,HLS_SYN_FF=184,HLS_SYN_LUT=169,HLS_VERSION=2018_2}";
     constant ap_const_logic_1 : STD_LOGIC := '1';
     constant ap_const_logic_0 : STD_LOGIC := '0';
     constant ap_ST_fsm_state1 : STD_LOGIC_VECTOR (2 downto 0) := "001";
@@ -109,7 +109,7 @@ architecture behav of fm_receiver_top is
     attribute fsm_encoding of ap_CS_fsm_state1 : signal is "none";
     signal ap_NS_fsm : STD_LOGIC_VECTOR (2 downto 0);
 
-    component fm_receiver_top_CONFIG_s_axi IS
+    component fm_receiver_hls_CONFIG_s_axi IS
     generic (
         C_S_AXI_ADDR_WIDTH : INTEGER;
         C_S_AXI_DATA_WIDTH : INTEGER );
@@ -140,7 +140,7 @@ architecture behav of fm_receiver_top is
 
 
 begin
-    fm_receiver_top_CONFIG_s_axi_U : component fm_receiver_top_CONFIG_s_axi
+    fm_receiver_hls_CONFIG_s_axi_U : component fm_receiver_hls_CONFIG_s_axi
     generic map (
         C_S_AXI_ADDR_WIDTH => C_S_AXI_CONFIG_ADDR_WIDTH,
         C_S_AXI_DATA_WIDTH => C_S_AXI_CONFIG_DATA_WIDTH)

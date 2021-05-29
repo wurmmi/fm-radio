@@ -7,9 +7,9 @@
 
 `timescale 1 ns / 1 ps 
 
-(* CORE_GENERATION_INFO="fm_receiver_top,hls_ip_2018_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xc7z020clg484-1,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=1.000000,HLS_SYN_LAT=2,HLS_SYN_TPT=none,HLS_SYN_MEM=0,HLS_SYN_DSP=0,HLS_SYN_FF=184,HLS_SYN_LUT=169,HLS_VERSION=2018_2}" *)
+(* CORE_GENERATION_INFO="fm_receiver_hls,hls_ip_2018_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xc7z020clg484-1,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=1.000000,HLS_SYN_LAT=2,HLS_SYN_TPT=none,HLS_SYN_MEM=0,HLS_SYN_DSP=0,HLS_SYN_FF=184,HLS_SYN_LUT=169,HLS_VERSION=2018_2}" *)
 
-module fm_receiver_top (
+module fm_receiver_hls (
         ap_clk,
         ap_rst_n,
         iq_in_V_TDATA,
@@ -127,10 +127,10 @@ initial begin
 #0 ap_CS_fsm = 3'd1;
 end
 
-fm_receiver_top_CONFIG_s_axi #(
+fm_receiver_hls_CONFIG_s_axi #(
     .C_S_AXI_ADDR_WIDTH( C_S_AXI_CONFIG_ADDR_WIDTH ),
     .C_S_AXI_DATA_WIDTH( C_S_AXI_CONFIG_DATA_WIDTH ))
-fm_receiver_top_CONFIG_s_axi_U(
+fm_receiver_hls_CONFIG_s_axi_U(
     .AWVALID(s_axi_CONFIG_AWVALID),
     .AWREADY(s_axi_CONFIG_AWREADY),
     .AWADDR(s_axi_CONFIG_AWADDR),
@@ -385,4 +385,4 @@ assign led_out = led_ctrl;
 
 assign tmp_4_fu_78_p2 = (toggle ^ 1'd1);
 
-endmodule //fm_receiver_top
+endmodule //fm_receiver_hls

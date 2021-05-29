@@ -22,7 +22,7 @@ OUTS = *.o
 
 
 libs:
-	echo "Compiling fm_receiver_top"
+	echo "Compiling fm_receiver_hls"
 	$(COMPILER) $(COMPILER_FLAGS) $(EXTRA_COMPILER_FLAGS) $(INCLUDES) $(LIBSOURCES)
 	$(ARCHIVER) -r ${RELEASEDIR}/${LIB} $(OUTS)
 	make clean

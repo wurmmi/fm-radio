@@ -9,7 +9,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use IEEE.NUMERIC_STD.all;
 
-entity fm_receiver_top_CONFIG_s_axi is
+entity fm_receiver_hls_CONFIG_s_axi is
 generic (
     C_S_AXI_ADDR_WIDTH    : INTEGER := 5;
     C_S_AXI_DATA_WIDTH    : INTEGER := 32);
@@ -38,7 +38,7 @@ port (
     -- user signals
     led_ctrl              :out  STD_LOGIC_VECTOR(7 downto 0)
 );
-end entity fm_receiver_top_CONFIG_s_axi;
+end entity fm_receiver_hls_CONFIG_s_axi;
 
 -- ------------------------Address Info-------------------
 -- 0x00 : reserved
@@ -51,7 +51,7 @@ end entity fm_receiver_top_CONFIG_s_axi;
 -- 0x14 : reserved
 -- (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
 
-architecture behave of fm_receiver_top_CONFIG_s_axi is
+architecture behave of fm_receiver_hls_CONFIG_s_axi is
     type states is (wridle, wrdata, wrresp, wrreset, rdidle, rddata, rdreset);  -- read and write fsm states
     signal wstate  : states := wrreset;
     signal rstate  : states := rdreset;
