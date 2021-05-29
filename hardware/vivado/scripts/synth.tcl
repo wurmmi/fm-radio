@@ -11,7 +11,6 @@ set parallel_jobs 4
 
 set top ${proj_name}_wrapper
 
-if {0} {
 # Open project
 if {[catch {
   open_project $build_dir/$proj_name.xpr
@@ -83,7 +82,7 @@ if {[catch {
   puts "(MWURM) ERROR: Bitstream generation failed."
   exit 1
 }
-}
+
 puts "--- - Copying build results"
 
 # Create build result folder

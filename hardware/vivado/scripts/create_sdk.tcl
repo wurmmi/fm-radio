@@ -47,7 +47,7 @@ puts "(MWURM) Editing options of FreeRTOS ..."
 configbsp -bsp $bsp_name/system.mss total_heap_size 512000
 
 puts "(MWURM) Update and re-generate BSP ..."
-#updatemss -mss $bsp_name/system.mss
+updatemss -mss $bsp_name/system.mss
 regenbsp -bsp $bsp_name
 
 #puts "(MWURM) Importing other sources..."

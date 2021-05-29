@@ -89,7 +89,7 @@ if { ${design_name} eq "" } {
    set errMsg "Design <$design_name> already exists in your project, please set the variable <design_name> to another value."
    set nRet 1
 } elseif { [get_files -quiet ${design_name}.bd] ne "" } {
-   # USE CASES: 
+   # USE CASES:
    #    6) Current opened design, has components, but diff names, design_name exists in project.
    #    7) No opened design, design_name exists in project.
 
@@ -123,7 +123,7 @@ set bCheckIPsPassed 1
 ##################################################################
 set bCheckIPs 1
 if { $bCheckIPs == 1 } {
-   set list_check_ips "\ 
+   set list_check_ips "\
 xilinx.com:ip:axi_dma:7.1\
 xilinx.com:ip:axi_fifo_mm_s:4.1\
 xilinx.com:ip:smartconnect:1.0\
@@ -200,7 +200,7 @@ proc create_root_design { parentCell } {
   set FIXED_IO [ create_bd_intf_port -mode Master -vlnv xilinx.com:display_processing_system7:fixedio_rtl:1.0 FIXED_IO ]
 
   # Create ports
-  set fm_radio_led_o [ create_bd_port -dir O -from 7 -to 0 -type data fm_radio_led_o ]
+  set fm_radio_led_o [ create_bd_port -dir O -from 7 -to 0 fm_radio_led_o ]
   set i2s_bclk_o [ create_bd_port -dir O i2s_bclk_o ]
   set i2s_lrclk_o [ create_bd_port -dir O i2s_lrclk_o ]
   set i2s_sdata_o [ create_bd_port -dir O i2s_sdata_o ]
@@ -688,7 +688,7 @@ proc create_root_design { parentCell } {
 
   # Create port connections
   connect_bd_net -net axi_dma_0_mm2s_introut [get_bd_pins axi_dma_0/mm2s_introut] [get_bd_pins processing_system7_0/IRQ_F2P]
-  connect_bd_net -net fm_receiver_hls_led_out [get_bd_ports fm_radio_led_o] [get_bd_pins fm_receiver_hls_0/led_out]
+  connect_bd_net -net fm_receiver_hls_0_led_out [get_bd_ports fm_radio_led_o] [get_bd_pins fm_receiver_hls_0/led_out]
   connect_bd_net -net miso_0_1 [get_bd_ports spi_miso_i] [get_bd_pins mySPIRxTx_0/miso]
   connect_bd_net -net myI2STx_0_bclk [get_bd_ports i2s_bclk_o] [get_bd_pins myI2STx_0/bclk]
   connect_bd_net -net myI2STx_0_lrclk [get_bd_ports i2s_lrclk_o] [get_bd_pins myI2STx_0/lrclk]
@@ -708,7 +708,7 @@ proc create_root_design { parentCell } {
   create_bd_addr_seg -range 0x20000000 -offset 0x00000000 [get_bd_addr_spaces axi_dma_0/Data_MM2S] [get_bd_addr_segs processing_system7_0/S_AXI_GP0/GP0_DDR_LOWOCM] SEG_processing_system7_0_GP0_DDR_LOWOCM
   create_bd_addr_seg -range 0x00010000 -offset 0x40400000 [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs axi_dma_0/S_AXI_LITE/Reg] SEG_axi_dma_0_Reg
   create_bd_addr_seg -range 0x00010000 -offset 0x43C10000 [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs axi_fifo_mm_s0_config_audio/S_AXI/Mem0] SEG_axi_fifo_mm_s_1_Mem0
-  create_bd_addr_seg -range 0x00010000 -offset 0x43C00000 [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs fm_receiver_hls_0/s_axi_CONFIG/Reg] SEG_fm_receiver_hls_Reg
+  create_bd_addr_seg -range 0x00010000 -offset 0x43C00000 [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs fm_receiver_hls_0/s_axi_CONFIG/Reg] SEG_fm_receiver_hls_0_Reg
 
 
   # Restore current instance
@@ -725,6 +725,4 @@ proc create_root_design { parentCell } {
 
 create_root_design ""
 
-
-common::send_msg_id "BD_TCL-1000" "WARNING" "This Tcl script was generated from a block design that has not been validated. It is possible that design <$design_name> may result in errors during validation."
 

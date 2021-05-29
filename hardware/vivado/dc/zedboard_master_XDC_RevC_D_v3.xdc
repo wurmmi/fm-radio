@@ -90,7 +90,7 @@ set_property PACKAGE_PIN AB5 [get_ports {spi_miso_i}];  # "AC-SDA"
 # ----------------------------------------------------------------------------
 # JA Pmod - Bank 13
 # ----------------------------------------------------------------------------
-#set_property PACKAGE_PIN Y11  [get_ports {JA1}];  # "JA1"
+set_property PACKAGE_PIN Y11  [get_ports {fm_radio_led_o[7]}];  # "JA1"
 #set_property PACKAGE_PIN AA8  [get_ports {JA10}];  # "JA10"
 #set_property PACKAGE_PIN AA11 [get_ports {JA2}];  # "JA2"
 #set_property PACKAGE_PIN Y10  [get_ports {JA3}];  # "JA3"
