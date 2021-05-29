@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /**
- * @file    fm_receiver_top.cpp
+ * @file    fm_receiver_hls.cpp
  * @author  Michael Wurm <wurm.michael95@gmail.com>
  * @brief   FM Receiver top-level wrapper implementation.
  */
@@ -25,7 +25,7 @@
 --       05/28/2021  20:30 -
 */
 
-#include "fm_receiver_top.hpp"
+#include "fm_receiver_hls.hpp"
 
 #include <iostream>
 
@@ -35,7 +35,7 @@
 
 using namespace std;
 
-void fm_receiver_top(hls::stream<iq_sample_t>& iq_in,
+void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
                      hls::stream<audio_sample_t>& audio_out,
                      uint8_t led_ctrl,
                      uint8_t& led_out) {

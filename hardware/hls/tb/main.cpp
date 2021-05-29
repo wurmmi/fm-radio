@@ -9,7 +9,7 @@
 #include <chrono>
 #include <iostream>
 
-#include "fm_receiver_top.hpp"
+#include "fm_receiver_hls.hpp"
 #include "helper/DataLoader.hpp"
 #include "helper/DataWriter.hpp"
 
@@ -74,7 +74,7 @@ int main() {
     sample_t audio_R;
     hls::stream<audio_sample_t> stream_data_out;
     while (!stream_data_in.empty()) {
-      fm_receiver_top(stream_data_in, stream_data_out);
+      fm_receiver_hls(stream_data_in, stream_data_out);
     }
 
     // Store output stream to file

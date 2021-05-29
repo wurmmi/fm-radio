@@ -8,8 +8,8 @@ puts "###############################################################"
 puts " Opening waveform"
 puts "###############################################################"
 
-set wdb_file "fm_receiver_top.wdb"
-set wcfg_file "fm_receiver_top.wcfg"
+set wdb_file "fm_receiver_hls.wdb"
+set wcfg_file "fm_receiver_hls.wcfg"
 
 current_fileset
 open_wave_database $wdb_file
