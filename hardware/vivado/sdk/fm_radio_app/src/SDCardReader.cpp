@@ -133,10 +133,12 @@ void SDCardReader::LoadFile(string const& filename) {
 
   switch (fileType) {
     case FileType::WAV: {
+      LOG_DEBUG("Reading WAV file '%s' ...", filename);
       mFileReader = new WavReader();
       mFileReader->LoadFile(filename_short);
     } break;
     case FileType::TXT:
+      LOG_DEBUG("Reading TXT file '%s' ...", filename);
       mFileReader = new TxtReader();
       mFileReader->LoadFile(filename_short);
       break;

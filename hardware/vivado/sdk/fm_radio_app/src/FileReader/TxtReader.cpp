@@ -21,8 +21,6 @@ TxtReader::TxtReader() {}
 TxtReader::~TxtReader() {}
 
 void TxtReader::LoadFile(string const& filename) {
-  LOG_DEBUG("Reading TXT file.");
-
   /* Get file size info */
   FILINFO fileInfo;
   FRESULT fres = f_stat(filename.c_str(), &fileInfo);

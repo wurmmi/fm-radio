@@ -42,8 +42,6 @@ WavReader::WavReader() {}
 WavReader::~WavReader() {}
 
 void WavReader::LoadFile(string const& filename) {
-  LOG_DEBUG("Reading WAV file.");
-
   // Open the file
   FRESULT fres = f_open(&mFile, filename.c_str(), FA_READ);
   if (fres) {
