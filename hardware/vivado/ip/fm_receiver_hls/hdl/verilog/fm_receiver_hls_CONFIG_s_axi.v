@@ -33,7 +33,11 @@ module fm_receiver_hls_CONFIG_s_axi
     output wire                          RVALID,
     input  wire                          RREADY,
     // user signals
-    output wire [7:0]                    led_ctrl
+    output wire [7:0]                    led_ctrl,
+    input  wire [2:0]                    git_hash_address0,
+    input  wire                          git_hash_ce0,
+    input  wire                          git_hash_we0,
+    input  wire [7:0]                    git_hash_d0
 );
 //------------------------Address Info-------------------
 // 0x00 : reserved
@@ -44,12 +48,20 @@ module fm_receiver_hls_CONFIG_s_axi
 //        bit 7~0 - led_ctrl[7:0] (Read/Write)
 //        others  - reserved
 // 0x14 : reserved
+// 0x18 ~
+// 0x1f : Memory 'git_hash' (7 * 8b)
+//        Word n : bit [ 7: 0] - git_hash[4n]
+//                 bit [15: 8] - git_hash[4n+1]
+//                 bit [23:16] - git_hash[4n+2]
+//                 bit [31:24] - git_hash[4n+3]
 // (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
 
 //------------------------Parameter----------------------
 localparam
     ADDR_LED_CTRL_DATA_0 = 5'h10,
     ADDR_LED_CTRL_CTRL   = 5'h14,
+    ADDR_GIT_HASH_BASE   = 5'h18,
+    ADDR_GIT_HASH_HIGH   = 5'h1f,
     WRIDLE               = 2'd0,
     WRDATA               = 2'd1,
     WRRESP               = 2'd2,
@@ -73,8 +85,44 @@ localparam
     wire [ADDR_BITS-1:0]          raddr;
     // internal registers
     reg  [7:0]                    int_led_ctrl = 'b0;
+    // memory signals
+    wire [0:0]                    int_git_hash_address0;
+    wire                          int_git_hash_ce0;
+    wire                          int_git_hash_we0;
+    wire [3:0]                    int_git_hash_be0;
+    wire [31:0]                   int_git_hash_d0;
+    wire [31:0]                   int_git_hash_q0;
+    wire [0:0]                    int_git_hash_address1;
+    wire                          int_git_hash_ce1;
+    wire                          int_git_hash_we1;
+    wire [3:0]                    int_git_hash_be1;
+    wire [31:0]                   int_git_hash_d1;
+    wire [31:0]                   int_git_hash_q1;
+    reg                           int_git_hash_read;
+    reg                           int_git_hash_write;
+    reg  [1:0]                    int_git_hash_shift;
 
 //------------------------Instantiation------------------
+// int_git_hash
+fm_receiver_hls_CONFIG_s_axi_ram #(
+    .BYTES    ( 4 ),
+    .DEPTH    ( 2 )
+) int_git_hash (
+    .clk0     ( ACLK ),
+    .address0 ( int_git_hash_address0 ),
+    .ce0      ( int_git_hash_ce0 ),
+    .we0      ( int_git_hash_we0 ),
+    .be0      ( int_git_hash_be0 ),
+    .d0       ( int_git_hash_d0 ),
+    .q0       ( int_git_hash_q0 ),
+    .clk1     ( ACLK ),
+    .address1 ( int_git_hash_address1 ),
+    .ce1      ( int_git_hash_ce1 ),
+    .we1      ( int_git_hash_we1 ),
+    .be1      ( int_git_hash_be1 ),
+    .d1       ( int_git_hash_d1 ),
+    .q1       ( int_git_hash_q1 )
+);
 
 //------------------------AXI write fsm------------------
 assign AWREADY = (wstate == WRIDLE);
@@ -128,7 +176,7 @@ end
 assign ARREADY = (rstate == RDIDLE);
 assign RDATA   = rdata;
 assign RRESP   = 2'b00;  // OKAY
-assign RVALID  = (rstate == RDDATA);
+assign RVALID  = (rstate == RDDATA) & !int_git_hash_read;
 assign ar_hs   = ARVALID & ARREADY;
 assign raddr   = ARADDR[ADDR_BITS-1:0];
 
@@ -169,6 +217,9 @@ always @(posedge ACLK) begin
                 end
             endcase
         end
+        else if (int_git_hash_read) begin
+            rdata <= int_git_hash_q1;
+        end
     end
 end
 
@@ -187,5 +238,120 @@ end
 
 
 //------------------------Memory logic-------------------
+// git_hash
+assign int_git_hash_address0 = git_hash_address0 >> 2;
+assign int_git_hash_ce0      = git_hash_ce0;
+assign int_git_hash_we0      = git_hash_we0;
+assign int_git_hash_be0      = 1 << git_hash_address0[1:0];
+assign int_git_hash_d0       = {4{git_hash_d0}};
+assign int_git_hash_address1 = ar_hs? raddr[2:2] : waddr[2:2];
+assign int_git_hash_ce1      = ar_hs | (int_git_hash_write & WVALID);
+assign int_git_hash_we1      = int_git_hash_write & WVALID;
+assign int_git_hash_be1      = WSTRB;
+assign int_git_hash_d1       = WDATA;
+// int_git_hash_read
+always @(posedge ACLK) begin
+    if (ARESET)
+        int_git_hash_read <= 1'b0;
+    else if (ACLK_EN) begin
+        if (ar_hs && raddr >= ADDR_GIT_HASH_BASE && raddr <= ADDR_GIT_HASH_HIGH)
+            int_git_hash_read <= 1'b1;
+        else
+            int_git_hash_read <= 1'b0;
+    end
+end
+
+// int_git_hash_write
+always @(posedge ACLK) begin
+    if (ARESET)
+        int_git_hash_write <= 1'b0;
+    else if (ACLK_EN) begin
+        if (aw_hs && AWADDR[ADDR_BITS-1:0] >= ADDR_GIT_HASH_BASE && AWADDR[ADDR_BITS-1:0] <= ADDR_GIT_HASH_HIGH)
+            int_git_hash_write <= 1'b1;
+        else if (WVALID)
+            int_git_hash_write <= 1'b0;
+    end
+end
+
+// int_git_hash_shift
+always @(posedge ACLK) begin
+    if (ACLK_EN) begin
+        if (git_hash_ce0)
+            int_git_hash_shift <= git_hash_address0[1:0];
+    end
+end
+
 
 endmodule
+
+
+`timescale 1ns/1ps
+
+module fm_receiver_hls_CONFIG_s_axi_ram
+#(parameter
+    BYTES  = 4,
+    DEPTH  = 256,
+    AWIDTH = log2(DEPTH)
+) (
+    input  wire               clk0,
+    input  wire [AWIDTH-1:0]  address0,
+    input  wire               ce0,
+    input  wire               we0,
+    input  wire [BYTES-1:0]   be0,
+    input  wire [BYTES*8-1:0] d0,
+    output reg  [BYTES*8-1:0] q0,
+    input  wire               clk1,
+    input  wire [AWIDTH-1:0]  address1,
+    input  wire               ce1,
+    input  wire               we1,
+    input  wire [BYTES-1:0]   be1,
+    input  wire [BYTES*8-1:0] d1,
+    output reg  [BYTES*8-1:0] q1
+);
+//------------------------Local signal-------------------
+reg  [BYTES*8-1:0] mem[0:DEPTH-1];
+//------------------------Task and function--------------
+function integer log2;
+    input integer x;
+    integer n, m;
+begin
+    n = 1;
+    m = 2;
+    while (m < x) begin
+        n = n + 1;
+        m = m * 2;
+    end
+    log2 = n;
+end
+endfunction
+//------------------------Body---------------------------
+// read port 0
+always @(posedge clk0) begin
+    if (ce0) q0 <= mem[address0];
+end
+
+// read port 1
+always @(posedge clk1) begin
+    if (ce1) q1 <= mem[address1];
+end
+
+genvar i;
+generate
+    for (i = 0; i < BYTES; i = i + 1) begin : gen_write
+        // write port 0
+        always @(posedge clk0) begin
+            if (ce0 & we0 & be0[i]) begin
+                mem[address0][8*i+7:8*i] <= d0[8*i+7:8*i];
+            end
+        end
+        // write port 1
+        always @(posedge clk1) begin
+            if (ce1 & we1 & be1[i]) begin
+                mem[address1][8*i+7:8*i] <= d1[8*i+7:8*i];
+            end
+        end
+    end
+endgenerate
+
+endmodule
+

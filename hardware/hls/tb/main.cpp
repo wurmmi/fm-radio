@@ -75,13 +75,30 @@ int main() {
     hls::stream<audio_sample_t> stream_data_out;
     uint8_t led_ctrl = 0x3;
     uint8_t led_out;
+    char git_hash_o[9]    = {0};
+    char build_time_o[13] = {0};
     while (!stream_data_in.empty()) {
-      fm_receiver_hls(stream_data_in, stream_data_out, led_ctrl, led_out);
+      fm_receiver_hls(stream_data_in,
+                      stream_data_out,
+                      led_ctrl,
+                      &git_hash_o[0],
+                      &build_time_o[0],
+                      led_out);
     }
 
     // Check LED output
     if (led_ctrl != led_out)
       cerr << "ERROR: LED control not matching LED output" << endl;
+
+    // Check build info status register
+    //    char git_hash[8]    = {0};
+    //    char build_time[13] = {0};
+    //    memcpy(git_hash, git_hash_o, 8);
+    //    memcpy(build_time, build_time_o, 12);
+    printf("git_hash  : %s\n", git_hash_o);
+    printf("build_time: %s\n", build_time_o);
+    cout << "git_hash  : " << git_hash_o << endl;
+    cout << "build_time: " << build_time_o << endl;
 
     // Store output stream to file
     while (!stream_data_out.empty()) {

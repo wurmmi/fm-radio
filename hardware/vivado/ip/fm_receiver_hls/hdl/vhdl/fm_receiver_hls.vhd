@@ -26,6 +26,16 @@ port (
     audio_out_V_TDATA : OUT STD_LOGIC_VECTOR (31 downto 0);
     audio_out_V_TVALID : OUT STD_LOGIC;
     audio_out_V_TREADY : IN STD_LOGIC;
+    build_time_address0 : OUT STD_LOGIC_VECTOR (3 downto 0);
+    build_time_ce0 : OUT STD_LOGIC;
+    build_time_we0 : OUT STD_LOGIC;
+    build_time_d0 : OUT STD_LOGIC_VECTOR (7 downto 0);
+    build_time_q0 : IN STD_LOGIC_VECTOR (7 downto 0);
+    build_time_address1 : OUT STD_LOGIC_VECTOR (3 downto 0);
+    build_time_ce1 : OUT STD_LOGIC;
+    build_time_we1 : OUT STD_LOGIC;
+    build_time_d1 : OUT STD_LOGIC_VECTOR (7 downto 0);
+    build_time_q1 : IN STD_LOGIC_VECTOR (7 downto 0);
     led_out : OUT STD_LOGIC_VECTOR (7 downto 0);
     s_axi_CONFIG_AWVALID : IN STD_LOGIC;
     s_axi_CONFIG_AWREADY : OUT STD_LOGIC;
@@ -50,7 +60,7 @@ end;
 architecture behav of fm_receiver_hls is 
     attribute CORE_GENERATION_INFO : STRING;
     attribute CORE_GENERATION_INFO of behav : architecture is
-    "fm_receiver_hls,hls_ip_2018_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xc7z020clg484-1,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=1.000000,HLS_SYN_LAT=2,HLS_SYN_TPT=none,HLS_SYN_MEM=0,HLS_SYN_DSP=0,HLS_SYN_FF=192,HLS_SYN_LUT=178,HLS_VERSION=2018_2}";
+    "fm_receiver_hls,hls_ip_2018_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xc7z020clg484-1,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=1.000000,HLS_SYN_LAT=2,HLS_SYN_TPT=none,HLS_SYN_MEM=2,HLS_SYN_DSP=0,HLS_SYN_FF=272,HLS_SYN_LUT=248,HLS_VERSION=2018_2}";
     constant ap_const_logic_1 : STD_LOGIC := '1';
     constant ap_const_logic_0 : STD_LOGIC := '0';
     constant ap_ST_fsm_state1 : STD_LOGIC_VECTOR (2 downto 0) := "001";
@@ -67,6 +77,7 @@ architecture behav of fm_receiver_hls is
     constant ap_const_lv32_2 : STD_LOGIC_VECTOR (31 downto 0) := "00000000000000000000000000000010";
     constant C_S_AXI_DATA_WIDTH : INTEGER range 63 downto 0 := 20;
     constant ap_const_lv8_0 : STD_LOGIC_VECTOR (7 downto 0) := "00000000";
+    constant ap_const_lv4_0 : STD_LOGIC_VECTOR (3 downto 0) := "0000";
     constant ap_const_boolean_1 : BOOLEAN := true;
 
     signal ap_rst_n_inv : STD_LOGIC;
@@ -111,7 +122,7 @@ architecture behav of fm_receiver_hls is
     signal audio_out_V_TDATA_blk_n : STD_LOGIC;
     signal ap_CS_fsm_state3 : STD_LOGIC;
     attribute fsm_encoding of ap_CS_fsm_state3 : signal is "none";
-    signal tmp_4_fu_78_p2 : STD_LOGIC_VECTOR (0 downto 0);
+    signal tmp_4_fu_90_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal led_out_preg : STD_LOGIC_VECTOR (7 downto 0) := "00000000";
     signal ap_NS_fsm : STD_LOGIC_VECTOR (2 downto 0);
 
@@ -334,7 +345,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((ap_const_logic_1 = ap_CS_fsm_state3) and (audio_out_V_1_ack_in = ap_const_logic_1))) then
-                toggle <= tmp_4_fu_78_p2;
+                toggle <= tmp_4_fu_90_p2;
             end if;
         end if;
     end process;
@@ -442,6 +453,14 @@ begin
     end process;
 
     audio_out_V_TVALID <= audio_out_V_1_state(0);
+    build_time_address0 <= ap_const_lv4_0;
+    build_time_address1 <= ap_const_lv4_0;
+    build_time_ce0 <= ap_const_logic_0;
+    build_time_ce1 <= ap_const_logic_0;
+    build_time_d0 <= ap_const_lv8_0;
+    build_time_d1 <= ap_const_lv8_0;
+    build_time_we0 <= ap_const_logic_0;
+    build_time_we1 <= ap_const_logic_0;
     iq_in_V_0_ack_in <= iq_in_V_0_state(1);
 
     iq_in_V_0_ack_out_assign_proc : process(iq_in_V_0_vld_out, audio_out_V_1_ack_in, ap_CS_fsm_state2)
@@ -490,5 +509,5 @@ begin
         end if; 
     end process;
 
-    tmp_4_fu_78_p2 <= (toggle xor ap_const_lv1_1);
+    tmp_4_fu_90_p2 <= (toggle xor ap_const_lv1_1);
 end behav;

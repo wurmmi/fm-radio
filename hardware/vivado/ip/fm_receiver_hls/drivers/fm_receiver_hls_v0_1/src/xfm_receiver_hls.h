@@ -83,6 +83,15 @@ int XFm_receiver_hls_Release(XFm_receiver_hls *InstancePtr);
 
 void XFm_receiver_hls_Set_led_ctrl(XFm_receiver_hls *InstancePtr, u32 Data);
 u32 XFm_receiver_hls_Get_led_ctrl(XFm_receiver_hls *InstancePtr);
+u32 XFm_receiver_hls_Get_git_hash_BaseAddress(XFm_receiver_hls *InstancePtr);
+u32 XFm_receiver_hls_Get_git_hash_HighAddress(XFm_receiver_hls *InstancePtr);
+u32 XFm_receiver_hls_Get_git_hash_TotalBytes(XFm_receiver_hls *InstancePtr);
+u32 XFm_receiver_hls_Get_git_hash_BitWidth(XFm_receiver_hls *InstancePtr);
+u32 XFm_receiver_hls_Get_git_hash_Depth(XFm_receiver_hls *InstancePtr);
+u32 XFm_receiver_hls_Write_git_hash_Words(XFm_receiver_hls *InstancePtr, int offset, int *data, int length);
+u32 XFm_receiver_hls_Read_git_hash_Words(XFm_receiver_hls *InstancePtr, int offset, int *data, int length);
+u32 XFm_receiver_hls_Write_git_hash_Bytes(XFm_receiver_hls *InstancePtr, int offset, char *data, int length);
+u32 XFm_receiver_hls_Read_git_hash_Bytes(XFm_receiver_hls *InstancePtr, int offset, char *data, int length);
 
 #ifdef __cplusplus
 }

@@ -31,7 +31,7 @@ clang-format off
 --                                            did not have the same name....
 --
 -- (4) Build information status register
---       (TODO)
+--       05/31/2021  22:00 -
 --
 --
 --
@@ -56,6 +56,8 @@ using namespace std;
 void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
                      hls::stream<audio_sample_t>& audio_out,
                      uint8_t led_ctrl,
+                     char* git_hash,
+                     char* build_time,
                      uint8_t& led_out) {
 #pragma HLS INTERFACE ap_ctrl_hs port = return
 
@@ -65,8 +67,11 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
 #pragma HLS INTERFACE axis port = audio_out
 #pragma HLS DATA_PACK variable  = audio_out
 
+#pragma HLS INTERFACE s_axilite port = git_hash bundle = CONFIG
+#pragma HLS INTERFACE s_axilite port = build_time bundle = CONFIG
 #pragma HLS INTERFACE s_axilite port = led_ctrl bundle = CONFIG
-#pragma HLS INTERFACE ap_none port                     = led_out
+
+#pragma HLS INTERFACE ap_none port = led_out
 
 #if IMPL_DATA_FORWARDING_ONLY == 1
   /*----------- Forwarding test --------------*/
@@ -81,12 +86,16 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
 
   // NOTE: This is used to determine how often this function is called.
   //       The toggle flag can be compared against the input clock.
-  // TODO: remove this debug toggle
   static bool toggle = false;
   toggle             = !toggle;
 
-  /*-------------- LED control ---------------*/
-  led_out = (led_ctrl | ((1 << 2) & toggle));
+  /*----------- AXILITE Interface ------------*/
+  led_out = led_ctrl | (((uint8_t)1 << 3) & toggle);
+
+  //  git_hash   = GIT_HASH;
+  //  build_time = BUILD_TIME;
+  git_hash   = (char*)"22b55c9";
+  build_time = (char*)"223157";
 
 #if IMPL_FM_RADIO == 1
   /*---------------- FM radio ----------------*/
