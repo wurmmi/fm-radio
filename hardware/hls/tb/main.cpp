@@ -73,9 +73,15 @@ int main() {
     sample_t audio_L;
     sample_t audio_R;
     hls::stream<audio_sample_t> stream_data_out;
+    uint8_t led_ctrl = 0x3;
+    uint8_t led_out;
     while (!stream_data_in.empty()) {
-      fm_receiver_hls(stream_data_in, stream_data_out);
+      fm_receiver_hls(stream_data_in, stream_data_out, led_ctrl, led_out);
     }
+
+    // Check LED output
+    if (led_ctrl != led_out)
+      cerr << "ERROR: LED control not matching LED output" << endl;
 
     // Store output stream to file
     while (!stream_data_out.empty()) {

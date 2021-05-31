@@ -43,6 +43,9 @@ clang-format on
 
 using namespace std;
 
+#define IMPL_DATA_FORWARDING_ONLY 0
+#define IMPL_FM_RADIO             1
+
 void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
                      hls::stream<audio_sample_t>& audio_out,
                      uint8_t led_ctrl,
@@ -61,12 +64,14 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
   /*-------------- LED control ---------------*/
   led_out = led_ctrl;
 
+#if IMPL_DATA_FORWARDING_ONLY == 1
   /*----------- Forwarding test --------------*/
   iq_sample_t fw_iq_in = iq_in.read();
 
   audio_sample_t fw_iq_out = {fw_iq_in.i, fw_iq_in.q};
 
   audio_out.write(fw_iq_out);
+#endif /* IMPL_DATA_FORWARDING_ONLY */
 
   /*-------------- Other testing -------------*/
 
@@ -76,8 +81,8 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
   static bool toggle = false;
   toggle             = !toggle;
 
+#if IMPL_FM_RADIO == 1
   /*---------------- FM radio ----------------*/
-  /*
   if (strobe_gen()) {
     // ------------------------------------------------------
     // Read input and split IQ samples
@@ -102,5 +107,5 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
     audio_sample_t audio_sample = {audio_L, audio_R};
     audio_out.write(audio_sample);
   }
-  */
+#endif /* IMPL_FM_RADIO */
 }
