@@ -42,15 +42,13 @@ static void task_audio(void *) {
   sdCardReader.DiscoverFiles();
   sdCardReader.PrintAvailableFilenames();
 
-  // sdCardReader.LoadFile("rx_fm_bb.wav");
-  sdCardReader.LoadFile("cantina_band_44100.wav");
-
   AudioStreamDMA streamDMA(XPAR_AXI_DMA_0_DEVICE_ID);
 
   while (true) {
     /* Show menu */
     printf("-------------- FM RADIO MENU -----------------\n");
-    printf("[p] ... play\n");
+    printf("[p] ... play audio (cantina band)\n");
+    printf("[r] ... play audio (fm radio)\n");
     printf("[s] ... stop\n");
     printf("[i] ... show information\n");
     printf("----------------------------------------------\n");
@@ -60,9 +58,18 @@ static void task_audio(void *) {
     fflush(stdout);
     char choice = inbyte();
     printf("%c\n", choice);
+
+    DMABuffer buffer = {nullptr, 0};
     switch (choice) {
       case 'p': {
-        DMABuffer buffer = sdCardReader.GetBuffer();
+        sdCardReader.LoadFile("cantina_band_44100.wav");
+        buffer = sdCardReader.GetBuffer();
+        streamDMA.TransmitBlob(buffer);
+        LOG_INFO("DMA playing in endless loop ...");
+      } break;
+      case 'r': {
+        sdCardReader.LoadFile("rx_fm_bb.wav");
+        buffer = sdCardReader.GetBuffer();
         streamDMA.TransmitBlob(buffer);
         LOG_INFO("DMA playing in endless loop ...");
       } break;
