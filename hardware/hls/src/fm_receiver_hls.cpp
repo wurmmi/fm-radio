@@ -50,7 +50,7 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
                      hls::stream<audio_sample_t>& audio_out,
                      uint8_t led_ctrl,
                      uint8_t& led_out) {
-#pragma HLS INTERFACE ap_ctrl_none port = return
+  //#pragma HLS INTERFACE ap_ctrl_none port = return
 
 #pragma HLS INTERFACE axis port = iq_in
 #pragma HLS DATA_PACK variable  = iq_in
