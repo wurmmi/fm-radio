@@ -7,7 +7,7 @@
 
 `timescale 1 ns / 1 ps 
 
-(* CORE_GENERATION_INFO="fm_receiver_hls,hls_ip_2018_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xc7z020clg484-1,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=8.457000,HLS_SYN_LAT=617,HLS_SYN_TPT=none,HLS_SYN_MEM=11,HLS_SYN_DSP=6,HLS_SYN_FF=1338,HLS_SYN_LUT=1779,HLS_VERSION=2018_2}" *)
+(* CORE_GENERATION_INFO="fm_receiver_hls,hls_ip_2018_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=0,HLS_INPUT_PART=xc7z020clg484-1,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=1.000000,HLS_SYN_LAT=2,HLS_SYN_TPT=none,HLS_SYN_MEM=0,HLS_SYN_DSP=0,HLS_SYN_FF=192,HLS_SYN_LUT=178,HLS_VERSION=2018_2}" *)
 
 module fm_receiver_hls (
         ap_clk,
@@ -42,10 +42,9 @@ module fm_receiver_hls (
         s_axi_CONFIG_BRESP
 );
 
-parameter    ap_ST_fsm_state1 = 4'd1;
-parameter    ap_ST_fsm_state2 = 4'd2;
-parameter    ap_ST_fsm_state3 = 4'd4;
-parameter    ap_ST_fsm_state4 = 4'd8;
+parameter    ap_ST_fsm_state1 = 3'd1;
+parameter    ap_ST_fsm_state2 = 3'd2;
+parameter    ap_ST_fsm_state3 = 3'd4;
 parameter    C_S_AXI_CONFIG_DATA_WIDTH = 32;
 parameter    C_S_AXI_CONFIG_ADDR_WIDTH = 5;
 parameter    C_S_AXI_DATA_WIDTH = 32;
@@ -90,7 +89,7 @@ reg ap_ready;
 reg[7:0] led_out;
 
  reg    ap_rst_n_inv;
-(* fsm_encoding = "none" *) reg   [3:0] ap_CS_fsm;
+(* fsm_encoding = "none" *) reg   [2:0] ap_CS_fsm;
 wire    ap_CS_fsm_state1;
 reg   [31:0] iq_in_V_0_data_out;
 wire    iq_in_V_0_vld_in;
@@ -126,25 +125,13 @@ reg    iq_in_V_TDATA_blk_n;
 wire    ap_CS_fsm_state2;
 reg    audio_out_V_TDATA_blk_n;
 wire    ap_CS_fsm_state3;
-wire    ap_CS_fsm_state4;
-wire   [15:0] in_i_V_fu_157_p1;
-reg   [15:0] in_i_V_reg_206;
-reg   [15:0] in_q_V_reg_211;
-wire   [31:0] tmp_1_fu_181_p3;
-wire    grp_fm_receiver_fu_117_ap_idle;
-wire    grp_fm_receiver_fu_117_ap_ready;
-wire    grp_fm_receiver_fu_117_ap_done;
-wire    grp_fm_receiver_fu_117_ap_start;
-wire   [15:0] grp_fm_receiver_fu_117_ap_return_0;
-wire   [15:0] grp_fm_receiver_fu_117_ap_return_1;
-reg    grp_fm_receiver_fu_117_ap_start_reg;
-wire   [0:0] tmp_s_fu_194_p2;
+wire   [0:0] tmp_4_fu_78_p2;
 reg   [7:0] led_out_preg;
-reg   [3:0] ap_NS_fsm;
+reg   [2:0] ap_NS_fsm;
 
 // power-on initialization
 initial begin
-#0 ap_CS_fsm = 4'd1;
+#0 ap_CS_fsm = 3'd1;
 #0 iq_in_V_0_sel_rd = 1'b0;
 #0 iq_in_V_0_sel_wr = 1'b0;
 #0 iq_in_V_0_state = 2'd0;
@@ -152,7 +139,6 @@ initial begin
 #0 audio_out_V_1_sel_wr = 1'b0;
 #0 audio_out_V_1_state = 2'd0;
 #0 toggle = 1'd0;
-#0 grp_fm_receiver_fu_117_ap_start_reg = 1'b0;
 #0 led_out_preg = 8'd0;
 end
 
@@ -183,19 +169,6 @@ fm_receiver_hls_CONFIG_s_axi_U(
     .led_ctrl(led_ctrl)
 );
 
-fm_receiver grp_fm_receiver_fu_117(
-    .ap_clk(ap_clk),
-    .ap_rst(ap_rst_n_inv),
-    .ap_start(grp_fm_receiver_fu_117_ap_start),
-    .ap_done(grp_fm_receiver_fu_117_ap_done),
-    .ap_idle(grp_fm_receiver_fu_117_ap_idle),
-    .ap_ready(grp_fm_receiver_fu_117_ap_ready),
-    .in_i_V_read(in_i_V_reg_206),
-    .in_q_V_read(in_q_V_reg_211),
-    .ap_return_0(grp_fm_receiver_fu_117_ap_return_0),
-    .ap_return_1(grp_fm_receiver_fu_117_ap_return_1)
-);
-
 always @ (posedge ap_clk) begin
     if (ap_rst_n_inv == 1'b1) begin
         ap_CS_fsm <= ap_ST_fsm_state1;
@@ -208,7 +181,7 @@ always @ (posedge ap_clk) begin
     if (ap_rst_n_inv == 1'b1) begin
         audio_out_V_1_sel_rd <= 1'b0;
     end else begin
-        if (((audio_out_V_1_ack_out == 1'b1) & (audio_out_V_1_vld_out == 1'b1))) begin
+        if (((audio_out_V_1_vld_out == 1'b1) & (audio_out_V_1_ack_out == 1'b1))) begin
             audio_out_V_1_sel_rd <= ~audio_out_V_1_sel_rd;
         end
     end
@@ -236,18 +209,6 @@ always @ (posedge ap_clk) begin
             audio_out_V_1_state <= 2'd3;
         end else begin
             audio_out_V_1_state <= 2'd2;
-        end
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if (ap_rst_n_inv == 1'b1) begin
-        grp_fm_receiver_fu_117_ap_start_reg <= 1'b0;
-    end else begin
-        if (((iq_in_V_0_vld_out == 1'b1) & (1'b1 == ap_CS_fsm_state2))) begin
-            grp_fm_receiver_fu_117_ap_start_reg <= 1'b1;
-        end else if ((grp_fm_receiver_fu_117_ap_ready == 1'b1)) begin
-            grp_fm_receiver_fu_117_ap_start_reg <= 1'b0;
         end
     end
 end
@@ -300,20 +261,13 @@ end
 
 always @ (posedge ap_clk) begin
     if ((audio_out_V_1_load_A == 1'b1)) begin
-        audio_out_V_1_payload_A <= tmp_1_fu_181_p3;
+        audio_out_V_1_payload_A <= iq_in_V_0_data_out;
     end
 end
 
 always @ (posedge ap_clk) begin
     if ((audio_out_V_1_load_B == 1'b1)) begin
-        audio_out_V_1_payload_B <= tmp_1_fu_181_p3;
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if (((iq_in_V_0_vld_out == 1'b1) & (1'b1 == ap_CS_fsm_state2))) begin
-        in_i_V_reg_206 <= in_i_V_fu_157_p1;
-        in_q_V_reg_211 <= {{iq_in_V_0_data_out[31:16]}};
+        audio_out_V_1_payload_B <= iq_in_V_0_data_out;
     end
 end
 
@@ -330,13 +284,13 @@ always @ (posedge ap_clk) begin
 end
 
 always @ (posedge ap_clk) begin
-    if (((1'b1 == ap_CS_fsm_state4) & (audio_out_V_1_ack_in == 1'b1))) begin
-        toggle <= tmp_s_fu_194_p2;
+    if (((1'b1 == ap_CS_fsm_state3) & (audio_out_V_1_ack_in == 1'b1))) begin
+        toggle <= tmp_4_fu_78_p2;
     end
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state4) & (audio_out_V_1_ack_in == 1'b1))) begin
+    if (((1'b1 == ap_CS_fsm_state3) & (audio_out_V_1_ack_in == 1'b1))) begin
         ap_done = 1'b1;
     end else begin
         ap_done = 1'b0;
@@ -352,7 +306,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state4) & (audio_out_V_1_ack_in == 1'b1))) begin
+    if (((1'b1 == ap_CS_fsm_state3) & (audio_out_V_1_ack_in == 1'b1))) begin
         ap_ready = 1'b1;
     end else begin
         ap_ready = 1'b0;
@@ -368,7 +322,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((~((grp_fm_receiver_fu_117_ap_done == 1'b0) | (audio_out_V_1_ack_in == 1'b0)) & (1'b1 == ap_CS_fsm_state3))) begin
+    if ((~((iq_in_V_0_vld_out == 1'b0) | (audio_out_V_1_ack_in == 1'b0)) & (1'b1 == ap_CS_fsm_state2))) begin
         audio_out_V_1_vld_in = 1'b1;
     end else begin
         audio_out_V_1_vld_in = 1'b0;
@@ -376,7 +330,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state4) | (1'b1 == ap_CS_fsm_state3))) begin
+    if (((1'b1 == ap_CS_fsm_state3) | (1'b1 == ap_CS_fsm_state2))) begin
         audio_out_V_TDATA_blk_n = audio_out_V_1_state[1'd1];
     end else begin
         audio_out_V_TDATA_blk_n = 1'b1;
@@ -384,7 +338,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((iq_in_V_0_vld_out == 1'b1) & (1'b1 == ap_CS_fsm_state2))) begin
+    if ((~((iq_in_V_0_vld_out == 1'b0) | (audio_out_V_1_ack_in == 1'b0)) & (1'b1 == ap_CS_fsm_state2))) begin
         iq_in_V_0_ack_out = 1'b1;
     end else begin
         iq_in_V_0_ack_out = 1'b0;
@@ -425,24 +379,17 @@ always @ (*) begin
             end
         end
         ap_ST_fsm_state2 : begin
-            if (((iq_in_V_0_vld_out == 1'b1) & (1'b1 == ap_CS_fsm_state2))) begin
+            if ((~((iq_in_V_0_vld_out == 1'b0) | (audio_out_V_1_ack_in == 1'b0)) & (1'b1 == ap_CS_fsm_state2))) begin
                 ap_NS_fsm = ap_ST_fsm_state3;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state2;
             end
         end
         ap_ST_fsm_state3 : begin
-            if ((~((grp_fm_receiver_fu_117_ap_done == 1'b0) | (audio_out_V_1_ack_in == 1'b0)) & (1'b1 == ap_CS_fsm_state3))) begin
-                ap_NS_fsm = ap_ST_fsm_state4;
-            end else begin
-                ap_NS_fsm = ap_ST_fsm_state3;
-            end
-        end
-        ap_ST_fsm_state4 : begin
-            if (((1'b1 == ap_CS_fsm_state4) & (audio_out_V_1_ack_in == 1'b1))) begin
+            if (((1'b1 == ap_CS_fsm_state3) & (audio_out_V_1_ack_in == 1'b1))) begin
                 ap_NS_fsm = ap_ST_fsm_state1;
             end else begin
-                ap_NS_fsm = ap_ST_fsm_state4;
+                ap_NS_fsm = ap_ST_fsm_state3;
             end
         end
         default : begin
@@ -456,8 +403,6 @@ assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 assign ap_CS_fsm_state2 = ap_CS_fsm[32'd1];
 
 assign ap_CS_fsm_state3 = ap_CS_fsm[32'd2];
-
-assign ap_CS_fsm_state4 = ap_CS_fsm[32'd3];
 
 always @ (*) begin
     ap_rst_n_inv = ~ap_rst_n;
@@ -481,10 +426,6 @@ assign audio_out_V_TDATA = audio_out_V_1_data_out;
 
 assign audio_out_V_TVALID = audio_out_V_1_state[1'd0];
 
-assign grp_fm_receiver_fu_117_ap_start = grp_fm_receiver_fu_117_ap_start_reg;
-
-assign in_i_V_fu_157_p1 = iq_in_V_0_data_out[15:0];
-
 assign iq_in_V_0_ack_in = iq_in_V_0_state[1'd1];
 
 assign iq_in_V_0_load_A = (iq_in_V_0_state_cmp_full & ~iq_in_V_0_sel_wr);
@@ -501,8 +442,6 @@ assign iq_in_V_0_vld_out = iq_in_V_0_state[1'd0];
 
 assign iq_in_V_TREADY = iq_in_V_0_state[1'd1];
 
-assign tmp_1_fu_181_p3 = {{grp_fm_receiver_fu_117_ap_return_1}, {grp_fm_receiver_fu_117_ap_return_0}};
-
-assign tmp_s_fu_194_p2 = (toggle ^ 1'd1);
+assign tmp_4_fu_78_p2 = (toggle ^ 1'd1);
 
 endmodule //fm_receiver_hls

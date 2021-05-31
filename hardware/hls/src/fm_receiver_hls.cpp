@@ -44,15 +44,14 @@ clang-format on
 
 #include "../tb/helper/DataWriter.hpp"
 #include "fm_receiver.hpp"
-#include "utils/strobe_gen.hpp"
 
 using namespace std;
 
 /** Select implementation variant
  *  NOTE: Selection is mutually exclusive - only enable one at a time!
  */
-#define IMPL_DATA_FORWARDING_ONLY 0
-#define IMPL_FM_RADIO             1
+#define IMPL_DATA_FORWARDING_ONLY 1
+#define IMPL_FM_RADIO             0
 
 void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
                      hls::stream<audio_sample_t>& audio_out,
@@ -68,9 +67,6 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
 
 #pragma HLS INTERFACE s_axilite port = led_ctrl bundle = CONFIG
 #pragma HLS INTERFACE ap_none port                     = led_out
-
-  /*-------------- LED control ---------------*/
-  led_out = led_ctrl;
 
 #if IMPL_DATA_FORWARDING_ONLY == 1
   /*----------- Forwarding test --------------*/
@@ -88,6 +84,9 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
   // TODO: remove this debug toggle
   static bool toggle = false;
   toggle             = !toggle;
+
+  /*-------------- LED control ---------------*/
+  led_out = (led_ctrl | ((1 << 2) & toggle));
 
 #if IMPL_FM_RADIO == 1
   /*---------------- FM radio ----------------*/
