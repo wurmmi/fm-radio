@@ -71,8 +71,9 @@ static void task_audio(void *) {
         LOG_INFO("DMA stopped.");
         break;
       case 'i':
-        printf("This program was developed by Michael Wurm.\n");
-        printf("Build date:  %s, %s\n", __DATE__, __TIME__);
+        printf("This program is developed by Michael Wurm.\n");
+        printf("SDK  build date:  %s, %s\n", __DATE__, __TIME__);
+        printf("FPGA build date:  %s, (%s)\n", "date", "git hash");
         break;
 
       default:

@@ -26,9 +26,14 @@ clang-format off
 --                                            with firmware support
 --
 --       05/28/2021  22:00 - 01:30    3:30 h  Fixing issue with auto-generated driver.
-         05/29/2021  14:00 - 20:00    6:00 h  It did not get imported into the SDK.
-                                              Problem was that HLS project and top-level
-                                              did not have the same name....
+--       05/29/2021  14:00 - 20:00    6:00 h  It did not get imported into the SDK.
+--                                            Problem was that HLS project and top-level
+--                                            did not have the same name....
+--
+-- (4) Build information status register
+--       (TODO)
+--
+--
 --
 clang-format on
 */
@@ -43,14 +48,17 @@ clang-format on
 
 using namespace std;
 
-#define IMPL_DATA_FORWARDING_ONLY 1
-#define IMPL_FM_RADIO             0
+/** Select implementation variant
+ *  NOTE: Selection is mutually exclusive - only enable one at a time!
+ */
+#define IMPL_DATA_FORWARDING_ONLY 0
+#define IMPL_FM_RADIO             1
 
 void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
                      hls::stream<audio_sample_t>& audio_out,
                      uint8_t led_ctrl,
                      uint8_t& led_out) {
-  //#pragma HLS INTERFACE ap_ctrl_none port = return
+#pragma HLS INTERFACE ap_ctrl_hs port = return
 
 #pragma HLS INTERFACE axis port = iq_in
 #pragma HLS DATA_PACK variable  = iq_in
