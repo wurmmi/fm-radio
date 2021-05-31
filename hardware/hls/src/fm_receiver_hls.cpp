@@ -91,29 +91,28 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
 
 #if IMPL_FM_RADIO == 1
   /*---------------- FM radio ----------------*/
-  if (strobe_gen()) {
-    // ------------------------------------------------------
-    // Read input and split IQ samples
-    // ------------------------------------------------------
 
-    iq_sample_t in = iq_in.read();
-    sample_t in_i  = in.i;
-    sample_t in_q  = in.q;
+  // ------------------------------------------------------
+  // Read input and split IQ samples
+  // ------------------------------------------------------
 
-    // ------------------------------------------------------
-    // FM Receiver IP
-    // ------------------------------------------------------
+  iq_sample_t in = iq_in.read();
+  sample_t in_i  = in.i;
+  sample_t in_q  = in.q;
 
-    sample_t audio_L;
-    sample_t audio_R;
-    fm_receiver(in_i, in_q, audio_L, audio_R);
+  // ------------------------------------------------------
+  // FM Receiver IP
+  // ------------------------------------------------------
 
-    // ------------------------------------------------------
-    // Output
-    // ------------------------------------------------------
+  sample_t audio_L;
+  sample_t audio_R;
+  fm_receiver(in_i, in_q, audio_L, audio_R);
 
-    audio_sample_t audio_sample = {audio_L, audio_R};
-    audio_out.write(audio_sample);
-  }
+  // ------------------------------------------------------
+  // Output
+  // ------------------------------------------------------
+
+  audio_sample_t audio_sample = {audio_L, audio_R};
+  audio_out.write(audio_sample);
 #endif /* IMPL_FM_RADIO */
 }
