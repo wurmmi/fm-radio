@@ -43,8 +43,8 @@ clang-format on
 
 using namespace std;
 
-#define IMPL_DATA_FORWARDING_ONLY 0
-#define IMPL_FM_RADIO             1
+#define IMPL_DATA_FORWARDING_ONLY 1
+#define IMPL_FM_RADIO             0
 
 void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
                      hls::stream<audio_sample_t>& audio_out,
