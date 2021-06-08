@@ -23,10 +23,9 @@ const TickType_t delay_ms_c = pdMS_TO_TICKS(1000);
 
 static TaskHandle_t task_loop_handle;
 static TaskHandle_t task_audio_handle;
+static FMRadioIP fmRadioIP(XPAR_FM_RECEIVER_HLS_0_DEVICE_ID);
 
 static void task_loop(void *) {
-  FMRadioIP fmRadioIP(XPAR_FM_RECEIVER_HLS_0_DEVICE_ID);
-
   while (true) {
     fmRadioIP.LED_Toggle(TLed::LED1);
     vTaskDelay(delay_ms_c);
@@ -77,11 +76,16 @@ static void task_audio(void *) {
         streamDMA.Stop();
         LOG_INFO("DMA stopped.");
         break;
-      case 'i':
+      case 'i': {
         printf("This program is developed by Michael Wurm.\n");
         printf("SDK  build date:  %s, %s\n", __DATE__, __TIME__);
-        printf("FPGA build date:  %s, (%s)\n", "date", "git hash");
-        break;
+
+        string build_time = fmRadioIP.GetBuildTime();
+        string git_hash   = fmRadioIP.GetGitHash();
+        printf("FPGA build date:  %s, (%s)\n",
+               build_time.c_str(),
+               git_hash.c_str());
+      } break;
 
       default:
         LOG_WARN("Unknown input.\n");

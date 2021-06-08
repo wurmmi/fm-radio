@@ -55,5 +55,5 @@ if {[file exists $build_dir/$proj_name.xpr]} {
 
 if {$open_gui == 1} {
   puts "Opening block design"
-  open_bd_design ./src/bd/$name.bd
+  open_bd_design [get_files $proj_name.bd]
 }
