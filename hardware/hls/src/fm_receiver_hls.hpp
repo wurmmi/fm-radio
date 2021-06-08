@@ -11,8 +11,6 @@
 
 #include <hls_stream.h>
 
-#include <string>
-
 #include "fm_global.hpp"
 
 typedef struct {

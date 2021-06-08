@@ -41,7 +41,7 @@ clang-format on
 #include "fm_receiver_hls.hpp"
 
 #include <iostream>
-#include <string>
+#include <memory>
 
 #include "../tb/helper/DataWriter.hpp"
 #include "fm_receiver.hpp"
@@ -109,8 +109,8 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
   /*----------- AXILITE Interface ------------*/
   led_out = led_ctrl | (((uint8_t)toggle << 2));
 
-  strncpy(git_hash, git_hash_string, 8);
-  strncpy(build_time, build_time_string, 13);
+  memcpy(git_hash, git_hash_string, 8);
+  memcpy(build_time, build_time_string, 13);
 
 #if IMPL_FM_RADIO == 1
   /*---------------- FM radio ----------------*/
