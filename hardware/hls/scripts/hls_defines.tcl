@@ -10,9 +10,6 @@ set TB_DIR   "../../tb"
 set GIT_HASH   "[exec git rev-parse --short HEAD]"
 set BUILD_TIME "[clock format [clock seconds] -format "%y%m%d%H%M%S"]"
 
-puts "GIT_HASH   : $GIT_HASH"
-puts "BUILD_TIME : $BUILD_TIME"
-
 set CPPFLAGS [ list                            \
                 -O0                            \
                 -std=gnu++11                   \
@@ -24,7 +21,8 @@ set CPPFLAGS [ list                            \
                 -DBUILD_TIME=${BUILD_TIME}     \
                 -DGIT_HASH=${GIT_HASH}         \
               ]
-
-puts "CPPFLAGS: $CPPFLAGS"
-
 #              -fsanitize=undefined"
+
+puts "GIT_HASH   : $GIT_HASH"
+puts "BUILD_TIME : $BUILD_TIME"
+puts "CPPFLAGS   : $CPPFLAGS"

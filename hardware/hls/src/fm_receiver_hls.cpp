@@ -41,7 +41,6 @@ clang-format on
 #include "fm_receiver_hls.hpp"
 
 #include <iostream>
-#include <memory>
 
 #include "../tb/helper/DataWriter.hpp"
 #include "fm_receiver.hpp"
@@ -73,8 +72,8 @@ static const char* build_time_string = STRING(BUILD_TIME);
 void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
                      hls::stream<audio_sample_t>& audio_out,
                      uint8_t led_ctrl,
-                     char* git_hash,
-                     char* build_time,
+                     char git_hash[8],
+                     char build_time[13],
                      uint8_t& led_out) {
 #pragma HLS INTERFACE ap_ctrl_hs port = return
 
@@ -109,8 +108,12 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
   /*----------- AXILITE Interface ------------*/
   led_out = led_ctrl | (((uint8_t)toggle << 2));
 
-  memcpy(git_hash, git_hash_string, 8);
-  memcpy(build_time, build_time_string, 13);
+  for (int i = 0; i < 8; i++) {
+    git_hash[i] = git_hash_string[i];
+  }
+  for (int i = 0; i < 13; i++) {
+    build_time[i] = build_time_string[i];
+  }
 
 #if IMPL_FM_RADIO == 1
   /*---------------- FM radio ----------------*/
