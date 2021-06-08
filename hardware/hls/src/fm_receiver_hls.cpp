@@ -56,24 +56,25 @@ using namespace std;
 
 #ifndef GIT_HASH
 #warning GIT_HASH is undefined!
-#define GIT_HASH "undefined"
+#define GIT_HASH undefined
 #endif
 
 #ifndef BUILD_TIME
 #warning BUILD_TIME is undefined!
-#define BUILD_TIME "4711"
+#define BUILD_TIME 4711
 #endif
 
-#define STRING(x) #x
+#define STRING2(x) #x
+#define STRING(x)  STRING2(x)
 
-static const char* git_hash_string   = string(STRING(GIT_HASH)).c_str();
-static const char* build_time_string = string(STRING(BUILD_TIME)).c_str();
+static const string git_hash_string   = string(STRING(GIT_HASH));
+static const string build_time_string = string(STRING(BUILD_TIME));
 
 void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
                      hls::stream<audio_sample_t>& audio_out,
                      uint8_t led_ctrl,
-                     char const* git_hash,
-                     char const* build_time,
+                     string& git_hash,
+                     string& build_time,
                      uint8_t& led_out) {
 #pragma HLS INTERFACE ap_ctrl_hs port = return
 

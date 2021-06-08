@@ -13,13 +13,16 @@ set BUILD_TIME "[clock format [clock seconds] -format "%y%m%d%H%M%S"]"
 puts "GIT_HASH   : $GIT_HASH"
 puts "BUILD_TIME : $BUILD_TIME"
 
-set CPPFLAGS "-O0 -std=gnu++11 -I$SRC_DIR    \
-              -Wall                          \
-              -Wno-unused-label              \
-              -Wno-unused-parameter          \
-              -DBUILD_TIME=\"${BUILD_TIME}\"   \
-              -DGIT_HASH=\"${GIT_HASH}\"       \
-            "
+set CPPFLAGS [ list                            \
+                -O0                            \
+                -std=gnu++11                   \
+                -I$SRC_DIR                     \
+                -Wall                          \
+                -Wno-unused-label              \
+                -Wno-unused-parameter          \
+                -DBUILD_TIME=${BUILD_TIME}     \
+                -DGIT_HASH=${GIT_HASH}         \
+              ]
 
 puts "CPPFLAGS: $CPPFLAGS"
 
