@@ -28,6 +28,9 @@ project: ##			- Create/Open Vivado project.
 	@mkdir -p $(VIVADO_DIR)
 	@$(call vivado,create_project.tcl,-tclargs $(VIVADO_DIR) $(IP_DIRS) $(GUI))
 
+upgrade_ips: ##			- Upgrade changed IPs in the design.
+	@$(call vivado,upgrade_ips.tcl,-tclargs $(VIVADO_DIR) $(IP_DIRS) $(GUI))
+
 synth: ##				- Synthesize Vivado project.
 	@echo "Synthesize Vivado project ..."
 	@mkdir -p $(VIVADO_DIR)
