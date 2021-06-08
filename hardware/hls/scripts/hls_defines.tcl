@@ -20,6 +20,7 @@ set CPPFLAGS [ list                            \
                 -Wall                          \
                 -Wno-unused-label              \
                 -Wno-unused-parameter          \
+                -Wno-mismatched-tags           \
                 -DBUILD_TIME=${BUILD_TIME}     \
                 -DGIT_HASH=${GIT_HASH}         \
               ]

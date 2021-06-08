@@ -23,8 +23,8 @@ typedef struct {
 void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
                      hls::stream<audio_sample_t>& audio_out,
                      uint8_t led_ctrl,
-                     std::string& git_hash,
-                     std::string& build_time,
+                     char* git_hash,
+                     char* build_time,
                      uint8_t& led_out);
 
 #endif /* _FM_RECEIVER_HLS_HPP */

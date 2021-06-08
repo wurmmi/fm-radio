@@ -67,14 +67,14 @@ using namespace std;
 #define STRING2(x) #x
 #define STRING(x)  STRING2(x)
 
-static const string git_hash_string   = string(STRING(GIT_HASH));
-static const string build_time_string = string(STRING(BUILD_TIME));
+static const char* git_hash_string   = STRING(GIT_HASH);
+static const char* build_time_string = STRING(BUILD_TIME);
 
 void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
                      hls::stream<audio_sample_t>& audio_out,
                      uint8_t led_ctrl,
-                     string& git_hash,
-                     string& build_time,
+                     char* git_hash,
+                     char* build_time,
                      uint8_t& led_out) {
 #pragma HLS INTERFACE ap_ctrl_hs port = return
 
@@ -109,8 +109,8 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
   /*----------- AXILITE Interface ------------*/
   led_out = led_ctrl | (((uint8_t)toggle << 2));
 
-  git_hash   = git_hash_string;
-  build_time = build_time_string;
+  strncpy(git_hash, git_hash_string, 8);
+  strncpy(build_time, build_time_string, 13);
 
 #if IMPL_FM_RADIO == 1
   /*---------------- FM radio ----------------*/

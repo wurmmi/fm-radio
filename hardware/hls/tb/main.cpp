@@ -75,8 +75,8 @@ int main() {
     hls::stream<audio_sample_t> stream_data_out;
     uint8_t led_ctrl = 0x3;
     uint8_t led_out_o;
-    string git_hash_o;
-    string build_time_o;
+    char git_hash_o[8]    = {0};
+    char build_time_o[13] = {0};
     while (!stream_data_in.empty()) {
       fm_receiver_hls(stream_data_in,
                       stream_data_out,
@@ -85,8 +85,8 @@ int main() {
                       build_time_o,
                       led_out_o);
 
-      std::bitset<8> led_out_o_bit(led_out_o);
-      cout << "led_out_o: " << hex << led_out_o_bit << endl;
+      // std::bitset<8> led_out_o_bit(led_out_o);
+      // cout << "led_out_o: " << hex << led_out_o_bit << endl;
     }
 
     // Check LED output
