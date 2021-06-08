@@ -107,7 +107,7 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
   toggle             = !toggle;
 
   /*----------- AXILITE Interface ------------*/
-  led_out = led_ctrl | (((uint8_t)1 << 3) & toggle);
+  led_out = led_ctrl | (((uint8_t)toggle << 2));
 
   git_hash   = git_hash_string;
   build_time = build_time_string;

@@ -6,6 +6,7 @@
  */
 /*****************************************************************************/
 
+#include <bitset>
 #include <chrono>
 #include <iostream>
 
@@ -70,11 +71,10 @@ int main() {
     // Apply stimuli, call the top-level function and save the results
     DataWriter writer_data_out_rx_audio_L("data_out_rx_audio_L.txt");
     DataWriter writer_data_out_rx_audio_R("data_out_rx_audio_R.txt");
-    sample_t audio_L;
-    sample_t audio_R;
+
     hls::stream<audio_sample_t> stream_data_out;
     uint8_t led_ctrl = 0x3;
-    uint8_t led_out;
+    uint8_t led_out_o;
     string git_hash_o;
     string build_time_o;
     while (!stream_data_in.empty()) {
@@ -83,11 +83,14 @@ int main() {
                       led_ctrl,
                       git_hash_o,
                       build_time_o,
-                      led_out);
+                      led_out_o);
+
+      std::bitset<8> led_out_o_bit(led_out_o);
+      cout << "led_out_o: " << hex << led_out_o_bit << endl;
     }
 
     // Check LED output
-    if (led_ctrl != led_out)
+    if (led_ctrl != led_out_o)
       cerr << "ERROR: LED control not matching LED output" << endl;
 
     // Check build info status register
