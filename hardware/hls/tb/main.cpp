@@ -75,8 +75,8 @@ int main() {
     hls::stream<audio_sample_t> stream_data_out;
     uint8_t led_ctrl = 0x3;
     uint8_t led_out;
-    char git_hash_o[9]    = {0};
-    char build_time_o[13] = {0};
+    string git_hash_o   = {0};
+    string build_time_o = {0};
     while (!stream_data_in.empty()) {
       fm_receiver_hls(stream_data_in,
                       stream_data_out,
@@ -95,8 +95,8 @@ int main() {
     //    char build_time[13] = {0};
     //    memcpy(git_hash, git_hash_o, 8);
     //    memcpy(build_time, build_time_o, 12);
-    printf("git_hash  : %s\n", git_hash_o);
-    printf("build_time: %s\n", build_time_o);
+    printf("git_hash  : %s\n", git_hash_o.c_str());
+    printf("build_time: %s\n", build_time_o.c_str());
     cout << "git_hash  : " << git_hash_o << endl;
     cout << "build_time: " << build_time_o << endl;
 
