@@ -7,23 +7,20 @@
 set SRC_DIR  "../../src"
 set TB_DIR   "../../tb"
 
-set GIT_HASH   [exec git rev-parse --short HEAD]
-set BUILD_TIME [clock format [clock seconds] -format "%y%m%d%H%M%S"]
+set GIT_HASH   "[exec git rev-parse --short HEAD]"
+set BUILD_TIME "[clock format [clock seconds] -format "%y%m%d%H%M%S"]"
 
 puts "GIT_HASH   : $GIT_HASH"
 puts "BUILD_TIME : $BUILD_TIME"
 
-set CPPFLAGS [ list                           \
-              -O0 -std=gnu++11 -I$SRC_DIR    \
+set CPPFLAGS "-O0 -std=gnu++11 -I$SRC_DIR    \
               -Wall                          \
               -Wno-unused-label              \
               -Wno-unused-parameter          \
-              -DBUILD_TIME="\"${BUILD_TIME}\""   \
-              -DGIT_HASH="\"${GIT_HASH}\""       \
-            ]
+              -DBUILD_TIME=\"${BUILD_TIME}\"   \
+              -DGIT_HASH=\"${GIT_HASH}\"       \
+            "
 
 puts "CPPFLAGS: $CPPFLAGS"
 
 #              -fsanitize=undefined"
-set line "This is a line \"with quotations\" inside the string."
-puts $line

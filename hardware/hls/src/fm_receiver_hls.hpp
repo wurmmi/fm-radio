@@ -13,16 +13,6 @@
 
 #include "fm_global.hpp"
 
-#ifndef GIT_HASH
-#warning GIT_HASH is undefined!
-#define GIT_HASH "undefined"
-#endif
-
-#ifndef BUILD_TIME
-#warning BUILD_TIME is undefined!
-#define BUILD_TIME "4711"
-#endif
-
 typedef struct {
   sample_t L;
   sample_t R;

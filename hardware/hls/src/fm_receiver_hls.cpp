@@ -54,8 +54,20 @@ using namespace std;
 #define IMPL_DATA_FORWARDING_ONLY 1
 #define IMPL_FM_RADIO             0
 
-static const char* git_hash_string   = string(GIT_HASH).c_str();
-static const char* build_time_string = string(BUILD_TIME).c_str();
+#ifndef GIT_HASH
+#warning GIT_HASH is undefined!
+#define GIT_HASH "undefined"
+#endif
+
+#ifndef BUILD_TIME
+#warning BUILD_TIME is undefined!
+#define BUILD_TIME "4711"
+#endif
+
+#define STRING(x) #x
+
+static const char* git_hash_string   = string(STRING(GIT_HASH)).c_str();
+static const char* build_time_string = string(STRING(BUILD_TIME)).c_str();
 
 void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
                      hls::stream<audio_sample_t>& audio_out,
