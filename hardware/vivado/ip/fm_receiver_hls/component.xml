@@ -153,7 +153,7 @@
       <spirit:parameters>
         <spirit:parameter>
           <spirit:name>ADDR_WIDTH</spirit:name>
-          <spirit:value spirit:id="BUSIFPARAM_VALUE.S_AXI_CONFIG.ADDR_WIDTH">5</spirit:value>
+          <spirit:value spirit:id="BUSIFPARAM_VALUE.S_AXI_CONFIG.ADDR_WIDTH">6</spirit:value>
         </spirit:parameter>
         <spirit:parameter>
           <spirit:name>DATA_WIDTH</spirit:name>
@@ -177,10 +177,10 @@ pe immediate dependency {} format string minimum {} maximum {}} value {}} bitwid
 ue {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 1} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0}}} ARREADY {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 1} bitoffset {attribs {resolve_type immediate dependency {} format long min
 imum {} maximum {}} value 0}}} RVALID {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 1} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0}}} RREADY {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type 
 immediate dependency {} format long minimum {} maximum {}} value 1} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0}}} RRESP {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 2} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} integer {sig
-ned {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value false}}}} AWADDR {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 5} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} integer {signed {attribs {resolve_type immediate dependency {} format bool minim
+ned {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value false}}}} AWADDR {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 6} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} integer {signed {attribs {resolve_type immediate dependency {} format bool minim
 um {} maximum {}} value false}}}} WDATA {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 8} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} integer {signed {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value true}}}} WSTRB {datatype {name {attribs {reso
 lve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 4} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} integer {signed {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value false}}}} ARADDR {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}
-} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 5} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} integer {signed {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value false}}}} RDATA {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} f
+} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 6} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} integer {signed {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value false}}}} RDATA {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} f
 ormat long minimum {} maximum {}} value 8} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} integer {signed {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value true}}}}}</spirit:value>
         </spirit:parameter>
       </spirit:parameters>
@@ -388,138 +388,6 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
       </spirit:parameters>
     </spirit:busInterface>
     <spirit:busInterface>
-      <spirit:name>build_time_address0</spirit:name>
-      <spirit:busType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="data" spirit:version="1.0"/>
-      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="data_rtl" spirit:version="1.0"/>
-      <spirit:master/>
-      <spirit:portMaps>
-        <spirit:portMap>
-          <spirit:logicalPort>
-            <spirit:name>DATA</spirit:name>
-          </spirit:logicalPort>
-          <spirit:physicalPort>
-            <spirit:name>build_time_address0</spirit:name>
-          </spirit:physicalPort>
-        </spirit:portMap>
-      </spirit:portMaps>
-      <spirit:parameters>
-        <spirit:parameter>
-          <spirit:name>LAYERED_METADATA</spirit:name>
-          <spirit:value spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.BUILD_TIME_ADDRESS0.LAYERED_METADATA">xilinx.com:interface:datatypes:1.0 {DATA {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 4} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0}}}}</spirit:value>
-        </spirit:parameter>
-      </spirit:parameters>
-    </spirit:busInterface>
-    <spirit:busInterface>
-      <spirit:name>build_time_d0</spirit:name>
-      <spirit:busType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="data" spirit:version="1.0"/>
-      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="data_rtl" spirit:version="1.0"/>
-      <spirit:master/>
-      <spirit:portMaps>
-        <spirit:portMap>
-          <spirit:logicalPort>
-            <spirit:name>DATA</spirit:name>
-          </spirit:logicalPort>
-          <spirit:physicalPort>
-            <spirit:name>build_time_d0</spirit:name>
-          </spirit:physicalPort>
-        </spirit:portMap>
-      </spirit:portMaps>
-      <spirit:parameters>
-        <spirit:parameter>
-          <spirit:name>LAYERED_METADATA</spirit:name>
-          <spirit:value spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.BUILD_TIME_D0.LAYERED_METADATA">xilinx.com:interface:datatypes:1.0 {DATA {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 8} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} integer {signed {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value true}}}}}</spirit:value>
-        </spirit:parameter>
-      </spirit:parameters>
-    </spirit:busInterface>
-    <spirit:busInterface>
-      <spirit:name>build_time_q0</spirit:name>
-      <spirit:busType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="data" spirit:version="1.0"/>
-      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="data_rtl" spirit:version="1.0"/>
-      <spirit:slave/>
-      <spirit:portMaps>
-        <spirit:portMap>
-          <spirit:logicalPort>
-            <spirit:name>DATA</spirit:name>
-          </spirit:logicalPort>
-          <spirit:physicalPort>
-            <spirit:name>build_time_q0</spirit:name>
-          </spirit:physicalPort>
-        </spirit:portMap>
-      </spirit:portMaps>
-      <spirit:parameters>
-        <spirit:parameter>
-          <spirit:name>LAYERED_METADATA</spirit:name>
-          <spirit:value spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.BUILD_TIME_Q0.LAYERED_METADATA">xilinx.com:interface:datatypes:1.0 {DATA {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 8} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} integer {signed {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value true}}}}}</spirit:value>
-        </spirit:parameter>
-      </spirit:parameters>
-    </spirit:busInterface>
-    <spirit:busInterface>
-      <spirit:name>build_time_address1</spirit:name>
-      <spirit:busType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="data" spirit:version="1.0"/>
-      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="data_rtl" spirit:version="1.0"/>
-      <spirit:master/>
-      <spirit:portMaps>
-        <spirit:portMap>
-          <spirit:logicalPort>
-            <spirit:name>DATA</spirit:name>
-          </spirit:logicalPort>
-          <spirit:physicalPort>
-            <spirit:name>build_time_address1</spirit:name>
-          </spirit:physicalPort>
-        </spirit:portMap>
-      </spirit:portMaps>
-      <spirit:parameters>
-        <spirit:parameter>
-          <spirit:name>LAYERED_METADATA</spirit:name>
-          <spirit:value spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.BUILD_TIME_ADDRESS1.LAYERED_METADATA">xilinx.com:interface:datatypes:1.0 {DATA {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 4} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0}}}}</spirit:value>
-        </spirit:parameter>
-      </spirit:parameters>
-    </spirit:busInterface>
-    <spirit:busInterface>
-      <spirit:name>build_time_d1</spirit:name>
-      <spirit:busType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="data" spirit:version="1.0"/>
-      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="data_rtl" spirit:version="1.0"/>
-      <spirit:master/>
-      <spirit:portMaps>
-        <spirit:portMap>
-          <spirit:logicalPort>
-            <spirit:name>DATA</spirit:name>
-          </spirit:logicalPort>
-          <spirit:physicalPort>
-            <spirit:name>build_time_d1</spirit:name>
-          </spirit:physicalPort>
-        </spirit:portMap>
-      </spirit:portMaps>
-      <spirit:parameters>
-        <spirit:parameter>
-          <spirit:name>LAYERED_METADATA</spirit:name>
-          <spirit:value spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.BUILD_TIME_D1.LAYERED_METADATA">xilinx.com:interface:datatypes:1.0 {DATA {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 8} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} integer {signed {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value true}}}}}</spirit:value>
-        </spirit:parameter>
-      </spirit:parameters>
-    </spirit:busInterface>
-    <spirit:busInterface>
-      <spirit:name>build_time_q1</spirit:name>
-      <spirit:busType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="data" spirit:version="1.0"/>
-      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="data_rtl" spirit:version="1.0"/>
-      <spirit:slave/>
-      <spirit:portMaps>
-        <spirit:portMap>
-          <spirit:logicalPort>
-            <spirit:name>DATA</spirit:name>
-          </spirit:logicalPort>
-          <spirit:physicalPort>
-            <spirit:name>build_time_q1</spirit:name>
-          </spirit:physicalPort>
-        </spirit:portMap>
-      </spirit:portMaps>
-      <spirit:parameters>
-        <spirit:parameter>
-          <spirit:name>LAYERED_METADATA</spirit:name>
-          <spirit:value spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.BUILD_TIME_Q1.LAYERED_METADATA">xilinx.com:interface:datatypes:1.0 {DATA {datatype {name {attribs {resolve_type immediate dependency {} format string minimum {} maximum {}} value {}} bitwidth {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 8} bitoffset {attribs {resolve_type immediate dependency {} format long minimum {} maximum {}} value 0} integer {signed {attribs {resolve_type immediate dependency {} format bool minimum {} maximum {}} value true}}}}}</spirit:value>
-        </spirit:parameter>
-      </spirit:parameters>
-    </spirit:busInterface>
-    <spirit:busInterface>
       <spirit:name>led_out</spirit:name>
       <spirit:busType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="data" spirit:version="1.0"/>
       <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="data_rtl" spirit:version="1.0"/>
@@ -609,6 +477,17 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
             <spirit:value spirit:format="long">0</spirit:value>
           </spirit:reset>
         </spirit:register>
+        <spirit:register>
+          <spirit:name>Memory_build_time</spirit:name>
+          <spirit:displayName>Memory_build_time</spirit:displayName>
+          <spirit:description>Memory build_time</spirit:description>
+          <spirit:addressOffset>32</spirit:addressOffset>
+          <spirit:size spirit:format="long">16</spirit:size>
+          <spirit:access>read-write</spirit:access>
+          <spirit:reset>
+            <spirit:value spirit:format="long">0</spirit:value>
+          </spirit:reset>
+        </spirit:register>
       </spirit:addressBlock>
     </spirit:memoryMap>
   </spirit:memoryMaps>
@@ -626,7 +505,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>a3b3b4bf</spirit:value>
+            <spirit:value>8600ba4d</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -642,7 +521,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>855123c4</spirit:value>
+            <spirit:value>ddd11882</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -658,7 +537,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>6b24e0f1</spirit:value>
+            <spirit:value>38f88b28</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -674,7 +553,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>0baf7f32</spirit:value>
+            <spirit:value>7ab8c50d</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -688,7 +567,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>cb17b6b5</spirit:value>
+            <spirit:value>46971b62</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -738,7 +617,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>90f31ef7</spirit:value>
+            <spirit:value>15c10c03</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -759,63 +638,11 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
     </spirit:views>
     <spirit:ports>
       <spirit:port>
-        <spirit:name>build_time_ce0</spirit:name>
-        <spirit:wire>
-          <spirit:direction>out</spirit:direction>
-          <spirit:wireTypeDefs>
-            <spirit:wireTypeDef>
-              <spirit:typeName>STD_LOGIC</spirit:typeName>
-              <spirit:viewNameRef>xilinx_verilogsynthesis</spirit:viewNameRef>
-              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
-            </spirit:wireTypeDef>
-          </spirit:wireTypeDefs>
-        </spirit:wire>
-      </spirit:port>
-      <spirit:port>
-        <spirit:name>build_time_we0</spirit:name>
-        <spirit:wire>
-          <spirit:direction>out</spirit:direction>
-          <spirit:wireTypeDefs>
-            <spirit:wireTypeDef>
-              <spirit:typeName>STD_LOGIC</spirit:typeName>
-              <spirit:viewNameRef>xilinx_verilogsynthesis</spirit:viewNameRef>
-              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
-            </spirit:wireTypeDef>
-          </spirit:wireTypeDefs>
-        </spirit:wire>
-      </spirit:port>
-      <spirit:port>
-        <spirit:name>build_time_ce1</spirit:name>
-        <spirit:wire>
-          <spirit:direction>out</spirit:direction>
-          <spirit:wireTypeDefs>
-            <spirit:wireTypeDef>
-              <spirit:typeName>STD_LOGIC</spirit:typeName>
-              <spirit:viewNameRef>xilinx_verilogsynthesis</spirit:viewNameRef>
-              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
-            </spirit:wireTypeDef>
-          </spirit:wireTypeDefs>
-        </spirit:wire>
-      </spirit:port>
-      <spirit:port>
-        <spirit:name>build_time_we1</spirit:name>
-        <spirit:wire>
-          <spirit:direction>out</spirit:direction>
-          <spirit:wireTypeDefs>
-            <spirit:wireTypeDef>
-              <spirit:typeName>STD_LOGIC</spirit:typeName>
-              <spirit:viewNameRef>xilinx_verilogsynthesis</spirit:viewNameRef>
-              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
-            </spirit:wireTypeDef>
-          </spirit:wireTypeDefs>
-        </spirit:wire>
-      </spirit:port>
-      <spirit:port>
         <spirit:name>s_axi_CONFIG_AWADDR</spirit:name>
         <spirit:wire>
           <spirit:direction>in</spirit:direction>
           <spirit:vector>
-            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_S_AXI_CONFIG_ADDR_WIDTH&apos;)) - 1)">4</spirit:left>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_S_AXI_CONFIG_ADDR_WIDTH&apos;)) - 1)">5</spirit:left>
             <spirit:right spirit:format="long">0</spirit:right>
           </spirit:vector>
           <spirit:wireTypeDefs>
@@ -961,7 +788,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:wire>
           <spirit:direction>in</spirit:direction>
           <spirit:vector>
-            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_S_AXI_CONFIG_ADDR_WIDTH&apos;)) - 1)">4</spirit:left>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_S_AXI_CONFIG_ADDR_WIDTH&apos;)) - 1)">5</spirit:left>
             <spirit:right spirit:format="long">0</spirit:right>
           </spirit:vector>
           <spirit:wireTypeDefs>
@@ -1224,108 +1051,6 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
         </spirit:wire>
       </spirit:port>
       <spirit:port>
-        <spirit:name>build_time_address0</spirit:name>
-        <spirit:wire>
-          <spirit:direction>out</spirit:direction>
-          <spirit:vector>
-            <spirit:left spirit:format="long">3</spirit:left>
-            <spirit:right spirit:format="long">0</spirit:right>
-          </spirit:vector>
-          <spirit:wireTypeDefs>
-            <spirit:wireTypeDef>
-              <spirit:typeName>std_logic_vector</spirit:typeName>
-              <spirit:viewNameRef>xilinx_verilogsynthesis</spirit:viewNameRef>
-              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
-            </spirit:wireTypeDef>
-          </spirit:wireTypeDefs>
-        </spirit:wire>
-      </spirit:port>
-      <spirit:port>
-        <spirit:name>build_time_d0</spirit:name>
-        <spirit:wire>
-          <spirit:direction>out</spirit:direction>
-          <spirit:vector>
-            <spirit:left spirit:format="long">7</spirit:left>
-            <spirit:right spirit:format="long">0</spirit:right>
-          </spirit:vector>
-          <spirit:wireTypeDefs>
-            <spirit:wireTypeDef>
-              <spirit:typeName>std_logic_vector</spirit:typeName>
-              <spirit:viewNameRef>xilinx_verilogsynthesis</spirit:viewNameRef>
-              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
-            </spirit:wireTypeDef>
-          </spirit:wireTypeDefs>
-        </spirit:wire>
-      </spirit:port>
-      <spirit:port>
-        <spirit:name>build_time_q0</spirit:name>
-        <spirit:wire>
-          <spirit:direction>in</spirit:direction>
-          <spirit:vector>
-            <spirit:left spirit:format="long">7</spirit:left>
-            <spirit:right spirit:format="long">0</spirit:right>
-          </spirit:vector>
-          <spirit:wireTypeDefs>
-            <spirit:wireTypeDef>
-              <spirit:typeName>std_logic_vector</spirit:typeName>
-              <spirit:viewNameRef>xilinx_verilogsynthesis</spirit:viewNameRef>
-              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
-            </spirit:wireTypeDef>
-          </spirit:wireTypeDefs>
-        </spirit:wire>
-      </spirit:port>
-      <spirit:port>
-        <spirit:name>build_time_address1</spirit:name>
-        <spirit:wire>
-          <spirit:direction>out</spirit:direction>
-          <spirit:vector>
-            <spirit:left spirit:format="long">3</spirit:left>
-            <spirit:right spirit:format="long">0</spirit:right>
-          </spirit:vector>
-          <spirit:wireTypeDefs>
-            <spirit:wireTypeDef>
-              <spirit:typeName>std_logic_vector</spirit:typeName>
-              <spirit:viewNameRef>xilinx_verilogsynthesis</spirit:viewNameRef>
-              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
-            </spirit:wireTypeDef>
-          </spirit:wireTypeDefs>
-        </spirit:wire>
-      </spirit:port>
-      <spirit:port>
-        <spirit:name>build_time_d1</spirit:name>
-        <spirit:wire>
-          <spirit:direction>out</spirit:direction>
-          <spirit:vector>
-            <spirit:left spirit:format="long">7</spirit:left>
-            <spirit:right spirit:format="long">0</spirit:right>
-          </spirit:vector>
-          <spirit:wireTypeDefs>
-            <spirit:wireTypeDef>
-              <spirit:typeName>std_logic_vector</spirit:typeName>
-              <spirit:viewNameRef>xilinx_verilogsynthesis</spirit:viewNameRef>
-              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
-            </spirit:wireTypeDef>
-          </spirit:wireTypeDefs>
-        </spirit:wire>
-      </spirit:port>
-      <spirit:port>
-        <spirit:name>build_time_q1</spirit:name>
-        <spirit:wire>
-          <spirit:direction>in</spirit:direction>
-          <spirit:vector>
-            <spirit:left spirit:format="long">7</spirit:left>
-            <spirit:right spirit:format="long">0</spirit:right>
-          </spirit:vector>
-          <spirit:wireTypeDefs>
-            <spirit:wireTypeDef>
-              <spirit:typeName>std_logic_vector</spirit:typeName>
-              <spirit:viewNameRef>xilinx_verilogsynthesis</spirit:viewNameRef>
-              <spirit:viewNameRef>xilinx_verilogbehavioralsimulation</spirit:viewNameRef>
-            </spirit:wireTypeDef>
-          </spirit:wireTypeDefs>
-        </spirit:wire>
-      </spirit:port>
-      <spirit:port>
         <spirit:name>led_out</spirit:name>
         <spirit:wire>
           <spirit:direction>out</spirit:direction>
@@ -1346,7 +1071,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
     <spirit:modelParameters>
       <spirit:modelParameter xsi:type="spirit:nameValueTypeType" spirit:dataType="integer">
         <spirit:name>C_S_AXI_CONFIG_ADDR_WIDTH</spirit:name>
-        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_S_AXI_CONFIG_ADDR_WIDTH">5</spirit:value>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_S_AXI_CONFIG_ADDR_WIDTH">6</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_S_AXI_CONFIG_DATA_WIDTH</spirit:name>
@@ -1367,6 +1092,22 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
+        <spirit:name>hdl/verilog/fm_receiver_hls_pbkb.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>hdl/verilog/fm_receiver_hls_pbkb_rom.dat</spirit:name>
+        <spirit:userFileType>mif</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>hdl/verilog/fm_receiver_hls_pcud.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>hdl/verilog/fm_receiver_hls_pcud_rom.dat</spirit:name>
+        <spirit:userFileType>mif</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
         <spirit:name>hdl/verilog/fm_receiver_hls.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
@@ -1377,6 +1118,24 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:name>hdl/verilog/fm_receiver_hls_CONFIG_s_axi.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>hdl/verilog/fm_receiver_hls_pbkb.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>hdl/verilog/fm_receiver_hls_pbkb_rom.dat</spirit:name>
+        <spirit:userFileType>mif</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>hdl/verilog/fm_receiver_hls_pcud.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>hdl/verilog/fm_receiver_hls_pcud_rom.dat</spirit:name>
+        <spirit:userFileType>mif</spirit:userFileType>
       </spirit:file>
       <spirit:file>
         <spirit:name>hdl/verilog/fm_receiver_hls.v</spirit:name>
@@ -1396,15 +1155,33 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
+        <spirit:name>hdl/vhdl/fm_receiver_hls_pbkb.vhd</spirit:name>
+        <spirit:fileType>vhdlSource</spirit:fileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>hdl/vhdl/fm_receiver_hls_pcud.vhd</spirit:name>
+        <spirit:fileType>vhdlSource</spirit:fileType>
+      </spirit:file>
+      <spirit:file>
         <spirit:name>hdl/vhdl/fm_receiver_hls.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_1b4c37b8</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_9067ed98</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>
       <spirit:name>xilinx_vhdlbehavioralsimulation_view_fileset</spirit:name>
       <spirit:file>
         <spirit:name>hdl/vhdl/fm_receiver_hls_CONFIG_s_axi.vhd</spirit:name>
+        <spirit:fileType>vhdlSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>hdl/vhdl/fm_receiver_hls_pbkb.vhd</spirit:name>
+        <spirit:fileType>vhdlSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>hdl/vhdl/fm_receiver_hls_pcud.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:userFileType>USED_IN_ipstatic</spirit:userFileType>
       </spirit:file>
@@ -1475,7 +1252,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
       <spirit:file>
         <spirit:name>xgui/fm_receiver_hls_v0_1.tcl</spirit:name>
         <spirit:fileType>tclSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_90f31ef7</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_15c10c03</spirit:userFileType>
         <spirit:userFileType>XGUI_VERSION_2</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
@@ -1508,7 +1285,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>latency</spirit:name>
-      <spirit:value spirit:id="PARAM_VALUE.latency" spirit:order="5">2</spirit:value>
+      <spirit:value spirit:id="PARAM_VALUE.latency" spirit:order="5">46</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>II</spirit:name>
@@ -1525,17 +1302,17 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
       </xilinx:taxonomies>
       <xilinx:displayName>fm_receiver_hls</xilinx:displayName>
       <xilinx:definitionSource>HLS</xilinx:definitionSource>
-      <xilinx:coreRevision>2105312233</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2021-05-31T20:33:19Z</xilinx:coreCreationDateTime>
+      <xilinx:coreRevision>2106082234</xilinx:coreRevision>
+      <xilinx:coreCreationDateTime>2021-06-08T20:34:56Z</xilinx:coreCreationDateTime>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2018.2</xilinx:xilinxVersion>
-      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="1b2ffd10"/>
-      <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="34c4eb1b"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="d7884288"/>
-      <xilinx:checksum xilinx:scope="ports" xilinx:value="f62a711b"/>
-      <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="33a0b57b"/>
-      <xilinx:checksum xilinx:scope="parameters" xilinx:value="f4f42744"/>
+      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="d5472ab3"/>
+      <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="26c0fb4b"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="52f3bc81"/>
+      <xilinx:checksum xilinx:scope="ports" xilinx:value="15f6d847"/>
+      <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="bae53229"/>
+      <xilinx:checksum xilinx:scope="parameters" xilinx:value="e2aef8ec"/>
     </xilinx:packagingInfo>
   </spirit:vendorExtensions>
 </spirit:component>

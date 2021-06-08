@@ -92,6 +92,15 @@ u32 XFm_receiver_hls_Write_git_hash_Words(XFm_receiver_hls *InstancePtr, int off
 u32 XFm_receiver_hls_Read_git_hash_Words(XFm_receiver_hls *InstancePtr, int offset, int *data, int length);
 u32 XFm_receiver_hls_Write_git_hash_Bytes(XFm_receiver_hls *InstancePtr, int offset, char *data, int length);
 u32 XFm_receiver_hls_Read_git_hash_Bytes(XFm_receiver_hls *InstancePtr, int offset, char *data, int length);
+u32 XFm_receiver_hls_Get_build_time_BaseAddress(XFm_receiver_hls *InstancePtr);
+u32 XFm_receiver_hls_Get_build_time_HighAddress(XFm_receiver_hls *InstancePtr);
+u32 XFm_receiver_hls_Get_build_time_TotalBytes(XFm_receiver_hls *InstancePtr);
+u32 XFm_receiver_hls_Get_build_time_BitWidth(XFm_receiver_hls *InstancePtr);
+u32 XFm_receiver_hls_Get_build_time_Depth(XFm_receiver_hls *InstancePtr);
+u32 XFm_receiver_hls_Write_build_time_Words(XFm_receiver_hls *InstancePtr, int offset, int *data, int length);
+u32 XFm_receiver_hls_Read_build_time_Words(XFm_receiver_hls *InstancePtr, int offset, int *data, int length);
+u32 XFm_receiver_hls_Write_build_time_Bytes(XFm_receiver_hls *InstancePtr, int offset, char *data, int length);
+u32 XFm_receiver_hls_Read_build_time_Bytes(XFm_receiver_hls *InstancePtr, int offset, char *data, int length);
 
 #ifdef __cplusplus
 }

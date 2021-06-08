@@ -133,3 +133,98 @@ u32 XFm_receiver_hls_Read_git_hash_Bytes(XFm_receiver_hls *InstancePtr, int offs
     return length;
 }
 
+u32 XFm_receiver_hls_Get_build_time_BaseAddress(XFm_receiver_hls *InstancePtr) {
+    Xil_AssertNonvoid(InstancePtr != NULL);
+    Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
+
+    return (InstancePtr->Config_BaseAddress + XFM_RECEIVER_HLS_CONFIG_ADDR_BUILD_TIME_BASE);
+}
+
+u32 XFm_receiver_hls_Get_build_time_HighAddress(XFm_receiver_hls *InstancePtr) {
+    Xil_AssertNonvoid(InstancePtr != NULL);
+    Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
+
+    return (InstancePtr->Config_BaseAddress + XFM_RECEIVER_HLS_CONFIG_ADDR_BUILD_TIME_HIGH);
+}
+
+u32 XFm_receiver_hls_Get_build_time_TotalBytes(XFm_receiver_hls *InstancePtr) {
+    Xil_AssertNonvoid(InstancePtr != NULL);
+    Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
+
+    return (XFM_RECEIVER_HLS_CONFIG_ADDR_BUILD_TIME_HIGH - XFM_RECEIVER_HLS_CONFIG_ADDR_BUILD_TIME_BASE + 1);
+}
+
+u32 XFm_receiver_hls_Get_build_time_BitWidth(XFm_receiver_hls *InstancePtr) {
+    Xil_AssertNonvoid(InstancePtr != NULL);
+    Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
+
+    return XFM_RECEIVER_HLS_CONFIG_WIDTH_BUILD_TIME;
+}
+
+u32 XFm_receiver_hls_Get_build_time_Depth(XFm_receiver_hls *InstancePtr) {
+    Xil_AssertNonvoid(InstancePtr != NULL);
+    Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
+
+    return XFM_RECEIVER_HLS_CONFIG_DEPTH_BUILD_TIME;
+}
+
+u32 XFm_receiver_hls_Write_build_time_Words(XFm_receiver_hls *InstancePtr, int offset, int *data, int length) {
+    Xil_AssertNonvoid(InstancePtr != NULL);
+    Xil_AssertNonvoid(InstancePtr -> IsReady == XIL_COMPONENT_IS_READY);
+
+    int i;
+
+    if ((offset + length)*4 > (XFM_RECEIVER_HLS_CONFIG_ADDR_BUILD_TIME_HIGH - XFM_RECEIVER_HLS_CONFIG_ADDR_BUILD_TIME_BASE + 1))
+        return 0;
+
+    for (i = 0; i < length; i++) {
+        *(int *)(InstancePtr->Config_BaseAddress + XFM_RECEIVER_HLS_CONFIG_ADDR_BUILD_TIME_BASE + (offset + i)*4) = *(data + i);
+    }
+    return length;
+}
+
+u32 XFm_receiver_hls_Read_build_time_Words(XFm_receiver_hls *InstancePtr, int offset, int *data, int length) {
+    Xil_AssertNonvoid(InstancePtr != NULL);
+    Xil_AssertNonvoid(InstancePtr -> IsReady == XIL_COMPONENT_IS_READY);
+
+    int i;
+
+    if ((offset + length)*4 > (XFM_RECEIVER_HLS_CONFIG_ADDR_BUILD_TIME_HIGH - XFM_RECEIVER_HLS_CONFIG_ADDR_BUILD_TIME_BASE + 1))
+        return 0;
+
+    for (i = 0; i < length; i++) {
+        *(data + i) = *(int *)(InstancePtr->Config_BaseAddress + XFM_RECEIVER_HLS_CONFIG_ADDR_BUILD_TIME_BASE + (offset + i)*4);
+    }
+    return length;
+}
+
+u32 XFm_receiver_hls_Write_build_time_Bytes(XFm_receiver_hls *InstancePtr, int offset, char *data, int length) {
+    Xil_AssertNonvoid(InstancePtr != NULL);
+    Xil_AssertNonvoid(InstancePtr -> IsReady == XIL_COMPONENT_IS_READY);
+
+    int i;
+
+    if ((offset + length) > (XFM_RECEIVER_HLS_CONFIG_ADDR_BUILD_TIME_HIGH - XFM_RECEIVER_HLS_CONFIG_ADDR_BUILD_TIME_BASE + 1))
+        return 0;
+
+    for (i = 0; i < length; i++) {
+        *(char *)(InstancePtr->Config_BaseAddress + XFM_RECEIVER_HLS_CONFIG_ADDR_BUILD_TIME_BASE + offset + i) = *(data + i);
+    }
+    return length;
+}
+
+u32 XFm_receiver_hls_Read_build_time_Bytes(XFm_receiver_hls *InstancePtr, int offset, char *data, int length) {
+    Xil_AssertNonvoid(InstancePtr != NULL);
+    Xil_AssertNonvoid(InstancePtr -> IsReady == XIL_COMPONENT_IS_READY);
+
+    int i;
+
+    if ((offset + length) > (XFM_RECEIVER_HLS_CONFIG_ADDR_BUILD_TIME_HIGH - XFM_RECEIVER_HLS_CONFIG_ADDR_BUILD_TIME_BASE + 1))
+        return 0;
+
+    for (i = 0; i < length; i++) {
+        *(data + i) = *(char *)(InstancePtr->Config_BaseAddress + XFM_RECEIVER_HLS_CONFIG_ADDR_BUILD_TIME_BASE + offset + i);
+    }
+    return length;
+}
+

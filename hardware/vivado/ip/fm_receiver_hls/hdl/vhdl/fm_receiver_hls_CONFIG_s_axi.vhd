@@ -11,7 +11,7 @@ use IEEE.NUMERIC_STD.all;
 
 entity fm_receiver_hls_CONFIG_s_axi is
 generic (
-    C_S_AXI_ADDR_WIDTH    : INTEGER := 5;
+    C_S_AXI_ADDR_WIDTH    : INTEGER := 6;
     C_S_AXI_DATA_WIDTH    : INTEGER := 32);
 port (
     -- axi4 lite slave signals
@@ -40,7 +40,11 @@ port (
     git_hash_address0     :in   STD_LOGIC_VECTOR(2 downto 0);
     git_hash_ce0          :in   STD_LOGIC;
     git_hash_we0          :in   STD_LOGIC;
-    git_hash_d0           :in   STD_LOGIC_VECTOR(7 downto 0)
+    git_hash_d0           :in   STD_LOGIC_VECTOR(7 downto 0);
+    build_time_address0   :in   STD_LOGIC_VECTOR(3 downto 0);
+    build_time_ce0        :in   STD_LOGIC;
+    build_time_we0        :in   STD_LOGIC;
+    build_time_d0         :in   STD_LOGIC_VECTOR(7 downto 0)
 );
 end entity fm_receiver_hls_CONFIG_s_axi;
 
@@ -54,11 +58,17 @@ end entity fm_receiver_hls_CONFIG_s_axi;
 --        others  - reserved
 -- 0x14 : reserved
 -- 0x18 ~
--- 0x1f : Memory 'git_hash' (7 * 8b)
+-- 0x1f : Memory 'git_hash' (8 * 8b)
 --        Word n : bit [ 7: 0] - git_hash[4n]
 --                 bit [15: 8] - git_hash[4n+1]
 --                 bit [23:16] - git_hash[4n+2]
 --                 bit [31:24] - git_hash[4n+3]
+-- 0x20 ~
+-- 0x2f : Memory 'build_time' (13 * 8b)
+--        Word n : bit [ 7: 0] - build_time[4n]
+--                 bit [15: 8] - build_time[4n+1]
+--                 bit [23:16] - build_time[4n+2]
+--                 bit [31:24] - build_time[4n+3]
 -- (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
 
 architecture behave of fm_receiver_hls_CONFIG_s_axi is
@@ -70,7 +80,9 @@ architecture behave of fm_receiver_hls_CONFIG_s_axi is
     constant ADDR_LED_CTRL_CTRL   : INTEGER := 16#14#;
     constant ADDR_GIT_HASH_BASE   : INTEGER := 16#18#;
     constant ADDR_GIT_HASH_HIGH   : INTEGER := 16#1f#;
-    constant ADDR_BITS         : INTEGER := 5;
+    constant ADDR_BUILD_TIME_BASE : INTEGER := 16#20#;
+    constant ADDR_BUILD_TIME_HIGH : INTEGER := 16#2f#;
+    constant ADDR_BITS         : INTEGER := 6;
 
     signal waddr               : UNSIGNED(ADDR_BITS-1 downto 0);
     signal wmask               : UNSIGNED(31 downto 0);
@@ -101,6 +113,21 @@ architecture behave of fm_receiver_hls_CONFIG_s_axi is
     signal int_git_hash_read   : STD_LOGIC;
     signal int_git_hash_write  : STD_LOGIC;
     signal int_git_hash_shift  : UNSIGNED(1 downto 0);
+    signal int_build_time_address0 : UNSIGNED(1 downto 0);
+    signal int_build_time_ce0  : STD_LOGIC;
+    signal int_build_time_we0  : STD_LOGIC;
+    signal int_build_time_be0  : UNSIGNED(3 downto 0);
+    signal int_build_time_d0   : UNSIGNED(31 downto 0);
+    signal int_build_time_q0   : UNSIGNED(31 downto 0);
+    signal int_build_time_address1 : UNSIGNED(1 downto 0);
+    signal int_build_time_ce1  : STD_LOGIC;
+    signal int_build_time_we1  : STD_LOGIC;
+    signal int_build_time_be1  : UNSIGNED(3 downto 0);
+    signal int_build_time_d1   : UNSIGNED(31 downto 0);
+    signal int_build_time_q1   : UNSIGNED(31 downto 0);
+    signal int_build_time_read : STD_LOGIC;
+    signal int_build_time_write : STD_LOGIC;
+    signal int_build_time_shift : UNSIGNED(1 downto 0);
 
     component fm_receiver_hls_CONFIG_s_axi_ram is
         generic (
@@ -159,6 +186,27 @@ port map (
      be1      => int_git_hash_be1,
      d1       => int_git_hash_d1,
      q1       => int_git_hash_q1);
+-- int_build_time
+int_build_time : fm_receiver_hls_CONFIG_s_axi_ram
+generic map (
+     BYTES    => 4,
+     DEPTH    => 4,
+     AWIDTH   => log2(4))
+port map (
+     clk0     => ACLK,
+     address0 => int_build_time_address0,
+     ce0      => int_build_time_ce0,
+     we0      => int_build_time_we0,
+     be0      => int_build_time_be0,
+     d0       => int_build_time_d0,
+     q0       => int_build_time_q0,
+     clk1     => ACLK,
+     address1 => int_build_time_address1,
+     ce1      => int_build_time_ce1,
+     we1      => int_build_time_we1,
+     be1      => int_build_time_be1,
+     d1       => int_build_time_d1,
+     q1       => int_build_time_q1);
 
 -- ----------------------- AXI WRITE ---------------------
     AWREADY_t <=  '1' when wstate = wridle else '0';
@@ -225,7 +273,7 @@ port map (
     ARREADY <= ARREADY_t;
     RDATA   <= STD_LOGIC_VECTOR(rdata_data);
     RRESP   <= "00";  -- OKAY
-    RVALID_t  <= '1' when (rstate = rddata) and (int_git_hash_read = '0') else '0';
+    RVALID_t  <= '1' when (rstate = rddata) and (int_git_hash_read = '0') and (int_build_time_read = '0') else '0';
     RVALID    <= RVALID_t;
     ar_hs   <= ARVALID and ARREADY_t;
     raddr   <= UNSIGNED(ARADDR(ADDR_BITS-1 downto 0));
@@ -275,6 +323,8 @@ port map (
                     end case;
                 elsif (int_git_hash_read = '1') then
                     rdata_data <= int_git_hash_q1;
+                elsif (int_build_time_read = '1') then
+                    rdata_data <= int_build_time_q1;
                 end if;
             end if;
         end if;
@@ -307,6 +357,17 @@ port map (
     int_git_hash_we1     <= '1' when int_git_hash_write = '1' and WVALID = '1' else '0';
     int_git_hash_be1     <= UNSIGNED(WSTRB);
     int_git_hash_d1      <= UNSIGNED(WDATA);
+    -- build_time
+    int_build_time_address0 <= SHIFT_RIGHT(UNSIGNED(build_time_address0), 2)(1 downto 0);
+    int_build_time_ce0   <= build_time_ce0;
+    int_build_time_we0   <= build_time_we0;
+    int_build_time_be0   <= SHIFT_LEFT(TO_UNSIGNED(1, 4), TO_INTEGER(UNSIGNED(build_time_address0(1 downto 0))));
+    int_build_time_d0    <= UNSIGNED(build_time_d0) & UNSIGNED(build_time_d0) & UNSIGNED(build_time_d0) & UNSIGNED(build_time_d0);
+    int_build_time_address1 <= raddr(3 downto 2) when ar_hs = '1' else waddr(3 downto 2);
+    int_build_time_ce1   <= '1' when ar_hs = '1' or (int_build_time_write = '1' and WVALID  = '1') else '0';
+    int_build_time_we1   <= '1' when int_build_time_write = '1' and WVALID = '1' else '0';
+    int_build_time_be1   <= UNSIGNED(WSTRB);
+    int_build_time_d1    <= UNSIGNED(WDATA);
 
     process (ACLK)
     begin
@@ -344,6 +405,47 @@ port map (
             if (ACLK_EN = '1') then
                 if (git_hash_ce0 = '1') then
                     int_git_hash_shift <= UNSIGNED(git_hash_address0(1 downto 0));
+                end if;
+            end if;
+        end if;
+    end process;
+
+    process (ACLK)
+    begin
+        if (ACLK'event and ACLK = '1') then
+            if (ARESET = '1') then
+                int_build_time_read <= '0';
+            elsif (ACLK_EN = '1') then
+                if (ar_hs = '1' and raddr >= ADDR_BUILD_TIME_BASE and raddr <= ADDR_BUILD_TIME_HIGH) then
+                    int_build_time_read <= '1';
+                else
+                    int_build_time_read <= '0';
+                end if;
+            end if;
+        end if;
+    end process;
+
+    process (ACLK)
+    begin
+        if (ACLK'event and ACLK = '1') then
+            if (ARESET = '1') then
+                int_build_time_write <= '0';
+            elsif (ACLK_EN = '1') then
+                if (aw_hs = '1' and UNSIGNED(AWADDR(ADDR_BITS-1 downto 0)) >= ADDR_BUILD_TIME_BASE and UNSIGNED(AWADDR(ADDR_BITS-1 downto 0)) <= ADDR_BUILD_TIME_HIGH) then
+                    int_build_time_write <= '1';
+                elsif (WVALID = '1') then
+                    int_build_time_write <= '0';
+                end if;
+            end if;
+        end if;
+    end process;
+
+    process (ACLK)
+    begin
+        if (ACLK'event and ACLK = '1') then
+            if (ACLK_EN = '1') then
+                if (build_time_ce0 = '1') then
+                    int_build_time_shift <= UNSIGNED(build_time_address0(1 downto 0));
                 end if;
             end if;
         end if;
