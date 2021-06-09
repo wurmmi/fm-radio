@@ -34,14 +34,10 @@ module fm_receiver_hls_CONFIG_s_axi
     input  wire                          RREADY,
     // user signals
     output wire [7:0]                    led_ctrl,
-    input  wire [2:0]                    git_hash_address0,
-    input  wire                          git_hash_ce0,
-    input  wire                          git_hash_we0,
-    input  wire [7:0]                    git_hash_d0,
-    input  wire [3:0]                    build_time_address0,
-    input  wire                          build_time_ce0,
-    input  wire                          build_time_we0,
-    input  wire [7:0]                    build_time_d0
+    input  wire [27:0]                   status_git_hash_V,
+    input  wire                          status_git_hash_V_ap_vld,
+    input  wire [47:0]                   status_build_time_V,
+    input  wire                          status_build_time_V_ap_vld
 );
 //------------------------Address Info-------------------
 // 0x00 : reserved
@@ -52,35 +48,38 @@ module fm_receiver_hls_CONFIG_s_axi
 //        bit 7~0 - led_ctrl[7:0] (Read/Write)
 //        others  - reserved
 // 0x14 : reserved
-// 0x18 ~
-// 0x1f : Memory 'git_hash' (8 * 8b)
-//        Word n : bit [ 7: 0] - git_hash[4n]
-//                 bit [15: 8] - git_hash[4n+1]
-//                 bit [23:16] - git_hash[4n+2]
-//                 bit [31:24] - git_hash[4n+3]
-// 0x20 ~
-// 0x2f : Memory 'build_time' (13 * 8b)
-//        Word n : bit [ 7: 0] - build_time[4n]
-//                 bit [15: 8] - build_time[4n+1]
-//                 bit [23:16] - build_time[4n+2]
-//                 bit [31:24] - build_time[4n+3]
+// 0x18 : Data signal of status_git_hash_V
+//        bit 27~0 - status_git_hash_V[27:0] (Read)
+//        others   - reserved
+// 0x1c : Control signal of status_git_hash_V
+//        bit 0  - status_git_hash_V_ap_vld (Read/COR)
+//        others - reserved
+// 0x20 : Data signal of status_build_time_V
+//        bit 31~0 - status_build_time_V[31:0] (Read)
+// 0x24 : Data signal of status_build_time_V
+//        bit 15~0 - status_build_time_V[47:32] (Read)
+//        others   - reserved
+// 0x28 : Control signal of status_build_time_V
+//        bit 0  - status_build_time_V_ap_vld (Read/COR)
+//        others - reserved
 // (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
 
 //------------------------Parameter----------------------
 localparam
-    ADDR_LED_CTRL_DATA_0 = 6'h10,
-    ADDR_LED_CTRL_CTRL   = 6'h14,
-    ADDR_GIT_HASH_BASE   = 6'h18,
-    ADDR_GIT_HASH_HIGH   = 6'h1f,
-    ADDR_BUILD_TIME_BASE = 6'h20,
-    ADDR_BUILD_TIME_HIGH = 6'h2f,
-    WRIDLE               = 2'd0,
-    WRDATA               = 2'd1,
-    WRRESP               = 2'd2,
-    WRRESET              = 2'd3,
-    RDIDLE               = 2'd0,
-    RDDATA               = 2'd1,
-    RDRESET              = 2'd2,
+    ADDR_LED_CTRL_DATA_0            = 6'h10,
+    ADDR_LED_CTRL_CTRL              = 6'h14,
+    ADDR_STATUS_GIT_HASH_V_DATA_0   = 6'h18,
+    ADDR_STATUS_GIT_HASH_V_CTRL     = 6'h1c,
+    ADDR_STATUS_BUILD_TIME_V_DATA_0 = 6'h20,
+    ADDR_STATUS_BUILD_TIME_V_DATA_1 = 6'h24,
+    ADDR_STATUS_BUILD_TIME_V_CTRL   = 6'h28,
+    WRIDLE                          = 2'd0,
+    WRDATA                          = 2'd1,
+    WRRESP                          = 2'd2,
+    WRRESET                         = 2'd3,
+    RDIDLE                          = 2'd0,
+    RDDATA                          = 2'd1,
+    RDRESET                         = 2'd2,
     ADDR_BITS         = 6;
 
 //------------------------Local signal-------------------
@@ -97,79 +96,12 @@ localparam
     wire [ADDR_BITS-1:0]          raddr;
     // internal registers
     reg  [7:0]                    int_led_ctrl = 'b0;
-    // memory signals
-    wire [0:0]                    int_git_hash_address0;
-    wire                          int_git_hash_ce0;
-    wire                          int_git_hash_we0;
-    wire [3:0]                    int_git_hash_be0;
-    wire [31:0]                   int_git_hash_d0;
-    wire [31:0]                   int_git_hash_q0;
-    wire [0:0]                    int_git_hash_address1;
-    wire                          int_git_hash_ce1;
-    wire                          int_git_hash_we1;
-    wire [3:0]                    int_git_hash_be1;
-    wire [31:0]                   int_git_hash_d1;
-    wire [31:0]                   int_git_hash_q1;
-    reg                           int_git_hash_read;
-    reg                           int_git_hash_write;
-    reg  [1:0]                    int_git_hash_shift;
-    wire [1:0]                    int_build_time_address0;
-    wire                          int_build_time_ce0;
-    wire                          int_build_time_we0;
-    wire [3:0]                    int_build_time_be0;
-    wire [31:0]                   int_build_time_d0;
-    wire [31:0]                   int_build_time_q0;
-    wire [1:0]                    int_build_time_address1;
-    wire                          int_build_time_ce1;
-    wire                          int_build_time_we1;
-    wire [3:0]                    int_build_time_be1;
-    wire [31:0]                   int_build_time_d1;
-    wire [31:0]                   int_build_time_q1;
-    reg                           int_build_time_read;
-    reg                           int_build_time_write;
-    reg  [1:0]                    int_build_time_shift;
+    reg  [27:0]                   int_status_git_hash_V = 'b0;
+    reg                           int_status_git_hash_V_ap_vld;
+    reg  [47:0]                   int_status_build_time_V = 'b0;
+    reg                           int_status_build_time_V_ap_vld;
 
 //------------------------Instantiation------------------
-// int_git_hash
-fm_receiver_hls_CONFIG_s_axi_ram #(
-    .BYTES    ( 4 ),
-    .DEPTH    ( 2 )
-) int_git_hash (
-    .clk0     ( ACLK ),
-    .address0 ( int_git_hash_address0 ),
-    .ce0      ( int_git_hash_ce0 ),
-    .we0      ( int_git_hash_we0 ),
-    .be0      ( int_git_hash_be0 ),
-    .d0       ( int_git_hash_d0 ),
-    .q0       ( int_git_hash_q0 ),
-    .clk1     ( ACLK ),
-    .address1 ( int_git_hash_address1 ),
-    .ce1      ( int_git_hash_ce1 ),
-    .we1      ( int_git_hash_we1 ),
-    .be1      ( int_git_hash_be1 ),
-    .d1       ( int_git_hash_d1 ),
-    .q1       ( int_git_hash_q1 )
-);
-// int_build_time
-fm_receiver_hls_CONFIG_s_axi_ram #(
-    .BYTES    ( 4 ),
-    .DEPTH    ( 4 )
-) int_build_time (
-    .clk0     ( ACLK ),
-    .address0 ( int_build_time_address0 ),
-    .ce0      ( int_build_time_ce0 ),
-    .we0      ( int_build_time_we0 ),
-    .be0      ( int_build_time_be0 ),
-    .d0       ( int_build_time_d0 ),
-    .q0       ( int_build_time_q0 ),
-    .clk1     ( ACLK ),
-    .address1 ( int_build_time_address1 ),
-    .ce1      ( int_build_time_ce1 ),
-    .we1      ( int_build_time_we1 ),
-    .be1      ( int_build_time_be1 ),
-    .d1       ( int_build_time_d1 ),
-    .q1       ( int_build_time_q1 )
-);
 
 //------------------------AXI write fsm------------------
 assign AWREADY = (wstate == WRIDLE);
@@ -223,7 +155,7 @@ end
 assign ARREADY = (rstate == RDIDLE);
 assign RDATA   = rdata;
 assign RRESP   = 2'b00;  // OKAY
-assign RVALID  = (rstate == RDDATA) & !int_git_hash_read & !int_build_time_read;
+assign RVALID  = (rstate == RDDATA);
 assign ar_hs   = ARVALID & ARREADY;
 assign raddr   = ARADDR[ADDR_BITS-1:0];
 
@@ -262,13 +194,22 @@ always @(posedge ACLK) begin
                 ADDR_LED_CTRL_DATA_0: begin
                     rdata <= int_led_ctrl[7:0];
                 end
+                ADDR_STATUS_GIT_HASH_V_DATA_0: begin
+                    rdata <= int_status_git_hash_V[27:0];
+                end
+                ADDR_STATUS_GIT_HASH_V_CTRL: begin
+                    rdata[0] <= int_status_git_hash_V_ap_vld;
+                end
+                ADDR_STATUS_BUILD_TIME_V_DATA_0: begin
+                    rdata <= int_status_build_time_V[31:0];
+                end
+                ADDR_STATUS_BUILD_TIME_V_DATA_1: begin
+                    rdata <= int_status_build_time_V[47:32];
+                end
+                ADDR_STATUS_BUILD_TIME_V_CTRL: begin
+                    rdata[0] <= int_status_build_time_V_ap_vld;
+                end
             endcase
-        end
-        else if (int_git_hash_read) begin
-            rdata <= int_git_hash_q1;
-        end
-        else if (int_build_time_read) begin
-            rdata <= int_build_time_q1;
         end
     end
 end
@@ -286,165 +227,51 @@ always @(posedge ACLK) begin
     end
 end
 
+// int_status_git_hash_V
+always @(posedge ACLK) begin
+    if (ARESET)
+        int_status_git_hash_V <= 0;
+    else if (ACLK_EN) begin
+        if (status_git_hash_V_ap_vld)
+            int_status_git_hash_V <= status_git_hash_V;
+    end
+end
+
+// int_status_git_hash_V_ap_vld
+always @(posedge ACLK) begin
+    if (ARESET)
+        int_status_git_hash_V_ap_vld <= 1'b0;
+    else if (ACLK_EN) begin
+        if (status_git_hash_V_ap_vld)
+            int_status_git_hash_V_ap_vld <= 1'b1;
+        else if (ar_hs && raddr == ADDR_STATUS_GIT_HASH_V_CTRL)
+            int_status_git_hash_V_ap_vld <= 1'b0; // clear on read
+    end
+end
+
+// int_status_build_time_V
+always @(posedge ACLK) begin
+    if (ARESET)
+        int_status_build_time_V <= 0;
+    else if (ACLK_EN) begin
+        if (status_build_time_V_ap_vld)
+            int_status_build_time_V <= status_build_time_V;
+    end
+end
+
+// int_status_build_time_V_ap_vld
+always @(posedge ACLK) begin
+    if (ARESET)
+        int_status_build_time_V_ap_vld <= 1'b0;
+    else if (ACLK_EN) begin
+        if (status_build_time_V_ap_vld)
+            int_status_build_time_V_ap_vld <= 1'b1;
+        else if (ar_hs && raddr == ADDR_STATUS_BUILD_TIME_V_CTRL)
+            int_status_build_time_V_ap_vld <= 1'b0; // clear on read
+    end
+end
+
 
 //------------------------Memory logic-------------------
-// git_hash
-assign int_git_hash_address0   = git_hash_address0 >> 2;
-assign int_git_hash_ce0        = git_hash_ce0;
-assign int_git_hash_we0        = git_hash_we0;
-assign int_git_hash_be0        = 1 << git_hash_address0[1:0];
-assign int_git_hash_d0         = {4{git_hash_d0}};
-assign int_git_hash_address1   = ar_hs? raddr[2:2] : waddr[2:2];
-assign int_git_hash_ce1        = ar_hs | (int_git_hash_write & WVALID);
-assign int_git_hash_we1        = int_git_hash_write & WVALID;
-assign int_git_hash_be1        = WSTRB;
-assign int_git_hash_d1         = WDATA;
-// build_time
-assign int_build_time_address0 = build_time_address0 >> 2;
-assign int_build_time_ce0      = build_time_ce0;
-assign int_build_time_we0      = build_time_we0;
-assign int_build_time_be0      = 1 << build_time_address0[1:0];
-assign int_build_time_d0       = {4{build_time_d0}};
-assign int_build_time_address1 = ar_hs? raddr[3:2] : waddr[3:2];
-assign int_build_time_ce1      = ar_hs | (int_build_time_write & WVALID);
-assign int_build_time_we1      = int_build_time_write & WVALID;
-assign int_build_time_be1      = WSTRB;
-assign int_build_time_d1       = WDATA;
-// int_git_hash_read
-always @(posedge ACLK) begin
-    if (ARESET)
-        int_git_hash_read <= 1'b0;
-    else if (ACLK_EN) begin
-        if (ar_hs && raddr >= ADDR_GIT_HASH_BASE && raddr <= ADDR_GIT_HASH_HIGH)
-            int_git_hash_read <= 1'b1;
-        else
-            int_git_hash_read <= 1'b0;
-    end
-end
-
-// int_git_hash_write
-always @(posedge ACLK) begin
-    if (ARESET)
-        int_git_hash_write <= 1'b0;
-    else if (ACLK_EN) begin
-        if (aw_hs && AWADDR[ADDR_BITS-1:0] >= ADDR_GIT_HASH_BASE && AWADDR[ADDR_BITS-1:0] <= ADDR_GIT_HASH_HIGH)
-            int_git_hash_write <= 1'b1;
-        else if (WVALID)
-            int_git_hash_write <= 1'b0;
-    end
-end
-
-// int_git_hash_shift
-always @(posedge ACLK) begin
-    if (ACLK_EN) begin
-        if (git_hash_ce0)
-            int_git_hash_shift <= git_hash_address0[1:0];
-    end
-end
-
-// int_build_time_read
-always @(posedge ACLK) begin
-    if (ARESET)
-        int_build_time_read <= 1'b0;
-    else if (ACLK_EN) begin
-        if (ar_hs && raddr >= ADDR_BUILD_TIME_BASE && raddr <= ADDR_BUILD_TIME_HIGH)
-            int_build_time_read <= 1'b1;
-        else
-            int_build_time_read <= 1'b0;
-    end
-end
-
-// int_build_time_write
-always @(posedge ACLK) begin
-    if (ARESET)
-        int_build_time_write <= 1'b0;
-    else if (ACLK_EN) begin
-        if (aw_hs && AWADDR[ADDR_BITS-1:0] >= ADDR_BUILD_TIME_BASE && AWADDR[ADDR_BITS-1:0] <= ADDR_BUILD_TIME_HIGH)
-            int_build_time_write <= 1'b1;
-        else if (WVALID)
-            int_build_time_write <= 1'b0;
-    end
-end
-
-// int_build_time_shift
-always @(posedge ACLK) begin
-    if (ACLK_EN) begin
-        if (build_time_ce0)
-            int_build_time_shift <= build_time_address0[1:0];
-    end
-end
-
 
 endmodule
-
-
-`timescale 1ns/1ps
-
-module fm_receiver_hls_CONFIG_s_axi_ram
-#(parameter
-    BYTES  = 4,
-    DEPTH  = 256,
-    AWIDTH = log2(DEPTH)
-) (
-    input  wire               clk0,
-    input  wire [AWIDTH-1:0]  address0,
-    input  wire               ce0,
-    input  wire               we0,
-    input  wire [BYTES-1:0]   be0,
-    input  wire [BYTES*8-1:0] d0,
-    output reg  [BYTES*8-1:0] q0,
-    input  wire               clk1,
-    input  wire [AWIDTH-1:0]  address1,
-    input  wire               ce1,
-    input  wire               we1,
-    input  wire [BYTES-1:0]   be1,
-    input  wire [BYTES*8-1:0] d1,
-    output reg  [BYTES*8-1:0] q1
-);
-//------------------------Local signal-------------------
-reg  [BYTES*8-1:0] mem[0:DEPTH-1];
-//------------------------Task and function--------------
-function integer log2;
-    input integer x;
-    integer n, m;
-begin
-    n = 1;
-    m = 2;
-    while (m < x) begin
-        n = n + 1;
-        m = m * 2;
-    end
-    log2 = n;
-end
-endfunction
-//------------------------Body---------------------------
-// read port 0
-always @(posedge clk0) begin
-    if (ce0) q0 <= mem[address0];
-end
-
-// read port 1
-always @(posedge clk1) begin
-    if (ce1) q1 <= mem[address1];
-end
-
-genvar i;
-generate
-    for (i = 0; i < BYTES; i = i + 1) begin : gen_write
-        // write port 0
-        always @(posedge clk0) begin
-            if (ce0 & we0 & be0[i]) begin
-                mem[address0][8*i+7:8*i] <= d0[8*i+7:8*i];
-            end
-        end
-        // write port 1
-        always @(posedge clk1) begin
-            if (ce1 & we1 & be1[i]) begin
-                mem[address1][8*i+7:8*i] <= d1[8*i+7:8*i];
-            end
-        end
-    end
-endgenerate
-
-endmodule
-

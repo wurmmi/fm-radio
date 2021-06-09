@@ -83,24 +83,10 @@ int XFm_receiver_hls_Release(XFm_receiver_hls *InstancePtr);
 
 void XFm_receiver_hls_Set_led_ctrl(XFm_receiver_hls *InstancePtr, u32 Data);
 u32 XFm_receiver_hls_Get_led_ctrl(XFm_receiver_hls *InstancePtr);
-u32 XFm_receiver_hls_Get_git_hash_BaseAddress(XFm_receiver_hls *InstancePtr);
-u32 XFm_receiver_hls_Get_git_hash_HighAddress(XFm_receiver_hls *InstancePtr);
-u32 XFm_receiver_hls_Get_git_hash_TotalBytes(XFm_receiver_hls *InstancePtr);
-u32 XFm_receiver_hls_Get_git_hash_BitWidth(XFm_receiver_hls *InstancePtr);
-u32 XFm_receiver_hls_Get_git_hash_Depth(XFm_receiver_hls *InstancePtr);
-u32 XFm_receiver_hls_Write_git_hash_Words(XFm_receiver_hls *InstancePtr, int offset, int *data, int length);
-u32 XFm_receiver_hls_Read_git_hash_Words(XFm_receiver_hls *InstancePtr, int offset, int *data, int length);
-u32 XFm_receiver_hls_Write_git_hash_Bytes(XFm_receiver_hls *InstancePtr, int offset, char *data, int length);
-u32 XFm_receiver_hls_Read_git_hash_Bytes(XFm_receiver_hls *InstancePtr, int offset, char *data, int length);
-u32 XFm_receiver_hls_Get_build_time_BaseAddress(XFm_receiver_hls *InstancePtr);
-u32 XFm_receiver_hls_Get_build_time_HighAddress(XFm_receiver_hls *InstancePtr);
-u32 XFm_receiver_hls_Get_build_time_TotalBytes(XFm_receiver_hls *InstancePtr);
-u32 XFm_receiver_hls_Get_build_time_BitWidth(XFm_receiver_hls *InstancePtr);
-u32 XFm_receiver_hls_Get_build_time_Depth(XFm_receiver_hls *InstancePtr);
-u32 XFm_receiver_hls_Write_build_time_Words(XFm_receiver_hls *InstancePtr, int offset, int *data, int length);
-u32 XFm_receiver_hls_Read_build_time_Words(XFm_receiver_hls *InstancePtr, int offset, int *data, int length);
-u32 XFm_receiver_hls_Write_build_time_Bytes(XFm_receiver_hls *InstancePtr, int offset, char *data, int length);
-u32 XFm_receiver_hls_Read_build_time_Bytes(XFm_receiver_hls *InstancePtr, int offset, char *data, int length);
+u32 XFm_receiver_hls_Get_status_git_hash_V(XFm_receiver_hls *InstancePtr);
+u32 XFm_receiver_hls_Get_status_git_hash_V_vld(XFm_receiver_hls *InstancePtr);
+u64 XFm_receiver_hls_Get_status_build_time_V(XFm_receiver_hls *InstancePtr);
+u32 XFm_receiver_hls_Get_status_build_time_V_vld(XFm_receiver_hls *InstancePtr);
 
 #ifdef __cplusplus
 }
