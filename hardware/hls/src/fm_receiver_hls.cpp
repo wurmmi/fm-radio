@@ -66,9 +66,6 @@ using namespace std;
 #define STRING2(x) #x
 #define STRING(x)  STRING2(x)
 
-static const status_git_hash_t status_git_hash_c     = STRING(GIT_HASH);
-static const status_build_time_t status_build_time_c = STRING(BUILD_TIME);
-
 void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
                      hls::stream<audio_sample_t>& audio_out,
                      uint8_t led_ctrl,
@@ -108,9 +105,13 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
   toggle             = !toggle;
 
   /*----------- AXILITE Interface ------------*/
-  *led_out           = led_ctrl | (((uint8_t)toggle << 2));
+  static const status_git_hash_t status_git_hash_c     = STRING(GIT_HASH);
+  static const status_build_time_t status_build_time_c = STRING(BUILD_TIME);
+
   *status_git_hash   = status_git_hash_c;
   *status_build_time = status_build_time_c;
+
+  *led_out = led_ctrl | (((uint8_t)toggle << 2));
 
 #if IMPL_FM_RADIO == 1
   /*---------------- FM radio ----------------*/
