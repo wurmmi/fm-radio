@@ -7,7 +7,7 @@
 
 `timescale 1 ns / 1 ps 
 
-(* CORE_GENERATION_INFO="fm_receiver_hls,hls_ip_2018_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=1,HLS_INPUT_PART=xc7z020clg484-1,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=1.965000,HLS_SYN_LAT=2,HLS_SYN_TPT=none,HLS_SYN_MEM=0,HLS_SYN_DSP=0,HLS_SYN_FF=282,HLS_SYN_LUT=333,HLS_VERSION=2018_2}" *)
+(* CORE_GENERATION_INFO="fm_receiver_hls,hls_ip_2018_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=1,HLS_INPUT_PART=xc7z020clg484-1,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=1.965000,HLS_SYN_LAT=2,HLS_SYN_TPT=none,HLS_SYN_MEM=0,HLS_SYN_DSP=0,HLS_SYN_FF=280,HLS_SYN_LUT=333,HLS_VERSION=2018_2}" *)
 
 module fm_receiver_hls (
         ap_clk,
@@ -120,8 +120,6 @@ wire    audio_out_V_1_load_B;
 reg   [1:0] audio_out_V_1_state;
 wire    audio_out_V_1_state_cmp_full;
 wire   [7:0] led_ctrl;
-reg    status_git_hash_V_ap_vld;
-reg    status_build_time_V_ap_vld;
 reg   [0:0] toggle;
 reg    iq_in_V_TDATA_blk_n;
 wire    ap_CS_fsm_state2;
@@ -130,8 +128,6 @@ wire    ap_CS_fsm_state3;
 wire   [0:0] tmp_3_fu_117_p2;
 wire   [7:0] tmp_6_fu_157_p3;
 reg   [7:0] led_out_preg;
-reg    ap_reg_ioackin_status_git_hash_V_dummy_ack;
-reg    ap_reg_ioackin_status_build_time_V_dummy_ack;
 wire   [2:0] tmp_fu_137_p1;
 wire   [2:0] tmp_5_fu_129_p3;
 wire   [4:0] tmp_7_fu_147_p4;
@@ -149,8 +145,6 @@ initial begin
 #0 audio_out_V_1_state = 2'd0;
 #0 toggle = 1'd0;
 #0 led_out_preg = 8'd0;
-#0 ap_reg_ioackin_status_git_hash_V_dummy_ack = 1'b0;
-#0 ap_reg_ioackin_status_build_time_V_dummy_ack = 1'b0;
 end
 
 fm_receiver_hls_CONFIG_s_axi #(
@@ -178,10 +172,8 @@ fm_receiver_hls_CONFIG_s_axi_U(
     .ARESET(ap_rst_n_inv),
     .ACLK_EN(1'b1),
     .led_ctrl(led_ctrl),
-    .status_git_hash_V(28'd86328877),
-    .status_git_hash_V_ap_vld(status_git_hash_V_ap_vld),
-    .status_build_time_V(48'd36309806032392),
-    .status_build_time_V_ap_vld(status_build_time_V_ap_vld)
+    .status_git_hash_V(28'd129746076),
+    .status_build_time_V(48'd36309806679111)
 );
 
 always @ (posedge ap_clk) begin
@@ -189,34 +181,6 @@ always @ (posedge ap_clk) begin
         ap_CS_fsm <= ap_ST_fsm_state1;
     end else begin
         ap_CS_fsm <= ap_NS_fsm;
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if (ap_rst_n_inv == 1'b1) begin
-        ap_reg_ioackin_status_build_time_V_dummy_ack <= 1'b0;
-    end else begin
-        if ((1'b1 == ap_CS_fsm_state2)) begin
-            if (~((iq_in_V_0_vld_out == 1'b0) | (audio_out_V_1_ack_in == 1'b0))) begin
-                ap_reg_ioackin_status_build_time_V_dummy_ack <= 1'b0;
-            end else if (((iq_in_V_0_vld_out == 1'b1) & (1'b1 == 1'b1))) begin
-                ap_reg_ioackin_status_build_time_V_dummy_ack <= 1'b1;
-            end
-        end
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if (ap_rst_n_inv == 1'b1) begin
-        ap_reg_ioackin_status_git_hash_V_dummy_ack <= 1'b0;
-    end else begin
-        if ((1'b1 == ap_CS_fsm_state2)) begin
-            if (~((iq_in_V_0_vld_out == 1'b0) | (audio_out_V_1_ack_in == 1'b0))) begin
-                ap_reg_ioackin_status_git_hash_V_dummy_ack <= 1'b0;
-            end else if (((iq_in_V_0_vld_out == 1'b1) & (1'b1 == 1'b1))) begin
-                ap_reg_ioackin_status_git_hash_V_dummy_ack <= 1'b1;
-            end
-        end
     end
 end
 
@@ -409,22 +373,6 @@ always @ (*) begin
         led_out = tmp_6_fu_157_p3;
     end else begin
         led_out = led_out_preg;
-    end
-end
-
-always @ (*) begin
-    if (((iq_in_V_0_vld_out == 1'b1) & (ap_reg_ioackin_status_build_time_V_dummy_ack == 1'b0) & (1'b1 == ap_CS_fsm_state2))) begin
-        status_build_time_V_ap_vld = 1'b1;
-    end else begin
-        status_build_time_V_ap_vld = 1'b0;
-    end
-end
-
-always @ (*) begin
-    if (((iq_in_V_0_vld_out == 1'b1) & (ap_reg_ioackin_status_git_hash_V_dummy_ack == 1'b0) & (1'b1 == ap_CS_fsm_state2))) begin
-        status_git_hash_V_ap_vld = 1'b1;
-    end else begin
-        status_git_hash_V_ap_vld = 1'b0;
     end
 end
 

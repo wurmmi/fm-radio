@@ -35,9 +35,7 @@ module fm_receiver_hls_CONFIG_s_axi
     // user signals
     output wire [7:0]                    led_ctrl,
     input  wire [27:0]                   status_git_hash_V,
-    input  wire                          status_git_hash_V_ap_vld,
-    input  wire [47:0]                   status_build_time_V,
-    input  wire                          status_build_time_V_ap_vld
+    input  wire [47:0]                   status_build_time_V
 );
 //------------------------Address Info-------------------
 // 0x00 : reserved
@@ -51,17 +49,13 @@ module fm_receiver_hls_CONFIG_s_axi
 // 0x18 : Data signal of status_git_hash_V
 //        bit 27~0 - status_git_hash_V[27:0] (Read)
 //        others   - reserved
-// 0x1c : Control signal of status_git_hash_V
-//        bit 0  - status_git_hash_V_ap_vld (Read/COR)
-//        others - reserved
+// 0x1c : reserved
 // 0x20 : Data signal of status_build_time_V
 //        bit 31~0 - status_build_time_V[31:0] (Read)
 // 0x24 : Data signal of status_build_time_V
 //        bit 15~0 - status_build_time_V[47:32] (Read)
 //        others   - reserved
-// 0x28 : Control signal of status_build_time_V
-//        bit 0  - status_build_time_V_ap_vld (Read/COR)
-//        others - reserved
+// 0x28 : reserved
 // (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
 
 //------------------------Parameter----------------------
@@ -97,9 +91,7 @@ localparam
     // internal registers
     reg  [7:0]                    int_led_ctrl = 'b0;
     reg  [27:0]                   int_status_git_hash_V = 'b0;
-    reg                           int_status_git_hash_V_ap_vld;
     reg  [47:0]                   int_status_build_time_V = 'b0;
-    reg                           int_status_build_time_V_ap_vld;
 
 //------------------------Instantiation------------------
 
@@ -197,17 +189,11 @@ always @(posedge ACLK) begin
                 ADDR_STATUS_GIT_HASH_V_DATA_0: begin
                     rdata <= int_status_git_hash_V[27:0];
                 end
-                ADDR_STATUS_GIT_HASH_V_CTRL: begin
-                    rdata[0] <= int_status_git_hash_V_ap_vld;
-                end
                 ADDR_STATUS_BUILD_TIME_V_DATA_0: begin
                     rdata <= int_status_build_time_V[31:0];
                 end
                 ADDR_STATUS_BUILD_TIME_V_DATA_1: begin
                     rdata <= int_status_build_time_V[47:32];
-                end
-                ADDR_STATUS_BUILD_TIME_V_CTRL: begin
-                    rdata[0] <= int_status_build_time_V_ap_vld;
                 end
             endcase
         end
@@ -232,20 +218,7 @@ always @(posedge ACLK) begin
     if (ARESET)
         int_status_git_hash_V <= 0;
     else if (ACLK_EN) begin
-        if (status_git_hash_V_ap_vld)
             int_status_git_hash_V <= status_git_hash_V;
-    end
-end
-
-// int_status_git_hash_V_ap_vld
-always @(posedge ACLK) begin
-    if (ARESET)
-        int_status_git_hash_V_ap_vld <= 1'b0;
-    else if (ACLK_EN) begin
-        if (status_git_hash_V_ap_vld)
-            int_status_git_hash_V_ap_vld <= 1'b1;
-        else if (ar_hs && raddr == ADDR_STATUS_GIT_HASH_V_CTRL)
-            int_status_git_hash_V_ap_vld <= 1'b0; // clear on read
     end
 end
 
@@ -254,20 +227,7 @@ always @(posedge ACLK) begin
     if (ARESET)
         int_status_build_time_V <= 0;
     else if (ACLK_EN) begin
-        if (status_build_time_V_ap_vld)
             int_status_build_time_V <= status_build_time_V;
-    end
-end
-
-// int_status_build_time_V_ap_vld
-always @(posedge ACLK) begin
-    if (ARESET)
-        int_status_build_time_V_ap_vld <= 1'b0;
-    else if (ACLK_EN) begin
-        if (status_build_time_V_ap_vld)
-            int_status_build_time_V_ap_vld <= 1'b1;
-        else if (ar_hs && raddr == ADDR_STATUS_BUILD_TIME_V_CTRL)
-            int_status_build_time_V_ap_vld <= 1'b0; // clear on read
     end
 end
 

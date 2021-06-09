@@ -52,9 +52,9 @@ static void task_audio(void *) {
     printf("[i] ... show information\n");
     printf("----------------------------------------------\n");
     printf("Choice: ");
+    fflush(stdout);
 
     /* Process user input */
-    fflush(stdout);
     char choice = inbyte();
     printf("%c\n", choice);
 

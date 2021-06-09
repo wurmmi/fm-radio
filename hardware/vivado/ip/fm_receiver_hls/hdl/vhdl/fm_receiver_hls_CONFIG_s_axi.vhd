@@ -38,9 +38,7 @@ port (
     -- user signals
     led_ctrl              :out  STD_LOGIC_VECTOR(7 downto 0);
     status_git_hash_V     :in   STD_LOGIC_VECTOR(27 downto 0);
-    status_git_hash_V_ap_vld :in   STD_LOGIC;
-    status_build_time_V   :in   STD_LOGIC_VECTOR(47 downto 0);
-    status_build_time_V_ap_vld :in   STD_LOGIC
+    status_build_time_V   :in   STD_LOGIC_VECTOR(47 downto 0)
 );
 end entity fm_receiver_hls_CONFIG_s_axi;
 
@@ -56,17 +54,13 @@ end entity fm_receiver_hls_CONFIG_s_axi;
 -- 0x18 : Data signal of status_git_hash_V
 --        bit 27~0 - status_git_hash_V[27:0] (Read)
 --        others   - reserved
--- 0x1c : Control signal of status_git_hash_V
---        bit 0  - status_git_hash_V_ap_vld (Read/COR)
---        others - reserved
+-- 0x1c : reserved
 -- 0x20 : Data signal of status_build_time_V
 --        bit 31~0 - status_build_time_V[31:0] (Read)
 -- 0x24 : Data signal of status_build_time_V
 --        bit 15~0 - status_build_time_V[47:32] (Read)
 --        others   - reserved
--- 0x28 : Control signal of status_build_time_V
---        bit 0  - status_build_time_V_ap_vld (Read/COR)
---        others - reserved
+-- 0x28 : reserved
 -- (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
 
 architecture behave of fm_receiver_hls_CONFIG_s_axi is
@@ -97,9 +91,7 @@ architecture behave of fm_receiver_hls_CONFIG_s_axi is
     -- internal registers
     signal int_led_ctrl        : UNSIGNED(7 downto 0) := (others => '0');
     signal int_status_git_hash_V : UNSIGNED(27 downto 0) := (others => '0');
-    signal int_status_git_hash_V_ap_vld : STD_LOGIC;
     signal int_status_build_time_V : UNSIGNED(47 downto 0) := (others => '0');
-    signal int_status_build_time_V_ap_vld : STD_LOGIC;
 
 
 begin
@@ -217,14 +209,10 @@ begin
                         rdata_data <= RESIZE(int_led_ctrl(7 downto 0), 32);
                     when ADDR_STATUS_GIT_HASH_V_DATA_0 =>
                         rdata_data <= RESIZE(int_status_git_hash_V(27 downto 0), 32);
-                    when ADDR_STATUS_GIT_HASH_V_CTRL =>
-                        rdata_data <= (0 => int_status_git_hash_V_ap_vld, others => '0');
                     when ADDR_STATUS_BUILD_TIME_V_DATA_0 =>
                         rdata_data <= RESIZE(int_status_build_time_V(31 downto 0), 32);
                     when ADDR_STATUS_BUILD_TIME_V_DATA_1 =>
                         rdata_data <= RESIZE(int_status_build_time_V(47 downto 32), 32);
-                    when ADDR_STATUS_BUILD_TIME_V_CTRL =>
-                        rdata_data <= (0 => int_status_build_time_V_ap_vld, others => '0');
                     when others =>
                         rdata_data <= (others => '0');
                     end case;
@@ -253,23 +241,8 @@ begin
             if (ARESET = '1') then
                 int_status_git_hash_V <= (others => '0');
             elsif (ACLK_EN = '1') then
-                if (status_git_hash_V_ap_vld = '1') then
+                if (true) then
                     int_status_git_hash_V <= UNSIGNED(status_git_hash_V); -- clear on read
-                end if;
-            end if;
-        end if;
-    end process;
-
-    process (ACLK)
-    begin
-        if (ACLK'event and ACLK = '1') then
-            if (ARESET = '1') then
-                int_status_git_hash_V_ap_vld <= '0';
-            elsif (ACLK_EN = '1') then
-                if (status_git_hash_V_ap_vld = '1') then
-                    int_status_git_hash_V_ap_vld <= '1';
-                elsif (ar_hs = '1' and raddr = ADDR_STATUS_GIT_HASH_V_CTRL) then
-                    int_status_git_hash_V_ap_vld <= '0'; -- clear on read
                 end if;
             end if;
         end if;
@@ -281,23 +254,8 @@ begin
             if (ARESET = '1') then
                 int_status_build_time_V <= (others => '0');
             elsif (ACLK_EN = '1') then
-                if (status_build_time_V_ap_vld = '1') then
+                if (true) then
                     int_status_build_time_V <= UNSIGNED(status_build_time_V); -- clear on read
-                end if;
-            end if;
-        end if;
-    end process;
-
-    process (ACLK)
-    begin
-        if (ACLK'event and ACLK = '1') then
-            if (ARESET = '1') then
-                int_status_build_time_V_ap_vld <= '0';
-            elsif (ACLK_EN = '1') then
-                if (status_build_time_V_ap_vld = '1') then
-                    int_status_build_time_V_ap_vld <= '1';
-                elsif (ar_hs = '1' and raddr = ADDR_STATUS_BUILD_TIME_V_CTRL) then
-                    int_status_build_time_V_ap_vld <= '0'; -- clear on read
                 end if;
             end if;
         end if;

@@ -504,43 +504,6 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
           </spirit:field>
         </spirit:register>
         <spirit:register>
-          <spirit:name>status_git_hash_V_ctrl</spirit:name>
-          <spirit:displayName>status_git_hash_V_ctrl</spirit:displayName>
-          <spirit:description>Control signal of status_git_hash_V</spirit:description>
-          <spirit:addressOffset>28</spirit:addressOffset>
-          <spirit:size spirit:format="long">32</spirit:size>
-          <spirit:access>read-only</spirit:access>
-          <spirit:reset>
-            <spirit:value spirit:format="long">0</spirit:value>
-          </spirit:reset>
-          <spirit:field>
-            <spirit:name>status_git_hash_V_ap_vld</spirit:name>
-            <spirit:description>Control signal status_git_hash_V_ap_vld</spirit:description>
-            <spirit:bitOffset>0</spirit:bitOffset>
-            <spirit:bitWidth spirit:format="long">1</spirit:bitWidth>
-            <spirit:access>read-only</spirit:access>
-            <spirit:writeValueConstraint>
-              <spirit:minimum>0</spirit:minimum>
-              <spirit:maximum>0</spirit:maximum>
-            </spirit:writeValueConstraint>
-            <spirit:readAction>modify</spirit:readAction>
-            <spirit:testable spirit:testConstraint="unconstrained">false</spirit:testable>
-          </spirit:field>
-          <spirit:field>
-            <spirit:name>RESERVED</spirit:name>
-            <spirit:description>Reserved.  0s on read.</spirit:description>
-            <spirit:bitOffset>1</spirit:bitOffset>
-            <spirit:bitWidth spirit:format="long">31</spirit:bitWidth>
-            <spirit:access>read-only</spirit:access>
-            <spirit:writeValueConstraint>
-              <spirit:minimum>0</spirit:minimum>
-              <spirit:maximum>0</spirit:maximum>
-            </spirit:writeValueConstraint>
-            <spirit:readAction>modify</spirit:readAction>
-            <spirit:testable spirit:testConstraint="unconstrained">false</spirit:testable>
-          </spirit:field>
-        </spirit:register>
-        <spirit:register>
           <spirit:name>status_build_time_V_1</spirit:name>
           <spirit:displayName>status_build_time_V_1</spirit:displayName>
           <spirit:description>Data signal of status_build_time_V</spirit:description>
@@ -601,43 +564,6 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
             <spirit:testable spirit:testConstraint="unconstrained">false</spirit:testable>
           </spirit:field>
         </spirit:register>
-        <spirit:register>
-          <spirit:name>status_build_time_V_ctrl</spirit:name>
-          <spirit:displayName>status_build_time_V_ctrl</spirit:displayName>
-          <spirit:description>Control signal of status_build_time_V</spirit:description>
-          <spirit:addressOffset>40</spirit:addressOffset>
-          <spirit:size spirit:format="long">32</spirit:size>
-          <spirit:access>read-only</spirit:access>
-          <spirit:reset>
-            <spirit:value spirit:format="long">0</spirit:value>
-          </spirit:reset>
-          <spirit:field>
-            <spirit:name>status_build_time_V_ap_vld</spirit:name>
-            <spirit:description>Control signal status_build_time_V_ap_vld</spirit:description>
-            <spirit:bitOffset>0</spirit:bitOffset>
-            <spirit:bitWidth spirit:format="long">1</spirit:bitWidth>
-            <spirit:access>read-only</spirit:access>
-            <spirit:writeValueConstraint>
-              <spirit:minimum>0</spirit:minimum>
-              <spirit:maximum>0</spirit:maximum>
-            </spirit:writeValueConstraint>
-            <spirit:readAction>modify</spirit:readAction>
-            <spirit:testable spirit:testConstraint="unconstrained">false</spirit:testable>
-          </spirit:field>
-          <spirit:field>
-            <spirit:name>RESERVED</spirit:name>
-            <spirit:description>Reserved.  0s on read.</spirit:description>
-            <spirit:bitOffset>1</spirit:bitOffset>
-            <spirit:bitWidth spirit:format="long">31</spirit:bitWidth>
-            <spirit:access>read-only</spirit:access>
-            <spirit:writeValueConstraint>
-              <spirit:minimum>0</spirit:minimum>
-              <spirit:maximum>0</spirit:maximum>
-            </spirit:writeValueConstraint>
-            <spirit:readAction>modify</spirit:readAction>
-            <spirit:testable spirit:testConstraint="unconstrained">false</spirit:testable>
-          </spirit:field>
-        </spirit:register>
       </spirit:addressBlock>
     </spirit:memoryMap>
   </spirit:memoryMaps>
@@ -655,7 +581,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>13d10f7c</spirit:value>
+            <spirit:value>b2e5900f</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -671,7 +597,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>2876d84c</spirit:value>
+            <spirit:value>c18530c7</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -687,7 +613,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>d9e8a0f3</spirit:value>
+            <spirit:value>4526fdf4</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -703,7 +629,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>077a485a</spirit:value>
+            <spirit:value>ecfd2ac1</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -717,7 +643,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>710eb904</spirit:value>
+            <spirit:value>83088746</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1273,7 +1199,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
       <spirit:file>
         <spirit:name>hdl/vhdl/fm_receiver_hls.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_73171d99</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_820f13f9</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>
@@ -1400,14 +1326,14 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
       </xilinx:taxonomies>
       <xilinx:displayName>fm_receiver_hls</xilinx:displayName>
       <xilinx:definitionSource>HLS</xilinx:definitionSource>
-      <xilinx:coreRevision>2106091730</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2021-06-09T15:30:50Z</xilinx:coreCreationDateTime>
+      <xilinx:coreRevision>2106092106</xilinx:coreRevision>
+      <xilinx:coreCreationDateTime>2021-06-09T19:07:02Z</xilinx:coreCreationDateTime>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2018.2</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="54db1f37"/>
-      <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="3018f776"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="89dd71cb"/>
+      <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="4050007a"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="2709471f"/>
       <xilinx:checksum xilinx:scope="ports" xilinx:value="15f6d847"/>
       <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="bae53229"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="f4f42744"/>
