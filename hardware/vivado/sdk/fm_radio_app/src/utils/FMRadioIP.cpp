@@ -6,10 +6,15 @@
 
 #include "FMRadioIP.h"
 
-#include <time.h>
-
 #include <chrono>
 #include <iostream>
+
+/** NOTE:
+ *  This is a workaround for a bug in the Xilinx SDK standard libraries.
+ *  https://stackoverflow.com/a/49389145
+ */
+#undef str
+#include <sstream>
 
 #include "log.h"
 
@@ -61,43 +66,47 @@ void FMRadioIP::LED_SetOff(TLed led) {
   XFm_receiver_hls_Set_led_ctrl(&mDev, state);
 }
 
-std::string FMRadioIP::GetGitHash() {
-  uint8_t const length  = XFM_RECEIVER_HLS_CONFIG_DEPTH_GIT_HASH;
-  char git_hash[length] = {0};
-
-  int num_read =
-      XFm_receiver_hls_Read_git_hash_Bytes(&mDev, 0, git_hash, length);
-  if (num_read != length) {
-    LOG_ERROR("Could not read git_hash bytes");
-    return "failed";
-  }
-
-  return string(git_hash);
+string FMRadioIP::UintToHexString(uint64_t num) {
+  // Convert number to string and hex-format
+  stringstream ss;
+  ss << hex << num;
+  return string(ss.str());
 }
 
-std::string FMRadioIP::GetBuildTime() {
-  uint8_t const length    = XFM_RECEIVER_HLS_CONFIG_DEPTH_BUILD_TIME;
-  char build_time[length] = {0};
+string FMRadioIP::GetGitHash() {
+  auto git_hash = XFm_receiver_hls_Get_status_git_hash_V(&mDev);
 
-  int num_read =
-      XFm_receiver_hls_Read_build_time_Bytes(&mDev, 0, build_time, length);
-  if (num_read != length) {
-    LOG_ERROR("Could not read build_time bytes");
-    return "failed";
-  }
+  return UintToHexString(git_hash);
+}
+
+string FMRadioIP::GetBuildTime() {
+  auto build_time_uint = XFm_receiver_hls_Get_status_build_time_V(&mDev);
 
   // Convert to human-readable date string
   // NOTE: I'm sure there's a much better way to do this...  :)
-  string year  = "20" + string{build_time[0], build_time[1]};
-  string month = string{build_time[2], build_time[3]};
-  string day   = string{build_time[4], build_time[5]};
+  // Example build_time result:
+  //    yymmddhhmmss
+  //    210609184711 --> 2021/06/09 18:47:11
+  string build_time = UintToHexString(build_time_uint);
 
-  string hour = string{build_time[6], build_time[7]};
-  string min  = string{build_time[8], build_time[9]};
-  string sec  = string{build_time[10], build_time[11]};
+  // Sanity check
+  uint8_t const expected_length_c = 12;
+  uint8_t len                     = build_time.length();
+  if (len < expected_length_c) {
+    LOG_ERROR(
+        "build_time does not match expected length! (is: %d, expected: %d)",
+        len,
+        expected_length_c);
+    return "error";
+  }
 
-  string date =
-      month + "/" + day + "/" + year + " " + hour + ":" + min + ":" + sec;
+  // Date formatting
+  build_time.insert(10, 1, ':');
+  build_time.insert(8, 1, ':');
+  build_time.insert(6, 1, ' ');
+  build_time.insert(4, 1, '/');
+  build_time.insert(2, 1, '/');
+  build_time.insert(0, "20");
 
-  return date;
+  return build_time;
 }

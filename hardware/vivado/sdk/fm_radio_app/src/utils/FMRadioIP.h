@@ -18,6 +18,8 @@ class FMRadioIP {
   XFm_receiver_hls mDev;
   uint32_t mDeviceId;
 
+  std::string UintToHexString(uint64_t num);
+
  public:
   FMRadioIP(uint32_t device_id);
   ~FMRadioIP();

@@ -87,6 +87,8 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
 #pragma HLS INTERFACE s_axilite port = status_build_time bundle = CONFIG
 #pragma HLS INTERFACE s_axilite port = led_ctrl bundle = CONFIG
 
+#pragma HLS INTERFACE ap_none port = status_git_hash
+#pragma HLS INTERFACE ap_none port = status_build_time
 #pragma HLS INTERFACE ap_none port = led_out
 
 #if IMPL_DATA_FORWARDING_ONLY == 1
