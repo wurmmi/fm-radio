@@ -43,7 +43,7 @@ class TB_DATA_HANDLER():
                 'data': [],
                 'fs': fs_rx_c,
                 'max_error_abs': 0.5,  # todo vhdl 2**-5
-                'max_error_norm': 3.2,  # todo vhdl 0.2
+                'max_error_norm': 3.5,  # todo vhdl 0.2
                 'result_okay': False
             },
             {
@@ -51,7 +51,7 @@ class TB_DATA_HANDLER():
                 'data': [],
                 'fs': fs_rx_c,
                 'max_error_abs': 0.5,  # todo 0.7 vhdl 2**-3
-                'max_error_norm': 7.5,  # todo vhdl 0.5
+                'max_error_norm': 8.7,  # todo vhdl 0.5
                 'result_okay': False
             },
             {
