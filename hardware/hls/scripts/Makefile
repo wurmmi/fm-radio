@@ -59,9 +59,9 @@ create_project: ##					- Create HLS project.
 gui: ##							- Open HLS project in GUI.
 	@cd $(PROJ_DIR) && vivado_hls -p $(VIVADO_HLS_PROJECT_NAME)
 
-csim: ##							- Run C simulation.
+csim: create_project ##					- Run C simulation.
 	@rm -f ../tb/output/*
-	@$(call vivado_hls_batch,hls_sim.tcl,$(VIVADO_HLS_PROJECT_NAME))
+	@$(call vivado_hls_batch,hls_csim.tcl,$(VIVADO_HLS_PROJECT_NAME))
 	@$(call analyze_tb_results)
 	@echo Done.
 
@@ -72,11 +72,11 @@ csim_analyze: ##						- Run analysis for latest csim.
 reload_plots: ##						- Reload plots from latest csim/co-sim.
 	@source $(ENV_SETUP_SCRIPT) && python -c $(PYTHON_RELOAD_PLOTS_CODE)
 
-csynth: ## 						- Run C synthesis.
+csynth: create_project ##					- Run C synthesis.
 	@$(call vivado_hls_batch,hls_csynth.tcl,$(VIVADO_HLS_PROJECT_NAME))
 	@echo Done.
 
-cosim: ## 						- Run co-simulation.
+cosim: create_project ##					- Run co-simulation.
 	@$(call vivado_hls_batch,hls_cosim.tcl,$(VIVADO_HLS_PROJECT_NAME))
 	@$(call analyze_tb_results)
 	@echo Done.

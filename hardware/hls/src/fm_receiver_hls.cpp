@@ -66,15 +66,15 @@ using namespace std;
 #define STRING2(x) #x
 #define STRING(x)  STRING2(x)
 
-static const char* git_hash_string   = STRING(GIT_HASH);
-static const char* build_time_string = STRING(BUILD_TIME);
+static const status_git_hash_t status_git_hash_c     = STRING(GIT_HASH);
+static const status_build_time_t status_build_time_c = STRING(BUILD_TIME);
 
 void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
                      hls::stream<audio_sample_t>& audio_out,
                      uint8_t led_ctrl,
-                     char git_hash[REG_STATUS_GIT_HASH_LEN],
-                     char build_time[REG_STATUS_BUILD_TIME_LEN],
-                     uint8_t& led_out) {
+                     status_git_hash_t* status_git_hash,
+                     status_build_time_t* status_build_time,
+                     uint8_t* led_out) {
 #pragma HLS INTERFACE ap_ctrl_hs port = return
 
 #pragma HLS INTERFACE axis port = iq_in
@@ -83,8 +83,8 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
 #pragma HLS INTERFACE axis port = audio_out
 #pragma HLS DATA_PACK variable  = audio_out
 
-#pragma HLS INTERFACE s_axilite port = git_hash bundle = CONFIG
-#pragma HLS INTERFACE s_axilite port = build_time bundle = CONFIG
+#pragma HLS INTERFACE s_axilite port = status_git_hash bundle = CONFIG
+#pragma HLS INTERFACE s_axilite port = status_build_time bundle = CONFIG
 #pragma HLS INTERFACE s_axilite port = led_ctrl bundle = CONFIG
 
 #pragma HLS INTERFACE ap_none port = led_out
@@ -106,14 +106,9 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
   toggle             = !toggle;
 
   /*----------- AXILITE Interface ------------*/
-  led_out = led_ctrl | (((uint8_t)toggle << 2));
-
-  for (int i = 0; i < 8; i++) {
-    git_hash[i] = git_hash_string[i];
-  }
-  for (int i = 0; i < 13; i++) {
-    build_time[i] = build_time_string[i];
-  }
+  *led_out           = led_ctrl | (((uint8_t)toggle << 2));
+  *status_git_hash   = status_git_hash_c;
+  *status_build_time = status_build_time_c;
 
 #if IMPL_FM_RADIO == 1
   /*---------------- FM radio ----------------*/

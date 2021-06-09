@@ -7,8 +7,8 @@
 set SRC_DIR  "../../src"
 set TB_DIR   "../../tb"
 
-set GIT_HASH   "[exec git rev-parse --short HEAD]"
-set BUILD_TIME "[clock format [clock seconds] -format "%y%m%d%H%M%S"]"
+set GIT_HASH   "0x[exec git rev-parse --short HEAD]"
+set BUILD_TIME "0x[clock format [clock seconds] -format "%y%m%d%H%M%S"]"
 
 set CPPFLAGS [ list                            \
                 -O0                            \
