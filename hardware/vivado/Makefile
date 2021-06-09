@@ -38,7 +38,7 @@ bitstream: ##			- Synthesize project and create a bitstream.
 
 sdk: ##				- Create/Open SDK project.
 	@echo "Creating SDK ..."
-	@xsdk -batch -source ./scripts/create_sdk.tcl
+	@xsdk -batch -source ./scripts/create_sdk.tcl $(GUI)
 ifeq ($(GUI),1)
 	@xsdk -workspace ./sdk
 endif
