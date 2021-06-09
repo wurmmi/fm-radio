@@ -24,8 +24,8 @@ typedef struct {
 void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
                      hls::stream<audio_sample_t>& audio_out,
                      uint8_t led_ctrl,
-                     char const git_hash[REG_STATUS_GIT_HASH_LEN],
-                     char const build_time[REG_STATUS_BUILD_TIME_LEN],
+                     char git_hash[REG_STATUS_GIT_HASH_LEN],
+                     char build_time[REG_STATUS_BUILD_TIME_LEN],
                      uint8_t& led_out);
 
 #endif /* _FM_RECEIVER_HLS_HPP */

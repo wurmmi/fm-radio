@@ -75,9 +75,8 @@ int main() {
     hls::stream<audio_sample_t> stream_data_out;
     uint8_t led_ctrl = 0x3;
     uint8_t led_out_o;
-
-    char *git_hash_o   = nullptr;
-    char *build_time_o = nullptr;
+    char git_hash_o[8]    = {0};
+    char build_time_o[13] = {0};
     while (!stream_data_in.empty()) {
       fm_receiver_hls(stream_data_in,
                       stream_data_out,
@@ -98,21 +97,8 @@ int main() {
       cout << "OKAY" << endl;
 
     cout << "- Check build info status register" << endl;
-    char git_hash[REG_STATUS_GIT_HASH_LEN]     = {0};
-    char build_time[REG_STATUS_BUILD_TIME_LEN] = {0};
-    if (git_hash_o == nullptr)
-      cout << "nullptr git_hash_o" << endl;
-    if (build_time_o == nullptr)
-      cout << "nullptr build_time_o" << endl;
-
-    for (uint8_t i = 0; i < REG_STATUS_GIT_HASH_LEN; i++) {
-      git_hash[i] = *(git_hash_o + i);
-    }
-    for (uint8_t i = 0; i < REG_STATUS_BUILD_TIME_LEN; i++) {
-      build_time[i] = *(build_time_o + i);
-    }
-    cout << "git_hash  : " << git_hash << endl;
-    cout << "build_time: " << build_time << endl;
+    cout << "git_hash  : " << git_hash_o << endl;
+    cout << "build_time: " << build_time_o << endl;
 
     cout << "- Store output stream to file" << endl;
     while (!stream_data_out.empty()) {
