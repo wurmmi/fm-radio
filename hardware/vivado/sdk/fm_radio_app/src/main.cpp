@@ -82,7 +82,7 @@ static void task_audio(void *) {
 
         string build_time = fmRadioIP.GetBuildTime();
         string git_hash   = fmRadioIP.GetGitHash();
-        printf("FPGA build date:  %s, (%s)\n",
+        printf("FPGA build date:  %s, (git hash: %s)\n",
                build_time.c_str(),
                git_hash.c_str());
       } break;

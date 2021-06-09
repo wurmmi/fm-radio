@@ -6,6 +6,11 @@
 
 #include "FMRadioIP.h"
 
+#include <time.h>
+
+#include <chrono>
+#include <iostream>
+
 #include "log.h"
 
 using namespace std;
@@ -57,7 +62,7 @@ void FMRadioIP::LED_SetOff(TLed led) {
 }
 
 std::string FMRadioIP::GetGitHash() {
-  int const length      = 8;
+  uint8_t const length  = XFM_RECEIVER_HLS_CONFIG_DEPTH_GIT_HASH;
   char git_hash[length] = {0};
 
   int num_read =
@@ -71,7 +76,7 @@ std::string FMRadioIP::GetGitHash() {
 }
 
 std::string FMRadioIP::GetBuildTime() {
-  int const length        = 13;
+  uint8_t const length    = XFM_RECEIVER_HLS_CONFIG_DEPTH_BUILD_TIME;
   char build_time[length] = {0};
 
   int num_read =
@@ -81,5 +86,18 @@ std::string FMRadioIP::GetBuildTime() {
     return "failed";
   }
 
-  return string(build_time);
+  // Convert to human-readable date string
+  // NOTE: I'm sure there's a much better way to do this...  :)
+  string year  = "20" + string{build_time[0], build_time[1]};
+  string month = string{build_time[2], build_time[3]};
+  string day   = string{build_time[4], build_time[5]};
+
+  string hour = string{build_time[6], build_time[7]};
+  string min  = string{build_time[8], build_time[9]};
+  string sec  = string{build_time[10], build_time[11]};
+
+  string date =
+      month + "/" + day + "/" + year + " " + hour + ":" + min + ":" + sec;
+
+  return date;
 }
