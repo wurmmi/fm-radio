@@ -72,8 +72,8 @@ static const char* build_time_string = STRING(BUILD_TIME);
 void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
                      hls::stream<audio_sample_t>& audio_out,
                      uint8_t led_ctrl,
-                     char git_hash[8],
-                     char build_time[13],
+                     char const git_hash[REG_STATUS_GIT_HASH_LEN],
+                     char const build_time[REG_STATUS_BUILD_TIME_LEN],
                      uint8_t& led_out) {
 #pragma HLS INTERFACE ap_ctrl_hs port = return
 
@@ -108,12 +108,10 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
   /*----------- AXILITE Interface ------------*/
   led_out = led_ctrl | (((uint8_t)toggle << 2));
 
-  for (int i = 0; i < 8; i++) {
-    git_hash[i] = git_hash_string[i];
-  }
-  for (int i = 0; i < 13; i++) {
-    build_time[i] = build_time_string[i];
-  }
+  //  git_hash   = git_hash_string;
+  //  build_time = build_time_string;
+  git_hash   = STRING(GIT_HASH);
+  build_time = STRING(BUILD_TIME);
 
 #if IMPL_FM_RADIO == 1
   /*---------------- FM radio ----------------*/

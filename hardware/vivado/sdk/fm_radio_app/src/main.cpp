@@ -77,12 +77,12 @@ static void task_audio(void *) {
         LOG_INFO("DMA stopped.");
         break;
       case 'i': {
-        printf("This program is developed by Michael Wurm.\n");
-        printf("SDK  build date:  %s, %s\n", __DATE__, __TIME__);
-
         string build_time = fmRadioIP.GetBuildTime();
         string git_hash   = fmRadioIP.GetGitHash();
-        printf("FPGA build date:  %s, (git hash: %s)\n",
+
+        printf("This program is developed by Michael Wurm.\n");
+        printf("SDK firmware build date :  %s, %s\n", __DATE__, __TIME__);
+        printf("FM Radio IP build date  :  %s, (git hash: %s)\n",
                build_time.c_str(),
                git_hash.c_str());
       } break;
