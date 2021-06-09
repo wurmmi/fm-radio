@@ -67,8 +67,8 @@ architecture behav of fm_receiver_hls is
     constant ap_const_lv32_2 : STD_LOGIC_VECTOR (31 downto 0) := "00000000000000000000000000000010";
     constant C_S_AXI_DATA_WIDTH : INTEGER range 63 downto 0 := 20;
     constant ap_const_lv8_0 : STD_LOGIC_VECTOR (7 downto 0) := "00000000";
-    constant ap_const_lv28_7BBC49C : STD_LOGIC_VECTOR (27 downto 0) := "0111101110111100010010011100";
-    constant ap_const_lv48_210609210447 : STD_LOGIC_VECTOR (47 downto 0) := "001000010000011000001001001000010000010001000111";
+    constant ap_const_lv28_ECA565D : STD_LOGIC_VECTOR (27 downto 0) := "1110110010100101011001011101";
+    constant ap_const_lv48_210609211919 : STD_LOGIC_VECTOR (47 downto 0) := "001000010000011000001001001000010001100100011001";
     constant ap_const_lv32_3 : STD_LOGIC_VECTOR (31 downto 0) := "00000000000000000000000000000011";
     constant ap_const_lv32_7 : STD_LOGIC_VECTOR (31 downto 0) := "00000000000000000000000000000111";
     constant ap_const_boolean_1 : BOOLEAN := true;
@@ -183,8 +183,8 @@ begin
         ARESET => ap_rst_n_inv,
         ACLK_EN => ap_const_logic_1,
         led_ctrl => led_ctrl,
-        status_git_hash_V => ap_const_lv28_7BBC49C,
-        status_build_time_V => ap_const_lv48_210609210447);
+        status_git_hash_V => ap_const_lv28_ECA565D,
+        status_build_time_V => ap_const_lv48_210609211919);
 
 
 

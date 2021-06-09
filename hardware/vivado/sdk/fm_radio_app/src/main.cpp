@@ -17,9 +17,7 @@
 
 using namespace std;
 
-#define STACK_SIZE ((uint16_t)65535)
-
-const TickType_t delay_ms_c = pdMS_TO_TICKS(1000);
+#define STACK_SIZE_TASK_AUDIO ((uint16_t)65535)
 
 static TaskHandle_t task_loop_handle;
 static TaskHandle_t task_audio_handle;
@@ -28,7 +26,7 @@ static FMRadioIP fmRadioIP(XPAR_FM_RECEIVER_HLS_0_DEVICE_ID);
 static void task_loop(void *) {
   while (true) {
     fmRadioIP.LED_Toggle(TLed::LED1);
-    vTaskDelay(delay_ms_c);
+    vTaskDelay(pdMS_TO_TICKS(1000));
   }
 }
 
@@ -110,7 +108,7 @@ int main() {
 
   xTaskCreate(task_audio,
               (const char *)"task_audio",
-              STACK_SIZE,
+              STACK_SIZE_TASK_AUDIO,
               NULL,
               tskIDLE_PRIORITY,
               &task_audio_handle);

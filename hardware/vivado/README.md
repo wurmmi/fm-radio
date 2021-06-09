@@ -19,7 +19,7 @@ Examples:
 
 ## Common use-cases
 
-### **IP was updated, since the Vivado project was created**
+### **Any IP was updated, since the Vivado project was created**
 
   Synthesis will show a warning, saying that IPs are "locked". \
   An example:
@@ -38,7 +38,8 @@ Examples:
   The Board Support Package (BSP) in the SDK needs to be re-generated in order to use the latest drivers.
 
   1. Build a bitstream that includes the new HLS IP (`make bitstream`)
-  2. Close the SDK and run `make sdk GUI=1`. \
+  2. Close the SDK and run `make clean-sdk`.
+  3. Run `make sdk GUI=1`. \
   This will read the latest Hardware Definition File (HDF) and extract the firmware drivers from it. \
   *NOTE: The HDF is simply a zip-file... Just rename it from \*.hdf to \*.zip and unzip it.*
 
