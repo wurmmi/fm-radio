@@ -49,18 +49,29 @@ int main() {
     // --------------------------------------------------------------------------
     cout << "--- Loading data from files" << endl;
 
-    WavReader wavReader;
-    // const string filename_wav = data_dir_fw_resource + "wav/rx_fm_bb.wav";
-    const string filename_wav =
-        data_dir_fw_resource + "wav/cantina_band_44100.wav";
-    wavReader.LoadFile(filename_wav);
-    auto buffer = wavReader.GetBuffer();
-
     cout << "num_samples_fs    = " << num_samples_fs_c << endl;
     cout << "num_samples_rx    = " << num_samples_rx_c << endl;
     cout << "num_samples_audio = " << num_samples_audio_c << endl;
 
-    // Input data
+    /*--- Load data like firmware (from Matlab *.wav file) ---*/
+
+    // Load file data
+    WavReader wavReader;
+    const string filename_wav = data_dir_fw_resource + "wav/rx_fm_bb.wav";
+    wavReader.LoadFile(filename_wav);
+    auto buffer = wavReader.GetBuffer();
+
+    // Transform into I/Q samples
+    uint32_t* pSource = (uint32_t*)buffer.buffer;
+    for (uint32_t i = 0; i < buffer.size / 4; i++) {
+      // Split 32 bit into 2x 16 bit
+      int16_t left  = (int16_t)((pSource[i] >> 16) & 0xFFFF);
+      int16_t right = (int16_t)((pSource[i] >> 0) & 0xFFFF);
+    }
+
+    /*--- Load data directly (from Matlab *.txt file) ---*/
+
+    // Load file data
     const string filename_txt = data_dir_verification + "rx_fm_bb.txt";
     vector<sample_t> data_in_iq =
         DataLoader::loadDataFromFile(filename_txt, num_samples_fs_c * 2);
@@ -123,7 +134,7 @@ int main() {
 
     cout << "--- Done." << endl;
     cout << "--- Took " << duration.count() << " seconds." << endl;
-  } catch (const exception &e) {
+  } catch (const exception& e) {
     cerr << "Exception occured: " << e.what() << endl;
     return -1;
   }
