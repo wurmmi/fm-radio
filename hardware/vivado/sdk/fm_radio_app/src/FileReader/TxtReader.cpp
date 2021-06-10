@@ -61,14 +61,15 @@ void TxtReader::LoadFile(string const& filename) {
     mBuffer = {nullptr, 0};
     return;
   }
-  mBuffer.bufferSize = fileSize;
+  mBuffer.size = fileSize;
 
   /** TODO: convert binary buffer to integers */
 
   f_close(&mFile);
 
   LOG_DEBUG("Done.");
-  LOG_DEBUG("Read %ld bytes from TXT file '%s'", mBufferSize, filename.c_str());
+  LOG_DEBUG(
+      "Read %zu bytes from TXT file '%s'", mBuffer.size, filename.c_str());
 
   PrepareBufferData();
 }

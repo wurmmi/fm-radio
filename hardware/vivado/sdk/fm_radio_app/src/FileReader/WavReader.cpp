@@ -69,10 +69,10 @@ void WavReader::LoadFile(string const& filename) {
   }
 
   /*--- Read chunks ---*/
-  uint32_t num_generic_chunks = 0;
-  uint32_t num_unknown_chunks = 0;
-  uint32_t num_fmt_chunks     = 0;
-  uint32_t num_data_chunks    = 0;
+  size_t num_generic_chunks = 0;
+  size_t num_unknown_chunks = 0;
+  size_t num_fmt_chunks     = 0;
+  size_t num_data_chunks    = 0;
 
   while (1) {
     // Read WAV generic chunk
@@ -91,7 +91,7 @@ void WavReader::LoadFile(string const& filename) {
     num_generic_chunks++;
 
     wav_fmt_chunk_t fmtChunk;
-    if (string{genericChunk.ckId, sizeof(genericChunk.ckId)} == "fmt") {
+    if (string{genericChunk.ckId, sizeof(genericChunk.ckId)} == "fmt ") {
       num_fmt_chunks++;
 
       /* The FMT chunk is compulsory and contains information about
@@ -130,10 +130,9 @@ void WavReader::LoadFile(string const& filename) {
         mBuffer = {nullptr, 0};
         return;
       }
-      mBuffer.bufferSize = genericChunk.cksize;
+      mBuffer.size = genericChunk.cksize;
 
-      success =
-          FileRead((void*)mBuffer.buffer, mBuffer.bufferSize, n_bytes_read);
+      success = FileRead((void*)mBuffer.buffer, mBuffer.size, n_bytes_read);
       if (!success) {
         delete[] mBuffer.buffer;
         mBuffer = {nullptr, 0};
@@ -153,10 +152,9 @@ void WavReader::LoadFile(string const& filename) {
   FileClose();
 
   LOG_INFO("Done.");
-  LOG_DEBUG("Read %ld bytes from WAV file '%s'",
-            mBuffer.bufferSize,
-            filename.c_str());
-  LOG_DEBUG("number of WAV chunks: %ld generic, %ld unknown, %ld fmt, %ld data",
+  LOG_DEBUG(
+      "Read %zu bytes from WAV file '%s'", mBuffer.size, filename.c_str());
+  LOG_DEBUG("number of WAV chunks: %zu generic, %zu unknown, %zu fmt, %zu data",
             num_generic_chunks,
             num_unknown_chunks,
             num_fmt_chunks,

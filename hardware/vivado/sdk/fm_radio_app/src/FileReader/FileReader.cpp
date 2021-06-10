@@ -53,7 +53,7 @@ void FileReader::PrepareBufferData() {
   int theVolume = 2;
 
   uint32_t* pSource = (uint32_t*)mBuffer.buffer;
-  for (uint32_t i = 0; i < mBuffer.bufferSize / 4; i++) {
+  for (uint32_t i = 0; i < mBuffer.size / 4; i++) {
     int16_t left  = (int16_t)((pSource[i] >> 16) & 0xFFFF);
     int16_t right = (int16_t)((pSource[i] >> 0) & 0xFFFF);
     int left_i    = -(int)left * theVolume / 4;

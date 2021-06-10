@@ -17,7 +17,7 @@
 
 typedef struct {
   uint8_t* buffer;
-  uint32_t bufferSize;
+  size_t size;
 } DMABuffer;
 
 enum class FileType { UNKNOWN, WAV, TXT };
