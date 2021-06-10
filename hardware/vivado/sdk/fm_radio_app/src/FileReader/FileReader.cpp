@@ -54,14 +54,14 @@ void FileReader::PrepareBufferData() {
   LOG_DEBUG("#############  BEGIN  ###################### PrepareBufferData()");
 
   uint32_t* pSource = (uint32_t*)mBuffer.buffer;
-  for (uint32_t i = 0; i < mBuffer.size / 4; i++) {
+  for (size_t i = 0; i < mBuffer.size / 4; i++) {
     // Split 32 bit into 2x 16 bit
     int16_t left  = (int16_t)((pSource[i] >> 16) & 0xFFFF);
     int16_t right = (int16_t)((pSource[i] >> 0) & 0xFFFF);
 
     // Adapt volume
-    int left_i  = (int)left * theVolume / 4;
-    int right_i = (int)right * theVolume / 4;
+    left  = left * theVolume / 4;
+    right = right * theVolume / 4;
 
     // Limit amplitude to 16 bit
     //    if (left > 32767)
@@ -74,11 +74,9 @@ void FileReader::PrepareBufferData() {
     //      right = -32767;
 
     if (i < 50)
-      LOG_DEBUG("pSource[%3d]: 0x%08x ", i, pSource[i]);
+      LOG_DEBUG("pSource[%3d]: 0x%08x ", i, (size_t)pSource[i]);
 
     // Combine to 32 bit again
-    left       = (int16_t)left_i;
-    right      = (int16_t)right_i;
     pSource[i] = ((uint32_t)right << 16) + (uint32_t)left;
   }
   LOG_DEBUG("#############  END  ######################## PrepareBufferData()");
