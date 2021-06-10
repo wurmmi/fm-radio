@@ -31,7 +31,11 @@ clang-format off
 --                                            did not have the same name....
 --
 -- (4) Build information status register
---       05/31/2021  22:00 -
+--       05/31/2021  22:00 - 00:00    2:00 h  Begin with interface
+--       06/08/2021  20:00 - 00:00    4:00 h  Trying to find out how to use a char-array on Axilite.
+--       06/09/2021  22:00 - 00:00    2:00 h  -''-
+--                                            Using an ap_uint<> now instead of a char-array, which
+--                                            is the most efficient way.
 --
 --
 --
