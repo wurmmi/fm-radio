@@ -42,6 +42,10 @@ WavReader::WavReader() {}
 WavReader::~WavReader() {}
 
 void WavReader::LoadFile(string const& filename) {
+  LOG_INFO("Loading WAV file '%s' ...", filename.c_str());
+  // cout << "Loading WAV file " << filename << endl;
+  // printf("asdf testing %s\n", filename.c_str());
+
   // Open the file
   bool success = FileOpen(filename);
   if (!success)

@@ -133,7 +133,6 @@ void SDCardReader::LoadFile(string const& filename) {
 
   switch (fileType) {
     case FileType::WAV: {
-      LOG_INFO("Reading WAV file '%s' ...", filename.c_str());
       mFileReader = new WavReader();
       mFileReader->LoadFile(filename_short);
     } break;

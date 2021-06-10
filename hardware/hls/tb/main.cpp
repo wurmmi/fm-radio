@@ -24,8 +24,11 @@ constexpr double n_sec_c = 0.001;
 constexpr double n_sec_c = 0.1;
 #endif
 
-const string data_folder =
-    "../../../../../../../../sim/matlab/verification_data/";
+const string repo_root = "../../../../../../../../";
+const string data_dir_verification =
+    repo_root + "sim/matlab/verification_data/";
+const string data_dir_fw_resource =
+    repo_root + "hardware/vivado/sdk/fm_radio_app/resource/";
 
 /* Derived constants */
 constexpr int num_samples_fs_c    = n_sec_c * FS;
@@ -45,16 +48,21 @@ int main() {
     // Load data from files
     // --------------------------------------------------------------------------
     cout << "--- Loading data from files" << endl;
+
     WavReader wavReader;
+    const string filename_wav = data_dir_fw_resource + "wav/rx_fm_bb.wav";
+    wavReader.LoadFile(filename_wav);
+    cout << "Loaded!" << endl;
+    auto buffer = wavReader.GetBuffer();
 
     cout << "num_samples_fs    = " << num_samples_fs_c << endl;
     cout << "num_samples_rx    = " << num_samples_rx_c << endl;
     cout << "num_samples_audio = " << num_samples_audio_c << endl;
 
     // Input data
-    const string filename = data_folder + "rx_fm_bb.txt";
+    const string filename_txt = data_dir_verification + "rx_fm_bb.txt";
     vector<sample_t> data_in_iq =
-        DataLoader::loadDataFromFile(filename, num_samples_fs_c * 2);
+        DataLoader::loadDataFromFile(filename_txt, num_samples_fs_c * 2);
 
     // Split interleaved I/Q samples (take every other)
     hls::stream<iq_sample_t> stream_data_in;

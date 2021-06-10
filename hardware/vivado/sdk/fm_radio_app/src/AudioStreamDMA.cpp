@@ -47,12 +47,12 @@ bool AudioStreamDMA::TxSetup() {
   uint32_t max_block_size   = txRingPtr->MaxTransferLen;
   mNumRequiredBDs           = ceil((float)mDataBuffer.size / max_block_size);
 
-  LOG_DEBUG("bufferSize      = %ld", mDataBuffer.size);
+  LOG_DEBUG("bufferSize      = %zu", mDataBuffer.size);
   LOG_DEBUG("max_block_size  = %ld", max_block_size);
-  LOG_DEBUG("mNumRequiredBDs = %ld", mNumRequiredBDs);
+  LOG_DEBUG("mNumRequiredBDs = %lu", mNumRequiredBDs);
 
   if (mNumRequiredBDs > DMA_NUM_BD_MAX) {
-    LOG_ERROR("Cannot allocate %ld BDs! Maximum is %d.",
+    LOG_ERROR("Cannot allocate %lu BDs! Maximum is %d.",
               mNumRequiredBDs,
               DMA_NUM_BD_MAX);
 
@@ -258,7 +258,7 @@ void AudioStreamDMA::TransmitBlob(DMABuffer const& dataBuffer) {
     LOG_ERROR("BufferSize is larger than maximum transfer length!");
     return;
   }
-  LOG_DEBUG("TransmitBlob: bufferSize = %ld", mDataBuffer.size);
+  LOG_DEBUG("TransmitBlob: bufferSize = %zu", mDataBuffer.size);
 
   /* Flush the buffers before the DMA transfer, in case the Data Cache is
    * enabled */
