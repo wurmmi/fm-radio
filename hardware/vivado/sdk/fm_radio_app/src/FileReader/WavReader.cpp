@@ -43,8 +43,6 @@ WavReader::~WavReader() {}
 
 void WavReader::LoadFile(string const& filename) {
   LOG_INFO("Loading WAV file '%s' ...", filename.c_str());
-  // cout << "Loading WAV file " << filename << endl;
-  // printf("asdf testing %s\n", filename.c_str());
 
   // Open the file
   bool success = FileOpen(filename);
@@ -54,6 +52,7 @@ void WavReader::LoadFile(string const& filename) {
   /*--- Sanity checks in header ---*/
 
   // WAV header
+  LOG_DEBUG("reading WAV header");
   wav_header_t header;
   size_t n_bytes_read;
   success = FileRead((void*)&header, sizeof(header), n_bytes_read);
@@ -71,6 +70,7 @@ void WavReader::LoadFile(string const& filename) {
     FileClose();
     return;
   }
+  LOG_DEBUG("WAV header OKAY");
 
   /*--- Read chunks ---*/
   size_t num_generic_chunks = 0;
@@ -83,10 +83,11 @@ void WavReader::LoadFile(string const& filename) {
     wav_generic_chunk_t genericChunk;
     size_t num_bytes_to_read = sizeof(genericChunk);
 
+    LOG_DEBUG("reading a WAV generic chunk");
     success = FileRead((void*)&genericChunk, num_bytes_to_read, n_bytes_read);
     if (!success) {
       if (n_bytes_read != num_bytes_to_read) {
-        LOG_WARN("reached EOF");
+        LOG_WARN("reached EOF (may be acceptable)");
         // Is an acceptable situation in this case
         break;
       }
@@ -153,16 +154,17 @@ void WavReader::LoadFile(string const& filename) {
       num_unknown_chunks++;
     }
   }
-  FileClose();
 
   LOG_INFO("Done.");
   LOG_DEBUG(
       "Read %zu bytes from WAV file '%s'", mBuffer.size, filename.c_str());
-  LOG_DEBUG("number of WAV chunks: %zu generic, %zu unknown, %zu fmt, %zu data",
-            num_generic_chunks,
-            num_unknown_chunks,
-            num_fmt_chunks,
-            num_data_chunks);
+  LOG_DEBUG(
+      "number of read WAV chunks: "
+      "%zu generic (%zu unknown + %zu fmt + %zu data)",
+      num_generic_chunks,
+      num_unknown_chunks,
+      num_fmt_chunks,
+      num_data_chunks);
 
   // PrepareBufferData();
 }

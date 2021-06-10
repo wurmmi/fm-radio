@@ -1,7 +1,7 @@
 /**
  * @file    log.h
  * @author  Michael Wurm <wurm.michael95@gmail.com>
- * @brief   log helper functions
+ * @brief   Log functions for pretty logging
  */
 
 #ifndef _LOG_H_
@@ -28,7 +28,7 @@
 #else
 #define LOG_DEBUG(format, ...) void();
 #endif
-#else /* __CSIM__ */
+#else /* __CSIM__ not defined */
 #define LOG_ERROR(format, ...) ({ _LOG_ERROR(format, ##__VA_ARGS__); })
 #define LOG_WARN(format, ...)  ({ _LOG_WARN(format, ##__VA_ARGS__);  })
 #define LOG_INFO(format, ...)  ({ _LOG_INFO(format, ##__VA_ARGS__);  })

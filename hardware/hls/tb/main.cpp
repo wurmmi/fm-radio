@@ -50,9 +50,10 @@ int main() {
     cout << "--- Loading data from files" << endl;
 
     WavReader wavReader;
-    const string filename_wav = data_dir_fw_resource + "wav/rx_fm_bb.wav";
+    // const string filename_wav = data_dir_fw_resource + "wav/rx_fm_bb.wav";
+    const string filename_wav =
+        data_dir_fw_resource + "wav/cantina_band_44100.wav";
     wavReader.LoadFile(filename_wav);
-    cout << "Loaded!" << endl;
     auto buffer = wavReader.GetBuffer();
 
     cout << "num_samples_fs    = " << num_samples_fs_c << endl;
