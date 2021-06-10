@@ -8,7 +8,7 @@
 #define _FILEREADER_H_
 
 #ifdef __CSIM__
-#pragma message "__CSIM__ IS DEFINED !!###########################"
+#include <cstdio>
 #else
 #include <ff.h>
 #endif
@@ -26,12 +26,19 @@ class FileReader {
  private:
  protected:
   DMABuffer mBuffer = {nullptr, 0};
-#if __CSIM__
+#ifdef __CSIM__
+  FILE* mFile;
 #else
-  FIL mFile;
+  FIL* mFile;
 #endif
 
   void PrepareBufferData();
+  bool FileOpen(std::string const& filename);
+  void FileClose();
+  bool FileRead(void* target_buf,
+                size_t num_bytes_to_read,
+                size_t& n_bytes_read);
+  bool FileSeek(size_t num_bytes_offset);
 
  public:
   FileReader();

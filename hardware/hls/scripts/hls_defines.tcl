@@ -24,16 +24,16 @@ set CPPFLAGS_COMMON [ list       \
 ]
 #              -fsanitize=undefined"
 
-set CPPFLAGS_CSIM [ list \
- {*}$CPPFLAGS_COMMON \
- -I$SRC_DIR_FW                  \
- -I$SRC_DIR_FW/utils                  \
- -D__CSIM__              \
+set CPPFLAGS_CSIM [ list         \
+ {*}$CPPFLAGS_COMMON             \
+ -I$SRC_DIR_FW                   \
+ -I$SRC_DIR_FW/utils             \
+ -D__CSIM__                      \
 ]
 
-set CPPFLAGS_COSIM [ list \
- {*}$CPPFLAGS_COMMON \
-  -D__RTL_SIMULATION__              \
+set CPPFLAGS_COSIM [ list        \
+ {*}$CPPFLAGS_COMMON             \
+  -D__RTL_SIMULATION__           \
 ]
 
 puts "GIT_HASH        : $GIT_HASH"
