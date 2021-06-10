@@ -6,10 +6,6 @@
 
 #include "WavReader.h"
 
-#ifndef __CSIM__
-#include <ff.h>
-#endif
-
 #include <algorithm>
 #include <iostream>
 
@@ -145,16 +141,17 @@ void WavReader::LoadFile(string const& filename) {
         delete[] mBuffer.buffer;
         return;
       }
-      mBufferSize = genericChunk.cksize;
+      mBuffer.bufferSize = genericChunk.cksize;
 
-      fres = f_read(&mFile, (void*)mBuffer.buffer, mBufferSize, &n_bytes_read);
+      fres = f_read(
+          &mFile, (void*)mBuffer.buffer, mBuffer.bufferSize, &n_bytes_read);
       if (fres != 0) {
         LOG_ERROR("Failed to read file");
         f_close(&mFile);
         delete[] mBuffer.buffer;
         return;
       }
-      if (n_bytes_read != mBufferSize) {
+      if (n_bytes_read != mBuffer.bufferSize) {
         LOG_ERROR("Didn't read the complete file");
         f_close(&mFile);
         delete[] mBuffer.buffer;
@@ -172,7 +169,9 @@ void WavReader::LoadFile(string const& filename) {
   f_close(&mFile);
 
   LOG_DEBUG("Done.");
-  LOG_DEBUG("Read %ld bytes from WAV file '%s'", mBufferSize, filename.c_str());
+  LOG_DEBUG("Read %ld bytes from WAV file '%s'",
+            mBuffer.bufferSize,
+            filename.c_str());
   LOG_DEBUG("number of WAV chunks: %ld generic, %ld unknown, %ld fmt, %ld data",
             num_generic_chunks,
             num_unknown_chunks,

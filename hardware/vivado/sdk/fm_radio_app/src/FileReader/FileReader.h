@@ -7,7 +7,9 @@
 #ifndef _FILEREADER_H_
 #define _FILEREADER_H_
 
-#ifndef __CSIM__
+#ifdef __CSIM__
+#pragma message "__CSIM__ IS DEFINED !!###########################"
+#else
 #include <ff.h>
 #endif
 
@@ -24,8 +26,10 @@ class FileReader {
  private:
  protected:
   DMABuffer mBuffer = {nullptr, 0};
+#if __CSIM__
+#else
   FIL mFile;
-  uint32_t mBufferSize = 0;
+#endif
 
   void PrepareBufferData();
 

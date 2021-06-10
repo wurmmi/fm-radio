@@ -16,7 +16,7 @@ puts " Running csim"
 puts "###############################################################"
 
 # Revert the workaround, described in "hls_cosim.tcl"
-add_files -tb $SRC_DIR_TB/main.cpp -cflags "$CPPFLAGS -D__CSIM__"
+add_files -tb $SRC_DIR_TB/main.cpp -cflags $CPPFLAGS_CSIM
 
 csim_design -clean
 #-ldflags {-fsanitize=undefined}

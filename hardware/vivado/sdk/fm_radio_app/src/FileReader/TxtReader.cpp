@@ -59,7 +59,7 @@ void TxtReader::LoadFile(string const& filename) {
     delete[] mBuffer.buffer;
     return;
   }
-  mBufferSize = fileSize;
+  mBuffer.bufferSize = fileSize;
 
   /** TODO: convert binary buffer to integers */
 
