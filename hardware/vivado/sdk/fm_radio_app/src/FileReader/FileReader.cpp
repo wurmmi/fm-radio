@@ -54,22 +54,15 @@ void FileReader::PrepareBufferData() {
 
   uint32_t* pSource = (uint32_t*)mBuffer.buffer;
   for (uint32_t i = 0; i < mBuffer.size / 4; i++) {
+    // Split 32 bit into 2x 16 bit
     int16_t left  = (int16_t)((pSource[i] >> 16) & 0xFFFF);
     int16_t right = (int16_t)((pSource[i] >> 0) & 0xFFFF);
-    int left_i    = -(int)left * theVolume / 4;
-    int right_i   = -(int)right * theVolume / 4;
 
-    //    if (left > 32767)
-    //      left = 32767;
-    //    if (left < -32767)
-    //      left = -32767;
-    //    if (right > 32767)
-    //      right = 32767;
-    //    if (right < -32767)
-    //      right = -32767;
+    // Adapt volume
+    left *= theVolume / 4;
+    right *= theVolume / 4;
 
-    left       = (int16_t)left_i;
-    right      = (int16_t)right_i;
+    // Combine to 32 bit again
     pSource[i] = ((uint32_t)right << 16) + (uint32_t)left;
   }
 }
