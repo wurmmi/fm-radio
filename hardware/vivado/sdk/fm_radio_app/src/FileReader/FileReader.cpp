@@ -82,7 +82,7 @@ bool FileReader::FileOpen(std::string const& filename) {
     return false;
   }
 #else
-  FRESULT fres = f_open(mFile, filename.c_str(), FA_READ);
+  FRESULT fres = f_open(&mFile, filename.c_str(), FA_READ);
   if (fres) {
     LOG_ERROR("Error opening file! (error: %d)", fres);
     return false;
@@ -96,7 +96,7 @@ void FileReader::FileClose() {
 #ifdef __CSIM__
   fclose(mFile);
 #else
-  f_close(mFile);
+  f_close(&mFile);
 #endif
 }
 
@@ -107,7 +107,7 @@ bool FileReader::FileRead(void* target_buf,
 #ifdef __CSIM__
   n_bytes_read = fread(target_buf, 1, num_bytes_to_read, mFile);
 #else
-  FRESULT fres = f_read(mFile, target_buf, num_bytes_to_read, &n_bytes_read);
+  FRESULT fres = f_read(&mFile, target_buf, num_bytes_to_read, &n_bytes_read);
   if (fres) {
     LOG_ERROR("Failed to read file.");
     FileClose();
@@ -117,9 +117,9 @@ bool FileReader::FileRead(void* target_buf,
 
   // Check if the requested amount was read
   if (n_bytes_read != num_bytes_to_read) {
-    LOG_ERROR("Read less than requested (%zu < %zu).",
-              n_bytes_read,
-              num_bytes_to_read);
+    LOG_WARN("Read less than requested (%zu < %zu).",
+             n_bytes_read,
+             num_bytes_to_read);
     FileClose();
     return false;
   }
@@ -132,8 +132,8 @@ bool FileReader::FileSeek(size_t num_bytes_offset) {
 #ifdef __CSIM__
   int res = fseek(mFile, num_bytes_offset, SEEK_CUR);
 #else
-  DWORD fp_current = f_tell(mFile);
-  FRESULT res      = f_lseek(mFile, fp_current + num_bytes_offset);
+  DWORD fp_current = f_tell(&mFile);
+  FRESULT res      = f_lseek(&mFile, fp_current + num_bytes_offset);
 #endif
 
   if (res) {

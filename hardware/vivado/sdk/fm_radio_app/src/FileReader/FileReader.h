@@ -29,7 +29,7 @@ class FileReader {
 #ifdef __CSIM__
   FILE* mFile;
 #else
-  FIL* mFile;
+  FIL mFile;
 #endif
 
   void PrepareBufferData();

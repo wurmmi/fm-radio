@@ -82,7 +82,7 @@ void WavReader::LoadFile(string const& filename) {
     success = FileRead((void*)&genericChunk, num_bytes_to_read, n_bytes_read);
     if (!success) {
       if (n_bytes_read != num_bytes_to_read) {
-        LOG_WARN("likely reached EOF");
+        LOG_WARN("reached EOF");
         // Is an acceptable situation in this case
         break;
       }
