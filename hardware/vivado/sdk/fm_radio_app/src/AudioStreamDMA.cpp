@@ -28,8 +28,8 @@ AudioStreamDMA::AudioStreamDMA(uint32_t device_id) : mDeviceId(device_id) {
    */
   mIntCtrl = &xInterruptController;
 
-  bool ret = Initialize();
-  if (!ret) {
+  mIsInitialized = Initialize();
+  if (!mIsInitialized) {
     LOG_ERROR("Error in DMA initialization");
     return;
   }
@@ -246,6 +246,14 @@ bool AudioStreamDMA::Initialize() {
 
 void AudioStreamDMA::TransmitBlob(DMABuffer const& dataBuffer) {
   mDataBuffer = dataBuffer;
+
+  if (!mIsInitialized) {
+    mIsInitialized = Initialize();
+  }
+  if (!mIsInitialized) {
+    LOG_ERROR("DMA init error persists");
+    return;
+  }
 
   bool ret = TxSetup();
   if (!ret) {

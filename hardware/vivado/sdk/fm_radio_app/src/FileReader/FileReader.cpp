@@ -51,6 +51,7 @@ void FileReader::PrepareBufferData() {
   // Change the volume and swap left/right channel and polarity
 
   int theVolume = 2;
+  LOG_DEBUG("#############  BEGIN  ###################### PrepareBufferData()");
 
   uint32_t* pSource = (uint32_t*)mBuffer.buffer;
   for (uint32_t i = 0; i < mBuffer.size / 4; i++) {
@@ -59,12 +60,28 @@ void FileReader::PrepareBufferData() {
     int16_t right = (int16_t)((pSource[i] >> 0) & 0xFFFF);
 
     // Adapt volume
-    left *= theVolume / 4;
-    right *= theVolume / 4;
+    int left_i  = (int)left * theVolume / 4;
+    int right_i = (int)right * theVolume / 4;
+
+    // Limit amplitude to 16 bit
+    //    if (left > 32767)
+    //      left = 32767;
+    //    if (left < -32767)
+    //      left = -32767;
+    //    if (right > 32767)
+    //      right = 32767;
+    //    if (right < -32767)
+    //      right = -32767;
+
+    if (i < 50)
+      LOG_DEBUG("pSource[%3d]: 0x%08x ", i, pSource[i]);
 
     // Combine to 32 bit again
+    left       = (int16_t)left_i;
+    right      = (int16_t)right_i;
     pSource[i] = ((uint32_t)right << 16) + (uint32_t)left;
   }
+  LOG_DEBUG("#############  END  ######################## PrepareBufferData()");
 }
 
 bool FileReader::FileOpen(std::string const& filename) {

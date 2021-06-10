@@ -27,6 +27,7 @@ class AudioStreamDMA {
       __attribute__((aligned(XAXIDMA_BD_MINIMUM_ALIGNMENT)));
   uint8_t mDeviceId;
   int mErrorState;
+  bool mIsInitialized;
   DMABuffer mDataBuffer;
   uint32_t mNumRequiredBDs;
 

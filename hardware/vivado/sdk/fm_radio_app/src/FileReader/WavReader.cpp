@@ -97,6 +97,7 @@ void WavReader::LoadFile(string const& filename) {
 
     wav_fmt_chunk_t fmtChunk;
     if (string{genericChunk.ckId, sizeof(genericChunk.ckId)} == "fmt ") {
+      LOG_DEBUG("reading WAV FMT chunk");
       num_fmt_chunks++;
 
       /* The FMT chunk is compulsory and contains information about
@@ -120,6 +121,7 @@ void WavReader::LoadFile(string const& filename) {
         LOG_ERROR("Only 16 bit per samples supported");
         FileClose();
         return;
+        LOG_DEBUG("WAV FMT chunk OKAY");
       }
     } else if (string{genericChunk.ckId, sizeof(genericChunk.ckId)} == "data") {
       num_data_chunks++;
@@ -166,5 +168,5 @@ void WavReader::LoadFile(string const& filename) {
       num_fmt_chunks,
       num_data_chunks);
 
-  // PrepareBufferData();
+  PrepareBufferData();
 }

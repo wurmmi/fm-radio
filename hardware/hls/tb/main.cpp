@@ -57,16 +57,24 @@ int main() {
 
     // Load file data
     WavReader wavReader;
-    const string filename_wav = data_dir_fw_resource + "wav/rx_fm_bb.wav";
+    const string filename_wav =
+        data_dir_fw_resource + "wav/cantina_band_44100.wav";
     wavReader.LoadFile(filename_wav);
     auto buffer = wavReader.GetBuffer();
 
     // Transform into I/Q samples
     uint32_t* pSource = (uint32_t*)buffer.buffer;
+    vector<iq_sample_t> vec_data_wav_in;
+    hls::stream<iq_sample_t> stream_data_wav_in;
+    iq_sample_t sample_wav_in;
     for (uint32_t i = 0; i < buffer.size / 4; i++) {
       // Split 32 bit into 2x 16 bit
-      int16_t left  = (int16_t)((pSource[i] >> 16) & 0xFFFF);
-      int16_t right = (int16_t)((pSource[i] >> 0) & 0xFFFF);
+      sample_wav_in.i = (sample_t)((pSource[i] >> 16) & 0xFFFF);
+      sample_wav_in.q = (sample_t)((pSource[i] >> 0) & 0xFFFF);
+
+      // Fill stream
+      stream_data_wav_in << sample_wav_in;
+      vec_data_wav_in.emplace_back(sample_wav_in);
     }
 
     /*--- Load data directly (from Matlab *.txt file) ---*/
@@ -76,14 +84,38 @@ int main() {
     vector<sample_t> data_in_iq =
         DataLoader::loadDataFromFile(filename_txt, num_samples_fs_c * 2);
 
-    // Split interleaved I/Q samples (take every other)
+    // Split interleaved I/Q samples
+    vector<iq_sample_t> vec_data_in;
     hls::stream<iq_sample_t> stream_data_in;
     iq_sample_t sample_in;
     for (size_t i = 0; i < data_in_iq.size(); i += 2) {
+      // Samples I/Q are interleaved (take every other)
       sample_in.i = data_in_iq[i];
       sample_in.q = data_in_iq[i + 1];
+
+      // Fill stream
       stream_data_in << sample_in;
+      vec_data_in.emplace_back(sample_in);
     }
+
+    /*--- Compare the 2 data loading methods ---*/
+
+    cout << "--- Checking data loading results" << endl;
+
+    cout << "- Check amount of data" << endl;
+    if (vec_data_wav_in.size() != vec_data_in.size()) {
+      cerr << "ERROR: amount of loaded data does not match!" << endl;
+      cerr << "vec_data_in : " << vec_data_in.size() << endl;
+      cerr << "vec_data_wav_in : " << vec_data_wav_in.size() << endl;
+    } else {
+      cout << "OKAY" << endl;
+    }
+
+    cout << "- Write to files for visual compare" << endl;
+    DataWriter writer_vec_data_in("vec_data_in.txt");
+    DataWriter writer_vec_data_wav_in("vec_data_wav_in.txt");
+    writer_vec_data_in.write(vec_data_in);
+    writer_vec_data_wav_in.write(vec_data_wav_in);
 
     // --------------------------------------------------------------------------
     // Run test on DUT
@@ -133,7 +165,7 @@ int main() {
     auto duration = chrono::duration_cast<chrono::seconds>(ts_stop - ts_start);
 
     cout << "--- Done." << endl;
-    cout << "--- Took " << duration.count() << " seconds." << endl;
+    cout << "--- Took " << to_string(duration.count()) << " seconds." << endl;
   } catch (const exception& e) {
     cerr << "Exception occured: " << e.what() << endl;
     return -1;
