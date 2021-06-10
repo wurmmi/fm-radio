@@ -7,19 +7,24 @@
 #ifndef _FILEREADER_H_
 #define _FILEREADER_H_
 
+#ifndef __CSIM__
 #include <ff.h>
+#endif
 
 #include <string>
 
-#include "AudioStreamDMA.h"
+typedef struct {
+  uint8_t* buffer;
+  uint32_t bufferSize;
+} DMABuffer;
 
 enum class FileType { UNKNOWN, WAV, TXT };
 
 class FileReader {
  private:
  protected:
+  DMABuffer mBuffer = {nullptr, 0};
   FIL mFile;
-  uint8_t* mBuffer     = nullptr;
   uint32_t mBufferSize = 0;
 
   void PrepareBufferData();

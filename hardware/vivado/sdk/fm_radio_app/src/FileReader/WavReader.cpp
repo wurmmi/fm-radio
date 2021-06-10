@@ -6,6 +6,10 @@
 
 #include "WavReader.h"
 
+#ifndef __CSIM__
+#include <ff.h>
+#endif
+
 #include <algorithm>
 #include <iostream>
 
@@ -134,26 +138,26 @@ void WavReader::LoadFile(string const& filename) {
 
       // "data" chunk contains all the audio samples
       /** TODO: Use a better concept to free this allocated memory somewhere. */
-      mBuffer = new uint8_t[genericChunk.cksize];
-      if (!mBuffer) {
+      mBuffer.buffer = new uint8_t[genericChunk.cksize];
+      if (!mBuffer.buffer) {
         LOG_ERROR("Could not allocate memory");
         f_close(&mFile);
-        delete[] mBuffer;
+        delete[] mBuffer.buffer;
         return;
       }
       mBufferSize = genericChunk.cksize;
 
-      fres = f_read(&mFile, (void*)mBuffer, mBufferSize, &n_bytes_read);
+      fres = f_read(&mFile, (void*)mBuffer.buffer, mBufferSize, &n_bytes_read);
       if (fres != 0) {
         LOG_ERROR("Failed to read file");
         f_close(&mFile);
-        delete[] mBuffer;
+        delete[] mBuffer.buffer;
         return;
       }
       if (n_bytes_read != mBufferSize) {
         LOG_ERROR("Didn't read the complete file");
         f_close(&mFile);
-        delete[] mBuffer;
+        delete[] mBuffer.buffer;
         return;
       }
     } else {

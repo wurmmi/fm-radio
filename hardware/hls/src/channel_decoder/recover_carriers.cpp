@@ -38,7 +38,7 @@ void recover_carriers(sample_t const& in_sample,
   // Debug
   // ------------------------------------------------------
 
-#ifndef __SYNTHESIS__
+#ifdef __CSIM__
   static DataWriter writer_data_out_pilot("data_out_pilot.txt");
   writer_data_out_pilot.write(pilot);
 #endif

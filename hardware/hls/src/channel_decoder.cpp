@@ -75,7 +75,7 @@ void channel_decoder(sample_t const& in_sample,
     // Debug
     // ------------------------------------------------------
 
-#ifndef __SYNTHESIS__
+#ifdef __CSIM__
     static DataWriter writer_data_out_audio_mono("data_out_audio_mono.txt");
     writer_data_out_audio_mono.write(audio_mono);
 
@@ -89,7 +89,7 @@ void channel_decoder(sample_t const& in_sample,
     writer_data_out_audio_R.write(audio_R);
 #endif
   }
-#ifndef __SYNTHESIS__
+#ifdef __CSIM__
   static DataWriter writer_data_out_carrier_38k("data_out_carrier_38k.txt");
   writer_data_out_carrier_38k.write(carrier_38k);
 #endif

@@ -10,6 +10,7 @@
 #include <chrono>
 #include <iostream>
 
+#include "FileReader/WavReader.h"
 #include "fm_receiver_hls.hpp"
 #include "helper/DataLoader.hpp"
 #include "helper/DataWriter.hpp"
@@ -44,6 +45,7 @@ int main() {
     // Load data from files
     // --------------------------------------------------------------------------
     cout << "--- Loading data from files" << endl;
+    WavReader wavReader;
 
     cout << "num_samples_fs    = " << num_samples_fs_c << endl;
     cout << "num_samples_rx    = " << num_samples_rx_c << endl;

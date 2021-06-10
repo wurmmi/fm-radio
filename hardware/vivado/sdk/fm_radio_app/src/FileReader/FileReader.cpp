@@ -17,9 +17,10 @@ using namespace std;
 FileReader::FileReader() {}
 
 FileReader::~FileReader() {
-  if (mBuffer) {
-    delete[] mBuffer;
-    mBuffer = nullptr;
+  if (mBuffer.buffer) {
+    delete[] mBuffer.buffer;
+    mBuffer.buffer     = nullptr;
+    mBuffer.bufferSize = 0;
   }
 }
 
@@ -43,8 +44,8 @@ void FileReader::PrepareBufferData() {
 
   int theVolume = 2;
 
-  uint32_t* pSource = (uint32_t*)mBuffer;
-  for (uint32_t i = 0; i < mBufferSize / 4; i++) {
+  uint32_t* pSource = (uint32_t*)mBuffer.buffer;
+  for (uint32_t i = 0; i < mBuffer.bufferSize / 4; i++) {
     int16_t left  = (int16_t)((pSource[i] >> 16) & 0xFFFF);
     int16_t right = (int16_t)((pSource[i] >> 0) & 0xFFFF);
     int left_i    = -(int)left * theVolume / 4;
@@ -66,5 +67,5 @@ void FileReader::PrepareBufferData() {
 }
 
 DMABuffer FileReader::GetBuffer() {
-  return {mBuffer, mBufferSize};
+  return mBuffer;
 }
