@@ -6,6 +6,14 @@
  */
 /*****************************************************************************/
 
+/* ------------------------------ */
+/* NOTE:
+ * This is a workaround for an issue with the gmp-library.
+ * https://forums.xilinx.com/t5/High-Level-Synthesis-HLS/Vivado-2015-3-HLS-Bug-gmp-h/td-p/661141
+ */
+#include <gmp.h>
+#define __gmp_const const
+/* ------------------------------ */
 #include <hls_math.h>
 
 #include <bitset>

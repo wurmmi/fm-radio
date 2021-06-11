@@ -9,10 +9,12 @@
 #ifndef _FM_RECEIVER_HLS_HPP
 #define _FM_RECEIVER_HLS_HPP
 
+// clang-format off
+#include "fm_global.hpp"
+// clang-format on
+
 #include <ap_int.h>
 #include <hls_stream.h>
-
-#include "fm_global.hpp"
 
 #define REG_STATUS_GIT_HASH_STRLEN   ((uint8_t)7)
 #define REG_STATUS_BUILD_TIME_STRLEN ((uint8_t)12)
