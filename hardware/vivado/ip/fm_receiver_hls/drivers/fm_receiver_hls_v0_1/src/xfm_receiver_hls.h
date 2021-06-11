@@ -40,12 +40,12 @@ typedef uint32_t u32;
 #else
 typedef struct {
     u16 DeviceId;
-    u32 Config_BaseAddress;
+    u32 Api_BaseAddress;
 } XFm_receiver_hls_Config;
 #endif
 
 typedef struct {
-    u32 Config_BaseAddress;
+    u32 Api_BaseAddress;
     u32 IsReady;
 } XFm_receiver_hls;
 
@@ -81,10 +81,10 @@ int XFm_receiver_hls_Release(XFm_receiver_hls *InstancePtr);
 #endif
 
 
-void XFm_receiver_hls_Set_led_ctrl(XFm_receiver_hls *InstancePtr, u32 Data);
-u32 XFm_receiver_hls_Get_led_ctrl(XFm_receiver_hls *InstancePtr);
 u32 XFm_receiver_hls_Get_status_git_hash_V(XFm_receiver_hls *InstancePtr);
 u64 XFm_receiver_hls_Get_status_build_time_V(XFm_receiver_hls *InstancePtr);
+void XFm_receiver_hls_Set_config_led_ctrl(XFm_receiver_hls *InstancePtr, u32 Data);
+u32 XFm_receiver_hls_Get_config_led_ctrl(XFm_receiver_hls *InstancePtr);
 
 #ifdef __cplusplus
 }
