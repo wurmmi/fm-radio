@@ -129,8 +129,8 @@ def compareResultsOkay(gold, actual, fail_on_err,
             log_warn(msg)
             return False
 
-    log_info("OKAY results for {:15s}: 2-norm = {:.5f}, max_abs_err = {:.5f}".format(
-        data_name, norm_res, max_error_abs_found))
+    log_info("OKAY results for {:15s}: 2-norm {:.5f} < {:.5f}, max_abs_err {:.5f} < {:.5f}".format(
+        data_name, norm_res, max_error_norm, max_error_abs_found, max_error_abs))
     return True
 
 
