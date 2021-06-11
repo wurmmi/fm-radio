@@ -68,8 +68,8 @@ architecture behav of fm_receiver_hls is
     constant ap_const_lv32_3 : STD_LOGIC_VECTOR (31 downto 0) := "00000000000000000000000000000011";
     constant C_S_AXI_DATA_WIDTH : INTEGER range 63 downto 0 := 20;
     constant ap_const_lv32_1 : STD_LOGIC_VECTOR (31 downto 0) := "00000000000000000000000000000001";
-    constant ap_const_lv28_97DD040 : STD_LOGIC_VECTOR (27 downto 0) := "1001011111011101000001000000";
-    constant ap_const_lv48_210611173916 : STD_LOGIC_VECTOR (47 downto 0) := "001000010000011000010001000101110011100100010110";
+    constant ap_const_lv28_4AEBA23 : STD_LOGIC_VECTOR (27 downto 0) := "0100101011101011101000100011";
+    constant ap_const_lv48_210611175918 : STD_LOGIC_VECTOR (47 downto 0) := "001000010000011000010001000101110101100100011000";
     constant ap_const_lv8_2 : STD_LOGIC_VECTOR (7 downto 0) := "00000010";
     constant ap_const_boolean_1 : BOOLEAN := true;
 
@@ -170,9 +170,9 @@ architecture behav of fm_receiver_hls is
         ACLK : IN STD_LOGIC;
         ARESET : IN STD_LOGIC;
         ACLK_EN : IN STD_LOGIC;
+        config_led_ctrl : OUT STD_LOGIC_VECTOR (7 downto 0);
         status_git_hash_V : IN STD_LOGIC_VECTOR (27 downto 0);
-        status_build_time_V : IN STD_LOGIC_VECTOR (47 downto 0);
-        config_led_ctrl : OUT STD_LOGIC_VECTOR (7 downto 0) );
+        status_build_time_V : IN STD_LOGIC_VECTOR (47 downto 0) );
     end component;
 
 
@@ -203,9 +203,9 @@ begin
         ACLK => ap_clk,
         ARESET => ap_rst_n_inv,
         ACLK_EN => ap_const_logic_1,
-        status_git_hash_V => ap_const_lv28_97DD040,
-        status_build_time_V => ap_const_lv48_210611173916,
-        config_led_ctrl => config_led_ctrl);
+        config_led_ctrl => config_led_ctrl,
+        status_git_hash_V => ap_const_lv28_4AEBA23,
+        status_build_time_V => ap_const_lv48_210611175918);
 
     grp_fm_receiver_fu_122 : component fm_receiver
     port map (

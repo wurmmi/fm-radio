@@ -402,8 +402,8 @@ architecture behav of fm_receiver is
     signal p_Val2_7_fu_626_p2 : STD_LOGIC_VECTOR (29 downto 0);
     signal p_Val2_7_i_fu_484_p2 : STD_LOGIC_VECTOR (15 downto 0);
     signal p_Val2_8_fu_633_p2 : STD_LOGIC_VECTOR (29 downto 0);
-    signal ssdm_int_V_write_ass_fu_547_p2 : STD_LOGIC_VECTOR (15 downto 0);
-    signal ssdm_int_V_write_ass_1_fu_553_p2 : STD_LOGIC_VECTOR (15 downto 0);
+    signal out_audio_L_V_write_s_fu_547_p2 : STD_LOGIC_VECTOR (15 downto 0);
+    signal out_audio_R_V_write_s_fu_553_p2 : STD_LOGIC_VECTOR (15 downto 0);
     signal tmp_3_fu_571_p2 : STD_LOGIC_VECTOR (15 downto 0);
     signal p_Val2_i_i_fu_577_p2 : STD_LOGIC_VECTOR (15 downto 0);
     signal p_Val2_2_fu_587_p3 : STD_LOGIC_VECTOR (29 downto 0);
@@ -866,7 +866,7 @@ begin
                 ap_return_0_preg <= ap_const_lv16_0;
             else
                 if (((tmp_i_fu_535_p2 = ap_const_lv1_1) and (ap_const_logic_1 = ap_CS_fsm_state7))) then 
-                    ap_return_0_preg <= ssdm_int_V_write_ass_fu_547_p2;
+                    ap_return_0_preg <= out_audio_L_V_write_s_fu_547_p2;
                 end if; 
             end if;
         end if;
@@ -880,7 +880,7 @@ begin
                 ap_return_1_preg <= ap_const_lv16_0;
             else
                 if (((tmp_i_fu_535_p2 = ap_const_lv1_1) and (ap_const_logic_1 = ap_CS_fsm_state7))) then 
-                    ap_return_1_preg <= ssdm_int_V_write_ass_1_fu_553_p2;
+                    ap_return_1_preg <= out_audio_R_V_write_s_fu_553_p2;
                 end if; 
             end if;
         end if;
@@ -1448,20 +1448,20 @@ begin
     end process;
 
 
-    ap_return_0_assign_proc : process(ap_CS_fsm_state7, ssdm_int_V_write_ass_fu_547_p2, tmp_i_fu_535_p2, ap_return_0_preg)
+    ap_return_0_assign_proc : process(ap_CS_fsm_state7, out_audio_L_V_write_s_fu_547_p2, tmp_i_fu_535_p2, ap_return_0_preg)
     begin
         if (((tmp_i_fu_535_p2 = ap_const_lv1_1) and (ap_const_logic_1 = ap_CS_fsm_state7))) then 
-            ap_return_0 <= ssdm_int_V_write_ass_fu_547_p2;
+            ap_return_0 <= out_audio_L_V_write_s_fu_547_p2;
         else 
             ap_return_0 <= ap_return_0_preg;
         end if; 
     end process;
 
 
-    ap_return_1_assign_proc : process(ap_CS_fsm_state7, ssdm_int_V_write_ass_1_fu_553_p2, tmp_i_fu_535_p2, ap_return_1_preg)
+    ap_return_1_assign_proc : process(ap_CS_fsm_state7, out_audio_R_V_write_s_fu_553_p2, tmp_i_fu_535_p2, ap_return_1_preg)
     begin
         if (((tmp_i_fu_535_p2 = ap_const_lv1_1) and (ap_const_logic_1 = ap_CS_fsm_state7))) then 
-            ap_return_1 <= ssdm_int_V_write_ass_1_fu_553_p2;
+            ap_return_1 <= out_audio_R_V_write_s_fu_553_p2;
         else 
             ap_return_1 <= ap_return_1_preg;
         end if; 
@@ -2071,14 +2071,14 @@ begin
     end process;
 
     k_1_fu_458_p2 <= std_logic_vector(unsigned(k_reg_355) + unsigned(ap_const_lv4_1));
+    out_audio_L_V_write_s_fu_547_p2 <= std_logic_vector(unsigned(p_Val2_3_reg_377) + unsigned(p_Val2_s_reg_366));
+    out_audio_R_V_write_s_fu_553_p2 <= std_logic_vector(unsigned(p_Val2_s_reg_366) - unsigned(p_Val2_3_reg_377));
     p_Val2_2_fu_587_p3 <= (OP1_V_cast_reg_883 & ap_const_lv1_0);
     p_Val2_4_fu_470_p1 <= iq_in_V_TDATA(16 - 1 downto 0);
     p_Val2_6_fu_474_p4 <= iq_in_V_TDATA(31 downto 16);
     p_Val2_7_i_fu_484_p2 <= std_logic_vector(signed(p_Val2_4_fu_470_p1) - signed(reg_423));
     p_Val2_i_fu_490_p2 <= std_logic_vector(signed(p_Val2_6_fu_474_p4) - signed(reg_429));
     p_Val2_i_i_fu_577_p2 <= std_logic_vector(unsigned(ap_const_lv16_0) - unsigned(tmp_3_fu_571_p2));
-    ssdm_int_V_write_ass_1_fu_553_p2 <= std_logic_vector(unsigned(p_Val2_s_reg_366) - unsigned(p_Val2_3_reg_377));
-    ssdm_int_V_write_ass_fu_547_p2 <= std_logic_vector(unsigned(p_Val2_3_reg_377) + unsigned(p_Val2_s_reg_366));
         tmp_1_fu_583_p1 <= std_logic_vector(IEEE.numeric_std.resize(signed(p_Val2_i_i_fu_577_p2),29));
 
     tmp_2_fu_464_p2 <= "1" when (k_reg_355 = ap_const_lv4_7) else "0";

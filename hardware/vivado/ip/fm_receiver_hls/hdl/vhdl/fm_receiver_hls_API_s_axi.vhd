@@ -36,9 +36,9 @@ port (
     RVALID                :out  STD_LOGIC;
     RREADY                :in   STD_LOGIC;
     -- user signals
+    config_led_ctrl       :out  STD_LOGIC_VECTOR(7 downto 0);
     status_git_hash_V     :in   STD_LOGIC_VECTOR(27 downto 0);
-    status_build_time_V   :in   STD_LOGIC_VECTOR(47 downto 0);
-    config_led_ctrl       :out  STD_LOGIC_VECTOR(7 downto 0)
+    status_build_time_V   :in   STD_LOGIC_VECTOR(47 downto 0)
 );
 end entity fm_receiver_hls_API_s_axi;
 
@@ -47,19 +47,19 @@ end entity fm_receiver_hls_API_s_axi;
 -- 0x04 : reserved
 -- 0x08 : reserved
 -- 0x0c : reserved
--- 0x10 : Data signal of status_git_hash_V
---        bit 27~0 - status_git_hash_V[27:0] (Read)
---        others   - reserved
--- 0x14 : reserved
--- 0x18 : Data signal of status_build_time_V
---        bit 31~0 - status_build_time_V[31:0] (Read)
--- 0x1c : Data signal of status_build_time_V
---        bit 15~0 - status_build_time_V[47:32] (Read)
---        others   - reserved
--- 0x20 : reserved
--- 0x24 : Data signal of config_led_ctrl
+-- 0x10 : Data signal of config_led_ctrl
 --        bit 7~0 - config_led_ctrl[7:0] (Read/Write)
 --        others  - reserved
+-- 0x14 : reserved
+-- 0x18 : Data signal of status_git_hash_V
+--        bit 27~0 - status_git_hash_V[27:0] (Read)
+--        others   - reserved
+-- 0x1c : reserved
+-- 0x20 : Data signal of status_build_time_V
+--        bit 31~0 - status_build_time_V[31:0] (Read)
+-- 0x24 : Data signal of status_build_time_V
+--        bit 15~0 - status_build_time_V[47:32] (Read)
+--        others   - reserved
 -- 0x28 : reserved
 -- (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
 
@@ -68,13 +68,13 @@ architecture behave of fm_receiver_hls_API_s_axi is
     signal wstate  : states := wrreset;
     signal rstate  : states := rdreset;
     signal wnext, rnext: states;
-    constant ADDR_STATUS_GIT_HASH_V_DATA_0   : INTEGER := 16#10#;
-    constant ADDR_STATUS_GIT_HASH_V_CTRL     : INTEGER := 16#14#;
-    constant ADDR_STATUS_BUILD_TIME_V_DATA_0 : INTEGER := 16#18#;
-    constant ADDR_STATUS_BUILD_TIME_V_DATA_1 : INTEGER := 16#1c#;
-    constant ADDR_STATUS_BUILD_TIME_V_CTRL   : INTEGER := 16#20#;
-    constant ADDR_CONFIG_LED_CTRL_DATA_0     : INTEGER := 16#24#;
-    constant ADDR_CONFIG_LED_CTRL_CTRL       : INTEGER := 16#28#;
+    constant ADDR_CONFIG_LED_CTRL_DATA_0     : INTEGER := 16#10#;
+    constant ADDR_CONFIG_LED_CTRL_CTRL       : INTEGER := 16#14#;
+    constant ADDR_STATUS_GIT_HASH_V_DATA_0   : INTEGER := 16#18#;
+    constant ADDR_STATUS_GIT_HASH_V_CTRL     : INTEGER := 16#1c#;
+    constant ADDR_STATUS_BUILD_TIME_V_DATA_0 : INTEGER := 16#20#;
+    constant ADDR_STATUS_BUILD_TIME_V_DATA_1 : INTEGER := 16#24#;
+    constant ADDR_STATUS_BUILD_TIME_V_CTRL   : INTEGER := 16#28#;
     constant ADDR_BITS         : INTEGER := 6;
 
     signal waddr               : UNSIGNED(ADDR_BITS-1 downto 0);
@@ -89,9 +89,9 @@ architecture behave of fm_receiver_hls_API_s_axi is
     signal ARREADY_t           : STD_LOGIC;
     signal RVALID_t            : STD_LOGIC;
     -- internal registers
+    signal int_config_led_ctrl : UNSIGNED(7 downto 0) := (others => '0');
     signal int_status_git_hash_V : UNSIGNED(27 downto 0) := (others => '0');
     signal int_status_build_time_V : UNSIGNED(47 downto 0) := (others => '0');
-    signal int_config_led_ctrl : UNSIGNED(7 downto 0) := (others => '0');
 
 
 begin
@@ -205,14 +205,14 @@ begin
             if (ACLK_EN = '1') then
                 if (ar_hs = '1') then
                     case (TO_INTEGER(raddr)) is
+                    when ADDR_CONFIG_LED_CTRL_DATA_0 =>
+                        rdata_data <= RESIZE(int_config_led_ctrl(7 downto 0), 32);
                     when ADDR_STATUS_GIT_HASH_V_DATA_0 =>
                         rdata_data <= RESIZE(int_status_git_hash_V(27 downto 0), 32);
                     when ADDR_STATUS_BUILD_TIME_V_DATA_0 =>
                         rdata_data <= RESIZE(int_status_build_time_V(31 downto 0), 32);
                     when ADDR_STATUS_BUILD_TIME_V_DATA_1 =>
                         rdata_data <= RESIZE(int_status_build_time_V(47 downto 32), 32);
-                    when ADDR_CONFIG_LED_CTRL_DATA_0 =>
-                        rdata_data <= RESIZE(int_config_led_ctrl(7 downto 0), 32);
                     when others =>
                         rdata_data <= (others => '0');
                     end case;
@@ -223,6 +223,17 @@ begin
 
 -- ----------------------- Register logic ----------------
     config_led_ctrl      <= STD_LOGIC_VECTOR(int_config_led_ctrl);
+
+    process (ACLK)
+    begin
+        if (ACLK'event and ACLK = '1') then
+            if (ACLK_EN = '1') then
+                if (w_hs = '1' and waddr = ADDR_CONFIG_LED_CTRL_DATA_0) then
+                    int_config_led_ctrl(7 downto 0) <= (UNSIGNED(WDATA(7 downto 0)) and wmask(7 downto 0)) or ((not wmask(7 downto 0)) and int_config_led_ctrl(7 downto 0));
+                end if;
+            end if;
+        end if;
+    end process;
 
     process (ACLK)
     begin
@@ -245,17 +256,6 @@ begin
             elsif (ACLK_EN = '1') then
                 if (true) then
                     int_status_build_time_V <= UNSIGNED(status_build_time_V); -- clear on read
-                end if;
-            end if;
-        end if;
-    end process;
-
-    process (ACLK)
-    begin
-        if (ACLK'event and ACLK = '1') then
-            if (ACLK_EN = '1') then
-                if (w_hs = '1' and waddr = ADDR_CONFIG_LED_CTRL_DATA_0) then
-                    int_config_led_ctrl(7 downto 0) <= (UNSIGNED(WDATA(7 downto 0)) and wmask(7 downto 0)) or ((not wmask(7 downto 0)) and int_config_led_ctrl(7 downto 0));
                 end if;
             end if;
         end if;

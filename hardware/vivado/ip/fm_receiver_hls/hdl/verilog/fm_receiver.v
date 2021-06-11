@@ -275,8 +275,8 @@ wire  signed [15:0] p_Val2_i_fu_490_p2;
 wire  signed [29:0] p_Val2_7_fu_626_p2;
 wire  signed [15:0] p_Val2_7_i_fu_484_p2;
 wire  signed [29:0] p_Val2_8_fu_633_p2;
-wire   [15:0] ssdm_int_V_write_ass_fu_547_p2;
-wire   [15:0] ssdm_int_V_write_ass_1_fu_553_p2;
+wire   [15:0] out_audio_L_V_write_s_fu_547_p2;
+wire   [15:0] out_audio_R_V_write_s_fu_553_p2;
 wire   [15:0] tmp_3_fu_571_p2;
 wire   [15:0] p_Val2_i_i_fu_577_p2;
 wire   [29:0] p_Val2_2_fu_587_p3;
@@ -572,7 +572,7 @@ always @ (posedge ap_clk) begin
         ap_return_0_preg <= 16'd0;
     end else begin
         if (((tmp_i_fu_535_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-            ap_return_0_preg <= ssdm_int_V_write_ass_fu_547_p2;
+            ap_return_0_preg <= out_audio_L_V_write_s_fu_547_p2;
         end
     end
 end
@@ -582,7 +582,7 @@ always @ (posedge ap_clk) begin
         ap_return_1_preg <= 16'd0;
     end else begin
         if (((tmp_i_fu_535_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-            ap_return_1_preg <= ssdm_int_V_write_ass_1_fu_553_p2;
+            ap_return_1_preg <= out_audio_R_V_write_s_fu_553_p2;
         end
     end
 end
@@ -871,7 +871,7 @@ end
 
 always @ (*) begin
     if (((tmp_i_fu_535_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-        ap_return_0 = ssdm_int_V_write_ass_fu_547_p2;
+        ap_return_0 = out_audio_L_V_write_s_fu_547_p2;
     end else begin
         ap_return_0 = ap_return_0_preg;
     end
@@ -879,7 +879,7 @@ end
 
 always @ (*) begin
     if (((tmp_i_fu_535_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-        ap_return_1 = ssdm_int_V_write_ass_1_fu_553_p2;
+        ap_return_1 = out_audio_R_V_write_s_fu_553_p2;
     end else begin
         ap_return_1 = ap_return_1_preg;
     end
@@ -1698,6 +1698,10 @@ assign i_2_fu_541_p2 = (i_i_reg_388 + 2'd1);
 
 assign k_1_fu_458_p2 = (k_reg_355 + 4'd1);
 
+assign out_audio_L_V_write_s_fu_547_p2 = (p_Val2_3_reg_377 + p_Val2_s_reg_366);
+
+assign out_audio_R_V_write_s_fu_553_p2 = (p_Val2_s_reg_366 - p_Val2_3_reg_377);
+
 assign p_Val2_2_fu_587_p3 = {{OP1_V_cast_reg_883}, {1'd0}};
 
 assign p_Val2_4_fu_470_p1 = iq_in_V_TDATA[15:0];
@@ -1709,10 +1713,6 @@ assign p_Val2_7_i_fu_484_p2 = ($signed(p_Val2_4_fu_470_p1) - $signed(reg_423));
 assign p_Val2_i_fu_490_p2 = ($signed(p_Val2_6_fu_474_p4) - $signed(reg_429));
 
 assign p_Val2_i_i_fu_577_p2 = (16'd0 - tmp_3_fu_571_p2);
-
-assign ssdm_int_V_write_ass_1_fu_553_p2 = (p_Val2_s_reg_366 - p_Val2_3_reg_377);
-
-assign ssdm_int_V_write_ass_fu_547_p2 = (p_Val2_3_reg_377 + p_Val2_s_reg_366);
 
 assign tmp_1_fu_583_p1 = $signed(p_Val2_i_i_fu_577_p2);
 
