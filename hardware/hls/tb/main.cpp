@@ -173,10 +173,7 @@ int main() {
     // --------------------------------------------------------------------------
     cout << "--- Running test on DUT" << endl;
 
-    // Apply stimuli, call the top-level function and save the results
-    DataWriter writer_data_out_rx_audio_L("data_out_rx_audio_L.txt");
-    DataWriter writer_data_out_rx_audio_R("data_out_rx_audio_R.txt");
-
+    // Apply stimuli to the top-level function
     hls::stream<audio_sample_t> stream_data_out;
     uint8_t led_ctrl = 0x3;
     uint8_t led_out_o;
@@ -206,6 +203,9 @@ int main() {
     cout << "status_build_time : " << hex << status_build_time_o << endl;
 
     cout << "- Store output stream to file" << endl;
+    DataWriter writer_data_out_rx_audio_L("data_out_rx_audio_L.txt");
+    DataWriter writer_data_out_rx_audio_R("data_out_rx_audio_R.txt");
+
     while (!stream_data_out.empty()) {
       audio_sample_t audio_sample = stream_data_out.read();
       writer_data_out_rx_audio_L.write(audio_sample.L);
