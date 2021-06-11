@@ -175,17 +175,13 @@ int main() {
 
     // Apply stimuli to the top-level function
     hls::stream<audio_sample_t> stream_data_out;
-    uint8_t led_ctrl = 0x3;
     uint8_t led_out_o;
-    status_git_hash_t status_git_hash_o;
-    status_build_time_t status_build_time_o;
+    status_t status_o;
+    config_t config;
+    config.led_ctrl = 0x3;
     while (!stream_data_in.empty()) {
-      fm_receiver_hls(stream_data_in,
-                      stream_data_out,
-                      led_ctrl,
-                      &status_git_hash_o,
-                      &status_build_time_o,
-                      &led_out_o);
+      fm_receiver_hls(
+          stream_data_in, stream_data_out, config, &status_o, &led_out_o);
 
 #if defined DEBUG_OUTPUT && DEBUG_OUTPUT > 0
       std::bitset<8> led_out_o_bit(led_out_o);
@@ -195,12 +191,12 @@ int main() {
 
     cout << "--- Checking results" << endl;
     cout << "- Check LED output" << endl;
-    if (led_ctrl != led_out_o)
+    if (config.led_ctrl != led_out_o)
       cerr << "ERROR: LED control not matching LED output" << endl;
 
     cout << "- Check build info status register" << endl;
-    cout << "status_git_hash   : " << hex << status_git_hash_o << endl;
-    cout << "status_build_time : " << hex << status_build_time_o << endl;
+    cout << "status.git_hash   : " << hex << status_o.git_hash << endl;
+    cout << "status.build_time : " << hex << status_o.build_time << endl;
 
     cout << "- Store output stream to file" << endl;
     DataWriter writer_data_out_rx_audio_L("data_out_rx_audio_L.txt");

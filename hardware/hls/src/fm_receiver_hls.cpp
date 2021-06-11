@@ -79,9 +79,8 @@ using namespace std;
 
 void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
                      hls::stream<audio_sample_t>& audio_out,
-                     uint8_t led_ctrl,
-                     status_git_hash_t* status_git_hash,
-                     status_build_time_t* status_build_time,
+                     config_t& config,
+                     status_t* status,
                      uint8_t* led_out) {
 #pragma HLS INTERFACE ap_ctrl_hs port = return
 
@@ -91,12 +90,10 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
 #pragma HLS INTERFACE axis port = audio_out
 #pragma HLS DATA_PACK variable  = audio_out
 
-#pragma HLS INTERFACE s_axilite port = status_git_hash bundle = CONFIG
-#pragma HLS INTERFACE s_axilite port = status_build_time bundle = CONFIG
-#pragma HLS INTERFACE s_axilite port = led_ctrl bundle = CONFIG
+#pragma HLS INTERFACE s_axilite port = status bundle = API
+#pragma HLS INTERFACE s_axilite port = config bundle = API
 
-#pragma HLS INTERFACE ap_none port = status_git_hash
-#pragma HLS INTERFACE ap_none port = status_build_time
+#pragma HLS INTERFACE ap_none port = status
 #pragma HLS INTERFACE ap_none port = led_out
 
 #if IMPL_DATA_FORWARDING_ONLY == 1
@@ -110,8 +107,9 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
 
   /*-------------- Other testing -------------*/
 
-  // NOTE: This is used to determine how often this function is called.
-  //       The toggle flag can be compared against the input clock.
+  /** NOTE: This is used to determine how often this function is called.
+   *        Simulation: The toggle flag can be compared against the input clock.
+   *        Hardware:   The toggle signal can be seen on an LED. */
   static bool toggle = false;
   toggle             = !toggle;
 
@@ -119,10 +117,10 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
   static const status_git_hash_t status_git_hash_c     = STRING(GIT_HASH);
   static const status_build_time_t status_build_time_c = STRING(BUILD_TIME);
 
-  *status_git_hash   = status_git_hash_c;
-  *status_build_time = status_build_time_c;
+  status->git_hash   = status_git_hash_c;
+  status->build_time = status_build_time_c;
 
-  *led_out = led_ctrl | (((uint8_t)toggle << 2));
+  *led_out = config.led_ctrl | (((uint8_t)toggle << 2));
 
 #if IMPL_FM_RADIO == 1
   /*---------------- FM radio ----------------*/
