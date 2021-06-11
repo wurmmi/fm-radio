@@ -94,7 +94,7 @@ def compareResultsOkay(gold, actual, fail_on_err,
         if fail_on_err:
             raise test_fail(msg)
         log_warn(msg)
-        return True
+        return False
 
     # Skip first and last N samples
     if skip_n_samples_end == 0:

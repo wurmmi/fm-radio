@@ -52,6 +52,9 @@ void channel_decoder(hls::stream<sample_t>& sample_in,
     static DataWriter writer_data_out_fm_channel_data(
         "data_out_fm_channel_data.txt");
     writer_data_out_fm_channel_data.write(in_sample);
+
+    static DataWriter writer_data_out_carrier_38k("data_out_carrier_38k.txt");
+    writer_data_out_carrier_38k.write(carrier_38k);
 #endif
   }
 
@@ -100,8 +103,4 @@ void channel_decoder(hls::stream<sample_t>& sample_in,
     writer_data_out_audio_R.write(audio_R);
 #endif
   }
-#ifndef __SYNTHESIS__
-  static DataWriter writer_data_out_carrier_38k("data_out_carrier_38k.txt");
-  writer_data_out_carrier_38k.write(carrier_38k);
-#endif
 }

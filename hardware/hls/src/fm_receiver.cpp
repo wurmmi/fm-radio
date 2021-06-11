@@ -53,6 +53,14 @@ void fm_receiver(hls::stream<iq_sample_t>& iq_in,
       if (k == OSR_RX - 1) {
         fm_channel_data.write(fm_demod);
       }
+
+      // ------------------------------------------------------
+      // Debug
+      // ------------------------------------------------------
+#ifndef __SYNTHESIS__
+      static DataWriter writer_data_out_fm_demod("data_out_fm_demod.txt");
+      writer_data_out_fm_demod.write(fm_demod);
+#endif
     }
   }
 
@@ -74,12 +82,4 @@ void fm_receiver(hls::stream<iq_sample_t>& iq_in,
     out_audio_L = audio_L;
     out_audio_R = audio_R;
   }
-
-  // ------------------------------------------------------
-  // Debug
-  // ------------------------------------------------------
-#ifndef __SYNTHESIS__
-  static DataWriter writer_data_out_fm_demod("data_out_fm_demod.txt");
-  writer_data_out_fm_demod.write(fm_demod);
-#endif
 }
