@@ -31,7 +31,7 @@ project: ##			- Create/Open Vivado project.
 upgrade_ips: ##			- Upgrade changed IPs in the design.
 	@$(call vivado,upgrade_ips.tcl,-tclargs $(VIVADO_DIR) $(IP_DIRS) $(GUI))
 
-bitstream: ##			- Synthesize project and create a bitstream.
+bitstream: upgrade_ips ##		- Synthesize project and create a bitstream.
 	@echo "Synthesize Vivado project ..."
 	@mkdir -p $(VIVADO_DIR)
 	@$(call vivado,synth.tcl,-tclargs $(VIVADO_DIR) $(GUI))

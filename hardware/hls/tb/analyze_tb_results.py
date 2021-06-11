@@ -66,7 +66,11 @@ def analyze():
     print("--- Comparing golden data with testbench results")
 
     tb_analyzer_helper = TB_ANALYZER_HELPER(model, tb_data_handler, is_cocotb=False)
-    tb_analyzer_helper.compare_data()
+    try:
+        tb_analyzer_helper.compare_data()
+    except Exception as ex:
+        print(f"Exception in tb_analyzer_helper.compare_data(): {ex}")
+        return
 
     # --------------------------------------------------------------------------
     # Plots

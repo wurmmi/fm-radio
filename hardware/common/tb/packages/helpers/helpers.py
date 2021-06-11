@@ -91,10 +91,11 @@ def compareResultsOkay(gold, actual, fail_on_err,
     if len(actual) < len(gold):
         msg = "Did not capture enough output values for {}: {} actual, {} expected.".format(
             data_name, len(actual), len(gold))
-        if fail_on_err:
-            raise test_fail(msg)
-        log_warn(msg)
-        return False
+        if is_cocotb:
+            log_warn(msg)
+        # Does not make sense to continue in that case.
+        # The IP design (or the testbench?) is broken at this point!
+        raise test_fail(msg)
 
     # Skip first and last N samples
     if skip_n_samples_end == 0:
