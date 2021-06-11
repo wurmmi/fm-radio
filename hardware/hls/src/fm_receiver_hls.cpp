@@ -129,15 +129,13 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
   // FM Receiver IP
   // ------------------------------------------------------
 
-  sample_t audio_L;
-  sample_t audio_R;
-  fm_receiver(iq_in, audio_L, audio_R);
+  audio_sample_t audio_sample;
+  fm_receiver(iq_in, audio_sample);
 
   // ------------------------------------------------------
   // Output
   // ------------------------------------------------------
 
-  audio_sample_t audio_sample = {audio_L, audio_R};
   audio_out.write(audio_sample);
 #endif /* IMPL_FM_RADIO */
 }

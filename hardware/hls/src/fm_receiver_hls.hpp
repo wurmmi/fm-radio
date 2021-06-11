@@ -31,11 +31,6 @@ typedef struct {
   status_build_time_t build_time;
 } status_t;
 
-typedef struct {
-  sample_t L;
-  sample_t R;
-} audio_sample_t;
-
 void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
                      hls::stream<audio_sample_t>& audio_out,
                      config_t& config,
