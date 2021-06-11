@@ -37,7 +37,11 @@ clang-format off
 --                                            Using an ap_uint<> now instead of a char-array, which
 --                                            is the most efficient way.
 --
---
+-- (5) Investigate why design does not work on hardware yet
+--       06/10/2021  08:00 - 19:00   11:00 h  Check input data to the IP.
+--                                            HLS testbench now uses firmware code to load the WAV file.
+--       06/11/2021  09:00 - 17:00   08:00 h  Re-write the sample decimation.
+--                                            (process N samples from the stream; the last one is the decimated one)
 --
 clang-format on
 */
@@ -50,6 +54,9 @@ clang-format on
 #include "fm_receiver.hpp"
 
 using namespace std;
+
+// TODO:
+// use a axilite config register to select between passthrough and FM radio
 
 /** Select implementation variant
  *  NOTE: Selection is mutually exclusive - only enable one at a time!

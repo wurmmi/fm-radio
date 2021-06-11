@@ -19,7 +19,7 @@
 
 using namespace std;
 
-void channel_decoder(hls::stream<sample_t>& sample_in,
+void channel_decoder(hls::stream<sample_t>& in_sample,
                      sample_t& out_audio_L,
                      sample_t& out_audio_R) {
   sample_t carrier_38k;
@@ -33,22 +33,22 @@ void channel_decoder(hls::stream<sample_t>& sample_in,
    *      to the next processing steps.
    */
   for (uint32_t i = 0; i < OSR_AUDIO; i++) {
-    sample_t in_sample = sample_in.read();
+    sample_t sample = in_sample.read();
 
     // ------------------------------------------------------
     // Recover carriers
     // ------------------------------------------------------
-    recover_carriers(in_sample, carrier_38k, carrier_57k);
+    recover_carriers(sample, carrier_38k, carrier_57k);
 
     // ------------------------------------------------------
     // Recover mono audio
     // ------------------------------------------------------
-    audio_mono = recover_mono(in_sample);
+    audio_mono = recover_mono(sample);
 
     // ------------------------------------------------------
     // Recover LR diff audio
     // ------------------------------------------------------
-    audio_lrdiff = recover_lrdiff(in_sample, carrier_38k);
+    audio_lrdiff = recover_lrdiff(sample, carrier_38k);
 
     // ------------------------------------------------------
     // Debug
@@ -56,7 +56,7 @@ void channel_decoder(hls::stream<sample_t>& sample_in,
 #ifndef __SYNTHESIS__
     static DataWriter writer_data_out_fm_channel_data(
         "data_out_fm_channel_data.txt");
-    writer_data_out_fm_channel_data.write(in_sample);
+    writer_data_out_fm_channel_data.write(sample);
 
     static DataWriter writer_data_out_carrier_38k("data_out_carrier_38k.txt");
     writer_data_out_carrier_38k.write(carrier_38k);
