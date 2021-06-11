@@ -6,6 +6,8 @@
  */
 /*****************************************************************************/
 
+#include <hls_math.h>
+
 #include <bitset>
 #include <chrono>
 #include <iostream>
@@ -61,7 +63,7 @@ int main() {
         DataLoader::loadDataFromFile(filename_txt, num_samples_fs_c * 2);
 
     // Split interleaved I/Q samples
-    vector<iq_sample_t> vec_data_in;
+    vector<iq_sample_t> vec_data_txt_in;
     hls::stream<iq_sample_t> stream_data_in;
     iq_sample_t sample_in;
     for (size_t i = 0; i < data_in_iq.size(); i += 2) {
@@ -71,7 +73,9 @@ int main() {
 
       // Fill stream
       stream_data_in << sample_in;
-      vec_data_in.emplace_back(sample_in);
+
+      // Store in vector
+      vec_data_txt_in.emplace_back(sample_in);
     }
 
     /*--- Load data like firmware (from Matlab *.wav file) ---*/
@@ -85,7 +89,6 @@ int main() {
     // Transform into I/Q samples
     uint32_t* pSource = (uint32_t*)buffer.buffer;
     vector<iq_sample_t> vec_data_wav_in;
-    hls::stream<iq_sample_t> stream_data_wav_in;
     iq_sample_t sample_wav_in;
     for (uint32_t i = 0; i < buffer.size / 4; i++) {
       // Split 32 bit into 2x 16 bit
@@ -96,8 +99,7 @@ int main() {
       sample_wav_in.i.range() = left;
       sample_wav_in.q.range() = right;
 
-      // Fill stream
-      stream_data_wav_in << sample_wav_in;
+      // Store in vector
       vec_data_wav_in.emplace_back(sample_wav_in);
     }
 
@@ -106,18 +108,52 @@ int main() {
     cout << "--- Checking data loading results" << endl;
 
     cout << "- Check amount of data" << endl;
-    if (vec_data_wav_in.size() != vec_data_in.size()) {
-      cerr << "ERROR: amount of loaded data does not match!" << endl;
-      cerr << "vec_data_in : " << vec_data_in.size() << endl;
+    if (vec_data_wav_in.size() < vec_data_txt_in.size()) {
+      cerr << "ERROR: WAV file contains too few data values!" << endl;
+      cerr << "vec_data_txt_in : " << vec_data_txt_in.size() << endl;
       cerr << "vec_data_wav_in : " << vec_data_wav_in.size() << endl;
     } else {
       cout << "OKAY" << endl;
     }
 
+    cout << "- Compare data values" << endl;
+    uint32_t value_error_count = 0;
+    for (uint32_t i = 0; i < vec_data_txt_in.size(); i++) {
+      iq_sample_t txt_in = vec_data_txt_in[i];
+      iq_sample_t wav_in = vec_data_wav_in[i];
+      if (!(txt_in == wav_in)) {
+        /** NOTE:
+         * Some values differ by a small amount, for some reason.
+         * There may be a bit-error in the type-casts somewhere in the
+         * read/write chain from Matlab to here.. will need to investigate
+         * this at some point.
+         */
+        const sample_t max_abs_error = 0.00001;
+        sample_t abs_err;
+        abs_err    = hls::abs(txt_in.i - wav_in.i);
+        bool err_i = (abs_err > max_abs_error);
+        abs_err    = hls::abs(txt_in.q - wav_in.q);
+        bool err_q = (abs_err > max_abs_error);
+
+        bool err = err_i || err_q;
+        if (err) {
+          cerr << "ERROR: values don't match! (idx=" << i << ")" << endl;
+          cerr << "txt_in: " << txt_in << endl;
+          cerr << "wav_in: " << wav_in << endl;
+          value_error_count++;
+          if (value_error_count > 10)
+            break;
+        }
+      }
+    }
+
     cout << "- Write to files for visual compare" << endl;
-    DataWriter writer_vec_data_in("vec_data_in.txt");
+    // shrink wav vector to the size of the txt vector
+    vec_data_wav_in.resize(vec_data_txt_in.size());
+    // write to file
+    DataWriter writer_vec_data_in("vec_data_txt_in.txt");
     DataWriter writer_vec_data_wav_in("vec_data_wav_in.txt");
-    writer_vec_data_in.write(vec_data_in);
+    writer_vec_data_in.write(vec_data_txt_in);
     writer_vec_data_wav_in.write(vec_data_wav_in);
 
     // --------------------------------------------------------------------------

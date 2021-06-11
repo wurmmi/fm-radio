@@ -50,8 +50,6 @@ DMABuffer FileReader::GetBuffer() {
 void FileReader::PrepareBufferData() {
   // Change the volume and swap left/right channel and polarity
 
-  LOG_DEBUG("#############  BEGIN  ###################### PrepareBufferData()");
-
   uint32_t* pSource = (uint32_t*)mBuffer.buffer;
   for (size_t i = 0; i < mBuffer.size / 4; i++) {
     // Split 32 bit into 2x 16 bit
@@ -75,13 +73,9 @@ void FileReader::PrepareBufferData() {
     //    if (right < -32767)
     //      right = -32767;
 
-    if (i < 50)
-      LOG_DEBUG("pSource[%3d]: 0x%08x ", i, (size_t)pSource[i]);
-
     // Combine to 32 bit again
     pSource[i] = ((uint32_t)right << 16) + (uint32_t)left;
   }
-  LOG_DEBUG("#############  END  ######################## PrepareBufferData()");
 }
 
 bool FileReader::FileOpen(std::string const& filename) {
