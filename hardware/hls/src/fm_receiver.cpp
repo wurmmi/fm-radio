@@ -42,7 +42,7 @@ void fm_receiver(hls::stream<iq_sample_t>& iq_in,
   // ------------------------------------------------------
 
   hls::stream<sample_t> fm_channel_data;
-  //#pragma HLS STREAM depth = 3 variable = fm_channel_data  // OSR_AUDIO
+#pragma HLS STREAM depth = 3 variable = fm_channel_data  // OSR_AUDIO
 
   sample_t fm_demod;
   for (uint32_t i = 0; i < OSR_AUDIO; i++) {
