@@ -19,19 +19,20 @@
 
 using namespace std;
 
-void channel_decoder(sample_t const& in_sample,
+void channel_decoder(hls::stream<sample_t>& sample_in,
                      sample_t& out_audio_L,
                      sample_t& out_audio_R) {
-  // ------------------------------------------------------
-  // Recover carriers
-  // ------------------------------------------------------
-
   sample_t carrier_38k;
   sample_t carrier_57k;
   sample_t audio_mono;
   sample_t audio_lrdiff;
 
   for (uint32_t i = 0; i < OSR_AUDIO; i++) {
+    sample_t in_sample = sample_in.read();
+
+    // ------------------------------------------------------
+    // Recover carriers
+    // ------------------------------------------------------
     recover_carriers(in_sample, carrier_38k, carrier_57k);
 
     // ------------------------------------------------------
@@ -43,6 +44,15 @@ void channel_decoder(sample_t const& in_sample,
     // Recover LR diff audio
     // ------------------------------------------------------
     audio_lrdiff = recover_lrdiff(in_sample, carrier_38k);
+
+    // ------------------------------------------------------
+    // Debug
+    // ------------------------------------------------------
+#ifndef __SYNTHESIS__
+    static DataWriter writer_data_out_fm_channel_data(
+        "data_out_fm_channel_data.txt");
+    writer_data_out_fm_channel_data.write(in_sample);
+#endif
   }
 
   // ------------------------------------------------------

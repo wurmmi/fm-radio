@@ -34,25 +34,28 @@
 
 using namespace std;
 
-void fm_receiver(sample_t const& in_i,
-                 sample_t const& in_q,
+void fm_receiver(hls::stream<iq_sample_t>& iq_in,
                  sample_t& out_audio_L,
                  sample_t& out_audio_R) {
   // ------------------------------------------------------
-  // FM Demodulator
+  // FM Demodulator (incl. decimator)
   // ------------------------------------------------------
+
+  hls::stream<sample_t> fm_channel_data;
+  //#pragma HLS STREAM depth = 3 variable = fm_channel_data  // OSR_AUDIO
 
   sample_t fm_demod;
-  for (uint32_t i = 0; i < OSR_RX; i++) {
-    iq_sample_t iq = {in_i, in_q};
-    fm_demod       = fm_demodulator(iq);
+  for (uint32_t i = 0; i < OSR_AUDIO; i++) {
+    for (uint32_t k = 0; k < OSR_RX; k++) {
+      iq_sample_t iq = iq_in.read();
+      fm_demod       = fm_demodulator(iq);
+
+      if (k == OSR_RX - 1) {
+        fm_channel_data.write(fm_demod);
+      }
+    }
   }
 
-  // ------------------------------------------------------
-  // Decimator
-  // ------------------------------------------------------
-
-  sample_t fm_channel_data   = fm_demod;
   bool fm_channel_data_valid = true;
 
   if (fm_channel_data_valid) {
@@ -70,18 +73,11 @@ void fm_receiver(sample_t const& in_i,
 
     out_audio_L = audio_L;
     out_audio_R = audio_R;
-
-    // ------------------------------------------------------
-    // Debug
-    // ------------------------------------------------------
-
-#ifndef __SYNTHESIS__
-    static DataWriter writer_data_out_fm_channel_data(
-        "data_out_fm_channel_data.txt");
-    writer_data_out_fm_channel_data.write(fm_channel_data);
-#endif
   }
 
+  // ------------------------------------------------------
+  // Debug
+  // ------------------------------------------------------
 #ifndef __SYNTHESIS__
   static DataWriter writer_data_out_fm_demod("data_out_fm_demod.txt");
   writer_data_out_fm_demod.write(fm_demod);

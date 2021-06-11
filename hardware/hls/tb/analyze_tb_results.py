@@ -35,17 +35,23 @@ def analyze():
     tb_data_handler.load_data_from_file(directory_tb)
 
     # Check number of samples that were found in the files
-    num_samples_audio_c = len(helper.get_dataset_by_name(tb_data_handler.data, 'audio_mono'))
-    num_samples_rx_c = len(helper.get_dataset_by_name(tb_data_handler.data, 'pilot'))
+    num_samples_fs_audio_c = len(helper.get_dataset_by_name(tb_data_handler.data, 'audio_mono'))
+    num_samples_fs_rx_c = len(helper.get_dataset_by_name(tb_data_handler.data, 'pilot'))
     num_samples_fs_c = len(helper.get_dataset_by_name(tb_data_handler.data, 'fm_demod'))
 
     # Sanity checks
-    assert num_samples_fs_c // num_samples_rx_c == osr_rx_c, \
-        "File lengths don't match osr_rx_c ..."
-    assert num_samples_rx_c // num_samples_audio_c == osr_audio_c, \
-        "File lengths don't match osr_audio_c ..."
+    ratio = num_samples_fs_c / num_samples_fs_rx_c
+    assert int(ratio) == osr_rx_c, \
+        "File lengths don't match osr_rx_c ... (fs: {} fs_rx: {} / ratio is: {}, expected: {})".format(
+            num_samples_fs_c, num_samples_fs_rx_c, ratio, osr_rx_c
+    )
+    ratio = num_samples_fs_rx_c / num_samples_fs_audio_c
+    assert int(ratio) == osr_audio_c, \
+        "File lengths don't match osr_audio_c ... (fs_rx: {} fs_audio: {} / ratio is: {}, expected: {})".format(
+            num_samples_fs_rx_c, num_samples_fs_audio_c, ratio, osr_audio_c
+    )
 
-    n_sec = num_samples_rx_c / fs_rx_c
+    n_sec = num_samples_fs_rx_c / fs_rx_c
     print(f"Loaded {n_sec} seconds worth of data!")
 
     # Golden data
