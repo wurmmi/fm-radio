@@ -27,6 +27,11 @@ void channel_decoder(hls::stream<sample_t>& sample_in,
   sample_t audio_mono;
   sample_t audio_lrdiff;
 
+  /** NOTE:
+   *  This loop performs decimation by N.
+   *  --> Processing N samples. Only the last sample is passed on
+   *      to the next processing steps.
+   */
   for (uint32_t i = 0; i < OSR_AUDIO; i++) {
     sample_t in_sample = sample_in.read();
 
@@ -59,48 +64,34 @@ void channel_decoder(hls::stream<sample_t>& sample_in,
   }
 
   // ------------------------------------------------------
-  // Decimate
-  // ------------------------------------------------------
-
-  // mono audio
-  sample_t audio_mono_dec   = audio_mono;
-  bool audio_mono_dec_valid = true;
-
-  // LR diff audio
-  sample_t audio_lrdiff_dec   = audio_lrdiff;
-  bool audio_lrdiff_dec_valid = true;
-
-  // ------------------------------------------------------
   // Separate LR audio
   // ------------------------------------------------------
-  if (audio_mono_dec_valid && audio_lrdiff_dec_valid) {
-    sample_t audio_L;
-    sample_t audio_R;
-    separate_lr_audio(audio_mono_dec, audio_lrdiff_dec, audio_L, audio_R);
+  sample_t audio_L;
+  sample_t audio_R;
+  separate_lr_audio(audio_mono, audio_lrdiff, audio_L, audio_R);
 
-    // ------------------------------------------------------
-    // Output
-    // ------------------------------------------------------
+  // ------------------------------------------------------
+  // Output
+  // ------------------------------------------------------
 
-    out_audio_L = audio_L;
-    out_audio_R = audio_R;
+  out_audio_L = audio_L;
+  out_audio_R = audio_R;
 
-    // ------------------------------------------------------
-    // Debug
-    // ------------------------------------------------------
+  // ------------------------------------------------------
+  // Debug
+  // ------------------------------------------------------
 
 #ifndef __SYNTHESIS__
-    static DataWriter writer_data_out_audio_mono("data_out_audio_mono.txt");
-    writer_data_out_audio_mono.write(audio_mono);
+  static DataWriter writer_data_out_audio_mono("data_out_audio_mono.txt");
+  writer_data_out_audio_mono.write(audio_mono);
 
-    static DataWriter writer_data_out_audio_lrdiff("data_out_audio_lrdiff.txt");
-    writer_data_out_audio_lrdiff.write(audio_lrdiff);
+  static DataWriter writer_data_out_audio_lrdiff("data_out_audio_lrdiff.txt");
+  writer_data_out_audio_lrdiff.write(audio_lrdiff);
 
-    static DataWriter writer_data_out_audio_L("data_out_audio_L.txt");
-    writer_data_out_audio_L.write(audio_L);
+  static DataWriter writer_data_out_audio_L("data_out_audio_L.txt");
+  writer_data_out_audio_L.write(audio_L);
 
-    static DataWriter writer_data_out_audio_R("data_out_audio_R.txt");
-    writer_data_out_audio_R.write(audio_R);
+  static DataWriter writer_data_out_audio_R("data_out_audio_R.txt");
+  writer_data_out_audio_R.write(audio_R);
 #endif
-  }
 }

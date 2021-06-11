@@ -42,8 +42,13 @@ void fm_receiver(hls::stream<iq_sample_t>& iq_in,
   // ------------------------------------------------------
 
   hls::stream<sample_t> fm_channel_data;
-#pragma HLS STREAM depth = 3 variable = fm_channel_data  // OSR_AUDIO
+#pragma HLS STREAM depth = OSR_AUDIO variable = fm_channel_data
 
+  /** NOTE:
+   *  This loop performs decimation by N.
+   *  --> Processing N samples. Only the last sample is passed on
+   *      to the next processing steps.
+   */
   sample_t fm_demod;
   for (uint32_t i = 0; i < OSR_AUDIO; i++) {
     for (uint32_t k = 0; k < OSR_RX; k++) {
@@ -64,22 +69,18 @@ void fm_receiver(hls::stream<iq_sample_t>& iq_in,
     }
   }
 
-  bool fm_channel_data_valid = true;
+  // ------------------------------------------------------
+  // Channel decoder
+  // ------------------------------------------------------
 
-  if (fm_channel_data_valid) {
-    // ------------------------------------------------------
-    // Channel decoder
-    // ------------------------------------------------------
+  sample_t audio_L;
+  sample_t audio_R;
+  channel_decoder(fm_channel_data, audio_L, audio_R);
 
-    sample_t audio_L;
-    sample_t audio_R;
-    channel_decoder(fm_channel_data, audio_L, audio_R);
+  // ------------------------------------------------------
+  // Output
+  // ------------------------------------------------------
 
-    // ------------------------------------------------------
-    // Output
-    // ------------------------------------------------------
-
-    out_audio_L = audio_L;
-    out_audio_R = audio_R;
-  }
+  out_audio_L = audio_L;
+  out_audio_R = audio_R;
 }

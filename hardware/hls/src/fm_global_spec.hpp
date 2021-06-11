@@ -16,8 +16,8 @@
 #define FS_RX    ((uint32_t)120000)
 #define FS_AUDIO ((uint32_t)40000)
 
-#define OSR_RX    ((uint32_t)8)
-#define OSR_AUDIO ((uint32_t)3)
+const uint32_t OSR_RX    = 8;
+const uint32_t OSR_AUDIO = 3;
 
 // IP specific
 #define PILOT_SCALE_FACTOR (8)
