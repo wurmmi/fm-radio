@@ -8,7 +8,7 @@
 `timescale 1ns/1ps
 module fm_receiver_hls_CONFIG_s_axi
 #(parameter
-    C_S_AXI_ADDR_WIDTH = 5,
+    C_S_AXI_ADDR_WIDTH = 6,
     C_S_AXI_DATA_WIDTH = 32
 )(
     // axi4 lite slave signals
@@ -33,7 +33,9 @@ module fm_receiver_hls_CONFIG_s_axi
     output wire                          RVALID,
     input  wire                          RREADY,
     // user signals
-    output wire [7:0]                    led_ctrl
+    output wire [7:0]                    led_ctrl,
+    input  wire [27:0]                   status_git_hash_V,
+    input  wire [47:0]                   status_build_time_V
 );
 //------------------------Address Info-------------------
 // 0x00 : reserved
@@ -44,20 +46,35 @@ module fm_receiver_hls_CONFIG_s_axi
 //        bit 7~0 - led_ctrl[7:0] (Read/Write)
 //        others  - reserved
 // 0x14 : reserved
+// 0x18 : Data signal of status_git_hash_V
+//        bit 27~0 - status_git_hash_V[27:0] (Read)
+//        others   - reserved
+// 0x1c : reserved
+// 0x20 : Data signal of status_build_time_V
+//        bit 31~0 - status_build_time_V[31:0] (Read)
+// 0x24 : Data signal of status_build_time_V
+//        bit 15~0 - status_build_time_V[47:32] (Read)
+//        others   - reserved
+// 0x28 : reserved
 // (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
 
 //------------------------Parameter----------------------
 localparam
-    ADDR_LED_CTRL_DATA_0 = 5'h10,
-    ADDR_LED_CTRL_CTRL   = 5'h14,
-    WRIDLE               = 2'd0,
-    WRDATA               = 2'd1,
-    WRRESP               = 2'd2,
-    WRRESET              = 2'd3,
-    RDIDLE               = 2'd0,
-    RDDATA               = 2'd1,
-    RDRESET              = 2'd2,
-    ADDR_BITS         = 5;
+    ADDR_LED_CTRL_DATA_0            = 6'h10,
+    ADDR_LED_CTRL_CTRL              = 6'h14,
+    ADDR_STATUS_GIT_HASH_V_DATA_0   = 6'h18,
+    ADDR_STATUS_GIT_HASH_V_CTRL     = 6'h1c,
+    ADDR_STATUS_BUILD_TIME_V_DATA_0 = 6'h20,
+    ADDR_STATUS_BUILD_TIME_V_DATA_1 = 6'h24,
+    ADDR_STATUS_BUILD_TIME_V_CTRL   = 6'h28,
+    WRIDLE                          = 2'd0,
+    WRDATA                          = 2'd1,
+    WRRESP                          = 2'd2,
+    WRRESET                         = 2'd3,
+    RDIDLE                          = 2'd0,
+    RDDATA                          = 2'd1,
+    RDRESET                         = 2'd2,
+    ADDR_BITS         = 6;
 
 //------------------------Local signal-------------------
     reg  [1:0]                    wstate = WRRESET;
@@ -73,6 +90,8 @@ localparam
     wire [ADDR_BITS-1:0]          raddr;
     // internal registers
     reg  [7:0]                    int_led_ctrl = 'b0;
+    reg  [27:0]                   int_status_git_hash_V = 'b0;
+    reg  [47:0]                   int_status_build_time_V = 'b0;
 
 //------------------------Instantiation------------------
 
@@ -167,6 +186,15 @@ always @(posedge ACLK) begin
                 ADDR_LED_CTRL_DATA_0: begin
                     rdata <= int_led_ctrl[7:0];
                 end
+                ADDR_STATUS_GIT_HASH_V_DATA_0: begin
+                    rdata <= int_status_git_hash_V[27:0];
+                end
+                ADDR_STATUS_BUILD_TIME_V_DATA_0: begin
+                    rdata <= int_status_build_time_V[31:0];
+                end
+                ADDR_STATUS_BUILD_TIME_V_DATA_1: begin
+                    rdata <= int_status_build_time_V[47:32];
+                end
             endcase
         end
     end
@@ -182,6 +210,24 @@ always @(posedge ACLK) begin
     else if (ACLK_EN) begin
         if (w_hs && waddr == ADDR_LED_CTRL_DATA_0)
             int_led_ctrl[7:0] <= (WDATA[31:0] & wmask) | (int_led_ctrl[7:0] & ~wmask);
+    end
+end
+
+// int_status_git_hash_V
+always @(posedge ACLK) begin
+    if (ARESET)
+        int_status_git_hash_V <= 0;
+    else if (ACLK_EN) begin
+            int_status_git_hash_V <= status_git_hash_V;
+    end
+end
+
+// int_status_build_time_V
+always @(posedge ACLK) begin
+    if (ARESET)
+        int_status_build_time_V <= 0;
+    else if (ACLK_EN) begin
+            int_status_build_time_V <= status_build_time_V;
     end
 end
 

@@ -10,15 +10,12 @@
 #include <xaxidma.h>
 #include <xscugic.h>
 
+#include "FileReader.h"
+
 // Size of the buffer which holds the DMA Buffer Descriptors (BDs)
 #define DMA_NUM_BD_MAX            32
 #define DMA_DELAY_TIMER_COUNT     100  // valid range 0..255
 #define DMA_RESET_TIMEOUT_COUNTER 10000
-
-typedef struct {
-  uint8_t* buffer;
-  uint32_t bufferSize;
-} DMABuffer;
 
 class AudioStreamDMA {
  private:
@@ -30,6 +27,7 @@ class AudioStreamDMA {
       __attribute__((aligned(XAXIDMA_BD_MINIMUM_ALIGNMENT)));
   uint8_t mDeviceId;
   int mErrorState;
+  bool mIsInitialized;
   DMABuffer mDataBuffer;
   uint32_t mNumRequiredBDs;
 

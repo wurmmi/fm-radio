@@ -9,10 +9,11 @@
 #ifndef _FM_RECEIVER_HPP
 #define _FM_RECEIVER_HPP
 
+#include <hls_stream.h>
+
 #include "fm_global.hpp"
 
-void fm_receiver(sample_t const& in_i,
-                 sample_t const& in_q,
+void fm_receiver(hls::stream<iq_sample_t>& iq_in,
                  sample_t& out_audio_L,
                  sample_t& out_audio_R);
 

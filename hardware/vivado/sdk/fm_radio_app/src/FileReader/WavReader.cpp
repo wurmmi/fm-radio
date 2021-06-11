@@ -34,7 +34,7 @@ typedef struct {
   uint16_t cbSize;
   uint16_t wValidBitsPerSample;
   uint32_t dwChannelMask;
-  u8 SubFormat[16];
+  uint8_t SubFormat[16];
 } wav_fmt_chunk_t;
 
 WavReader::WavReader() {}
@@ -42,140 +42,130 @@ WavReader::WavReader() {}
 WavReader::~WavReader() {}
 
 void WavReader::LoadFile(string const& filename) {
-  LOG_DEBUG("Reading WAV file.");
+  LOG_INFO("Loading WAV file '%s' ...", filename.c_str());
 
   // Open the file
-  FRESULT fres = f_open(&mFile, filename.c_str(), FA_READ);
-  if (fres) {
-    LOG_ERROR("Error opening file! (error: %d)", fres);
+  bool success = FileOpen(filename);
+  if (!success)
     return;
-  }
 
-  /*--- Sanity checks ---*/
+  /*--- Sanity checks in header ---*/
 
   // WAV header
+  LOG_DEBUG("reading WAV header");
   wav_header_t header;
-  UINT n_bytes_read;
-  fres = f_read(&mFile, (void*)&header, sizeof(header), &n_bytes_read);
-  if (fres) {
-    LOG_ERROR("Failed to read file.");
-    f_close(&mFile);
+  size_t n_bytes_read;
+  success = FileRead((void*)&header, sizeof(header), n_bytes_read);
+  if (!success)
     return;
-  }
 
   if (string{header.riff, sizeof(header.riff)} != "RIFF") {
     LOG_ERROR("Illegal WAV file format, RIFF not found.");
-    f_close(&mFile);
+    FileClose();
     return;
   }
 
   if (string{header.wave, sizeof(header.riff)} != "WAVE") {
     LOG_ERROR("Illegal WAV file format, WAVE not found.");
-    f_close(&mFile);
+    FileClose();
     return;
   }
+  LOG_DEBUG("WAV header OKAY");
 
   /*--- Read chunks ---*/
-  uint32_t num_generic_chunks = 0;
-  uint32_t num_unknown_chunks = 0;
-  uint32_t num_fmt_chunks     = 0;
-  uint32_t num_data_chunks    = 0;
+  size_t num_generic_chunks = 0;
+  size_t num_unknown_chunks = 0;
+  size_t num_fmt_chunks     = 0;
+  size_t num_data_chunks    = 0;
 
   while (1) {
     // Read WAV generic chunk
     wav_generic_chunk_t genericChunk;
-    fres = f_read(
-        &mFile, (void*)&genericChunk, sizeof(genericChunk), &n_bytes_read);
-    if (fres) {
-      LOG_ERROR("Failed to read file.");
-      f_close(&mFile);
-      return;
-    } else if (n_bytes_read != sizeof(genericChunk)) {
-      // probably reached EOF
-      break;
+    size_t num_bytes_to_read = sizeof(genericChunk);
+
+    LOG_DEBUG("reading a WAV generic chunk");
+    success = FileRead((void*)&genericChunk, num_bytes_to_read, n_bytes_read);
+    if (!success) {
+      if (n_bytes_read != num_bytes_to_read) {
+        LOG_WARN("likely reached EOF");
+        break;
+      }
     }
 
     num_generic_chunks++;
 
     wav_fmt_chunk_t fmtChunk;
     if (string{genericChunk.ckId, sizeof(genericChunk.ckId)} == "fmt ") {
+      LOG_DEBUG("reading WAV FMT chunk");
       num_fmt_chunks++;
 
-      // "fmt" chunk is compulsory and contains information
-      // about the sample
-      // format
-      fres =
-          f_read(&mFile, (void*)&fmtChunk, genericChunk.cksize, &n_bytes_read);
-      if (fres != 0) {
-        LOG_ERROR("Failed to read file");
-        f_close(&mFile);
+      /* The FMT chunk is compulsory and contains information about
+       * the sample format. */
+      success = FileRead((void*)&fmtChunk, genericChunk.cksize, n_bytes_read);
+      if (!success)
         return;
-      }
-      if (n_bytes_read != genericChunk.cksize) {
-        LOG_ERROR("EOF reached");
-        f_close(&mFile);
-        return;
-      }
+
+      /*--- Sanity checks in FMT chunk ---*/
       if (fmtChunk.wFormatTag != 1) {
         LOG_ERROR("Unsupported format");
-        f_close(&mFile);
+        FileClose();
         return;
       }
       if (fmtChunk.nChannels != 2) {
         LOG_ERROR("Only stereo files supported");
-        f_close(&mFile);
+        FileClose();
         return;
       }
       if (fmtChunk.wBitsPerSample != 16) {
         LOG_ERROR("Only 16 bit per samples supported");
-        f_close(&mFile);
+        FileClose();
         return;
+        LOG_DEBUG("WAV FMT chunk OKAY");
       }
     } else if (string{genericChunk.ckId, sizeof(genericChunk.ckId)} == "data") {
       num_data_chunks++;
 
-      // "data" chunk contains all the audio samples
-      /** TODO: Use a better concept to free this allocated memory somewhere. */
-      mBuffer = new uint8_t[genericChunk.cksize];
-      if (!mBuffer) {
+      /* The DATA chunk contains all the audio samples */
+      /** TODO: Use a better concept to free this allocated memory somewhere.
+       */
+      mBuffer.buffer = new uint8_t[genericChunk.cksize];
+      if (!mBuffer.buffer) {
         LOG_ERROR("Could not allocate memory");
-        f_close(&mFile);
-        delete[] mBuffer;
+        FileClose();
+        delete[] mBuffer.buffer;
+        mBuffer = {nullptr, 0};
         return;
       }
-      mBufferSize = genericChunk.cksize;
+      mBuffer.size = genericChunk.cksize;
 
-      fres = f_read(&mFile, (void*)mBuffer, mBufferSize, &n_bytes_read);
-      if (fres != 0) {
-        LOG_ERROR("Failed to read file");
-        f_close(&mFile);
-        delete[] mBuffer;
-        return;
-      }
-      if (n_bytes_read != mBufferSize) {
-        LOG_ERROR("Didn't read the complete file");
-        f_close(&mFile);
-        delete[] mBuffer;
+      success = FileRead((void*)mBuffer.buffer, mBuffer.size, n_bytes_read);
+      if (!success) {
+        delete[] mBuffer.buffer;
+        mBuffer = {nullptr, 0};
         return;
       }
     } else {
-      LOG_DEBUG("skipping unknown chunk: %s", genericChunk.ckId);
+      LOG_DEBUG("skipping unknown chunk: '%s'", genericChunk.ckId);
 
-      // advance the file pointer
-      DWORD fp = f_tell(&mFile);
-      f_lseek(&mFile, fp + genericChunk.cksize);
+      // Advance the file pointer
+      success = FileSeek(genericChunk.cksize);
+      if (!success)
+        return;
+
       num_unknown_chunks++;
     }
   }
-  f_close(&mFile);
 
-  LOG_DEBUG("Done.");
-  LOG_DEBUG("Read %ld bytes from WAV file '%s'", mBufferSize, filename.c_str());
-  LOG_DEBUG("number of WAV chunks: %ld generic, %ld unknown, %ld fmt, %ld data",
-            num_generic_chunks,
-            num_unknown_chunks,
-            num_fmt_chunks,
-            num_data_chunks);
+  LOG_INFO("Done.");
+  LOG_DEBUG(
+      "Read %zu bytes from WAV file '%s'", mBuffer.size, filename.c_str());
+  LOG_DEBUG(
+      "number of read WAV chunks: "
+      "%zu generic (%zu unknown + %zu fmt + %zu data)",
+      num_generic_chunks,
+      num_unknown_chunks,
+      num_fmt_chunks,
+      num_data_chunks);
 
   PrepareBufferData();
 }

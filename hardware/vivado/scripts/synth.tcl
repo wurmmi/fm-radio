@@ -100,17 +100,22 @@ foreach report_file $report_files {
   file copy -force $report_file $result_dir
 }
 
-puts "Preparing for SDK (binaries to SDK)..."
-# Copy binaries
+puts "--- Preparing for SDK (binaries to SDK)..."
+
+puts "Copy binaries ..."
 set latest_bin_sdk_dir $build_dir/../sdk/latest_bin
 file copy -force $build_output_dir/${top}.sysdef $latest_bin_sdk_dir/${top}.hdf
 file copy -force $build_output_dir/${top}.bit    $latest_bin_sdk_dir/
 
-# Create a timestamp file
+puts "Create a timestamp file ..."
 set build_finish_time [clock format [clock seconds] -format "%Y/%m/%d %H:%M:%S"]
+set fm_radio_ip_git_hash "[exec git rev-parse --short HEAD]"
+
 set filename $latest_bin_sdk_dir/timestamp.txt
 set fileId [open $filename "w"]
-puts $fileId "Binaries built at: $build_finish_time"
+
+puts $fileId "Binaries built at    : $build_finish_time"
+puts $fileId "FM radio IP git hash : $fm_radio_ip_git_hash"
 close $fileId
 
 puts "(MWURM) Done."

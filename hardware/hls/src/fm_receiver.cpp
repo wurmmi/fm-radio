@@ -30,60 +30,57 @@
 
 #include "../tb/helper/DataWriter.hpp"
 #include "channel_decoder.hpp"
-#include "utils/decimator.hpp"
 #include "utils/fm_demodulator.hpp"
 
 using namespace std;
 
-void fm_receiver(sample_t const& in_i,
-                 sample_t const& in_q,
+void fm_receiver(hls::stream<iq_sample_t>& iq_in,
                  sample_t& out_audio_L,
                  sample_t& out_audio_R) {
   // ------------------------------------------------------
-  // FM Demodulator
+  // FM Demodulator (incl. decimator)
   // ------------------------------------------------------
 
-  iq_sample_t iq    = {in_i, in_q};
-  sample_t fm_demod = fm_demodulator(iq);
+  hls::stream<sample_t> fm_channel_data;
+#pragma HLS STREAM depth = OSR_AUDIO variable = fm_channel_data
 
-  // ------------------------------------------------------
-  // Decimator
-  // ------------------------------------------------------
+  /** NOTE:
+   *  This loop performs decimation by N.
+   *  --> Processing N samples. Only the last sample is passed on
+   *      to the next processing steps.
+   */
+  sample_t fm_demod;
+  for (uint32_t i = 0; i < OSR_AUDIO; i++) {
+    for (uint32_t k = 0; k < OSR_RX; k++) {
+      iq_sample_t iq = iq_in.read();
+      fm_demod       = fm_demodulator(iq);
 
-  sample_t fm_channel_data;
-  bool fm_channel_data_valid;
-  static DECIMATOR<OSR_RX> decimator;
-  decimator(fm_demod, fm_channel_data, fm_channel_data_valid);
+      if (k == OSR_RX - 1) {
+        fm_channel_data.write(fm_demod);
+      }
 
-  if (fm_channel_data_valid) {
-    // ------------------------------------------------------
-    // Channel decoder
-    // ------------------------------------------------------
-
-    sample_t audio_L;
-    sample_t audio_R;
-    channel_decoder(fm_channel_data, audio_L, audio_R);
-
-    // ------------------------------------------------------
-    // Output
-    // ------------------------------------------------------
-
-    out_audio_L = audio_L;
-    out_audio_R = audio_R;
-
-    // ------------------------------------------------------
-    // Debug
-    // ------------------------------------------------------
-
+      // ------------------------------------------------------
+      // Debug
+      // ------------------------------------------------------
 #ifndef __SYNTHESIS__
-    static DataWriter writer_data_out_fm_channel_data(
-        "data_out_fm_channel_data.txt");
-    writer_data_out_fm_channel_data.write(fm_channel_data);
+      static DataWriter writer_data_out_fm_demod("data_out_fm_demod.txt");
+      writer_data_out_fm_demod.write(fm_demod);
 #endif
+    }
   }
 
-#ifndef __SYNTHESIS__
-  static DataWriter writer_data_out_fm_demod("data_out_fm_demod.txt");
-  writer_data_out_fm_demod.write(fm_demod);
-#endif
+  // ------------------------------------------------------
+  // Channel decoder
+  // ------------------------------------------------------
+
+  sample_t audio_L;
+  sample_t audio_R;
+  channel_decoder(fm_channel_data, audio_L, audio_R);
+
+  // ------------------------------------------------------
+  // Output
+  // ------------------------------------------------------
+
+  out_audio_L = audio_L;
+  out_audio_R = audio_R;
 }

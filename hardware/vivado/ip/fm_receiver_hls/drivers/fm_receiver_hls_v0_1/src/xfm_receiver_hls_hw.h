@@ -14,8 +14,22 @@
 //        bit 7~0 - led_ctrl[7:0] (Read/Write)
 //        others  - reserved
 // 0x14 : reserved
+// 0x18 : Data signal of status_git_hash_V
+//        bit 27~0 - status_git_hash_V[27:0] (Read)
+//        others   - reserved
+// 0x1c : reserved
+// 0x20 : Data signal of status_build_time_V
+//        bit 31~0 - status_build_time_V[31:0] (Read)
+// 0x24 : Data signal of status_build_time_V
+//        bit 15~0 - status_build_time_V[47:32] (Read)
+//        others   - reserved
+// 0x28 : reserved
 // (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
 
-#define XFM_RECEIVER_HLS_CONFIG_ADDR_LED_CTRL_DATA 0x10
-#define XFM_RECEIVER_HLS_CONFIG_BITS_LED_CTRL_DATA 8
+#define XFM_RECEIVER_HLS_CONFIG_ADDR_LED_CTRL_DATA            0x10
+#define XFM_RECEIVER_HLS_CONFIG_BITS_LED_CTRL_DATA            8
+#define XFM_RECEIVER_HLS_CONFIG_ADDR_STATUS_GIT_HASH_V_DATA   0x18
+#define XFM_RECEIVER_HLS_CONFIG_BITS_STATUS_GIT_HASH_V_DATA   28
+#define XFM_RECEIVER_HLS_CONFIG_ADDR_STATUS_BUILD_TIME_V_DATA 0x20
+#define XFM_RECEIVER_HLS_CONFIG_BITS_STATUS_BUILD_TIME_V_DATA 48
 

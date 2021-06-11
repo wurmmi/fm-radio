@@ -7,22 +7,38 @@
 #ifndef _FILEREADER_H_
 #define _FILEREADER_H_
 
+#if defined(__CSIM__) || defined(__RTL_SIMULATION__)
+#include <cstdio>
+#else
 #include <ff.h>
+#endif
 
 #include <string>
 
-#include "AudioStreamDMA.h"
+typedef struct {
+  uint8_t* buffer;
+  size_t size;
+} DMABuffer;
 
 enum class FileType { UNKNOWN, WAV, TXT };
 
 class FileReader {
  private:
  protected:
+  DMABuffer mBuffer = {nullptr, 0};
+#if defined(__CSIM__) || defined(__RTL_SIMULATION__)
+  FILE* mFile;
+#else
   FIL mFile;
-  uint8_t* mBuffer     = nullptr;
-  uint32_t mBufferSize = 0;
+#endif
 
   void PrepareBufferData();
+  bool FileOpen(std::string const& filename);
+  void FileClose();
+  bool FileRead(void* target_buf,
+                size_t num_bytes_to_read,
+                size_t& n_bytes_read);
+  bool FileSeek(size_t num_bytes_offset);
 
  public:
   FileReader();

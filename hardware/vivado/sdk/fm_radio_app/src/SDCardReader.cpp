@@ -109,9 +109,10 @@ string SDCardReader::GetShortFilename(string const& filename) {
   } else {
     short_name = name + extension;
   }
-  LOG_DEBUG("filename  : %s", filename.c_str());
-  LOG_DEBUG("extension : %s", extension.c_str());
-  LOG_DEBUG("short_name: %s", short_name.c_str());
+  LOG_DEBUG("filename       : %s", filename.c_str());
+  LOG_DEBUG("filename_upper : %s", fn_upper.c_str());
+  LOG_DEBUG("extension      : %s", extension.c_str());
+  LOG_DEBUG("short_name     : %s", short_name.c_str());
   return short_name;
 }
 
@@ -137,6 +138,7 @@ void SDCardReader::LoadFile(string const& filename) {
       mFileReader->LoadFile(filename_short);
     } break;
     case FileType::TXT:
+      LOG_INFO("Reading TXT file '%s' ...", filename.c_str());
       mFileReader = new TxtReader();
       mFileReader->LoadFile(filename_short);
       break;

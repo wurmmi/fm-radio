@@ -21,8 +21,6 @@ TxtReader::TxtReader() {}
 TxtReader::~TxtReader() {}
 
 void TxtReader::LoadFile(string const& filename) {
-  LOG_DEBUG("Reading TXT file.");
-
   /* Get file size info */
   FILINFO fileInfo;
   FRESULT fres = f_stat(filename.c_str(), &fileInfo);
@@ -40,35 +38,38 @@ void TxtReader::LoadFile(string const& filename) {
   }
 
   /* Load entire file at once */
-  UINT n_byte_read = 0;
+  size_t n_bytes_read;
   /** TODO: Use a better concept to free this allocated memory somewhere. */
-  mBuffer = new uint8_t[fileSize];
+  mBuffer.buffer = new uint8_t[fileSize];
 
-  fres = f_read(&mFile, (void*)mBuffer, fileSize, &n_byte_read);
+  fres = f_read(&mFile, (void*)mBuffer.buffer, fileSize, &n_bytes_read);
   if (fres) {
     LOG_ERROR("Error reading file! (error: %d)", fres);
     f_close(&mFile);
-    delete[] mBuffer;
+    delete[] mBuffer.buffer;
+    mBuffer = {nullptr, 0};
     return;
   }
 
   /* Sanity checks */
-  if (n_byte_read != fileSize) {
-    LOG_ERROR("Error reading file! (fileSize = %ld, n_byte_read = %d)",
+  if (n_bytes_read != fileSize) {
+    LOG_ERROR("Error reading file! (fileSize = %ld, n_bytes_read = %d)",
               fileSize,
-              (int)n_byte_read);
+              (int)n_bytes_read);
     f_close(&mFile);
-    delete[] mBuffer;
+    delete[] mBuffer.buffer;
+    mBuffer = {nullptr, 0};
     return;
   }
-  mBufferSize = fileSize;
+  mBuffer.size = fileSize;
 
   /** TODO: convert binary buffer to integers */
 
   f_close(&mFile);
 
   LOG_DEBUG("Done.");
-  LOG_DEBUG("Read %ld bytes from TXT file '%s'", mBufferSize, filename.c_str());
+  LOG_DEBUG(
+      "Read %zu bytes from TXT file '%s'", mBuffer.size, filename.c_str());
 
   PrepareBufferData();
 }

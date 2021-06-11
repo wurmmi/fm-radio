@@ -9,6 +9,8 @@
 set origin_dir [file dirname [info script]]
 set workspace_dir [file normalize "${origin_dir}/../sdk"]
 
+set open_gui [lindex $argv 0]
+
 set design_name "proj"
 
 set hw_name ${design_name}_wrapper_hw_platform_0
@@ -64,14 +66,16 @@ foreach proj $projects {
   puts "\t($i) $proj"
 }
 
-if {[catch {
-  puts "(MWURM) Building all projects..."
-  projects -build
-} errmsg ]} {
-  puts "(MWURM) Failed building all projects!"
-  puts "(MWURM) Error information:"
-  puts "ErrorMsg: $errmsg"
-  puts "ErrorCode: $errorCode"
-  puts "ErrorInfo:\n$errorInfo\n"
-  exit 1
+if {$open_gui == 0} {
+  if {[catch {
+    puts "(MWURM) Building all projects..."
+    projects -build
+  } errmsg ]} {
+    puts "(MWURM) Failed building all projects!"
+    puts "(MWURM) Error information:"
+    puts "ErrorMsg: $errmsg"
+    puts "ErrorCode: $errorCode"
+    puts "ErrorInfo:\n$errorInfo\n"
+    exit 1
+  }
 }

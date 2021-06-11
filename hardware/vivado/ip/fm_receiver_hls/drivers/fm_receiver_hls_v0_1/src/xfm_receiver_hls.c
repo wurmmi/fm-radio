@@ -38,3 +38,24 @@ u32 XFm_receiver_hls_Get_led_ctrl(XFm_receiver_hls *InstancePtr) {
     return Data;
 }
 
+u32 XFm_receiver_hls_Get_status_git_hash_V(XFm_receiver_hls *InstancePtr) {
+    u32 Data;
+
+    Xil_AssertNonvoid(InstancePtr != NULL);
+    Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
+
+    Data = XFm_receiver_hls_ReadReg(InstancePtr->Config_BaseAddress, XFM_RECEIVER_HLS_CONFIG_ADDR_STATUS_GIT_HASH_V_DATA);
+    return Data;
+}
+
+u64 XFm_receiver_hls_Get_status_build_time_V(XFm_receiver_hls *InstancePtr) {
+    u64 Data;
+
+    Xil_AssertNonvoid(InstancePtr != NULL);
+    Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
+
+    Data = XFm_receiver_hls_ReadReg(InstancePtr->Config_BaseAddress, XFM_RECEIVER_HLS_CONFIG_ADDR_STATUS_BUILD_TIME_V_DATA);
+    Data += (u64)XFm_receiver_hls_ReadReg(InstancePtr->Config_BaseAddress, XFM_RECEIVER_HLS_CONFIG_ADDR_STATUS_BUILD_TIME_V_DATA + 4) << 32;
+    return Data;
+}
+

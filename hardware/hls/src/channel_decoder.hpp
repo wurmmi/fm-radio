@@ -9,9 +9,11 @@
 #ifndef _CHANNEL_DECODER_HPP
 #define _CHANNEL_DECODER_HPP
 
+#include <hls_stream.h>
+
 #include "fm_global.hpp"
 
-void channel_decoder(sample_t const& in_sample,
+void channel_decoder(hls::stream<sample_t>& in_sample,
                      sample_t& out_audio_L,
                      sample_t& out_audio_R);
 

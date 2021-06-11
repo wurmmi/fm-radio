@@ -39,17 +39,31 @@ class DataWriter {
       throw std::runtime_error("Failed to open file'" + filepath);
     }
   }
+
   ~DataWriter() {
     ofs.close();
   }
 
-  void write(sample_t const value) {
+  void write(sample_t const& value) {
     // Write to file
     ofs << std::fixed << std::setw(FP_WIDTH + 3) << std::setprecision(FP_WIDTH)
         << value.to_float() << std::endl;
 
     // Store in local vector
     data.emplace_back(value);
+  }
+
+  void write(std::vector<sample_t> const& vec) {
+    for (auto const& elem : vec) {
+      write(elem);
+    }
+  }
+
+  void write(std::vector<iq_sample_t> const& vec) {
+    for (auto const& elem : vec) {
+      write(elem.i);
+      write(elem.q);
+    }
   }
 };
 #endif /* __SYNTHESIS__ */

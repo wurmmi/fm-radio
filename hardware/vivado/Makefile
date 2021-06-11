@@ -23,19 +23,23 @@ vivado = vivado -nojournal -nolog -notrace -mode batch -source ./scripts/$1 $2
 ##-----------------
 
 all: project synth sdk ##		- Default target.
-
+##
 project: ##			- Create/Open Vivado project.
 	@mkdir -p $(VIVADO_DIR)
 	@$(call vivado,create_project.tcl,-tclargs $(VIVADO_DIR) $(IP_DIRS) $(GUI))
 
-synth: ##				- Synthesize Vivado project.
+upgrade_ips: ##			- Upgrade changed IPs in the design.
+	@echo "Upgrading IPs ..."
+	@$(call vivado,upgrade_ips.tcl,-tclargs $(VIVADO_DIR) $(IP_DIRS) $(GUI))
+
+bitstream: upgrade_ips ##		- Synthesize project and create a bitstream.
 	@echo "Synthesize Vivado project ..."
 	@mkdir -p $(VIVADO_DIR)
 	@$(call vivado,synth.tcl,-tclargs $(VIVADO_DIR) $(GUI))
 
 sdk: ##				- Create/Open SDK project.
 	@echo "Creating SDK ..."
-	@xsdk -batch -source ./scripts/create_sdk.tcl
+	@xsdk -batch -source ./scripts/create_sdk.tcl $(GUI)
 ifeq ($(GUI),1)
 	@xsdk -workspace ./sdk
 endif

@@ -26,10 +26,19 @@ typedef ap_fixed<FP_WIDTH, FP_WIDTH_INT> sample_t;
 typedef sample_t coeff_t;
 typedef sample_t acc_t;
 
-typedef struct {
+struct iq_sample_t {
   sample_t i;
   sample_t q;
-} iq_sample_t;
+
+  // Operator overloading
+  bool operator==(const iq_sample_t &rhs) const {
+    return ((i == rhs.i) && (q == rhs.q));
+  }
+  friend std::ostream &operator<<(std::ostream &out, const iq_sample_t &rhs) {
+    out << "I: " << rhs.i << " Q: " << rhs.q;
+    return out;
+  }
+};
 
 const ap_fixed<4, 4> pilot_scale_factor_c = PILOT_SCALE_FACTOR;
 const ap_fixed<5, 2> carrier_38k_offset_c = CARRIER_38K_OFFSET;

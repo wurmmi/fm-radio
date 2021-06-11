@@ -20,16 +20,16 @@ using namespace std;
 extern XScuGic xInterruptController;
 
 AudioStreamDMA::AudioStreamDMA(uint32_t device_id) : mDeviceId(device_id) {
-  mDataBuffer.buffer     = nullptr;
-  mDataBuffer.bufferSize = 0;
+  mDataBuffer.buffer = nullptr;
+  mDataBuffer.size   = 0;
 
   /* Use the FreeRTOS interrupt controller here.
    * Otherwise we would crash/overwrite all the interrupt settings of the OS.
    */
   mIntCtrl = &xInterruptController;
 
-  bool ret = Initialize();
-  if (!ret) {
+  mIsInitialized = Initialize();
+  if (!mIsInitialized) {
     LOG_ERROR("Error in DMA initialization");
     return;
   }
@@ -45,14 +45,14 @@ bool AudioStreamDMA::TxSetup() {
   /* Calculate number of required BDs */
   XAxiDma_BdRing* txRingPtr = XAxiDma_GetTxRing(&mDev);
   uint32_t max_block_size   = txRingPtr->MaxTransferLen;
-  mNumRequiredBDs = ceil((float)mDataBuffer.bufferSize / max_block_size);
+  mNumRequiredBDs           = ceil((float)mDataBuffer.size / max_block_size);
 
-  LOG_DEBUG("bufferSize      = %ld", mDataBuffer.bufferSize);
+  LOG_DEBUG("bufferSize      = %zu", mDataBuffer.size);
   LOG_DEBUG("max_block_size  = %ld", max_block_size);
-  LOG_DEBUG("mNumRequiredBDs = %ld", mNumRequiredBDs);
+  LOG_DEBUG("mNumRequiredBDs = %lu", mNumRequiredBDs);
 
   if (mNumRequiredBDs > DMA_NUM_BD_MAX) {
-    LOG_ERROR("Cannot allocate %ld BDs! Maximum is %d.",
+    LOG_ERROR("Cannot allocate %lu BDs! Maximum is %d.",
               mNumRequiredBDs,
               DMA_NUM_BD_MAX);
 
@@ -247,6 +247,14 @@ bool AudioStreamDMA::Initialize() {
 void AudioStreamDMA::TransmitBlob(DMABuffer const& dataBuffer) {
   mDataBuffer = dataBuffer;
 
+  if (!mIsInitialized) {
+    mIsInitialized = Initialize();
+  }
+  if (!mIsInitialized) {
+    LOG_ERROR("DMA init error persists");
+    return;
+  }
+
   bool ret = TxSetup();
   if (!ret) {
     LOG_ERROR("TxSetup failed");
@@ -254,15 +262,15 @@ void AudioStreamDMA::TransmitBlob(DMABuffer const& dataBuffer) {
   }
 
   XAxiDma_BdRing* txRingPtr = XAxiDma_GetTxRing(&mDev);
-  if (mDataBuffer.bufferSize > txRingPtr->MaxTransferLen) {
+  if (mDataBuffer.size > txRingPtr->MaxTransferLen) {
     LOG_ERROR("BufferSize is larger than maximum transfer length!");
     return;
   }
-  LOG_DEBUG("TransmitBlob: bufferSize = %ld", mDataBuffer.bufferSize);
+  LOG_DEBUG("TransmitBlob: bufferSize = %zu", mDataBuffer.size);
 
   /* Flush the buffers before the DMA transfer, in case the Data Cache is
    * enabled */
-  Xil_DCacheFlushRange((uint32_t)mDataBuffer.buffer, mDataBuffer.bufferSize);
+  Xil_DCacheFlushRange((uint32_t)mDataBuffer.buffer, mDataBuffer.size);
 
   XAxiDma_Bd* bd_ptr;
   int status = XAxiDma_BdRingAlloc(txRingPtr, mNumRequiredBDs, &bd_ptr);
@@ -273,7 +281,7 @@ void AudioStreamDMA::TransmitBlob(DMABuffer const& dataBuffer) {
 
   /* Create and fill the BDs with information */
   UINTPTR p_block         = (UINTPTR)mDataBuffer.buffer;
-  uint32_t n_bytes_remain = mDataBuffer.bufferSize;
+  uint32_t n_bytes_remain = mDataBuffer.size;
   XAxiDma_Bd* bd_ptr_cur  = bd_ptr;
   uint32_t transmit_count = 0;
   bool isFirst            = true;
@@ -329,7 +337,7 @@ void AudioStreamDMA::Transmit(DMABuffer const& buffer_cur,
   XAxiDma_BdRing* txRingPtr = XAxiDma_GetTxRing(&mDev);
 
   status = XAxiDma_BdSetLength(
-      bd_ptr_cur, buffer_cur.bufferSize, txRingPtr->MaxTransferLen);
+      bd_ptr_cur, buffer_cur.size, txRingPtr->MaxTransferLen);
   if (status != XST_SUCCESS) {
     LOG_ERROR("Tx set length failed");
     return;
@@ -344,11 +352,11 @@ void AudioStreamDMA::Transmit(DMABuffer const& buffer_cur,
   isLast  = true;
 
   if (isFirst) {
-    LOG_DEBUG("first");
+    LOG_DEBUG("first BD");
     CrBits |= XAXIDMA_BD_CTRL_TXSOF_MASK;  // First BD
   }
   if (isLast) {
-    LOG_DEBUG("last");
+    LOG_DEBUG("last BD");
     CrBits |= XAXIDMA_BD_CTRL_TXEOF_MASK;  // Last BD
   }
 

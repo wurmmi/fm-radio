@@ -7,8 +7,6 @@
 #ifndef _WAVREADER_H_
 #define _WAVREADER_H_
 
-#include <ff.h>
-
 #include <string>
 
 #include "FileReader.h"

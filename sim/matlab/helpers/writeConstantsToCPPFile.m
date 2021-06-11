@@ -44,8 +44,8 @@ fprintf(fileID, "#define FS       ((uint32_t)%d)\n", fs);
 fprintf(fileID, "#define FS_RX    ((uint32_t)%d)\n", fs_rx);
 fprintf(fileID, "#define FS_AUDIO ((uint32_t)%d)\n", fs_audio);
 fprintf(fileID, "\n");
-fprintf(fileID, "#define OSR_RX    ((uint32_t)%d)\n", osr_rx);
-fprintf(fileID, "#define OSR_AUDIO ((uint32_t)%d)\n", osr_audio);
+fprintf(fileID, "const uint32_t OSR_RX    = %d;\n", osr_rx);
+fprintf(fileID, "const uint32_t OSR_AUDIO = %d;\n", osr_audio);
 fprintf(fileID, "\n");
 
 fprintf(fileID, "// IP specific\n");
