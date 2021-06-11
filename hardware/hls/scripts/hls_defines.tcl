@@ -31,14 +31,15 @@ set CPPFLAGS_COMMON [ list                    \
 #  -fsanitize=undefined"
 
 set CPPFLAGS_CSIM [ list                      \
- {*}$CPPFLAGS_COMMON                          \
- -I$SRC_DIR_FW                                \
- -I$SRC_DIR_FW/utils                          \
- -D__CSIM__                                   \
+  {*}$CPPFLAGS_COMMON                         \
+  -I$SRC_DIR_FW                               \
+  -I$SRC_DIR_FW/utils                         \
+  -D__CSIM__                                  \
 ]
 
 set CPPFLAGS_COSIM [ list                     \
- {*}$CPPFLAGS_COMMON                          \
+  {*}$CPPFLAGS_COMMON                         \
+  -I$SRC_DIR_FW                               \
   -D__RTL_SIMULATION__                        \
 ]
 

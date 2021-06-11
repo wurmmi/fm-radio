@@ -75,14 +75,14 @@ void fm_receiver(sample_t const& in_i,
     // Debug
     // ------------------------------------------------------
 
-#ifdef __CSIM__
+#ifndef __SYNTHESIS__
     static DataWriter writer_data_out_fm_channel_data(
         "data_out_fm_channel_data.txt");
     writer_data_out_fm_channel_data.write(fm_channel_data);
 #endif
   }
 
-#ifdef __CSIM__
+#ifndef __SYNTHESIS__
   static DataWriter writer_data_out_fm_demod("data_out_fm_demod.txt");
   writer_data_out_fm_demod.write(fm_demod);
 #endif

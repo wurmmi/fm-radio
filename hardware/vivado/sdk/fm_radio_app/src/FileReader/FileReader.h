@@ -7,7 +7,7 @@
 #ifndef _FILEREADER_H_
 #define _FILEREADER_H_
 
-#ifdef __CSIM__
+#if defined(__CSIM__) || defined(__RTL_SIMULATION__)
 #include <cstdio>
 #else
 #include <ff.h>
@@ -26,7 +26,7 @@ class FileReader {
  private:
  protected:
   DMABuffer mBuffer = {nullptr, 0};
-#ifdef __CSIM__
+#if defined(__CSIM__) || defined(__RTL_SIMULATION__)
   FILE* mFile;
 #else
   FIL mFile;

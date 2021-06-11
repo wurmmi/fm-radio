@@ -76,7 +76,7 @@ csynth: create_project ##					- Run C synthesis.
 	@$(call vivado_hls_batch,hls_csynth.tcl,$(VIVADO_HLS_PROJECT_NAME))
 	@echo Done.
 
-cosim: create_project ##					- Run co-simulation.
+cosim:  ##						- Run co-simulation.
 	@$(call vivado_hls_batch,hls_cosim.tcl,$(VIVADO_HLS_PROJECT_NAME))
 	@$(call analyze_tb_results)
 	@echo Done.
