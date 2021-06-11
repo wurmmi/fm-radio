@@ -33,12 +33,6 @@ static void task_loop(void *) {
 static void task_audio(void *) {
   AudioHandler audioHandler;
   SDCardReader sdCardReader;
-
-  const uint8_t num_retries = 5;
-  sdCardReader.MountSDCard(num_retries);
-  sdCardReader.DiscoverFiles();
-  sdCardReader.PrintAvailableFilenames();
-
   AudioStreamDMA streamDMA(XPAR_AXI_DMA_0_DEVICE_ID);
 
   while (true) {
@@ -47,6 +41,7 @@ static void task_audio(void *) {
     printf("[p] ... play audio (cantina band)\n");
     printf("[r] ... play audio (fm radio)\n");
     printf("[s] ... stop\n");
+    printf("[c] ... print available filenames on SD card\n");
     printf("[i] ... show information\n");
     printf("----------------------------------------------\n");
     printf("Choice: ");
@@ -73,6 +68,11 @@ static void task_audio(void *) {
       case 's':
         streamDMA.Stop();
         LOG_INFO("DMA stopped.");
+        break;
+      case 'c':
+        sdCardReader.MountSDCard();
+        sdCardReader.DiscoverFiles();
+        sdCardReader.PrintAvailableFilenames();
         break;
       case 'i': {
         string build_time = fmRadioIP.GetBuildTime();

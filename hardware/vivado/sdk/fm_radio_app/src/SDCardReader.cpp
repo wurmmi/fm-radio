@@ -17,6 +17,10 @@ using namespace std;
 
 SDCardReader::SDCardReader() {
   mMounted = false;
+
+  const uint8_t num_retries = 5;
+  MountSDCard(num_retries);
+  DiscoverFiles();
 }
 
 SDCardReader::~SDCardReader() {}
