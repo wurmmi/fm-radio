@@ -58,7 +58,7 @@ void FileReader::PrepareBufferData() {
 
     // Adapt volume
     /** NOTE: could be an Axilite parameter in the future*/
-    const int theVolume = 4;
+    const int theVolume = 1;
 
     left  = left * theVolume / 4;
     right = right * theVolume / 4;
