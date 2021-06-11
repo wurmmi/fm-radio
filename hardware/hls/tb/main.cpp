@@ -57,8 +57,7 @@ int main() {
 
     // Load file data
     WavReader wavReader;
-    const string filename_wav =
-        data_dir_fw_resource + "wav/cantina_band_44100.wav";
+    const string filename_wav = data_dir_fw_resource + "wav/rx_fm_bb.wav";
     wavReader.LoadFile(filename_wav);
     auto buffer = wavReader.GetBuffer();
 
@@ -69,27 +68,12 @@ int main() {
     iq_sample_t sample_wav_in;
     for (uint32_t i = 0; i < buffer.size / 4; i++) {
       // Split 32 bit into 2x 16 bit
+      int16_t left  = (int16_t)((pSource[i] >> 16) & 0xFFFF);
+      int16_t right = (int16_t)((pSource[i] >> 0) & 0xFFFF);
 
-      // ############################################
-      // ############################################
-      // ############################################
-      // ############################################
-      // ############################################
-      // ############################################
-      // ############################################
-      // ############################################
-      // ############################################
-      //
-      // ERROR IS HERE IN CONVERSION!!!
-      //
-      // ############################################
-      // ############################################
-      // ############################################
-      // ############################################
-      // ############################################
-      // ############################################
-      sample_wav_in.i = (sample_t)((pSource[i] >> 16) & 0xFFFF);
-      sample_wav_in.q = (sample_t)((pSource[i] >> 0) & 0xFFFF);
+      // Convert to ap_fixed data type
+      sample_wav_in.i.range() = left;
+      sample_wav_in.q.range() = right;
 
       // Fill stream
       stream_data_wav_in << sample_wav_in;

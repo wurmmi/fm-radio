@@ -50,7 +50,6 @@ DMABuffer FileReader::GetBuffer() {
 void FileReader::PrepareBufferData() {
   // Change the volume and swap left/right channel and polarity
 
-  int theVolume = 2;
   LOG_DEBUG("#############  BEGIN  ###################### PrepareBufferData()");
 
   uint32_t* pSource = (uint32_t*)mBuffer.buffer;
@@ -60,6 +59,9 @@ void FileReader::PrepareBufferData() {
     int16_t right = (int16_t)((pSource[i] >> 0) & 0xFFFF);
 
     // Adapt volume
+    /** NOTE: could be an Axilite parameter in the future*/
+    const int theVolume = 4;
+
     left  = left * theVolume / 4;
     right = right * theVolume / 4;
 
