@@ -26,6 +26,8 @@ constexpr double n_sec_c = 0.001;
 constexpr double n_sec_c = 0.1;
 #endif
 
+#define DEBUG_OUTPUT 0
+
 const string repo_root = "../../../../../../../../";
 const string data_dir_verification =
     repo_root + "sim/matlab/verification_data/";
@@ -56,6 +58,7 @@ int main() {
     cout << "num_samples_audio = " << num_samples_audio_c << endl;
 
     /*--- Load data directly (from Matlab *.txt file) ---*/
+    cout << "- Loading data from *.TXT" << endl;
 
     // Load file data
     const string filename_txt = data_dir_verification + "rx_fm_bb.txt";
@@ -79,6 +82,7 @@ int main() {
     }
 
     /*--- Load data like firmware (from Matlab *.wav file) ---*/
+    cout << "- Loading data from *.WAV" << endl;
 
     // Load file data
     WavReader wavReader;
@@ -112,8 +116,6 @@ int main() {
       cerr << "ERROR: WAV file contains too few data values!" << endl;
       cerr << "vec_data_txt_in : " << vec_data_txt_in.size() << endl;
       cerr << "vec_data_wav_in : " << vec_data_wav_in.size() << endl;
-    } else {
-      cout << "OKAY" << endl;
     }
 
     cout << "- Compare data values" << endl;
@@ -128,7 +130,7 @@ int main() {
          * read/write chain from Matlab to here.. will need to investigate
          * this at some point.
          */
-        const sample_t max_abs_error = 0.00001;
+        const sample_t max_abs_error = pow(2, -14);
         sample_t abs_err;
         abs_err    = hls::abs(txt_in.i - wav_in.i);
         bool err_i = (abs_err > max_abs_error);
@@ -147,6 +149,7 @@ int main() {
       }
     }
 
+#if defined DEBUG_OUTPUT && DEBUG_OUTPUT > 0
     cout << "- Write to files for visual compare" << endl;
     // shrink wav vector to the size of the txt vector
     vec_data_wav_in.resize(vec_data_txt_in.size());
@@ -155,6 +158,7 @@ int main() {
     DataWriter writer_vec_data_wav_in("vec_data_wav_in.txt");
     writer_vec_data_in.write(vec_data_txt_in);
     writer_vec_data_wav_in.write(vec_data_wav_in);
+#endif
 
     // --------------------------------------------------------------------------
     // Run test on DUT
@@ -178,16 +182,16 @@ int main() {
                       &status_build_time_o,
                       &led_out_o);
 
-      // std::bitset<8> led_out_o_bit(led_out_o);
-      // cout << "led_out_o: " << hex << led_out_o_bit << endl;
+#if defined DEBUG_OUTPUT && DEBUG_OUTPUT > 0
+      std::bitset<8> led_out_o_bit(led_out_o);
+      cout << "led_out_o: " << hex << led_out_o_bit << endl;
+#endif
     }
 
     cout << "--- Checking results" << endl;
     cout << "- Check LED output" << endl;
     if (led_ctrl != led_out_o)
       cerr << "ERROR: LED control not matching LED output" << endl;
-    else
-      cout << "OKAY" << endl;
 
     cout << "- Check build info status register" << endl;
     cout << "status_git_hash   : " << hex << status_git_hash_o << endl;
