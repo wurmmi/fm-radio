@@ -80,6 +80,8 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
 
 #pragma HLS INTERFACE axis port = iq_in
 #pragma HLS DATA_PACK variable  = iq_in
+
+/** NOTE: this does not have any effect on the generated HDL ... */
 #pragma HLS STREAM depth = 32 variable = iq_in
 
 #pragma HLS INTERFACE axis port = audio_out

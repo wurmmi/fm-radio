@@ -16,7 +16,6 @@
 #include "channel_decoder/recover_mono.hpp"
 #include "channel_decoder/separate_lr_audio.hpp"
 #include "fm_receiver.hpp"
-#include "utils/decimator.hpp"
 
 using namespace std;
 
@@ -26,35 +25,37 @@ void channel_decoder(sample_t const& in_sample,
   // ------------------------------------------------------
   // Recover carriers
   // ------------------------------------------------------
+
   sample_t carrier_38k;
   sample_t carrier_57k;
-  recover_carriers(in_sample, carrier_38k, carrier_57k);
+  sample_t audio_mono;
+  sample_t audio_lrdiff;
 
-  // ------------------------------------------------------
-  // Recover mono audio
-  // ------------------------------------------------------
-  sample_t audio_mono = recover_mono(in_sample);
+  for (uint32_t i = 0; i < OSR_AUDIO; i++) {
+    recover_carriers(in_sample, carrier_38k, carrier_57k);
 
-  // ------------------------------------------------------
-  // Recover LR diff audio
-  // ------------------------------------------------------
-  sample_t audio_lrdiff = recover_lrdiff(in_sample, carrier_38k);
+    // ------------------------------------------------------
+    // Recover mono audio
+    // ------------------------------------------------------
+    audio_mono = recover_mono(in_sample);
+
+    // ------------------------------------------------------
+    // Recover LR diff audio
+    // ------------------------------------------------------
+    audio_lrdiff = recover_lrdiff(in_sample, carrier_38k);
+  }
 
   // ------------------------------------------------------
   // Decimate
   // ------------------------------------------------------
 
   // mono audio
-  sample_t audio_mono_dec;
-  bool audio_mono_dec_valid;
-  static DECIMATOR<OSR_AUDIO> decimator_mono_audio;
-  decimator_mono_audio(audio_mono, audio_mono_dec, audio_mono_dec_valid);
+  sample_t audio_mono_dec   = audio_mono;
+  bool audio_mono_dec_valid = true;
 
   // LR diff audio
-  sample_t audio_lrdiff_dec;
-  static DECIMATOR<OSR_AUDIO> decimator_lrdiff;
-  bool audio_lrdiff_dec_valid;
-  decimator_lrdiff(audio_lrdiff, audio_lrdiff_dec, audio_lrdiff_dec_valid);
+  sample_t audio_lrdiff_dec   = audio_lrdiff;
+  bool audio_lrdiff_dec_valid = true;
 
   // ------------------------------------------------------
   // Separate LR audio

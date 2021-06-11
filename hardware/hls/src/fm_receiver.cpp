@@ -30,7 +30,6 @@
 
 #include "../tb/helper/DataWriter.hpp"
 #include "channel_decoder.hpp"
-#include "utils/decimator.hpp"
 #include "utils/fm_demodulator.hpp"
 
 using namespace std;
@@ -43,17 +42,18 @@ void fm_receiver(sample_t const& in_i,
   // FM Demodulator
   // ------------------------------------------------------
 
-  iq_sample_t iq    = {in_i, in_q};
-  sample_t fm_demod = fm_demodulator(iq);
+  sample_t fm_demod;
+  for (uint32_t i = 0; i < OSR_RX; i++) {
+    iq_sample_t iq = {in_i, in_q};
+    fm_demod       = fm_demodulator(iq);
+  }
 
   // ------------------------------------------------------
   // Decimator
   // ------------------------------------------------------
 
-  sample_t fm_channel_data;
-  bool fm_channel_data_valid;
-  static DECIMATOR<OSR_RX> decimator;
-  decimator(fm_demod, fm_channel_data, fm_channel_data_valid);
+  sample_t fm_channel_data   = fm_demod;
+  bool fm_channel_data_valid = true;
 
   if (fm_channel_data_valid) {
     // ------------------------------------------------------
