@@ -53,6 +53,27 @@ int main() {
     cout << "num_samples_rx    = " << num_samples_rx_c << endl;
     cout << "num_samples_audio = " << num_samples_audio_c << endl;
 
+    /*--- Load data directly (from Matlab *.txt file) ---*/
+
+    // Load file data
+    const string filename_txt = data_dir_verification + "rx_fm_bb.txt";
+    vector<sample_t> data_in_iq =
+        DataLoader::loadDataFromFile(filename_txt, num_samples_fs_c * 2);
+
+    // Split interleaved I/Q samples
+    vector<iq_sample_t> vec_data_in;
+    hls::stream<iq_sample_t> stream_data_in;
+    iq_sample_t sample_in;
+    for (size_t i = 0; i < data_in_iq.size(); i += 2) {
+      // Samples I/Q are interleaved (take every other)
+      sample_in.i = data_in_iq[i];
+      sample_in.q = data_in_iq[i + 1];
+
+      // Fill stream
+      stream_data_in << sample_in;
+      vec_data_in.emplace_back(sample_in);
+    }
+
     /*--- Load data like firmware (from Matlab *.wav file) ---*/
 
     // Load file data
@@ -78,27 +99,6 @@ int main() {
       // Fill stream
       stream_data_wav_in << sample_wav_in;
       vec_data_wav_in.emplace_back(sample_wav_in);
-    }
-
-    /*--- Load data directly (from Matlab *.txt file) ---*/
-
-    // Load file data
-    const string filename_txt = data_dir_verification + "rx_fm_bb.txt";
-    vector<sample_t> data_in_iq =
-        DataLoader::loadDataFromFile(filename_txt, num_samples_fs_c * 2);
-
-    // Split interleaved I/Q samples
-    vector<iq_sample_t> vec_data_in;
-    hls::stream<iq_sample_t> stream_data_in;
-    iq_sample_t sample_in;
-    for (size_t i = 0; i < data_in_iq.size(); i += 2) {
-      // Samples I/Q are interleaved (take every other)
-      sample_in.i = data_in_iq[i];
-      sample_in.q = data_in_iq[i + 1];
-
-      // Fill stream
-      stream_data_in << sample_in;
-      vec_data_in.emplace_back(sample_in);
     }
 
     /*--- Compare the 2 data loading methods ---*/
