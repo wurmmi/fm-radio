@@ -43,6 +43,9 @@ clang-format off
 --       06/11/2021  09:00 - 17:00   08:00 h  Re-write the sample decimation.
 --                                            (process N samples from the stream; the last one is the decimated one)
 --
+-- (6) Switch mode between radio processing and pass-through
+--       06/13/2021  14:00 -         0x:00 h
+--
 clang-format on
 */
 
@@ -82,6 +85,7 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
                      config_t& config,
                      status_t* status,
                      uint8_t* led_out) {
+  /*----------- HLS interface settings ------------*/
 #pragma HLS INTERFACE ap_ctrl_hs port = return
 
 #pragma HLS INTERFACE axis port = iq_in
@@ -96,24 +100,14 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
 #pragma HLS INTERFACE ap_none port = status
 #pragma HLS INTERFACE ap_none port = led_out
 
-#if IMPL_DATA_FORWARDING_ONLY == 1
-  /*----------- Forwarding test --------------*/
-  iq_sample_t fw_iq_in = iq_in.read();
-
-  audio_sample_t fw_iq_out = {fw_iq_in.i, fw_iq_in.q};
-
-  audio_out.write(fw_iq_out);
-#endif /* IMPL_DATA_FORWARDING_ONLY */
-
-  /*-------------- Other testing -------------*/
-
+  /*------------ Other (testing) -------------*/
   /** NOTE: This is used to determine how often this function is called.
    *        Simulation: The toggle flag can be compared against the input clock.
    *        Hardware:   The toggle signal can be seen on an LED. */
   static bool toggle = false;
   toggle             = !toggle;
 
-  /*----------- AXILITE Interface ------------*/
+  /*----------- AXILITE interface ------------*/
   static const status_git_hash_t status_git_hash_c     = STRING(GIT_HASH);
   static const status_build_time_t status_build_time_c = STRING(BUILD_TIME);
 
@@ -122,19 +116,17 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
 
   *led_out = config.led_ctrl | (((uint8_t)toggle << 2));
 
-#if IMPL_FM_RADIO == 1
-  /*---------------- FM radio ----------------*/
+  if (config.enable_fm_radio_ip == 1) {
+    /*---------------- Mode: Pass-through ------------*/
 
-  // ------------------------------------------------------
-  // FM Receiver IP
-  // ------------------------------------------------------
+    iq_sample_t fw_iq_in     = iq_in.read();
+    audio_sample_t fw_iq_out = {fw_iq_in.i, fw_iq_in.q};
+    audio_out.write(fw_iq_out);
 
-  audio_sample_t audio_sample = fm_receiver(iq_in);
+  } else {
+    /*---------------- Mode: FM radio ----------------*/
 
-  // ------------------------------------------------------
-  // Output
-  // ------------------------------------------------------
-
-  audio_out.write(audio_sample);
-#endif /* IMPL_FM_RADIO */
+    audio_sample_t audio_sample = fm_receiver(iq_in);
+    audio_out.write(audio_sample);
+  }
 }

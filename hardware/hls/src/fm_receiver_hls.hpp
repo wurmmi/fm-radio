@@ -24,6 +24,7 @@ typedef ap_uint<REG_STATUS_BUILD_TIME_STRLEN * 4> status_build_time_t;
 
 typedef struct {
   uint8_t led_ctrl;
+  uint8_t enable_fm_radio_ip;
 } config_t;
 
 typedef struct {

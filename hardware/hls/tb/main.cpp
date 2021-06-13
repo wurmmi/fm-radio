@@ -177,8 +177,8 @@ int main() {
     hls::stream<audio_sample_t> stream_data_out;
     uint8_t led_out_o;
     status_t status_o;
-    config_t config;
-    config.led_ctrl = 0x3;
+    config_t config = {.led_ctrl = 0x3, .enable_fm_radio_ip = 1};
+
     while (!stream_data_in.empty()) {
       fm_receiver_hls(
           stream_data_in, stream_data_out, config, &status_o, &led_out_o);
