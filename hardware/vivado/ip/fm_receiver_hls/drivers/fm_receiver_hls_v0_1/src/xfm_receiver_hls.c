@@ -38,6 +38,23 @@ u32 XFm_receiver_hls_Get_config_led_ctrl(XFm_receiver_hls *InstancePtr) {
     return Data;
 }
 
+void XFm_receiver_hls_Set_config_enable_fm_radio_ip(XFm_receiver_hls *InstancePtr, u32 Data) {
+    Xil_AssertVoid(InstancePtr != NULL);
+    Xil_AssertVoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
+
+    XFm_receiver_hls_WriteReg(InstancePtr->Api_BaseAddress, XFM_RECEIVER_HLS_API_ADDR_CONFIG_ENABLE_FM_RADIO_IP_DATA, Data);
+}
+
+u32 XFm_receiver_hls_Get_config_enable_fm_radio_ip(XFm_receiver_hls *InstancePtr) {
+    u32 Data;
+
+    Xil_AssertNonvoid(InstancePtr != NULL);
+    Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
+
+    Data = XFm_receiver_hls_ReadReg(InstancePtr->Api_BaseAddress, XFM_RECEIVER_HLS_API_ADDR_CONFIG_ENABLE_FM_RADIO_IP_DATA);
+    return Data;
+}
+
 u32 XFm_receiver_hls_Get_status_git_hash_V(XFm_receiver_hls *InstancePtr) {
     u32 Data;
 

@@ -34,6 +34,7 @@ module fm_receiver_hls_API_s_axi
     input  wire                          RREADY,
     // user signals
     output wire [7:0]                    config_led_ctrl,
+    output wire [7:0]                    config_enable_fm_radio_ip,
     input  wire [27:0]                   status_git_hash_V,
     input  wire [47:0]                   status_build_time_V
 );
@@ -46,34 +47,40 @@ module fm_receiver_hls_API_s_axi
 //        bit 7~0 - config_led_ctrl[7:0] (Read/Write)
 //        others  - reserved
 // 0x14 : reserved
-// 0x18 : Data signal of status_git_hash_V
+// 0x18 : Data signal of config_enable_fm_radio_ip
+//        bit 7~0 - config_enable_fm_radio_ip[7:0] (Read/Write)
+//        others  - reserved
+// 0x1c : reserved
+// 0x20 : Data signal of status_git_hash_V
 //        bit 27~0 - status_git_hash_V[27:0] (Read)
 //        others   - reserved
-// 0x1c : reserved
-// 0x20 : Data signal of status_build_time_V
+// 0x24 : reserved
+// 0x28 : Data signal of status_build_time_V
 //        bit 31~0 - status_build_time_V[31:0] (Read)
-// 0x24 : Data signal of status_build_time_V
+// 0x2c : Data signal of status_build_time_V
 //        bit 15~0 - status_build_time_V[47:32] (Read)
 //        others   - reserved
-// 0x28 : reserved
+// 0x30 : reserved
 // (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
 
 //------------------------Parameter----------------------
 localparam
-    ADDR_CONFIG_LED_CTRL_DATA_0     = 6'h10,
-    ADDR_CONFIG_LED_CTRL_CTRL       = 6'h14,
-    ADDR_STATUS_GIT_HASH_V_DATA_0   = 6'h18,
-    ADDR_STATUS_GIT_HASH_V_CTRL     = 6'h1c,
-    ADDR_STATUS_BUILD_TIME_V_DATA_0 = 6'h20,
-    ADDR_STATUS_BUILD_TIME_V_DATA_1 = 6'h24,
-    ADDR_STATUS_BUILD_TIME_V_CTRL   = 6'h28,
-    WRIDLE                          = 2'd0,
-    WRDATA                          = 2'd1,
-    WRRESP                          = 2'd2,
-    WRRESET                         = 2'd3,
-    RDIDLE                          = 2'd0,
-    RDDATA                          = 2'd1,
-    RDRESET                         = 2'd2,
+    ADDR_CONFIG_LED_CTRL_DATA_0           = 6'h10,
+    ADDR_CONFIG_LED_CTRL_CTRL             = 6'h14,
+    ADDR_CONFIG_ENABLE_FM_RADIO_IP_DATA_0 = 6'h18,
+    ADDR_CONFIG_ENABLE_FM_RADIO_IP_CTRL   = 6'h1c,
+    ADDR_STATUS_GIT_HASH_V_DATA_0         = 6'h20,
+    ADDR_STATUS_GIT_HASH_V_CTRL           = 6'h24,
+    ADDR_STATUS_BUILD_TIME_V_DATA_0       = 6'h28,
+    ADDR_STATUS_BUILD_TIME_V_DATA_1       = 6'h2c,
+    ADDR_STATUS_BUILD_TIME_V_CTRL         = 6'h30,
+    WRIDLE                                = 2'd0,
+    WRDATA                                = 2'd1,
+    WRRESP                                = 2'd2,
+    WRRESET                               = 2'd3,
+    RDIDLE                                = 2'd0,
+    RDDATA                                = 2'd1,
+    RDRESET                               = 2'd2,
     ADDR_BITS         = 6;
 
 //------------------------Local signal-------------------
@@ -90,6 +97,7 @@ localparam
     wire [ADDR_BITS-1:0]          raddr;
     // internal registers
     reg  [7:0]                    int_config_led_ctrl = 'b0;
+    reg  [7:0]                    int_config_enable_fm_radio_ip = 'b0;
     reg  [27:0]                   int_status_git_hash_V = 'b0;
     reg  [47:0]                   int_status_build_time_V = 'b0;
 
@@ -186,6 +194,9 @@ always @(posedge ACLK) begin
                 ADDR_CONFIG_LED_CTRL_DATA_0: begin
                     rdata <= int_config_led_ctrl[7:0];
                 end
+                ADDR_CONFIG_ENABLE_FM_RADIO_IP_DATA_0: begin
+                    rdata <= int_config_enable_fm_radio_ip[7:0];
+                end
                 ADDR_STATUS_GIT_HASH_V_DATA_0: begin
                     rdata <= int_status_git_hash_V[27:0];
                 end
@@ -202,7 +213,8 @@ end
 
 
 //------------------------Register logic-----------------
-assign config_led_ctrl = int_config_led_ctrl;
+assign config_led_ctrl           = int_config_led_ctrl;
+assign config_enable_fm_radio_ip = int_config_enable_fm_radio_ip;
 // int_config_led_ctrl[7:0]
 always @(posedge ACLK) begin
     if (ARESET)
@@ -210,6 +222,16 @@ always @(posedge ACLK) begin
     else if (ACLK_EN) begin
         if (w_hs && waddr == ADDR_CONFIG_LED_CTRL_DATA_0)
             int_config_led_ctrl[7:0] <= (WDATA[31:0] & wmask) | (int_config_led_ctrl[7:0] & ~wmask);
+    end
+end
+
+// int_config_enable_fm_radio_ip[7:0]
+always @(posedge ACLK) begin
+    if (ARESET)
+        int_config_enable_fm_radio_ip[7:0] <= 0;
+    else if (ACLK_EN) begin
+        if (w_hs && waddr == ADDR_CONFIG_ENABLE_FM_RADIO_IP_DATA_0)
+            int_config_enable_fm_radio_ip[7:0] <= (WDATA[31:0] & wmask) | (int_config_enable_fm_radio_ip[7:0] & ~wmask);
     end
 end
 

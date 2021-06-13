@@ -83,6 +83,8 @@ int XFm_receiver_hls_Release(XFm_receiver_hls *InstancePtr);
 
 void XFm_receiver_hls_Set_config_led_ctrl(XFm_receiver_hls *InstancePtr, u32 Data);
 u32 XFm_receiver_hls_Get_config_led_ctrl(XFm_receiver_hls *InstancePtr);
+void XFm_receiver_hls_Set_config_enable_fm_radio_ip(XFm_receiver_hls *InstancePtr, u32 Data);
+u32 XFm_receiver_hls_Get_config_enable_fm_radio_ip(XFm_receiver_hls *InstancePtr);
 u32 XFm_receiver_hls_Get_status_git_hash_V(XFm_receiver_hls *InstancePtr);
 u64 XFm_receiver_hls_Get_status_build_time_V(XFm_receiver_hls *InstancePtr);
 
