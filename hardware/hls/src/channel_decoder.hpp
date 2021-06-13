@@ -13,7 +13,6 @@
 
 #include "fm_global.hpp"
 
-void channel_decoder(hls::stream<sample_t>& in_sample,
-                     audio_sample_t& out_audio);
+audio_sample_t channel_decoder(hls::stream<sample_t>& in_sample);
 
 #endif /* _CHANNEL_DECODER_HPP */

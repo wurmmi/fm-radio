@@ -13,6 +13,6 @@
 
 #include "fm_global.hpp"
 
-void fm_receiver(hls::stream<iq_sample_t>& iq_in, audio_sample_t& out_audio);
+audio_sample_t fm_receiver(hls::stream<iq_sample_t>& iq_in);
 
 #endif /* _FM_RECEIVER_HPP */

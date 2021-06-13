@@ -19,8 +19,7 @@
 
 using namespace std;
 
-void channel_decoder(hls::stream<sample_t>& in_sample,
-                     audio_sample_t& out_audio) {
+audio_sample_t channel_decoder(hls::stream<sample_t>& in_sample) {
   sample_t carrier_38k;
   sample_t carrier_57k;
   sample_t audio_mono;
@@ -65,14 +64,7 @@ void channel_decoder(hls::stream<sample_t>& in_sample,
   // ------------------------------------------------------
   // Separate LR audio
   // ------------------------------------------------------
-  audio_sample_t audio;
-  separate_lr_audio(audio_mono, audio_lrdiff, audio);
-
-  // ------------------------------------------------------
-  // Output
-  // ------------------------------------------------------
-
-  out_audio = audio;
+  audio_sample_t audio = separate_lr_audio(audio_mono, audio_lrdiff);
 
   // ------------------------------------------------------
   // Debug
@@ -91,4 +83,10 @@ void channel_decoder(hls::stream<sample_t>& in_sample,
   static DataWriter writer_data_out_audio_R("data_out_audio_R.txt");
   writer_data_out_audio_R.write(audio.R);
 #endif
+
+  // ------------------------------------------------------
+  // Output
+  // ------------------------------------------------------
+
+  return audio;
 }
