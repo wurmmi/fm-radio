@@ -275,8 +275,8 @@ wire  signed [15:0] p_Val2_i_fu_490_p2;
 wire  signed [29:0] p_Val2_7_fu_626_p2;
 wire  signed [15:0] p_Val2_7_i_fu_484_p2;
 wire  signed [29:0] p_Val2_8_fu_633_p2;
-wire   [15:0] out_audio_L_V_write_s_fu_547_p2;
-wire   [15:0] out_audio_R_V_write_s_fu_553_p2;
+wire   [15:0] agg_result_L_V_write_fu_547_p2;
+wire   [15:0] agg_result_R_V_write_fu_553_p2;
 wire   [15:0] tmp_3_fu_571_p2;
 wire   [15:0] p_Val2_i_i_fu_577_p2;
 wire   [29:0] p_Val2_2_fu_587_p3;
@@ -572,7 +572,7 @@ always @ (posedge ap_clk) begin
         ap_return_0_preg <= 16'd0;
     end else begin
         if (((tmp_i_fu_535_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-            ap_return_0_preg <= out_audio_L_V_write_s_fu_547_p2;
+            ap_return_0_preg <= agg_result_L_V_write_fu_547_p2;
         end
     end
 end
@@ -582,7 +582,7 @@ always @ (posedge ap_clk) begin
         ap_return_1_preg <= 16'd0;
     end else begin
         if (((tmp_i_fu_535_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-            ap_return_1_preg <= out_audio_R_V_write_s_fu_553_p2;
+            ap_return_1_preg <= agg_result_R_V_write_fu_553_p2;
         end
     end
 end
@@ -871,7 +871,7 @@ end
 
 always @ (*) begin
     if (((tmp_i_fu_535_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-        ap_return_0 = out_audio_L_V_write_s_fu_547_p2;
+        ap_return_0 = agg_result_L_V_write_fu_547_p2;
     end else begin
         ap_return_0 = ap_return_0_preg;
     end
@@ -879,7 +879,7 @@ end
 
 always @ (*) begin
     if (((tmp_i_fu_535_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-        ap_return_1 = out_audio_R_V_write_s_fu_553_p2;
+        ap_return_1 = agg_result_R_V_write_fu_553_p2;
     end else begin
         ap_return_1 = ap_return_1_preg;
     end
@@ -1592,6 +1592,10 @@ assign OP1_V_cast_fu_640_p1 = tmp_1_fu_583_p1;
 
 assign addconv_i_i_fu_594_p2 = ($signed(30'd872415232) + $signed(p_Val2_2_fu_587_p3));
 
+assign agg_result_L_V_write_fu_547_p2 = (p_Val2_3_reg_377 + p_Val2_s_reg_366);
+
+assign agg_result_R_V_write_fu_553_p2 = (p_Val2_s_reg_366 - p_Val2_3_reg_377);
+
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
 assign ap_CS_fsm_state10 = ap_CS_fsm[32'd9];
@@ -1697,10 +1701,6 @@ assign i_1_fu_446_p2 = (i_reg_344 + 2'd1);
 assign i_2_fu_541_p2 = (i_i_reg_388 + 2'd1);
 
 assign k_1_fu_458_p2 = (k_reg_355 + 4'd1);
-
-assign out_audio_L_V_write_s_fu_547_p2 = (p_Val2_3_reg_377 + p_Val2_s_reg_366);
-
-assign out_audio_R_V_write_s_fu_553_p2 = (p_Val2_s_reg_366 - p_Val2_3_reg_377);
 
 assign p_Val2_2_fu_587_p3 = {{OP1_V_cast_reg_883}, {1'd0}};
 
