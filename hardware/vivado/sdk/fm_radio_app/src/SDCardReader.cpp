@@ -41,6 +41,7 @@ bool SDCardReader::FoundFiles() {
 }
 
 bool SDCardReader::MountSDCard(uint8_t num_retries) {
+  mFilenames.clear();
   while (num_retries--) {
     LOG_DEBUG("Mounting SD Card");
     FRESULT result = f_mount(&mFilesystem, LOGICAL_DRIVE_0, 1);
@@ -69,6 +70,7 @@ void SDCardReader::DiscoverFiles() {
   }
 
   LOG_DEBUG("Discovering files: ");
+  mFilenames.clear();
   do {
     FILINFO fno;
     res = f_readdir(&dir, &fno);

@@ -37,33 +37,33 @@ bool FMRadioIP::Initialize() {
 }
 
 void FMRadioIP::LED_SetOn(TLed led) {
-  uint32_t state = XFm_receiver_hls_Get_led_ctrl(&mDev);
+  uint32_t state = XFm_receiver_hls_Get_config_led_ctrl(&mDev);
 
   state |= (1 << (uint8_t)led);
   if (led == TLed::ALL)
     state = 0xFF;
 
-  XFm_receiver_hls_Set_led_ctrl(&mDev, state);
+  XFm_receiver_hls_Set_config_led_ctrl(&mDev, state);
 }
 
 void FMRadioIP::LED_Toggle(TLed led) {
-  uint32_t state = XFm_receiver_hls_Get_led_ctrl(&mDev);
+  uint32_t state = XFm_receiver_hls_Get_config_led_ctrl(&mDev);
 
   state ^= (1 << (uint8_t)led);
   if (led == TLed::ALL)
     state ^= 0xFF;
 
-  XFm_receiver_hls_Set_led_ctrl(&mDev, state);
+  XFm_receiver_hls_Set_config_led_ctrl(&mDev, state);
 }
 
 void FMRadioIP::LED_SetOff(TLed led) {
-  uint32_t state = XFm_receiver_hls_Get_led_ctrl(&mDev);
+  uint32_t state = XFm_receiver_hls_Get_config_led_ctrl(&mDev);
 
   state &= ~(1 << (uint8_t)led);
   if (led == TLed::ALL)
     state = 0x0;
 
-  XFm_receiver_hls_Set_led_ctrl(&mDev, state);
+  XFm_receiver_hls_Set_config_led_ctrl(&mDev, state);
 }
 
 string FMRadioIP::UintToHexString(uint64_t num) {
