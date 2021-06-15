@@ -11,14 +11,17 @@
 
 #include "AudioHandler.h"
 #include "FMRadioIP.h"
+#include "MenuControl.h"
 #include "log.h"
 
 using namespace std;
 
-#define STACK_SIZE_TASK_AUDIO ((uint16_t)65535)
+#define STACK_SIZE_TASK_AUDIO     ((unsigned short)65535)
+#define STACK_SIZE_TASK_HEARTBEAT configMINIMAL_STACK_SIZE
 
 static TaskHandle_t task_heartbeat_handle;
 static TaskHandle_t task_audio_handle;
+
 static FMRadioIP fmRadioIP(XPAR_FM_RECEIVER_HLS_0_DEVICE_ID);
 
 static void task_heartbeat(void *) {
@@ -31,25 +34,8 @@ static void task_heartbeat(void *) {
 static void task_audio(void *) {
   AudioHandler audioHandler(&fmRadioIP);
 
+  MenuControl::PrintMainMenu();
   while (true) {
-    /* Show menu */
-    printf("-------------- FM RADIO MENU -----------------\n");
-    printf("MODE: PASS-THROUGH \n");
-    printf("   [p] ... play\n");
-    printf("   [s] ... stop\n");
-    printf("   [u] ... volume up\n");
-    printf("   [d] ... volume down\n");
-    printf("\n");
-    printf("MODE: FM RADIO \n");
-    printf("   [r] ... play\n");
-    printf("\n");
-    printf("GENERAL\n");
-    printf("   [c] ... print available filenames on SD card\n");
-    printf("   [i] ... show information\n");
-    printf("----------------------------------------------\n");
-    printf("Choice: ");
-    fflush(stdout);
-
     /* Process user input */
     char choice = inbyte();
     printf("%c\n", choice);
@@ -75,6 +61,9 @@ static void task_audio(void *) {
         LOG_INFO("DMA stopped.");
         break;
 
+      case 'm':
+        MenuControl::PrintMainMenu();
+        break;
       case 'c':
         audioHandler.ShowAvailableFiles();
         break;
@@ -105,7 +94,7 @@ int main() {
 
   xTaskCreate(task_heartbeat,
               (const char *)"task_heartbeat",
-              configMINIMAL_STACK_SIZE,
+              STACK_SIZE_TASK_HEARTBEAT,
               NULL,
               tskIDLE_PRIORITY,
               &task_heartbeat_handle);

@@ -74,38 +74,42 @@ void AudioHandler::ApplyVolume() {
   }
 }
 
+void AudioHandler::PrintVolumeInfo(string const& limit) {
+  string msg = "volume: " + to_string(mVolume) + limit;
+
+  if (mIsPlaying)
+    msg += " (STOP and START again to apply)";
+
+  LOG_INFO("%s", msg.c_str());
+}
+
 void AudioHandler::VolumeUp() {
   if (mFmRadioIP->GetMode() == TMode::FMRADIO) {
-    LOG_ERROR("volume settings only available in FM_RADIO mode!");
+    LOG_WARN("volume settings only available in FM_RADIO mode!");
     return;
   }
-
+  string limit = "";
   if (mVolume >= volume_max_c)
-    LOG_INFO("maximum volume reached");
+    limit = " (MAXIMUM)";
   else
     mVolume++;
 
-  if (!mIsPlaying)
-    LOG_INFO("volume: %d", mVolume);
-  else
-    LOG_INFO("volume: %d (STOP and START again to apply)", mVolume);
+  PrintVolumeInfo(limit);
 }
 
 void AudioHandler::VolumeDown() {
   if (mFmRadioIP->GetMode() == TMode::FMRADIO) {
-    LOG_ERROR("volume settings only available in FM_RADIO mode!");
+    LOG_WARN("volume settings only available in FM_RADIO mode!");
     return;
   }
 
+  string limit = "";
   if (mVolume <= volume_min_c)
-    LOG_INFO("minimum volume reached");
+    limit = " (MINIMUM)";
   else
     mVolume--;
 
-  if (!mIsPlaying)
-    LOG_INFO("volume: %d", mVolume);
-  else
-    LOG_INFO("volume: %d (STOP and START again to apply)", mVolume);
+  PrintVolumeInfo(limit);
 }
 
 void AudioHandler::PlayFile(std::string const& filename) {

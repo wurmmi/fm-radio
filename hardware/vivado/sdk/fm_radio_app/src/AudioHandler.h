@@ -32,6 +32,7 @@ class AudioHandler {
   bool Initialize();
   void FillAudioBuffer();
   void ApplyVolume();
+  void PrintVolumeInfo(std::string const& limit);
   void AudioStreamEmptyCallback();
 
  public:
