@@ -201,4 +201,22 @@ else
     error('Check settings.')
 end
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Amplitude limiter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+if EnableSenderAmplitudeLimiter
+    disp('-- Sender amplitude limiter');
+
+    max_real_before = max(real(rx_fm_bb));
+    max_imag_before = max(imag(rx_fm_bb));
+
+    rx_fm_bb = rx_fm_bb * SenderAmplitudeLimiterFactor;
+    
+    max_real_scaled = max(real(rx_fm_bb));
+    max_imag_scaled = max(imag(rx_fm_bb));
+    fprintf("REAL before: %f, after: %f\n", max_real_before, max_real_scaled);
+    fprintf("IMAG before: %f, after: %f\n", max_imag_before, max_imag_scaled);
+end
+
 disp('Done.');
