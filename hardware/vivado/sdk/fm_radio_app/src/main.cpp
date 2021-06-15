@@ -10,20 +10,18 @@
 #include <iostream>
 
 #include "AudioHandler.h"
-#include "AudioStreamDMA.h"
 #include "FMRadioIP.h"
-#include "SDCardReader.h"
 #include "log.h"
 
 using namespace std;
 
 #define STACK_SIZE_TASK_AUDIO ((uint16_t)65535)
 
-static TaskHandle_t task_loop_handle;
+static TaskHandle_t task_heartbeat_handle;
 static TaskHandle_t task_audio_handle;
 static FMRadioIP fmRadioIP(XPAR_FM_RECEIVER_HLS_0_DEVICE_ID);
 
-static void task_loop(void *) {
+static void task_heartbeat(void *) {
   while (true) {
     fmRadioIP.LED_Toggle(TLed::LED1);
     vTaskDelay(pdMS_TO_TICKS(1000));
@@ -32,8 +30,6 @@ static void task_loop(void *) {
 
 static void task_audio(void *) {
   AudioHandler audioHandler;
-  SDCardReader sdCardReader;
-  AudioStreamDMA streamDMA(XPAR_AXI_DMA_0_DEVICE_ID);
 
   while (true) {
     /* Show menu */
@@ -58,25 +54,25 @@ static void task_audio(void *) {
     DMABuffer buffer = {nullptr, 0};
     switch (choice) {
       case 'p': {
-        sdCardReader.LoadFile("cantina_band_44100.wav");
-        buffer = sdCardReader.GetBuffer();
-        streamDMA.TransmitBlob(buffer);
-        LOG_INFO("DMA playing in endless loop ...");
+        audioHandler.PlayFile("cantina_band_44100.wav");
       } break;
+      case 'u':
+        audioHandler.VolumeUp();
+        break;
+      case 'd':
+        audioHandler.VolumeDown();
+        break;
+
       case 'r': {
-        sdCardReader.LoadFile("rx_fm_bb.wav");
-        buffer = sdCardReader.GetBuffer();
-        streamDMA.TransmitBlob(buffer);
-        LOG_INFO("DMA playing in endless loop ...");
+        audioHandler.PlayFile("rx_fm_bb.wav");
       } break;
       case 's':
-        streamDMA.Stop();
+        audioHandler.Stop();
         LOG_INFO("DMA stopped.");
         break;
+
       case 'c':
-        sdCardReader.MountSDCard();
-        sdCardReader.DiscoverFiles();
-        sdCardReader.PrintAvailableFilenames();
+        audioHandler.ShowAvailableFiles();
         break;
       case 'i': {
         string build_time = fmRadioIP.GetBuildTime();
@@ -103,12 +99,12 @@ int main() {
   /*--- Program start ---*/
   LOG_INFO("Hello World!");
 
-  xTaskCreate(task_loop,
-              (const char *)"task_loop",
+  xTaskCreate(task_heartbeat,
+              (const char *)"task_heartbeat",
               configMINIMAL_STACK_SIZE,
               NULL,
               tskIDLE_PRIORITY,
-              &task_loop_handle);
+              &task_heartbeat_handle);
 
   xTaskCreate(task_audio,
               (const char *)"task_audio",

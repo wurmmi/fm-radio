@@ -48,8 +48,7 @@ DMABuffer FileReader::GetBuffer() {
 }
 
 void FileReader::PrepareBufferData() {
-  // Change the volume and swap left/right channel and polarity
-
+  // Swap left and right channel
   uint32_t* pSource = (uint32_t*)mBuffer.buffer;
   for (size_t i = 0; i < mBuffer.size / 4; i++) {
     // Split 32 bit into 2x 16 bit
@@ -62,16 +61,6 @@ void FileReader::PrepareBufferData() {
 
     left  = left * theVolume / 4;
     right = right * theVolume / 4;
-
-    // Limit amplitude to 16 bit
-    //    if (left > 32767)
-    //      left = 32767;
-    //    if (left < -32767)
-    //      left = -32767;
-    //    if (right > 32767)
-    //      right = 32767;
-    //    if (right < -32767)
-    //      right = -32767;
 
     // Combine to 32 bit again
     pSource[i] = ((uint32_t)right << 16) + (uint32_t)left;

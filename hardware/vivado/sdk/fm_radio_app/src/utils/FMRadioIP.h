@@ -12,6 +12,7 @@
 #include "xfm_receiver_hls.h"
 
 enum class TLed { LED1, LED2, LED3, LED4, LED5, LED6, LED7, ALL };
+enum class TMode : uint32_t { FMRADIO, PASSTHROUGH };
 
 class FMRadioIP {
  private:
@@ -31,6 +32,9 @@ class FMRadioIP {
 
   std::string GetGitHash();
   std::string GetBuildTime();
+
+  void SetMode(TMode mode);
+  TMode GetMode();
 };
 
 #endif /* _FMRADIOIP_H_ */
