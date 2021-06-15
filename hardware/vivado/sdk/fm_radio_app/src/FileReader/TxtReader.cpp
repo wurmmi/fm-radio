@@ -70,6 +70,4 @@ void TxtReader::LoadFile(string const& filename) {
   LOG_DEBUG("Done.");
   LOG_DEBUG(
       "Read %zu bytes from TXT file '%s'", mBuffer.size, filename.c_str());
-
-  PrepareBufferData();
 }

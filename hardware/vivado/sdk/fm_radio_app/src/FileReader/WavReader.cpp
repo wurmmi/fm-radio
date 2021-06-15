@@ -166,6 +166,4 @@ void WavReader::LoadFile(string const& filename) {
       num_unknown_chunks,
       num_fmt_chunks,
       num_data_chunks);
-
-  PrepareBufferData();
 }

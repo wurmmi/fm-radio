@@ -51,7 +51,6 @@ static void task_audio(void *) {
     char choice = inbyte();
     printf("%c\n", choice);
 
-    DMABuffer buffer = {nullptr, 0};
     switch (choice) {
       case 'p': {
         audioHandler.PlayFile("cantina_band_44100.wav");

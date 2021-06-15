@@ -18,7 +18,7 @@
 using namespace std;
 
 AudioHandler::AudioHandler() : mStreamDMA(XPAR_AXI_DMA_0_DEVICE_ID) {
-  mVolume = 1;
+  mVolume = volume_default_c;
 
   Initialize();
   FillAudioBuffer();
@@ -46,18 +46,44 @@ void AudioHandler::FillAudioBuffer() {
   }
 }
 
+void AudioHandler::ApplyVolume() {
+  auto buffer = mSdCardReader.GetBuffer();
+  if (buffer.buffer == nullptr) {
+    LOG_ERROR("no file loaded yet");
+    return;
+  }
+
+  // Apply volume (and swap left and right channel)
+  uint32_t* pSource = (uint32_t*)buffer.buffer;
+  for (size_t i = 0; i < buffer.size / 4; i++) {
+    // Split 32 bit into 2x 16 bit
+    int16_t left  = (int16_t)((pSource[i] >> 16) & 0xFFFF);
+    int16_t right = (int16_t)((pSource[i] >> 0) & 0xFFFF);
+
+    // Adapt volume
+    left  = left * mVolume / 4;
+    right = right * mVolume / 4;
+
+    // Combine to 32 bit again
+    pSource[i] = ((uint32_t)right << 16) + (uint32_t)left;
+  }
+}
+
 void AudioHandler::VolumeUp() {
   if (mVolume >= volume_max_c)
     LOG_INFO("maximum volume reached (%d)", mVolume);
   else
     mVolume++;
+  ApplyVolume();
   LOG_INFO("volume: %d", mVolume);
 }
+
 void AudioHandler::VolumeDown() {
   if (mVolume <= volume_min_c)
     LOG_INFO("minimum volume reached (%d)", mVolume);
   else
     mVolume--;
+  ApplyVolume();
   LOG_INFO("volume: %d", mVolume);
 }
 

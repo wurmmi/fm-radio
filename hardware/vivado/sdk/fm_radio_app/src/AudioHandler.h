@@ -22,11 +22,13 @@ class AudioHandler {
   AudioStreamDMA mStreamDMA;
   uint16_t mVolume;
 
-  uint16_t const volume_max_c = 4;
-  uint16_t const volume_min_c = 1;
+  uint16_t const volume_default_c = 4;
+  uint16_t const volume_max_c     = 4;
+  uint16_t const volume_min_c     = 1;
 
   bool Initialize();
   void FillAudioBuffer();
+  void ApplyVolume();
   void AudioStreamEmptyCallback();
 
  public:

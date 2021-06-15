@@ -47,26 +47,6 @@ DMABuffer FileReader::GetBuffer() {
   return mBuffer;
 }
 
-void FileReader::PrepareBufferData() {
-  // Swap left and right channel
-  uint32_t* pSource = (uint32_t*)mBuffer.buffer;
-  for (size_t i = 0; i < mBuffer.size / 4; i++) {
-    // Split 32 bit into 2x 16 bit
-    int16_t left  = (int16_t)((pSource[i] >> 16) & 0xFFFF);
-    int16_t right = (int16_t)((pSource[i] >> 0) & 0xFFFF);
-
-    // Adapt volume
-    /** NOTE: could be an Axilite parameter in the future*/
-    const int theVolume = 4;
-
-    left  = left * theVolume / 4;
-    right = right * theVolume / 4;
-
-    // Combine to 32 bit again
-    pSource[i] = ((uint32_t)right << 16) + (uint32_t)left;
-  }
-}
-
 bool FileReader::FileOpen(std::string const& filename) {
 #ifdef __CSIM__
   mFile = fopen(filename.c_str(), "r");

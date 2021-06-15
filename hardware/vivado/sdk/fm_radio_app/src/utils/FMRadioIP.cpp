@@ -112,7 +112,8 @@ string FMRadioIP::GetBuildTime() {
 }
 
 void FMRadioIP::SetMode(TMode mode) {
-  XFm_receiver_hls_Set_config_enable_fm_radio_ip(&mDev, mode);
+  XFm_receiver_hls_Set_config_enable_fm_radio_ip(&mDev,
+                                                 static_cast<uint32_t>(mode));
 }
 
 TMode FMRadioIP::GetMode() {
