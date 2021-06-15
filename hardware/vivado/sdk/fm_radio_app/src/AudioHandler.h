@@ -12,6 +12,7 @@
 #include "ADAU1761.h"
 #include "AudioStreamDMA.h"
 #include "FIFO.h"
+#include "FMRadioIP.h"
 #include "SDCardReader.h"
 
 class AudioHandler {
@@ -20,6 +21,7 @@ class AudioHandler {
   audio_buffer_t mAudioBuffer;
   SDCardReader mSdCardReader;
   AudioStreamDMA mStreamDMA;
+  FMRadioIP* mFmRadioIP;
   uint16_t mVolume;
 
   uint16_t const volume_default_c = 4;
@@ -32,7 +34,7 @@ class AudioHandler {
   void AudioStreamEmptyCallback();
 
  public:
-  AudioHandler();
+  AudioHandler(FMRadioIP* radioIP);
   ~AudioHandler();
 
   void VolumeUp();

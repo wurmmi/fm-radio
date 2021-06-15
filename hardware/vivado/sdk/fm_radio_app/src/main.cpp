@@ -29,7 +29,7 @@ static void task_heartbeat(void *) {
 }
 
 static void task_audio(void *) {
-  AudioHandler audioHandler;
+  AudioHandler audioHandler(&fmRadioIP);
 
   while (true) {
     /* Show menu */
@@ -53,6 +53,7 @@ static void task_audio(void *) {
 
     switch (choice) {
       case 'p': {
+        fmRadioIP.SetMode(TMode::PASSTHROUGH);
         audioHandler.PlayFile("cantina_band_44100.wav");
       } break;
       case 'u':
@@ -63,6 +64,7 @@ static void task_audio(void *) {
         break;
 
       case 'r': {
+        fmRadioIP.SetMode(TMode::FMRADIO);
         audioHandler.PlayFile("rx_fm_bb.wav");
       } break;
       case 's':
