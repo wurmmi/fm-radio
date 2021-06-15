@@ -23,6 +23,7 @@ AudioHandler::AudioHandler(FMRadioIP* radioIP)
   assert(radioIP);
   mFmRadioIP = radioIP;
   mVolume    = volume_default_c;
+  mIsPlaying = false;
 
   Initialize();
   FillAudioBuffer();
@@ -83,7 +84,11 @@ void AudioHandler::VolumeUp() {
     LOG_INFO("maximum volume reached");
   else
     mVolume++;
-  LOG_INFO("volume: %d", mVolume);
+
+  if (!mIsPlaying)
+    LOG_INFO("volume: %d", mVolume);
+  else
+    LOG_INFO("volume: %d (STOP and START again to apply)", mVolume);
 }
 
 void AudioHandler::VolumeDown() {
@@ -96,7 +101,11 @@ void AudioHandler::VolumeDown() {
     LOG_INFO("minimum volume reached");
   else
     mVolume--;
-  LOG_INFO("volume: %d", mVolume);
+
+  if (!mIsPlaying)
+    LOG_INFO("volume: %d", mVolume);
+  else
+    LOG_INFO("volume: %d (STOP and START again to apply)", mVolume);
 }
 
 void AudioHandler::PlayFile(std::string const& filename) {
@@ -105,11 +114,13 @@ void AudioHandler::PlayFile(std::string const& filename) {
     ApplyVolume();
   auto buffer = mSdCardReader.GetBuffer();
   mStreamDMA.TransmitBlob(buffer);
+  mIsPlaying = true;
   LOG_INFO("DMA playing in endless loop ...");
 }
 
 void AudioHandler::Stop() {
   mStreamDMA.Stop();
+  mIsPlaying = false;
   LOG_INFO("DMA stopped.");
 }
 

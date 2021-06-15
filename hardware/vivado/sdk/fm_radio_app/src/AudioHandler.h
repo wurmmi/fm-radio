@@ -23,6 +23,7 @@ class AudioHandler {
   AudioStreamDMA mStreamDMA;
   FMRadioIP* mFmRadioIP;
   uint16_t mVolume;
+  bool mIsPlaying;
 
   uint16_t const volume_default_c = 4;
   uint16_t const volume_max_c     = 4;

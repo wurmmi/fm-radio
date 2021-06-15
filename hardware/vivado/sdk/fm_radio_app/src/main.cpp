@@ -34,15 +34,18 @@ static void task_audio(void *) {
   while (true) {
     /* Show menu */
     printf("-------------- FM RADIO MENU -----------------\n");
-    printf("[p] ... play audio  (pass-through)\n");
-    printf("[u] ... volume up   (pass-through)\n");
-    printf("[d] ... volume down (pass-through)\n");
+    printf("MODE: PASS-THROUGH \n");
+    printf("   [p] ... play\n");
+    printf("   [s] ... stop\n");
+    printf("   [u] ... volume up\n");
+    printf("   [d] ... volume down\n");
     printf("\n");
-    printf("[r] ... play radio  (FM Radio)\n");
-    printf("[s] ... stop\n");
+    printf("MODE: FM RADIO \n");
+    printf("   [r] ... play\n");
     printf("\n");
-    printf("[c] ... print available filenames on SD card\n");
-    printf("[i] ... show information\n");
+    printf("GENERAL\n");
+    printf("   [c] ... print available filenames on SD card\n");
+    printf("   [i] ... show information\n");
     printf("----------------------------------------------\n");
     printf("Choice: ");
     fflush(stdout);
