@@ -20,13 +20,13 @@ TxtReader::TxtReader() {}
 
 TxtReader::~TxtReader() {}
 
-void TxtReader::LoadFile(string const& filename) {
+bool TxtReader::LoadFile(string const& filename) {
   /* Get file size info */
   FILINFO fileInfo;
   FRESULT fres = f_stat(filename.c_str(), &fileInfo);
   if (fres) {
     LOG_ERROR("Error opening file with f_stat! (error: %d)", fres);
-    return;
+    return false;
   }
   uint32_t fileSize = fileInfo.fsize;
 
@@ -34,7 +34,7 @@ void TxtReader::LoadFile(string const& filename) {
   fres = f_open(&mFile, filename.c_str(), FA_READ);
   if (fres) {
     LOG_ERROR("Error opening file! (error: %d)", fres);
-    return;
+    return false;
   }
 
   /* Load entire file at once */
@@ -48,7 +48,7 @@ void TxtReader::LoadFile(string const& filename) {
     f_close(&mFile);
     delete[] mBuffer.buffer;
     mBuffer = {nullptr, 0};
-    return;
+    return false;
   }
 
   /* Sanity checks */
@@ -59,7 +59,7 @@ void TxtReader::LoadFile(string const& filename) {
     f_close(&mFile);
     delete[] mBuffer.buffer;
     mBuffer = {nullptr, 0};
-    return;
+    return false;
   }
   mBuffer.size = fileSize;
 
@@ -70,4 +70,6 @@ void TxtReader::LoadFile(string const& filename) {
   LOG_DEBUG("Done.");
   LOG_DEBUG(
       "Read %zu bytes from TXT file '%s'", mBuffer.size, filename.c_str());
+
+  return true;
 }

@@ -52,9 +52,13 @@ static void task_audio(void *) {
         audioHandler.VolumeDown();
         break;
 
+      case 'x': {
+        fmRadioIP.SetMode(TMode::FMRADIO);
+        audioHandler.PlayFile("over_rx_fm_bb.wav");
+      } break;
       case 'r': {
         fmRadioIP.SetMode(TMode::FMRADIO);
-        audioHandler.PlayFile("rx_fm_bb.wav");
+        audioHandler.PlayFile("limit_rx_fm_bb.wav");
       } break;
       case 's':
         audioHandler.Stop();

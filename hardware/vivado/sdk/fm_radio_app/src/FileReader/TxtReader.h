@@ -17,7 +17,7 @@ class TxtReader : public FileReader {
   TxtReader();
   ~TxtReader();
 
-  void LoadFile(std::string const& filename) override;
+  bool LoadFile(std::string const& filename) override;
 };
 
 #endif /* _TXTREADER_H_ */

@@ -113,7 +113,10 @@ void AudioHandler::VolumeDown() {
 }
 
 void AudioHandler::PlayFile(std::string const& filename) {
-  mSdCardReader.LoadFile(filename);
+  bool success = mSdCardReader.LoadFile(filename);
+  if (!success)
+    return;
+
   if (mFmRadioIP->GetMode() == TMode::PASSTHROUGH)
     ApplyVolume();
   auto buffer = mSdCardReader.GetBuffer();

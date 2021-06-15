@@ -122,9 +122,9 @@ string SDCardReader::GetShortFilename(string const& filename) {
   return short_name;
 }
 
-void SDCardReader::LoadFile(string const& filename) {
+bool SDCardReader::LoadFile(string const& filename) {
   if (!IsMounted() || !FoundFiles()) {
-    return;
+    return false;
   }
 
   // Check if this filename was previously discovered
@@ -132,21 +132,22 @@ void SDCardReader::LoadFile(string const& filename) {
   auto iter = find(mFilenames.cbegin(), mFilenames.cend(), filename_short);
   if (iter == mFilenames.cend()) {
     LOG_ERROR("File '%s' does not exist.", filename_short.c_str());
-    return;
+    return false;
   }
 
   // Handle file depending on its type
   FileType fileType = FileReader::GetFileType(filename);
 
+  bool success = false;
   switch (fileType) {
     case FileType::WAV: {
       mFileReader = new WavReader();
-      mFileReader->LoadFile(filename_short);
+      success     = mFileReader->LoadFile(filename_short);
     } break;
     case FileType::TXT:
       LOG_INFO("Reading TXT file '%s' ...", filename.c_str());
       mFileReader = new TxtReader();
-      mFileReader->LoadFile(filename_short);
+      success     = mFileReader->LoadFile(filename_short);
       break;
 
     case FileType::UNKNOWN:
@@ -154,8 +155,13 @@ void SDCardReader::LoadFile(string const& filename) {
       LOG_ERROR("Unknown filetype of file: %s (short: %s)",
                 filename.c_str(),
                 filename_short.c_str());
+      success = false;
       break;
   }
+
+  if (!success)
+    LOG_ERROR("Could not load file!");
+  return success;
 }
 
 void SDCardReader::PrintAvailableFilenames() const {

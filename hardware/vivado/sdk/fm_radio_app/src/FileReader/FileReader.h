@@ -45,7 +45,7 @@ class FileReader {
 
   static FileType GetFileType(std::string const& filename);
 
-  virtual void LoadFile(std::string const& filename) = 0;
+  virtual bool LoadFile(std::string const& filename) = 0;
   DMABuffer GetBuffer();
 };
 
