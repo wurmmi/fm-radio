@@ -6,10 +6,10 @@
 
 
 import cocotb
+import fm_global as fm_global
 import helpers as helper
 from cocotb.triggers import RisingEdge, Timer
-from cocotbext.axi4stream.drivers import Axi4StreamMaster
-from fm_global import *
+from cocotbext.axi4stream.drivers import Axi4StreamMaster, Axi4StreamSlave
 from fm_receiver_model import FM_RECEIVER_MODEL
 from tb_analyzer_helper import TB_ANALYZER_HELPER
 from tb_data_handler import TB_DATA_HANDLER
@@ -31,7 +31,7 @@ class FM_TB():
         self.n_sec = n_sec
 
         # Sanity checks
-        assert (self.CLOCK_FREQ_MHZ * 1e9 / fs_rx_c).is_integer(), \
+        assert (self.CLOCK_FREQ_MHZ * 1e9 / fm_global.fs_rx_c).is_integer(), \
             "Clock rate and fs_rx_c must have an integer relation!"
 
         # Instantiate model
@@ -68,8 +68,7 @@ class FM_TB():
                                self.dut.fm_receiver_inst.fm_demod,
                                self.dut.fm_receiver_inst.fm_demod_valid,
                                self.model.num_samples_fs_c,
-                               fp_width_c, fp_width_frac_c)
-
+                               fm_global.fp_width_c, fm_global.fp_width_frac_c)
         await sampler.read_vhdl_output(
             helper.get_dataset_by_name(self.tb_data_handler.data, 'fm_demod'))
 
@@ -79,7 +78,7 @@ class FM_TB():
                                self.dut.fm_receiver_inst.fm_channel_data,
                                self.dut.fm_receiver_inst.fm_channel_data_valid,
                                self.model.num_samples_rx_c,
-                               fp_width_c, fp_width_frac_c)
+                               fm_global.fp_width_c, fm_global.fp_width_frac_c)
 
         await sampler.read_vhdl_output(
             helper.get_dataset_by_name(self.tb_data_handler.data, 'fm_channel_data'))
@@ -90,7 +89,7 @@ class FM_TB():
                                self.dut.fm_receiver_inst.channel_decoder_inst.audio_mono,
                                self.dut.fm_receiver_inst.channel_decoder_inst.audio_mono_valid,
                                self.model.num_samples_audio_c,
-                               fp_width_c, fp_width_frac_c, 10)
+                               fm_global.fp_width_c, fm_global.fp_width_frac_c, 10)
 
         await sampler.read_vhdl_output(
             helper.get_dataset_by_name(self.tb_data_handler.data, 'audio_mono'))
@@ -101,7 +100,7 @@ class FM_TB():
                                self.dut.fm_receiver_inst.channel_decoder_inst.recover_carriers_inst.pilot,
                                self.dut.fm_receiver_inst.channel_decoder_inst.recover_carriers_inst.pilot_valid,
                                self.model.num_samples_rx_c,
-                               fp_width_c, fp_width_frac_c)
+                               fm_global.fp_width_c, fm_global.fp_width_frac_c)
 
         await sampler.read_vhdl_output(
             helper.get_dataset_by_name(self.tb_data_handler.data, 'pilot'))
@@ -112,7 +111,7 @@ class FM_TB():
                                self.dut.fm_receiver_inst.channel_decoder_inst.recover_carriers_inst.carrier_38k,
                                self.dut.fm_receiver_inst.channel_decoder_inst.recover_carriers_inst.carrier_38k_valid,
                                self.model.num_samples_rx_c,
-                               fp_width_c, fp_width_frac_c)
+                               fm_global.fp_width_c, fm_global.fp_width_frac_c)
 
         await sampler.read_vhdl_output(
             helper.get_dataset_by_name(self.tb_data_handler.data, 'carrier_38k'))
@@ -123,7 +122,7 @@ class FM_TB():
                                self.dut.fm_receiver_inst.channel_decoder_inst.audio_lrdiff,
                                self.dut.fm_receiver_inst.channel_decoder_inst.audio_lrdiff_valid,
                                self.model.num_samples_audio_c,
-                               fp_width_c, fp_width_frac_c, 10)
+                               fm_global.fp_width_c, fm_global.fp_width_frac_c, 10)
 
         await sampler.read_vhdl_output(
             helper.get_dataset_by_name(self.tb_data_handler.data, 'audio_lrdiff'))
@@ -134,7 +133,7 @@ class FM_TB():
                                  self.dut.fm_receiver_inst.audio_L_o,
                                  self.dut.fm_receiver_inst.audio_valid_o,
                                  self.model.num_samples_audio_c,
-                                 fp_width_c, fp_width_frac_c, 10)
+                                 fm_global.fp_width_c, fm_global.fp_width_frac_c, 10)
 
         await sampler_L.read_vhdl_output(
             helper.get_dataset_by_name(self.tb_data_handler.data, 'audio_L'))
@@ -145,7 +144,7 @@ class FM_TB():
                                  self.dut.fm_receiver_inst.audio_R_o,
                                  self.dut.fm_receiver_inst.audio_valid_o,
                                  self.model.num_samples_audio_c,
-                                 fp_width_c, fp_width_frac_c, 10)
+                                 fm_global.fp_width_c, fm_global.fp_width_frac_c, 10)
 
         await sampler_R.read_vhdl_output(
             helper.get_dataset_by_name(self.tb_data_handler.data, 'audio_R'))
