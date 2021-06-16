@@ -34,9 +34,7 @@
 
 using namespace std;
 
-void fm_receiver(hls::stream<iq_sample_t>& iq_in,
-                 sample_t& out_audio_L,
-                 sample_t& out_audio_R) {
+audio_sample_t fm_receiver(hls::stream<iq_sample_t>& iq_in) {
   // ------------------------------------------------------
   // FM Demodulator (incl. decimator)
   // ------------------------------------------------------
@@ -73,14 +71,11 @@ void fm_receiver(hls::stream<iq_sample_t>& iq_in,
   // Channel decoder
   // ------------------------------------------------------
 
-  sample_t audio_L;
-  sample_t audio_R;
-  channel_decoder(fm_channel_data, audio_L, audio_R);
+  audio_sample_t audio_sample = channel_decoder(fm_channel_data);
 
   // ------------------------------------------------------
   // Output
   // ------------------------------------------------------
 
-  out_audio_L = audio_L;
-  out_audio_R = audio_R;
+  return audio_sample;
 }

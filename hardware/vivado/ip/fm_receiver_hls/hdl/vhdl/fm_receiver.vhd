@@ -236,8 +236,8 @@ architecture behav of fm_receiver is
     signal k_1_reg_670 : STD_LOGIC_VECTOR (3 downto 0);
     signal ap_CS_fsm_state3 : STD_LOGIC;
     attribute fsm_encoding of ap_CS_fsm_state3 : signal is "none";
-    signal tmp_5_fu_464_p2 : STD_LOGIC_VECTOR (0 downto 0);
-    signal tmp_5_reg_675 : STD_LOGIC_VECTOR (0 downto 0);
+    signal tmp_2_fu_464_p2 : STD_LOGIC_VECTOR (0 downto 0);
+    signal tmp_2_reg_675 : STD_LOGIC_VECTOR (0 downto 0);
     signal tmp_s_fu_452_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal p_Val2_4_fu_470_p1 : STD_LOGIC_VECTOR (15 downto 0);
     signal p_Val2_4_reg_679 : STD_LOGIC_VECTOR (15 downto 0);
@@ -369,8 +369,8 @@ architecture behav of fm_receiver is
     signal fm_channel_data_V_V_write : STD_LOGIC;
     signal ap_block_state6 : BOOLEAN;
     signal tmp_fu_440_p2 : STD_LOGIC_VECTOR (0 downto 0);
-    signal audio_lrdiff_dec_V_reg_366 : STD_LOGIC_VECTOR (15 downto 0);
-    signal audio_mono_dec_V_reg_377 : STD_LOGIC_VECTOR (15 downto 0);
+    signal p_Val2_s_reg_366 : STD_LOGIC_VECTOR (15 downto 0);
+    signal p_Val2_3_reg_377 : STD_LOGIC_VECTOR (15 downto 0);
     signal i_i_reg_388 : STD_LOGIC_VECTOR (1 downto 0);
     signal grp_operator_s_fu_399_ap_start_reg : STD_LOGIC := '0';
     signal ap_CS_fsm_state42 : STD_LOGIC;
@@ -402,15 +402,15 @@ architecture behav of fm_receiver is
     signal p_Val2_7_fu_626_p2 : STD_LOGIC_VECTOR (29 downto 0);
     signal p_Val2_7_i_fu_484_p2 : STD_LOGIC_VECTOR (15 downto 0);
     signal p_Val2_8_fu_633_p2 : STD_LOGIC_VECTOR (29 downto 0);
-    signal ssdm_int_V_write_ass_fu_547_p2 : STD_LOGIC_VECTOR (15 downto 0);
-    signal ssdm_int_V_write_ass_1_fu_553_p2 : STD_LOGIC_VECTOR (15 downto 0);
+    signal agg_result_L_V_write_fu_547_p2 : STD_LOGIC_VECTOR (15 downto 0);
+    signal agg_result_R_V_write_fu_553_p2 : STD_LOGIC_VECTOR (15 downto 0);
     signal tmp_3_fu_571_p2 : STD_LOGIC_VECTOR (15 downto 0);
     signal p_Val2_i_i_fu_577_p2 : STD_LOGIC_VECTOR (15 downto 0);
     signal p_Val2_2_fu_587_p3 : STD_LOGIC_VECTOR (29 downto 0);
     signal addconv_i_i_fu_594_p2 : STD_LOGIC_VECTOR (29 downto 0);
     signal r_V_fu_646_p2 : STD_LOGIC_VECTOR (28 downto 0);
     signal OP1_V_cast_fu_640_p0 : STD_LOGIC_VECTOR (15 downto 0);
-    signal tmp_7_fu_583_p1 : STD_LOGIC_VECTOR (28 downto 0);
+    signal tmp_1_fu_583_p1 : STD_LOGIC_VECTOR (28 downto 0);
     signal OP1_V_cast_fu_640_p1 : STD_LOGIC_VECTOR (15 downto 0);
     signal tmp_i_fu_535_p2 : STD_LOGIC_VECTOR (0 downto 0);
     signal ap_return_0_preg : STD_LOGIC_VECTOR (15 downto 0) := "0000000000000000";
@@ -866,7 +866,7 @@ begin
                 ap_return_0_preg <= ap_const_lv16_0;
             else
                 if (((tmp_i_fu_535_p2 = ap_const_lv1_1) and (ap_const_logic_1 = ap_CS_fsm_state7))) then 
-                    ap_return_0_preg <= ssdm_int_V_write_ass_fu_547_p2;
+                    ap_return_0_preg <= agg_result_L_V_write_fu_547_p2;
                 end if; 
             end if;
         end if;
@@ -880,7 +880,7 @@ begin
                 ap_return_1_preg <= ap_const_lv16_0;
             else
                 if (((tmp_i_fu_535_p2 = ap_const_lv1_1) and (ap_const_logic_1 = ap_CS_fsm_state7))) then 
-                    ap_return_1_preg <= ssdm_int_V_write_ass_1_fu_553_p2;
+                    ap_return_1_preg <= agg_result_R_V_write_fu_553_p2;
                 end if; 
             end if;
         end if;
@@ -946,7 +946,7 @@ begin
         if (ap_clk'event and ap_clk = '1') then
             if (((tmp_fu_440_p2 = ap_const_lv1_0) and (ap_const_logic_1 = ap_CS_fsm_state2))) then 
                 k_reg_355 <= ap_const_lv4_0;
-            elsif ((not(((fm_channel_data_V_V_full_n = ap_const_logic_0) and (tmp_5_reg_675 = ap_const_lv1_1))) and (ap_const_logic_1 = ap_CS_fsm_state6))) then 
+            elsif ((not(((fm_channel_data_V_V_full_n = ap_const_logic_0) and (tmp_2_reg_675 = ap_const_lv1_1))) and (ap_const_logic_1 = ap_CS_fsm_state6))) then 
                 k_reg_355 <= k_1_reg_670;
             end if; 
         end if;
@@ -978,15 +978,6 @@ begin
         if (ap_clk'event and ap_clk = '1') then
             if (((grp_operator_s_fu_399_ap_done = ap_const_logic_1) and (ap_const_logic_1 = ap_CS_fsm_state39))) then
                 OP1_V_cast_reg_883 <= OP1_V_cast_fu_640_p2;
-            end if;
-        end if;
-    end process;
-    process (ap_clk)
-    begin
-        if (ap_clk'event and ap_clk = '1') then
-            if (((ap_const_boolean_0 = ap_block_state43_on_subcall_done) and (ap_const_logic_1 = ap_CS_fsm_state43))) then
-                audio_lrdiff_dec_V_reg_366 <= grp_operator_s_fu_414_ap_return;
-                audio_mono_dec_V_reg_377 <= mono_delayed_V_reg_707;
             end if;
         end if;
     end process;
@@ -1204,6 +1195,15 @@ begin
     process (ap_clk)
     begin
         if (ap_clk'event and ap_clk = '1') then
+            if (((ap_const_boolean_0 = ap_block_state43_on_subcall_done) and (ap_const_logic_1 = ap_CS_fsm_state43))) then
+                p_Val2_3_reg_377 <= grp_operator_s_fu_414_ap_return;
+                p_Val2_s_reg_366 <= mono_delayed_V_reg_707;
+            end if;
+        end if;
+    end process;
+    process (ap_clk)
+    begin
+        if (ap_clk'event and ap_clk = '1') then
             if (((ap_const_logic_1 = ap_CS_fsm_state26) or (ap_const_logic_1 = ap_CS_fsm_state9))) then
                 reg_435 <= delay_inst_shift_reg_1_q0;
             end if;
@@ -1213,7 +1213,7 @@ begin
     begin
         if (ap_clk'event and ap_clk = '1') then
             if (((tmp_s_fu_452_p2 = ap_const_lv1_0) and (ap_const_logic_1 = ap_CS_fsm_state3))) then
-                tmp_5_reg_675 <= tmp_5_fu_464_p2;
+                tmp_2_reg_675 <= tmp_2_fu_464_p2;
             end if;
         end if;
     end process;
@@ -1226,7 +1226,7 @@ begin
         end if;
     end process;
 
-    ap_NS_fsm_assign_proc : process (ap_start, ap_CS_fsm, ap_CS_fsm_state1, iq_in_V_TVALID, ap_CS_fsm_state5, ap_CS_fsm_state2, ap_CS_fsm_state3, tmp_5_reg_675, tmp_s_fu_452_p2, ap_CS_fsm_state7, ap_CS_fsm_state38, fm_channel_data_V_V_empty_n, ap_CS_fsm_state39, grp_operator_s_fu_399_ap_done, ap_CS_fsm_state41, ap_CS_fsm_state43, ap_block_state43_on_subcall_done, ap_CS_fsm_state6, fm_channel_data_V_V_full_n, tmp_fu_440_p2, tmp_i_fu_535_p2)
+    ap_NS_fsm_assign_proc : process (ap_start, ap_CS_fsm, ap_CS_fsm_state1, iq_in_V_TVALID, ap_CS_fsm_state5, ap_CS_fsm_state2, ap_CS_fsm_state3, tmp_2_reg_675, tmp_s_fu_452_p2, ap_CS_fsm_state7, ap_CS_fsm_state38, fm_channel_data_V_V_empty_n, ap_CS_fsm_state39, grp_operator_s_fu_399_ap_done, ap_CS_fsm_state41, ap_CS_fsm_state43, ap_block_state43_on_subcall_done, ap_CS_fsm_state6, fm_channel_data_V_V_full_n, tmp_fu_440_p2, tmp_i_fu_535_p2)
     begin
         case ap_CS_fsm is
             when ap_ST_fsm_state1 => 
@@ -1256,7 +1256,7 @@ begin
                     ap_NS_fsm <= ap_ST_fsm_state5;
                 end if;
             when ap_ST_fsm_state6 => 
-                if ((not(((fm_channel_data_V_V_full_n = ap_const_logic_0) and (tmp_5_reg_675 = ap_const_lv1_1))) and (ap_const_logic_1 = ap_CS_fsm_state6))) then
+                if ((not(((fm_channel_data_V_V_full_n = ap_const_logic_0) and (tmp_2_reg_675 = ap_const_lv1_1))) and (ap_const_logic_1 = ap_CS_fsm_state6))) then
                     ap_NS_fsm <= ap_ST_fsm_state3;
                 else
                     ap_NS_fsm <= ap_ST_fsm_state6;
@@ -1359,9 +1359,11 @@ begin
                 ap_NS_fsm <= "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
         end case;
     end process;
-    OP1_V_cast_fu_640_p0 <= tmp_7_fu_583_p1(16 - 1 downto 0);
-    OP1_V_cast_fu_640_p1 <= tmp_7_fu_583_p1(16 - 1 downto 0);
+    OP1_V_cast_fu_640_p0 <= tmp_1_fu_583_p1(16 - 1 downto 0);
+    OP1_V_cast_fu_640_p1 <= tmp_1_fu_583_p1(16 - 1 downto 0);
     addconv_i_i_fu_594_p2 <= std_logic_vector(signed(ap_const_lv30_34000000) + signed(p_Val2_2_fu_587_p3));
+    agg_result_L_V_write_fu_547_p2 <= std_logic_vector(unsigned(p_Val2_3_reg_377) + unsigned(p_Val2_s_reg_366));
+    agg_result_R_V_write_fu_553_p2 <= std_logic_vector(unsigned(p_Val2_s_reg_366) - unsigned(p_Val2_3_reg_377));
     ap_CS_fsm_state1 <= ap_CS_fsm(0);
     ap_CS_fsm_state10 <= ap_CS_fsm(9);
     ap_CS_fsm_state11 <= ap_CS_fsm(10);
@@ -1412,9 +1414,9 @@ begin
     end process;
 
 
-    ap_block_state6_assign_proc : process(tmp_5_reg_675, fm_channel_data_V_V_full_n)
+    ap_block_state6_assign_proc : process(tmp_2_reg_675, fm_channel_data_V_V_full_n)
     begin
-                ap_block_state6 <= ((fm_channel_data_V_V_full_n = ap_const_logic_0) and (tmp_5_reg_675 = ap_const_lv1_1));
+                ap_block_state6 <= ((fm_channel_data_V_V_full_n = ap_const_logic_0) and (tmp_2_reg_675 = ap_const_lv1_1));
     end process;
 
 
@@ -1448,20 +1450,20 @@ begin
     end process;
 
 
-    ap_return_0_assign_proc : process(ap_CS_fsm_state7, ssdm_int_V_write_ass_fu_547_p2, tmp_i_fu_535_p2, ap_return_0_preg)
+    ap_return_0_assign_proc : process(ap_CS_fsm_state7, agg_result_L_V_write_fu_547_p2, tmp_i_fu_535_p2, ap_return_0_preg)
     begin
         if (((tmp_i_fu_535_p2 = ap_const_lv1_1) and (ap_const_logic_1 = ap_CS_fsm_state7))) then 
-            ap_return_0 <= ssdm_int_V_write_ass_fu_547_p2;
+            ap_return_0 <= agg_result_L_V_write_fu_547_p2;
         else 
             ap_return_0 <= ap_return_0_preg;
         end if; 
     end process;
 
 
-    ap_return_1_assign_proc : process(ap_CS_fsm_state7, ssdm_int_V_write_ass_1_fu_553_p2, tmp_i_fu_535_p2, ap_return_1_preg)
+    ap_return_1_assign_proc : process(ap_CS_fsm_state7, agg_result_R_V_write_fu_553_p2, tmp_i_fu_535_p2, ap_return_1_preg)
     begin
         if (((tmp_i_fu_535_p2 = ap_const_lv1_1) and (ap_const_logic_1 = ap_CS_fsm_state7))) then 
-            ap_return_1 <= ssdm_int_V_write_ass_1_fu_553_p2;
+            ap_return_1 <= agg_result_R_V_write_fu_553_p2;
         else 
             ap_return_1 <= ap_return_1_preg;
         end if; 
@@ -1778,9 +1780,9 @@ begin
     end process;
 
 
-    delay_inst_shift_reg_2_ce0_assign_proc : process(iq_in_V_TVALID, ap_CS_fsm_state5, ap_CS_fsm_state4, ap_CS_fsm_state3, tmp_5_reg_675, ap_CS_fsm_state6, fm_channel_data_V_V_full_n)
+    delay_inst_shift_reg_2_ce0_assign_proc : process(iq_in_V_TVALID, ap_CS_fsm_state5, ap_CS_fsm_state4, ap_CS_fsm_state3, tmp_2_reg_675, ap_CS_fsm_state6, fm_channel_data_V_V_full_n)
     begin
-        if (((ap_const_logic_1 = ap_CS_fsm_state3) or (ap_const_logic_1 = ap_CS_fsm_state4) or (not(((fm_channel_data_V_V_full_n = ap_const_logic_0) and (tmp_5_reg_675 = ap_const_lv1_1))) and (ap_const_logic_1 = ap_CS_fsm_state6)) or ((iq_in_V_TVALID = ap_const_logic_1) and (ap_const_logic_1 = ap_CS_fsm_state5)))) then 
+        if (((ap_const_logic_1 = ap_CS_fsm_state3) or (ap_const_logic_1 = ap_CS_fsm_state4) or (not(((fm_channel_data_V_V_full_n = ap_const_logic_0) and (tmp_2_reg_675 = ap_const_lv1_1))) and (ap_const_logic_1 = ap_CS_fsm_state6)) or ((iq_in_V_TVALID = ap_const_logic_1) and (ap_const_logic_1 = ap_CS_fsm_state5)))) then 
             delay_inst_shift_reg_2_ce0 <= ap_const_logic_1;
         else 
             delay_inst_shift_reg_2_ce0 <= ap_const_logic_0;
@@ -1788,9 +1790,9 @@ begin
     end process;
 
 
-    delay_inst_shift_reg_2_ce1_assign_proc : process(iq_in_V_TVALID, ap_CS_fsm_state5, ap_CS_fsm_state4, tmp_5_reg_675, ap_CS_fsm_state6, fm_channel_data_V_V_full_n)
+    delay_inst_shift_reg_2_ce1_assign_proc : process(iq_in_V_TVALID, ap_CS_fsm_state5, ap_CS_fsm_state4, tmp_2_reg_675, ap_CS_fsm_state6, fm_channel_data_V_V_full_n)
     begin
-        if (((ap_const_logic_1 = ap_CS_fsm_state4) or (not(((fm_channel_data_V_V_full_n = ap_const_logic_0) and (tmp_5_reg_675 = ap_const_lv1_1))) and (ap_const_logic_1 = ap_CS_fsm_state6)) or ((iq_in_V_TVALID = ap_const_logic_1) and (ap_const_logic_1 = ap_CS_fsm_state5)))) then 
+        if (((ap_const_logic_1 = ap_CS_fsm_state4) or (not(((fm_channel_data_V_V_full_n = ap_const_logic_0) and (tmp_2_reg_675 = ap_const_lv1_1))) and (ap_const_logic_1 = ap_CS_fsm_state6)) or ((iq_in_V_TVALID = ap_const_logic_1) and (ap_const_logic_1 = ap_CS_fsm_state5)))) then 
             delay_inst_shift_reg_2_ce1 <= ap_const_logic_1;
         else 
             delay_inst_shift_reg_2_ce1 <= ap_const_logic_0;
@@ -1810,9 +1812,9 @@ begin
     end process;
 
 
-    delay_inst_shift_reg_2_we0_assign_proc : process(iq_in_V_TVALID, ap_CS_fsm_state5, tmp_5_reg_675, ap_CS_fsm_state6, fm_channel_data_V_V_full_n)
+    delay_inst_shift_reg_2_we0_assign_proc : process(iq_in_V_TVALID, ap_CS_fsm_state5, tmp_2_reg_675, ap_CS_fsm_state6, fm_channel_data_V_V_full_n)
     begin
-        if (((not(((fm_channel_data_V_V_full_n = ap_const_logic_0) and (tmp_5_reg_675 = ap_const_lv1_1))) and (ap_const_logic_1 = ap_CS_fsm_state6)) or ((iq_in_V_TVALID = ap_const_logic_1) and (ap_const_logic_1 = ap_CS_fsm_state5)))) then 
+        if (((not(((fm_channel_data_V_V_full_n = ap_const_logic_0) and (tmp_2_reg_675 = ap_const_lv1_1))) and (ap_const_logic_1 = ap_CS_fsm_state6)) or ((iq_in_V_TVALID = ap_const_logic_1) and (ap_const_logic_1 = ap_CS_fsm_state5)))) then 
             delay_inst_shift_reg_2_we0 <= ap_const_logic_1;
         else 
             delay_inst_shift_reg_2_we0 <= ap_const_logic_0;
@@ -1820,9 +1822,9 @@ begin
     end process;
 
 
-    delay_inst_shift_reg_2_we1_assign_proc : process(iq_in_V_TVALID, ap_CS_fsm_state5, tmp_5_reg_675, ap_CS_fsm_state6, fm_channel_data_V_V_full_n)
+    delay_inst_shift_reg_2_we1_assign_proc : process(iq_in_V_TVALID, ap_CS_fsm_state5, tmp_2_reg_675, ap_CS_fsm_state6, fm_channel_data_V_V_full_n)
     begin
-        if (((not(((fm_channel_data_V_V_full_n = ap_const_logic_0) and (tmp_5_reg_675 = ap_const_lv1_1))) and (ap_const_logic_1 = ap_CS_fsm_state6)) or ((iq_in_V_TVALID = ap_const_logic_1) and (ap_const_logic_1 = ap_CS_fsm_state5)))) then 
+        if (((not(((fm_channel_data_V_V_full_n = ap_const_logic_0) and (tmp_2_reg_675 = ap_const_lv1_1))) and (ap_const_logic_1 = ap_CS_fsm_state6)) or ((iq_in_V_TVALID = ap_const_logic_1) and (ap_const_logic_1 = ap_CS_fsm_state5)))) then 
             delay_inst_shift_reg_2_we1 <= ap_const_logic_1;
         else 
             delay_inst_shift_reg_2_we1 <= ap_const_logic_0;
@@ -1856,9 +1858,9 @@ begin
     end process;
 
 
-    delay_inst_shift_reg_ce0_assign_proc : process(iq_in_V_TVALID, ap_CS_fsm_state5, ap_CS_fsm_state4, ap_CS_fsm_state3, tmp_5_reg_675, ap_CS_fsm_state6, fm_channel_data_V_V_full_n)
+    delay_inst_shift_reg_ce0_assign_proc : process(iq_in_V_TVALID, ap_CS_fsm_state5, ap_CS_fsm_state4, ap_CS_fsm_state3, tmp_2_reg_675, ap_CS_fsm_state6, fm_channel_data_V_V_full_n)
     begin
-        if (((ap_const_logic_1 = ap_CS_fsm_state3) or (ap_const_logic_1 = ap_CS_fsm_state4) or (not(((fm_channel_data_V_V_full_n = ap_const_logic_0) and (tmp_5_reg_675 = ap_const_lv1_1))) and (ap_const_logic_1 = ap_CS_fsm_state6)) or ((iq_in_V_TVALID = ap_const_logic_1) and (ap_const_logic_1 = ap_CS_fsm_state5)))) then 
+        if (((ap_const_logic_1 = ap_CS_fsm_state3) or (ap_const_logic_1 = ap_CS_fsm_state4) or (not(((fm_channel_data_V_V_full_n = ap_const_logic_0) and (tmp_2_reg_675 = ap_const_lv1_1))) and (ap_const_logic_1 = ap_CS_fsm_state6)) or ((iq_in_V_TVALID = ap_const_logic_1) and (ap_const_logic_1 = ap_CS_fsm_state5)))) then 
             delay_inst_shift_reg_ce0 <= ap_const_logic_1;
         else 
             delay_inst_shift_reg_ce0 <= ap_const_logic_0;
@@ -1866,9 +1868,9 @@ begin
     end process;
 
 
-    delay_inst_shift_reg_ce1_assign_proc : process(iq_in_V_TVALID, ap_CS_fsm_state5, ap_CS_fsm_state4, tmp_5_reg_675, ap_CS_fsm_state6, fm_channel_data_V_V_full_n)
+    delay_inst_shift_reg_ce1_assign_proc : process(iq_in_V_TVALID, ap_CS_fsm_state5, ap_CS_fsm_state4, tmp_2_reg_675, ap_CS_fsm_state6, fm_channel_data_V_V_full_n)
     begin
-        if (((ap_const_logic_1 = ap_CS_fsm_state4) or (not(((fm_channel_data_V_V_full_n = ap_const_logic_0) and (tmp_5_reg_675 = ap_const_lv1_1))) and (ap_const_logic_1 = ap_CS_fsm_state6)) or ((iq_in_V_TVALID = ap_const_logic_1) and (ap_const_logic_1 = ap_CS_fsm_state5)))) then 
+        if (((ap_const_logic_1 = ap_CS_fsm_state4) or (not(((fm_channel_data_V_V_full_n = ap_const_logic_0) and (tmp_2_reg_675 = ap_const_lv1_1))) and (ap_const_logic_1 = ap_CS_fsm_state6)) or ((iq_in_V_TVALID = ap_const_logic_1) and (ap_const_logic_1 = ap_CS_fsm_state5)))) then 
             delay_inst_shift_reg_ce1 <= ap_const_logic_1;
         else 
             delay_inst_shift_reg_ce1 <= ap_const_logic_0;
@@ -1888,9 +1890,9 @@ begin
     end process;
 
 
-    delay_inst_shift_reg_we0_assign_proc : process(iq_in_V_TVALID, ap_CS_fsm_state5, tmp_5_reg_675, ap_CS_fsm_state6, fm_channel_data_V_V_full_n)
+    delay_inst_shift_reg_we0_assign_proc : process(iq_in_V_TVALID, ap_CS_fsm_state5, tmp_2_reg_675, ap_CS_fsm_state6, fm_channel_data_V_V_full_n)
     begin
-        if (((not(((fm_channel_data_V_V_full_n = ap_const_logic_0) and (tmp_5_reg_675 = ap_const_lv1_1))) and (ap_const_logic_1 = ap_CS_fsm_state6)) or ((iq_in_V_TVALID = ap_const_logic_1) and (ap_const_logic_1 = ap_CS_fsm_state5)))) then 
+        if (((not(((fm_channel_data_V_V_full_n = ap_const_logic_0) and (tmp_2_reg_675 = ap_const_lv1_1))) and (ap_const_logic_1 = ap_CS_fsm_state6)) or ((iq_in_V_TVALID = ap_const_logic_1) and (ap_const_logic_1 = ap_CS_fsm_state5)))) then 
             delay_inst_shift_reg_we0 <= ap_const_logic_1;
         else 
             delay_inst_shift_reg_we0 <= ap_const_logic_0;
@@ -1898,9 +1900,9 @@ begin
     end process;
 
 
-    delay_inst_shift_reg_we1_assign_proc : process(iq_in_V_TVALID, ap_CS_fsm_state5, tmp_5_reg_675, ap_CS_fsm_state6, fm_channel_data_V_V_full_n)
+    delay_inst_shift_reg_we1_assign_proc : process(iq_in_V_TVALID, ap_CS_fsm_state5, tmp_2_reg_675, ap_CS_fsm_state6, fm_channel_data_V_V_full_n)
     begin
-        if (((not(((fm_channel_data_V_V_full_n = ap_const_logic_0) and (tmp_5_reg_675 = ap_const_lv1_1))) and (ap_const_logic_1 = ap_CS_fsm_state6)) or ((iq_in_V_TVALID = ap_const_logic_1) and (ap_const_logic_1 = ap_CS_fsm_state5)))) then 
+        if (((not(((fm_channel_data_V_V_full_n = ap_const_logic_0) and (tmp_2_reg_675 = ap_const_lv1_1))) and (ap_const_logic_1 = ap_CS_fsm_state6)) or ((iq_in_V_TVALID = ap_const_logic_1) and (ap_const_logic_1 = ap_CS_fsm_state5)))) then 
             delay_inst_shift_reg_we1 <= ap_const_logic_1;
         else 
             delay_inst_shift_reg_we1 <= ap_const_logic_0;
@@ -2009,9 +2011,9 @@ begin
     end process;
 
 
-    fm_channel_data_V_V_write_assign_proc : process(tmp_5_reg_675, ap_CS_fsm_state6, fm_channel_data_V_V_full_n)
+    fm_channel_data_V_V_write_assign_proc : process(tmp_2_reg_675, ap_CS_fsm_state6, fm_channel_data_V_V_full_n)
     begin
-        if ((not(((fm_channel_data_V_V_full_n = ap_const_logic_0) and (tmp_5_reg_675 = ap_const_lv1_1))) and (tmp_5_reg_675 = ap_const_lv1_1) and (ap_const_logic_1 = ap_CS_fsm_state6))) then 
+        if ((not(((fm_channel_data_V_V_full_n = ap_const_logic_0) and (tmp_2_reg_675 = ap_const_lv1_1))) and (tmp_2_reg_675 = ap_const_lv1_1) and (ap_const_logic_1 = ap_CS_fsm_state6))) then 
             fm_channel_data_V_V_write <= ap_const_logic_1;
         else 
             fm_channel_data_V_V_write <= ap_const_logic_0;
@@ -2077,12 +2079,10 @@ begin
     p_Val2_7_i_fu_484_p2 <= std_logic_vector(signed(p_Val2_4_fu_470_p1) - signed(reg_423));
     p_Val2_i_fu_490_p2 <= std_logic_vector(signed(p_Val2_6_fu_474_p4) - signed(reg_429));
     p_Val2_i_i_fu_577_p2 <= std_logic_vector(unsigned(ap_const_lv16_0) - unsigned(tmp_3_fu_571_p2));
-    ssdm_int_V_write_ass_1_fu_553_p2 <= std_logic_vector(unsigned(audio_mono_dec_V_reg_377) - unsigned(audio_lrdiff_dec_V_reg_366));
-    ssdm_int_V_write_ass_fu_547_p2 <= std_logic_vector(unsigned(audio_lrdiff_dec_V_reg_366) + unsigned(audio_mono_dec_V_reg_377));
-    tmp_3_fu_571_p2 <= std_logic_vector(shift_left(unsigned(grp_operator_s_fu_399_ap_return),to_integer(unsigned('0' & ap_const_lv16_3(16-1 downto 0)))));
-    tmp_5_fu_464_p2 <= "1" when (k_reg_355 = ap_const_lv4_7) else "0";
-        tmp_7_fu_583_p1 <= std_logic_vector(IEEE.numeric_std.resize(signed(p_Val2_i_i_fu_577_p2),29));
+        tmp_1_fu_583_p1 <= std_logic_vector(IEEE.numeric_std.resize(signed(p_Val2_i_i_fu_577_p2),29));
 
+    tmp_2_fu_464_p2 <= "1" when (k_reg_355 = ap_const_lv4_7) else "0";
+    tmp_3_fu_571_p2 <= std_logic_vector(shift_left(unsigned(grp_operator_s_fu_399_ap_return),to_integer(unsigned('0' & ap_const_lv16_3(16-1 downto 0)))));
     tmp_fu_440_p2 <= "1" when (i_reg_344 = ap_const_lv2_3) else "0";
     tmp_i_fu_535_p2 <= "1" when (i_i_reg_388 = ap_const_lv2_3) else "0";
     tmp_s_fu_452_p2 <= "1" when (k_reg_355 = ap_const_lv4_8) else "0";

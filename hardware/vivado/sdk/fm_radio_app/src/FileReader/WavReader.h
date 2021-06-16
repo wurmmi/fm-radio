@@ -17,7 +17,7 @@ class WavReader : public FileReader {
   WavReader();
   ~WavReader();
 
-  void LoadFile(std::string const& filename) override;
+  bool LoadFile(std::string const& filename) override;
 };
 
 #endif /* _WAVREADER_H_ */

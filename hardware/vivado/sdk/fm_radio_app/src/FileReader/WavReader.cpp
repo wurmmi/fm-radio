@@ -41,13 +41,13 @@ WavReader::WavReader() {}
 
 WavReader::~WavReader() {}
 
-void WavReader::LoadFile(string const& filename) {
+bool WavReader::LoadFile(string const& filename) {
   LOG_INFO("Loading WAV file '%s' ...", filename.c_str());
 
   // Open the file
   bool success = FileOpen(filename);
   if (!success)
-    return;
+    return false;
 
   /*--- Sanity checks in header ---*/
 
@@ -57,18 +57,18 @@ void WavReader::LoadFile(string const& filename) {
   size_t n_bytes_read;
   success = FileRead((void*)&header, sizeof(header), n_bytes_read);
   if (!success)
-    return;
+    return false;
 
   if (string{header.riff, sizeof(header.riff)} != "RIFF") {
     LOG_ERROR("Illegal WAV file format, RIFF not found.");
     FileClose();
-    return;
+    return false;
   }
 
   if (string{header.wave, sizeof(header.riff)} != "WAVE") {
     LOG_ERROR("Illegal WAV file format, WAVE not found.");
     FileClose();
-    return;
+    return false;
   }
   LOG_DEBUG("WAV header OKAY");
 
@@ -103,23 +103,23 @@ void WavReader::LoadFile(string const& filename) {
        * the sample format. */
       success = FileRead((void*)&fmtChunk, genericChunk.cksize, n_bytes_read);
       if (!success)
-        return;
+        return false;
 
       /*--- Sanity checks in FMT chunk ---*/
       if (fmtChunk.wFormatTag != 1) {
         LOG_ERROR("Unsupported format");
         FileClose();
-        return;
+        return false;
       }
       if (fmtChunk.nChannels != 2) {
         LOG_ERROR("Only stereo files supported");
         FileClose();
-        return;
+        return false;
       }
       if (fmtChunk.wBitsPerSample != 16) {
         LOG_ERROR("Only 16 bit per samples supported");
         FileClose();
-        return;
+        return false;
         LOG_DEBUG("WAV FMT chunk OKAY");
       }
     } else if (string{genericChunk.ckId, sizeof(genericChunk.ckId)} == "data") {
@@ -134,7 +134,7 @@ void WavReader::LoadFile(string const& filename) {
         FileClose();
         delete[] mBuffer.buffer;
         mBuffer = {nullptr, 0};
-        return;
+        return false;
       }
       mBuffer.size = genericChunk.cksize;
 
@@ -142,7 +142,7 @@ void WavReader::LoadFile(string const& filename) {
       if (!success) {
         delete[] mBuffer.buffer;
         mBuffer = {nullptr, 0};
-        return;
+        return false;
       }
     } else {
       LOG_DEBUG("skipping unknown chunk: '%s'", genericChunk.ckId);
@@ -150,7 +150,7 @@ void WavReader::LoadFile(string const& filename) {
       // Advance the file pointer
       success = FileSeek(genericChunk.cksize);
       if (!success)
-        return;
+        return false;
 
       num_unknown_chunks++;
     }
@@ -167,5 +167,5 @@ void WavReader::LoadFile(string const& filename) {
       num_fmt_chunks,
       num_data_chunks);
 
-  PrepareBufferData();
+  return true;
 }

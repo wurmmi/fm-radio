@@ -26,6 +26,11 @@ typedef ap_fixed<FP_WIDTH, FP_WIDTH_INT> sample_t;
 typedef sample_t coeff_t;
 typedef sample_t acc_t;
 
+typedef struct {
+  sample_t L;
+  sample_t R;
+} audio_sample_t;
+
 struct iq_sample_t {
   sample_t i;
   sample_t q;

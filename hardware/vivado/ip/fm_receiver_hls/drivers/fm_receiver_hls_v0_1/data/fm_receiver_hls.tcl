@@ -9,16 +9,16 @@ proc generate {drv_handle} {
     xdefine_include_file $drv_handle "xparameters.h" "XFm_receiver_hls" \
         "NUM_INSTANCES" \
         "DEVICE_ID" \
-        "C_S_AXI_CONFIG_BASEADDR" \
-        "C_S_AXI_CONFIG_HIGHADDR"
+        "C_S_AXI_API_BASEADDR" \
+        "C_S_AXI_API_HIGHADDR"
 
     xdefine_config_file $drv_handle "xfm_receiver_hls_g.c" "XFm_receiver_hls" \
         "DEVICE_ID" \
-        "C_S_AXI_CONFIG_BASEADDR"
+        "C_S_AXI_API_BASEADDR"
 
     xdefine_canonical_xpars $drv_handle "xparameters.h" "XFm_receiver_hls" \
         "DEVICE_ID" \
-        "C_S_AXI_CONFIG_BASEADDR" \
-        "C_S_AXI_CONFIG_HIGHADDR"
+        "C_S_AXI_API_BASEADDR" \
+        "C_S_AXI_API_HIGHADDR"
 }
 

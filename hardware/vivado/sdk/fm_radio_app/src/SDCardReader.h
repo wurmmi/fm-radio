@@ -32,9 +32,9 @@ class SDCardReader {
   SDCardReader();
   ~SDCardReader();
 
-  bool MountSDCard(uint8_t num_retries);
+  bool MountSDCard(uint8_t num_retries = 1);
   void DiscoverFiles();
-  void LoadFile(std::string const& filename);
+  bool LoadFile(std::string const& filename);
   void PrintAvailableFilenames() const;
   DMABuffer GetBuffer();
 };

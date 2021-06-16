@@ -318,13 +318,13 @@ end
 fig_title = 'Carrier phase recovery';
 fig_rx_time_rds = figure('Name',fig_title);
 hold on;
-plot(tnRx/fs_rx, rx_pilot,             'm',   'DisplayName', 'carrier_19kHz (rec.)', 'LineWidth',2);
-plot(tnRx/fs_rx, pilot_local,          'm--', 'DisplayName', 'carrier_19kHz (local)');
-plot(tnRx/fs_rx, rx_carrier_38kHz,       'b',  'DisplayName', 'carrier_38kHz (rec.)', 'LineWidth',2);
-plot(tnRx/fs_rx, rx_carrier_38kHz_local, 'b--','DisplayName', 'carrier_38kHz (local)');
+plot(tnRx/fs_rx, rx_pilot,             'm',   'DisplayName', 'carrier\_19kHz (rec.)', 'LineWidth',2);
+plot(tnRx/fs_rx, pilot_local,          'm--', 'DisplayName', 'carrier\_19kHz (local)');
+plot(tnRx/fs_rx, rx_carrier_38kHz,       'b',  'DisplayName', 'carrier\_38kHz (rec.)', 'LineWidth',2);
+plot(tnRx/fs_rx, rx_carrier_38kHz_local, 'b--','DisplayName', 'carrier\_38kHz (local)');
 if EnableRDSDecoder
-    plot(tnRx/fs_rx, rx_carrier_57kHz,       'g',   'DisplayName', 'carrier_57kHz (rec.)', 'LineWidth',2);
-    plot(tnRx/fs_rx, rx_carrier_57kHz_local, 'g--', 'DisplayName', 'carrier_57kHz (local)');
+    plot(tnRx/fs_rx, rx_carrier_57kHz,       'g',   'DisplayName', 'carrier\_57kHz (rec.)', 'LineWidth',2);
+    plot(tnRx/fs_rx, rx_carrier_57kHz_local, 'g--', 'DisplayName', 'carrier\_57kHz (local)');
 end
 grid on;
 title(fig_title);

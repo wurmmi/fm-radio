@@ -125,9 +125,9 @@ int XFm_receiver_hls_Initialize(XFm_receiver_hls *InstancePtr, const char* Insta
         return XST_OPEN_DEVICE_FAILED;
     }
 
-    // NOTE: slave interface 'Config' should be mapped to uioX/map0
-    InstancePtr->Config_BaseAddress = (u32)mmap(NULL, InfoPtr->maps[0].size, PROT_READ|PROT_WRITE, MAP_SHARED, InfoPtr->uio_fd, 0 * getpagesize());
-    assert(InstancePtr->Config_BaseAddress);
+    // NOTE: slave interface 'Api' should be mapped to uioX/map0
+    InstancePtr->Api_BaseAddress = (u32)mmap(NULL, InfoPtr->maps[0].size, PROT_READ|PROT_WRITE, MAP_SHARED, InfoPtr->uio_fd, 0 * getpagesize());
+    assert(InstancePtr->Api_BaseAddress);
 
     InstancePtr->IsReady = XIL_COMPONENT_IS_READY;
 
@@ -140,7 +140,7 @@ int XFm_receiver_hls_Release(XFm_receiver_hls *InstancePtr) {
     assert(InstancePtr != NULL);
     assert(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
 
-    munmap((void*)InstancePtr->Config_BaseAddress, InfoPtr->maps[0].size);
+    munmap((void*)InstancePtr->Api_BaseAddress, InfoPtr->maps[0].size);
 
     close(InfoPtr->uio_fd);
 

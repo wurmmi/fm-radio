@@ -10,20 +10,40 @@
 #include <array>
 
 #include "ADAU1761.h"
+#include "AudioStreamDMA.h"
 #include "FIFO.h"
+#include "FMRadioIP.h"
+#include "SDCardReader.h"
 
 class AudioHandler {
  private:
   ADAU1761 mAdau1761;
   audio_buffer_t mAudioBuffer;
+  SDCardReader mSdCardReader;
+  AudioStreamDMA mStreamDMA;
+  FMRadioIP* mFmRadioIP;
+  uint16_t mVolume;
+  bool mIsPlaying;
+
+  uint16_t const volume_default_c = 4;
+  uint16_t const volume_max_c     = 4;
+  uint16_t const volume_min_c     = 1;
 
   bool Initialize();
   void FillAudioBuffer();
+  void ApplyVolume();
+  void PrintVolumeInfo(std::string const& limit);
   void AudioStreamEmptyCallback();
 
  public:
-  AudioHandler();
+  AudioHandler(FMRadioIP* radioIP);
   ~AudioHandler();
+
+  void VolumeUp();
+  void VolumeDown();
+  void PlayFile(std::string const& filename);
+  void Stop();
+  void ShowAvailableFiles();
 };
 
 #endif /* _AUDIOHANDLER_H_ */

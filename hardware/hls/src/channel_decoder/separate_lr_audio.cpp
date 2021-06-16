@@ -10,15 +10,12 @@
 
 using namespace std;
 
-void separate_lr_audio(sample_t const& in_mono,
-                       sample_t const& in_lrdiff,
-                       sample_t& out_audio_L,
-                       sample_t& out_audio_R) {
+audio_sample_t separate_lr_audio(sample_t const& in_mono,
+                                 sample_t const& in_lrdiff) {
   // Compute L and R
   sample_t audio_L = in_mono + in_lrdiff;
   sample_t audio_R = in_mono - in_lrdiff;
 
   // Output
-  out_audio_L = audio_L;
-  out_audio_R = audio_R;
+  return {audio_L, audio_R};
 }

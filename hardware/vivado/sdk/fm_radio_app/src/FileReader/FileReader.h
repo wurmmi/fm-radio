@@ -32,7 +32,6 @@ class FileReader {
   FIL mFile;
 #endif
 
-  void PrepareBufferData();
   bool FileOpen(std::string const& filename);
   void FileClose();
   bool FileRead(void* target_buf,
@@ -46,7 +45,7 @@ class FileReader {
 
   static FileType GetFileType(std::string const& filename);
 
-  virtual void LoadFile(std::string const& filename) = 0;
+  virtual bool LoadFile(std::string const& filename) = 0;
   DMABuffer GetBuffer();
 };
 

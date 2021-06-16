@@ -145,8 +145,8 @@ wire    ap_CS_fsm_state2;
 wire   [3:0] k_1_fu_458_p2;
 reg   [3:0] k_1_reg_670;
 wire    ap_CS_fsm_state3;
-wire   [0:0] tmp_5_fu_464_p2;
-reg   [0:0] tmp_5_reg_675;
+wire   [0:0] tmp_2_fu_464_p2;
+reg   [0:0] tmp_2_reg_675;
 wire   [0:0] tmp_s_fu_452_p2;
 wire  signed [15:0] p_Val2_4_fu_470_p1;
 reg  signed [15:0] p_Val2_4_reg_679;
@@ -254,8 +254,8 @@ wire    fm_channel_data_V_V_full_n;
 reg    fm_channel_data_V_V_write;
 reg    ap_block_state6;
 wire   [0:0] tmp_fu_440_p2;
-reg   [15:0] audio_lrdiff_dec_V_reg_366;
-reg   [15:0] audio_mono_dec_V_reg_377;
+reg   [15:0] p_Val2_s_reg_366;
+reg   [15:0] p_Val2_3_reg_377;
 reg   [1:0] i_i_reg_388;
 reg    grp_operator_s_fu_399_ap_start_reg;
 wire    ap_CS_fsm_state42;
@@ -275,15 +275,15 @@ wire  signed [15:0] p_Val2_i_fu_490_p2;
 wire  signed [29:0] p_Val2_7_fu_626_p2;
 wire  signed [15:0] p_Val2_7_i_fu_484_p2;
 wire  signed [29:0] p_Val2_8_fu_633_p2;
-wire   [15:0] ssdm_int_V_write_ass_fu_547_p2;
-wire   [15:0] ssdm_int_V_write_ass_1_fu_553_p2;
+wire   [15:0] agg_result_L_V_write_fu_547_p2;
+wire   [15:0] agg_result_R_V_write_fu_553_p2;
 wire   [15:0] tmp_3_fu_571_p2;
 wire   [15:0] p_Val2_i_i_fu_577_p2;
 wire   [29:0] p_Val2_2_fu_587_p3;
 wire   [29:0] addconv_i_i_fu_594_p2;
 wire  signed [28:0] r_V_fu_646_p2;
 wire  signed [15:0] OP1_V_cast_fu_640_p0;
-wire  signed [28:0] tmp_7_fu_583_p1;
+wire  signed [28:0] tmp_1_fu_583_p1;
 wire  signed [15:0] OP1_V_cast_fu_640_p1;
 wire   [0:0] tmp_i_fu_535_p2;
 reg   [15:0] ap_return_0_preg;
@@ -572,7 +572,7 @@ always @ (posedge ap_clk) begin
         ap_return_0_preg <= 16'd0;
     end else begin
         if (((tmp_i_fu_535_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-            ap_return_0_preg <= ssdm_int_V_write_ass_fu_547_p2;
+            ap_return_0_preg <= agg_result_L_V_write_fu_547_p2;
         end
     end
 end
@@ -582,7 +582,7 @@ always @ (posedge ap_clk) begin
         ap_return_1_preg <= 16'd0;
     end else begin
         if (((tmp_i_fu_535_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-            ap_return_1_preg <= ssdm_int_V_write_ass_1_fu_553_p2;
+            ap_return_1_preg <= agg_result_R_V_write_fu_553_p2;
         end
     end
 end
@@ -630,7 +630,7 @@ end
 always @ (posedge ap_clk) begin
     if (((tmp_fu_440_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state2))) begin
         k_reg_355 <= 4'd0;
-    end else if ((~((fm_channel_data_V_V_full_n == 1'b0) & (tmp_5_reg_675 == 1'd1)) & (1'b1 == ap_CS_fsm_state6))) begin
+    end else if ((~((fm_channel_data_V_V_full_n == 1'b0) & (tmp_2_reg_675 == 1'd1)) & (1'b1 == ap_CS_fsm_state6))) begin
         k_reg_355 <= k_1_reg_670;
     end
 end
@@ -654,13 +654,6 @@ end
 always @ (posedge ap_clk) begin
     if (((grp_operator_s_fu_399_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state39))) begin
         OP1_V_cast_reg_883 <= OP1_V_cast_fu_640_p2;
-    end
-end
-
-always @ (posedge ap_clk) begin
-    if (((1'b0 == ap_block_state43_on_subcall_done) & (1'b1 == ap_CS_fsm_state43))) begin
-        audio_lrdiff_dec_V_reg_366 <= grp_operator_s_fu_414_ap_return;
-        audio_mono_dec_V_reg_377 <= mono_delayed_V_reg_707;
     end
 end
 
@@ -828,6 +821,13 @@ always @ (posedge ap_clk) begin
 end
 
 always @ (posedge ap_clk) begin
+    if (((1'b0 == ap_block_state43_on_subcall_done) & (1'b1 == ap_CS_fsm_state43))) begin
+        p_Val2_3_reg_377 <= grp_operator_s_fu_414_ap_return;
+        p_Val2_s_reg_366 <= mono_delayed_V_reg_707;
+    end
+end
+
+always @ (posedge ap_clk) begin
     if (((1'b1 == ap_CS_fsm_state26) | (1'b1 == ap_CS_fsm_state9))) begin
         reg_435 <= delay_inst_shift_reg_1_q0;
     end
@@ -835,7 +835,7 @@ end
 
 always @ (posedge ap_clk) begin
     if (((tmp_s_fu_452_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state3))) begin
-        tmp_5_reg_675 <= tmp_5_fu_464_p2;
+        tmp_2_reg_675 <= tmp_2_fu_464_p2;
     end
 end
 
@@ -871,7 +871,7 @@ end
 
 always @ (*) begin
     if (((tmp_i_fu_535_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-        ap_return_0 = ssdm_int_V_write_ass_fu_547_p2;
+        ap_return_0 = agg_result_L_V_write_fu_547_p2;
     end else begin
         ap_return_0 = ap_return_0_preg;
     end
@@ -879,7 +879,7 @@ end
 
 always @ (*) begin
     if (((tmp_i_fu_535_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state7))) begin
-        ap_return_1 = ssdm_int_V_write_ass_1_fu_553_p2;
+        ap_return_1 = agg_result_R_V_write_fu_553_p2;
     end else begin
         ap_return_1 = ap_return_1_preg;
     end
@@ -1176,7 +1176,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state3) | (1'b1 == ap_CS_fsm_state4) | (~((fm_channel_data_V_V_full_n == 1'b0) & (tmp_5_reg_675 == 1'd1)) & (1'b1 == ap_CS_fsm_state6)) | ((iq_in_V_TVALID == 1'b1) & (1'b1 == ap_CS_fsm_state5)))) begin
+    if (((1'b1 == ap_CS_fsm_state3) | (1'b1 == ap_CS_fsm_state4) | (~((fm_channel_data_V_V_full_n == 1'b0) & (tmp_2_reg_675 == 1'd1)) & (1'b1 == ap_CS_fsm_state6)) | ((iq_in_V_TVALID == 1'b1) & (1'b1 == ap_CS_fsm_state5)))) begin
         delay_inst_shift_reg_2_ce0 = 1'b1;
     end else begin
         delay_inst_shift_reg_2_ce0 = 1'b0;
@@ -1184,7 +1184,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state4) | (~((fm_channel_data_V_V_full_n == 1'b0) & (tmp_5_reg_675 == 1'd1)) & (1'b1 == ap_CS_fsm_state6)) | ((iq_in_V_TVALID == 1'b1) & (1'b1 == ap_CS_fsm_state5)))) begin
+    if (((1'b1 == ap_CS_fsm_state4) | (~((fm_channel_data_V_V_full_n == 1'b0) & (tmp_2_reg_675 == 1'd1)) & (1'b1 == ap_CS_fsm_state6)) | ((iq_in_V_TVALID == 1'b1) & (1'b1 == ap_CS_fsm_state5)))) begin
         delay_inst_shift_reg_2_ce1 = 1'b1;
     end else begin
         delay_inst_shift_reg_2_ce1 = 1'b0;
@@ -1202,7 +1202,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((~((fm_channel_data_V_V_full_n == 1'b0) & (tmp_5_reg_675 == 1'd1)) & (1'b1 == ap_CS_fsm_state6)) | ((iq_in_V_TVALID == 1'b1) & (1'b1 == ap_CS_fsm_state5)))) begin
+    if (((~((fm_channel_data_V_V_full_n == 1'b0) & (tmp_2_reg_675 == 1'd1)) & (1'b1 == ap_CS_fsm_state6)) | ((iq_in_V_TVALID == 1'b1) & (1'b1 == ap_CS_fsm_state5)))) begin
         delay_inst_shift_reg_2_we0 = 1'b1;
     end else begin
         delay_inst_shift_reg_2_we0 = 1'b0;
@@ -1210,7 +1210,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((~((fm_channel_data_V_V_full_n == 1'b0) & (tmp_5_reg_675 == 1'd1)) & (1'b1 == ap_CS_fsm_state6)) | ((iq_in_V_TVALID == 1'b1) & (1'b1 == ap_CS_fsm_state5)))) begin
+    if (((~((fm_channel_data_V_V_full_n == 1'b0) & (tmp_2_reg_675 == 1'd1)) & (1'b1 == ap_CS_fsm_state6)) | ((iq_in_V_TVALID == 1'b1) & (1'b1 == ap_CS_fsm_state5)))) begin
         delay_inst_shift_reg_2_we1 = 1'b1;
     end else begin
         delay_inst_shift_reg_2_we1 = 1'b0;
@@ -1240,7 +1240,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state3) | (1'b1 == ap_CS_fsm_state4) | (~((fm_channel_data_V_V_full_n == 1'b0) & (tmp_5_reg_675 == 1'd1)) & (1'b1 == ap_CS_fsm_state6)) | ((iq_in_V_TVALID == 1'b1) & (1'b1 == ap_CS_fsm_state5)))) begin
+    if (((1'b1 == ap_CS_fsm_state3) | (1'b1 == ap_CS_fsm_state4) | (~((fm_channel_data_V_V_full_n == 1'b0) & (tmp_2_reg_675 == 1'd1)) & (1'b1 == ap_CS_fsm_state6)) | ((iq_in_V_TVALID == 1'b1) & (1'b1 == ap_CS_fsm_state5)))) begin
         delay_inst_shift_reg_ce0 = 1'b1;
     end else begin
         delay_inst_shift_reg_ce0 = 1'b0;
@@ -1248,7 +1248,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state4) | (~((fm_channel_data_V_V_full_n == 1'b0) & (tmp_5_reg_675 == 1'd1)) & (1'b1 == ap_CS_fsm_state6)) | ((iq_in_V_TVALID == 1'b1) & (1'b1 == ap_CS_fsm_state5)))) begin
+    if (((1'b1 == ap_CS_fsm_state4) | (~((fm_channel_data_V_V_full_n == 1'b0) & (tmp_2_reg_675 == 1'd1)) & (1'b1 == ap_CS_fsm_state6)) | ((iq_in_V_TVALID == 1'b1) & (1'b1 == ap_CS_fsm_state5)))) begin
         delay_inst_shift_reg_ce1 = 1'b1;
     end else begin
         delay_inst_shift_reg_ce1 = 1'b0;
@@ -1266,7 +1266,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((~((fm_channel_data_V_V_full_n == 1'b0) & (tmp_5_reg_675 == 1'd1)) & (1'b1 == ap_CS_fsm_state6)) | ((iq_in_V_TVALID == 1'b1) & (1'b1 == ap_CS_fsm_state5)))) begin
+    if (((~((fm_channel_data_V_V_full_n == 1'b0) & (tmp_2_reg_675 == 1'd1)) & (1'b1 == ap_CS_fsm_state6)) | ((iq_in_V_TVALID == 1'b1) & (1'b1 == ap_CS_fsm_state5)))) begin
         delay_inst_shift_reg_we0 = 1'b1;
     end else begin
         delay_inst_shift_reg_we0 = 1'b0;
@@ -1274,7 +1274,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((~((fm_channel_data_V_V_full_n == 1'b0) & (tmp_5_reg_675 == 1'd1)) & (1'b1 == ap_CS_fsm_state6)) | ((iq_in_V_TVALID == 1'b1) & (1'b1 == ap_CS_fsm_state5)))) begin
+    if (((~((fm_channel_data_V_V_full_n == 1'b0) & (tmp_2_reg_675 == 1'd1)) & (1'b1 == ap_CS_fsm_state6)) | ((iq_in_V_TVALID == 1'b1) & (1'b1 == ap_CS_fsm_state5)))) begin
         delay_inst_shift_reg_we1 = 1'b1;
     end else begin
         delay_inst_shift_reg_we1 = 1'b0;
@@ -1362,7 +1362,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((~((fm_channel_data_V_V_full_n == 1'b0) & (tmp_5_reg_675 == 1'd1)) & (tmp_5_reg_675 == 1'd1) & (1'b1 == ap_CS_fsm_state6))) begin
+    if ((~((fm_channel_data_V_V_full_n == 1'b0) & (tmp_2_reg_675 == 1'd1)) & (tmp_2_reg_675 == 1'd1) & (1'b1 == ap_CS_fsm_state6))) begin
         fm_channel_data_V_V_write = 1'b1;
     end else begin
         fm_channel_data_V_V_write = 1'b0;
@@ -1443,7 +1443,7 @@ always @ (*) begin
             end
         end
         ap_ST_fsm_state6 : begin
-            if ((~((fm_channel_data_V_V_full_n == 1'b0) & (tmp_5_reg_675 == 1'd1)) & (1'b1 == ap_CS_fsm_state6))) begin
+            if ((~((fm_channel_data_V_V_full_n == 1'b0) & (tmp_2_reg_675 == 1'd1)) & (1'b1 == ap_CS_fsm_state6))) begin
                 ap_NS_fsm = ap_ST_fsm_state3;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state6;
@@ -1586,11 +1586,15 @@ always @ (*) begin
     endcase
 end
 
-assign OP1_V_cast_fu_640_p0 = tmp_7_fu_583_p1;
+assign OP1_V_cast_fu_640_p0 = tmp_1_fu_583_p1;
 
-assign OP1_V_cast_fu_640_p1 = tmp_7_fu_583_p1;
+assign OP1_V_cast_fu_640_p1 = tmp_1_fu_583_p1;
 
 assign addconv_i_i_fu_594_p2 = ($signed(30'd872415232) + $signed(p_Val2_2_fu_587_p3));
+
+assign agg_result_L_V_write_fu_547_p2 = (p_Val2_3_reg_377 + p_Val2_s_reg_366);
+
+assign agg_result_R_V_write_fu_553_p2 = (p_Val2_s_reg_366 - p_Val2_3_reg_377);
 
 assign ap_CS_fsm_state1 = ap_CS_fsm[32'd0];
 
@@ -1683,7 +1687,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    ap_block_state6 = ((fm_channel_data_V_V_full_n == 1'b0) & (tmp_5_reg_675 == 1'd1));
+    ap_block_state6 = ((fm_channel_data_V_V_full_n == 1'b0) & (tmp_2_reg_675 == 1'd1));
 end
 
 assign fm_channel_data_V_V_din = (p_Val2_9_reg_689 - p_Val2_11_reg_694);
@@ -1710,15 +1714,11 @@ assign p_Val2_i_fu_490_p2 = ($signed(p_Val2_6_fu_474_p4) - $signed(reg_429));
 
 assign p_Val2_i_i_fu_577_p2 = (16'd0 - tmp_3_fu_571_p2);
 
-assign ssdm_int_V_write_ass_1_fu_553_p2 = (audio_mono_dec_V_reg_377 - audio_lrdiff_dec_V_reg_366);
+assign tmp_1_fu_583_p1 = $signed(p_Val2_i_i_fu_577_p2);
 
-assign ssdm_int_V_write_ass_fu_547_p2 = (audio_lrdiff_dec_V_reg_366 + audio_mono_dec_V_reg_377);
+assign tmp_2_fu_464_p2 = ((k_reg_355 == 4'd7) ? 1'b1 : 1'b0);
 
 assign tmp_3_fu_571_p2 = grp_operator_s_fu_399_ap_return << 16'd3;
-
-assign tmp_5_fu_464_p2 = ((k_reg_355 == 4'd7) ? 1'b1 : 1'b0);
-
-assign tmp_7_fu_583_p1 = $signed(p_Val2_i_i_fu_577_p2);
 
 assign tmp_fu_440_p2 = ((i_reg_344 == 2'd3) ? 1'b1 : 1'b0);
 

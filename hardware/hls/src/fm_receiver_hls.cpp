@@ -43,6 +43,9 @@ clang-format off
 --       06/11/2021  09:00 - 17:00   08:00 h  Re-write the sample decimation.
 --                                            (process N samples from the stream; the last one is the decimated one)
 --
+-- (6) Switch mode between radio processing and pass-through
+--       06/13/2021  14:00 -         0x:00 h
+--
 clang-format on
 */
 
@@ -79,10 +82,10 @@ using namespace std;
 
 void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
                      hls::stream<audio_sample_t>& audio_out,
-                     uint8_t led_ctrl,
-                     status_git_hash_t* status_git_hash,
-                     status_build_time_t* status_build_time,
+                     config_t& config,
+                     status_t* status,
                      uint8_t* led_out) {
+  /*----------- HLS interface settings ------------*/
 #pragma HLS INTERFACE ap_ctrl_hs port = return
 
 #pragma HLS INTERFACE axis port = iq_in
@@ -91,55 +94,39 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
 #pragma HLS INTERFACE axis port = audio_out
 #pragma HLS DATA_PACK variable  = audio_out
 
-#pragma HLS INTERFACE s_axilite port = status_git_hash bundle = CONFIG
-#pragma HLS INTERFACE s_axilite port = status_build_time bundle = CONFIG
-#pragma HLS INTERFACE s_axilite port = led_ctrl bundle = CONFIG
+#pragma HLS INTERFACE s_axilite port = status bundle = API
+#pragma HLS INTERFACE s_axilite port = config bundle = API
 
-#pragma HLS INTERFACE ap_none port = status_git_hash
-#pragma HLS INTERFACE ap_none port = status_build_time
+#pragma HLS INTERFACE ap_none port = status
 #pragma HLS INTERFACE ap_none port = led_out
 
-#if IMPL_DATA_FORWARDING_ONLY == 1
-  /*----------- Forwarding test --------------*/
-  iq_sample_t fw_iq_in = iq_in.read();
-
-  audio_sample_t fw_iq_out = {fw_iq_in.i, fw_iq_in.q};
-
-  audio_out.write(fw_iq_out);
-#endif /* IMPL_DATA_FORWARDING_ONLY */
-
-  /*-------------- Other testing -------------*/
-
-  // NOTE: This is used to determine how often this function is called.
-  //       The toggle flag can be compared against the input clock.
+  /*------------ Other (testing) -------------*/
+  /** NOTE: This is used to determine how often this function is called.
+   *        Simulation: The toggle flag can be compared against the input clock.
+   *        Hardware:   The toggle signal can be seen on an LED. */
   static bool toggle = false;
   toggle             = !toggle;
 
-  /*----------- AXILITE Interface ------------*/
+  /*----------- AXILITE interface ------------*/
   static const status_git_hash_t status_git_hash_c     = STRING(GIT_HASH);
   static const status_build_time_t status_build_time_c = STRING(BUILD_TIME);
 
-  *status_git_hash   = status_git_hash_c;
-  *status_build_time = status_build_time_c;
+  status->git_hash   = status_git_hash_c;
+  status->build_time = status_build_time_c;
 
-  *led_out = led_ctrl | (((uint8_t)toggle << 2));
+  *led_out = config.led_ctrl | (((uint8_t)toggle << 2));
 
-#if IMPL_FM_RADIO == 1
-  /*---------------- FM radio ----------------*/
+  if (config.enable_fm_radio_ip == 1) {
+    /*---------------- Mode: Pass-through ------------*/
 
-  // ------------------------------------------------------
-  // FM Receiver IP
-  // ------------------------------------------------------
+    iq_sample_t fw_iq_in     = iq_in.read();
+    audio_sample_t fw_iq_out = {fw_iq_in.i, fw_iq_in.q};
+    audio_out.write(fw_iq_out);
 
-  sample_t audio_L;
-  sample_t audio_R;
-  fm_receiver(iq_in, audio_L, audio_R);
+  } else {
+    /*---------------- Mode: FM radio ----------------*/
 
-  // ------------------------------------------------------
-  // Output
-  // ------------------------------------------------------
-
-  audio_sample_t audio_sample = {audio_L, audio_R};
-  audio_out.write(audio_sample);
-#endif /* IMPL_FM_RADIO */
+    audio_sample_t audio_sample = fm_receiver(iq_in);
+    audio_out.write(audio_sample);
+  }
 }

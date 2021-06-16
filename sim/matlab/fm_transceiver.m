@@ -50,6 +50,9 @@ EnableDeEmphasis       = false;
 EnableManualDecimation = false;
 EnableRDSDecoder       = false;
 
+EnableSenderAmplitudeLimiter = true;
+SenderAmplitudeLimiterFactor = 0.9;
+
 fp_config.enable     = true;
 fp_config.width      = 16;
 fp_config.width_frac = 14;
@@ -81,7 +84,7 @@ fm_sender();
 
 fm_receiver();
 
-% TODO: implement an implementation that is suitable for hardware
+% TODO: implement a version that is actually using 16 bit fixed_point like hardware
 % fm_receiver_fixed_point();
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -145,7 +148,7 @@ if EnableWriteDataFiles
     writeDataToFile(rx_audio_L,       num_samples_audio, './verification_data/rx_audio_L.txt',       fp_config);
     writeDataToFile(rx_audio_R,       num_samples_audio, './verification_data/rx_audio_R.txt',       fp_config);
 
-    writeDataToFileWAV(rx_fm_bb, fs, '../../hardware/vivado/sdk/fm_radio_app/resource/wav/rx_fm_bb.wav');
+    writeDataToFileWAV(rx_fm_bb, fs, '../../hardware/vivado/sdk/fm_radio_app/resource/wav/','rx_fm_bb', fp_config);
     disp('Done.');
 end
 
