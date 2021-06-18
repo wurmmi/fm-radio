@@ -15,9 +15,9 @@ class FM_RECEIVER_MODEL():
     def __init__(self, n_sec, golden_data_directory, is_cocotb=True):
         # Adapt logging functions
         if is_cocotb:
-            self.log_info = cocotb.logging.info
-            self.log_warn = cocotb.logging.warning
-            self.log_error = cocotb.logging.error
+            self.log_info = cocotb.log.info
+            self.log_warn = cocotb.log.warning
+            self.log_error = cocotb.log.error
             self.test_fail = cocotb.result.TestFailure
         else:
             self.log_info = print

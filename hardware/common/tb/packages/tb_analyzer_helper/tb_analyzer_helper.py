@@ -22,8 +22,8 @@ class TB_ANALYZER_HELPER():
         # Adapt logging functions
         self.is_cocotb = is_cocotb
         if self.is_cocotb:
-            self.log_info = cocotb.logging.info
-            self.log_warn = cocotb.logging.warning
+            self.log_info = cocotb.log.info
+            self.log_warn = cocotb.log.warning
             self.test_fail = cocotb.result.TestFailure
         else:
             self.log_info = print
@@ -65,21 +65,14 @@ class TB_ANALYZER_HELPER():
             msg += "Check consistency of the list in TB_DATA_HANDLER and FM_RECEIVER_MODEL"
             assert model_dataset['name'] == tb_dataset['name'], msg
 
-            # Calculate number of samples to be skipped
-            skip_n_begin = int(len(model_dataset['data']) * 0.25)
-            skip_n_end = int(len(model_dataset['data']) * 0.05)
-            self.log_warn(f"################## {model_dataset['name']}:")
-            self.log_info(f"skip_n_begin: {skip_n_begin}")
-            self.log_info(f"skip_n_end:   {skip_n_end}")
-
             tb_dataset['result_okay'] = \
                 helper.compareResultsOkay(model_dataset['data'],
                                           tb_dataset['data'],
                                           fail_on_err=EnableFailOnError,
                                           max_error_abs=tb_dataset['max_error_abs'],
                                           max_error_norm=tb_dataset['max_error_norm'],
-                                          skip_n_samples_begin=skip_n_begin,
-                                          skip_n_samples_end=skip_n_end,
+                                          skip_n_samples_begin=30,
+                                          skip_n_samples_end=30,
                                           data_name=tb_dataset['name'],
                                           is_cocotb=self.is_cocotb)
 
