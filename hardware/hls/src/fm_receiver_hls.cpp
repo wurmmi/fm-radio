@@ -84,7 +84,7 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
                      hls::stream<audio_sample_t>& audio_out,
                      config_t& config,
                      status_t* status,
-                     uint8_t* led_out) {
+                     ap_int<NUM_LEDS>* led_out) {
   /*----------- HLS interface settings ------------*/
 #pragma HLS INTERFACE ap_ctrl_hs port = return
 

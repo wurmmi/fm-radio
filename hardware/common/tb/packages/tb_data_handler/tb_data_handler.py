@@ -83,4 +83,5 @@ class TB_DATA_HANDLER():
     def load_data_from_file(self, directory):
         for dataset in self.data:
             filename = directory + f"data_out_{dataset['name']}.txt"
-            dataset['data'] = helper.loadDataFromFile(filename, -1, fp_width_c, fp_width_frac_c, use_fixed=False)
+            dataset['data'] = helper.loadDataFromFile(
+                filename, -1, fm_global.fp_width_c, fm_global.fp_width_frac_c, use_fixed=False)
