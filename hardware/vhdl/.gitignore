@@ -1,29 +1,16 @@
 #-------------------------------------------------------------------------------
 # File        : .gitignore
 # Author      : Michael Wurm <wurm.michael95@gmail.com>
-# Description : Local gitignore file
+# Description : Local gitignore file for VHDL
 #-------------------------------------------------------------------------------
-
-######## VHDL #########
 
 # cocotb
 sim_build/
-vhdl/**/*.lst
-vhdl/tb/**/*.xml
-vhdl/**/*.txt
+**/*.lst
+**/tb/**/*.xml
+**/*.txt
 *.o
 __pycache__
 
-
 **/integration_test/fm_receiver_top
 **/unit_test/FIR/dspfir
-
-######## HLS ##########
-
-# Vivado
-generated/
-output/
-vivado/**/*.str
-.Xil/
-Packages/
-*.log
