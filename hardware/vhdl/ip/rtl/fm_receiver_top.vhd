@@ -43,7 +43,7 @@ entity fm_receiver_top is
     m0_axis_tvalid : out std_logic;
 
     -- LED output
-    leds_o : out std_logic_vector(3 downto 0)
+    leds_o : out std_logic_vector(3 downto 0);
 
     -- AXI-Lite register interface
     s_axi_awaddr_i  : in std_logic_vector(spec_reg_if_addr_width_c - 1 downto 0);
@@ -64,7 +64,7 @@ entity fm_receiver_top is
     s_axi_rdata_o   : out std_logic_vector(31 downto 0);
     s_axi_rresp_o   : out std_logic_vector(1 downto 0);
     s_axi_rvalid_o  : out std_logic;
-    s_axi_rready_i  : in std_logic));
+    s_axi_rready_i  : in std_logic);
 
 end entity fm_receiver_top;
 

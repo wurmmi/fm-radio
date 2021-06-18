@@ -63,7 +63,7 @@ package fm_global_pkg is
   type control_t is record
     --! @brief FM Radio's control registers
     --! @param led_ctrl LED control.
-    led_ctrl : gui_ctrl_t;
+    led_ctrl : std_ulogic_vector(3 downto 0);
   end record control_t;
 
   ------------------------------------------------------------------------------

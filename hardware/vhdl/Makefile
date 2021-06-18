@@ -19,7 +19,7 @@ registers = \
 	$(if $(shell test -f ./ip/spec/fm_radio.yaml && echo file exists), \
 			$(call templates,$1,registers_axi.vhd,./ip/rtl/$1_axi.vhd); \
 			$(call templates,$1,registers.md,./ip/registers.md); \
-			$(call templates,$1,spec.vhd,./ip/rtl/$1_spec_pkg.vhd); \
+			$(call templates,$1,spec.vhd,./ip/rtl/packages/$1_spec_pkg.vhd); \
 			$(call templates,$1,registers.h,./ip/include/$1.h), \
 		echo "Could not find specification file './ip/spec/fm_radio.yaml'")
 
