@@ -15,6 +15,9 @@
 --       06/16/2021  08:30 - 10:00    1:30 h   VHDL implementation fast; But
 --                                             testbench verification took 3h ..
 --
+-- (3) LED control
+--       06/18/2021  13:30 -
+--
 
 library ieee;
 use ieee.std_logic_1164.all;
