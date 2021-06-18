@@ -11,7 +11,7 @@ SHELL        = /bin/bash
 MAKEFILE_DIR = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 VIVADO_DIR = ./generated
-IP_DIRS     = "./ip ../vhdl"
+IP_DIRS     = "./ip ../vhdl/ip"
 
 vivado = vivado -nojournal -nolog -notrace -mode batch -source ./scripts/$1 $2
 

@@ -14,7 +14,7 @@ SHELL        = /bin/bash
 MAKEFILE_DIR = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 VIVADO_HLS_PROJECT_NAME = prj
-ENV_SETUP_SCRIPT        = ../../vhdl/tb/setup_env.sh
+ENV_SETUP_SCRIPT        = ../../vhdl/ip/tb/setup_env.sh
 
 PROJ_DIR = ../generated/fm_receiver_hls
 IP_DIR   = ../../vivado/ip

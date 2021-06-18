@@ -43,7 +43,7 @@ async def fir_filter_test(dut):
     # --------------------------------------------------------------------------
     # Load data from files
     # --------------------------------------------------------------------------
-    filename = "../../../../../sim/matlab/verification_data/rx_fm_channel_data.txt"
+    filename = "../../../../../../sim/matlab/verification_data/rx_fm_channel_data.txt"
     data_i = []
     with open(filename) as fd:
         val_count = 0
@@ -58,7 +58,7 @@ async def fir_filter_test(dut):
     data_i_fp = to_fixed_point(data_i, fm_global.fp_width_c, fm_global.fp_width_frac_c)
     data_i_int = fixed_to_int(data_i_fp)
 
-    filename = "../../../../../sim/matlab/verification_data/rx_pilot.txt"
+    filename = "../../../../../../sim/matlab/verification_data/rx_pilot.txt"
     gold_data_o = []
     with open(filename) as fd:
         val_count = 0
@@ -153,7 +153,7 @@ async def fir_filter_test(dut):
 
     # Skip first N samples
     skip_N = 10
-    dut._log.info("Skipping first N={} samples.")
+    dut._log.info(f"Skipping first N={skip_N} samples.")
     gold_data_o_fp = gold_data_o_fp[skip_N:]
     tb.data_out = tb.data_out[skip_N:]
 

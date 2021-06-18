@@ -49,7 +49,7 @@ async def data_processing_test(dut):
     # --------------------------------------------------------------------------
     dut._log.info("Loading input data ...")
 
-    filename = "../../../../sim/matlab/verification_data/rx_fm_bb.txt"
+    filename = "../../../../../sim/matlab/verification_data/rx_fm_bb.txt"
     data_fp = helper.loadDataFromFile(filename, tb.model.num_samples_fs_c * 2,
                                       fm_global.fp_width_c, fm_global.fp_width_frac_c)
 

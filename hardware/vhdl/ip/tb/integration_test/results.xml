@@ -1,0 +1,6 @@
+<testsuites name="results">
+  <testsuite name="all" package="all">
+    <property name="random_seed" value="1624018205" />
+    <testcase name="data_processing_test" classname="tests" file="/home/mike/work/fm-radio/hardware/vhdl/ip/tb/integration_test/tests.py" lineno="21" time="26.72848677635193" sim_time_ns="409605.000001" ratio_time="15324.661041544585" />
+  </testsuite>
+</testsuites>

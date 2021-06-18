@@ -34,7 +34,7 @@ class FM_TB():
             "Clock rate and fs_rx_c must have an integer relation!"
 
         # Instantiate model
-        golden_data_directory = "../../../../sim/matlab/verification_data/"
+        golden_data_directory = "../../../../../sim/matlab/verification_data/"
         self.model = FM_RECEIVER_MODEL(n_sec, golden_data_directory)
 
         # Connect AXI interface (IP input)

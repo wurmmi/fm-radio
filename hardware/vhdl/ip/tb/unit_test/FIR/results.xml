@@ -1,0 +1,6 @@
+<testsuites name="results">
+  <testsuite name="all" package="all">
+    <property name="random_seed" value="1624018322" />
+    <testcase name="fir_filter_test" classname="tests" file="/home/mike/work/fm-radio/hardware/vhdl/ip/tb/unit_test/FIR/tests.py" lineno="23" time="9.382893085479736" sim_time_ns="1016379.000001" ratio_time="108322.56008265426" />
+  </testsuite>
+</testsuites>
