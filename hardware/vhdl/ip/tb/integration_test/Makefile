@@ -19,8 +19,8 @@ endif
 
 # VHDL sources in compile order
 VHDL_SOURCES =
-VHDL_SOURCES += $(CURDIR)/../../rtl/packages/fm_radio_spec_pkg.vhd
 VHDL_SOURCES += $(CURDIR)/../../rtl/packages/fm_global_spec_pkg.vhd
+VHDL_SOURCES += $(CURDIR)/../../rtl/packages/fm_radio_spec_pkg.vhd
 VHDL_SOURCES += $(CURDIR)/../../rtl/fm_radio_pkg.vhd
 VHDL_SOURCES += $(CURDIR)/../../rtl/packages/filter_lp_mono_pkg.vhd
 VHDL_SOURCES += $(CURDIR)/../../rtl/packages/filter_bp_pilot_pkg.vhd

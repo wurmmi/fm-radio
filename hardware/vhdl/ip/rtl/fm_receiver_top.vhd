@@ -47,25 +47,25 @@ entity fm_receiver_top is
     leds_o : out std_logic_vector(3 downto 0);
 
     -- AXI-Lite register interface
-    s_axi_awaddr_i  : in std_logic_vector(spec_reg_if_addr_width_c - 1 downto 0);
-    s_axi_awprot_i  : in std_logic_vector(2 downto 0);
-    s_axi_awvalid_i : in std_logic;
-    s_axi_awready_o : out std_logic;
-    s_axi_wdata_i   : in std_logic_vector(31 downto 0);
-    s_axi_wstrb_i   : in std_logic_vector(3 downto 0);
-    s_axi_wvalid_i  : in std_logic;
-    s_axi_wready_o  : out std_logic;
-    s_axi_bresp_o   : out std_logic_vector(1 downto 0);
-    s_axi_bvalid_o  : out std_logic;
-    s_axi_bready_i  : in std_logic;
-    s_axi_araddr_i  : in std_logic_vector(spec_reg_if_addr_width_c - 1 downto 0);
-    s_axi_arprot_i  : in std_logic_vector(2 downto 0);
-    s_axi_arvalid_i : in std_logic;
-    s_axi_arready_o : out std_logic;
-    s_axi_rdata_o   : out std_logic_vector(31 downto 0);
-    s_axi_rresp_o   : out std_logic_vector(1 downto 0);
-    s_axi_rvalid_o  : out std_logic;
-    s_axi_rready_i  : in std_logic);
+    s_axi_awaddr  : in std_logic_vector(spec_reg_if_addr_width_c - 1 downto 0);
+    s_axi_awprot  : in std_logic_vector(2 downto 0);
+    s_axi_awvalid : in std_logic;
+    s_axi_awready : out std_logic;
+    s_axi_wdata   : in std_logic_vector(31 downto 0);
+    s_axi_wstrb   : in std_logic_vector(3 downto 0);
+    s_axi_wvalid  : in std_logic;
+    s_axi_wready  : out std_logic;
+    s_axi_bresp   : out std_logic_vector(1 downto 0);
+    s_axi_bvalid  : out std_logic;
+    s_axi_bready  : in std_logic;
+    s_axi_araddr  : in std_logic_vector(spec_reg_if_addr_width_c - 1 downto 0);
+    s_axi_arprot  : in std_logic_vector(2 downto 0);
+    s_axi_arvalid : in std_logic;
+    s_axi_arready : out std_logic;
+    s_axi_rdata   : out std_logic_vector(31 downto 0);
+    s_axi_rresp   : out std_logic_vector(1 downto 0);
+    s_axi_rvalid  : out std_logic;
+    s_axi_rready  : in std_logic);
 
 end entity fm_receiver_top;
 
@@ -166,7 +166,7 @@ begin -- architecture rtl
 
   registers_inst : entity work.fm_radio_axi
     port map(
-      s_axi_aclk_i    => clk_i,
+      s_axi_aclk_i   => clk_i,
       s_axi_areset_i => rst_i,
 
       s_axi_awaddr_i  => s_axi_awaddr_i,

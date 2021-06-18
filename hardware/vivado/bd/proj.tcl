@@ -690,7 +690,7 @@ proc create_root_design { parentCell } {
   # Create instance: ps7_0_axi_periph, and set properties
   set ps7_0_axi_periph [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 ps7_0_axi_periph ]
   set_property -dict [ list \
-   CONFIG.NUM_MI {5} \
+   CONFIG.NUM_MI {6} \
  ] $ps7_0_axi_periph
 
   # Create instance: rst_ps7_0_50M, and set properties
@@ -719,6 +719,7 @@ proc create_root_design { parentCell } {
   connect_bd_intf_net -intf_net ps7_0_axi_periph_M02_AXI [get_bd_intf_pins fm_receiver_hls_0/s_axi_API] [get_bd_intf_pins ps7_0_axi_periph/M02_AXI]
   connect_bd_intf_net -intf_net ps7_0_axi_periph_M03_AXI [get_bd_intf_pins axis_switch_0/S_AXI_CTRL] [get_bd_intf_pins ps7_0_axi_periph/M03_AXI]
   connect_bd_intf_net -intf_net ps7_0_axi_periph_M04_AXI [get_bd_intf_pins axis_switch_1/S_AXI_CTRL] [get_bd_intf_pins ps7_0_axi_periph/M04_AXI]
+  connect_bd_intf_net -intf_net ps7_0_axi_periph_M05_AXI [get_bd_intf_pins fm_receiver_vhdl_0/s_axi_lite_control] [get_bd_intf_pins ps7_0_axi_periph/M05_AXI]
 
   # Create port connections
   connect_bd_net -net axi_dma_0_mm2s_introut [get_bd_pins axi_dma_0/mm2s_introut] [get_bd_pins processing_system7_0/IRQ_F2P]
@@ -733,10 +734,10 @@ proc create_root_design { parentCell } {
   connect_bd_net -net mySPIRxTx_0_mosi [get_bd_ports spi_mosi_o] [get_bd_pins mySPIRxTx_0/mosi]
   connect_bd_net -net mySPIRxTx_0_sclk [get_bd_ports spi_sclk_o] [get_bd_pins mySPIRxTx_0/sclk]
   connect_bd_net -net mySPIRxTx_0_ss [get_bd_ports spi_ss_o] [get_bd_pins mySPIRxTx_0/ss]
-  connect_bd_net -net processing_system7_0_FCLK_CLK0 [get_bd_pins axi_dma_0/m_axi_mm2s_aclk] [get_bd_pins axi_dma_0/m_axi_sg_aclk] [get_bd_pins axi_dma_0/s_axi_lite_aclk] [get_bd_pins axi_fifo_mm_s0_config_audio/s_axi_aclk] [get_bd_pins axi_smc/aclk] [get_bd_pins axis_switch_0/aclk] [get_bd_pins axis_switch_0/s_axi_ctrl_aclk] [get_bd_pins axis_switch_1/aclk] [get_bd_pins axis_switch_1/s_axi_ctrl_aclk] [get_bd_pins fm_receiver_hls_0/ap_clk] [get_bd_pins fm_receiver_vhdl_0/clk_i] [get_bd_pins myI2STx_0/s00_axis_aclk] [get_bd_pins myPrescaler_0/clk] [get_bd_pins myPrescaler_1/clk] [get_bd_pins mySPIRxTx_0/axis_aclk] [get_bd_pins processing_system7_0/FCLK_CLK0] [get_bd_pins processing_system7_0/M_AXI_GP0_ACLK] [get_bd_pins processing_system7_0/S_AXI_GP0_ACLK] [get_bd_pins ps7_0_axi_periph/ACLK] [get_bd_pins ps7_0_axi_periph/M00_ACLK] [get_bd_pins ps7_0_axi_periph/M01_ACLK] [get_bd_pins ps7_0_axi_periph/M02_ACLK] [get_bd_pins ps7_0_axi_periph/M03_ACLK] [get_bd_pins ps7_0_axi_periph/M04_ACLK] [get_bd_pins ps7_0_axi_periph/S00_ACLK] [get_bd_pins rst_ps7_0_50M/slowest_sync_clk]
+  connect_bd_net -net processing_system7_0_FCLK_CLK0 [get_bd_pins axi_dma_0/m_axi_mm2s_aclk] [get_bd_pins axi_dma_0/m_axi_sg_aclk] [get_bd_pins axi_dma_0/s_axi_lite_aclk] [get_bd_pins axi_fifo_mm_s0_config_audio/s_axi_aclk] [get_bd_pins axi_smc/aclk] [get_bd_pins axis_switch_0/aclk] [get_bd_pins axis_switch_0/s_axi_ctrl_aclk] [get_bd_pins axis_switch_1/aclk] [get_bd_pins axis_switch_1/s_axi_ctrl_aclk] [get_bd_pins fm_receiver_hls_0/ap_clk] [get_bd_pins fm_receiver_vhdl_0/clk_i] [get_bd_pins myI2STx_0/s00_axis_aclk] [get_bd_pins myPrescaler_0/clk] [get_bd_pins myPrescaler_1/clk] [get_bd_pins mySPIRxTx_0/axis_aclk] [get_bd_pins processing_system7_0/FCLK_CLK0] [get_bd_pins processing_system7_0/M_AXI_GP0_ACLK] [get_bd_pins processing_system7_0/S_AXI_GP0_ACLK] [get_bd_pins ps7_0_axi_periph/ACLK] [get_bd_pins ps7_0_axi_periph/M00_ACLK] [get_bd_pins ps7_0_axi_periph/M01_ACLK] [get_bd_pins ps7_0_axi_periph/M02_ACLK] [get_bd_pins ps7_0_axi_periph/M03_ACLK] [get_bd_pins ps7_0_axi_periph/M04_ACLK] [get_bd_pins ps7_0_axi_periph/M05_ACLK] [get_bd_pins ps7_0_axi_periph/S00_ACLK] [get_bd_pins rst_ps7_0_50M/slowest_sync_clk]
   connect_bd_net -net processing_system7_0_FCLK_RESET0_N [get_bd_pins processing_system7_0/FCLK_RESET0_N] [get_bd_pins rst_ps7_0_50M/ext_reset_in]
   connect_bd_net -net rst_ps7_0_50M_interconnect_aresetn [get_bd_pins axis_switch_0/aresetn] [get_bd_pins axis_switch_1/aresetn] [get_bd_pins ps7_0_axi_periph/ARESETN] [get_bd_pins rst_ps7_0_50M/interconnect_aresetn]
-  connect_bd_net -net rst_ps7_0_50M_peripheral_aresetn [get_bd_pins axi_dma_0/axi_resetn] [get_bd_pins axi_fifo_mm_s0_config_audio/s_axi_aresetn] [get_bd_pins axi_smc/aresetn] [get_bd_pins axis_switch_0/s_axi_ctrl_aresetn] [get_bd_pins axis_switch_1/s_axi_ctrl_aresetn] [get_bd_pins fm_receiver_hls_0/ap_rst_n] [get_bd_pins fm_receiver_vhdl_0/rst_i] [get_bd_pins myI2STx_0/s00_axis_aresetn] [get_bd_pins mySPIRxTx_0/axis_aresetn] [get_bd_pins ps7_0_axi_periph/M00_ARESETN] [get_bd_pins ps7_0_axi_periph/M01_ARESETN] [get_bd_pins ps7_0_axi_periph/M02_ARESETN] [get_bd_pins ps7_0_axi_periph/M03_ARESETN] [get_bd_pins ps7_0_axi_periph/M04_ARESETN] [get_bd_pins ps7_0_axi_periph/S00_ARESETN] [get_bd_pins rst_ps7_0_50M/peripheral_aresetn]
+  connect_bd_net -net rst_ps7_0_50M_peripheral_aresetn [get_bd_pins axi_dma_0/axi_resetn] [get_bd_pins axi_fifo_mm_s0_config_audio/s_axi_aresetn] [get_bd_pins axi_smc/aresetn] [get_bd_pins axis_switch_0/s_axi_ctrl_aresetn] [get_bd_pins axis_switch_1/s_axi_ctrl_aresetn] [get_bd_pins fm_receiver_hls_0/ap_rst_n] [get_bd_pins fm_receiver_vhdl_0/rst_i] [get_bd_pins myI2STx_0/s00_axis_aresetn] [get_bd_pins mySPIRxTx_0/axis_aresetn] [get_bd_pins ps7_0_axi_periph/M00_ARESETN] [get_bd_pins ps7_0_axi_periph/M01_ARESETN] [get_bd_pins ps7_0_axi_periph/M02_ARESETN] [get_bd_pins ps7_0_axi_periph/M03_ARESETN] [get_bd_pins ps7_0_axi_periph/M04_ARESETN] [get_bd_pins ps7_0_axi_periph/M05_ARESETN] [get_bd_pins ps7_0_axi_periph/S00_ARESETN] [get_bd_pins rst_ps7_0_50M/peripheral_aresetn]
   connect_bd_net -net xlconstant_high_dout [get_bd_pins fm_receiver_hls_0/ap_start] [get_bd_pins xlconstant_high/dout]
 
   # Create address segments
@@ -747,6 +748,7 @@ proc create_root_design { parentCell } {
   create_bd_addr_seg -range 0x00010000 -offset 0x43C20000 [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs axis_switch_0/S_AXI_CTRL/Reg] SEG_axis_switch_0_Reg
   create_bd_addr_seg -range 0x00010000 -offset 0x43C30000 [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs axis_switch_1/S_AXI_CTRL/Reg] SEG_axis_switch_1_Reg
   create_bd_addr_seg -range 0x00010000 -offset 0x43C00000 [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs fm_receiver_hls_0/s_axi_API/Reg] SEG_fm_receiver_hls_0_Reg
+  create_bd_addr_seg -range 0x00010000 -offset 0x43C40000 [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs fm_receiver_vhdl_0/s_axi_lite_control/registers] SEG_fm_receiver_vhdl_0_registers
 
 
   # Restore current instance

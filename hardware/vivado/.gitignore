@@ -6,3 +6,4 @@
 
 # Vivado
 generated/
+*.str
