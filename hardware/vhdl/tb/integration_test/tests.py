@@ -13,7 +13,6 @@ import helpers as helper
 from cocotb.clock import Clock
 from cocotb.generators import repeat
 from cocotb.generators.bit import bit_toggler
-from cocotb.triggers import RisingEdge
 from fixed_point import fixed_to_int
 
 from fm_tb import FM_TB
@@ -31,7 +30,7 @@ async def data_processing_test(dut):
     # --------------------------------------------------------------------------
 
     # Number of seconds to process
-    n_sec = 0.001
+    n_sec = 0.002
 
     # --------------------------------------------------------------------------
     # Prepare environment

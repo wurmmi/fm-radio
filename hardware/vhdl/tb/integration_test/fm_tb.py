@@ -8,8 +8,8 @@
 import cocotb
 import fm_global
 import helpers as helper
-from cocotb.drivers import BitDriver
 from cocotb.triggers import RisingEdge, Timer
+from cocotb_bus.drivers import BitDriver
 from cocotbext.axi4stream.drivers import Axi4StreamMaster
 from fm_receiver_model import FM_RECEIVER_MODEL
 from tb_analyzer_helper import TB_ANALYZER_HELPER

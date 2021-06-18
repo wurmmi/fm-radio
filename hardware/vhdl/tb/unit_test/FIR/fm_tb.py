@@ -7,8 +7,8 @@
 
 import cocotb
 import fm_global
-from cocotb.drivers import BitDriver
 from cocotb.triggers import RisingEdge, Timer
+from cocotb_bus.drivers import BitDriver
 from fixed_point import int_to_fixed
 
 
