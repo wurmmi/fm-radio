@@ -10,8 +10,8 @@
 // 0x04 : reserved
 // 0x08 : reserved
 // 0x0c : reserved
-// 0x10 : Data signal of config_led_ctrl
-//        bit 7~0 - config_led_ctrl[7:0] (Read/Write)
+// 0x10 : Data signal of config_led_ctrl_V
+//        bit 3~0 - config_led_ctrl_V[3:0] (Read/Write)
 //        others  - reserved
 // 0x14 : reserved
 // 0x18 : Data signal of config_enable_fm_radio_ip
@@ -30,8 +30,8 @@
 // 0x30 : reserved
 // (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
 
-#define XFM_RECEIVER_HLS_API_ADDR_CONFIG_LED_CTRL_DATA           0x10
-#define XFM_RECEIVER_HLS_API_BITS_CONFIG_LED_CTRL_DATA           8
+#define XFM_RECEIVER_HLS_API_ADDR_CONFIG_LED_CTRL_V_DATA         0x10
+#define XFM_RECEIVER_HLS_API_BITS_CONFIG_LED_CTRL_V_DATA         4
 #define XFM_RECEIVER_HLS_API_ADDR_CONFIG_ENABLE_FM_RADIO_IP_DATA 0x18
 #define XFM_RECEIVER_HLS_API_BITS_CONFIG_ENABLE_FM_RADIO_IP_DATA 8
 #define XFM_RECEIVER_HLS_API_ADDR_STATUS_GIT_HASH_V_DATA         0x20
