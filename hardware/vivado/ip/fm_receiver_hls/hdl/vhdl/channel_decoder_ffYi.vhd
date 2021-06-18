@@ -9,7 +9,7 @@ library ieee;
 use ieee.std_logic_1164.all; 
 use ieee.std_logic_unsigned.all;
 
-entity fm_receiver_filtefYi_rom is 
+entity channel_decoder_ffYi_rom is 
     generic(
              DWIDTH     : integer := 16; 
              AWIDTH     : integer := 7; 
@@ -24,7 +24,7 @@ entity fm_receiver_filtefYi_rom is
 end entity; 
 
 
-architecture rtl of fm_receiver_filtefYi_rom is 
+architecture rtl of channel_decoder_ffYi_rom is 
 
 signal addr0_tmp : std_logic_vector(AWIDTH-1 downto 0); 
 type mem_array is array (0 to MEM_SIZE-1) of std_logic_vector (DWIDTH-1 downto 0); 
@@ -90,7 +90,7 @@ end rtl;
 Library IEEE;
 use IEEE.std_logic_1164.all;
 
-entity fm_receiver_filtefYi is
+entity channel_decoder_ffYi is
     generic (
         DataWidth : INTEGER := 16;
         AddressRange : INTEGER := 73;
@@ -103,8 +103,8 @@ entity fm_receiver_filtefYi is
         q0 : OUT STD_LOGIC_VECTOR(DataWidth - 1 DOWNTO 0));
 end entity;
 
-architecture arch of fm_receiver_filtefYi is
-    component fm_receiver_filtefYi_rom is
+architecture arch of channel_decoder_ffYi is
+    component channel_decoder_ffYi_rom is
         port (
             clk : IN STD_LOGIC;
             addr0 : IN STD_LOGIC_VECTOR;
@@ -115,7 +115,7 @@ architecture arch of fm_receiver_filtefYi is
 
 
 begin
-    fm_receiver_filtefYi_rom_U :  component fm_receiver_filtefYi_rom
+    channel_decoder_ffYi_rom_U :  component channel_decoder_ffYi_rom
     port map (
         clk => clk,
         addr0 => address0,

@@ -3,7 +3,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-entity fm_receiver_hls_mocq_DSP48_2 is
+entity fm_receiver_hls_mkbM_DSP48_1 is
 port (
     a: in std_logic_vector(16 - 1 downto 0);
     b: in std_logic_vector(16 - 1 downto 0);
@@ -11,7 +11,7 @@ port (
 
 end entity;
 
-architecture behav of fm_receiver_hls_mocq_DSP48_2 is
+architecture behav of fm_receiver_hls_mkbM_DSP48_1 is
     signal a_cvt: signed(16 - 1 downto 0);
     signal b_cvt: signed(16 - 1 downto 0);
     signal p_cvt: signed(29 - 1 downto 0);
@@ -29,7 +29,7 @@ end architecture;
 Library IEEE;
 use IEEE.std_logic_1164.all;
 
-entity fm_receiver_hls_mocq is
+entity fm_receiver_hls_mkbM is
     generic (
         ID : INTEGER;
         NUM_STAGE : INTEGER;
@@ -42,8 +42,8 @@ entity fm_receiver_hls_mocq is
         dout : OUT STD_LOGIC_VECTOR(dout_WIDTH - 1 DOWNTO 0));
 end entity;
 
-architecture arch of fm_receiver_hls_mocq is
-    component fm_receiver_hls_mocq_DSP48_2 is
+architecture arch of fm_receiver_hls_mkbM is
+    component fm_receiver_hls_mkbM_DSP48_1 is
         port (
             a : IN STD_LOGIC_VECTOR;
             b : IN STD_LOGIC_VECTOR;
@@ -53,7 +53,7 @@ architecture arch of fm_receiver_hls_mocq is
 
 
 begin
-    fm_receiver_hls_mocq_DSP48_2_U :  component fm_receiver_hls_mocq_DSP48_2
+    fm_receiver_hls_mkbM_DSP48_1_U :  component fm_receiver_hls_mkbM_DSP48_1
     port map (
         a => din0,
         b => din1,

@@ -1,17 +1,17 @@
 
 `timescale 1 ns / 1 ps
 
-  module fm_receiver_hls_mocq_DSP48_2(a, b, p);
+  module fm_receiver_hls_mlbW_DSP48_2(a, b, p);
 input signed [16 - 1 : 0] a;
 input signed [16 - 1 : 0] b;
-output signed [29 - 1 : 0] p;
+output signed [30 - 1 : 0] p;
 
 assign p = $signed (a) * $signed (b);
 
 endmodule
 
 `timescale 1 ns / 1 ps
-module fm_receiver_hls_mocq(
+module fm_receiver_hls_mlbW(
     din0,
     din1,
     dout);
@@ -27,7 +27,7 @@ output[dout_WIDTH - 1:0] dout;
 
 
 
-fm_receiver_hls_mocq_DSP48_2 fm_receiver_hls_mocq_DSP48_2_U(
+fm_receiver_hls_mlbW_DSP48_2 fm_receiver_hls_mlbW_DSP48_2_U(
     .a( din0 ),
     .b( din1 ),
     .p( dout ));

@@ -6,7 +6,7 @@
 // ==============================================================
 
 `timescale 1 ns / 1 ps
-(* rom_style = "block" *) module fm_receiver_filtefYi_rom (
+(* rom_style = "block" *) module channel_decoder_ffYi_rom (
 addr0, ce0, q0, clk);
 
 parameter DWIDTH = 16;
@@ -21,7 +21,7 @@ input clk;
 (* ram_style = "block" *)reg [DWIDTH-1:0] ram[0:MEM_SIZE-1];
 
 initial begin
-    $readmemh("./fm_receiver_filtefYi_rom.dat", ram);
+    $readmemh("./channel_decoder_ffYi_rom.dat", ram);
 end
 
 
@@ -40,7 +40,7 @@ endmodule
 
 
 `timescale 1 ns / 1 ps
-module fm_receiver_filtefYi(
+module channel_decoder_ffYi(
     reset,
     clk,
     address0,
@@ -58,7 +58,7 @@ output[DataWidth - 1:0] q0;
 
 
 
-fm_receiver_filtefYi_rom fm_receiver_filtefYi_rom_U(
+channel_decoder_ffYi_rom channel_decoder_ffYi_rom_U(
     .clk( clk ),
     .addr0( address0 ),
     .ce0( ce0 ),

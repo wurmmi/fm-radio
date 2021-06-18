@@ -6,22 +6,23 @@
 // ==============================================================
 
 `timescale 1 ns / 1 ps
-(* rom_style = "block" *) module fm_receiver_filtedEe_rom (
-addr0, ce0, q0, clk);
+module channel_decoder_fcud_ram (addr0, ce0, d0, we0, q0,  clk);
 
 parameter DWIDTH = 16;
 parameter AWIDTH = 7;
-parameter MEM_SIZE = 73;
+parameter MEM_SIZE = 72;
 
 input[AWIDTH-1:0] addr0;
 input ce0;
+input[DWIDTH-1:0] d0;
+input we0;
 output reg[DWIDTH-1:0] q0;
 input clk;
 
 (* ram_style = "block" *)reg [DWIDTH-1:0] ram[0:MEM_SIZE-1];
 
 initial begin
-    $readmemh("./fm_receiver_filtedEe_rom.dat", ram);
+    $readmemh("./channel_decoder_fcud_ram.dat", ram);
 end
 
 
@@ -30,38 +31,49 @@ always @(posedge clk)
 begin 
     if (ce0) 
     begin
-        q0 <= ram[addr0];
+        if (we0) 
+        begin 
+            ram[addr0] <= d0; 
+            q0 <= d0;
+        end 
+        else 
+            q0 <= ram[addr0];
     end
 end
-
 
 
 endmodule
 
 
 `timescale 1 ns / 1 ps
-module fm_receiver_filtedEe(
+module channel_decoder_fcud(
     reset,
     clk,
     address0,
     ce0,
+    we0,
+    d0,
     q0);
 
 parameter DataWidth = 32'd16;
-parameter AddressRange = 32'd73;
+parameter AddressRange = 32'd72;
 parameter AddressWidth = 32'd7;
 input reset;
 input clk;
 input[AddressWidth - 1:0] address0;
 input ce0;
+input we0;
+input[DataWidth - 1:0] d0;
 output[DataWidth - 1:0] q0;
 
 
 
-fm_receiver_filtedEe_rom fm_receiver_filtedEe_rom_U(
+channel_decoder_fcud_ram channel_decoder_fcud_ram_U(
     .clk( clk ),
     .addr0( address0 ),
     .ce0( ce0 ),
+    .we0( we0 ),
+    .d0( d0 ),
     .q0( q0 ));
 
 endmodule
