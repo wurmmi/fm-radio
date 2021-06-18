@@ -8,8 +8,9 @@
 import cocotb
 import fm_global as fm_global
 import helpers as helper
+from cocotb.drivers import BitDriver
 from cocotb.triggers import RisingEdge, Timer
-from cocotbext.axi import AxiStreamBus, AxiStreamSink, AxiStreamSource
+from cocotbext.axi4stream.drivers import Axi4StreamMaster
 from fm_receiver_model import FM_RECEIVER_MODEL
 from tb_analyzer_helper import TB_ANALYZER_HELPER
 from tb_data_handler import TB_DATA_HANDLER
@@ -27,7 +28,6 @@ class FM_TB():
 
     def __init__(self, dut: cocotb.handle.HierarchyObject, n_sec):
         self.dut = dut
-        self.n_sec = n_sec
 
         # Sanity checks
         assert (self.CLOCK_FREQ_MHZ * 1e9 / fm_global.fs_rx_c).is_integer(), \
@@ -38,17 +38,13 @@ class FM_TB():
         self.model = FM_RECEIVER_MODEL(n_sec, golden_data_directory)
 
         # Connect AXI interface (IP input)
-        #self.axis_m = Axi4StreamMaster(dut, "s0_axis", dut.clk_i)
-        self.axis_m = AxiStreamSource(AxiStreamBus.from_prefix(dut, "s0_axis"),
-                                      dut.clk_i, dut.rst_i, byte_size=4)
+        self.axis_m = Axi4StreamMaster(dut, "s0_axis", dut.clk_i)
 
-        # Connect AXI interface (IP output)
-        # self.axis_s = AxiStreamSink(AxiStreamBus.from_prefix(dut, "m0_axis"),
-        #                            dut.clk_i, dut.rst_i, byte_size=4)
+        # Backpressure from I2S output
+        self.backpressure_i2s = BitDriver(dut.m0_axis_tready, dut.clk_i)
 
         # Variables
         self.tb_data_handler = TB_DATA_HANDLER()
-
         self.tb_analyzer_helper = TB_ANALYZER_HELPER(self.model, self.tb_data_handler, is_cocotb=True)
 
     @cocotb.coroutine
@@ -65,10 +61,6 @@ class FM_TB():
     @cocotb.coroutine
     async def assign_defaults(self):
         self.dut._log.info("Setting input port defaults ...")
-
-        # Output is always ready
-        # TODO: set this on a BitDriver to toggle at a certain rate
-        self.dut.m0_axis_tready <= 1
 
     @cocotb.coroutine
     async def read_fm_demod_output(self):
@@ -135,15 +127,21 @@ class FM_TB():
         await sampler.read_vhdl_output(
             helper.get_dataset_by_name(self.tb_data_handler.data, 'audio_lrdiff'))
 
-    def read_audio_output(self, read_data):
-        data_L = helper.get_dataset_by_name(self.tb_data_handler.data, 'audio_lrdiff')
-        data_R = helper.get_dataset_by_name(self.tb_data_handler.data, 'audio_lrdiff')
-
+    @cocotb.coroutine
+    async def read_audio_output(self):
+        pass
+        # sampler = VHDL_SAMPLER("audio_out", self.dut,
+        #                       self.dut.m0_axis_tdata,
+        #                       self.dut.m0_axis_tvalid,
+        #                       self.model.num_samples_audio_c,
+        #                       fm_global.fp_width_c, fm_global.fp_width_frac_c, 10)
+        #
+        #data_L = helper.get_dataset_by_name(self.tb_data_handler.data, 'audio_L')
+        #data_R = helper.get_dataset_by_name(self.tb_data_handler.data, 'audio_R')
+        #
         # TODO: split upper and lower 16 bit first
-        data_L.append(read_data)
-        data_R.append(read_data)
-
-        print("_read_audio_output")
+        # data_L.append(read_data)
+        # data_R.append(read_data)
 
     @cocotb.coroutine
     async def read_audio_L_output(self):

@@ -11,8 +11,9 @@ import cocotb
 import fm_global as fm_global
 import helpers as helper
 from cocotb.clock import Clock
+from cocotb.generators import repeat
+from cocotb.generators.bit import bit_toggler
 from cocotb.triggers import RisingEdge
-from cocotbext.axi.axis import AxiStreamFrame
 from fixed_point import fixed_to_int
 
 from fm_tb import FM_TB
@@ -30,7 +31,7 @@ async def data_processing_test(dut):
     # --------------------------------------------------------------------------
 
     # Number of seconds to process
-    n_sec = 0.0001
+    n_sec = 0.002
 
     # --------------------------------------------------------------------------
     # Prepare environment
@@ -73,6 +74,22 @@ async def data_processing_test(dut):
     await tb.assign_defaults()
     await tb.reset()
 
+    # Generate backpressure signal (AXI stream tready) for IPs' stream output
+    # NOTE:
+    #  This is not generating the actual ~40 kHz output frequency (as defined by fm_global.fs_audio_c).
+    #  It generates a much faster output, to speed up the testbench (see "output_speedup_factor").
+    # NOTE:
+    #  This speedup factor needs to be chosen carefully. The IP needs to complete the calculation for one sample,
+    #  before the next sample can be taken from the input. Therefore, set the factor small, to ensure enough
+    #  low-cycles, to allow the IP to complete one entire calculation.
+    output_speedup_factor = 120
+    strobe_num_cycles_high = 1
+    strobe_num_cycles_low = tb.CLOCK_FREQ_MHZ * 1e6 // fm_global.fs_audio_c // output_speedup_factor - strobe_num_cycles_high
+    print(f"strobe_num_cycles_high  = {strobe_num_cycles_high}")
+    print(f"strobe_num_cycles_low  = {strobe_num_cycles_low}")
+    print(f"ratio  = {strobe_num_cycles_low/strobe_num_cycles_high}")
+    tb.backpressure_i2s.start(bit_toggler(repeat(strobe_num_cycles_high), repeat(strobe_num_cycles_low)))
+
     # Fork the 'receiving parts'
     fm_demod_output_fork = cocotb.fork(tb.read_fm_demod_output())
     fm_channel_data_output_fork = cocotb.fork(tb.read_fm_channel_data_output())
@@ -82,25 +99,16 @@ async def data_processing_test(dut):
     audio_lrdiff_output_fork = cocotb.fork(tb.read_audio_lrdiff_output())
     audio_L_output_fork = cocotb.fork(tb.read_audio_L_output())
     audio_R_output_fork = cocotb.fork(tb.read_audio_R_output())
+    audio_output_fork = cocotb.fork(tb.read_audio_output())
 
     # Send input data to IP
     dut._log.info("Sending IQ samples to FM Receiver IP ...")
 
     for i, value in enumerate(data_in_iq):
-        print(f"write {i}/{len(data_in_iq)}")
-        # await tb.axis_m.write(value)
-        await tb.axis_m.send(value.to_bytes(length=4, byteorder='big'))
+        await tb.axis_m.write(value)
 
-    # Read output data from IP
-#    for i in range(0, len(data_in_iq)):
-#        print(f"read {i}/{len(data_in_iq)}")
-#        rx_data = await tb.axis_s.read()
-#        tb.read_audio_output(rx_data)
-#    assert tb.axis_s.empty()
-
-    await RisingEdge(dut.fm_receiver_inst.channel_decoder_inst.audio_lrdiff_valid)
-
-    # Await forked routines to stop
+    # Await forked routines to stop.
+    # They stop, when the expected number of samples were read.
     await fm_demod_output_fork
     await fm_channel_data_output_fork
     await audio_mono_output_fork
@@ -109,6 +117,7 @@ async def data_processing_test(dut):
     await audio_lrdiff_output_fork
     await audio_L_output_fork
     await audio_R_output_fork
+    await audio_output_fork
 
     # Measure time
     duration_s = int(time.time() - timestamp_start)
