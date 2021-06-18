@@ -12,6 +12,7 @@ import fm_global as fm_global
 import helpers as helper
 from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge
+from cocotbext.axi.axis import AxiStreamFrame
 from fixed_point import fixed_to_int
 
 from fm_tb import FM_TB
@@ -29,7 +30,7 @@ async def data_processing_test(dut):
     # --------------------------------------------------------------------------
 
     # Number of seconds to process
-    n_sec = 0.001
+    n_sec = 0.0001
 
     # --------------------------------------------------------------------------
     # Prepare environment
@@ -82,11 +83,20 @@ async def data_processing_test(dut):
     audio_L_output_fork = cocotb.fork(tb.read_audio_L_output())
     audio_R_output_fork = cocotb.fork(tb.read_audio_R_output())
 
-    # Send input data through filter
+    # Send input data to IP
     dut._log.info("Sending IQ samples to FM Receiver IP ...")
 
-    for i in range(0, len(data_in_iq)):
-        await tb.axis_m.write(data_in_iq[i])
+    for i, value in enumerate(data_in_iq):
+        print(f"write {i}/{len(data_in_iq)}")
+        # await tb.axis_m.write(value)
+        await tb.axis_m.send(value.to_bytes(length=4, byteorder='big'))
+
+    # Read output data from IP
+#    for i in range(0, len(data_in_iq)):
+#        print(f"read {i}/{len(data_in_iq)}")
+#        rx_data = await tb.axis_s.read()
+#        tb.read_audio_output(rx_data)
+#    assert tb.axis_s.empty()
 
     await RisingEdge(dut.fm_receiver_inst.channel_decoder_inst.audio_lrdiff_valid)
 

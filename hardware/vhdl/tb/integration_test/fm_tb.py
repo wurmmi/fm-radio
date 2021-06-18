@@ -9,7 +9,7 @@ import cocotb
 import fm_global as fm_global
 import helpers as helper
 from cocotb.triggers import RisingEdge, Timer
-from cocotbext.axi4stream.drivers import Axi4StreamMaster, Axi4StreamSlave
+from cocotbext.axi import AxiStreamBus, AxiStreamSink, AxiStreamSource
 from fm_receiver_model import FM_RECEIVER_MODEL
 from tb_analyzer_helper import TB_ANALYZER_HELPER
 from tb_data_handler import TB_DATA_HANDLER
@@ -25,8 +25,7 @@ class FM_TB():
     def __del__(self):
         pass
 
-    def __init__(self, dut: cocotb.handle.HierarchyObject,
-                 n_sec):
+    def __init__(self, dut: cocotb.handle.HierarchyObject, n_sec):
         self.dut = dut
         self.n_sec = n_sec
 
@@ -38,9 +37,14 @@ class FM_TB():
         golden_data_directory = "../../../../sim/matlab/verification_data/"
         self.model = FM_RECEIVER_MODEL(n_sec, golden_data_directory)
 
-        # Connect AXI interface
-        slave_interface_to_connect_to = "s0_axis"
-        self.axis_m = Axi4StreamMaster(dut, slave_interface_to_connect_to, dut.clk_i)
+        # Connect AXI interface (IP input)
+        #self.axis_m = Axi4StreamMaster(dut, "s0_axis", dut.clk_i)
+        self.axis_m = AxiStreamSource(AxiStreamBus.from_prefix(dut, "s0_axis"),
+                                      dut.clk_i, dut.rst_i, byte_size=4)
+
+        # Connect AXI interface (IP output)
+        # self.axis_s = AxiStreamSink(AxiStreamBus.from_prefix(dut, "m0_axis"),
+        #                            dut.clk_i, dut.rst_i, byte_size=4)
 
         # Variables
         self.tb_data_handler = TB_DATA_HANDLER()
@@ -61,6 +65,10 @@ class FM_TB():
     @cocotb.coroutine
     async def assign_defaults(self):
         self.dut._log.info("Setting input port defaults ...")
+
+        # Output is always ready
+        # TODO: set this on a BitDriver to toggle at a certain rate
+        self.dut.m0_axis_tready <= 1
 
     @cocotb.coroutine
     async def read_fm_demod_output(self):
@@ -126,6 +134,16 @@ class FM_TB():
 
         await sampler.read_vhdl_output(
             helper.get_dataset_by_name(self.tb_data_handler.data, 'audio_lrdiff'))
+
+    def read_audio_output(self, read_data):
+        data_L = helper.get_dataset_by_name(self.tb_data_handler.data, 'audio_lrdiff')
+        data_R = helper.get_dataset_by_name(self.tb_data_handler.data, 'audio_lrdiff')
+
+        # TODO: split upper and lower 16 bit first
+        data_L.append(read_data)
+        data_R.append(read_data)
+
+        print("_read_audio_output")
 
     @cocotb.coroutine
     async def read_audio_L_output(self):

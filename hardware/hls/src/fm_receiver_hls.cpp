@@ -44,7 +44,7 @@ clang-format off
 --                                            (process N samples from the stream; the last one is the decimated one)
 --
 -- (6) Switch mode between radio processing and pass-through
---       06/13/2021  14:00 -         0x:00 h
+--       06/13/2021  14:00 - 15:00   01:00 h
 --
 clang-format on
 */
