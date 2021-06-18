@@ -1,0 +1,27 @@
+---
+name: "FM Radio"
+description: "FM Radio IP (VHDL)"
+prefix: FM
+
+registers:
+  - name: "MAGIC_VALUE"
+    description: "Magic constant to identity Blinkylight."
+    access: "READ_ONLY"
+    fields:
+      - name: "VALUE"
+        description: ""
+        width: 32
+        offset: 0
+        reset: 0xDEADBEEF
+        connect: "status_i.magic_value"
+
+  - name: "LED_CONTROL"
+    description: "Represents the physical LED value."
+    access: "READ_WRITE"
+    fields:
+      - name: "VALUE"
+        description: ""
+        width: 8
+        offset: 0
+        reset: 0x0
+        connect: "control_o.led"

@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------------
 --! @file      strobe_gen.vhd
 --! @author    Michael Wurm <wurm.michael95@gmail.com>
---! @copyright 2017-2019 Michael Wurm
+--! @copyright 2017 - 2021 Michael Wurm
 --! @brief     Entity implementation of strobe_gen.
 -------------------------------------------------------------------------------
 
