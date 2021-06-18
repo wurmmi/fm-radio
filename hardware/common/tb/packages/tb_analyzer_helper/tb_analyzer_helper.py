@@ -9,7 +9,6 @@ import cocotb
 import helpers as helper
 import numpy as np
 from fixed_point import from_fixed_point
-from fm_global import *
 
 # --------------------------------------------------------------------------
 # Constants

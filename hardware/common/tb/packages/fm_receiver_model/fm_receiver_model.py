@@ -6,8 +6,8 @@
 
 
 import cocotb
+import fm_global
 import helpers as helper
-from fm_global import *
 from tb_data_handler import TB_DATA_HANDLER
 
 
@@ -27,9 +27,9 @@ class FM_RECEIVER_MODEL():
 
         # Derived constants
         self.n_sec = n_sec
-        self.num_samples_audio_c = int(n_sec * fs_audio_c)
-        self.num_samples_rx_c = int(n_sec * fs_rx_c)
-        self.num_samples_fs_c = int(n_sec * fs_c)
+        self.num_samples_audio_c = int(n_sec * fm_global.fs_audio_c)
+        self.num_samples_rx_c = int(n_sec * fm_global.fs_rx_c)
+        self.num_samples_fs_c = int(n_sec * fm_global.fs_c)
 
         self.loadModelData(golden_data_directory)
 
@@ -46,7 +46,8 @@ class FM_RECEIVER_MODEL():
 
             new_dataset = {}
             new_dataset['name'] = dataset['name']
-            new_dataset['data'] = helper.loadDataFromFile(filename, num_samples, fp_width_c, fp_width_frac_c)
+            new_dataset['data'] = helper.loadDataFromFile(
+                filename, num_samples, fm_global.fp_width_c, fm_global.fp_width_frac_c)
             self.data.append(new_dataset)
 
     def shift_data(self, data_name, amount):
@@ -55,6 +56,6 @@ class FM_RECEIVER_MODEL():
 
         # Shift
         if amount >= 0:
-            helper.move_n_right(dataset, amount, fp_width_c, fp_width_frac_c)
+            helper.move_n_right(dataset, amount, fm_global.fp_width_c, fm_global.fp_width_frac_c)
         else:
-            helper.move_n_left(dataset, -amount, fp_width_c, fp_width_frac_c)
+            helper.move_n_left(dataset, -amount, fm_global.fp_width_c, fm_global.fp_width_frac_c)

@@ -6,10 +6,10 @@
 
 
 import cocotb
+import fm_global
 from cocotb.drivers import BitDriver
 from cocotb.triggers import RisingEdge, Timer
 from fixed_point import int_to_fixed
-from fm_global import *
 
 
 class FM_TB():
@@ -27,7 +27,7 @@ class FM_TB():
         self.dut._log.debug("Building/Connecting Testbench")
 
         # Sanity checks
-        assert (self.CLOCK_FREQ_MHZ * 1e9 / fs_rx_c).is_integer(), \
+        assert (self.CLOCK_FREQ_MHZ * 1e9 / fm_global.fs_rx_c).is_integer(), \
             "Clock rate and fs_rx_c must have an integer relation!"
 
         self.fir_in_strobe = BitDriver(self.dut.iValDry, self.dut.iClk)
@@ -57,7 +57,7 @@ class FM_TB():
             await edge
             sample_out = self.dut.oDwet.value.signed_integer * output_scale
             self.data_out.append(
-                int_to_fixed(sample_out, fp_width_c, fp_width_frac_c))
+                int_to_fixed(sample_out, fm_global.fp_width_c, fm_global.fp_width_frac_c))
 
             # print every 10th number to show progress
             size = len(self.data_out)

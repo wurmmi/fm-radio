@@ -6,7 +6,7 @@
 
 
 import cocotb
-import fm_global as fm_global
+import fm_global
 import helpers as helper
 from cocotb.drivers import BitDriver
 from cocotb.triggers import RisingEdge, Timer
