@@ -24,4 +24,4 @@ registers:
         width: 4
         offset: 0
         reset: 0x0
-        connect: "control_o.led"
+        connect: "control_o.led_ctrl"

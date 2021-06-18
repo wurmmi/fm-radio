@@ -146,7 +146,7 @@ begin -- architecture rtl
   s_axi_rdata_o   <= axi_rdata;
   s_axi_rresp_o   <= axi_rresp;
 
-  control_o.led <= fm_led_control_value;
+  control_o.led_ctrl <= fm_led_control_value;
 
   -----------------------------------------------------------------------------
   -- Signal Assignments

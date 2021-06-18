@@ -27,7 +27,6 @@ use ieee.fixed_pkg.all;
 library work;
 use work.fm_radio_spec_pkg.all;
 use work.fm_radio_pkg.all;
-use work.fm_radio_axi.all;
 
 entity fm_receiver_top is
   port (
