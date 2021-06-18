@@ -30,7 +30,7 @@ use ieee.numeric_std.all;
 --use ieee.fixed_float_types.all;
 use ieee.fixed_pkg.all;
 
-use work.fm_global_pkg.all;
+use work.fm_radio_pkg.all;
 use work.filter_bp_pilot_pkg.all;
 
 entity DspFir is

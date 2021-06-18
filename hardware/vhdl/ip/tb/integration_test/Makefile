@@ -21,10 +21,11 @@ endif
 VHDL_SOURCES =
 VHDL_SOURCES += $(CURDIR)/../../rtl/packages/fm_radio_spec_pkg.vhd
 VHDL_SOURCES += $(CURDIR)/../../rtl/packages/fm_global_spec_pkg.vhd
-VHDL_SOURCES += $(CURDIR)/../../rtl/fm_global_pkg.vhd
+VHDL_SOURCES += $(CURDIR)/../../rtl/fm_radio_pkg.vhd
 VHDL_SOURCES += $(CURDIR)/../../rtl/packages/filter_lp_mono_pkg.vhd
 VHDL_SOURCES += $(CURDIR)/../../rtl/packages/filter_bp_pilot_pkg.vhd
 VHDL_SOURCES += $(CURDIR)/../../rtl/packages/filter_bp_lrdiff_pkg.vhd
+VHDL_SOURCES += $(CURDIR)/../../rtl/fm_radio_axi.vhd
 VHDL_SOURCES += $(CURDIR)/../../rtl/utils/delay_bit.vhd
 VHDL_SOURCES += $(CURDIR)/../../rtl/utils/delay_vector.vhd
 VHDL_SOURCES += $(CURDIR)/../../rtl/utils/DspFir.vhd

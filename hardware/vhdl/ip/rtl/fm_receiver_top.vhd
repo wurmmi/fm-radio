@@ -25,7 +25,9 @@ use ieee.numeric_std.all;
 use ieee.fixed_pkg.all;
 
 library work;
-use work.fm_global_pkg.all;
+use work.fm_radio_spec_pkg.all;
+use work.fm_radio_pkg.all;
+use work.fm_radio_axi.all;
 
 entity fm_receiver_top is
   port (
@@ -91,9 +93,8 @@ architecture rtl of fm_receiver_top is
 
   signal iq_valid : std_ulogic;
 
-  signal status    : status_t;
-  signal control   : control_t;
-  signal interrupt : interrupt_t;
+  signal status  : status_t;
+  signal control : control_t;
 
   --! @}
 
@@ -167,7 +168,7 @@ begin -- architecture rtl
   registers_inst : entity work.fm_radio_axi
     port map(
       s_axi_aclk_i    => clk_i,
-      s_axi_aresetn_i => rst_i,
+      s_axi_areset_i => rst_i,
 
       s_axi_awaddr_i  => s_axi_awaddr_i,
       s_axi_awprot_i  => s_axi_awprot_i,

@@ -9,7 +9,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 library work;
-use work.fm_global_pkg.all;
+use work.fm_radio_pkg.all;
 
 --! @brief Entity declaration of strobe_gen
 --! @details

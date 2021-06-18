@@ -3,7 +3,7 @@
 -- *** DO NOT MODIFY ***
 
 library work;
-use work.fm_global_pkg.all;
+use work.fm_radio_pkg.all;
 
 package filter_bp_pilot_pkg is
 

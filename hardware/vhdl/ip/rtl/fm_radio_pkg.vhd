@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
---! @file      fm_global_pkg.vhd
+--! @file      fm_radio_pkg.vhd
 --! @author    Michael Wurm <wurm.michael95@gmail.com>
 --! @copyright 2021 Michael Wurm
 --! @brief     Global package with types and constants.
@@ -14,7 +14,7 @@ use ieee.fixed_float_types.all;
 library work;
 use work.fm_global_spec_pkg.all;
 
-package fm_global_pkg is
+package fm_radio_pkg is
 
   ------------------------------------------------------------------------------
   -- Types and Constants
@@ -66,6 +66,12 @@ package fm_global_pkg is
     led_ctrl : std_ulogic_vector(3 downto 0);
   end record control_t;
 
+  type interrupt_t is record
+    --! @brief FM Radio's interrupt registers
+    --! @param dummy No function yet.
+    dummy : std_ulogic;
+  end record interrupt_t;
+
   ------------------------------------------------------------------------------
   -- Function Definitions
   ------------------------------------------------------------------------------
@@ -81,9 +87,9 @@ package fm_global_pkg is
     size_res : u_sfixed) -- for size only
     return sfixed;
 
-end package fm_global_pkg;
+end package fm_radio_pkg;
 
-package body fm_global_pkg is
+package body fm_radio_pkg is
 
   -- Function LogDualis returns the logarithm of base 2 as an integer.
   -- Although the implementation of this function was not done with synthesis
@@ -128,4 +134,4 @@ package body fm_global_pkg is
     return tmp(size_res'range);
   end function ResizeTruncAbsVal;
 
-end package body fm_global_pkg;
+end package body fm_radio_pkg;

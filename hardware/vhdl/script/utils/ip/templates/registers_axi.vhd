@@ -12,8 +12,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-library {{name|pretty}}lib;
-use {{name|pretty}}lib.{{name|pretty}}_pkg.all;
+library work;
+use work.{{name|pretty}}_pkg.all;
 
 --! @brief Entity declaration of {{name|pretty}}_axi
 --! @details

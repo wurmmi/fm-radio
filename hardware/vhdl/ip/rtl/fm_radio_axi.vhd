@@ -12,8 +12,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-library fm_radiolib;
-use fm_radiolib.fm_radio_pkg.all;
+library work;
+use work.fm_radio_pkg.all;
 
 --! @brief Entity declaration of fm_radio_axi
 --! @details
