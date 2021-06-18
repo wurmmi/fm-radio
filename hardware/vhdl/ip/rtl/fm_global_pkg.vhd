@@ -54,6 +54,18 @@ package fm_global_pkg is
 
   type filter_coeffs_t is array (natural range <>) of fract_real;
 
+  type status_t is record
+    --! @brief FM Radio's status registers
+    --! @param magic_value Magic value constant.
+    magic_value : std_ulogic_vector(31 downto 0);
+  end record status_t;
+
+  type control_t is record
+    --! @brief FM Radio's control registers
+    --! @param led_ctrl LED control.
+    led_ctrl : gui_ctrl_t;
+  end record control_t;
+
   ------------------------------------------------------------------------------
   -- Function Definitions
   ------------------------------------------------------------------------------

@@ -43,7 +43,28 @@ entity fm_receiver_top is
     m0_axis_tvalid : out std_logic;
 
     -- LED output
-    leds_o : out std_logic_vector(3 downto 0));
+    leds_o : out std_logic_vector(3 downto 0)
+
+    -- AXI-Lite register interface
+    s_axi_awaddr_i  : in std_logic_vector(spec_reg_if_addr_width_c - 1 downto 0);
+    s_axi_awprot_i  : in std_logic_vector(2 downto 0);
+    s_axi_awvalid_i : in std_logic;
+    s_axi_awready_o : out std_logic;
+    s_axi_wdata_i   : in std_logic_vector(31 downto 0);
+    s_axi_wstrb_i   : in std_logic_vector(3 downto 0);
+    s_axi_wvalid_i  : in std_logic;
+    s_axi_wready_o  : out std_logic;
+    s_axi_bresp_o   : out std_logic_vector(1 downto 0);
+    s_axi_bvalid_o  : out std_logic;
+    s_axi_bready_i  : in std_logic;
+    s_axi_araddr_i  : in std_logic_vector(spec_reg_if_addr_width_c - 1 downto 0);
+    s_axi_arprot_i  : in std_logic_vector(2 downto 0);
+    s_axi_arvalid_i : in std_logic;
+    s_axi_arready_o : out std_logic;
+    s_axi_rdata_o   : out std_logic_vector(31 downto 0);
+    s_axi_rresp_o   : out std_logic_vector(1 downto 0);
+    s_axi_rvalid_o  : out std_logic;
+    s_axi_rready_i  : in std_logic));
 
 end entity fm_receiver_top;
 
@@ -70,6 +91,10 @@ architecture rtl of fm_receiver_top is
 
   signal iq_valid : std_ulogic;
 
+  signal status    : status_t;
+  signal control   : control_t;
+  signal interrupt : interrupt_t;
+
   --! @}
 
 begin -- architecture rtl
@@ -85,7 +110,7 @@ begin -- architecture rtl
   m0_axis_tdata(15 downto 0)  <= std_logic_vector(to_slv(audio_R));
   m0_axis_tvalid              <= std_logic(audio_valid);
 
-  leds_o <= b"1111";
+  leds_o <= control.led_ctrl;
 
   ------------------------------------------------------------------------------
   -- Signal Assignments
@@ -138,5 +163,38 @@ begin -- architecture rtl
       audio_L_o     => audio_L,
       audio_R_o     => audio_R,
       audio_valid_o => audio_valid);
+
+  registers_inst : entity work.fm_radio_axi
+    port map(
+      s_axi_aclk_i    => clk_i,
+      s_axi_aresetn_i => rst_i,
+
+      s_axi_awaddr_i  => s_axi_awaddr_i,
+      s_axi_awprot_i  => s_axi_awprot_i,
+      s_axi_awvalid_i => s_axi_awvalid_i,
+      s_axi_awready_o => s_axi_awready_o,
+
+      s_axi_wdata_i  => s_axi_wdata_i,
+      s_axi_wstrb_i  => s_axi_wstrb_i,
+      s_axi_wvalid_i => s_axi_wvalid_i,
+      s_axi_wready_o => s_axi_wready_o,
+
+      s_axi_bresp_o  => s_axi_bresp_o,
+      s_axi_bvalid_o => s_axi_bvalid_o,
+      s_axi_bready_i => s_axi_bready_i,
+
+      s_axi_araddr_i  => s_axi_araddr_i,
+      s_axi_arprot_i  => s_axi_arprot_i,
+      s_axi_arvalid_i => s_axi_arvalid_i,
+      s_axi_arready_o => s_axi_arready_o,
+
+      s_axi_rdata_o  => s_axi_rdata_o,
+      s_axi_rresp_o  => s_axi_rresp_o,
+      s_axi_rvalid_o => s_axi_rvalid_o,
+      s_axi_rready_i => s_axi_rready_i,
+
+      status_i    => status,
+      control_o   => control,
+      interrupt_o => open);
 
 end architecture rtl;

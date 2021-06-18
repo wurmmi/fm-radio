@@ -25,7 +25,7 @@ entity {{name|pretty}}_axi is
     --! @{
 
     s_axi_aclk_i    : in std_ulogic;
-    s_axi_aresetn_i : in std_ulogic;
+    s_axi_areset_i : in std_ulogic;
 
     --! @}
     --! @name AXI write address
@@ -215,7 +215,7 @@ begin -- architecture rtl
   -- Registers
   -----------------------------------------------------------------------------
 
-  regs : process (s_axi_aclk_i, s_axi_aresetn_i) is
+  regs : process (s_axi_aclk_i, s_axi_areset_i) is
     procedure reset is
     begin
       axi_awready <= '0';
@@ -227,7 +227,7 @@ begin -- architecture rtl
       axi_rvalid  <= (others => '0');
     end procedure reset;
   begin -- process regs
-    if s_axi_aresetn_i = '0' then
+    if s_axi_areset_i = '1' then
       reset;
     elsif rising_edge(s_axi_aclk_i) then
       -- Defaults
@@ -286,14 +286,14 @@ begin -- architecture rtl
     end if;
   end process regs;
 
-  reading : process (s_axi_aclk_i, s_axi_aresetn_i) is
+  reading : process (s_axi_aclk_i, s_axi_areset_i) is
     procedure reset is
     begin
       axi_rdata <= (others => '0');
       axi_rresp <= axi_addr_error_c;
     end procedure reset;
   begin -- process reading
-    if s_axi_aresetn_i = '0' then
+    if s_axi_areset_i = '1' then
       reset;
     elsif rising_edge(s_axi_aclk_i) then
       -- Defaults
@@ -320,7 +320,7 @@ begin -- architecture rtl
     end if;
   end process reading;
 
-  writing : process (s_axi_aclk_i, s_axi_aresetn_i) is
+  writing : process (s_axi_aclk_i, s_axi_areset_i) is
     procedure reset is
     begin
       axi_bresp <= axi_addr_error_c;
@@ -344,7 +344,7 @@ begin -- architecture rtl
       {% endfor %}
     end procedure reset;
   begin -- process writing
-    if s_axi_aresetn_i = '0' then
+    if s_axi_areset_i = '1' then
       reset;
     elsif rising_edge(s_axi_aclk_i) then
       -- Defaults

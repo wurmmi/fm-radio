@@ -32,14 +32,14 @@ registers = \
 ##Supported Targets
 ##-----------------
 
-registers: ##	- Generate IP register files from templates.
+registers: ##		- Generate IP register files from templates.
 	$(call registers,fm_radio)
 
 clean: ##			- Clean all outputs.
 	@echo "Cleaning..."
 	git clean -xdf
 
-help: ##				- Show this help message.
+help: ##			- Show this help message.
 	@grep -h "##" Makefile | grep -v "\"##\"" | sed -e 's/##//g'
 
 .PHONY: clean help
