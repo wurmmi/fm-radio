@@ -95,8 +95,8 @@ async def data_processing_test(dut):
     pilot_output_fork = cocotb.fork(tb.read_pilot_output())
     carrier_38k_output_fork = cocotb.fork(tb.read_carrier_38k_output())
     audio_lrdiff_output_fork = cocotb.fork(tb.read_audio_lrdiff_output())
-    #audio_L_output_fork = cocotb.fork(tb.read_audio_L_output())
-    #audio_R_output_fork = cocotb.fork(tb.read_audio_R_output())
+    audio_L_output_fork = cocotb.fork(tb.read_audio_L_output())
+    audio_R_output_fork = cocotb.fork(tb.read_audio_R_output())
     audio_output_fork = cocotb.fork(tb.read_audio_output())
 
     # Send input data to IP
@@ -105,6 +105,7 @@ async def data_processing_test(dut):
     for i, value in enumerate(data_in_iq):
         await tb.axis_m.write(value)
 
+    dut._log.info("Waiting to receive enough samples ...")
     # Await forked routines to stop.
     # They stop, when the expected number of samples were read.
     await fm_demod_output_fork
@@ -113,8 +114,8 @@ async def data_processing_test(dut):
     await pilot_output_fork
     await carrier_38k_output_fork
     await audio_lrdiff_output_fork
-    # await audio_L_output_fork
-    # await audio_R_output_fork
+    await audio_L_output_fork
+    await audio_R_output_fork
     await audio_output_fork
 
     # Measure time

@@ -142,7 +142,7 @@ class FM_TB():
 
     @cocotb.coroutine
     async def read_audio_L_output(self):
-        # NOTE: This is replaced by the AXI stream output.
+        # NOTE: This is replaced by the AXI stream output (function 'read_audio_output()' above).
         #       However, this can be useful to re-enable.
         return
         sampler = VHDL_SAMPLER("audio_L", self.dut,
@@ -156,7 +156,7 @@ class FM_TB():
 
     @cocotb.coroutine
     async def read_audio_R_output(self):
-        # NOTE: This is replaced by the AXI stream output.
+        # NOTE: This is replaced by the AXI stream output (function 'read_audio_output()' above).
         #       However, this can be useful to re-enable.
         return
         sampler = VHDL_SAMPLER("audio_R", self.dut,
