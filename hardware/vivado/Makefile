@@ -22,7 +22,7 @@ vivado = vivado -nojournal -nolog -notrace -mode batch -source ./scripts/$1 $2
 ##Supported Targets
 ##-----------------
 
-all: project synth sdk ##		- Default target.
+all: project bitstream sdk ##	- Default target.
 ##
 project: ##			- Create/Open Vivado project.
 	@mkdir -p $(VIVADO_DIR)
@@ -56,7 +56,7 @@ clean-all: ##			- Clean all outputs.
 help: ##				- Show this help message.
 	@grep -h "##" Makefile | grep -v "\"##\"" | sed -e 's/##//g'
 
-.PHONY: project synth sdk clean-all clean-sdk help
+.PHONY: project bitstream sdk clean-all clean-sdk help
 
 ##
 ##==============================================================================
