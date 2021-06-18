@@ -60,7 +60,11 @@
         </spirit:parameter>
         <spirit:parameter>
           <spirit:name>ASSOCIATED_BUSIF</spirit:name>
-          <spirit:value spirit:id="BUSIFPARAM_VALUE.CLK_I.ASSOCIATED_BUSIF">s0_axis</spirit:value>
+          <spirit:value spirit:id="BUSIFPARAM_VALUE.CLK_I.ASSOCIATED_BUSIF">s0_axis:m0_axis</spirit:value>
+        </spirit:parameter>
+        <spirit:parameter>
+          <spirit:name>ASSOCIATED_RESET</spirit:name>
+          <spirit:value spirit:id="BUSIFPARAM_VALUE.CLK_I.ASSOCIATED_RESET">rst_i</spirit:value>
         </spirit:parameter>
       </spirit:parameters>
     </spirit:busInterface>
@@ -81,6 +85,38 @@
         </spirit:portMap>
       </spirit:portMaps>
     </spirit:busInterface>
+    <spirit:busInterface>
+      <spirit:name>m0_axis</spirit:name>
+      <spirit:busType spirit:vendor="xilinx.com" spirit:library="interface" spirit:name="axis" spirit:version="1.0"/>
+      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="interface" spirit:name="axis_rtl" spirit:version="1.0"/>
+      <spirit:master/>
+      <spirit:portMaps>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>TDATA</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>m0_axis_tdata</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>TVALID</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>m0_axis_tvalid</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>TREADY</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>m0_axis_tready</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+      </spirit:portMaps>
+    </spirit:busInterface>
   </spirit:busInterfaces>
   <spirit:model>
     <spirit:views>
@@ -96,7 +132,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>ebfadc96</spirit:value>
+            <spirit:value>8fb76e3e</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -112,7 +148,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>7ed66f7d</spirit:value>
+            <spirit:value>334ae7fa</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -233,11 +269,27 @@
         </spirit:wire>
       </spirit:port>
       <spirit:port>
-        <spirit:name>audio_L_o</spirit:name>
+        <spirit:name>m0_axis_tready</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>xilinx_anylanguagesynthesis</spirit:viewNameRef>
+              <spirit:viewNameRef>xilinx_anylanguagebehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">1</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>m0_axis_tdata</spirit:name>
         <spirit:wire>
           <spirit:direction>out</spirit:direction>
           <spirit:vector>
-            <spirit:left spirit:format="long">15</spirit:left>
+            <spirit:left spirit:format="long">31</spirit:left>
             <spirit:right spirit:format="long">0</spirit:right>
           </spirit:vector>
           <spirit:wireTypeDefs>
@@ -250,24 +302,7 @@
         </spirit:wire>
       </spirit:port>
       <spirit:port>
-        <spirit:name>audio_R_o</spirit:name>
-        <spirit:wire>
-          <spirit:direction>out</spirit:direction>
-          <spirit:vector>
-            <spirit:left spirit:format="long">15</spirit:left>
-            <spirit:right spirit:format="long">0</spirit:right>
-          </spirit:vector>
-          <spirit:wireTypeDefs>
-            <spirit:wireTypeDef>
-              <spirit:typeName>std_logic_vector</spirit:typeName>
-              <spirit:viewNameRef>xilinx_anylanguagesynthesis</spirit:viewNameRef>
-              <spirit:viewNameRef>xilinx_anylanguagebehavioralsimulation</spirit:viewNameRef>
-            </spirit:wireTypeDef>
-          </spirit:wireTypeDefs>
-        </spirit:wire>
-      </spirit:port>
-      <spirit:port>
-        <spirit:name>audio_valid_o</spirit:name>
+        <spirit:name>m0_axis_tvalid</spirit:name>
         <spirit:wire>
           <spirit:direction>out</spirit:direction>
           <spirit:wireTypeDefs>
@@ -349,13 +384,9 @@
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/utils/strobe_gen.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
         <spirit:name>rtl/fm_receiver_top.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_0898226e</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_0d31d545</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>
@@ -421,10 +452,6 @@
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/utils/strobe_gen.vhd</spirit:name>
-        <spirit:fileType>vhdlSource</spirit:fileType>
-      </spirit:file>
-      <spirit:file>
         <spirit:name>rtl/fm_receiver_top.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
@@ -484,11 +511,11 @@
       </xilinx:xpmLibraries>
       <xilinx:vendorDisplayName>M.Wurm</xilinx:vendorDisplayName>
       <xilinx:vendorURL>https://www.linkedin.com/in/michael-wurm</xilinx:vendorURL>
-      <xilinx:coreRevision>5</xilinx:coreRevision>
+      <xilinx:coreRevision>6</xilinx:coreRevision>
       <xilinx:upgrades>
         <xilinx:canUpgradeFrom>user.org:user:fm_receiver_top:1.0</xilinx:canUpgradeFrom>
       </xilinx:upgrades>
-      <xilinx:coreCreationDateTime>2021-05-21T09:23:04Z</xilinx:coreCreationDateTime>
+      <xilinx:coreCreationDateTime>2021-06-18T09:58:12Z</xilinx:coreCreationDateTime>
       <xilinx:tags>
         <xilinx:tag xilinx:name="nopcore"/>
         <xilinx:tag xilinx:name="user.org:user:fm_receiver_top:1.0_ARCHIVE_LOCATION">/home/mike/work/fm-radio/hardware/vhdl</xilinx:tag>
@@ -501,9 +528,9 @@
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2018.2</xilinx:xilinxVersion>
-      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="3d02dc8e"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="9e0b2a46"/>
-      <xilinx:checksum xilinx:scope="ports" xilinx:value="0d12595f"/>
+      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="ba23270d"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="fac38b3f"/>
+      <xilinx:checksum xilinx:scope="ports" xilinx:value="84200ef9"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="134b76fe"/>
     </xilinx:packagingInfo>
   </spirit:vendorExtensions>
