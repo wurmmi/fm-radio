@@ -9,7 +9,6 @@ import cocotb
 import helpers as helper
 import numpy as np
 from fixed_point import from_fixed_point
-from fm_global import *
 
 # --------------------------------------------------------------------------
 # Constants
@@ -22,8 +21,8 @@ class TB_ANALYZER_HELPER():
         # Adapt logging functions
         self.is_cocotb = is_cocotb
         if self.is_cocotb:
-            self.log_info = cocotb.logging.info
-            self.log_warn = cocotb.logging.warning
+            self.log_info = cocotb.log.info
+            self.log_warn = cocotb.log.warning
             self.test_fail = cocotb.result.TestFailure
         else:
             self.log_info = print
@@ -71,8 +70,8 @@ class TB_ANALYZER_HELPER():
                                           fail_on_err=EnableFailOnError,
                                           max_error_abs=tb_dataset['max_error_abs'],
                                           max_error_norm=tb_dataset['max_error_norm'],
-                                          skip_n_samples_begin=30,  # TODO: get param, or depending on fs
-                                          skip_n_samples_end=30,    # TODO: get param, or depending on fs
+                                          skip_n_samples_begin=30,  # TODO: get as param, or depending on fs
+                                          skip_n_samples_end=30,    # TODO: get as param, or depending on fs
                                           data_name=tb_dataset['name'],
                                           is_cocotb=self.is_cocotb)
 

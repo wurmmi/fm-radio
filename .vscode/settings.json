@@ -1,0 +1,11 @@
+{
+  "python.autoComplete.extraPaths": [
+    "${workspaceFolder}/hardware/vhdl/tb/integration_test",
+    "${workspaceFolder}/hardware/common/tb/packages"
+  ],
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}/hardware/vhdl/tb/packages",
+    "${workspaceFolder}/hardware/vhdl/tb/integration_test",
+    "${workspaceFolder}/hardware/common/tb/packages"
+  ]
+}

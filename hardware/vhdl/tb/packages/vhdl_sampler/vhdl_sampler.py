@@ -21,8 +21,8 @@ class VHDL_SAMPLER():
                  fp_width, fp_width_frac, show_progress_after_num=100):
         self.data_name = data_name
         self.dut = dut
-        self._signal = signal
-        self._signal_valid = signal_valid
+        self.signal = signal
+        self.signal_valid = signal_valid
         self.fp_width_c = fp_width
         self.fp_width_frac_c = fp_width_frac
         self.num_expected_c = num_expected
@@ -31,12 +31,29 @@ class VHDL_SAMPLER():
     @cocotb.coroutine
     async def read_vhdl_output(self, data):
         while(True):
-            await RisingEdge(self._signal_valid)
+            await RisingEdge(self.signal_valid)
             data.append(
-                int_to_fixed(self._signal.value.signed_integer, self.fp_width_c, self.fp_width_frac_c))
+                int_to_fixed(self.signal.value.signed_integer, self.fp_width_c, self.fp_width_frac_c))
 
             # print every Nth number to show progress
             size = len(data)
+            if size % self.show_progress_after_num_c == 0:
+                self.dut._log.info("Progress {}: {}".format(self.data_name, size))
+
+            if size >= self.num_expected_c:
+                break
+
+    @cocotb.coroutine
+    async def read_vhdl_output_32bit_split(self, data_L, data_R):
+        while(True):
+            await RisingEdge(self.signal_valid)
+            left = self.signal.value[0:15].signed_integer
+            right = self.signal.value[16:31].signed_integer
+            data_L.append(int_to_fixed(left, self.fp_width_c, self.fp_width_frac_c))
+            data_R.append(int_to_fixed(right, self.fp_width_c, self.fp_width_frac_c))
+
+            # print every Nth number to show progress
+            size = len(data_L)
             if size % self.show_progress_after_num_c == 0:
                 self.dut._log.info("Progress {}: {}".format(self.data_name, size))
 

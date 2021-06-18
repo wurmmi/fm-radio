@@ -35,7 +35,7 @@ def loadDataFromFile(filename, num_samples, bitwidth, bitwidth_frac, use_fixed=T
     return data
 
 
-def get_dataset_by_name(datalist, data_name, log_func=cocotb.logging.error):
+def get_dataset_by_name(datalist, data_name, log_func=cocotb.log.error):
     # Find the dataset with the matching data_name
     dataset = [x for x in datalist if x['name'] == data_name]
     if len(dataset) == 0:
@@ -79,8 +79,8 @@ def compareResultsOkay(gold, actual, fail_on_err,
     """
     # Adapt logging functions
     if is_cocotb:
-        log_info = cocotb.logging.info
-        log_warn = cocotb.logging.warning
+        log_info = cocotb.log.info
+        log_warn = cocotb.log.warning
         test_fail = cocotb.result.TestFailure
     else:
         log_info = print

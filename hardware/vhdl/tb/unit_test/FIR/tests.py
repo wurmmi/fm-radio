@@ -8,6 +8,7 @@
 import time
 
 import cocotb
+import fm_global
 import matplotlib.pyplot as plt
 import numpy as np
 from cocotb.clock import Clock
@@ -15,7 +16,6 @@ from cocotb.generators import repeat
 from cocotb.generators.bit import bit_toggler
 from cocotb.triggers import RisingEdge
 from fixed_point import fixed_to_int, from_fixed_point, to_fixed_point
-from fm_global import *
 
 from fm_tb import FM_TB
 
@@ -38,7 +38,7 @@ async def fir_filter_test(dut):
     n_sec = 0.001
 
     # Derived constants
-    num_samples = int(n_sec * fs_rx_c)
+    num_samples = int(n_sec * fm_global.fs_rx_c)
 
     # --------------------------------------------------------------------------
     # Load data from files
@@ -55,7 +55,7 @@ async def fir_filter_test(dut):
                 break
 
     # Convert to fixed point and back to int
-    data_i_fp = to_fixed_point(data_i, fp_width_c, fp_width_frac_c)
+    data_i_fp = to_fixed_point(data_i, fm_global.fp_width_c, fm_global.fp_width_frac_c)
     data_i_int = fixed_to_int(data_i_fp)
 
     filename = "../../../../../sim/matlab/verification_data/rx_pilot.txt"
@@ -70,7 +70,7 @@ async def fir_filter_test(dut):
                 break
 
     # Convert to fixed point
-    gold_data_o_fp = to_fixed_point(gold_data_o, fp_width_c, fp_width_frac_c)
+    gold_data_o_fp = to_fixed_point(gold_data_o, fm_global.fp_width_c, fm_global.fp_width_frac_c)
 
     # --------------------------------------------------------------------------
     # Prepare environment
@@ -84,7 +84,7 @@ async def fir_filter_test(dut):
 
     # Generate FIR input strobe
     strobe_num_cycles_high = 1
-    strobe_num_cycles_low = tb.CLOCK_FREQ_MHZ * 1e6 // fs_rx_c - strobe_num_cycles_high
+    strobe_num_cycles_low = tb.CLOCK_FREQ_MHZ * 1e6 // fm_global.fs_rx_c - strobe_num_cycles_high
     tb.fir_in_strobe.start(bit_toggler(repeat(strobe_num_cycles_high), repeat(strobe_num_cycles_low)))
 
     N_FIR = 73  # see filter_bp_pilot_coeffs_c in DUT (DspFir)
@@ -103,7 +103,7 @@ async def fir_filter_test(dut):
     await tb.reset()
 
     # Fork the 'receiving part'
-    fir_out_fork = cocotb.fork(tb.read_fir_result(pilot_output_scale_c, num_samples))
+    fir_out_fork = cocotb.fork(tb.read_fir_result(fm_global.pilot_output_scale_c, num_samples))
 
     # Send input data through filter
     dut._log.info("Sending input data through filter ...")
@@ -131,15 +131,15 @@ async def fir_filter_test(dut):
         dut._log.info("Plots ...")
 
         fig = plt.figure()
-        plt.plot(np.arange(0, num_expected) / fs_rx_c,
+        plt.plot(np.arange(0, num_expected) / fm_global.fs_rx_c,
                  from_fixed_point(gold_data_o_fp), "b", label="gold_data_o_fp")
-        plt.plot(np.arange(0, num_received) / fs_rx_c,
+        plt.plot(np.arange(0, num_received) / fm_global.fs_rx_c,
                  tb.data_out, "r", label="data_out")
         plt.title("Pilot")
         plt.grid(True)
         plt.legend()
         fig.tight_layout()
-        plt.xlim([0, num_samples / fs_rx_c])
+        plt.xlim([0, num_samples / fm_global.fs_rx_c])
         plt.show()
 
     # --------------------------------------------------------------------------

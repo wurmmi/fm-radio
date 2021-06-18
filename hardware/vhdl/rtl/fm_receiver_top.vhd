@@ -8,8 +8,11 @@
 -------------------------------------------------------------------------------
 -- TIME LOGGING
 --
--- (1) FM receiver top (AXI stream interface) implementation
+-- (1) Top-level AXI stream interface (input) implementation
 --       03/27/2021  15:30 - 17:30    2:00 h
+--
+-- (2) Top-level AXI stream interface (output) implementation
+--       06/16/2021  08:30 -
 --
 
 library ieee;
@@ -25,15 +28,15 @@ entity fm_receiver_top is
     clk_i : in std_logic;
     rst_i : in std_logic;
 
-    -- AXI Stream input
+    -- AXI stream input
     s0_axis_tready : out std_logic;
     s0_axis_tdata  : in std_logic_vector(31 downto 0);
     s0_axis_tvalid : in std_logic;
 
-    -- Output
-    audio_L_o     : out std_logic_vector(15 downto 0);
-    audio_R_o     : out std_logic_vector(15 downto 0);
-    audio_valid_o : out std_logic);
+    -- AXI stream input
+    m0_axis_tready : in std_logic;
+    m0_axis_tdata  : out std_logic_vector(31 downto 0);
+    m0_axis_tvalid : out std_logic);
 
 end entity fm_receiver_top;
 
@@ -43,8 +46,6 @@ architecture rtl of fm_receiver_top is
   --! @name Internal Registers
   -----------------------------------------------------------------------------
   --! @{
-
-  signal req_sample : std_ulogic;
 
   signal i_sample    : sample_t;
   signal q_sample    : sample_t;
@@ -70,11 +71,12 @@ begin -- architecture rtl
   -- Outputs
   ------------------------------------------------------------------------------
 
-  s0_axis_tready <= req_sample;
+  -- NOTE: Consume an input sample, when output is ready to receive one
+  s0_axis_tready <= m0_axis_tready;
 
-  audio_L_o     <= std_logic_vector(to_slv(audio_L));
-  audio_R_o     <= std_logic_vector(to_slv(audio_R));
-  audio_valid_o <= std_logic(audio_valid);
+  m0_axis_tdata(31 downto 16) <= std_logic_vector(to_slv(audio_L));
+  m0_axis_tdata(15 downto 0)  <= std_logic_vector(to_slv(audio_R));
+  m0_axis_tvalid              <= std_logic(audio_valid);
 
   ------------------------------------------------------------------------------
   -- Signal Assignments
@@ -113,18 +115,6 @@ begin -- architecture rtl
   ------------------------------------------------------------------------------
   -- Instantiations
   ------------------------------------------------------------------------------
-
-  -- Strobe generator to request samples at the required sample rate
-  strobe_gen_inst : entity work.strobe_gen
-    generic map(
-      clk_freq_g => clk_freq_system_c,
-      period_g   => (1 sec / fs_c))
-    port map(
-      clk_i => clk_i,
-      rst_i => rst_i,
-
-      enable_i => '1',
-      strobe_o => req_sample);
 
   -- FM receiver IP
   fm_receiver_inst : entity work.fm_receiver
