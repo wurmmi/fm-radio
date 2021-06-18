@@ -29,10 +29,10 @@ typedef struct {
 
 /* Register: FM_LED_CONTROL */
 #define FM_LED_CONTROL_VALUE_Pos (0U)
-#define FM_LED_CONTROL_VALUE_Len (8U)
+#define FM_LED_CONTROL_VALUE_Len (4U)
 #define FM_LED_CONTROL_VALUE_Rst (0x0U)
 #define FM_LED_CONTROL_VALUE_Msk \
-    (0xFFU << FM_LED_CONTROL_VALUE_Pos)
+    (0xFU << FM_LED_CONTROL_VALUE_Pos)
 #define GET_FM_LED_CONTROL_VALUE(REG) \
     (((REG) & FM_LED_CONTROL_VALUE_Msk) >> FM_LED_CONTROL_VALUE_Pos)
 #define SET_FM_LED_CONTROL_VALUE(REG, VAL) \

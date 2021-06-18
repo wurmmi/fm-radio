@@ -7,7 +7,7 @@ Address width: 2 bits
 
 ---
 ### MAGIC_VALUE
-Magic constant to identity Blinkylight.
+Magic constant to identify FM Radio IP.
 
 | Address: `0x0` | *READ_ONLY* |
 | :--- | ---: |
@@ -19,7 +19,7 @@ Represents the physical LED value.
 
 | Address: `0x4` | *READ_WRITE* |
 | :--- | ---: |
-| *VALUE*<br> | Bits: `[7:0]`<br>Reset: `0x0` |
+| *VALUE*<br> | Bits: `[3:0]`<br>Reset: `0x0` |
 
 
 ---

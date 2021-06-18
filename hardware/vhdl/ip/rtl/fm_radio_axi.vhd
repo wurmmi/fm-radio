@@ -117,7 +117,7 @@ architecture rtl of fm_radio_axi is
   -----------------------------------------------------------------------------
   --! @{
 
-  signal fm_led_control_value : std_ulogic_vector(7 downto 0) := std_ulogic_vector(to_unsigned(0, 8));
+  signal fm_led_control_value : std_ulogic_vector(3 downto 0) := std_ulogic_vector(to_unsigned(0, 4));
 
   --! @}
   -----------------------------------------------------------------------------
@@ -246,7 +246,7 @@ begin -- architecture rtl
           axi_rresp <= axi_okay_c;
 
         when 4 =>
-          axi_rdata(7 downto 0) <= fm_led_control_value;
+          axi_rdata(3 downto 0) <= fm_led_control_value;
           axi_rresp <= axi_okay_c;
 
         when others => null;
@@ -259,7 +259,7 @@ begin -- architecture rtl
     begin
       axi_bresp <= axi_addr_error_c;
 
-      fm_led_control_value <= std_ulogic_vector(to_unsigned(0, 8));
+      fm_led_control_value <= std_ulogic_vector(to_unsigned(0, 4));
     end procedure reset;
   begin -- process writing
     if s_axi_aresetn_i = '0' then
@@ -275,7 +275,7 @@ begin -- architecture rtl
 
         case to_integer(axi_awaddr) is
           when 4 =>
-            fm_led_control_value <= s_axi_wdata_i(7 downto 0);
+            fm_led_control_value <= s_axi_wdata_i(3 downto 0);
             axi_bresp <= axi_okay_c;
 
 

@@ -40,7 +40,7 @@ package fm_radio_reg_pkg is
 
   constant register_map_c : registers_t := (
     0 => (x"00000000", READ_ONLY, x"DEADBEEF", x"FFFFFFFF"),
-    1 => (x"00000004", READ_WRITE, x"00000000", x"000000FF"));
+    1 => (x"00000004", READ_WRITE, x"00000000", x"0000000F"));
 
   -- Register: FM_MAGIC_VALUE
   constant FM_MAGIC_VALUE_ADDR : unsigned(31 downto 0) := x"00000000";
@@ -52,11 +52,11 @@ package fm_radio_reg_pkg is
 
   -- Register: FM_LED_CONTROL
   constant FM_LED_CONTROL_ADDR : unsigned(31 downto 0) := x"00000004";
-  constant FM_LED_CONTROL_MASK : std_ulogic_vector(31 downto 0) := x"000000FF";
+  constant FM_LED_CONTROL_MASK : std_ulogic_vector(31 downto 0) := x"0000000F";
 
   constant FM_LED_CONTROL_VALUE_Pos : natural := 0;
-  constant FM_LED_CONTROL_VALUE_Len : natural := 8;
-  constant FM_LED_CONTROL_VALUE_Rst : std_ulogic_vector(7 downto 0) := b"00000000";
+  constant FM_LED_CONTROL_VALUE_Len : natural := 4;
+  constant FM_LED_CONTROL_VALUE_Rst : std_ulogic_vector(3 downto 0) := b"0000";
 
 
   -----------------------------------------------------------------------------

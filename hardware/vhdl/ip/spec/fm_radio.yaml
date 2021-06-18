@@ -5,7 +5,7 @@ prefix: FM
 
 registers:
   - name: "MAGIC_VALUE"
-    description: "Magic constant to identity Blinkylight."
+    description: "Magic constant to identify FM Radio IP."
     access: "READ_ONLY"
     fields:
       - name: "VALUE"
@@ -21,7 +21,7 @@ registers:
     fields:
       - name: "VALUE"
         description: ""
-        width: 8
+        width: 4
         offset: 0
         reset: 0x0
         connect: "control_o.led"
