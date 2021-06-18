@@ -37,7 +37,10 @@ entity fm_receiver_top is
     -- AXI stream input
     m0_axis_tready : in std_logic;
     m0_axis_tdata  : out std_logic_vector(31 downto 0);
-    m0_axis_tvalid : out std_logic);
+    m0_axis_tvalid : out std_logic;
+
+    -- LED output
+    leds_o : out std_logic_vector(3 downto 0));
 
 end entity fm_receiver_top;
 
@@ -78,6 +81,8 @@ begin -- architecture rtl
   m0_axis_tdata(31 downto 16) <= std_logic_vector(to_slv(audio_L));
   m0_axis_tdata(15 downto 0)  <= std_logic_vector(to_slv(audio_R));
   m0_axis_tvalid              <= std_logic(audio_valid);
+
+  leds_o <= b"1111";
 
   ------------------------------------------------------------------------------
   -- Signal Assignments
