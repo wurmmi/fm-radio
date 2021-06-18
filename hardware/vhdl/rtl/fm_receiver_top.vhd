@@ -12,7 +12,8 @@
 --       03/27/2021  15:30 - 17:30    2:00 h
 --
 -- (2) Top-level AXI stream interface (output) implementation
---       06/16/2021  08:30 -
+--       06/16/2021  08:30 - 10:00    1:30 h   VHDL implementation fast; But
+--                                             testbench verification took 3h ..
 --
 
 library ieee;
