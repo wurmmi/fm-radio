@@ -84,10 +84,9 @@ async def data_processing_test(dut):
     output_speedup_factor = 120
     strobe_num_cycles_high = 1
     strobe_num_cycles_low = tb.CLOCK_FREQ_MHZ * 1e6 // fm_global.fs_audio_c // output_speedup_factor - strobe_num_cycles_high
-    print(f"strobe_num_cycles_high  = {strobe_num_cycles_high}")
-    print(f"strobe_num_cycles_low  = {strobe_num_cycles_low}")
-    print(f"ratio  = {strobe_num_cycles_low/strobe_num_cycles_high}")
+    ratio = strobe_num_cycles_low // strobe_num_cycles_high
     tb.backpressure_i2s.start(bit_toggler(repeat(strobe_num_cycles_high), repeat(strobe_num_cycles_low)))
+    assert ratio >= 9, "output_speedup_factor is set too high! --> IP won't have enough time to calculate a sample, before the next one arrives"
 
     # Fork the 'receiving parts'
     fm_demod_output_fork = cocotb.fork(tb.read_fm_demod_output())
@@ -96,8 +95,8 @@ async def data_processing_test(dut):
     pilot_output_fork = cocotb.fork(tb.read_pilot_output())
     carrier_38k_output_fork = cocotb.fork(tb.read_carrier_38k_output())
     audio_lrdiff_output_fork = cocotb.fork(tb.read_audio_lrdiff_output())
-    audio_L_output_fork = cocotb.fork(tb.read_audio_L_output())
-    audio_R_output_fork = cocotb.fork(tb.read_audio_R_output())
+    #audio_L_output_fork = cocotb.fork(tb.read_audio_L_output())
+    #audio_R_output_fork = cocotb.fork(tb.read_audio_R_output())
     audio_output_fork = cocotb.fork(tb.read_audio_output())
 
     # Send input data to IP
@@ -114,8 +113,8 @@ async def data_processing_test(dut):
     await pilot_output_fork
     await carrier_38k_output_fork
     await audio_lrdiff_output_fork
-    await audio_L_output_fork
-    await audio_R_output_fork
+    # await audio_L_output_fork
+    # await audio_R_output_fork
     await audio_output_fork
 
     # Measure time
