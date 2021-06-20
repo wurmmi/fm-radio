@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include "AudioHandler.h"
+#include "AxiStreamRouter.h"
 #include "FMRadioIP.h"
 #include "MenuControl.h"
 #include "log.h"
@@ -33,6 +34,7 @@ static void task_heartbeat(void *) {
 
 static void task_audio(void *) {
   AudioHandler audioHandler(&fmRadioIP);
+  AxiStreamRouter axiStreamRouter;
 
   MenuControl::PrintMainMenu();
   while (true) {
@@ -41,10 +43,17 @@ static void task_audio(void *) {
     printf("%c\n", choice);
 
     switch (choice) {
-      case 'p': {
+      case 'h':
+        axiStreamRouter.SelectIP(IPSelection::HLS);
+        break;
+      case 'v':
+        axiStreamRouter.SelectIP(IPSelection::VHDL);
+        break;
+
+      case 'p':
         fmRadioIP.SetMode(TMode::PASSTHROUGH);
         audioHandler.PlayFile("cantina_band_44100.wav");
-      } break;
+        break;
       case 'u':
         audioHandler.VolumeUp();
         break;
@@ -52,14 +61,14 @@ static void task_audio(void *) {
         audioHandler.VolumeDown();
         break;
 
-      case 'x': {
+      case 'x':
         fmRadioIP.SetMode(TMode::FMRADIO);
         audioHandler.PlayFile("over_rx_fm_bb.wav");
-      } break;
-      case 'r': {
+        break;
+      case 'r':
         fmRadioIP.SetMode(TMode::FMRADIO);
         audioHandler.PlayFile("limit_rx_fm_bb.wav");
-      } break;
+        break;
       case 's':
         audioHandler.Stop();
         LOG_INFO("DMA stopped.");
