@@ -9,8 +9,8 @@
 --  VHDL-200X LRM.
 --
 -- --------------------------------------------------------------------
--- Version    : $Revision: 1.2 $
--- Date       : $Date: 2011/03/24 07:44:24 $
+-- Version    : $Revision: 1.21 $
+-- Date       : $Date: 2007-09-11 14:52:13-04 $
 -- --------------------------------------------------------------------
 
 package fixed_float_types is
@@ -32,6 +32,3 @@ package fixed_float_types is
                       round_zero);      -- Round toward zero (truncate)
 
 end package fixed_float_types;
-
-
-

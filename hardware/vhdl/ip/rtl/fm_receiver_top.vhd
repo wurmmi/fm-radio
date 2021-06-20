@@ -110,7 +110,7 @@ begin -- architecture rtl
   m0_axis_tdata(15 downto 0)  <= std_logic_vector(to_slv(audio_R));
   m0_axis_tvalid              <= std_logic(audio_valid);
 
-  leds_o <= std_logic_vector(to_slv(control.led_ctrl));
+  leds_o <= std_logic_vector(control.led_ctrl);
 
   ------------------------------------------------------------------------------
   -- Signal Assignments
