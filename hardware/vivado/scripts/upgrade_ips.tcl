@@ -29,6 +29,16 @@ if {[file exists $build_dir/$proj_name.xpr]} {
   puts "- Opening block design"
   open_bd_design [get_files $proj_name.bd]
 
+  ###
+  # NOTE:
+  # This is a work-around, to re-import the VHDL files into the project ...
+  ###
+  puts "- Bump VHDL IP core_revision number"
+  set comp [ ipx::open_core -set_current false [ get_property xml_file_name [ get_ipdefs *fm_receiver_vhdl* ] ] ]
+  set_property core_revision [ expr 1 + [ get_property core_revision $comp ] ] $comp
+  ipx::save_core $comp
+  ipx::unload_core $comp
+
   puts "- Update IP catalog"
   update_ip_catalog -rebuild -scan_changes
 
