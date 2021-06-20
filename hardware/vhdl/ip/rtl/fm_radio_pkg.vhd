@@ -41,13 +41,13 @@ package fm_radio_pkg is
   constant fp_width_int_c  : natural := fp_width_int_spec_c;
 
   --! Pilot recovery
-  constant pilot_scale_factor_c : u_sfixed(4 downto 0)  := to_sfixed(pilot_scale_factor_spec_c, 4, 0);
-  constant carrier_38k_offset_c : u_sfixed(2 downto -2) := to_sfixed(carrier_38k_offset_spec_c, 2, -2);
+  constant pilot_scale_factor_c : sfixed(4 downto 0)  := to_sfixed(pilot_scale_factor_spec_c, 4, 0);
+  constant carrier_38k_offset_c : sfixed(2 downto -2) := to_sfixed(carrier_38k_offset_spec_c, 2, -2);
 
   --! Value
-  subtype iq_value_t is u_sfixed(fp_width_int_c - 1 downto -fp_width_frac_c);
+  subtype iq_value_t is sfixed(fp_width_int_c - 1 downto -fp_width_frac_c);
 
-  subtype sample_t is u_sfixed(fp_width_int_c - 1 downto -fp_width_frac_c);
+  subtype sample_t is sfixed(fp_width_int_c - 1 downto -fp_width_frac_c);
 
   subtype fract_real is real range
   - 1.0 to 0.99999999999999999999999999999999999999999999999999999999999999999;
@@ -83,8 +83,8 @@ package fm_radio_pkg is
   -- ***
   -- Resize and truncate
   function ResizeTruncAbsVal (
-    arg      : u_sfixed; -- input
-    size_res : u_sfixed) -- for size only
+    arg      : sfixed; -- input
+    size_res : sfixed) -- for size only
     return sfixed;
 
 end package fm_radio_pkg;
@@ -113,12 +113,12 @@ package body fm_radio_pkg is
   -- ***
   -- Resize and truncate
   function ResizeTruncAbsVal (
-    arg      : u_sfixed;
-    size_res : u_sfixed)
+    arg      : sfixed;
+    size_res : sfixed)
     return sfixed is
 
-    variable lsb : u_sfixed(size_res'range)                        := (others => '0');
-    variable tmp : u_sfixed(size_res'high + 1 downto size_res'low) := (others => '0');
+    variable lsb : sfixed(size_res'range)                        := (others => '0');
+    variable tmp : sfixed(size_res'high + 1 downto size_res'low) := (others => '0');
   begin
     lsb(lsb'low)        := '1';
     tmp(size_res'range) := resize(
