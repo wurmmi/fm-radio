@@ -11,7 +11,7 @@
 
 #include "xaxis_switch.h"
 
-enum class IPSelection { HLS, VHDL };
+enum class IPSelection { VHDL, HLS };
 
 class AxiStreamRouter {
  private:

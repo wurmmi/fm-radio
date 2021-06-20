@@ -102,7 +102,7 @@ static void task_audio(void *) {
 }
 
 static void Xil_AssertCallbackRoutine(uint8_t *file, int32_t line) {
-  printf("Assertion in file %s, on line %0d\n", file, line);
+  printf("Assertion in file %s, on line %0ld\n", file, line);
 }
 
 int main() {
