@@ -5,6 +5,7 @@
  */
 
 #include "AxiStreamRouter.h"
+
 #include "log.h"
 
 using namespace std;
@@ -45,7 +46,7 @@ bool AxiStreamRouter::Initialize() {
   return true;
 }
 
-void AxiStreamRouter::ConfigureAxiSwitch(u8 parallel_ip_nr) {
+void AxiStreamRouter::ConfigureAxiSwitch(uint8_t parallel_ip_nr) {
   // Clear all existing configurations
   XAxisScr_MiPortDisableAll(&mAxisSwitchIn);
   XAxisScr_RegUpdateEnable(&mAxisSwitchIn);
@@ -66,6 +67,18 @@ void AxiStreamRouter::ConfigureAxiSwitch(u8 parallel_ip_nr) {
 void AxiStreamRouter::SelectIP(IPSelection selection) {
   ConfigureAxiSwitch(static_cast<uint8_t>(selection));
   mCurrentSelection = selection;
+
+  switch (selection) {
+    case IPSelection::HLS:
+      LOG_INFO("Set AXI stream switches to HLS IP");
+      break;
+    case IPSelection::VHDL:
+      LOG_INFO("Set AXI stream switches to VHDL IP");
+      break;
+    default:
+      LOG_WARN("Unknown IPSelection %d", static_cast<uint8_t>(selection));
+      break;
+  }
 }
 
 IPSelection AxiStreamRouter::GetCurrentlySelectedIP() {

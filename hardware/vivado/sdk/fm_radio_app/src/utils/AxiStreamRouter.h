@@ -27,7 +27,7 @@ class AxiStreamRouter {
 
   void SelectIP(IPSelection selection);
   IPSelection GetCurrentlySelectedIP();
-  void ConfigureAxiSwitch(u8 parallel_ip_nr);
+  void ConfigureAxiSwitch(uint8_t parallel_ip_nr);
 };
 
 #endif /* _AXISTREAMROUTER_H_ */

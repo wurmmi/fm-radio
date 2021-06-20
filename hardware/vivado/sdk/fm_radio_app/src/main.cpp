@@ -11,7 +11,7 @@
 
 #include "AudioHandler.h"
 #include "AxiStreamRouter.h"
-#include "FMRadioIP.h"
+#include "FMRadioIP_HLS.h"
 #include "MenuControl.h"
 #include "log.h"
 
@@ -23,17 +23,17 @@ using namespace std;
 static TaskHandle_t task_heartbeat_handle;
 static TaskHandle_t task_audio_handle;
 
-static FMRadioIP fmRadioIP(XPAR_FM_RECEIVER_HLS_0_DEVICE_ID);
+static FMRadioIP_HLS fmRadioIP_HLS(XPAR_FM_RECEIVER_HLS_0_DEVICE_ID);
 
 static void task_heartbeat(void *) {
   while (true) {
-    fmRadioIP.LED_Toggle(TLed::LED1);
+    fmRadioIP_HLS.LED_Toggle(TLed::LED1);
     vTaskDelay(pdMS_TO_TICKS(1000));
   }
 }
 
 static void task_audio(void *) {
-  AudioHandler audioHandler(&fmRadioIP);
+  AudioHandler audioHandler(&fmRadioIP_HLS);
   AxiStreamRouter axiStreamRouter;
 
   MenuControl::PrintMainMenu();
@@ -58,8 +58,8 @@ static void task_audio(void *) {
         audioHandler.ShowAvailableFiles();
         break;
       case 'i': {
-        string build_time = fmRadioIP.GetBuildTime();
-        string git_hash   = fmRadioIP.GetGitHash();
+        string build_time = fmRadioIP_HLS.GetBuildTime();
+        string git_hash   = fmRadioIP_HLS.GetGitHash();
 
         printf("This program is developed by Michael Wurm.\n");
         printf("SDK firmware build date :  %s, %s\n", __DATE__, __TIME__);
@@ -70,7 +70,7 @@ static void task_audio(void *) {
 
       /*-- MODE: PASS-THROUGH --*/
       case 'p':
-        fmRadioIP.SetMode(TMode::PASSTHROUGH);
+        fmRadioIP_HLS.SetMode(TMode::PASSTHROUGH);
         audioHandler.PlayFile("cantina_band_44100.wav");
         break;
       case 's':
@@ -86,11 +86,11 @@ static void task_audio(void *) {
 
       /*-- MODE: FM RADIO --*/
       case 'x':
-        fmRadioIP.SetMode(TMode::FMRADIO);
+        fmRadioIP_HLS.SetMode(TMode::FMRADIO);
         audioHandler.PlayFile("over_rx_fm_bb.wav");
         break;
       case 'r':
-        fmRadioIP.SetMode(TMode::FMRADIO);
+        fmRadioIP_HLS.SetMode(TMode::FMRADIO);
         audioHandler.PlayFile("limit_rx_fm_bb.wav");
         break;
 
