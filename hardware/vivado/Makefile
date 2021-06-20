@@ -49,6 +49,10 @@ clean-sdk: ##			- Clean all outputs of SDK.
 	@echo "Cleaning SDK stuff..."
 	git clean -xdf sdk/
 
+clean-vivado: ##			- Clean all outputs of Vivado project.
+	@echo "Cleaning SDK stuff..."
+	git clean -xdf generated/
+
 clean-all: ##			- Clean all outputs.
 	@echo "Cleaning..."
 	git clean -xdf
@@ -56,7 +60,7 @@ clean-all: ##			- Clean all outputs.
 help: ##				- Show this help message.
 	@grep -h "##" Makefile | grep -v "\"##\"" | sed -e 's/##//g'
 
-.PHONY: project bitstream sdk clean-all clean-sdk help
+.PHONY: all project upgrade_ips bitstream sdk clean-sdk clean-vivado clean-all help
 
 ##
 ##==============================================================================
