@@ -110,7 +110,7 @@ begin -- architecture rtl
   m0_axis_tdata(15 downto 0)  <= std_logic_vector(to_slv(audio_R));
   m0_axis_tvalid              <= std_logic(audio_valid);
 
-  leds_o <= control.led_ctrl;
+  leds_o <= std_logic_vector(to_slv(control.led_ctrl));
 
   ------------------------------------------------------------------------------
   -- Signal Assignments
@@ -169,29 +169,29 @@ begin -- architecture rtl
       s_axi_aclk_i   => clk_i,
       s_axi_areset_i => rst_i,
 
-      s_axi_awaddr_i  => s_axi_awaddr,
-      s_axi_awprot_i  => s_axi_awprot,
-      s_axi_awvalid_i => s_axi_awvalid,
-      s_axi_awready_o => s_axi_awready,
+      s_axi_awaddr_i              => std_ulogic_vector(s_axi_awaddr),
+      s_axi_awprot_i              => std_ulogic_vector(s_axi_awprot),
+      s_axi_awvalid_i             => std_ulogic(s_axi_awvalid),
+      std_ulogic(s_axi_awready_o) => s_axi_awready,
 
-      s_axi_wdata_i  => s_axi_wdata,
-      s_axi_wstrb_i  => s_axi_wstrb,
-      s_axi_wvalid_i => s_axi_wvalid,
-      s_axi_wready_o => s_axi_wready,
+      s_axi_wdata_i              => std_ulogic_vector(s_axi_wdata),
+      s_axi_wstrb_i              => std_ulogic_vector(s_axi_wstrb),
+      s_axi_wvalid_i             => std_ulogic(s_axi_wvalid),
+      std_ulogic(s_axi_wready_o) => s_axi_wready,
 
-      s_axi_bresp_o  => s_axi_bresp,
-      s_axi_bvalid_o => s_axi_bvalid,
-      s_axi_bready_i => s_axi_bready,
+      std_ulogic_vector(s_axi_bresp_o) => s_axi_bresp,
+      std_ulogic(s_axi_bvalid_o)       => s_axi_bvalid,
+      s_axi_bready_i                   => std_ulogic(s_axi_bready),
 
-      s_axi_araddr_i  => s_axi_araddr,
-      s_axi_arprot_i  => s_axi_arprot,
-      s_axi_arvalid_i => s_axi_arvalid,
-      s_axi_arready_o => s_axi_arready,
+      s_axi_araddr_i              => std_ulogic_vector(s_axi_araddr),
+      s_axi_arprot_i              => std_ulogic_vector(s_axi_arprot),
+      s_axi_arvalid_i             => std_ulogic(s_axi_arvalid),
+      std_ulogic(s_axi_arready_o) => s_axi_arready,
 
-      s_axi_rdata_o  => s_axi_rdata,
-      s_axi_rresp_o  => s_axi_rresp,
-      s_axi_rvalid_o => s_axi_rvalid,
-      s_axi_rready_i => s_axi_rready,
+      std_ulogic_vector(s_axi_rdata_o) => s_axi_rdata,
+      std_ulogic_vector(s_axi_rresp_o) => s_axi_rresp,
+      std_ulogic(s_axi_rvalid_o)       => s_axi_rvalid,
+      s_axi_rready_i                   => std_ulogic(s_axi_rready),
 
       status_i    => status,
       control_o   => control,

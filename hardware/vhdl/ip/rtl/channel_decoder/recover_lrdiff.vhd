@@ -111,8 +111,8 @@ begin -- architecture rtl
     generic map(
       gB => filter_bp_lrdiff_coeffs_c)
     port map(
-      iClk         => clk_i,
-      inResetAsync => not rst_i,
+      iClk        => clk_i,
+      iResetAsync => rst_i,
 
       iDdry   => sample_i,
       iValDry => sample_valid_i,
@@ -125,8 +125,8 @@ begin -- architecture rtl
     generic map(
       gB => filter_lp_mono_coeffs_c)
     port map(
-      iClk         => clk_i,
-      inResetAsync => not rst_i,
+      iClk        => clk_i,
+      iResetAsync => rst_i,
 
       iDdry   => lrdiff_mod_bb,
       iValDry => lrdiff_mod_bb_valid,

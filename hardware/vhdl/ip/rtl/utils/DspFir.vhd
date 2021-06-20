@@ -43,8 +43,8 @@ entity DspFir is
   );
   port (
     -- Sequential logic inside this unit
-    iClk         : in std_ulogic;
-    inResetAsync : in std_ulogic;
+    iClk        : in std_ulogic;
+    iResetAsync : in std_ulogic;
 
     -- Input audio channels
     iDdry   : in sample_t;
@@ -110,7 +110,7 @@ architecture RtlRam of DspFir is
   begin
     if (in_addr = (gB'length - 1)) then
       out_addr <= (others => '0');
-    else
+      else
       out_addr <= in_addr + 1;
     end if;
   end incr_addr;
@@ -200,11 +200,11 @@ begin
   ----------------------------------------------------------------------------
   -- Register process
   ----------------------------------------------------------------------------
-  Regs : process (iClk, inResetAsync) is
+  Regs : process (iClk, iResetAsync) is
   begin
-    if inResetAsync = '0' then
+    if iResetAsync = '1' then
       R <= cInitFirParam;
-    elsif rising_edge(iClk) then
+      elsif rising_edge(iClk) then
       R <= nxR;
     end if;
   end process Regs;

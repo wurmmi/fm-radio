@@ -116,8 +116,8 @@ begin -- architecture rtl
     generic map(
       gB => filter_bp_pilot_coeffs_c)
     port map(
-      iClk         => clk_i,
-      inResetAsync => not rst_i,
+      iClk        => clk_i,
+      iResetAsync => rst_i,
 
       iDdry   => sample_i,
       iValDry => sample_valid_i,

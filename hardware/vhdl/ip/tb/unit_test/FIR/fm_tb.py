@@ -36,11 +36,11 @@ class FM_TB():
     async def reset(self):
         self.dut._log.info("Resetting DUT ...")
 
-        self.dut.inResetAsync <= 1
+        self.dut.iResetAsync <= 1
         await RisingEdge(self.dut.iClk)
-        self.dut.inResetAsync <= 0
+        self.dut.iResetAsync <= 0
         await Timer(3.3, units='us')
-        self.dut.inResetAsync <= 1
+        self.dut.iResetAsync <= 1
         await RisingEdge(self.dut.iClk)
 
     @cocotb.coroutine

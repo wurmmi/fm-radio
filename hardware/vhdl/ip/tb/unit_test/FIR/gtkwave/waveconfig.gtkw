@@ -17,7 +17,7 @@
 [sst_expanded] 1
 [sst_vpaned_height] 298
 @28
-top.dspfir.inresetasync
+top.dspfir.iResetAsync
 top.dspfir.iclk
 @29
 top.dspfir.ivaldry

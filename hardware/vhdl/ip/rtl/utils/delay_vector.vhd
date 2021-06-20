@@ -22,8 +22,8 @@ entity delay_vector is
     gDelay : natural := 256);
   port (
     -- Sequential logic inside this unit
-    iClk         : in std_ulogic;
-    inResetAsync : in std_ulogic;
+    iClk        : in std_ulogic;
+    iResetAsync : in std_ulogic;
 
     -- Input audio channels
     iDdry   : in sample_t;
@@ -84,9 +84,9 @@ begin
     end procedure;
   begin
     if rising_edge(iClk) then
-      if inResetAsync = '0' then
+      if iResetAsync = '1' then
         reset;
-      else
+        else
         valid      <= next_valid;
         next_valid <= '0';
 
@@ -96,14 +96,14 @@ begin
 
           if addrCnt = gDelay - 1 then
             addrCnt <= 0;
-          else
+            else
             addrCnt <= addrCnt + 1;
           end if;
         end if;
 
         if addrCnt = gDelay - 1 then
           readVal <= ram(0);
-        else
+          else
           readVal <= ram(addrCnt + 1);
         end if;
       end if;
@@ -120,7 +120,7 @@ begin
   --    end procedure;
   --  begin
   --    if rising_edge(iClk) then
-  --      if inResetAsync = '0' then
+  --      if iResetAsync = '1' then
   --        reset;
   --      else
   --        -- Defaults

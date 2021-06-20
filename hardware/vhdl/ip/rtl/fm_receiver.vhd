@@ -136,12 +136,13 @@ begin -- architecture rtl
   -----------------------------------------------------------------------------
   -- Assertions for testbench
   -----------------------------------------------------------------------------
-
+  -- synthesis translate_off
   asserts : process (all)
   begin
     if NOW > 0 ns then -- to skip the meta values at the beginning
 
     end if;
   end process asserts;
+  -- synthesis translate_on
 
 end architecture rtl;

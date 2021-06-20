@@ -76,7 +76,7 @@ begin -- architecture rtl
 
   ------------------------------------------------------------------------------
   -- Registers
-  ------------------------------------------------------------------------------
+  ----iResetAsync---------------------------------------------------------------
 
   regs : process (clk_i) is
     procedure reset is
@@ -92,7 +92,7 @@ begin -- architecture rtl
     if rising_edge(clk_i) then
       if rst_i = '1' then
         reset;
-      else
+        else
         -- Defaults
         fm_demod_valid <= '0';
 
@@ -119,7 +119,7 @@ begin -- architecture rtl
       gDelay => 3 + 2) -- NOTE: why +2 ??
     port map(
       iClk         => clk_i,
-      inResetAsync => not rst_i,
+      iResetAsync => rst_i,
 
       iDdry   => i_sample_i,
       iValDry => iq_valid_i,
@@ -132,7 +132,7 @@ begin -- architecture rtl
       gDelay => 3 + 2) -- NOTE: why +2 ??
     port map(
       iClk         => clk_i,
-      inResetAsync => not rst_i,
+      iResetAsync => rst_i,
 
       iDdry   => q_sample_i,
       iValDry => iq_valid_i,
