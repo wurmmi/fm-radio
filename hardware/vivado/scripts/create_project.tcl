@@ -38,6 +38,10 @@ if {[file exists $build_dir/$proj_name.xpr]} {
 
   add_files -fileset constrs_1 -norecurse "./dc/zedboard_master_XDC_RevC_D_v3.xdc"
 
+  puts "--- - VHDL 2008 support"
+  add_files -norecurse ./scripts/fixed_pkg_2008.vhd
+  set_property library ieee [get_files ./scripts/fixed_pkg_2008.vhd]
+
   puts "--- - Creating block design"
   source ./bd/$proj_name.tcl
 
