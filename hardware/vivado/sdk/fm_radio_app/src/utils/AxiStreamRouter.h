@@ -19,6 +19,8 @@ class AxiStreamRouter {
   XAxis_Switch mAxisSwitchOut;
   IPSelection mCurrentSelection;
 
+  bool Initialize();
+
  public:
   AxiStreamRouter();
   ~AxiStreamRouter();

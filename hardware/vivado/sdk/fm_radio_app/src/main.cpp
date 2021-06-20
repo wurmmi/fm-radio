@@ -101,6 +101,10 @@ static void task_audio(void *) {
   }
 }
 
+static void Xil_AssertCallbackRoutine(uint8_t *file, int32_t line) {
+  printf("Assertion in file %s, on line %0d\n", file, line);
+}
+
 int main() {
   /*--- System setup ---*/
   Xil_DCacheEnable();
@@ -121,6 +125,10 @@ int main() {
               NULL,
               tskIDLE_PRIORITY,
               &task_audio_handle);
+
+  /* Enable exceptions. */
+  Xil_AssertSetCallback((Xil_AssertCallback)Xil_AssertCallbackRoutine);
+  Xil_ExceptionEnable();
 
   vTaskStartScheduler();
   LOG_ERROR("vTaskStartScheduler() returned unexpectedly!");

@@ -8,9 +8,41 @@
 
 using namespace std;
 
-AxiStreamRouter::AxiStreamRouter() {}
+AxiStreamRouter::AxiStreamRouter() {
+  Initialize();
+}
 
 AxiStreamRouter::~AxiStreamRouter() {}
+
+bool AxiStreamRouter::Initialize() {
+  /* Input selector switch */
+  XAxis_Switch_Config* cfgPtr =
+      XAxisScr_LookupConfig(XPAR_AXIS_SWITCH_IN_DEVICE_ID);
+  if (cfgPtr == nullptr) {
+    LOG_ERROR("AxisSwitchIn not found!");
+    return false;
+  }
+  uint32_t status =
+      XAxisScr_CfgInitialize(&mAxisSwitchIn, cfgPtr, cfgPtr->BaseAddress);
+  if (status != XST_SUCCESS) {
+    LOG_ERROR("AxisSwitchIn initialization failed (error %d)", status);
+    return false;
+  }
+
+  /* Output selector switch */
+  cfgPtr = XAxisScr_LookupConfig(XPAR_AXIS_SWITCH_OUT_DEVICE_ID);
+  if (cfgPtr == nullptr) {
+    LOG_ERROR("AxisSwitchOut not found!");
+    return false;
+  }
+  status = XAxisScr_CfgInitialize(&mAxisSwitchOut, cfgPtr, cfgPtr->BaseAddress);
+  if (status != XST_SUCCESS) {
+    LOG_ERROR("AxisSwitchOut initialization failed (error %d)", status);
+    return false;
+  }
+
+  return true;
+}
 
 void AxiStreamRouter::ConfigureAxiSwitch(u8 parallel_ip_nr) {
   // Clear all existing configurations
