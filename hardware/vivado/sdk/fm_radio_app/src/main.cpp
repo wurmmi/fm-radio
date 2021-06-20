@@ -43,35 +43,12 @@ static void task_audio(void *) {
     printf("%c\n", choice);
 
     switch (choice) {
+      /*-- GENERAL --*/
       case 'h':
         axiStreamRouter.SelectIP(IPSelection::HLS);
         break;
       case 'v':
         axiStreamRouter.SelectIP(IPSelection::VHDL);
-        break;
-
-      case 'p':
-        fmRadioIP.SetMode(TMode::PASSTHROUGH);
-        audioHandler.PlayFile("cantina_band_44100.wav");
-        break;
-      case 'u':
-        audioHandler.VolumeUp();
-        break;
-      case 'd':
-        audioHandler.VolumeDown();
-        break;
-
-      case 'x':
-        fmRadioIP.SetMode(TMode::FMRADIO);
-        audioHandler.PlayFile("over_rx_fm_bb.wav");
-        break;
-      case 'r':
-        fmRadioIP.SetMode(TMode::FMRADIO);
-        audioHandler.PlayFile("limit_rx_fm_bb.wav");
-        break;
-      case 's':
-        audioHandler.Stop();
-        LOG_INFO("DMA stopped.");
         break;
 
       case 'm':
@@ -90,6 +67,32 @@ static void task_audio(void *) {
                build_time.c_str(),
                git_hash.c_str());
       } break;
+
+      /*-- MODE: PASS-THROUGH --*/
+      case 'p':
+        fmRadioIP.SetMode(TMode::PASSTHROUGH);
+        audioHandler.PlayFile("cantina_band_44100.wav");
+        break;
+      case 's':
+        audioHandler.Stop();
+        LOG_INFO("DMA stopped.");
+        break;
+      case 'u':
+        audioHandler.VolumeUp();
+        break;
+      case 'd':
+        audioHandler.VolumeDown();
+        break;
+
+      /*-- MODE: FM RADIO --*/
+      case 'x':
+        fmRadioIP.SetMode(TMode::FMRADIO);
+        audioHandler.PlayFile("over_rx_fm_bb.wav");
+        break;
+      case 'r':
+        fmRadioIP.SetMode(TMode::FMRADIO);
+        audioHandler.PlayFile("limit_rx_fm_bb.wav");
+        break;
 
       default:
         LOG_WARN("Unknown input.\n");
