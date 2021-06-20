@@ -20,8 +20,13 @@
 
 using namespace std;
 
-FMRadioIP::FMRadioIP(uint32_t device_id) : mDeviceId(device_id) {
-  Initialize();
-}
+FMRadioIP::FMRadioIP(uint32_t device_id) : mDeviceId(device_id) {}
 
 FMRadioIP::~FMRadioIP() {}
+
+string FMRadioIP::UintToHexString(uint64_t num) {
+  // Convert number to string and hex-format
+  stringstream ss;
+  ss << hex << num;
+  return string(ss.str());
+}
