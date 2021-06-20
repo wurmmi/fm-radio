@@ -5,6 +5,7 @@
  */
 
 #include "AxiStreamRouter.h"
+#include "log.h"
 
 using namespace std;
 
@@ -25,7 +26,7 @@ bool AxiStreamRouter::Initialize() {
   uint32_t status =
       XAxisScr_CfgInitialize(&mAxisSwitchIn, cfgPtr, cfgPtr->BaseAddress);
   if (status != XST_SUCCESS) {
-    LOG_ERROR("AxisSwitchIn initialization failed (error %d)", status);
+    LOG_ERROR("AxisSwitchIn initialization failed (error %ld)", status);
     return false;
   }
 
@@ -37,7 +38,7 @@ bool AxiStreamRouter::Initialize() {
   }
   status = XAxisScr_CfgInitialize(&mAxisSwitchOut, cfgPtr, cfgPtr->BaseAddress);
   if (status != XST_SUCCESS) {
-    LOG_ERROR("AxisSwitchOut initialization failed (error %d)", status);
+    LOG_ERROR("AxisSwitchOut initialization failed (error %ld)", status);
     return false;
   }
 

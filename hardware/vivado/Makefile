@@ -19,6 +19,12 @@ vivado = vivado -nojournal -nolog -notrace -mode batch -source ./scripts/$1 $2
 ##Makefile Help for Vivado project.
 ##==============================================================================
 ##
+##Parameters
+##----------
+##Targets: project, upgrade_ips, bitstream, sdk
+##  GUI=<0 or 1> (default: 0)
+##  e.g. `make project GUI=1`
+##
 ##Supported Targets
 ##-----------------
 
@@ -67,6 +73,6 @@ help: ##				- Show this help message.
 ##*** NOTE: Makefile requires following setup:
 ##
 ##      - Vivado (vivado) can be found in PATH.
-##      - Vivado HLS (vivado_hls) can be found in PATH.
+##      - Vivado SDK (xsdk) can be found in PATH.
 ##
 ##==============================================================================
