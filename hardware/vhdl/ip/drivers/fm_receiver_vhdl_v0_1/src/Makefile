@@ -16,8 +16,11 @@ ARCHIVER=
 CP=cp
 COMPILER_FLAGS=
 EXTRA_COMPILER_FLAGS=
+LIB=
 
+RELEASEDIR=../../../lib
 INCLUDEDIR=../../../include
+INCLUDES=-I./. -I${INCLUDEDIR}
 
 INCLUDEFILES=*.h
 LIBSOURCES=*.c
@@ -26,6 +29,9 @@ OUTS = *.o
 
 libs:
 	echo "Compiling fm_receiver_vhdl"
+	$(COMPILER) $(COMPILER_FLAGS) $(EXTRA_COMPILER_FLAGS) $(INCLUDES) $(LIBSOURCES)
+	$(ARCHIVER) -r ${RELEASEDIR}/${LIB} $(OUTS)
+	make clean
 
 include:
 	${CP} $(INCLUDEFILES) $(INCLUDEDIR)
