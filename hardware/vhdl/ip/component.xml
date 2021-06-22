@@ -60,7 +60,7 @@
         </spirit:parameter>
         <spirit:parameter>
           <spirit:name>ASSOCIATED_BUSIF</spirit:name>
-          <spirit:value spirit:id="BUSIFPARAM_VALUE.CLK_I.ASSOCIATED_BUSIF">s0_axis:m0_axis:s_axi_lite_control</spirit:value>
+          <spirit:value spirit:id="BUSIFPARAM_VALUE.CLK_I.ASSOCIATED_BUSIF">s0_axis:m0_axis:s_axi_API</spirit:value>
         </spirit:parameter>
         <spirit:parameter>
           <spirit:name>ASSOCIATED_RESET</spirit:name>
@@ -134,12 +134,12 @@
       </spirit:portMaps>
     </spirit:busInterface>
     <spirit:busInterface>
-      <spirit:name>s_axi_lite_control</spirit:name>
+      <spirit:name>s_axi_API</spirit:name>
       <spirit:displayName>Status and Control Register Interface</spirit:displayName>
       <spirit:busType spirit:vendor="xilinx.com" spirit:library="interface" spirit:name="aximm" spirit:version="1.0"/>
       <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="interface" spirit:name="aximm_rtl" spirit:version="1.0"/>
       <spirit:slave>
-        <spirit:memoryMapRef spirit:memoryMapRef="s_axi_lite_control"/>
+        <spirit:memoryMapRef spirit:memoryMapRef="s_axi_API"/>
       </spirit:slave>
       <spirit:portMaps>
         <spirit:portMap>
@@ -299,20 +299,20 @@
   </spirit:busInterfaces>
   <spirit:memoryMaps>
     <spirit:memoryMap>
-      <spirit:name>s_axi_lite_control</spirit:name>
+      <spirit:name>s_axi_API</spirit:name>
       <spirit:addressBlock>
-        <spirit:name>registers</spirit:name>
+        <spirit:name>Reg</spirit:name>
         <spirit:baseAddress spirit:format="long">0</spirit:baseAddress>
         <spirit:range spirit:format="long">4096</spirit:range>
         <spirit:width spirit:format="long">0</spirit:width>
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>OFFSET_BASE_PARAM</spirit:name>
-            <spirit:value spirit:id="ADDRBLOCKPARAM_VALUE.S_AXI_LITE_CONTROL.REGISTERS.OFFSET_BASE_PARAM"/>
+            <spirit:value spirit:id="ADDRBLOCKPARAM_VALUE.S_AXI_API.REG.OFFSET_BASE_PARAM">C_S_AXI_API_BASEADDR</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>OFFSET_HIGH_PARAM</spirit:name>
-            <spirit:value spirit:id="ADDRBLOCKPARAM_VALUE.S_AXI_LITE_CONTROL.REGISTERS.OFFSET_HIGH_PARAM"/>
+            <spirit:value spirit:id="ADDRBLOCKPARAM_VALUE.S_AXI_API.REG.OFFSET_HIGH_PARAM">C_S_AXI_API_HIGHADDR</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:addressBlock>
@@ -332,7 +332,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>5039eae3</spirit:value>
+            <spirit:value>7f0a2930</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -348,7 +348,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>a58a28ed</spirit:value>
+            <spirit:value>2c172110</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -404,7 +404,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>0ca02b59</spirit:value>
+            <spirit:value>92c4c546</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1113,11 +1113,11 @@
       </xilinx:xpmLibraries>
       <xilinx:vendorDisplayName>M.Wurm</xilinx:vendorDisplayName>
       <xilinx:vendorURL>https://www.linkedin.com/in/michael-wurm</xilinx:vendorURL>
-      <xilinx:coreRevision>46</xilinx:coreRevision>
+      <xilinx:coreRevision>51</xilinx:coreRevision>
       <xilinx:upgrades>
         <xilinx:canUpgradeFrom>user.org:user:fm_receiver_top:1.0</xilinx:canUpgradeFrom>
       </xilinx:upgrades>
-      <xilinx:coreCreationDateTime>2021-06-22T17:21:53Z</xilinx:coreCreationDateTime>
+      <xilinx:coreCreationDateTime>2021-06-22T20:48:30Z</xilinx:coreCreationDateTime>
       <xilinx:tags>
         <xilinx:tag xilinx:name="nopcore"/>
         <xilinx:tag xilinx:name="user.org:user:fm_receiver_top:1.0_ARCHIVE_LOCATION">/home/mike/work/fm-radio/hardware/vhdl</xilinx:tag>
@@ -1130,9 +1130,9 @@
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2018.2</xilinx:xilinxVersion>
-      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="99f9c3df"/>
-      <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="1a1128b0"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="4d236d7d"/>
+      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="067488ad"/>
+      <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="0ca5d099"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="061f0398"/>
       <xilinx:checksum xilinx:scope="ports" xilinx:value="42ccde1d"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="134b76fe"/>
     </xilinx:packagingInfo>
