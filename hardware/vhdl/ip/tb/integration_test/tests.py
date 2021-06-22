@@ -19,7 +19,47 @@ from fm_tb import FM_TB
 
 
 @cocotb.test()
-async def data_processing_test(dut):
+async def axi_lite_memory_map_test(dut):
+    """
+    Read and write AXI-lite registers of the DUT.
+    """
+
+    # --------------------------------------------------------------------------
+    # Prepare environment
+    # --------------------------------------------------------------------------
+
+    timestamp_start = time.time()
+
+    tb = FM_TB(dut, 0)
+
+    # Generate clock
+    clk_period_ns = round(1 / tb.CLOCK_FREQ_MHZ * 1e3)
+    clk = Clock(dut.clk_i, period=clk_period_ns, units='ns')
+    clk_gen = cocotb.fork(clk.start())
+
+    # --------------------------------------------------------------------------
+    # Run test on DUT
+    # --------------------------------------------------------------------------
+
+    # Reset the DUT before any tests begin
+    await tb.assign_defaults()
+    await tb.reset()
+
+    # Read registers
+    for reg_nr in range(3):
+        word_addr = reg_nr * 4
+        dut._log.info(f"##### Read register address: {word_addr} ...")
+        rddata = await tb.axil_mm_m.read(word_addr, 4)
+        dut._log.info(f"rddata: {rddata.data}")
+
+    # Measure time
+    duration_s = int(time.time() - timestamp_start)
+    mins, secs = divmod(duration_s, 60)
+    dut._log.info("Execution took {:02d}:{:02d} minutes.".format(mins, secs))
+
+
+@cocotb.test()
+async def axi_stream_dsp_test(dut):
     """
     Load test data from files and send them through the DUT.
     Compare input and output afterwards.

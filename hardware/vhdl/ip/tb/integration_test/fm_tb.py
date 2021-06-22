@@ -10,6 +10,7 @@ import fm_global
 import helpers as helper
 from cocotb.triggers import RisingEdge, Timer
 from cocotb_bus.drivers import BitDriver
+from cocotbext.axi import AxiLiteBus, AxiLiteMaster, AxiLiteRam
 from cocotbext.axi4stream.drivers import Axi4StreamMaster
 from fm_receiver_model import FM_RECEIVER_MODEL
 from tb_analyzer_helper import TB_ANALYZER_HELPER
@@ -42,6 +43,9 @@ class FM_TB():
 
         # Backpressure from I2S output
         self.backpressure_i2s = BitDriver(dut.m0_axis_tready, dut.clk_i)
+
+        # AXILite register interface
+        self.axil_mm_m = AxiLiteMaster(AxiLiteBus.from_prefix(dut, "s_axi"), dut.clk_i, dut.rst_i)
 
         # Variables
         self.tb_data_handler = TB_DATA_HANDLER()

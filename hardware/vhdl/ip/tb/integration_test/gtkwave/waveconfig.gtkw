@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
-[*] Tue Jun 22 14:40:13 2021
+[*] Tue Jun 22 22:00:19 2021
 [*]
 [dumpfile] "/home/mike/work/fm-radio/hardware/vhdl/ip/tb/integration_test/sim_build/waveform.ghw"
-[dumpfile_mtime] "Tue Jun 22 14:33:47 2021"
-[dumpfile_size] 325684
+[dumpfile_mtime] "Tue Jun 22 21:49:19 2021"
+[dumpfile_size] 44547
 [savefile] "/home/mike/work/fm-radio/hardware/vhdl/ip/tb/integration_test/gtkwave/waveconfig.gtkw"
-[timestart] 2161000000
+[timestart] 0
 [size] 1848 1016
 [pos] -1 -1
-*-29.554668 3360000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-29.554668 3402000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.fm_receiver_top.
 [treeopen] top.fm_receiver_top.control.
@@ -121,7 +121,35 @@ top.fm_receiver_top.m0_axis_tready
 top.fm_receiver_top.m0_axis_tvalid
 @22
 #{top.fm_receiver_top.m0_axis_tdata[31:0]} top.fm_receiver_top.m0_axis_tdata[31] top.fm_receiver_top.m0_axis_tdata[30] top.fm_receiver_top.m0_axis_tdata[29] top.fm_receiver_top.m0_axis_tdata[28] top.fm_receiver_top.m0_axis_tdata[27] top.fm_receiver_top.m0_axis_tdata[26] top.fm_receiver_top.m0_axis_tdata[25] top.fm_receiver_top.m0_axis_tdata[24] top.fm_receiver_top.m0_axis_tdata[23] top.fm_receiver_top.m0_axis_tdata[22] top.fm_receiver_top.m0_axis_tdata[21] top.fm_receiver_top.m0_axis_tdata[20] top.fm_receiver_top.m0_axis_tdata[19] top.fm_receiver_top.m0_axis_tdata[18] top.fm_receiver_top.m0_axis_tdata[17] top.fm_receiver_top.m0_axis_tdata[16] top.fm_receiver_top.m0_axis_tdata[15] top.fm_receiver_top.m0_axis_tdata[14] top.fm_receiver_top.m0_axis_tdata[13] top.fm_receiver_top.m0_axis_tdata[12] top.fm_receiver_top.m0_axis_tdata[11] top.fm_receiver_top.m0_axis_tdata[10] top.fm_receiver_top.m0_axis_tdata[9] top.fm_receiver_top.m0_axis_tdata[8] top.fm_receiver_top.m0_axis_tdata[7] top.fm_receiver_top.m0_axis_tdata[6] top.fm_receiver_top.m0_axis_tdata[5] top.fm_receiver_top.m0_axis_tdata[4] top.fm_receiver_top.m0_axis_tdata[3] top.fm_receiver_top.m0_axis_tdata[2] top.fm_receiver_top.m0_axis_tdata[1] top.fm_receiver_top.m0_axis_tdata[0]
-@29
+@28
 top.fm_receiver_top.control.enable_fm_radio
+@200
+-AXI LITE INTERFACE
+@28
+#{top.fm_receiver_top.s_axi_awprot[2:0]} top.fm_receiver_top.s_axi_awprot[2] top.fm_receiver_top.s_axi_awprot[1] top.fm_receiver_top.s_axi_awprot[0]
+#{top.fm_receiver_top.s_axi_awaddr[2:0]} top.fm_receiver_top.s_axi_awaddr[2] top.fm_receiver_top.s_axi_awaddr[1] top.fm_receiver_top.s_axi_awaddr[0]
+#{top.fm_receiver_top.s_axi_awprot[2:0]} top.fm_receiver_top.s_axi_awprot[2] top.fm_receiver_top.s_axi_awprot[1] top.fm_receiver_top.s_axi_awprot[0]
+top.fm_receiver_top.s_axi_awvalid
+@22
+#{top.fm_receiver_top.s_axi_wdata[31:0]} top.fm_receiver_top.s_axi_wdata[31] top.fm_receiver_top.s_axi_wdata[30] top.fm_receiver_top.s_axi_wdata[29] top.fm_receiver_top.s_axi_wdata[28] top.fm_receiver_top.s_axi_wdata[27] top.fm_receiver_top.s_axi_wdata[26] top.fm_receiver_top.s_axi_wdata[25] top.fm_receiver_top.s_axi_wdata[24] top.fm_receiver_top.s_axi_wdata[23] top.fm_receiver_top.s_axi_wdata[22] top.fm_receiver_top.s_axi_wdata[21] top.fm_receiver_top.s_axi_wdata[20] top.fm_receiver_top.s_axi_wdata[19] top.fm_receiver_top.s_axi_wdata[18] top.fm_receiver_top.s_axi_wdata[17] top.fm_receiver_top.s_axi_wdata[16] top.fm_receiver_top.s_axi_wdata[15] top.fm_receiver_top.s_axi_wdata[14] top.fm_receiver_top.s_axi_wdata[13] top.fm_receiver_top.s_axi_wdata[12] top.fm_receiver_top.s_axi_wdata[11] top.fm_receiver_top.s_axi_wdata[10] top.fm_receiver_top.s_axi_wdata[9] top.fm_receiver_top.s_axi_wdata[8] top.fm_receiver_top.s_axi_wdata[7] top.fm_receiver_top.s_axi_wdata[6] top.fm_receiver_top.s_axi_wdata[5] top.fm_receiver_top.s_axi_wdata[4] top.fm_receiver_top.s_axi_wdata[3] top.fm_receiver_top.s_axi_wdata[2] top.fm_receiver_top.s_axi_wdata[1] top.fm_receiver_top.s_axi_wdata[0]
+#{top.fm_receiver_top.s_axi_wstrb[3:0]} top.fm_receiver_top.s_axi_wstrb[3] top.fm_receiver_top.s_axi_wstrb[2] top.fm_receiver_top.s_axi_wstrb[1] top.fm_receiver_top.s_axi_wstrb[0]
+#{top.fm_receiver_top.s_axi_wdata[31:0]} top.fm_receiver_top.s_axi_wdata[31] top.fm_receiver_top.s_axi_wdata[30] top.fm_receiver_top.s_axi_wdata[29] top.fm_receiver_top.s_axi_wdata[28] top.fm_receiver_top.s_axi_wdata[27] top.fm_receiver_top.s_axi_wdata[26] top.fm_receiver_top.s_axi_wdata[25] top.fm_receiver_top.s_axi_wdata[24] top.fm_receiver_top.s_axi_wdata[23] top.fm_receiver_top.s_axi_wdata[22] top.fm_receiver_top.s_axi_wdata[21] top.fm_receiver_top.s_axi_wdata[20] top.fm_receiver_top.s_axi_wdata[19] top.fm_receiver_top.s_axi_wdata[18] top.fm_receiver_top.s_axi_wdata[17] top.fm_receiver_top.s_axi_wdata[16] top.fm_receiver_top.s_axi_wdata[15] top.fm_receiver_top.s_axi_wdata[14] top.fm_receiver_top.s_axi_wdata[13] top.fm_receiver_top.s_axi_wdata[12] top.fm_receiver_top.s_axi_wdata[11] top.fm_receiver_top.s_axi_wdata[10] top.fm_receiver_top.s_axi_wdata[9] top.fm_receiver_top.s_axi_wdata[8] top.fm_receiver_top.s_axi_wdata[7] top.fm_receiver_top.s_axi_wdata[6] top.fm_receiver_top.s_axi_wdata[5] top.fm_receiver_top.s_axi_wdata[4] top.fm_receiver_top.s_axi_wdata[3] top.fm_receiver_top.s_axi_wdata[2] top.fm_receiver_top.s_axi_wdata[1] top.fm_receiver_top.s_axi_wdata[0]
+@28
+top.fm_receiver_top.s_axi_arvalid
+#{top.fm_receiver_top.s_axi_araddr[2:0]} top.fm_receiver_top.s_axi_araddr[2] top.fm_receiver_top.s_axi_araddr[1] top.fm_receiver_top.s_axi_araddr[0]
+#{top.fm_receiver_top.s_axi_arprot[2:0]} top.fm_receiver_top.s_axi_arprot[2] top.fm_receiver_top.s_axi_arprot[1] top.fm_receiver_top.s_axi_arprot[0]
+top.fm_receiver_top.s_axi_arvalid
+top.fm_receiver_top.s_axi_arready
+top.fm_receiver_top.s_axi_awready
+top.fm_receiver_top.s_axi_wvalid
+top.fm_receiver_top.s_axi_wready
+top.fm_receiver_top.s_axi_bvalid
+top.fm_receiver_top.s_axi_bready
+#{top.fm_receiver_top.s_axi_bresp[1:0]} top.fm_receiver_top.s_axi_bresp[1] top.fm_receiver_top.s_axi_bresp[0]
+top.fm_receiver_top.s_axi_rvalid
+top.fm_receiver_top.s_axi_rready
+#{top.fm_receiver_top.s_axi_rresp[1:0]} top.fm_receiver_top.s_axi_rresp[1] top.fm_receiver_top.s_axi_rresp[0]
+@23
+#{top.fm_receiver_top.s_axi_rdata[31:0]} top.fm_receiver_top.s_axi_rdata[31] top.fm_receiver_top.s_axi_rdata[30] top.fm_receiver_top.s_axi_rdata[29] top.fm_receiver_top.s_axi_rdata[28] top.fm_receiver_top.s_axi_rdata[27] top.fm_receiver_top.s_axi_rdata[26] top.fm_receiver_top.s_axi_rdata[25] top.fm_receiver_top.s_axi_rdata[24] top.fm_receiver_top.s_axi_rdata[23] top.fm_receiver_top.s_axi_rdata[22] top.fm_receiver_top.s_axi_rdata[21] top.fm_receiver_top.s_axi_rdata[20] top.fm_receiver_top.s_axi_rdata[19] top.fm_receiver_top.s_axi_rdata[18] top.fm_receiver_top.s_axi_rdata[17] top.fm_receiver_top.s_axi_rdata[16] top.fm_receiver_top.s_axi_rdata[15] top.fm_receiver_top.s_axi_rdata[14] top.fm_receiver_top.s_axi_rdata[13] top.fm_receiver_top.s_axi_rdata[12] top.fm_receiver_top.s_axi_rdata[11] top.fm_receiver_top.s_axi_rdata[10] top.fm_receiver_top.s_axi_rdata[9] top.fm_receiver_top.s_axi_rdata[8] top.fm_receiver_top.s_axi_rdata[7] top.fm_receiver_top.s_axi_rdata[6] top.fm_receiver_top.s_axi_rdata[5] top.fm_receiver_top.s_axi_rdata[4] top.fm_receiver_top.s_axi_rdata[3] top.fm_receiver_top.s_axi_rdata[2] top.fm_receiver_top.s_axi_rdata[1] top.fm_receiver_top.s_axi_rdata[0]
 [pattern_trace] 1
 [pattern_trace] 0

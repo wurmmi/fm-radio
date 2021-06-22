@@ -133,6 +133,8 @@ begin -- architecture rtl
   -- Signal Assignments
   ------------------------------------------------------------------------------
 
+  status.magic_value <= x"DEADBEEF";
+
   -- Detect rising edge
   iq_valid <= not iq_valid_sr(1) and iq_valid_sr(0);
 
