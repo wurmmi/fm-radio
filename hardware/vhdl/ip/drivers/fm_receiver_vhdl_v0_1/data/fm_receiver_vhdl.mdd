@@ -14,8 +14,7 @@ OPTION psf_version = 2.1;
 
 BEGIN driver fm_receiver_vhdl
 
- OPTION supported_peripherals = (fm_receiver_vhdl );
- OPTION driver_state = ACTIVE;
+ OPTION supported_peripherals = (fm_receiver_vhdl);
  OPTION copyfiles = all;
  OPTION name = fm_receiver_vhdl;
  OPTION version = 0.1;

@@ -138,7 +138,9 @@
       <spirit:displayName>Status and Control Register Interface</spirit:displayName>
       <spirit:busType spirit:vendor="xilinx.com" spirit:library="interface" spirit:name="aximm" spirit:version="1.0"/>
       <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="interface" spirit:name="aximm_rtl" spirit:version="1.0"/>
-      <spirit:slave/>
+      <spirit:slave>
+        <spirit:memoryMapRef spirit:memoryMapRef="s_axi_lite_control"/>
+      </spirit:slave>
       <spirit:portMaps>
         <spirit:portMap>
           <spirit:logicalPort>
@@ -402,7 +404,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>913f69d6</spirit:value>
+            <spirit:value>0ca02b59</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1064,16 +1066,20 @@
     <spirit:fileSet>
       <spirit:name>xilinx_softwaredriver_view_fileset</spirit:name>
       <spirit:file>
-        <spirit:name>drivers/fm_receiver_vhdl_v0_1/src/fm_radio_vhdl.h</spirit:name>
-        <spirit:userFileType>driver_src</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
         <spirit:name>drivers/fm_receiver_vhdl_v0_1/src/Makefile</spirit:name>
         <spirit:userFileType>driver_src</spirit:userFileType>
       </spirit:file>
       <spirit:file>
         <spirit:name>drivers/fm_receiver_vhdl_v0_1/data/fm_receiver_vhdl.mdd</spirit:name>
         <spirit:userFileType>driver_mdd</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>drivers/fm_receiver_vhdl_v0_1/src/fm_receiver_vhdl.h</spirit:name>
+        <spirit:userFileType>driver_src</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>drivers/fm_receiver_vhdl_v0_1/data/fm_receiver_vhdl.tcl</spirit:name>
+        <spirit:userFileType>driver_tcl</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
   </spirit:fileSets>
@@ -1107,11 +1113,11 @@
       </xilinx:xpmLibraries>
       <xilinx:vendorDisplayName>M.Wurm</xilinx:vendorDisplayName>
       <xilinx:vendorURL>https://www.linkedin.com/in/michael-wurm</xilinx:vendorURL>
-      <xilinx:coreRevision>45</xilinx:coreRevision>
+      <xilinx:coreRevision>46</xilinx:coreRevision>
       <xilinx:upgrades>
         <xilinx:canUpgradeFrom>user.org:user:fm_receiver_top:1.0</xilinx:canUpgradeFrom>
       </xilinx:upgrades>
-      <xilinx:coreCreationDateTime>2021-06-22T16:34:00Z</xilinx:coreCreationDateTime>
+      <xilinx:coreCreationDateTime>2021-06-22T17:21:53Z</xilinx:coreCreationDateTime>
       <xilinx:tags>
         <xilinx:tag xilinx:name="nopcore"/>
         <xilinx:tag xilinx:name="user.org:user:fm_receiver_top:1.0_ARCHIVE_LOCATION">/home/mike/work/fm-radio/hardware/vhdl</xilinx:tag>
@@ -1124,9 +1130,9 @@
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2018.2</xilinx:xilinxVersion>
-      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="91320015"/>
+      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="99f9c3df"/>
       <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="1a1128b0"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="207cde91"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="4d236d7d"/>
       <xilinx:checksum xilinx:scope="ports" xilinx:value="42ccde1d"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="134b76fe"/>
     </xilinx:packagingInfo>

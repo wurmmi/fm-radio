@@ -16,7 +16,7 @@ ARCHIVER=
 CP=cp
 COMPILER_FLAGS=
 EXTRA_COMPILER_FLAGS=
-LIB=
+LIB=libxil.a
 
 RELEASEDIR=../../../lib
 INCLUDEDIR=../../../include
@@ -30,7 +30,7 @@ OUTS = *.o
 libs:
 	echo "Compiling fm_receiver_vhdl"
 	$(COMPILER) $(COMPILER_FLAGS) $(EXTRA_COMPILER_FLAGS) $(INCLUDES) $(LIBSOURCES)
-	$(ARCHIVER) -r ${RELEASEDIR}/${LIB} $(OUTS)
+	$(ARCHIVER) -r ${RELEASEDIR}/${LIB} ${OUTS}
 	make clean
 
 include:

@@ -10,7 +10,7 @@
 #include <string>
 
 #include "FMRadioIP.h"
-#include "fm_radio_vhdl.h"
+#include "fm_receiver_vhdl.h"
 
 class FMRadioIP_VHDL : FMRadioIP {
  private:
