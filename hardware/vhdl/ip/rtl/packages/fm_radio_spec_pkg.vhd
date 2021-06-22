@@ -12,10 +12,10 @@ package fm_radio_spec_pkg is
   --! @{
 
   -- Number of registers in AXI register map
-  constant spec_num_registers_c     : natural := 2;
+  constant spec_num_registers_c     : natural := 3;
 
   -- Register interface address bus width
-  constant spec_reg_if_addr_width_c : natural := 2;
+  constant spec_reg_if_addr_width_c : natural := 3;
 
   -- Constants inferred from fm_radio.yaml
 

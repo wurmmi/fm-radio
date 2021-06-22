@@ -21,6 +21,7 @@
 typedef struct {
   const volatile u32 MAGIC_VALUE;
         volatile u32 LED_CONTROL;
+        volatile u32 ENABLE_FM_RADIO;
 } fm_radio_t;
 
 /* Register: FM_MAGIC_VALUE */
@@ -42,5 +43,16 @@ typedef struct {
     (((REG) & FM_LED_CONTROL_VALUE_Msk) >> FM_LED_CONTROL_VALUE_Pos)
 #define SET_FM_LED_CONTROL_VALUE(REG, VAL) \
     (((REG) & ~FM_LED_CONTROL_VALUE_Msk) | ((VAL) << FM_LED_CONTROL_VALUE_Pos))
+
+/* Register: FM_ENABLE_FM_RADIO */
+#define FM_ENABLE_FM_RADIO_VALUE_Pos (0U)
+#define FM_ENABLE_FM_RADIO_VALUE_Len (1U)
+#define FM_ENABLE_FM_RADIO_VALUE_Rst (0x1U)
+#define FM_ENABLE_FM_RADIO_VALUE_Msk \
+    (0x1U << FM_ENABLE_FM_RADIO_VALUE_Pos)
+#define GET_FM_ENABLE_FM_RADIO_VALUE(REG) \
+    (((REG) & FM_ENABLE_FM_RADIO_VALUE_Msk) >> FM_ENABLE_FM_RADIO_VALUE_Pos)
+#define SET_FM_ENABLE_FM_RADIO_VALUE(REG, VAL) \
+    (((REG) & ~FM_ENABLE_FM_RADIO_VALUE_Msk) | ((VAL) << FM_ENABLE_FM_RADIO_VALUE_Pos))
 
 #endif /* FM_RADIO_H */

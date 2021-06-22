@@ -3,7 +3,7 @@
 FM Radio IP (VHDL)
 
 Register width: 32 bits<br>
-Address width: 2 bits
+Address width: 3 bits
 
 ---
 ### MAGIC_VALUE
@@ -20,6 +20,14 @@ Represents the physical LED value.
 | Address: `0x4` | *READ_WRITE* |
 | :--- | ---: |
 | *VALUE*<br> | Bits: `[3:0]`<br>Reset: `0x0` |
+
+---
+### ENABLE_FM_RADIO
+Enables FM Radio DSP mode; Passthrough mode if disabled.
+
+| Address: `0x8` | *READ_WRITE* |
+| :--- | ---: |
+| *VALUE*<br> | Bits: `[0]`<br>Reset: `0x1` |
 
 
 ---

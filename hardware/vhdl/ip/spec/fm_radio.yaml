@@ -25,3 +25,14 @@ registers:
         offset: 0
         reset: 0x0
         connect: "control_o.led_ctrl"
+
+  - name: "ENABLE_FM_RADIO"
+    description: "Enables FM Radio DSP mode; Passthrough mode if disabled."
+    access: "READ_WRITE"
+    fields:
+      - name: "VALUE"
+        description: ""
+        width: 1
+        offset: 0
+        reset: 0x1
+        connect: "control_o.mode"
