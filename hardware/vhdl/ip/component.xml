@@ -346,7 +346,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>412d8e7b</spirit:value>
+            <spirit:value>a58a28ed</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -548,7 +548,7 @@
         <spirit:wire>
           <spirit:direction>in</spirit:direction>
           <spirit:vector>
-            <spirit:left spirit:format="long">1</spirit:left>
+            <spirit:left spirit:format="long">2</spirit:left>
             <spirit:right spirit:format="long">0</spirit:right>
           </spirit:vector>
           <spirit:wireTypeDefs>
@@ -732,7 +732,7 @@
         <spirit:wire>
           <spirit:direction>in</spirit:direction>
           <spirit:vector>
-            <spirit:left spirit:format="long">1</spirit:left>
+            <spirit:left spirit:format="long">2</spirit:left>
             <spirit:right spirit:format="long">0</spirit:right>
           </spirit:vector>
           <spirit:wireTypeDefs>
@@ -1028,6 +1028,14 @@
         <spirit:name>rtl/fm_receiver_top.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
       </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/utils/fixed_float_types_c.vhd</spirit:name>
+        <spirit:fileType>vhdlSource</spirit:fileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/utils/fixed_pkg_2008.vhd</spirit:name>
+        <spirit:fileType>vhdlSource</spirit:fileType>
+      </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>
       <spirit:name>xilinx_xpgui_view_fileset</spirit:name>
@@ -1099,11 +1107,11 @@
       </xilinx:xpmLibraries>
       <xilinx:vendorDisplayName>M.Wurm</xilinx:vendorDisplayName>
       <xilinx:vendorURL>https://www.linkedin.com/in/michael-wurm</xilinx:vendorURL>
-      <xilinx:coreRevision>38</xilinx:coreRevision>
+      <xilinx:coreRevision>43</xilinx:coreRevision>
       <xilinx:upgrades>
         <xilinx:canUpgradeFrom>user.org:user:fm_receiver_top:1.0</xilinx:canUpgradeFrom>
       </xilinx:upgrades>
-      <xilinx:coreCreationDateTime>2021-06-22T15:17:34Z</xilinx:coreCreationDateTime>
+      <xilinx:coreCreationDateTime>2021-06-22T15:56:42Z</xilinx:coreCreationDateTime>
       <xilinx:tags>
         <xilinx:tag xilinx:name="nopcore"/>
         <xilinx:tag xilinx:name="user.org:user:fm_receiver_top:1.0_ARCHIVE_LOCATION">/home/mike/work/fm-radio/hardware/vhdl</xilinx:tag>
@@ -1118,8 +1126,8 @@
       <xilinx:xilinxVersion>2018.2</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="91320015"/>
       <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="1a1128b0"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="f588a509"/>
-      <xilinx:checksum xilinx:scope="ports" xilinx:value="d0fa7a86"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="207cde91"/>
+      <xilinx:checksum xilinx:scope="ports" xilinx:value="42ccde1d"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="134b76fe"/>
     </xilinx:packagingInfo>
   </spirit:vendorExtensions>
