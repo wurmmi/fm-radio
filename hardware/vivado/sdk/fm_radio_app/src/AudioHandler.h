@@ -21,7 +21,7 @@ class AudioHandler {
   audio_buffer_t mAudioBuffer;
   SDCardReader mSdCardReader;
   AudioStreamDMA mStreamDMA;
-  FMRadioIP_HLS* mFmRadioIP;
+  FMRadioIP* mFmRadioIP;
   uint16_t mVolume;
   bool mIsPlaying;
 
@@ -36,8 +36,10 @@ class AudioHandler {
   void AudioStreamEmptyCallback();
 
  public:
-  AudioHandler(FMRadioIP_HLS* radioIP);
+  AudioHandler();
   ~AudioHandler();
+
+  void SetIP(FMRadioIP* ip);
 
   void VolumeUp();
   void VolumeDown();

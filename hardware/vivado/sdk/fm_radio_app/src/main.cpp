@@ -12,6 +12,7 @@
 #include "AudioHandler.h"
 #include "AxiStreamRouter.h"
 #include "FMRadioIP_HLS.h"
+#include "FMRadioIP_VHDL.h"
 #include "MenuControl.h"
 #include "log.h"
 
@@ -24,16 +25,18 @@ static TaskHandle_t task_heartbeat_handle;
 static TaskHandle_t task_audio_handle;
 
 static FMRadioIP_HLS fmRadioIP_HLS(XPAR_FM_RECEIVER_HLS_0_DEVICE_ID);
+static FMRadioIP_VHDL fmRadioIP_VHDL;
 
 static void task_heartbeat(void *) {
   while (true) {
     fmRadioIP_HLS.LED_Toggle(TLed::LED1);
+    fmRadioIP_VHDL.LED_Toggle(TLed::ALL);
     vTaskDelay(pdMS_TO_TICKS(1000));
   }
 }
 
 static void task_audio(void *) {
-  AudioHandler audioHandler(&fmRadioIP_HLS);
+  AudioHandler audioHandler;
   AxiStreamRouter axiStreamRouter;
 
   MenuControl::PrintMainMenu();
@@ -46,9 +49,11 @@ static void task_audio(void *) {
       /*-- GENERAL --*/
       case 'h':
         axiStreamRouter.SelectIP(IPSelection::HLS);
+        audioHandler.SetIP(&fmRadioIP_HLS);
         break;
       case 'v':
         axiStreamRouter.SelectIP(IPSelection::VHDL);
+        audioHandler.SetIP(&fmRadioIP_VHDL);
         break;
 
       case 'm':
@@ -58,19 +63,19 @@ static void task_audio(void *) {
         audioHandler.ShowAvailableFiles();
         break;
       case 'i': {
-        string build_time = fmRadioIP_HLS.GetBuildTime();
-        string git_hash   = fmRadioIP_HLS.GetGitHash();
-
+        printf("==========================================\n");
         printf("This program is developed by Michael Wurm.\n");
         printf("SDK firmware build date :  %s, %s\n", __DATE__, __TIME__);
-        printf("FM Radio IP build date  :  %s, (git hash: %s)\n",
-               build_time.c_str(),
-               git_hash.c_str());
+        printf("FM Radio IPs:\n");
+        fmRadioIP_VHDL.PrintInfo();
+        fmRadioIP_HLS.PrintInfo();
+        printf("==========================================\n");
       } break;
 
       /*-- MODE: PASS-THROUGH --*/
       case 'p':
         fmRadioIP_HLS.SetMode(TMode::PASSTHROUGH);
+        fmRadioIP_VHDL.SetMode(TMode::PASSTHROUGH);
         audioHandler.PlayFile("cantina_band_44100.wav");
         break;
       case 's':
@@ -87,10 +92,12 @@ static void task_audio(void *) {
       /*-- MODE: FM RADIO --*/
       case 'x':
         fmRadioIP_HLS.SetMode(TMode::FMRADIO);
+        fmRadioIP_VHDL.SetMode(TMode::FMRADIO);
         audioHandler.PlayFile("over_rx_fm_bb.wav");
         break;
       case 'r':
         fmRadioIP_HLS.SetMode(TMode::FMRADIO);
+        fmRadioIP_VHDL.SetMode(TMode::FMRADIO);
         audioHandler.PlayFile("limit_rx_fm_bb.wav");
         break;
 

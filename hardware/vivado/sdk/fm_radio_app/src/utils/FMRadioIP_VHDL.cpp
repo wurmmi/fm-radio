@@ -20,7 +20,7 @@
 
 using namespace std;
 
-FMRadioIP_VHDL::FMRadioIP_VHDL(uint32_t device_id) : FMRadioIP(device_id) {
+FMRadioIP_VHDL::FMRadioIP_VHDL() : FMRadioIP(-1) {
   Initialize();
 }
 
@@ -60,6 +60,11 @@ void FMRadioIP_VHDL::LED_SetOff(TLed led) {
     state = 0x0;
 
   mDev->LED_CONTROL = state;
+}
+
+void FMRadioIP_VHDL::PrintInfo() {
+  printf(" -- VHDL:\n");
+  FMRadioIP::PrintInfo();
 }
 
 string FMRadioIP_VHDL::GetGitHash() {

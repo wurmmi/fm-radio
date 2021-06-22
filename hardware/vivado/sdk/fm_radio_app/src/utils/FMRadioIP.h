@@ -18,7 +18,7 @@ class FMRadioIP {
  protected:
   uint32_t mDeviceId;
 
-  std::string UintToHexString(uint64_t num);
+  std::string UintToHexString(uint64_t num) const;
 
  public:
   FMRadioIP(uint32_t device_id);
@@ -29,6 +29,7 @@ class FMRadioIP {
   virtual void LED_Toggle(TLed led) = 0;
   virtual void LED_SetOff(TLed led) = 0;
 
+  virtual void PrintInfo();
   virtual std::string GetGitHash()   = 0;
   virtual std::string GetBuildTime() = 0;
 

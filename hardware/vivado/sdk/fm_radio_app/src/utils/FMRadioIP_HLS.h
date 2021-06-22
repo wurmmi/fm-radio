@@ -12,7 +12,7 @@
 #include "FMRadioIP.h"
 #include "xfm_receiver_hls.h"
 
-class FMRadioIP_HLS : FMRadioIP {
+class FMRadioIP_HLS : public FMRadioIP {
  private:
   XFm_receiver_hls mDev;
 
@@ -25,6 +25,7 @@ class FMRadioIP_HLS : FMRadioIP {
   void LED_Toggle(TLed led) override;
   void LED_SetOff(TLed led) override;
 
+  void PrintInfo() override;
   std::string GetGitHash() override;
   std::string GetBuildTime() override;
 

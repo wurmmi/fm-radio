@@ -12,12 +12,12 @@
 #include "FMRadioIP.h"
 #include "fm_receiver_vhdl.h"
 
-class FMRadioIP_VHDL : FMRadioIP {
+class FMRadioIP_VHDL : public FMRadioIP {
  private:
   fm_radio_t* mDev;
 
  public:
-  FMRadioIP_VHDL(uint32_t device_id);
+  FMRadioIP_VHDL();
   ~FMRadioIP_VHDL();
 
   bool Initialize() override;
@@ -25,6 +25,7 @@ class FMRadioIP_VHDL : FMRadioIP {
   void LED_Toggle(TLed led) override;
   void LED_SetOff(TLed led) override;
 
+  void PrintInfo() override;
   std::string GetGitHash() override;
   std::string GetBuildTime() override;
 

@@ -66,6 +66,11 @@ void FMRadioIP_HLS::LED_SetOff(TLed led) {
   XFm_receiver_hls_Set_config_led_ctrl_V(&mDev, state);
 }
 
+void FMRadioIP_HLS::PrintInfo() {
+  printf(" -- HLS:\n");
+  FMRadioIP::PrintInfo();
+}
+
 string FMRadioIP_HLS::GetGitHash() {
   auto git_hash = XFm_receiver_hls_Get_status_git_hash_V(&mDev);
 

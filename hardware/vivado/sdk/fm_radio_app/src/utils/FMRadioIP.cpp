@@ -24,9 +24,14 @@ FMRadioIP::FMRadioIP(uint32_t device_id) : mDeviceId(device_id) {}
 
 FMRadioIP::~FMRadioIP() {}
 
-string FMRadioIP::UintToHexString(uint64_t num) {
+string FMRadioIP::UintToHexString(uint64_t num) const {
   // Convert number to string and hex-format
   stringstream ss;
   ss << hex << num;
   return string(ss.str());
+}
+
+void FMRadioIP::PrintInfo() {
+  printf("     build date :  %s\n", GetBuildTime().c_str());
+  printf("     git hash   :  %s)\n", GetGitHash().c_str());
 }

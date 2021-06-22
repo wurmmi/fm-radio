@@ -18,10 +18,8 @@
 
 using namespace std;
 
-AudioHandler::AudioHandler(FMRadioIP* radioIP)
-    : mStreamDMA(XPAR_AXI_DMA_0_DEVICE_ID) {
-  assert(radioIP);
-  mFmRadioIP = radioIP;
+AudioHandler::AudioHandler() : mStreamDMA(XPAR_AXI_DMA_0_DEVICE_ID) {
+  mFmRadioIP = nullptr;
   mVolume    = volume_default_c;
   mIsPlaying = false;
 
@@ -38,6 +36,14 @@ bool AudioHandler::Initialize() {
   LOG_DEBUG("AudioHandler hardware initialization OKAY");
 
   return true;
+}
+
+void AudioHandler::SetIP(FMRadioIP* radioIP) {
+  if (!radioIP) {
+    LOG_ERROR("nullptr");
+    return;
+  }
+  mFmRadioIP = radioIP;
 }
 
 void AudioHandler::FillAudioBuffer() {
