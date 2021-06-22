@@ -19,7 +19,7 @@
 --       06/18/2021  13:30 - 16:30    3:00 h   Register interface already tested and auto-generated!
 --
 -- (4) Mode
---       06/22/2021  16:00 -
+--       06/22/2021  16:00 - 17:00    1:00 h
 --
 
 library ieee;
