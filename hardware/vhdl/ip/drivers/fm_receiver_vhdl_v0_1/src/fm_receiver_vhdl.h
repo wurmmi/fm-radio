@@ -15,7 +15,7 @@
 #include <stdint.h>
 
 /* FM Radio AXI-Lite base address */
-#define FM_RADIO_BASE ((fm_radio_t *)0x40300000)
+#define FM_RADIO_BASE ((fm_radio_t *)0xDEADBEEF)
 
 /* FM Radio register structure */
 typedef struct {

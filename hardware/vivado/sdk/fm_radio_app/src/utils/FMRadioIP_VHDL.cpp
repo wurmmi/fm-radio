@@ -20,46 +20,46 @@
 
 using namespace std;
 
-FMRadioIP_VHDL::FMRadioIP_VHDL() : FMRadioIP(-1) {
+#define IP ((fm_radio_t*)XPAR_FM_RECEIVER_VHDL_0_S_AXI_API_BASEADDR)
+
+FMRadioIP_VHDL::FMRadioIP_VHDL(uint32_t device_id) : FMRadioIP(device_id) {
   Initialize();
 }
 
 FMRadioIP_VHDL::~FMRadioIP_VHDL() {}
 
 bool FMRadioIP_VHDL::Initialize() {
-  mDev = FM_RADIO_BASE;
-
   return true;
 }
 
 void FMRadioIP_VHDL::LED_SetOn(TLed led) {
-  uint32_t state = mDev->LED_CONTROL;
+  uint32_t state = IP->LED_CONTROL;
 
   state |= (1 << (uint8_t)led);
   if (led == TLed::ALL)
     state = 0xFF;
 
-  mDev->LED_CONTROL = state;
+  IP->LED_CONTROL = state;
 }
 
 void FMRadioIP_VHDL::LED_Toggle(TLed led) {
-  uint32_t state = mDev->LED_CONTROL;
+  uint32_t state = IP->LED_CONTROL;
 
   state ^= (1 << (uint8_t)led);
   if (led == TLed::ALL)
     state ^= 0xFF;
 
-  mDev->LED_CONTROL = state;
+  IP->LED_CONTROL = state;
 }
 
 void FMRadioIP_VHDL::LED_SetOff(TLed led) {
-  uint32_t state = mDev->LED_CONTROL;
+  uint32_t state = IP->LED_CONTROL;
 
   state &= ~(1 << (uint8_t)led);
   if (led == TLed::ALL)
     state = 0x0;
 
-  mDev->LED_CONTROL = state;
+  IP->LED_CONTROL = state;
 }
 
 void FMRadioIP_VHDL::PrintInfo() {
@@ -68,7 +68,7 @@ void FMRadioIP_VHDL::PrintInfo() {
 }
 
 string FMRadioIP_VHDL::GetGitHash() {
-  auto git_hash = mDev->MAGIC_VALUE;
+  auto git_hash = IP->MAGIC_VALUE;
 
   return UintToHexString(git_hash);
 }
@@ -77,7 +77,7 @@ string FMRadioIP_VHDL::GetBuildTime() {
   LOG_ERROR("not implemented yet");
   return "not implemented yet";
 
-  auto build_time_uint = mDev->MAGIC_VALUE;
+  auto build_time_uint = IP->MAGIC_VALUE;
 
   // Convert to human-readable date string
   // NOTE: I'm sure there's a much better way to do
@@ -111,13 +111,13 @@ string FMRadioIP_VHDL::GetBuildTime() {
 void FMRadioIP_VHDL::SetMode(TMode mode) {
   LOG_ERROR("not implemented yet");
 
-  // mDev->MODE = static_cast<uint32_t>(mode);
+  // IP->MODE = static_cast<uint32_t>(mode);
 }
 
 TMode FMRadioIP_VHDL::GetMode() {
   LOG_ERROR("not implemented yet");
 
-  //  auto mode = mDev->MODE;
+  //  auto mode = IP->MODE;
   //  return static_cast<TMode>(mode);
   return TMode::FMRADIO;
 }

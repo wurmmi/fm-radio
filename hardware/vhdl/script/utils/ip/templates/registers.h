@@ -15,7 +15,7 @@
 #include <stdint.h>
 
 /* {{name}} AXI-Lite base address */
-#define {{name|pretty|upper}}_BASE (({{name|pretty}}_t *)0x40300000)
+#define {{name|pretty|upper}}_BASE (({{name|pretty}}_t *)0xDEADBEEF)
 
 /* {{name}} register structure */
 typedef struct {

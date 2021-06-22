@@ -25,7 +25,7 @@ static TaskHandle_t task_heartbeat_handle;
 static TaskHandle_t task_audio_handle;
 
 static FMRadioIP_HLS fmRadioIP_HLS(XPAR_FM_RECEIVER_HLS_0_DEVICE_ID);
-static FMRadioIP_VHDL fmRadioIP_VHDL;
+static FMRadioIP_VHDL fmRadioIP_VHDL(XPAR_FM_RECEIVER_VHDL_0_DEVICE_ID);
 
 static void task_heartbeat(void *) {
   while (true) {
