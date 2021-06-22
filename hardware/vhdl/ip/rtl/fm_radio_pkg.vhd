@@ -44,9 +44,7 @@ package fm_radio_pkg is
   constant pilot_scale_factor_c : sfixed(4 downto 0)  := to_sfixed(pilot_scale_factor_spec_c, 4, 0);
   constant carrier_38k_offset_c : sfixed(2 downto -2) := to_sfixed(carrier_38k_offset_spec_c, 2, -2);
 
-  --! Value
-  subtype iq_value_t is sfixed(fp_width_int_c - 1 downto -fp_width_frac_c);
-
+  --! Sample value type
   subtype sample_t is sfixed(fp_width_int_c - 1 downto -fp_width_frac_c);
 
   subtype fract_real is real range
@@ -63,7 +61,9 @@ package fm_radio_pkg is
   type control_t is record
     --! @brief FM Radio's control registers
     --! @param led_ctrl LED control.
-    led_ctrl : std_ulogic_vector(3 downto 0);
+    --! @param enable_fm_radio Enable FM radio DSP.
+    led_ctrl        : std_ulogic_vector(3 downto 0);
+    enable_fm_radio : std_ulogic;
   end record control_t;
 
   type interrupt_t is record

@@ -35,4 +35,4 @@ registers:
         width: 1
         offset: 0
         reset: 0x1
-        connect: "control_o.mode"
+        connect: "control_o.enable_fm_radio"

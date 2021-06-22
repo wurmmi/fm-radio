@@ -18,8 +18,8 @@ entity fm_demodulator is
     clk_i : in std_ulogic;
     rst_i : in std_ulogic;
 
-    i_sample_i : in iq_value_t;
-    q_sample_i : in iq_value_t;
+    i_sample_i : in sample_t;
+    q_sample_i : in sample_t;
     iq_valid_i : in std_ulogic;
 
     fm_demod_o       : out sample_t;
@@ -92,7 +92,7 @@ begin -- architecture rtl
     if rising_edge(clk_i) then
       if rst_i = '1' then
         reset;
-        else
+      else
         -- Defaults
         fm_demod_valid <= '0';
 
@@ -118,7 +118,7 @@ begin -- architecture rtl
     generic map(
       gDelay => 3 + 2) -- NOTE: why +2 ??
     port map(
-      iClk         => clk_i,
+      iClk        => clk_i,
       iResetAsync => rst_i,
 
       iDdry   => i_sample_i,
@@ -131,7 +131,7 @@ begin -- architecture rtl
     generic map(
       gDelay => 3 + 2) -- NOTE: why +2 ??
     port map(
-      iClk         => clk_i,
+      iClk        => clk_i,
       iResetAsync => rst_i,
 
       iDdry   => q_sample_i,

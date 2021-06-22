@@ -16,7 +16,10 @@
 --                                             testbench verification took 3h ..
 --
 -- (3) LED control
---       06/18/2021  13:30 -
+--       06/18/2021  13:30 - 16:30    3:00 h   Register interface already tested and auto-generated!
+--
+-- (4) Mode
+--       06/22/2021  16:00 -
 --
 
 library ieee;
@@ -38,7 +41,7 @@ entity fm_receiver_top is
     s0_axis_tdata  : in std_logic_vector(31 downto 0);
     s0_axis_tvalid : in std_logic;
 
-    -- AXI stream input
+    -- AXI stream output
     m0_axis_tready : in std_logic;
     m0_axis_tdata  : out std_logic_vector(31 downto 0);
     m0_axis_tvalid : out std_logic;
@@ -103,12 +106,26 @@ begin -- architecture rtl
   -- Outputs
   ------------------------------------------------------------------------------
 
-  -- NOTE: Consume an input sample, when output is ready to receive one
-  s0_axis_tready <= m0_axis_tready;
+  process (clk_i, control.enable_fm_radio) is
+  begin
+    case control.enable_fm_radio is
+        -- Mode: Passthrough
+      when '0' =>
+        s0_axis_tready <= m0_axis_tready;
+        m0_axis_tdata  <= s0_axis_tdata;
+        m0_axis_tvalid <= s0_axis_tvalid;
 
-  m0_axis_tdata(31 downto 16) <= std_logic_vector(to_slv(audio_L));
-  m0_axis_tdata(15 downto 0)  <= std_logic_vector(to_slv(audio_R));
-  m0_axis_tvalid              <= std_logic(audio_valid);
+        -- Mode: FM Radio
+      when '1' =>
+        -- NOTE: Consume an input sample, when output is ready to receive one
+        s0_axis_tready <= m0_axis_tready;
+
+        m0_axis_tdata(31 downto 16) <= std_logic_vector(to_slv(audio_L));
+        m0_axis_tdata(15 downto 0)  <= std_logic_vector(to_slv(audio_R));
+        m0_axis_tvalid              <= std_logic(audio_valid);
+      when others => null;
+    end case;
+  end process;
 
   leds_o <= std_logic_vector(control.led_ctrl);
 

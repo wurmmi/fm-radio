@@ -148,7 +148,7 @@ begin -- architecture rtl
   s_axi_rresp_o   <= axi_rresp;
 
   control_o.led_ctrl <= fm_led_control_value;
-  control_o.mode <= fm_enable_fm_radio_value;
+  control_o.enable_fm_radio <= fm_enable_fm_radio_value;
 
   -----------------------------------------------------------------------------
   -- Signal Assignments

@@ -39,8 +39,8 @@ entity fm_receiver is
     clk_i : in std_ulogic;
     rst_i : in std_ulogic;
 
-    i_sample_i : in iq_value_t;
-    q_sample_i : in iq_value_t;
+    i_sample_i : in sample_t;
+    q_sample_i : in sample_t;
     iq_valid_i : in std_ulogic;
 
     audio_L_o     : out sample_t;
