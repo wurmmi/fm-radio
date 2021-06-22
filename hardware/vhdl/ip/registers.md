@@ -3,7 +3,7 @@
 FM Radio IP (VHDL)
 
 Register width: 32 bits<br>
-Address width: 3 bits
+Address width: 4 bits
 
 ---
 ### MAGIC_VALUE

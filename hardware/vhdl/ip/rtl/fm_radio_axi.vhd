@@ -34,7 +34,7 @@ entity fm_radio_axi is
     --! @name AXI write address
     --! @{
 
-    s_axi_awaddr_i  : in  std_ulogic_vector(2 downto 0);
+    s_axi_awaddr_i  : in  std_ulogic_vector(3 downto 0);
     s_axi_awprot_i  : in  std_ulogic_vector(2 downto 0);
     s_axi_awvalid_i : in  std_ulogic;
     s_axi_awready_o : out std_ulogic;
@@ -60,7 +60,7 @@ entity fm_radio_axi is
     --! @name AXI read address
     --! @{
 
-    s_axi_araddr_i  : in  std_ulogic_vector(2 downto 0);
+    s_axi_araddr_i  : in  std_ulogic_vector(3 downto 0);
     s_axi_arprot_i  : in  std_ulogic_vector(2 downto 0);
     s_axi_arvalid_i : in  std_ulogic;
     s_axi_arready_o : out std_ulogic;

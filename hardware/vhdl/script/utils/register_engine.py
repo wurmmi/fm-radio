@@ -119,7 +119,7 @@ def generate_register_data(data):
     # Calculate needed address width
     offset -= 4
     if offset > 0:
-        addr_width = int(numpy.ceil(numpy.log2(offset)))
+        addr_width = int(numpy.ceil(numpy.log2(offset))) + 1
     data['addr_width'] = addr_width
     data['addr_max'] = offset
 
