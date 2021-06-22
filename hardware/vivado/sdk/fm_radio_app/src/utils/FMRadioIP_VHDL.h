@@ -15,9 +15,9 @@
 class FMRadioIP_VHDL : FMRadioIP {
  private:
   fm_radio_t* mDev;
-  TODO
 
-      public : FMRadioIP_VHDL(uint32_t device_id);
+ public:
+  FMRadioIP_VHDL(uint32_t device_id);
   ~FMRadioIP_VHDL();
 
   bool Initialize() override;

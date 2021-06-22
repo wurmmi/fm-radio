@@ -27,57 +27,56 @@ FMRadioIP_VHDL::FMRadioIP_VHDL(uint32_t device_id) : FMRadioIP(device_id) {
 FMRadioIP_VHDL::~FMRadioIP_VHDL() {}
 
 bool FMRadioIP_VHDL::Initialize() {
-  int status = XFm_receiver_hls_Initialize(&mDev, mDeviceId);
-  if (status != XST_SUCCESS) {
-    LOG_ERROR("Could not initialize FM Receiver IP");
-    return false;
-  }
+  mDev = FM_RADIO_BASE;
 
   return true;
 }
 
 void FMRadioIP_VHDL::LED_SetOn(TLed led) {
-  uint32_t state = XFm_receiver_hls_Get_config_led_ctrl_V(&mDev);
+  uint32_t state = mDev->LED_CONTROL;
 
   state |= (1 << (uint8_t)led);
   if (led == TLed::ALL)
     state = 0xFF;
 
-  XFm_receiver_hls_Set_config_led_ctrl_V(&mDev, state);
+  mDev->LED_CONTROL = state;
 }
 
 void FMRadioIP_VHDL::LED_Toggle(TLed led) {
-  uint32_t state = XFm_receiver_hls_Get_config_led_ctrl_V(&mDev);
+  uint32_t state = mDev->LED_CONTROL;
 
   state ^= (1 << (uint8_t)led);
   if (led == TLed::ALL)
     state ^= 0xFF;
 
-  XFm_receiver_hls_Set_config_led_ctrl_V(&mDev, state);
+  mDev->LED_CONTROL = state;
 }
 
 void FMRadioIP_VHDL::LED_SetOff(TLed led) {
-  uint32_t state = XFm_receiver_hls_Get_config_led_ctrl_V(&mDev);
+  uint32_t state = mDev->LED_CONTROL;
 
   state &= ~(1 << (uint8_t)led);
   if (led == TLed::ALL)
     state = 0x0;
 
-  XFm_receiver_hls_Set_config_led_ctrl_V(&mDev, state);
+  mDev->LED_CONTROL = state;
 }
 
 string FMRadioIP_VHDL::GetGitHash() {
-  auto git_hash = XFm_receiver_hls_Get_status_git_hash_V(&mDev);
+  auto git_hash = mDev->MAGIC_VALUE;
 
   return UintToHexString(git_hash);
 }
 
 string FMRadioIP_VHDL::GetBuildTime() {
-  auto build_time_uint = XFm_receiver_hls_Get_status_build_time_V(&mDev);
+  LOG_ERROR("not implemented yet");
+  return "not implemented yet";
+
+  auto build_time_uint = mDev->MAGIC_VALUE;
 
   // Convert to human-readable date string
-  // NOTE: I'm sure there's a much better way to do this...  :)
-  // Example build_time result:
+  // NOTE: I'm sure there's a much better way to do
+  // this...  :) Example build_time result:
   //    yymmddhhmmss
   //    210609184711 --> 2021/06/09 18:47:11
   string build_time = UintToHexString(build_time_uint);
@@ -105,12 +104,15 @@ string FMRadioIP_VHDL::GetBuildTime() {
 }
 
 void FMRadioIP_VHDL::SetMode(TMode mode) {
-  XFm_receiver_hls_Set_config_enable_fm_radio_ip(&mDev,
-                                                 static_cast<uint32_t>(mode));
+  LOG_ERROR("not implemented yet");
+
+  // mDev->MODE = static_cast<uint32_t>(mode);
 }
 
 TMode FMRadioIP_VHDL::GetMode() {
-  auto mode = XFm_receiver_hls_Get_config_enable_fm_radio_ip(&mDev);
+  LOG_ERROR("not implemented yet");
 
-  return static_cast<TMode>(mode);
+  //  auto mode = mDev->MODE;
+  //  return static_cast<TMode>(mode);
+  return TMode::FMRADIO;
 }
