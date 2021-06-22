@@ -45,12 +45,25 @@ async def axi_lite_memory_map_test(dut):
     await tb.assign_defaults()
     await tb.reset()
 
-    # Read registers
+    # Read all registers
     for reg_nr in range(3):
         word_addr = reg_nr * 4
         dut._log.info(f"##### Read register address: {word_addr} ...")
         rddata = await tb.axil_mm_m.read(word_addr, 4)
         dut._log.info(f"rddata: {rddata.data}")
+
+    # Write some registers
+    # Reg: LED_CONTROL (TODO: generate this with Register Engine)
+    word_addr = 4
+    await tb.axil_mm_m.write(word_addr, b'\xff')
+    rddata = await tb.axil_mm_m.read(word_addr, 4)
+    rddata_expected = bytearray.fromhex("0F000000")  # little endian
+    assert rddata.data == rddata_expected  # register only implements 4 bit in HW
+
+    await tb.axil_mm_m.write(word_addr, b'\x00')
+    rddata = await tb.axil_mm_m.read(word_addr, 4)
+    rddata_expected = bytearray.fromhex("00000000")
+    assert rddata.data == rddata_expected
 
     # Measure time
     duration_s = int(time.time() - timestamp_start)
@@ -58,7 +71,7 @@ async def axi_lite_memory_map_test(dut):
     dut._log.info("Execution took {:02d}:{:02d} minutes.".format(mins, secs))
 
 
-@cocotb.test()
+@ cocotb.test()
 async def axi_stream_dsp_test(dut):
     """
     Load test data from files and send them through the DUT.

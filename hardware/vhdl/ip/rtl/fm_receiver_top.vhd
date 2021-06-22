@@ -50,6 +50,9 @@ entity fm_receiver_top is
     leds_o : out std_logic_vector(3 downto 0);
 
     -- AXI-Lite register interface
+    -- NOTE:
+    --   Keep port widths in sync with the IP! (awaddr, araddr)
+    --   --> adapt in IP Packager, if address widths change!
     s_axi_awaddr  : in std_logic_vector(spec_reg_if_addr_width_c - 1 downto 0);
     s_axi_awprot  : in std_logic_vector(2 downto 0);
     s_axi_awvalid : in std_logic;
