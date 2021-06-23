@@ -26,7 +26,7 @@
 --       06/22/2021  16:00 - 17:00    1:00 h
 --
 -- (6) Top-level AXI stream interface (input / output) implementation
---       06/23/2021  13:00 - 17:00    4:00 h   Had to re-work the entire logic around the stream interface ...
+--       06/23/2021  13:00 - 18:00    5:00 h   Had to re-work the entire logic around the stream interface ...
 --                                             Big effort in working out and implementing FSM, etc. compared to HLS.
 --                                             Still not an optimum solution. Used a 'work-around' to throttle the input.
 --                                             Optimum solution: stream interface in ALL entities throughout the design (like HLS).
@@ -169,9 +169,12 @@ begin -- architecture rtl
   ------------------------------------------------------------------------------
 
   -- FSM functionality:
-  --   1. Wait for valid input and consume one input sample
-  --   2. Process the sample through the IP
-  --   3. When the IP output is ready, forward the result to the output
+  --   1.  Wait for strobe (to throttle the input)
+  --   2.  Wait for valid input and consume an input sample
+  --   2a. An output sample is produced by the IP --> goto 3
+  --   2b. No output sample produced yet --> goto 1
+  --   3.  Wait until the downstream IP (axi-stream-to-i2s converter) is ready.
+  --       Once it becomes ready, goto 1.
   regs : process (clk_i) is
     procedure reset is
     begin
@@ -205,7 +208,6 @@ begin -- architecture rtl
 
           when S2_ProcessValidInput =>
             if s0_axis_tvalid = '1' then
-
               tready   <= '0';
               i_sample <= to_sfixed(s0_axis_tdata(15 downto 0), i_sample);
               q_sample <= to_sfixed(s0_axis_tdata(31 downto 16), q_sample);
