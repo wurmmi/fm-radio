@@ -142,12 +142,12 @@ def load_template(template):
 
 def write_file(filename, content):
     try:
-        fp = open(args.dest, 'w')
+        fp = open(filename, 'w')
         fp.write(content)
         fp.close()
     except:
         print >> sys.stderr, 'ERROR: Could not create/write file "' + \
-            args.dest + '".'
+            filename + '".'
         sys.exit(1)
 
 

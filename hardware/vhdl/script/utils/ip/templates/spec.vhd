@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------------
 --! @file      {{name|pretty}}_spec_pkg.vhd
 --! @author    Super Easy Register Scripting Engine (SERSE)
---! @copyright 2017 - 2021 Michael Wurm
+--! @copyright 2017-2021 Michael Wurm
 --! @brief     Specification package for {{name}}
 -------------------------------------------------------------------------------
 

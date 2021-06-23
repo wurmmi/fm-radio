@@ -36,3 +36,25 @@ registers:
         offset: 0
         reset: 0x1
         connect: "control_o.enable_fm_radio"
+
+  - name: "VERSION_ADDR"
+    description: "Set version register to be read."
+    access: "READ_WRITE"
+    fields:
+      - name: "VALUE"
+        description: ""
+        width: 4
+        offset: 0
+        reset: 0x0
+        connect: "control_o.version_addr"
+
+  - name: "VERSION"
+    description: "Version value at address VERSION_ADDR."
+    access: "READ_WRITE"
+    fields:
+      - name: "VALUE"
+        description: ""
+        width: 32
+        offset: 0
+        reset: 0x0
+        connect: "control_o.version"

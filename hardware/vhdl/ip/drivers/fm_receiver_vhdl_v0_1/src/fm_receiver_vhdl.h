@@ -22,6 +22,8 @@ typedef struct {
   const volatile uint32_t MAGIC_VALUE;
         volatile uint32_t LED_CONTROL;
         volatile uint32_t ENABLE_FM_RADIO;
+        volatile uint32_t VERSION_ADDR;
+        volatile uint32_t VERSION;
 } fm_radio_t;
 
 /* Register: FM_MAGIC_VALUE */
@@ -54,5 +56,27 @@ typedef struct {
     (((REG) & FM_ENABLE_FM_RADIO_VALUE_Msk) >> FM_ENABLE_FM_RADIO_VALUE_Pos)
 #define SET_FM_ENABLE_FM_RADIO_VALUE(REG, VAL) \
     (((REG) & ~FM_ENABLE_FM_RADIO_VALUE_Msk) | ((VAL) << FM_ENABLE_FM_RADIO_VALUE_Pos))
+
+/* Register: FM_VERSION_ADDR */
+#define FM_VERSION_ADDR_VALUE_Pos (0U)
+#define FM_VERSION_ADDR_VALUE_Len (4U)
+#define FM_VERSION_ADDR_VALUE_Rst (0x0U)
+#define FM_VERSION_ADDR_VALUE_Msk \
+    (0xFU << FM_VERSION_ADDR_VALUE_Pos)
+#define GET_FM_VERSION_ADDR_VALUE(REG) \
+    (((REG) & FM_VERSION_ADDR_VALUE_Msk) >> FM_VERSION_ADDR_VALUE_Pos)
+#define SET_FM_VERSION_ADDR_VALUE(REG, VAL) \
+    (((REG) & ~FM_VERSION_ADDR_VALUE_Msk) | ((VAL) << FM_VERSION_ADDR_VALUE_Pos))
+
+/* Register: FM_VERSION */
+#define FM_VERSION_VALUE_Pos (0U)
+#define FM_VERSION_VALUE_Len (32U)
+#define FM_VERSION_VALUE_Rst (0x0U)
+#define FM_VERSION_VALUE_Msk \
+    (0xFFFFFFFFU << FM_VERSION_VALUE_Pos)
+#define GET_FM_VERSION_VALUE(REG) \
+    (((REG) & FM_VERSION_VALUE_Msk) >> FM_VERSION_VALUE_Pos)
+#define SET_FM_VERSION_VALUE(REG, VAL) \
+    (((REG) & ~FM_VERSION_VALUE_Msk) | ((VAL) << FM_VERSION_VALUE_Pos))
 
 #endif /* FM_RADIO_H */
