@@ -74,7 +74,6 @@ string FMRadioIP_VHDL::GetGitHash() {
 }
 
 string FMRadioIP_VHDL::GetBuildTime() {
-  LOG_ERROR("not implemented yet");
   return "not implemented yet";
 
   auto build_time_uint = IP->MAGIC_VALUE;
@@ -109,15 +108,10 @@ string FMRadioIP_VHDL::GetBuildTime() {
 }
 
 void FMRadioIP_VHDL::SetMode(TMode mode) {
-  LOG_ERROR("not implemented yet");
-
-  // IP->MODE = static_cast<uint32_t>(mode);
+  IP->ENABLE_FM_RADIO = static_cast<uint32_t>(mode);
 }
 
 TMode FMRadioIP_VHDL::GetMode() {
-  LOG_ERROR("not implemented yet");
-
-  //  auto mode = IP->MODE;
-  //  return static_cast<TMode>(mode);
-  return TMode::FMRADIO;
+  auto mode = IP->ENABLE_FM_RADIO;
+  return static_cast<TMode>(mode);
 }

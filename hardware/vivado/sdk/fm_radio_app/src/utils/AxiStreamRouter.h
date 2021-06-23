@@ -12,6 +12,7 @@
 #include "xaxis_switch.h"
 
 enum class IPSelection { VHDL, HLS };
+static const std::string IPSelectionString[2] = {"VHDL", "HLS"};
 
 class AxiStreamRouter {
  private:
@@ -27,6 +28,7 @@ class AxiStreamRouter {
 
   void SelectIP(IPSelection selection);
   IPSelection GetCurrentlySelectedIP();
+  std::string GetCurrentlySelectedIPString();
   void ConfigureAxiSwitch(uint8_t parallel_ip_nr);
 };
 

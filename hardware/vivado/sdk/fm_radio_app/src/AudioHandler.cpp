@@ -90,6 +90,10 @@ void AudioHandler::PrintVolumeInfo(string const& limit) {
 }
 
 void AudioHandler::VolumeUp() {
+  if (!mFmRadioIP) {
+    LOG_ERROR("nullptr");
+    return;
+  }
   if (mFmRadioIP->GetMode() == TMode::FMRADIO) {
     LOG_WARN("volume settings only available in FM_RADIO mode!");
     return;
@@ -104,6 +108,10 @@ void AudioHandler::VolumeUp() {
 }
 
 void AudioHandler::VolumeDown() {
+  if (!mFmRadioIP) {
+    LOG_ERROR("nullptr");
+    return;
+  }
   if (mFmRadioIP->GetMode() == TMode::FMRADIO) {
     LOG_WARN("volume settings only available in FM_RADIO mode!");
     return;
@@ -123,6 +131,10 @@ void AudioHandler::PlayFile(std::string const& filename) {
   if (!success)
     return;
 
+  if (!mFmRadioIP) {
+    LOG_ERROR("nullptr");
+    return;
+  }
   if (mFmRadioIP->GetMode() == TMode::PASSTHROUGH)
     ApplyVolume();
   auto buffer = mSdCardReader.GetBuffer();

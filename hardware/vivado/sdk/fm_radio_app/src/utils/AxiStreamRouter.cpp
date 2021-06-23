@@ -12,6 +12,7 @@ using namespace std;
 
 AxiStreamRouter::AxiStreamRouter() {
   Initialize();
+  SelectIP(IPSelection::HLS);
 }
 
 AxiStreamRouter::~AxiStreamRouter() {}
@@ -65,9 +66,6 @@ void AxiStreamRouter::ConfigureAxiSwitch(uint8_t parallel_ip_nr) {
 }
 
 void AxiStreamRouter::SelectIP(IPSelection selection) {
-  ConfigureAxiSwitch(static_cast<uint8_t>(selection));
-  mCurrentSelection = selection;
-
   switch (selection) {
     case IPSelection::HLS:
       LOG_INFO("Set AXI stream switches to HLS IP");
@@ -77,10 +75,17 @@ void AxiStreamRouter::SelectIP(IPSelection selection) {
       break;
     default:
       LOG_WARN("Unknown IPSelection %d", static_cast<uint8_t>(selection));
-      break;
+      return;
   }
+
+  mCurrentSelection = selection;
+  ConfigureAxiSwitch(static_cast<uint8_t>(selection));
 }
 
 IPSelection AxiStreamRouter::GetCurrentlySelectedIP() {
   return mCurrentSelection;
+}
+
+string AxiStreamRouter::GetCurrentlySelectedIPString() {
+  return string(IPSelectionString[static_cast<uint8_t>(mCurrentSelection)]);
 }

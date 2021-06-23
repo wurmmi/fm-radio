@@ -63,13 +63,16 @@ static void task_audio(void *) {
         audioHandler.ShowAvailableFiles();
         break;
       case 'i': {
-        printf("==========================================\n");
+        printf("=== STATUS ========================================\n");
+        printf("Currently selected IP: '%s'\n",
+               axiStreamRouter.GetCurrentlySelectedIPString().c_str());
+        printf("=== GENERAL =======================================\n");
         printf("This program is developed by Michael Wurm.\n");
         printf("SDK firmware build date :  %s, %s\n", __DATE__, __TIME__);
         printf("FM Radio IPs:\n");
         fmRadioIP_VHDL.PrintInfo();
         fmRadioIP_HLS.PrintInfo();
-        printf("==========================================\n");
+        printf("===================================================\n");
       } break;
 
       /*-- MODE: PASS-THROUGH --*/
@@ -109,7 +112,7 @@ static void task_audio(void *) {
 }
 
 static void Xil_AssertCallbackRoutine(uint8_t *file, int32_t line) {
-  printf("Assertion in file %s, on line %0ld\n", file, line);
+  LOG_ERROR("Assertion in file %s, on line %0ld\n", file, line);
 }
 
 int main() {
