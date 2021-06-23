@@ -23,30 +23,12 @@ package fm_radio_pkg is
   --! System clock rate
   constant clk_freq_system_c : natural := 100e6;
 
-  -- TODO: remove these duplicate constant definitions (use *spec*) directly
-  --! Sample rate
-  constant fs_c : natural := fs_spec_c;
-
-  --! Sample rate of Rx channel decoder
-  constant fs_rx_c : natural := fs_rx_spec_c;
-
-  --! Oversampling rate fs_c:fs_rx_c
-  constant osr_rx_c : natural := osr_rx_spec_c;
-
-  --! Oversampling rate fs_rx_c:fs_audio_c
-  constant osr_audio_c : natural := osr_audio_spec_c;
-
-  --! Fixed point bitwidths
-  constant fp_width_c      : natural := fp_width_spec_c;
-  constant fp_width_frac_c : natural := fp_width_frac_spec_c;
-  constant fp_width_int_c  : natural := fp_width_int_spec_c;
-
   --! Pilot recovery
   constant pilot_scale_factor_c : sfixed(4 downto 0)  := to_sfixed(pilot_scale_factor_spec_c, 4, 0);
   constant carrier_38k_offset_c : sfixed(2 downto -2) := to_sfixed(carrier_38k_offset_spec_c, 2, -2);
 
   --! Sample value type
-  subtype sample_t is sfixed(fp_width_int_c - 1 downto -fp_width_frac_c);
+  subtype sample_t is sfixed(fp_width_int_spec_c - 1 downto -fp_width_frac_spec_c);
 
   subtype fract_real is real range
   - 1.0 to 0.99999999999999999999999999999999999999999999999999999999999999999;
@@ -63,8 +45,12 @@ package fm_radio_pkg is
     --! @brief FM Radio's control registers
     --! @param led_ctrl LED control.
     --! @param enable_fm_radio Enable FM radio DSP.
+    --! @param version_addr Version address.
+    --! @param version Version value.
     led_ctrl        : std_ulogic_vector(2 downto 0);
     enable_fm_radio : std_ulogic;
+    version_addr    : std_ulogic_vector(3 downto 0);
+    version         : std_ulogic_vector(31 downto 0);
   end record control_t;
 
   type interrupt_t is record

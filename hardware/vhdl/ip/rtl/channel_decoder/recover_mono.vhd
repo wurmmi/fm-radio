@@ -10,6 +10,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 library work;
+use work.fm_global_spec_pkg.all;
 use work.fm_radio_pkg.all;
 use work.filter_lp_mono_pkg.all;
 use work.filter_bp_lrdiff_pkg.all;
@@ -86,7 +87,7 @@ begin -- architecture rtl
 
   decimator_inst : entity work.decimator
     generic map(
-      decimation_g => osr_audio_c)
+      decimation_g => osr_audio_spec_c)
     port map(
       clk_i => clk_i,
       rst_i => rst_i,

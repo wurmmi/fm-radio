@@ -38,6 +38,7 @@ use ieee.numeric_std.all;
 use ieee.fixed_pkg.all;
 
 library work;
+use work.fm_global_spec_pkg.all;
 use work.fm_radio_spec_pkg.all;
 use work.fm_radio_pkg.all;
 
@@ -239,7 +240,7 @@ begin -- architecture rtl
   strobe_gen_inst : entity work.strobe_gen
     generic map(
       clk_freq_g => clk_freq_system_c,
-      period_g   => (1 sec / fs_c))
+      period_g   => (1 sec / fs_spec_c))
     port map(
       clk_i => clk_i,
       rst_i => rst,
