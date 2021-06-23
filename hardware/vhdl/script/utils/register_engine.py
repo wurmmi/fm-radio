@@ -10,6 +10,7 @@
 
 import argparse
 import copy
+import datetime
 import sys
 
 import jinja2
@@ -132,6 +133,23 @@ def generate_register_data(data):
     return True
 
 
+def generate_rom(content):
+    if content == "0":
+        return
+
+    date = datetime.datetime.utcnow().strftime('%Y%m%d').zfill(8)
+    time = datetime.datetime.utcnow().strftime('%H%M%S').zfill(6)
+
+    rom = []
+    rom.append(date)
+    rom.append(time)
+    # split content in chunks of 8 characters (= 32 bit)
+    n = 8
+    for index in range(0, len(content), n):
+        rom.append(content[index: index + n])
+    return rom
+
+
 def load_template(template):
     try:
         return jinja2_env.get_template(template)
@@ -157,6 +175,7 @@ if __name__ == '__main__':
     parser.add_argument('spec', help='The .yaml specification file of this IP.')
     parser.add_argument('tmpl', help='This template is used.')
     parser.add_argument('dest', help='Filename of generated file.')
+    parser.add_argument('--rom_content', help='ROM content')
     args = parser.parse_args()
 
     # Jinja2 for generating files out of a template file
@@ -175,6 +194,9 @@ if __name__ == '__main__':
         data = yaml.load(fp, Loader=yaml.FullLoader)
         if generate_register_data(data):
             template = load_template(args.tmpl)
+
+            data['rom'] = generate_rom(args.rom_content)
+
             content = template.render(data)
             write_file(args.dest, content)
         else:

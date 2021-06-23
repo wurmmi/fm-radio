@@ -57,11 +57,9 @@ architecture rtl of {{name | pretty}}_rom is
 
   --! ROM content
   constant rom_c : rom_t := (
-    {%if rom | length > 3 %}
     {% for word in rom %}
     {{loop.index0}} => x"{{word}}",
     {% endfor %}
-    {% endif%}
     others => (others => '0'));
 
   --! @}
