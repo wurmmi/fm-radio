@@ -84,7 +84,7 @@ architecture rtl of fm_receiver_top is
   -----------------------------------------------------------------------------
   --! @{
 
-  type fsm_state_t is (S0_reset, S1_ready, S2_waitForValidInput, S3_WaitForIpToCompleteProcessData);
+  type fsm_state_t is (S0_reset, S1_waitForValidInput, S2_WaitForIpToCompleteProcessData, S3_WaitForReadyOutput);
 
   --! @}
   -----------------------------------------------------------------------------
@@ -178,31 +178,33 @@ begin -- architecture rtl
       else
         -- Defaults
         iq_valid <= '0';
+        --tready   <= '0';
 
         case nextState is
           when S0_reset =>
             reset;
-            nextState <= S1_ready;
+            nextState <= S1_waitForValidInput;
 
-          when S1_ready =>
-            tready    <= '1';
-            nextState <= S2_waitForValidInput;
-
-          when S2_waitForValidInput =>
+          when S1_waitForValidInput =>
+            tready <= '1';
             if s0_axis_tvalid = '1' then
               i_sample <= to_sfixed(s0_axis_tdata(15 downto 0), i_sample);
               q_sample <= to_sfixed(s0_axis_tdata(31 downto 16), q_sample);
               iq_valid <= '1';
 
-              nextState <= S3_WaitForIpToCompleteProcessData;
+              nextState <= S2_WaitForIpToCompleteProcessData;
             end if;
 
-          when S3_WaitForIpToCompleteProcessData =>
-            tready <= '0';
+          when S2_WaitForIpToCompleteProcessData =>
             if audio_valid = '1' then
-              nextState <= S1_ready;
+              tready    <= '0';
+              nextState <= S3_WaitForReadyOutput;
             end if;
 
+          when S3_WaitForReadyOutput =>
+            if m0_axis_tready = '1' then
+              nextState <= S1_waitForValidInput;
+            end if;
           when others =>
             assert false report "unknown nextState" severity error;
         end case;
