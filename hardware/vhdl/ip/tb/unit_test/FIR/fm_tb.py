@@ -62,7 +62,7 @@ class FM_TB():
             # print every 10th number to show progress
             size = len(self.data_out)
             if size % 10 == 0:
-                self.dut._log.info("Progress sample: {}".format(size))
+                self.dut._log.info("Progress sample: {}/{}".format(size, num_expected))
 
             if size >= num_expected:
                 break

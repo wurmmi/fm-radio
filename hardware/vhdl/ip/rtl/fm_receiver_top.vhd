@@ -84,7 +84,7 @@ architecture rtl of fm_receiver_top is
   -----------------------------------------------------------------------------
   --! @{
 
-  type fsm_state_t is (S0_reset, S1_ProcessValidInput, S2_WaitForIpToCompleteProcessData, S2_WaitForReadyOutput);
+  type fsm_state_t is (S0_reset, S01_WaitForStrobe, S1_ProcessValidInput, S2_WaitForIpToCompleteProcessData, S2_WaitForReadyOutput);
 
   --! @}
   -----------------------------------------------------------------------------
@@ -106,7 +106,8 @@ architecture rtl of fm_receiver_top is
   -----------------------------------------------------------------------------
   --! @{
 
-  signal rst : std_ulogic;
+  signal rst        : std_ulogic;
+  signal req_sample : std_ulogic;
 
   signal audio_L     : sample_t;
   signal audio_R     : sample_t;
@@ -178,16 +179,21 @@ begin -- architecture rtl
       else
         -- Defaults
         iq_valid <= '0';
-        --tready   <= '0';
 
         case nextState is
           when S0_reset =>
             reset;
-            nextState <= S1_ProcessValidInput;
+            nextState <= S01_WaitForStrobe;
+
+          when S01_WaitForStrobe =>
+            if req_sample = '1' then
+              tready    <= '1';
+              nextState <= S1_ProcessValidInput;
+            end if;
 
           when S1_ProcessValidInput =>
-            tready <= '1';
             if s0_axis_tvalid = '1' then
+              tready   <= '0';
               i_sample <= to_sfixed(s0_axis_tdata(15 downto 0), i_sample);
               q_sample <= to_sfixed(s0_axis_tdata(31 downto 16), q_sample);
               iq_valid <= '1';
@@ -195,6 +201,8 @@ begin -- architecture rtl
             if audio_valid = '1' then
               tready    <= '0';
               nextState <= S2_WaitForReadyOutput;
+            else
+              nextState <= S01_WaitForStrobe;
             end if;
 
           when S2_WaitForReadyOutput =>
@@ -212,6 +220,18 @@ begin -- architecture rtl
   -- Instantiations
   ------------------------------------------------------------------------------
 
+  -- Strobe generator to throttle streaming input
+  strobe_gen_inst : entity work.strobe_gen
+    generic map(
+      clk_freq_g => clk_freq_system_c,
+      period_g   => (1 sec / fs_c))
+    port map(
+      clk_i => clk_i,
+      rst_i => rst,
+
+      enable_i => '1',
+      strobe_o => req_sample);
+
   -- FM receiver IP
   fm_receiver_inst : entity work.fm_receiver
     port map(
@@ -226,6 +246,7 @@ begin -- architecture rtl
       audio_R_o     => audio_R,
       audio_valid_o => audio_valid);
 
+  -- AXI-lite register map
   registers_inst : entity work.fm_radio_axi
     port map(
       s_axi_aclk_i   => clk_i,

@@ -23,6 +23,7 @@ package fm_radio_pkg is
   --! System clock rate
   constant clk_freq_system_c : natural := 100e6;
 
+  -- TODO: remove these duplicate constant definitions (use *spec*) directly
   --! Sample rate
   constant fs_c : natural := fs_spec_c;
 

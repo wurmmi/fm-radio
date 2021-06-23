@@ -38,12 +38,14 @@ class VHDL_SAMPLER():
             # print every Nth number to show progress
             size = len(data)
             if size % self.show_progress_after_num_c == 0:
-                self.dut._log.info("Progress {}: {}".format(self.data_name, size))
+                self.dut._log.info("Progress {:15s}: {:4d}/{:4d}".format(self.data_name, size, self.num_expected_c))
 
             if size >= self.num_expected_c:
+                self.dut._log.info(
+                    "---> {} received all samples".format(self.data_name))
                 break
 
-    @cocotb.coroutine
+    @ cocotb.coroutine
     async def read_vhdl_output_32bit_split(self, data_L, data_R):
         while(True):
             await RisingEdge(self.signal_valid)
@@ -55,7 +57,9 @@ class VHDL_SAMPLER():
             # print every Nth number to show progress
             size = len(data_L)
             if size % self.show_progress_after_num_c == 0:
-                self.dut._log.info("Progress {}: {}".format(self.data_name, size))
+                self.dut._log.info("Progress {:15s}: {:4d}/{:4d}".format(self.data_name, size, self.num_expected_c))
 
             if size >= self.num_expected_c:
+                self.dut._log.info(
+                    "---> {} received all samples".format(self.data_name))
                 break

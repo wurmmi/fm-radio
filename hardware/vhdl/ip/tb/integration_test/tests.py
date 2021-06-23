@@ -83,7 +83,7 @@ async def axi_stream_dsp_test(dut):
     # --------------------------------------------------------------------------
 
     # Number of seconds to process
-    n_sec = 0.002
+    n_sec = 0.001
 
     # --------------------------------------------------------------------------
     # Prepare environment
@@ -134,7 +134,7 @@ async def axi_stream_dsp_test(dut):
     #  This speedup factor needs to be chosen carefully. The IP needs to complete the calculation for one sample,
     #  before the next sample can be taken from the input. Therefore, set the factor small, to ensure enough
     #  low-cycles, to allow the IP to complete one entire calculation.
-    output_speedup_factor = 80
+    output_speedup_factor = 50
     strobe_num_cycles_high = 1
     strobe_num_cycles_low = tb.CLOCK_FREQ_MHZ * 1e6 // fm_global.fs_audio_c // output_speedup_factor - strobe_num_cycles_high
     ratio = strobe_num_cycles_low // strobe_num_cycles_high
