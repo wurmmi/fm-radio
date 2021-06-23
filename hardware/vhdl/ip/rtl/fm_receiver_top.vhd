@@ -222,7 +222,7 @@ begin -- architecture rtl
 
           when S3_WaitForReadyOutput =>
             if m0_axis_tready = '1' then
-              nextState <= S2_ProcessValidInput;
+              nextState <= S1_WaitForThrottleStrobe;
             end if;
           when others =>
             assert false report "unknown/unhandled nextState" severity error;
