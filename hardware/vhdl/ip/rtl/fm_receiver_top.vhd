@@ -84,7 +84,7 @@ architecture rtl of fm_receiver_top is
   -----------------------------------------------------------------------------
   --! @{
 
-  type fsm_state_t is (S0_reset, S01_WaitForStrobe, S1_ProcessValidInput, S2_WaitForIpToCompleteProcessData, S2_WaitForReadyOutput);
+  type fsm_state_t is (S0_reset, S1_WaitForThrottleStrobe, S2_ProcessValidInput, S3_WaitForReadyOutput);
 
   --! @}
   -----------------------------------------------------------------------------
@@ -176,22 +176,22 @@ begin -- architecture rtl
     if rising_edge(clk_i) then
       if rst = '1' then
         reset;
-      else
+        else
         -- Defaults
         iq_valid <= '0';
 
         case nextState is
           when S0_reset =>
             reset;
-            nextState <= S01_WaitForStrobe;
+            nextState <= S1_WaitForThrottleStrobe;
 
-          when S01_WaitForStrobe =>
+          when S1_WaitForThrottleStrobe =>
             if req_sample = '1' then
               tready    <= '1';
-              nextState <= S1_ProcessValidInput;
+              nextState <= S2_ProcessValidInput;
             end if;
 
-          when S1_ProcessValidInput =>
+          when S2_ProcessValidInput =>
             if s0_axis_tvalid = '1' then
               tready   <= '0';
               i_sample <= to_sfixed(s0_axis_tdata(15 downto 0), i_sample);
@@ -200,17 +200,17 @@ begin -- architecture rtl
             end if;
             if audio_valid = '1' then
               tready    <= '0';
-              nextState <= S2_WaitForReadyOutput;
+              nextState <= S3_WaitForReadyOutput;
             else
-              nextState <= S01_WaitForStrobe;
+              nextState <= S1_WaitForThrottleStrobe;
             end if;
 
-          when S2_WaitForReadyOutput =>
+          when S3_WaitForReadyOutput =>
             if m0_axis_tready = '1' then
-              nextState <= S1_ProcessValidInput;
+              nextState <= S2_ProcessValidInput;
             end if;
           when others =>
-            assert false report "unknown nextState" severity error;
+            assert false report "unknown/unhandled nextState" severity error;
         end case;
       end if;
     end if;

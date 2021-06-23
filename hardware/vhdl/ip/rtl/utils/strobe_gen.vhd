@@ -29,9 +29,9 @@ entity strobe_gen is
     --! @{
 
     --! System clock
-    clk_i : in std_logic;
+    clk_i : in std_ulogic;
     --! Asynchronous reset
-    rst_i : in std_logic;
+    rst_i : in std_ulogic;
 
     --! @}
     --! @name Strobe signals
@@ -52,7 +52,7 @@ begin
   --    severity note;
   assert ((1 sec / clk_freq_g) <= period_g)
   report "strobe_gen: The Clk frequency is to low to generate such a short strobe cycle."
-    severity error;
+  severity error;
   -- pragma translate_on
 
 end entity strobe_gen;
@@ -95,13 +95,13 @@ begin -- architecture rtl
     if rising_edge(clk_i) then
       if rst_i = '1' then
         reset;
-      else
+        else
         if enable_i = '1' then
           -- Count the number of Clk cycles from strobe pulse to strobe pulse.
           if count = clks_per_strobe_c - 1 then
             count  <= (others => '0');
             strobe <= '1';
-          else
+            else
             count  <= count + 1;
             strobe <= '0';
           end if;
