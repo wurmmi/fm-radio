@@ -22,15 +22,15 @@ typedef struct {
 {% for reg in original %}
 {% if reg.type == "ARRAY" or reg.type == "TRK_ARRAY" %}
 {% if reg.access == "READ_ONLY" %}
-const volatile u32 {{reg.name|pretty|replace("[n]", "")|upper}}[{{reg.size}}];
+const volatile uint32_t {{reg.name|pretty|replace("[n]", "")|upper}}[{{reg.size}}];
 {% else %}
-        volatile u32 {{reg.name|pretty|replace("[n]", "")|upper}}[{{reg.size}}];
+        volatile uint32_t {{reg.name|pretty|replace("[n]", "")|upper}}[{{reg.size}}];
 {% endif %}
 {% else %}
 {% if reg.access == "READ_ONLY" %}
-  const volatile u32 {{reg.name|pretty|upper}};
+  const volatile uint32_t {{reg.name|pretty|upper}};
 {% else %}
-        volatile u32 {{reg.name|pretty|upper}};
+        volatile uint32_t {{reg.name|pretty|upper}};
 {% endif %}
 {% endif %}
 {% endfor %}

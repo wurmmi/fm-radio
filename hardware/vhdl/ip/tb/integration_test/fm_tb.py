@@ -45,7 +45,8 @@ class FM_TB():
         self.backpressure_i2s = BitDriver(dut.m0_axis_tready, dut.clk_i)
 
         # AXILite register interface
-        self.axil_mm_m = AxiLiteMaster(AxiLiteBus.from_prefix(dut, "s_axi"), dut.clk_i, dut.rst_i)
+        self.axil_mm_m = AxiLiteMaster(AxiLiteBus.from_prefix(dut, "s_axi"), dut.clk_i,
+                                       dut.rst_n_i, reset_active_level=False)
 
         # Variables
         self.tb_data_handler = TB_DATA_HANDLER()
@@ -55,11 +56,11 @@ class FM_TB():
     async def reset(self):
         self.dut._log.info("Resetting DUT ...")
 
-        self.dut.rst_i <= 0
+        self.dut.rst_n_i <= 1  # release reset
         await RisingEdge(self.dut.clk_i)
-        self.dut.rst_i <= 1
+        self.dut.rst_n_i <= 0  # reset
         await Timer(3.3, units='us')
-        self.dut.rst_i <= 0
+        self.dut.rst_n_i <= 1  # release reset
         await RisingEdge(self.dut.clk_i)
 
     @cocotb.coroutine

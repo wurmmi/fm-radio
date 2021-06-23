@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
-[*] Tue Jun 22 22:00:19 2021
+[*] Wed Jun 23 08:54:20 2021
 [*]
 [dumpfile] "/home/mike/work/fm-radio/hardware/vhdl/ip/tb/integration_test/sim_build/waveform.ghw"
-[dumpfile_mtime] "Tue Jun 22 21:49:19 2021"
-[dumpfile_size] 44547
+[dumpfile_mtime] "Wed Jun 23 08:52:55 2021"
+[dumpfile_size] 760087
 [savefile] "/home/mike/work/fm-radio/hardware/vhdl/ip/tb/integration_test/gtkwave/waveconfig.gtkw"
 [timestart] 0
 [size] 1848 1016
 [pos] -1 -1
-*-29.554668 3402000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-31.554668 1060500000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.fm_receiver_top.
 [treeopen] top.fm_receiver_top.control.
@@ -20,7 +20,8 @@
 [sst_expanded] 1
 [sst_vpaned_height] 298
 @28
-top.fm_receiver_top.fm_receiver_inst.rst_i
+top.fm_receiver_top.rst_n_i
+top.fm_receiver_top.rst
 top.fm_receiver_top.fm_receiver_inst.clk_i
 @c08420
 #{top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[0:-31]} top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[0] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-1] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-2] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-3] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-4] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-5] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-6] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-7] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-8] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-9] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-10] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-11] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-12] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-13] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-14]
@@ -149,7 +150,7 @@ top.fm_receiver_top.s_axi_bready
 top.fm_receiver_top.s_axi_rvalid
 top.fm_receiver_top.s_axi_rready
 #{top.fm_receiver_top.s_axi_rresp[1:0]} top.fm_receiver_top.s_axi_rresp[1] top.fm_receiver_top.s_axi_rresp[0]
-@23
+@22
 #{top.fm_receiver_top.s_axi_rdata[31:0]} top.fm_receiver_top.s_axi_rdata[31] top.fm_receiver_top.s_axi_rdata[30] top.fm_receiver_top.s_axi_rdata[29] top.fm_receiver_top.s_axi_rdata[28] top.fm_receiver_top.s_axi_rdata[27] top.fm_receiver_top.s_axi_rdata[26] top.fm_receiver_top.s_axi_rdata[25] top.fm_receiver_top.s_axi_rdata[24] top.fm_receiver_top.s_axi_rdata[23] top.fm_receiver_top.s_axi_rdata[22] top.fm_receiver_top.s_axi_rdata[21] top.fm_receiver_top.s_axi_rdata[20] top.fm_receiver_top.s_axi_rdata[19] top.fm_receiver_top.s_axi_rdata[18] top.fm_receiver_top.s_axi_rdata[17] top.fm_receiver_top.s_axi_rdata[16] top.fm_receiver_top.s_axi_rdata[15] top.fm_receiver_top.s_axi_rdata[14] top.fm_receiver_top.s_axi_rdata[13] top.fm_receiver_top.s_axi_rdata[12] top.fm_receiver_top.s_axi_rdata[11] top.fm_receiver_top.s_axi_rdata[10] top.fm_receiver_top.s_axi_rdata[9] top.fm_receiver_top.s_axi_rdata[8] top.fm_receiver_top.s_axi_rdata[7] top.fm_receiver_top.s_axi_rdata[6] top.fm_receiver_top.s_axi_rdata[5] top.fm_receiver_top.s_axi_rdata[4] top.fm_receiver_top.s_axi_rdata[3] top.fm_receiver_top.s_axi_rdata[2] top.fm_receiver_top.s_axi_rdata[1] top.fm_receiver_top.s_axi_rdata[0]
 [pattern_trace] 1
 [pattern_trace] 0

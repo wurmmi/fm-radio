@@ -37,8 +37,8 @@ use work.fm_radio_pkg.all;
 
 entity fm_receiver_top is
   port (
-    clk_i : in std_logic;
-    rst_i : in std_logic;
+    clk_i   : in std_logic;
+    rst_n_i : in std_logic;
 
     -- AXI stream input
     s0_axis_tready : out std_logic;
@@ -88,17 +88,19 @@ architecture rtl of fm_receiver_top is
   signal q_sample    : sample_t;
   signal iq_valid_sr : std_ulogic_vector(1 downto 0);
 
-  signal audio_L     : sample_t;
-  signal audio_R     : sample_t;
-  signal audio_valid : std_ulogic;
-
   --! @}
   -----------------------------------------------------------------------------
   --! @name Internal Wires
   -----------------------------------------------------------------------------
   --! @{
 
+  signal rst : std_ulogic;
+
   signal iq_valid : std_ulogic;
+
+  signal audio_L     : sample_t;
+  signal audio_R     : sample_t;
+  signal audio_valid : std_ulogic;
 
   signal status  : status_t;
   signal control : control_t;
@@ -143,6 +145,9 @@ begin -- architecture rtl
   -- Detect rising edge
   iq_valid <= not iq_valid_sr(1) and iq_valid_sr(0);
 
+  -- Invert reset
+  rst <= not rst_n_i;
+
   ------------------------------------------------------------------------------
   -- Registers
   ------------------------------------------------------------------------------
@@ -156,7 +161,7 @@ begin -- architecture rtl
     end procedure reset;
   begin -- process regs
     if rising_edge(clk_i) then
-      if rst_i = '1' then
+      if rst = '1' then
         reset;
       else
         -- Defaults
@@ -178,7 +183,7 @@ begin -- architecture rtl
   fm_receiver_inst : entity work.fm_receiver
     port map(
       clk_i => clk_i,
-      rst_i => rst_i,
+      rst_i => rst,
 
       i_sample_i => i_sample,
       q_sample_i => q_sample,
@@ -191,7 +196,7 @@ begin -- architecture rtl
   registers_inst : entity work.fm_radio_axi
     port map(
       s_axi_aclk_i   => clk_i,
-      s_axi_areset_i => rst_i,
+      s_axi_areset_i => rst,
 
       s_axi_awaddr_i              => std_ulogic_vector(s_axi_awaddr),
       s_axi_awprot_i              => std_ulogic_vector(s_axi_awprot),

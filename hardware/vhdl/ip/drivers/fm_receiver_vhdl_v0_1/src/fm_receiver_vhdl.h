@@ -19,9 +19,9 @@
 
 /* FM Radio register structure */
 typedef struct {
-  const volatile u32 MAGIC_VALUE;
-        volatile u32 LED_CONTROL;
-        volatile u32 ENABLE_FM_RADIO;
+  const volatile uint32_t MAGIC_VALUE;
+        volatile uint32_t LED_CONTROL;
+        volatile uint32_t ENABLE_FM_RADIO;
 } fm_radio_t;
 
 /* Register: FM_MAGIC_VALUE */
