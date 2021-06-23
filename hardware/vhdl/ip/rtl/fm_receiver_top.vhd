@@ -80,13 +80,25 @@ end entity fm_receiver_top;
 architecture rtl of fm_receiver_top is
 
   -----------------------------------------------------------------------------
+  --! @name Types and Constants
+  -----------------------------------------------------------------------------
+  --! @{
+
+  type fsm_state_t is (S0_reset, S1_ready, S2_waitForValidInput, S3_WaitForIpToCompleteProcessData);
+
+  --! @}
+  -----------------------------------------------------------------------------
   --! @name Internal Registers
   -----------------------------------------------------------------------------
   --! @{
 
-  signal i_sample    : sample_t;
-  signal q_sample    : sample_t;
-  signal iq_valid_sr : std_ulogic_vector(1 downto 0);
+  signal nextState : fsm_state_t := S0_reset;
+
+  signal tready : std_ulogic;
+
+  signal i_sample : sample_t;
+  signal q_sample : sample_t;
+  signal iq_valid : std_ulogic;
 
   --! @}
   -----------------------------------------------------------------------------
@@ -95,8 +107,6 @@ architecture rtl of fm_receiver_top is
   --! @{
 
   signal rst : std_ulogic;
-
-  signal iq_valid : std_ulogic;
 
   signal audio_L     : sample_t;
   signal audio_R     : sample_t;
@@ -113,7 +123,7 @@ begin -- architecture rtl
   -- Outputs
   ------------------------------------------------------------------------------
 
-  process (clk_i, control.enable_fm_radio) is
+  mode_switch : process (clk_i, control.enable_fm_radio) is
   begin
     case control.enable_fm_radio is
         -- Mode: Passthrough
@@ -124,15 +134,14 @@ begin -- architecture rtl
 
         -- Mode: FM Radio
       when '1' =>
-        -- NOTE: Consume an input sample, when output is ready to receive one
-        s0_axis_tready <= m0_axis_tready;
+        s0_axis_tready <= tready;
 
         m0_axis_tdata(31 downto 16) <= std_logic_vector(to_slv(audio_L));
         m0_axis_tdata(15 downto 0)  <= std_logic_vector(to_slv(audio_R));
         m0_axis_tvalid              <= std_logic(audio_valid);
       when others => null;
     end case;
-  end process;
+  end process mode_switch;
 
   leds_o <= std_logic_vector(control.led_ctrl);
 
@@ -142,9 +151,6 @@ begin -- architecture rtl
 
   status.magic_value <= x"DEADBEEF";
 
-  -- Detect rising edge
-  iq_valid <= not iq_valid_sr(1) and iq_valid_sr(0);
-
   -- Invert reset
   rst <= not rst_n_i;
 
@@ -152,28 +158,57 @@ begin -- architecture rtl
   -- Registers
   ------------------------------------------------------------------------------
 
-  regs : process (clk_i) is
+  -- FSM functionality:
+  --   1. Wait for valid input and consume one input sample
+  --   2. Process the sample through the IP
+  --   3. When the IP output is ready, forward the result to the output
+  axi_stream_fsm : process (clk_i) is
     procedure reset is
     begin
-      i_sample    <= (others => '0');
-      q_sample    <= (others => '0');
-      iq_valid_sr <= (others => '0');
-    end procedure reset;
-  begin -- process regs
+      nextState <= S0_reset;
+      tready    <= '0';
+
+      iq_valid <= '0';
+      i_sample <= (others => '0');
+      q_sample <= (others => '0');
+    end procedure reset; begin
     if rising_edge(clk_i) then
       if rst = '1' then
         reset;
       else
         -- Defaults
-        iq_valid_sr <= iq_valid_sr(0) & s0_axis_tvalid;
+        iq_valid <= '0';
 
-        if s0_axis_tvalid = '1' then
-          i_sample <= to_sfixed(s0_axis_tdata(15 downto 0), i_sample);
-          q_sample <= to_sfixed(s0_axis_tdata(31 downto 16), q_sample);
-        end if;
+        case nextState is
+          when S0_reset =>
+            reset;
+            nextState <= S1_ready;
+
+          when S1_ready =>
+            tready    <= '1';
+            nextState <= S2_waitForValidInput;
+
+          when S2_waitForValidInput =>
+            if s0_axis_tvalid = '1' then
+              i_sample <= to_sfixed(s0_axis_tdata(15 downto 0), i_sample);
+              q_sample <= to_sfixed(s0_axis_tdata(31 downto 16), q_sample);
+              iq_valid <= '1';
+
+              nextState <= S3_WaitForIpToCompleteProcessData;
+            end if;
+
+          when S3_WaitForIpToCompleteProcessData =>
+            tready <= '0';
+            if audio_valid = '1' then
+              nextState <= S1_ready;
+            end if;
+
+          when others =>
+            assert false report "unknown nextState" severity error;
+        end case;
       end if;
     end if;
-  end process regs;
+  end process axi_stream_fsm;
 
   ------------------------------------------------------------------------------
   -- Instantiations
