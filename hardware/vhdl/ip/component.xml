@@ -332,7 +332,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>ce35d288</spirit:value>
+            <spirit:value>13d0e8c5</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -348,7 +348,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>d635d209</spirit:value>
+            <spirit:value>9dc003d7</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -404,7 +404,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>da71be7c</spirit:value>
+            <spirit:value>2b9dd752</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -961,6 +961,12 @@
         <spirit:userFileType>CHECKSUM_d13f2ab9</spirit:userFileType>
         <spirit:logicalName>xil_defaultlib</spirit:logicalName>
       </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/fm_radio_rom.vhd</spirit:name>
+        <spirit:fileType>vhdlSource</spirit:fileType>
+        <spirit:userFileType>CHECKSUM_bcbcce47</spirit:userFileType>
+        <spirit:logicalName>xil_defaultlib</spirit:logicalName>
+      </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>
       <spirit:name>xilinx_anylanguagebehavioralsimulation_view_fileset</spirit:name>
@@ -1123,11 +1129,11 @@
       </xilinx:xpmLibraries>
       <xilinx:vendorDisplayName>M.Wurm</xilinx:vendorDisplayName>
       <xilinx:vendorURL>https://www.linkedin.com/in/michael-wurm</xilinx:vendorURL>
-      <xilinx:coreRevision>71</xilinx:coreRevision>
+      <xilinx:coreRevision>75</xilinx:coreRevision>
       <xilinx:upgrades>
         <xilinx:canUpgradeFrom>user.org:user:fm_receiver_top:1.0</xilinx:canUpgradeFrom>
       </xilinx:upgrades>
-      <xilinx:coreCreationDateTime>2021-06-23T18:54:29Z</xilinx:coreCreationDateTime>
+      <xilinx:coreCreationDateTime>2021-06-23T22:38:26Z</xilinx:coreCreationDateTime>
       <xilinx:tags>
         <xilinx:tag xilinx:name="nopcore"/>
         <xilinx:tag xilinx:name="user.org:user:fm_receiver_top:1.0_ARCHIVE_LOCATION">/home/mike/work/fm-radio/hardware/vhdl</xilinx:tag>
@@ -1142,7 +1148,7 @@
       <xilinx:xilinxVersion>2018.2</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="aefda486"/>
       <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="0ca5d099"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="e31b0a76"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="1ed28eaf"/>
       <xilinx:checksum xilinx:scope="ports" xilinx:value="09a6c13a"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="134b76fe"/>
     </xilinx:packagingInfo>

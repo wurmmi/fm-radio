@@ -65,6 +65,8 @@ std::string FMRadioIP::DatetimeToString(uint64_t datetime_int) const {
   build_time.insert(2, 1, '/');
   build_time.insert(0, "20");
 
+  build_time += " UTC";
+
   return build_time;
 }
 
