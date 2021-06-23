@@ -748,7 +748,7 @@ proc create_root_design { parentCell } {
   create_bd_addr_seg -range 0x00010000 -offset 0x43C20000 [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs axis_switch_out/S_AXI_CTRL/Reg] SEG_axis_switch_0_Reg
   create_bd_addr_seg -range 0x00010000 -offset 0x43C30000 [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs axis_switch_in/S_AXI_CTRL/Reg] SEG_axis_switch_1_Reg
   create_bd_addr_seg -range 0x00010000 -offset 0x43C00000 [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs fm_receiver_hls_0/s_axi_API/Reg] SEG_fm_receiver_hls_0_Reg
-  create_bd_addr_seg -range 0x00010000 -offset 0x43C40000 [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs fm_receiver_vhdl_0/s_axi_API/Reg] SEG_fm_receiver_vhdl_0_Reg
+  create_bd_addr_seg -range 0x00001000 -offset 0x43C40000 [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs fm_receiver_vhdl_0/s_axi_API/Reg] SEG_fm_receiver_vhdl_0_Reg
 
 
   # Restore current instance

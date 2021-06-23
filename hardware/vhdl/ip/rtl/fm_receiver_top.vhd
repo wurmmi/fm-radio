@@ -15,10 +15,14 @@
 --       06/16/2021  08:30 - 10:00    1:30 h   VHDL implementation fast; But
 --                                             testbench verification took 3h ..
 --
--- (3) LED control
---       06/18/2021  13:30 - 16:30    3:00 h   Register interface already tested and auto-generated!
+-- (3) AXI-Lite register interface
+--       06/18/2021  08:00 - 18:00   10:00 h   Register interface already tested and auto-generated!
+--                                             But took a long time to bring it into Vivado. (create IF in IP Packager, figure out Address Range error, etc.)
 --
--- (4) Mode
+-- (4) LED control
+--       06/19/2021  13:30 - 15:30    2:00 h
+--
+-- (5) Mode
 --       06/22/2021  16:00 - 17:00    1:00 h
 --
 
@@ -50,9 +54,7 @@ entity fm_receiver_top is
     leds_o : out std_logic_vector(3 downto 0);
 
     -- AXI-Lite register interface
-    -- NOTE:
-    --   Keep port widths in sync with the IP! (awaddr, araddr)
-    --   --> adapt in IP Packager, if address widths change!
+    -- NOTE: Adapt address widths in the IP Packager if they change! (awaddr, araddr)
     s_axi_awaddr  : in std_logic_vector(spec_reg_if_addr_width_c - 1 downto 0);
     s_axi_awprot  : in std_logic_vector(2 downto 0);
     s_axi_awvalid : in std_logic;
