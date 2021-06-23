@@ -68,42 +68,25 @@ void FMRadioIP_VHDL::PrintInfo() {
 }
 
 string FMRadioIP_VHDL::GetGitHash() {
-  auto git_hash = IP->MAGIC_VALUE;
+  // Select ROM register address, then read it
+  IP->VERSION_ADDR  = 2;
+  uint32_t git_hash = IP->VERSION;
 
   return UintToHexString(git_hash);
 }
 
 string FMRadioIP_VHDL::GetBuildTime() {
-  return "not implemented yet";
+  // Select ROM register address, then read it
+  IP->VERSION_ADDR = 0;
+  uint32_t date    = IP->VERSION;
+  IP->VERSION_ADDR = 1;
+  uint32_t time    = IP->VERSION;
 
-  auto build_time_uint = IP->MAGIC_VALUE;
+  // Combine to expected format
+  uint64_t build_datetime_int = ((uint64_t)date << 24) | time;
 
-  /** Convert to human-readable date string
-   *  NOTE: I'm sure there's a much better way to do this...  :)
-   *  Example build_time result:
-   *    yymmddhhmmss
-   *    210609184711 --> 2021/06/09 18:47:11
-   */
-  string build_time = UintToHexString(build_time_uint);
-
-  // Sanity check
-  uint8_t const expected_length_c = 12;
-  uint8_t len                     = build_time.length();
-  if (len < expected_length_c) {
-    LOG_ERROR(
-        "build_time does not match expected length! (is: %d, expected: %d)",
-        len,
-        expected_length_c);
-    return "error";
-  }
-
-  // Date formatting
-  build_time.insert(10, 1, ':');
-  build_time.insert(8, 1, ':');
-  build_time.insert(6, 1, ' ');
-  build_time.insert(4, 1, '/');
-  build_time.insert(2, 1, '/');
-  build_time.insert(0, "20");
+  // Convert to string
+  string build_time = DatetimeToString(build_datetime_int);
 
   return build_time;
 }
@@ -113,6 +96,6 @@ void FMRadioIP_VHDL::SetMode(TMode mode) {
 }
 
 TMode FMRadioIP_VHDL::GetMode() {
-  auto mode = IP->ENABLE_FM_RADIO;
+  uint32_t mode = IP->ENABLE_FM_RADIO;
   return static_cast<TMode>(mode);
 }

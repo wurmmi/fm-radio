@@ -19,6 +19,7 @@ class FMRadioIP {
   uint32_t mDeviceId;
 
   std::string UintToHexString(uint64_t num) const;
+  std::string DatetimeToString(uint64_t datetime_int) const;
 
  public:
   FMRadioIP(uint32_t device_id);
