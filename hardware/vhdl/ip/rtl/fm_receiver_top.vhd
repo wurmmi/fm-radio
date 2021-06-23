@@ -164,6 +164,8 @@ begin -- architecture rtl
   -- Invert reset
   rst <= not rst_n_i;
 
+  led_toggle <= audio_valid;
+
   ------------------------------------------------------------------------------
   -- Registers
   ------------------------------------------------------------------------------
@@ -175,8 +177,6 @@ begin -- architecture rtl
   axi_stream_fsm : process (clk_i) is
     procedure reset is
     begin
-      led_toggle <= '0';
-
       tready    <= '0';
       nextState <= S0_reset;
 
@@ -210,9 +210,8 @@ begin -- architecture rtl
               iq_valid <= '1';
             end if;
             if audio_valid = '1' then
-              led_toggle <= not led_toggle;
-              tready     <= '0';
-              nextState  <= S3_WaitForReadyOutput;
+              tready    <= '0';
+              nextState <= S3_WaitForReadyOutput;
             else
               nextState <= S1_WaitForThrottleStrobe;
             end if;
