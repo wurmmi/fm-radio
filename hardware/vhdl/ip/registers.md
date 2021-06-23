@@ -19,7 +19,7 @@ Represents the physical LED value.
 
 | Address: `0x4` | *READ_WRITE* |
 | :--- | ---: |
-| *VALUE*<br> | Bits: `[3:0]`<br>Reset: `0x0` |
+| *VALUE*<br> | Bits: `[2:0]`<br>Reset: `0x0` |
 
 ---
 ### ENABLE_FM_RADIO

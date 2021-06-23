@@ -25,6 +25,12 @@
 -- (5) Mode
 --       06/22/2021  16:00 - 17:00    1:00 h
 --
+-- (6) Top-level AXI stream interface (input / output) implementation
+--       06/23/2021  13:00 - 17:00    4:00 h   Had to re-work the entire logic around the stream interface ...
+--                                             Big effort in working out and implementing FSM, etc. compared to HLS.
+--                                             Still not an optimum solution. Used a 'work-around' to throttle the input.
+--                                             Optimum solution: stream interface in ALL entities throughout the design (like HLS).
+--
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -94,11 +100,13 @@ architecture rtl of fm_receiver_top is
 
   signal nextState : fsm_state_t := S0_reset;
 
-  signal tready : std_ulogic;
+  signal tready : std_ulogic := '0';
 
-  signal i_sample : sample_t;
-  signal q_sample : sample_t;
-  signal iq_valid : std_ulogic;
+  signal i_sample : sample_t   := (others => '0');
+  signal q_sample : sample_t   := (others => '0');
+  signal iq_valid : std_ulogic := '0';
+
+  signal led_toggle : std_ulogic := '0';
 
   --! @}
   -----------------------------------------------------------------------------
@@ -144,7 +152,8 @@ begin -- architecture rtl
     end case;
   end process mode_switch;
 
-  leds_o <= std_logic_vector(control.led_ctrl);
+  leds_o(3 downto 1) <= std_logic_vector(control.led_ctrl);
+  leds_o(0)          <= led_toggle;
 
   ------------------------------------------------------------------------------
   -- Signal Assignments
@@ -166,8 +175,10 @@ begin -- architecture rtl
   axi_stream_fsm : process (clk_i) is
     procedure reset is
     begin
-      nextState <= S0_reset;
+      led_toggle <= '0';
+
       tready    <= '0';
+      nextState <= S0_reset;
 
       iq_valid <= '0';
       i_sample <= (others => '0');
@@ -199,8 +210,9 @@ begin -- architecture rtl
               iq_valid <= '1';
             end if;
             if audio_valid = '1' then
-              tready    <= '0';
-              nextState <= S3_WaitForReadyOutput;
+              led_toggle <= not led_toggle;
+              tready     <= '0';
+              nextState  <= S3_WaitForReadyOutput;
             else
               nextState <= S1_WaitForThrottleStrobe;
             end if;

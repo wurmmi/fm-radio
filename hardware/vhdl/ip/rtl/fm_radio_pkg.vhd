@@ -63,7 +63,7 @@ package fm_radio_pkg is
     --! @brief FM Radio's control registers
     --! @param led_ctrl LED control.
     --! @param enable_fm_radio Enable FM radio DSP.
-    led_ctrl        : std_ulogic_vector(3 downto 0);
+    led_ctrl        : std_ulogic_vector(2 downto 0);
     enable_fm_radio : std_ulogic;
   end record control_t;
 

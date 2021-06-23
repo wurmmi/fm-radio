@@ -57,8 +57,8 @@ async def axi_lite_memory_map_test(dut):
     word_addr = 4
     await tb.axil_mm_m.write(word_addr, b'\xff')
     rddata = await tb.axil_mm_m.read(word_addr, 4)
-    rddata_expected = bytearray.fromhex("0F000000")  # little endian
-    assert rddata.data == rddata_expected  # register only implements 4 bit in HW
+    rddata_expected = bytearray.fromhex("07000000")  # little endian and register only implements 3 bit in HW
+    assert rddata.data == rddata_expected
 
     await tb.axil_mm_m.write(word_addr, b'\x00')
     rddata = await tb.axil_mm_m.read(word_addr, 4)

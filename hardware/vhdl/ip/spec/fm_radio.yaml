@@ -21,7 +21,7 @@ registers:
     fields:
       - name: "VALUE"
         description: ""
-        width: 4
+        width: 3
         offset: 0
         reset: 0x0
         connect: "control_o.led_ctrl"
