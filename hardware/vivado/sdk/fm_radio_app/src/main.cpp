@@ -30,7 +30,7 @@ static FMRadioIP_VHDL fmRadioIP_VHDL(XPAR_FM_RECEIVER_VHDL_0_DEVICE_ID);
 static void task_heartbeat(void *) {
   while (true) {
     fmRadioIP_HLS.LED_Toggle(TLed::LED1);
-    fmRadioIP_VHDL.LED_Toggle(TLed::ALL);
+    fmRadioIP_VHDL.LED_Toggle(TLed::LED1);
     vTaskDelay(pdMS_TO_TICKS(1000));
   }
 }

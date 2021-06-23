@@ -164,8 +164,6 @@ begin -- architecture rtl
   -- Invert reset
   rst <= not rst_n_i;
 
-  led_toggle <= audio_valid;
-
   ------------------------------------------------------------------------------
   -- Registers
   ------------------------------------------------------------------------------
@@ -174,7 +172,7 @@ begin -- architecture rtl
   --   1. Wait for valid input and consume one input sample
   --   2. Process the sample through the IP
   --   3. When the IP output is ready, forward the result to the output
-  axi_stream_fsm : process (clk_i) is
+  regs : process (clk_i) is
     procedure reset is
     begin
       tready    <= '0';
@@ -187,9 +185,12 @@ begin -- architecture rtl
     if rising_edge(clk_i) then
       if rst = '1' then
         reset;
-        else
+      else
         -- Defaults
         iq_valid <= '0';
+        if audio_valid = '1' then
+          led_toggle <= not led_toggle;
+        end if;
 
         case nextState is
           when S0_reset =>
@@ -204,6 +205,7 @@ begin -- architecture rtl
 
           when S2_ProcessValidInput =>
             if s0_axis_tvalid = '1' then
+
               tready   <= '0';
               i_sample <= to_sfixed(s0_axis_tdata(15 downto 0), i_sample);
               q_sample <= to_sfixed(s0_axis_tdata(31 downto 16), q_sample);
@@ -225,7 +227,7 @@ begin -- architecture rtl
         end case;
       end if;
     end if;
-  end process axi_stream_fsm;
+  end process regs;
 
   ------------------------------------------------------------------------------
   -- Instantiations
