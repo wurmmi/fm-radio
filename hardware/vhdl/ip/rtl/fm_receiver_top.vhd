@@ -262,6 +262,14 @@ begin -- architecture rtl
       audio_R_o     => audio_R,
       audio_valid_o => audio_valid);
 
+  --! Version ROM
+  rom_inst : entity work.fm_radio_rom
+    port map(
+      clk_i => clk_i,
+
+      addr_i => control.version_addr,
+      data_o => status.version);
+
   -- AXI-lite register map
   registers_inst : entity work.fm_radio_axi
     port map(

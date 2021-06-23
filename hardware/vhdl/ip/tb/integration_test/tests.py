@@ -46,11 +46,20 @@ async def axi_lite_memory_map_test(dut):
     await tb.reset()
 
     # Read all registers
-    for reg_nr in range(3):
+    for reg_nr in range(5):
         word_addr = reg_nr * 4
-        dut._log.info(f"##### Read register address: {word_addr} ...")
+        dut._log.info(f"----- Read register address: {word_addr} ...")
         rddata = await tb.axil_mm_m.read(word_addr, 4)
-        dut._log.info(f"rddata: {rddata.data}")
+        dut._log.info(f"rddata: {rddata.data.hex()}")
+
+    # Read version ROM registers
+    version_addr_reg_addr = 12  # TODO: generate this with Register Engine
+    version_reg_addr = 16       # TODO: generate this with Register Engine
+    for rom_reg_addr in range(3):
+        dut._log.info(f"----- Read ROM register address: {rom_reg_addr} ...")
+        await tb.axil_mm_m.write(version_addr_reg_addr, bytearray(rom_reg_addr.to_bytes(1, byteorder='little')))
+        rddata = await tb.axil_mm_m.read(version_reg_addr, 4)
+        dut._log.info(f"rddata: {rddata.data.hex()}")
 
     # Write some registers
     # Reg: LED_CONTROL (TODO: generate this with Register Engine)

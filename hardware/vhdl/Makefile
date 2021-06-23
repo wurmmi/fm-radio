@@ -13,7 +13,7 @@ MAKEFILE_DIR = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 # --- Functions ---
 templates = ./script/utils/register_engine.py --rom $1 ./ip/spec/$2.yaml ./script/utils/ip/templates/$3 $4
-git_describe = $(shell git describe --always)
+git_describe = $(shell git describe --always --abbrev=8)
 
 registers = \
 	@echo "Generating registers ..."; \

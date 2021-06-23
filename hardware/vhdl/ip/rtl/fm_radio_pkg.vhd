@@ -38,7 +38,9 @@ package fm_radio_pkg is
   type status_t is record
     --! @brief FM Radio's status registers
     --! @param magic_value Magic value constant.
+    --! @param version Version value.
     magic_value : std_ulogic_vector(31 downto 0);
+    version     : std_ulogic_vector(31 downto 0);
   end record status_t;
 
   type control_t is record
@@ -46,11 +48,9 @@ package fm_radio_pkg is
     --! @param led_ctrl LED control.
     --! @param enable_fm_radio Enable FM radio DSP.
     --! @param version_addr Version address.
-    --! @param version Version value.
     led_ctrl        : std_ulogic_vector(2 downto 0);
     enable_fm_radio : std_ulogic;
     version_addr    : std_ulogic_vector(3 downto 0);
-    version         : std_ulogic_vector(31 downto 0);
   end record control_t;
 
   type interrupt_t is record

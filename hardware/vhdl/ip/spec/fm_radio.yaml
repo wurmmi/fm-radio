@@ -50,11 +50,11 @@ registers:
 
   - name: "VERSION"
     description: "Version value at address VERSION_ADDR."
-    access: "READ_WRITE"
+    access: "READ_ONLY"
     fields:
       - name: "VALUE"
         description: ""
         width: 32
         offset: 0
         reset: 0x0
-        connect: "control_o.version"
+        connect: "status_i.version"

@@ -41,7 +41,7 @@ Set version register to be read.
 ### VERSION
 Version value at address VERSION_ADDR.
 
-| Address: `0x10` | *READ_WRITE* |
+| Address: `0x10` | *READ_ONLY* |
 | :--- | ---: |
 | *VALUE*<br> | Bits: `[31:0]`<br>Reset: `0x0` |
 

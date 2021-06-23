@@ -123,7 +123,6 @@ architecture rtl of fm_radio_axi is
   signal fm_led_control_value : std_ulogic_vector(2 downto 0) := std_ulogic_vector(to_unsigned(0, 3));
   signal fm_enable_fm_radio_value : std_ulogic := '1';
   signal fm_version_addr_value : std_ulogic_vector(3 downto 0) := std_ulogic_vector(to_unsigned(0, 4));
-  signal fm_version_value : std_ulogic_vector(31 downto 0) := std_ulogic_vector(to_unsigned(0, 32));
 
   --! @}
   -----------------------------------------------------------------------------
@@ -132,6 +131,7 @@ architecture rtl of fm_radio_axi is
   --! @{
 
   signal fm_magic_value_value : std_ulogic_vector(31 downto 0);
+  signal fm_version_value : std_ulogic_vector(31 downto 0);
   --! @}
 
 begin -- architecture rtl
@@ -152,13 +152,13 @@ begin -- architecture rtl
   control_o.led_ctrl <= fm_led_control_value;
   control_o.enable_fm_radio <= fm_enable_fm_radio_value;
   control_o.version_addr <= fm_version_addr_value;
-  control_o.version <= fm_version_value;
 
   -----------------------------------------------------------------------------
   -- Signal Assignments
   -----------------------------------------------------------------------------
 
   fm_magic_value_value <= status_i.magic_value;
+  fm_version_value <= status_i.version;
 
   -----------------------------------------------------------------------------
   -- Registers
@@ -283,7 +283,6 @@ begin -- architecture rtl
       fm_led_control_value <= std_ulogic_vector(to_unsigned(0, 3));
       fm_enable_fm_radio_value <= '1';
       fm_version_addr_value <= std_ulogic_vector(to_unsigned(0, 4));
-      fm_version_value <= std_ulogic_vector(to_unsigned(0, 32));
     end procedure reset;
   begin -- process writing
     if s_axi_areset_i = '1' then
@@ -308,10 +307,6 @@ begin -- architecture rtl
 
           when 12 =>
             fm_version_addr_value <= s_axi_wdata_i(3 downto 0);
-            axi_bresp <= axi_okay_c;
-
-          when 16 =>
-            fm_version_value <= s_axi_wdata_i(31 downto 0);
             axi_bresp <= axi_okay_c;
 
 

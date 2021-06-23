@@ -23,7 +23,7 @@ typedef struct {
         volatile uint32_t LED_CONTROL;
         volatile uint32_t ENABLE_FM_RADIO;
         volatile uint32_t VERSION_ADDR;
-        volatile uint32_t VERSION;
+  const volatile uint32_t VERSION;
 } fm_radio_t;
 
 /* Register: FM_MAGIC_VALUE */
@@ -76,7 +76,5 @@ typedef struct {
     (0xFFFFFFFFU << FM_VERSION_VALUE_Pos)
 #define GET_FM_VERSION_VALUE(REG) \
     (((REG) & FM_VERSION_VALUE_Msk) >> FM_VERSION_VALUE_Pos)
-#define SET_FM_VERSION_VALUE(REG, VAL) \
-    (((REG) & ~FM_VERSION_VALUE_Msk) | ((VAL) << FM_VERSION_VALUE_Pos))
 
 #endif /* FM_RADIO_H */
