@@ -64,7 +64,6 @@ void AudioHandler::ApplyVolume() {
     return;
   }
 
-  // Apply volume (and swap left and right channel)
   uint32_t* pSource = (uint32_t*)buffer.buffer;
   for (size_t i = 0; i < buffer.size / 4; i++) {
     // Split 32 bit into 2x 16 bit
@@ -76,7 +75,7 @@ void AudioHandler::ApplyVolume() {
     right = right * mVolume / 4;
 
     // Combine to 32 bit again
-    pSource[i] = ((uint32_t)right << 16) + (uint32_t)left;
+    pSource[i] = ((uint32_t)left << 16) + (uint32_t)right;
   }
 }
 
@@ -87,6 +86,25 @@ void AudioHandler::PrintVolumeInfo(string const& limit) {
     msg += " (STOP and START again to apply)";
 
   LOG_INFO("%s", msg.c_str());
+}
+
+void AudioHandler::SwapLeftAndRight() {
+  auto buffer = mSdCardReader.GetBuffer();
+  if (buffer.buffer == nullptr) {
+    LOG_ERROR("no file loaded yet");
+    return;
+  }
+
+  LOG_DEBUG("swap left and right channel");
+  uint32_t* pSource = (uint32_t*)buffer.buffer;
+  for (size_t i = 0; i < buffer.size / 4; i++) {
+    // Split 32 bit into 2x 16 bit
+    int16_t left  = (int16_t)((pSource[i] >> 16) & 0xFFFF);
+    int16_t right = (int16_t)((pSource[i] >> 0) & 0xFFFF);
+
+    // Combine to 32 bit again (reversed)
+    pSource[i] = ((uint32_t)right << 16) + (uint32_t)left;
+  }
 }
 
 void AudioHandler::VolumeUp() {
