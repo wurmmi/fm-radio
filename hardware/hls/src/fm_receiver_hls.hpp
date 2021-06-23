@@ -18,7 +18,7 @@
 
 #define NUM_LEDS 4
 
-#define REG_STATUS_GIT_HASH_STRLEN   ((uint8_t)7)
+#define REG_STATUS_GIT_HASH_STRLEN   ((uint8_t)8)
 #define REG_STATUS_BUILD_TIME_STRLEN ((uint8_t)12)
 
 typedef ap_uint<REG_STATUS_GIT_HASH_STRLEN * 4> status_git_hash_t;

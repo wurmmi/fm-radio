@@ -8,8 +8,8 @@ set SRC_DIR_IP  "../../src"
 set SRC_DIR_TB  "../../tb"
 set SRC_DIR_FW  "../../../vivado/sdk/fm_radio_app/src"
 
-set GIT_HASH   "0x[exec git rev-parse --short HEAD]"
-set BUILD_TIME "0x[clock format [clock seconds] -format "%y%m%d%H%M%S"]"
+set GIT_HASH   "0x[exec git describe --always --abbrev=8]"
+set BUILD_TIME "0x[clock format [clock seconds] -format "%y%m%d%H%M%S" -timezone UTC]"
 
 set CPPFLAGS_AVOID_HLS_STDLIB_WARNINGS [ list \
   -Wno-unused-label                           \
