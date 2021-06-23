@@ -137,7 +137,7 @@ def generate_rom(content):
     if content == "0":
         return
 
-    date = datetime.datetime.utcnow().strftime('%Y%m%d').zfill(8)
+    date = datetime.datetime.utcnow().strftime('%y%m%d').zfill(8)
     time = datetime.datetime.utcnow().strftime('%H%M%S').zfill(8)
 
     rom = []
