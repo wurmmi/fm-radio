@@ -78,11 +78,12 @@ string FMRadioIP_VHDL::GetBuildTime() {
 
   auto build_time_uint = IP->MAGIC_VALUE;
 
-  // Convert to human-readable date string
-  // NOTE: I'm sure there's a much better way to do
-  // this...  :) Example build_time result:
-  //    yymmddhhmmss
-  //    210609184711 --> 2021/06/09 18:47:11
+  /** Convert to human-readable date string
+   *  NOTE: I'm sure there's a much better way to do this...  :)
+   *  Example build_time result:
+   *    yymmddhhmmss
+   *    210609184711 --> 2021/06/09 18:47:11
+   */
   string build_time = UintToHexString(build_time_uint);
 
   // Sanity check

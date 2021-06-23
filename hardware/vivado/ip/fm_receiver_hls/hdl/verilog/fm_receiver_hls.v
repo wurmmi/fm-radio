@@ -7,7 +7,7 @@
 
 `timescale 1 ns / 1 ps 
 
-(* CORE_GENERATION_INFO="fm_receiver_hls,hls_ip_2018_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=1,HLS_INPUT_PART=xc7z020clg484-1,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=8.457000,HLS_SYN_LAT=1358,HLS_SYN_TPT=none,HLS_SYN_MEM=8,HLS_SYN_DSP=6,HLS_SYN_FF=1483,HLS_SYN_LUT=1301,HLS_VERSION=2018_2}" *)
+(* CORE_GENERATION_INFO="fm_receiver_hls,hls_ip_2018_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=1,HLS_INPUT_PART=xc7z020clg484-1,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=8.457000,HLS_SYN_LAT=1358,HLS_SYN_TPT=none,HLS_SYN_MEM=8,HLS_SYN_DSP=6,HLS_SYN_FF=1484,HLS_SYN_LUT=1301,HLS_VERSION=2018_2}" *)
 
 module fm_receiver_hls (
         ap_clk,
@@ -127,13 +127,13 @@ reg   [27:0] status_git_hash_V;
 reg   [47:0] status_build_time_V;
 reg   [0:0] toggle;
 reg    iq_in_V_TDATA_blk_n;
-wire    ap_CS_fsm_state4;
+wire    ap_CS_fsm_state2;
 reg    audio_out_V_TDATA_blk_n;
 wire    ap_CS_fsm_state3;
 reg   [0:0] tmp_reg_377;
-wire    ap_CS_fsm_state2;
+wire    ap_CS_fsm_state4;
 wire   [0:0] tmp_fu_354_p2;
-wire   [31:0] tmp_2_fu_368_p3;
+wire   [31:0] tmp5_fu_368_p3;
 wire    grp_fm_receiver_fu_221_ap_idle;
 wire    grp_fm_receiver_fu_221_ap_ready;
 wire    grp_fm_receiver_fu_221_ap_done;
@@ -259,7 +259,7 @@ always @ (posedge ap_clk) begin
     if (ap_rst_n_inv == 1'b1) begin
         grp_fm_receiver_fu_221_ap_start_reg <= 1'b0;
     end else begin
-        if (((tmp_fu_354_p2 == 1'd0) & (1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
+        if (((tmp_fu_354_p2 == 1'd1) & (1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
             grp_fm_receiver_fu_221_ap_start_reg <= 1'b1;
         end else if ((grp_fm_receiver_fu_221_ap_ready == 1'b1)) begin
             grp_fm_receiver_fu_221_ap_start_reg <= 1'b0;
@@ -315,30 +315,34 @@ end
 
 always @ (posedge ap_clk) begin
     if (ap_rst_n_inv == 1'b1) begin
-                status_build_time_V_preg[1] <= 1'b0;
-        status_build_time_V_preg[5] <= 1'b0;
+                status_build_time_V_preg[0] <= 1'b0;
+        status_build_time_V_preg[1] <= 1'b0;
+        status_build_time_V_preg[4] <= 1'b0;
+        status_build_time_V_preg[8] <= 1'b0;
         status_build_time_V_preg[10] <= 1'b0;
         status_build_time_V_preg[12] <= 1'b0;
-        status_build_time_V_preg[14] <= 1'b0;
         status_build_time_V_preg[17] <= 1'b0;
         status_build_time_V_preg[20] <= 1'b0;
-        status_build_time_V_preg[27] <= 1'b0;
-        status_build_time_V_preg[28] <= 1'b0;
+        status_build_time_V_preg[24] <= 1'b0;
+        status_build_time_V_preg[25] <= 1'b0;
+        status_build_time_V_preg[29] <= 1'b0;
         status_build_time_V_preg[33] <= 1'b0;
         status_build_time_V_preg[34] <= 1'b0;
         status_build_time_V_preg[40] <= 1'b0;
         status_build_time_V_preg[45] <= 1'b0;
     end else begin
         if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
-                        status_build_time_V_preg[1] <= 1'b1;
-            status_build_time_V_preg[5] <= 1'b1;
+                        status_build_time_V_preg[0] <= 1'b1;
+            status_build_time_V_preg[1] <= 1'b1;
+            status_build_time_V_preg[4] <= 1'b1;
+            status_build_time_V_preg[8] <= 1'b1;
             status_build_time_V_preg[10] <= 1'b1;
             status_build_time_V_preg[12] <= 1'b1;
-            status_build_time_V_preg[14] <= 1'b1;
             status_build_time_V_preg[17] <= 1'b1;
             status_build_time_V_preg[20] <= 1'b1;
-            status_build_time_V_preg[27] <= 1'b1;
-            status_build_time_V_preg[28] <= 1'b1;
+            status_build_time_V_preg[24] <= 1'b1;
+            status_build_time_V_preg[25] <= 1'b1;
+            status_build_time_V_preg[29] <= 1'b1;
             status_build_time_V_preg[33] <= 1'b1;
             status_build_time_V_preg[34] <= 1'b1;
             status_build_time_V_preg[40] <= 1'b1;
@@ -350,37 +354,35 @@ end
 always @ (posedge ap_clk) begin
     if (ap_rst_n_inv == 1'b1) begin
                 status_git_hash_V_preg[0] <= 1'b0;
-        status_git_hash_V_preg[4] <= 1'b0;
+        status_git_hash_V_preg[1] <= 1'b0;
+        status_git_hash_V_preg[2] <= 1'b0;
         status_git_hash_V_preg[6] <= 1'b0;
         status_git_hash_V_preg[7] <= 1'b0;
+        status_git_hash_V_preg[8] <= 1'b0;
         status_git_hash_V_preg[9] <= 1'b0;
-        status_git_hash_V_preg[10] <= 1'b0;
-        status_git_hash_V_preg[11] <= 1'b0;
-        status_git_hash_V_preg[12] <= 1'b0;
-        status_git_hash_V_preg[13] <= 1'b0;
+        status_git_hash_V_preg[15] <= 1'b0;
         status_git_hash_V_preg[19] <= 1'b0;
-        status_git_hash_V_preg[22] <= 1'b0;
+        status_git_hash_V_preg[21] <= 1'b0;
         status_git_hash_V_preg[23] <= 1'b0;
-        status_git_hash_V_preg[24] <= 1'b0;
         status_git_hash_V_preg[25] <= 1'b0;
         status_git_hash_V_preg[26] <= 1'b0;
+        status_git_hash_V_preg[27] <= 1'b0;
     end else begin
         if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
                         status_git_hash_V_preg[0] <= 1'b1;
-            status_git_hash_V_preg[4] <= 1'b1;
+            status_git_hash_V_preg[1] <= 1'b1;
+            status_git_hash_V_preg[2] <= 1'b1;
             status_git_hash_V_preg[6] <= 1'b1;
             status_git_hash_V_preg[7] <= 1'b1;
+            status_git_hash_V_preg[8] <= 1'b1;
             status_git_hash_V_preg[9] <= 1'b1;
-            status_git_hash_V_preg[10] <= 1'b1;
-            status_git_hash_V_preg[11] <= 1'b1;
-            status_git_hash_V_preg[12] <= 1'b1;
-            status_git_hash_V_preg[13] <= 1'b1;
+            status_git_hash_V_preg[15] <= 1'b1;
             status_git_hash_V_preg[19] <= 1'b1;
-            status_git_hash_V_preg[22] <= 1'b1;
+            status_git_hash_V_preg[21] <= 1'b1;
             status_git_hash_V_preg[23] <= 1'b1;
-            status_git_hash_V_preg[24] <= 1'b1;
             status_git_hash_V_preg[25] <= 1'b1;
             status_git_hash_V_preg[26] <= 1'b1;
+            status_git_hash_V_preg[27] <= 1'b1;
         end
     end
 end
@@ -441,10 +443,10 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((iq_in_V_0_vld_out == 1'b1) & (1'b1 == ap_CS_fsm_state4))) begin
+    if (((grp_fm_receiver_fu_221_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state4))) begin
+        audio_out_V_1_data_in = tmp5_fu_368_p3;
+    end else if (((iq_in_V_0_vld_out == 1'b1) & (1'b1 == ap_CS_fsm_state2))) begin
         audio_out_V_1_data_in = iq_in_V_0_data_out;
-    end else if (((grp_fm_receiver_fu_221_ap_done == 1'b1) & (1'b1 == ap_CS_fsm_state2))) begin
-        audio_out_V_1_data_in = tmp_2_fu_368_p3;
     end else begin
         audio_out_V_1_data_in = 'bx;
     end
@@ -459,7 +461,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((~((grp_fm_receiver_fu_221_ap_done == 1'b0) | (audio_out_V_1_ack_in == 1'b0)) & (1'b1 == ap_CS_fsm_state2)) | (~((iq_in_V_0_vld_out == 1'b0) | (audio_out_V_1_ack_in == 1'b0)) & (1'b1 == ap_CS_fsm_state4)))) begin
+    if (((~((grp_fm_receiver_fu_221_ap_done == 1'b0) | (audio_out_V_1_ack_in == 1'b0)) & (1'b1 == ap_CS_fsm_state4)) | (~((iq_in_V_0_vld_out == 1'b0) | (audio_out_V_1_ack_in == 1'b0)) & (1'b1 == ap_CS_fsm_state2)))) begin
         audio_out_V_1_vld_in = 1'b1;
     end else begin
         audio_out_V_1_vld_in = 1'b0;
@@ -467,7 +469,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if (((1'b1 == ap_CS_fsm_state2) | (1'b1 == ap_CS_fsm_state4) | ((tmp_reg_377 == 1'd0) & (1'b1 == ap_CS_fsm_state3)) | ((tmp_reg_377 == 1'd1) & (1'b1 == ap_CS_fsm_state3)))) begin
+    if (((1'b1 == ap_CS_fsm_state4) | (1'b1 == ap_CS_fsm_state2) | ((tmp_reg_377 == 1'd0) & (1'b1 == ap_CS_fsm_state3)) | ((tmp_reg_377 == 1'd1) & (1'b1 == ap_CS_fsm_state3)))) begin
         audio_out_V_TDATA_blk_n = audio_out_V_1_state[1'd1];
     end else begin
         audio_out_V_TDATA_blk_n = 1'b1;
@@ -475,9 +477,9 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((~((iq_in_V_0_vld_out == 1'b0) | (audio_out_V_1_ack_in == 1'b0)) & (1'b1 == ap_CS_fsm_state4))) begin
+    if ((~((iq_in_V_0_vld_out == 1'b0) | (audio_out_V_1_ack_in == 1'b0)) & (1'b1 == ap_CS_fsm_state2))) begin
         iq_in_V_0_ack_out = 1'b1;
-    end else if ((1'b1 == ap_CS_fsm_state2)) begin
+    end else if ((1'b1 == ap_CS_fsm_state4)) begin
         iq_in_V_0_ack_out = grp_fm_receiver_fu_221_iq_in_V_TREADY;
     end else begin
         iq_in_V_0_ack_out = 1'b0;
@@ -493,7 +495,7 @@ always @ (*) begin
 end
 
 always @ (*) begin
-    if ((1'b1 == ap_CS_fsm_state4)) begin
+    if ((1'b1 == ap_CS_fsm_state2)) begin
         iq_in_V_TDATA_blk_n = iq_in_V_0_state[1'd0];
     end else begin
         iq_in_V_TDATA_blk_n = 1'b1;
@@ -510,7 +512,7 @@ end
 
 always @ (*) begin
     if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
-        status_build_time_V = 48'd36310057374754;
+        status_build_time_V = 48'd36310241907987;
     end else begin
         status_build_time_V = status_build_time_V_preg;
     end
@@ -518,7 +520,7 @@ end
 
 always @ (*) begin
     if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
-        status_git_hash_V = 28'd130563793;
+        status_git_hash_V = 28'd245924807;
     end else begin
         status_git_hash_V = status_git_hash_V_preg;
     end
@@ -536,7 +538,7 @@ always @ (*) begin
             end
         end
         ap_ST_fsm_state2 : begin
-            if ((~((grp_fm_receiver_fu_221_ap_done == 1'b0) | (audio_out_V_1_ack_in == 1'b0)) & (1'b1 == ap_CS_fsm_state2))) begin
+            if ((~((iq_in_V_0_vld_out == 1'b0) | (audio_out_V_1_ack_in == 1'b0)) & (1'b1 == ap_CS_fsm_state2))) begin
                 ap_NS_fsm = ap_ST_fsm_state3;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state2;
@@ -550,7 +552,7 @@ always @ (*) begin
             end
         end
         ap_ST_fsm_state4 : begin
-            if ((~((iq_in_V_0_vld_out == 1'b0) | (audio_out_V_1_ack_in == 1'b0)) & (1'b1 == ap_CS_fsm_state4))) begin
+            if ((~((grp_fm_receiver_fu_221_ap_done == 1'b0) | (audio_out_V_1_ack_in == 1'b0)) & (1'b1 == ap_CS_fsm_state4))) begin
                 ap_NS_fsm = ap_ST_fsm_state3;
             end else begin
                 ap_NS_fsm = ap_ST_fsm_state4;
@@ -621,28 +623,28 @@ always @ (*) begin
     p_s_fu_343_p4[4'd2] = |(toggle_assign_fu_331_p2);
 end
 
-assign tmp_2_fu_368_p3 = {{grp_fm_receiver_fu_221_ap_return_1}, {grp_fm_receiver_fu_221_ap_return_0}};
+assign tmp5_fu_368_p3 = {{grp_fm_receiver_fu_221_ap_return_1}, {grp_fm_receiver_fu_221_ap_return_0}};
 
 assign tmp_fu_354_p2 = ((config_enable_fm_radio_ip == 8'd1) ? 1'b1 : 1'b0);
 
 assign toggle_assign_fu_331_p2 = (toggle ^ 1'd1);
 
 always @ (posedge ap_clk) begin
-    status_git_hash_V_preg[3:1] <= 3'b000;
-    status_git_hash_V_preg[5:5] <= 1'b0;
-    status_git_hash_V_preg[8:8] <= 1'b0;
-    status_git_hash_V_preg[18:14] <= 5'b00000;
-    status_git_hash_V_preg[21:20] <= 2'b00;
-    status_git_hash_V_preg[27] <= 1'b0;
-    status_build_time_V_preg[0] <= 1'b0;
-    status_build_time_V_preg[4:2] <= 3'b000;
-    status_build_time_V_preg[9:6] <= 4'b0000;
+    status_git_hash_V_preg[5:3] <= 3'b000;
+    status_git_hash_V_preg[14:10] <= 5'b00000;
+    status_git_hash_V_preg[18:16] <= 3'b000;
+    status_git_hash_V_preg[20:20] <= 1'b0;
+    status_git_hash_V_preg[22:22] <= 1'b0;
+    status_git_hash_V_preg[24] <= 1'b0;
+    status_build_time_V_preg[3:2] <= 2'b00;
+    status_build_time_V_preg[7:5] <= 3'b000;
+    status_build_time_V_preg[9:9] <= 1'b0;
     status_build_time_V_preg[11:11] <= 1'b0;
-    status_build_time_V_preg[13:13] <= 1'b0;
-    status_build_time_V_preg[16:15] <= 2'b00;
+    status_build_time_V_preg[16:13] <= 4'b0000;
     status_build_time_V_preg[19:18] <= 2'b00;
-    status_build_time_V_preg[26:21] <= 6'b000000;
-    status_build_time_V_preg[32:29] <= 4'b0000;
+    status_build_time_V_preg[23:21] <= 3'b000;
+    status_build_time_V_preg[28:26] <= 3'b000;
+    status_build_time_V_preg[32:30] <= 3'b000;
     status_build_time_V_preg[39:35] <= 5'b00000;
     status_build_time_V_preg[44:41] <= 4'b0000;
     status_build_time_V_preg[47:46] <= 2'b00;

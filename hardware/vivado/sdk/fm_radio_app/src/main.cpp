@@ -36,8 +36,9 @@ static void task_heartbeat(void *) {
 }
 
 static void task_audio(void *) {
-  AudioHandler audioHandler;
   AxiStreamRouter axiStreamRouter;
+  AudioHandler audioHandler;
+  audioHandler.SetIP(&fmRadioIP_HLS);
 
   MenuControl::PrintMainMenu();
   while (true) {
