@@ -514,22 +514,9 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
           </spirit:reset>
           <spirit:field>
             <spirit:name>status_git_hash_V</spirit:name>
-            <spirit:description>Bit 27 to 0 Data signal of status_git_hash_V</spirit:description>
+            <spirit:description>Bit 31 to 0 Data signal of status_git_hash_V</spirit:description>
             <spirit:bitOffset>0</spirit:bitOffset>
-            <spirit:bitWidth spirit:format="long">28</spirit:bitWidth>
-            <spirit:access>read-only</spirit:access>
-            <spirit:writeValueConstraint>
-              <spirit:minimum>0</spirit:minimum>
-              <spirit:maximum>0</spirit:maximum>
-            </spirit:writeValueConstraint>
-            <spirit:readAction>modify</spirit:readAction>
-            <spirit:testable spirit:testConstraint="unconstrained">false</spirit:testable>
-          </spirit:field>
-          <spirit:field>
-            <spirit:name>RESERVED</spirit:name>
-            <spirit:description>Reserved.  0s on read.</spirit:description>
-            <spirit:bitOffset>28</spirit:bitOffset>
-            <spirit:bitWidth spirit:format="long">4</spirit:bitWidth>
+            <spirit:bitWidth spirit:format="long">32</spirit:bitWidth>
             <spirit:access>read-only</spirit:access>
             <spirit:writeValueConstraint>
               <spirit:minimum>0</spirit:minimum>
@@ -617,7 +604,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>f0240c4e</spirit:value>
+            <spirit:value>dc66679a</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -633,7 +620,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>4728055f</spirit:value>
+            <spirit:value>29ac1f66</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -649,7 +636,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>14f23dbb</spirit:value>
+            <spirit:value>33aaaa1f</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -665,7 +652,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>9758e2b8</spirit:value>
+            <spirit:value>1950175b</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -679,7 +666,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>89ca0c83</spirit:value>
+            <spirit:value>b4a5848e</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1410,7 +1397,7 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
       <spirit:file>
         <spirit:name>hdl/vhdl/fm_receiver_hls.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_53818a0d</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_7572f468</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>
@@ -1592,14 +1579,14 @@ aximum {}} value 16} bitoffset {attribs {resolve_type immediate dependency {} fo
       </xilinx:taxonomies>
       <xilinx:displayName>fm_receiver_hls</xilinx:displayName>
       <xilinx:definitionSource>HLS</xilinx:definitionSource>
-      <xilinx:coreRevision>2106231217</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2021-06-23T10:17:53Z</xilinx:coreCreationDateTime>
+      <xilinx:coreRevision>2106240105</xilinx:coreRevision>
+      <xilinx:coreCreationDateTime>2021-06-23T23:05:52Z</xilinx:coreCreationDateTime>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2018.2</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="fc36203b"/>
-      <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="a9857774"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="dd7cd022"/>
+      <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="ce1fe418"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="1a763e1c"/>
       <xilinx:checksum xilinx:scope="ports" xilinx:value="dca1a33e"/>
       <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="5b4a7f83"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="f4f42744"/>

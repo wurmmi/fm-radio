@@ -38,7 +38,7 @@ port (
     -- user signals
     config_led_ctrl_V     :out  STD_LOGIC_VECTOR(3 downto 0);
     config_enable_fm_radio_ip :out  STD_LOGIC_VECTOR(7 downto 0);
-    status_git_hash_V     :in   STD_LOGIC_VECTOR(27 downto 0);
+    status_git_hash_V     :in   STD_LOGIC_VECTOR(31 downto 0);
     status_build_time_V   :in   STD_LOGIC_VECTOR(47 downto 0)
 );
 end entity fm_receiver_hls_API_s_axi;
@@ -57,8 +57,7 @@ end entity fm_receiver_hls_API_s_axi;
 --        others  - reserved
 -- 0x1c : reserved
 -- 0x20 : Data signal of status_git_hash_V
---        bit 27~0 - status_git_hash_V[27:0] (Read)
---        others   - reserved
+--        bit 31~0 - status_git_hash_V[31:0] (Read)
 -- 0x24 : reserved
 -- 0x28 : Data signal of status_build_time_V
 --        bit 31~0 - status_build_time_V[31:0] (Read)
@@ -98,7 +97,7 @@ architecture behave of fm_receiver_hls_API_s_axi is
     -- internal registers
     signal int_config_led_ctrl_V : UNSIGNED(3 downto 0) := (others => '0');
     signal int_config_enable_fm_radio_ip : UNSIGNED(7 downto 0) := (others => '0');
-    signal int_status_git_hash_V : UNSIGNED(27 downto 0) := (others => '0');
+    signal int_status_git_hash_V : UNSIGNED(31 downto 0) := (others => '0');
     signal int_status_build_time_V : UNSIGNED(47 downto 0) := (others => '0');
 
 
@@ -218,7 +217,7 @@ begin
                     when ADDR_CONFIG_ENABLE_FM_RADIO_IP_DATA_0 =>
                         rdata_data <= RESIZE(int_config_enable_fm_radio_ip(7 downto 0), 32);
                     when ADDR_STATUS_GIT_HASH_V_DATA_0 =>
-                        rdata_data <= RESIZE(int_status_git_hash_V(27 downto 0), 32);
+                        rdata_data <= RESIZE(int_status_git_hash_V(31 downto 0), 32);
                     when ADDR_STATUS_BUILD_TIME_V_DATA_0 =>
                         rdata_data <= RESIZE(int_status_build_time_V(31 downto 0), 32);
                     when ADDR_STATUS_BUILD_TIME_V_DATA_1 =>

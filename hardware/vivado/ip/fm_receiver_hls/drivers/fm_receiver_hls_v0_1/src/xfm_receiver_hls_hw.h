@@ -19,8 +19,7 @@
 //        others  - reserved
 // 0x1c : reserved
 // 0x20 : Data signal of status_git_hash_V
-//        bit 27~0 - status_git_hash_V[27:0] (Read)
-//        others   - reserved
+//        bit 31~0 - status_git_hash_V[31:0] (Read)
 // 0x24 : reserved
 // 0x28 : Data signal of status_build_time_V
 //        bit 31~0 - status_build_time_V[31:0] (Read)
@@ -35,7 +34,7 @@
 #define XFM_RECEIVER_HLS_API_ADDR_CONFIG_ENABLE_FM_RADIO_IP_DATA 0x18
 #define XFM_RECEIVER_HLS_API_BITS_CONFIG_ENABLE_FM_RADIO_IP_DATA 8
 #define XFM_RECEIVER_HLS_API_ADDR_STATUS_GIT_HASH_V_DATA         0x20
-#define XFM_RECEIVER_HLS_API_BITS_STATUS_GIT_HASH_V_DATA         28
+#define XFM_RECEIVER_HLS_API_BITS_STATUS_GIT_HASH_V_DATA         32
 #define XFM_RECEIVER_HLS_API_ADDR_STATUS_BUILD_TIME_V_DATA       0x28
 #define XFM_RECEIVER_HLS_API_BITS_STATUS_BUILD_TIME_V_DATA       48
 

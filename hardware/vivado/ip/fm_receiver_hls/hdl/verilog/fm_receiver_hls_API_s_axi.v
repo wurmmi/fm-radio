@@ -35,7 +35,7 @@ module fm_receiver_hls_API_s_axi
     // user signals
     output wire [3:0]                    config_led_ctrl_V,
     output wire [7:0]                    config_enable_fm_radio_ip,
-    input  wire [27:0]                   status_git_hash_V,
+    input  wire [31:0]                   status_git_hash_V,
     input  wire [47:0]                   status_build_time_V
 );
 //------------------------Address Info-------------------
@@ -52,8 +52,7 @@ module fm_receiver_hls_API_s_axi
 //        others  - reserved
 // 0x1c : reserved
 // 0x20 : Data signal of status_git_hash_V
-//        bit 27~0 - status_git_hash_V[27:0] (Read)
-//        others   - reserved
+//        bit 31~0 - status_git_hash_V[31:0] (Read)
 // 0x24 : reserved
 // 0x28 : Data signal of status_build_time_V
 //        bit 31~0 - status_build_time_V[31:0] (Read)
@@ -98,7 +97,7 @@ localparam
     // internal registers
     reg  [3:0]                    int_config_led_ctrl_V = 'b0;
     reg  [7:0]                    int_config_enable_fm_radio_ip = 'b0;
-    reg  [27:0]                   int_status_git_hash_V = 'b0;
+    reg  [31:0]                   int_status_git_hash_V = 'b0;
     reg  [47:0]                   int_status_build_time_V = 'b0;
 
 //------------------------Instantiation------------------
@@ -198,7 +197,7 @@ always @(posedge ACLK) begin
                     rdata <= int_config_enable_fm_radio_ip[7:0];
                 end
                 ADDR_STATUS_GIT_HASH_V_DATA_0: begin
-                    rdata <= int_status_git_hash_V[27:0];
+                    rdata <= int_status_git_hash_V[31:0];
                 end
                 ADDR_STATUS_BUILD_TIME_V_DATA_0: begin
                     rdata <= int_status_build_time_V[31:0];
