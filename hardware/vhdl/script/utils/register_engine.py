@@ -120,6 +120,12 @@ def generate_register_data(data):
     offset -= 4
     if offset > 0:
         addr_width = int(numpy.ceil(numpy.log2(offset))) + 1
+
+    # NOTE: AXI-lite must be at least 12 bit wide!
+    #       The smallest address range that can be set in the Vivado
+    #       block diagram 'Address Editor' is 4K (2^12 = 4096)
+    addr_width = max(addr_width, 12)
+
     data['addr_width'] = addr_width
     data['addr_max'] = offset
 
