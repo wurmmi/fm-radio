@@ -9,3 +9,4 @@ generated/
 *.str
 *.zip
 .Xil/
+Packages/

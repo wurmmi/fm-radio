@@ -43,10 +43,10 @@ add_files      $SRC_DIR_IP/fm_receiver_hls.cpp                    -cflags $CPPFL
 # Testbench files
 puts "### Testbench firmware sources"
 add_files -tb  $SRC_DIR_FW/utils/log.h
-add_files -tb  $SRC_DIR_FW/FileReader/FileReader.h
-add_files -tb  $SRC_DIR_FW/FileReader/FileReader.cpp              -cflags $CPPFLAGS_CSIM
-add_files -tb  $SRC_DIR_FW/FileReader/WavReader.h
-add_files -tb  $SRC_DIR_FW/FileReader/WavReader.cpp               -cflags $CPPFLAGS_CSIM
+add_files -tb  $SRC_DIR_FW/utils/FileReader/FileReader.h
+add_files -tb  $SRC_DIR_FW/utils/FileReader/FileReader.cpp        -cflags $CPPFLAGS_CSIM
+add_files -tb  $SRC_DIR_FW/utils/FileReader/WavReader.h
+add_files -tb  $SRC_DIR_FW/utils/FileReader/WavReader.cpp         -cflags $CPPFLAGS_CSIM
 
 # Testbench
 puts "### Testbench firmware sources"
