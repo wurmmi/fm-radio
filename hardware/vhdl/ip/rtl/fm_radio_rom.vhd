@@ -50,9 +50,9 @@ architecture rtl of fm_radio_rom is
 
   --! ROM content
   constant rom_c : rom_t := (
-    0 => x"00210623",
-    1 => x"00230840",
-    2 => x"870d25e0",
+    0 => x"00210624",
+    1 => x"00094834",
+    2 => x"0bf15c9f",
     others => (others => '0'));
 
   --! @}
