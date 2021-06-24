@@ -28,6 +28,7 @@ class FIFO {
   XScuGic mIrqCtrl;
   uint8_t mDeviceId;
   std::function<void()> mCallbackOnTxEmptyIRQ;
+  std::function<void()> mCallbackOnRxFullIRQ;
 
   bool clear_irqs();
   void irq_handler();
@@ -42,7 +43,8 @@ class FIFO {
 
   bool Initialize();
   bool SetupInterrupts(uint32_t irq_id,
-                       std::function<void()> const& isEmptyCallback);
+                       std::function<void()> const& callbackOnTxEmptyIRQ,
+                       std::function<void()> const& callbackOnRxFullIRQ);
 };
 
 #endif /* _FIFO_H_ */

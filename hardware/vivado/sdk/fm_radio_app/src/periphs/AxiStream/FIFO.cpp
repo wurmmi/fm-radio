@@ -63,6 +63,11 @@ void FIFO::irq_handler() {
       if (mCallbackOnTxEmptyIRQ != nullptr)
         mCallbackOnTxEmptyIRQ();
       XLlFifo_IntClear(&mDev, XLLF_INT_TFPE_MASK);
+    } else if (pending & XLLF_INT_RFPF_MASK) {
+      // Rx FIFO Programmable Full
+      if (mCallbackOnRxFullIRQ != nullptr)
+        mCallbackOnRxFullIRQ();
+      XLlFifo_IntClear(&mDev, XLLF_INT_TFPE_MASK);
     } else if (pending & XLLF_INT_ERROR_MASK) {
       // Error status
       XLlFifo_IntClear(&mDev, XLLF_INT_ERROR_MASK);
@@ -78,9 +83,12 @@ void FIFO::irq_handler_callback(void* context) {
 }
 
 bool FIFO::SetupInterrupts(uint32_t irq_id,
-                           std::function<void()> const& isEmptyCallback) {
-  assert(isEmptyCallback);
-  mCallbackOnTxEmptyIRQ = isEmptyCallback;
+                           std::function<void()> const& callbackOnTxEmptyIRQ,
+                           std::function<void()> const& callbackOnRxFullIRQ) {
+  assert(callbackOnTxEmptyIRQ);
+  assert(callbackOnRxFullIRQ);
+  mCallbackOnTxEmptyIRQ = callbackOnTxEmptyIRQ;
+  mCallbackOnRxFullIRQ  = callbackOnRxFullIRQ;
 
   // Initialize the interrupt controller driver so that it is ready to use.
   XScuGic_Config* IntcConfig =
@@ -125,6 +133,7 @@ bool FIFO::SetupInterrupts(uint32_t irq_id,
   // Enable FIFO interrupts
   XLlFifo_IntEnable(&mDev, XLLF_INT_ALL_MASK);
 
+  // Start first transmission
   if (mCallbackOnTxEmptyIRQ != nullptr)
     mCallbackOnTxEmptyIRQ();
 
