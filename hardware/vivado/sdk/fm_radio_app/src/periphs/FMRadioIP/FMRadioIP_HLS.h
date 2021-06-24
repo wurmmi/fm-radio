@@ -28,6 +28,7 @@ class FMRadioIP_HLS : public FMRadioIP {
   void PrintInfo() override;
   std::string GetGitHash() override;
   std::string GetBuildTime() override;
+  std::string GetTypeStr() override;
 
   void SetMode(TMode mode) override;
   TMode GetMode() override;

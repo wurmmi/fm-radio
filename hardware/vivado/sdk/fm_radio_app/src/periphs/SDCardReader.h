@@ -19,6 +19,7 @@ class SDCardReader {
  private:
   FATFS mFilesystem;
   std::vector<std::string> mFilenames;
+  std::string mCurrentlyLoadedFilename;
   bool mMounted;
   FileReader* mFileReader;
 
@@ -35,8 +36,10 @@ class SDCardReader {
   bool MountSDCard(uint8_t num_retries = 1);
   void DiscoverFiles();
   bool LoadFile(std::string const& filename);
+  bool WriteFile(std::string const& filename, std::vector<uint32_t> data);
   void PrintAvailableFilenames() const;
   DMABuffer GetBuffer();
+  std::string const& GetCurrentlyLoadedFilename();
 };
 
 #endif /* _SDCARDREADER_H_ */

@@ -16,13 +16,11 @@
 
 class IPOutputFIFO : public FIFO {
  private:
-  std::vector<uint32_t> mData;
-
  public:
   IPOutputFIFO(uint32_t device_id);
   ~IPOutputFIFO();
 
-  void read();
+  vector<uint32_t> ReadAll();
 };
 
 #endif /* _IPOUTPUTFIFO_H_ */

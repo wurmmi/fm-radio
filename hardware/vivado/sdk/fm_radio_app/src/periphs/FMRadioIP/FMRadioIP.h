@@ -33,6 +33,7 @@ class FMRadioIP {
   virtual void PrintInfo();
   virtual std::string GetGitHash()   = 0;
   virtual std::string GetBuildTime() = 0;
+  virtual std::string GetTypeStr()   = 0;
 
   virtual void SetMode(TMode mode) = 0;
   virtual TMode GetMode()          = 0;

@@ -91,6 +91,10 @@ string FMRadioIP_VHDL::GetBuildTime() {
   return build_time;
 }
 
+string FMRadioIP_VHDL::GetTypeStr() {
+  return "VHDL";
+}
+
 void FMRadioIP_VHDL::SetMode(TMode mode) {
   IP->ENABLE_FM_RADIO = static_cast<uint32_t>(mode);
 }

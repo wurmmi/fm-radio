@@ -86,8 +86,8 @@ void FIFO::irq_handler_callback(void* context) {
 bool FIFO::SetupInterrupts(uint32_t irq_id,
                            std::function<void()> const& callbackOnTxEmptyIRQ,
                            std::function<void()> const& callbackOnRxFullIRQ) {
-  assert(callbackOnTxEmptyIRQ);
-  assert(callbackOnRxFullIRQ);
+  // assert(callbackOnTxEmptyIRQ);
+  // assert(callbackOnRxFullIRQ);
   mCallbackOnTxEmptyIRQ = callbackOnTxEmptyIRQ;
   mCallbackOnRxFullIRQ  = callbackOnRxFullIRQ;
 
