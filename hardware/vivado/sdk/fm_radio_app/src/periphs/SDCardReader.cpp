@@ -7,6 +7,7 @@
 #include "SDCardReader.h"
 
 #include <algorithm>
+#include <fstream>
 #include <iostream>
 
 #include "TxtReader.h"
@@ -167,11 +168,29 @@ bool SDCardReader::LoadFile(string const& filename) {
 }
 
 bool SDCardReader::WriteFile(std::string const& filename,
-                             std::vector<uint32_t> data) {
+                             std::vector<uint32_t> data,
+                             bool overwrite) {
   if (!IsMounted()) {
-    return;
+    return false;
   }
   LOG_INFO("Writing TXT file '%s' ...", filename.c_str());
+
+  ofstream fp;
+  if (overwrite)
+    fp.open(filename, ios::out);
+  else
+    fp.open(filename, ios::out | ios::app);
+  if (!fp.is_open()) {
+    LOG_ERROR("could not create/open file '%s'!", filename.c_str());
+    return false;
+  }
+
+  for (auto const& elem : data) {
+    fp << elem << endl;
+  }
+  fp.close();
+
+  return true;
 }
 
 void SDCardReader::PrintAvailableFilenames() const {

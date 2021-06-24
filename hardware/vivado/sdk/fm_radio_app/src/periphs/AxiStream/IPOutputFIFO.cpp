@@ -23,4 +23,5 @@ vector<uint32_t> IPOutputFIFO::ReadAll() {
    *  Read all data from Rx FIFO and store into vector
    *
    */
+  return {};
 }

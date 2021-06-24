@@ -13,7 +13,15 @@
 
 using namespace std;
 
-FIFO::FIFO(uint32_t device_id) : mDeviceId(device_id) {}
+// Interrupt controller of FreeRTOS
+extern XScuGic xInterruptController;
+
+FIFO::FIFO(uint32_t device_id) : mDeviceId(device_id) {
+  /* Use the FreeRTOS interrupt controller here.
+   * Otherwise we would crash/overwrite all the interrupt settings of the OS.
+   */
+  mIrqCtrl = &xInterruptController;
+}
 
 FIFO::~FIFO() {}
 
@@ -100,25 +108,25 @@ bool FIFO::SetupInterrupts(uint32_t irq_id,
   }
 
   int status =
-      XScuGic_CfgInitialize(&mIrqCtrl, IntcConfig, IntcConfig->CpuBaseAddress);
+      XScuGic_CfgInitialize(mIrqCtrl, IntcConfig, IntcConfig->CpuBaseAddress);
   if (status != XST_SUCCESS) {
     printf("XScuGic_CfgInitialize() failed\n");
     return false;
   }
 
-  XScuGic_SetPriorityTriggerType(&mIrqCtrl, irq_id, 0xA0, 0x03);
+  XScuGic_SetPriorityTriggerType(mIrqCtrl, irq_id, 0xA0, 0x03);
 
   // Connect the device driver handler that will be called when an
   // interrupt for the device occurs, the handler defined above performs
   // the specific interrupt processing for the device.
   status = XScuGic_Connect(
-      &mIrqCtrl, irq_id, (Xil_InterruptHandler)irq_handler_callback, this);
+      mIrqCtrl, irq_id, (Xil_InterruptHandler)irq_handler_callback, this);
   if (status != XST_SUCCESS) {
     printf("XScuGic_Connect() failed\n");
     return false;
   }
 
-  XScuGic_Enable(&mIrqCtrl, irq_id);
+  XScuGic_Enable(mIrqCtrl, irq_id);
 
   // Initialize the exception table.
   Xil_ExceptionInit();
@@ -126,7 +134,7 @@ bool FIFO::SetupInterrupts(uint32_t irq_id,
   // Register the interrupt controller handler with the exception table.
   Xil_ExceptionRegisterHandler(XIL_EXCEPTION_ID_INT,
                                (Xil_ExceptionHandler)XScuGic_InterruptHandler,
-                               (void*)&mIrqCtrl);
+                               (void*)mIrqCtrl);
 
   // Enable exceptions.
   Xil_ExceptionEnable();

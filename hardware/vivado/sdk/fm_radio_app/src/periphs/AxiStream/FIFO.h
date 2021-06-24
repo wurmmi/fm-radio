@@ -25,7 +25,7 @@ using audio_buffer_t = std::array<audio_sample_t, FIFO_NUM_SAMPLES>;
 
 class FIFO {
  private:
-  XScuGic mIrqCtrl;
+  XScuGic* mIrqCtrl;
   uint8_t mDeviceId;
   std::function<void()> mCallbackOnTxEmptyIRQ;
   std::function<void()> mCallbackOnRxFullIRQ;

@@ -20,7 +20,7 @@ using namespace std;
 
 AudioHandler::AudioHandler()
     : mStreamDMA(XPAR_AXI_DMA_0_DEVICE_ID),
-      mIPOutputFifo(XPAR_AXI_FIFO_MM_S_0_DEVICE_ID) {
+      mIPOutputFifo(XPAR_AXI_FIFO_MM_S1_IP_OUTPUT_DEVICE_ID) {
   mFmRadioIP = nullptr;
   mVolume    = volume_default_c;
   mIsPlaying = false;
@@ -44,9 +44,9 @@ bool AudioHandler::Initialize() {
   }
 
   status = mIPOutputFifo.SetupInterrupts(
-      XPAR_FABRIC_AXI_FIFO_MM_S_0_INTERRUPT_INTR,
+      XPAR_FABRIC_AXI_FIFO_MM_S1_IP_OUTPUT_INTERRUPT_INTR,
       nullptr,
-      bind(&AudioHandler::IPOutputFifoFullCallback));
+      bind(&AudioHandler::IPOutputFifoFullCallback, this));
   LOG_DEBUG("Done.");
 
   return true;
@@ -56,9 +56,11 @@ void AudioHandler::IPOutputFifoFullCallback() {
   LOG_INFO("IPOutputFIFO full!");
   auto data = mIPOutputFifo.ReadAll();
 
-  string filename = mSdCardReader.GetCurrentlyLoadedFilename() +
+  string filename = mSdCardReader.GetCurrentlyLoadedFilename() + "_" +
                     mFmRadioIP->GetTypeStr() + ".txt";
-  mSdCardReader.WriteFile(filename, data);
+
+  const bool overwrite = true;
+  mSdCardReader.WriteFile(filename, data, overwrite);
 }
 
 void AudioHandler::SetIP(FMRadioIP* radioIP) {

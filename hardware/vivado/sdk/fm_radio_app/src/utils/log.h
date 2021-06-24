@@ -12,13 +12,13 @@
 #define ENABLE_DEBUG_MSG 1
 
 // clang-format off
-#define _LOG_ERROR(format, ...) printf("ERROR: (%s::%s()) " format "\n", __FILE__, __FUNCTION__, ##__VA_ARGS__)
-#define _LOG_WARN(format, ...)  printf("WARN : "            format "\n", ##__VA_ARGS__)
-#define _LOG_INFO(format, ...)  printf("INFO : "            format "\n", ##__VA_ARGS__)
-#define _LOG_DEBUG(format, ...) printf("DEBUG: "            format "\n", ##__VA_ARGS__)
+#define _LOG_ERROR(format, ...) printf("ERROR: %s::%s " format "\n", __FILE__, __FUNCTION__, ##__VA_ARGS__)
+#define _LOG_WARN(format, ...)  printf("WARN : "        format "\n", ##__VA_ARGS__)
+#define _LOG_INFO(format, ...)  printf("INFO : "        format "\n", ##__VA_ARGS__)
+#define _LOG_DEBUG(format, ...) printf("DEBUG: "        format "\n", ##__VA_ARGS__)
 
 #ifdef __CSIM__
-/** NOTE: Just adding a fflush() after the printf()... */
+/** NOTE: Just adding a fflush() after the printf() in HLS simulation ... */
 #define LOG_ERROR(format, ...) ({ _LOG_ERROR(format, ##__VA_ARGS__); fflush(stdout); })
 #define LOG_WARN(format, ...)  ({ _LOG_WARN(format, ##__VA_ARGS__);  fflush(stdout); })
 #define LOG_INFO(format, ...)  ({ _LOG_INFO(format, ##__VA_ARGS__);  fflush(stdout); })

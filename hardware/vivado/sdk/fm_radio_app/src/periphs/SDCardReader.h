@@ -36,7 +36,9 @@ class SDCardReader {
   bool MountSDCard(uint8_t num_retries = 1);
   void DiscoverFiles();
   bool LoadFile(std::string const& filename);
-  bool WriteFile(std::string const& filename, std::vector<uint32_t> data);
+  bool WriteFile(std::string const& filename,
+                 std::vector<uint32_t> data,
+                 bool overwrite);
   void PrintAvailableFilenames() const;
   DMABuffer GetBuffer();
   std::string const& GetCurrentlyLoadedFilename();

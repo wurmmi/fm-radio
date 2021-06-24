@@ -14,6 +14,7 @@
 #endif
 
 #include <string>
+#include <vector>
 
 typedef struct {
   uint8_t* buffer;
@@ -37,6 +38,9 @@ class FileReader {
   bool FileRead(void* target_buf,
                 size_t num_bytes_to_read,
                 size_t& n_bytes_read);
+  bool FileWrite(std::string const& filename,
+                 std::vector<uint32_t> data,
+                 bool overwrite);
   bool FileSeek(size_t num_bytes_offset);
 
  public:

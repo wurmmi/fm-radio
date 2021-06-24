@@ -20,7 +20,7 @@ class IPOutputFIFO : public FIFO {
   IPOutputFIFO(uint32_t device_id);
   ~IPOutputFIFO();
 
-  vector<uint32_t> ReadAll();
+  std::vector<uint32_t> ReadAll();
 };
 
 #endif /* _IPOUTPUTFIFO_H_ */
