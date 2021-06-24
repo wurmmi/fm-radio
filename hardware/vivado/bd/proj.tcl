@@ -727,6 +727,9 @@ proc create_root_design { parentCell } {
   # Create instance: xlconstant_high, and set properties
   set xlconstant_high [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 xlconstant_high ]
 
+  # Create instance: xlconstant_high_1, and set properties
+  set xlconstant_high_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 xlconstant_high_1 ]
+
   # Create interface connections
   connect_bd_intf_net -intf_net axi_dma_0_M_AXIS_MM2S [get_bd_intf_pins axi_dma_0/M_AXIS_MM2S] [get_bd_intf_pins axis_switch_in/S00_AXIS]
   connect_bd_intf_net -intf_net axi_dma_0_M_AXI_MM2S [get_bd_intf_pins axi_dma_0/M_AXI_MM2S] [get_bd_intf_pins axi_smc/S01_AXI]
@@ -771,6 +774,7 @@ proc create_root_design { parentCell } {
   connect_bd_net -net rst_ps7_0_50M_interconnect_aresetn [get_bd_pins axis_broadcaster_0/aresetn] [get_bd_pins axis_switch_in/aresetn] [get_bd_pins axis_switch_out/aresetn] [get_bd_pins ps7_0_axi_periph/ARESETN] [get_bd_pins rst_ps7_0_50M/interconnect_aresetn]
   connect_bd_net -net rst_ps7_0_50M_peripheral_aresetn [get_bd_pins axi_dma_0/axi_resetn] [get_bd_pins axi_fifo_mm_s0_config_audio/s_axi_aresetn] [get_bd_pins axi_fifo_mm_s1_ip_output/s_axi_aresetn] [get_bd_pins axi_smc/aresetn] [get_bd_pins axis_switch_in/s_axi_ctrl_aresetn] [get_bd_pins axis_switch_out/s_axi_ctrl_aresetn] [get_bd_pins fm_receiver_hls_0/ap_rst_n] [get_bd_pins fm_receiver_vhdl_0/rst_n_i] [get_bd_pins myI2STx_0/s00_axis_aresetn] [get_bd_pins mySPIRxTx_0/axis_aresetn] [get_bd_pins ps7_0_axi_periph/M00_ARESETN] [get_bd_pins ps7_0_axi_periph/M01_ARESETN] [get_bd_pins ps7_0_axi_periph/M02_ARESETN] [get_bd_pins ps7_0_axi_periph/M03_ARESETN] [get_bd_pins ps7_0_axi_periph/M04_ARESETN] [get_bd_pins ps7_0_axi_periph/M05_ARESETN] [get_bd_pins ps7_0_axi_periph/M06_ARESETN] [get_bd_pins ps7_0_axi_periph/S00_ARESETN] [get_bd_pins rst_ps7_0_50M/peripheral_aresetn]
   connect_bd_net -net xlconcat_0_dout [get_bd_pins processing_system7_0/IRQ_F2P] [get_bd_pins xlconcat_0/dout]
+  connect_bd_net -net xlconstant_high_1_dout [get_bd_pins axi_fifo_mm_s1_ip_output/axi_str_rxd_tlast] [get_bd_pins xlconstant_high_1/dout]
   connect_bd_net -net xlconstant_high_dout [get_bd_pins fm_receiver_hls_0/ap_start] [get_bd_pins xlconstant_high/dout]
 
   # Create address segments
