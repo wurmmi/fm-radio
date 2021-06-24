@@ -23,6 +23,10 @@ vector<uint32_t> IPOutputFIFO::ReadAll() {
   // LOG_DEBUG("available (RxOccupancy) : %ld", available_values);
   // LOG_DEBUG("available (RxGetLen)    : %ld", available_values_in_packet);
 
+  // TODO: maybe also current log time into file (once each time)
+  //       this could give information about the output speed/timing
+  //       --> use FreeRTOS functions:
+  //              xTaskGetTickCountFromISR / xTaskGetTickCount
   vector<uint32_t> data;
   uint32_t value;
   for (uint32_t i = 0; i < available_values; i++) {
