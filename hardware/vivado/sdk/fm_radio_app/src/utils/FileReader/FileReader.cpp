@@ -100,6 +100,12 @@ bool FileReader::FileRead(void* target_buf,
   return true;
 }
 
+bool FileReader::FileWrite(std::string const& filename,
+                           std::vector<uint32_t> data,
+                           bool overwrite) {
+  return true;
+}
+
 bool FileReader::FileSeek(size_t num_bytes_offset) {
   // Advance the file pointer by n byte
 #ifdef __CSIM__

@@ -56,6 +56,7 @@ void AudioHandler::IPOutputFifoFullCallback() {
   LOG_INFO("IPOutputFIFO full!");
   auto data = mIPOutputFifo.ReadAll();
 
+  LOG_INFO("read %d data values from IPOutputFIFO", data.size());
   string filename = mSdCardReader.GetCurrentlyLoadedFilename() + "_" +
                     mFmRadioIP->GetTypeStr() + ".txt";
 
