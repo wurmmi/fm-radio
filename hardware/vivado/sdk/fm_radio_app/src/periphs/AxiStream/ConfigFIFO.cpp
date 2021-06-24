@@ -8,6 +8,8 @@
 
 #include <iostream>
 
+#include "ADAU1761_hw.h"
+
 using namespace std;
 
 ConfigFIFO::ConfigFIFO(uint32_t device_id) : FIFO(device_id) {}
@@ -16,7 +18,8 @@ ConfigFIFO::~ConfigFIFO() {}
 
 uint8_t ConfigFIFO::read(uint16_t addr) {
   // Write bytes to transfer into Tx FIFO
-  XLlFifo_TxPutWord(&mDev, ((FIFO_CHIP_ADDR << 1) | 0x01) & 0xFF);
+  XLlFifo_TxPutWord(
+      &mDev, ((ADAU1761_SPI_CHIP_ADDR << 1) | ADAU1761_SPI_READ_CMD) & 0xFF);
   XLlFifo_TxPutWord(&mDev, (addr >> 8) & 0xFF);
   XLlFifo_TxPutWord(&mDev, addr & 0xFF);
   XLlFifo_TxPutWord(&mDev, 0);
@@ -39,7 +42,7 @@ uint8_t ConfigFIFO::read(uint16_t addr) {
 
 void ConfigFIFO::write(uint16_t addr, uint8_t value) {
   // Write bytes to transfer into Tx FIFO
-  XLlFifo_TxPutWord(&mDev, (FIFO_CHIP_ADDR << 1) & 0xFF);
+  XLlFifo_TxPutWord(&mDev, (ADAU1761_SPI_CHIP_ADDR << 1) & 0xFF);
   XLlFifo_TxPutWord(&mDev, (addr >> 8) & 0xFF);
   XLlFifo_TxPutWord(&mDev, addr & 0xFF);
   XLlFifo_TxPutWord(&mDev, value);

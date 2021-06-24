@@ -24,8 +24,8 @@ vector<uint32_t> IPOutputFIFO::ReadAll() {
   uint32_t value;
   uint32_t available_values  = XLlFifo_iRxGetLen(&mDev) / 4;
   uint32_t available_values2 = XLlFifo_iRxOccupancy(&mDev);
-  LOG_INFO("available_values  (iRxGetLen)   : %d", available_values);
-  LOG_INFO("available_values2 (iRxOccupancy): %d", available_values2);
+  LOG_INFO("available_values  (iRxGetLen)   : %ld", available_values);
+  LOG_INFO("available_values2 (iRxOccupancy): %ld", available_values2);
 
   for (uint32_t i = 0; i < available_values; i++) {
     value = XLlFifo_RxGetWord(&mDev);

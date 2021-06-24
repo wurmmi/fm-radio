@@ -39,6 +39,7 @@ void MenuControl::PrintMainMenu() {
 
 void MenuControl::PrintAppHeader() {
   // clang-format off
+  // NOTE: generated with http://patorjk.com/software/taag/
   cout << R"(=============================================================)" << endl;
   cout << R"(                                                             )" << endl;
   cout << R"(_________  ___ ______          _ _          ___              )" << endl;

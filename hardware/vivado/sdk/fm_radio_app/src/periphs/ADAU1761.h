@@ -9,6 +9,7 @@
 
 #include <functional>
 
+#include "ADAU1761_hw.h"
 #include "ConfigFIFO.h"
 
 class ADAU1761 {

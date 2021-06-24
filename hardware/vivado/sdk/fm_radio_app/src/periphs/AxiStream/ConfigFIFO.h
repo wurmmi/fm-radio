@@ -9,9 +9,6 @@
 
 #include "FIFO.h"
 
-// TODO: can this be retrieved from the generated driver includes?
-#define FIFO_CHIP_ADDR 0
-
 class ConfigFIFO : public FIFO {
  private:
  public:
