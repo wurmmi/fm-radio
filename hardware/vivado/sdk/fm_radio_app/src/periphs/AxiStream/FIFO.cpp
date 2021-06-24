@@ -67,11 +67,12 @@ void FIFO::irq_handler() {
       // Rx FIFO Programmable Full
       if (mCallbackOnRxFullIRQ != nullptr)
         mCallbackOnRxFullIRQ();
-      XLlFifo_IntClear(&mDev, XLLF_INT_TFPE_MASK);
+      XLlFifo_IntClear(&mDev, XLLF_INT_RFPF_MASK);
     } else if (pending & XLLF_INT_ERROR_MASK) {
       // Error status
       XLlFifo_IntClear(&mDev, XLLF_INT_ERROR_MASK);
     } else {
+      // Unhandled - clear all
       XLlFifo_IntClear(&mDev, pending);
     }
     pending = XLlFifo_IntPending(&mDev);

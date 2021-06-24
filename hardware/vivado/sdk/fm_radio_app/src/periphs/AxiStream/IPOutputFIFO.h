@@ -7,6 +7,8 @@
 #ifndef _IPOUTPUTFIFO_H_
 #define _IPOUTPUTFIFO_H_
 
+#include <vector>
+
 #include "FIFO.h"
 
 // TODO: can this be retrieved from the generated driver includes?
@@ -14,11 +16,13 @@
 
 class IPOutputFIFO : public FIFO {
  private:
+  std::vector<uint32_t> mData;
+
  public:
   IPOutputFIFO(uint32_t device_id);
   ~IPOutputFIFO();
 
-  uint8_t read(uint16_t addr);
+  void read();
 };
 
 #endif /* _IPOUTPUTFIFO_H_ */
