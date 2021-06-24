@@ -53,13 +53,15 @@ bool AudioHandler::Initialize() {
 }
 
 void AudioHandler::IPOutputFifoFullCallback() {
-  LOG_INFO("IPOutputFIFO full!");
+  LOG_DEBUG("IPOutputFIFO full!");
   auto data = mIPOutputFifo.ReadAll();
 
   LOG_INFO("read %d data values from IPOutputFIFO", data.size());
+
+  // TODO: move this into another thread and notify it
+  //       (don't write a file here in the ISR)
   string filename = mSdCardReader.GetCurrentlyLoadedFilename() + "_" +
                     mFmRadioIP->GetTypeStr() + ".txt";
-
   const bool overwrite = true;
   mSdCardReader.WriteFile(filename, data, overwrite);
 }
