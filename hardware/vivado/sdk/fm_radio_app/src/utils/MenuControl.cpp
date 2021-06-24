@@ -17,6 +17,9 @@ MenuControl::~MenuControl() {}
 void MenuControl::PrintMainMenu() {
   printf("-------------- FM RADIO MENU -----------------\n");
   printf("GENERAL\n");
+  printf("   [h] ... use HLS IP\n");
+  printf("   [v] ... use VHDL IP\n");
+  printf("\n");
   printf("   [m] ... show this menu\n");
   printf("   [c] ... print available filenames on SD card\n");
   printf("   [i] ... show information\n");

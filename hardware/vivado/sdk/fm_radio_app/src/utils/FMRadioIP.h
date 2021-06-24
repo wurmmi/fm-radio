@@ -12,29 +12,30 @@
 #include "xfm_receiver_hls.h"
 
 enum class TLed { LED1, LED2, LED3, LED4, LED5, LED6, LED7, ALL };
-enum class TMode : uint32_t { FMRADIO, PASSTHROUGH };
+enum class TMode : uint32_t { PASSTHROUGH, FMRADIO };
 
 class FMRadioIP {
- private:
-  XFm_receiver_hls mDev;
+ protected:
   uint32_t mDeviceId;
 
-  std::string UintToHexString(uint64_t num);
+  std::string UintToHexString(uint64_t num) const;
+  std::string DatetimeToString(uint64_t datetime_int) const;
 
  public:
   FMRadioIP(uint32_t device_id);
   ~FMRadioIP();
 
-  bool Initialize();
-  void LED_SetOn(TLed led);
-  void LED_Toggle(TLed led);
-  void LED_SetOff(TLed led);
+  virtual bool Initialize()         = 0;
+  virtual void LED_SetOn(TLed led)  = 0;
+  virtual void LED_Toggle(TLed led) = 0;
+  virtual void LED_SetOff(TLed led) = 0;
 
-  std::string GetGitHash();
-  std::string GetBuildTime();
+  virtual void PrintInfo();
+  virtual std::string GetGitHash()   = 0;
+  virtual std::string GetBuildTime() = 0;
 
-  void SetMode(TMode mode);
-  TMode GetMode();
+  virtual void SetMode(TMode mode) = 0;
+  virtual TMode GetMode()          = 0;
 };
 
 #endif /* _FMRADIOIP_H_ */

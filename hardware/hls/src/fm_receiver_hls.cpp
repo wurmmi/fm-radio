@@ -84,7 +84,7 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
                      hls::stream<audio_sample_t>& audio_out,
                      config_t& config,
                      status_t* status,
-                     uint8_t* led_out) {
+                     ap_int<NUM_LEDS>* led_out) {
   /*----------- HLS interface settings ------------*/
 #pragma HLS INTERFACE ap_ctrl_hs port = return
 
@@ -117,16 +117,16 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
   *led_out = config.led_ctrl | (((uint8_t)toggle << 2));
 
   if (config.enable_fm_radio_ip == 1) {
+    /*---------------- Mode: FM radio ----------------*/
+
+    audio_sample_t audio_sample = fm_receiver(iq_in);
+    audio_out.write(audio_sample);
+
+  } else {
     /*---------------- Mode: Pass-through ------------*/
 
     iq_sample_t fw_iq_in     = iq_in.read();
     audio_sample_t fw_iq_out = {fw_iq_in.i, fw_iq_in.q};
     audio_out.write(fw_iq_out);
-
-  } else {
-    /*---------------- Mode: FM radio ----------------*/
-
-    audio_sample_t audio_sample = fm_receiver(iq_in);
-    audio_out.write(audio_sample);
   }
 }

@@ -75,15 +75,11 @@ int main() {
 
     // Split interleaved I/Q samples
     vector<iq_sample_t> vec_data_txt_in;
-    hls::stream<iq_sample_t> stream_data_in;
-    iq_sample_t sample_in;
     for (size_t i = 0; i < data_in_iq.size(); i += 2) {
       // Samples I/Q are interleaved (take every other)
+      iq_sample_t sample_in;
       sample_in.i = data_in_iq[i];
       sample_in.q = data_in_iq[i + 1];
-
-      // Fill stream
-      stream_data_in << sample_in;
 
       // Store in vector
       vec_data_txt_in.emplace_back(sample_in);
@@ -173,11 +169,17 @@ int main() {
     // --------------------------------------------------------------------------
     cout << "--- Running test on DUT" << endl;
 
+    // Fill input stream (use WAV data; amount is determined by TXT-Matlab)
+    hls::stream<iq_sample_t> stream_data_in;
+    for (uint32_t i = 0; i < vec_data_txt_in.size(); i++) {
+      stream_data_in << vec_data_wav_in[i];
+    }
+
     // Apply stimuli to the top-level function
     hls::stream<audio_sample_t> stream_data_out;
-    uint8_t led_out_o;
+    ap_int<NUM_LEDS> led_out_o;
     status_t status_o;
-    config_t config = {.led_ctrl = 0x3, .enable_fm_radio_ip = 0};
+    config_t config = {.led_ctrl = 0x3, .enable_fm_radio_ip = 1};
 
     while (!stream_data_in.empty()) {
       fm_receiver_hls(

@@ -19,7 +19,7 @@ template <typename sample_T, uint8_t delay_n_T>
 class DELAY {
  private:
  protected:
-  sample_T shift_reg[delay_n_T];
+  sample_T shift_reg[delay_n_T + 1];
 
  public:
   sample_T operator()(sample_T x);
@@ -33,7 +33,7 @@ class DELAY {
 template <typename sample_T, uint8_t delay_n_T>
 sample_T DELAY<sample_T, delay_n_T>::operator()(sample_T x) {
 loop:
-  for (uint8_t i = 0; i < delay_n_T + 1; i++) {
+  for (uint8_t i = 0; i < delay_n_T; i++) {
 #pragma HLS unroll
     shift_reg[i] = shift_reg[i + 1];
   }

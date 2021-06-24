@@ -1,0 +1,187 @@
+[*]
+[*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
+[*] Wed Jun 23 15:33:14 2021
+[*]
+[dumpfile] "/home/mike/work/fm-radio/hardware/vhdl/ip/tb/integration_test/sim_build/waveform.ghw"
+[dumpfile_mtime] "Wed Jun 23 15:31:30 2021"
+[dumpfile_size] 858862
+[savefile] "/home/mike/work/fm-radio/hardware/vhdl/ip/tb/integration_test/gtkwave/waveconfig.gtkw"
+[timestart] 0
+[size] 1848 1016
+[pos] -1 -1
+*-35.554668 7300000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.fm_receiver_top.
+[treeopen] top.fm_receiver_top.control.
+[treeopen] top.fm_receiver_top.fm_receiver_inst.
+[treeopen] top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.
+[sst_width] 287
+[signals_width] 318
+[sst_expanded] 1
+[sst_vpaned_height] 298
+@28
+top.fm_receiver_top.rst_n_i
+top.fm_receiver_top.rst
+top.fm_receiver_top.fm_receiver_inst.clk_i
+@c08420
+#{top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[0:-31]} top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[0] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-1] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-2] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-3] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-4] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-5] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-6] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-7] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-8] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-9] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-10] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-11] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-12] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-13] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-14]
+@28
+top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[0]
+top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-1]
+top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-2]
+top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-3]
+top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-4]
+top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-5]
+top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-6]
+top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-7]
+top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-8]
+top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-9]
+top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-10]
+top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-11]
+top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-12]
+top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-13]
+top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_i[-14]
+@1401200
+-group_end
+@20000
+-
+-
+-
+-
+@28
+top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.iq_valid_i
+@8420
+#{top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_diff[0:-31]} top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_diff[0] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_diff[-1] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_diff[-2] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_diff[-3] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_diff[-4] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_diff[-5] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_diff[-6] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_diff[-7] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_diff[-8] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_diff[-9] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_diff[-10] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_diff[-11] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_diff[-12] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_diff[-13] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_diff[-14]
+@20000
+-
+-
+-
+-
+@8420
+#{top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_del[0:-31]} top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_del[0] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_del[-1] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_del[-2] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_del[-3] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_del[-4] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_del[-5] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_del[-6] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_del[-7] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_del[-8] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_del[-9] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_del[-10] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_del[-11] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_del[-12] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_del[-13] top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.q_sample_del[-14]
+@20000
+-
+-
+-
+-
+@28
+top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.sample_del_valid
+@420
+top.fm_receiver_top.fm_receiver_inst.fm_demodulator_inst.delay_vector_i_inst.addrcnt
+@8420
+#{top.fm_receiver_top.fm_receiver_inst.fm_demod[0:-31]} top.fm_receiver_top.fm_receiver_inst.fm_demod[0] top.fm_receiver_top.fm_receiver_inst.fm_demod[-1] top.fm_receiver_top.fm_receiver_inst.fm_demod[-2] top.fm_receiver_top.fm_receiver_inst.fm_demod[-3] top.fm_receiver_top.fm_receiver_inst.fm_demod[-4] top.fm_receiver_top.fm_receiver_inst.fm_demod[-5] top.fm_receiver_top.fm_receiver_inst.fm_demod[-6] top.fm_receiver_top.fm_receiver_inst.fm_demod[-7] top.fm_receiver_top.fm_receiver_inst.fm_demod[-8] top.fm_receiver_top.fm_receiver_inst.fm_demod[-9] top.fm_receiver_top.fm_receiver_inst.fm_demod[-10] top.fm_receiver_top.fm_receiver_inst.fm_demod[-11] top.fm_receiver_top.fm_receiver_inst.fm_demod[-12] top.fm_receiver_top.fm_receiver_inst.fm_demod[-13] top.fm_receiver_top.fm_receiver_inst.fm_demod[-14]
+@20000
+-
+-
+-
+@28
+top.fm_receiver_top.fm_receiver_inst.fm_demod_valid
+@22
+#{top.fm_receiver_top.fm_receiver_inst.fm_channel_data[0:-31]} top.fm_receiver_top.fm_receiver_inst.fm_channel_data[0] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-1] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-2] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-3] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-4] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-5] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-6] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-7] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-8] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-9] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-10] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-11] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-12] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-13] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-14]
+@28
+top.fm_receiver_top.fm_receiver_inst.fm_channel_data_valid
+@c08420
+#{top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[0:-31]} top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[0] top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-1] top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-2] top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-3] top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-4] top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-5] top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-6] top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-7] top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-8] top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-9] top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-10] top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-11] top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-12] top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-13] top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-14]
+@28
+top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[0]
+top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-1]
+top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-2]
+top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-3]
+top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-4]
+top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-5]
+top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-6]
+top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-7]
+top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-8]
+top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-9]
+top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-10]
+top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-11]
+top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-12]
+top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-13]
+top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono[-14]
+@1401200
+-group_end
+@20000
+-
+-
+-
+@28
+top.fm_receiver_top.fm_receiver_inst.channel_decoder_inst.audio_mono_valid
+top.fm_receiver_top.clk_i
+@200
+-DSP
+@28
+[color] 5
+top.fm_receiver_top.iq_valid
+@22
+#{top.fm_receiver_top.q_sample[1:-14]} top.fm_receiver_top.q_sample[1] top.fm_receiver_top.q_sample[0] top.fm_receiver_top.q_sample[-1] top.fm_receiver_top.q_sample[-2] top.fm_receiver_top.q_sample[-3] top.fm_receiver_top.q_sample[-4] top.fm_receiver_top.q_sample[-5] top.fm_receiver_top.q_sample[-6] top.fm_receiver_top.q_sample[-7] top.fm_receiver_top.q_sample[-8] top.fm_receiver_top.q_sample[-9] top.fm_receiver_top.q_sample[-10] top.fm_receiver_top.q_sample[-11] top.fm_receiver_top.q_sample[-12] top.fm_receiver_top.q_sample[-13] top.fm_receiver_top.q_sample[-14]
+#{top.fm_receiver_top.i_sample[1:-14]} top.fm_receiver_top.i_sample[1] top.fm_receiver_top.i_sample[0] top.fm_receiver_top.i_sample[-1] top.fm_receiver_top.i_sample[-2] top.fm_receiver_top.i_sample[-3] top.fm_receiver_top.i_sample[-4] top.fm_receiver_top.i_sample[-5] top.fm_receiver_top.i_sample[-6] top.fm_receiver_top.i_sample[-7] top.fm_receiver_top.i_sample[-8] top.fm_receiver_top.i_sample[-9] top.fm_receiver_top.i_sample[-10] top.fm_receiver_top.i_sample[-11] top.fm_receiver_top.i_sample[-12] top.fm_receiver_top.i_sample[-13] top.fm_receiver_top.i_sample[-14]
+@28
+[color] 5
+top.fm_receiver_top.fm_receiver_inst.fm_demod_valid
+@22
+#{top.fm_receiver_top.fm_receiver_inst.fm_demod[1:-14]} top.fm_receiver_top.fm_receiver_inst.fm_demod[1] top.fm_receiver_top.fm_receiver_inst.fm_demod[0] top.fm_receiver_top.fm_receiver_inst.fm_demod[-1] top.fm_receiver_top.fm_receiver_inst.fm_demod[-2] top.fm_receiver_top.fm_receiver_inst.fm_demod[-3] top.fm_receiver_top.fm_receiver_inst.fm_demod[-4] top.fm_receiver_top.fm_receiver_inst.fm_demod[-5] top.fm_receiver_top.fm_receiver_inst.fm_demod[-6] top.fm_receiver_top.fm_receiver_inst.fm_demod[-7] top.fm_receiver_top.fm_receiver_inst.fm_demod[-8] top.fm_receiver_top.fm_receiver_inst.fm_demod[-9] top.fm_receiver_top.fm_receiver_inst.fm_demod[-10] top.fm_receiver_top.fm_receiver_inst.fm_demod[-11] top.fm_receiver_top.fm_receiver_inst.fm_demod[-12] top.fm_receiver_top.fm_receiver_inst.fm_demod[-13] top.fm_receiver_top.fm_receiver_inst.fm_demod[-14]
+@28
+[color] 5
+top.fm_receiver_top.fm_receiver_inst.fm_channel_data_valid
+@22
+#{top.fm_receiver_top.fm_receiver_inst.fm_channel_data[1:-14]} top.fm_receiver_top.fm_receiver_inst.fm_channel_data[1] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[0] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-1] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-2] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-3] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-4] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-5] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-6] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-7] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-8] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-9] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-10] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-11] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-12] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-13] top.fm_receiver_top.fm_receiver_inst.fm_channel_data[-14]
+#{top.fm_receiver_top.audio_l[1:-14]} top.fm_receiver_top.audio_l[1] top.fm_receiver_top.audio_l[0] top.fm_receiver_top.audio_l[-1] top.fm_receiver_top.audio_l[-2] top.fm_receiver_top.audio_l[-3] top.fm_receiver_top.audio_l[-4] top.fm_receiver_top.audio_l[-5] top.fm_receiver_top.audio_l[-6] top.fm_receiver_top.audio_l[-7] top.fm_receiver_top.audio_l[-8] top.fm_receiver_top.audio_l[-9] top.fm_receiver_top.audio_l[-10] top.fm_receiver_top.audio_l[-11] top.fm_receiver_top.audio_l[-12] top.fm_receiver_top.audio_l[-13] top.fm_receiver_top.audio_l[-14]
+#{top.fm_receiver_top.audio_r[1:-14]} top.fm_receiver_top.audio_r[1] top.fm_receiver_top.audio_r[0] top.fm_receiver_top.audio_r[-1] top.fm_receiver_top.audio_r[-2] top.fm_receiver_top.audio_r[-3] top.fm_receiver_top.audio_r[-4] top.fm_receiver_top.audio_r[-5] top.fm_receiver_top.audio_r[-6] top.fm_receiver_top.audio_r[-7] top.fm_receiver_top.audio_r[-8] top.fm_receiver_top.audio_r[-9] top.fm_receiver_top.audio_r[-10] top.fm_receiver_top.audio_r[-11] top.fm_receiver_top.audio_r[-12] top.fm_receiver_top.audio_r[-13] top.fm_receiver_top.audio_r[-14]
+@28
+top.fm_receiver_top.audio_valid
+@200
+-AXI STREAM INTERFACE
+@800028
+#{top.fm_receiver_top.leds_o[3:0]} top.fm_receiver_top.leds_o[3] top.fm_receiver_top.leds_o[2] top.fm_receiver_top.leds_o[1] top.fm_receiver_top.leds_o[0]
+@28
+top.fm_receiver_top.leds_o[3]
+top.fm_receiver_top.leds_o[2]
+top.fm_receiver_top.leds_o[1]
+top.fm_receiver_top.leds_o[0]
+@1001200
+-group_end
+@29
+top.fm_receiver_top.led_toggle
+@28
+top.fm_receiver_top.req_sample
+top.fm_receiver_top.s0_axis_tready
+top.fm_receiver_top.s0_axis_tvalid
+@22
+#{top.fm_receiver_top.s0_axis_tdata[31:0]} top.fm_receiver_top.s0_axis_tdata[31] top.fm_receiver_top.s0_axis_tdata[30] top.fm_receiver_top.s0_axis_tdata[29] top.fm_receiver_top.s0_axis_tdata[28] top.fm_receiver_top.s0_axis_tdata[27] top.fm_receiver_top.s0_axis_tdata[26] top.fm_receiver_top.s0_axis_tdata[25] top.fm_receiver_top.s0_axis_tdata[24] top.fm_receiver_top.s0_axis_tdata[23] top.fm_receiver_top.s0_axis_tdata[22] top.fm_receiver_top.s0_axis_tdata[21] top.fm_receiver_top.s0_axis_tdata[20] top.fm_receiver_top.s0_axis_tdata[19] top.fm_receiver_top.s0_axis_tdata[18] top.fm_receiver_top.s0_axis_tdata[17] top.fm_receiver_top.s0_axis_tdata[16] top.fm_receiver_top.s0_axis_tdata[15] top.fm_receiver_top.s0_axis_tdata[14] top.fm_receiver_top.s0_axis_tdata[13] top.fm_receiver_top.s0_axis_tdata[12] top.fm_receiver_top.s0_axis_tdata[11] top.fm_receiver_top.s0_axis_tdata[10] top.fm_receiver_top.s0_axis_tdata[9] top.fm_receiver_top.s0_axis_tdata[8] top.fm_receiver_top.s0_axis_tdata[7] top.fm_receiver_top.s0_axis_tdata[6] top.fm_receiver_top.s0_axis_tdata[5] top.fm_receiver_top.s0_axis_tdata[4] top.fm_receiver_top.s0_axis_tdata[3] top.fm_receiver_top.s0_axis_tdata[2] top.fm_receiver_top.s0_axis_tdata[1] top.fm_receiver_top.s0_axis_tdata[0]
+@28
+top.fm_receiver_top.m0_axis_tready
+top.fm_receiver_top.m0_axis_tvalid
+@22
+#{top.fm_receiver_top.m0_axis_tdata[31:0]} top.fm_receiver_top.m0_axis_tdata[31] top.fm_receiver_top.m0_axis_tdata[30] top.fm_receiver_top.m0_axis_tdata[29] top.fm_receiver_top.m0_axis_tdata[28] top.fm_receiver_top.m0_axis_tdata[27] top.fm_receiver_top.m0_axis_tdata[26] top.fm_receiver_top.m0_axis_tdata[25] top.fm_receiver_top.m0_axis_tdata[24] top.fm_receiver_top.m0_axis_tdata[23] top.fm_receiver_top.m0_axis_tdata[22] top.fm_receiver_top.m0_axis_tdata[21] top.fm_receiver_top.m0_axis_tdata[20] top.fm_receiver_top.m0_axis_tdata[19] top.fm_receiver_top.m0_axis_tdata[18] top.fm_receiver_top.m0_axis_tdata[17] top.fm_receiver_top.m0_axis_tdata[16] top.fm_receiver_top.m0_axis_tdata[15] top.fm_receiver_top.m0_axis_tdata[14] top.fm_receiver_top.m0_axis_tdata[13] top.fm_receiver_top.m0_axis_tdata[12] top.fm_receiver_top.m0_axis_tdata[11] top.fm_receiver_top.m0_axis_tdata[10] top.fm_receiver_top.m0_axis_tdata[9] top.fm_receiver_top.m0_axis_tdata[8] top.fm_receiver_top.m0_axis_tdata[7] top.fm_receiver_top.m0_axis_tdata[6] top.fm_receiver_top.m0_axis_tdata[5] top.fm_receiver_top.m0_axis_tdata[4] top.fm_receiver_top.m0_axis_tdata[3] top.fm_receiver_top.m0_axis_tdata[2] top.fm_receiver_top.m0_axis_tdata[1] top.fm_receiver_top.m0_axis_tdata[0]
+@28
+top.fm_receiver_top.control.enable_fm_radio
+@200
+-AXI LITE INTERFACE
+@28
+#{top.fm_receiver_top.s_axi_awprot[2:0]} top.fm_receiver_top.s_axi_awprot[2] top.fm_receiver_top.s_axi_awprot[1] top.fm_receiver_top.s_axi_awprot[0]
+#{top.fm_receiver_top.s_axi_awaddr[2:0]} top.fm_receiver_top.s_axi_awaddr[2] top.fm_receiver_top.s_axi_awaddr[1] top.fm_receiver_top.s_axi_awaddr[0]
+#{top.fm_receiver_top.s_axi_awprot[2:0]} top.fm_receiver_top.s_axi_awprot[2] top.fm_receiver_top.s_axi_awprot[1] top.fm_receiver_top.s_axi_awprot[0]
+top.fm_receiver_top.s_axi_awvalid
+@22
+#{top.fm_receiver_top.s_axi_wdata[31:0]} top.fm_receiver_top.s_axi_wdata[31] top.fm_receiver_top.s_axi_wdata[30] top.fm_receiver_top.s_axi_wdata[29] top.fm_receiver_top.s_axi_wdata[28] top.fm_receiver_top.s_axi_wdata[27] top.fm_receiver_top.s_axi_wdata[26] top.fm_receiver_top.s_axi_wdata[25] top.fm_receiver_top.s_axi_wdata[24] top.fm_receiver_top.s_axi_wdata[23] top.fm_receiver_top.s_axi_wdata[22] top.fm_receiver_top.s_axi_wdata[21] top.fm_receiver_top.s_axi_wdata[20] top.fm_receiver_top.s_axi_wdata[19] top.fm_receiver_top.s_axi_wdata[18] top.fm_receiver_top.s_axi_wdata[17] top.fm_receiver_top.s_axi_wdata[16] top.fm_receiver_top.s_axi_wdata[15] top.fm_receiver_top.s_axi_wdata[14] top.fm_receiver_top.s_axi_wdata[13] top.fm_receiver_top.s_axi_wdata[12] top.fm_receiver_top.s_axi_wdata[11] top.fm_receiver_top.s_axi_wdata[10] top.fm_receiver_top.s_axi_wdata[9] top.fm_receiver_top.s_axi_wdata[8] top.fm_receiver_top.s_axi_wdata[7] top.fm_receiver_top.s_axi_wdata[6] top.fm_receiver_top.s_axi_wdata[5] top.fm_receiver_top.s_axi_wdata[4] top.fm_receiver_top.s_axi_wdata[3] top.fm_receiver_top.s_axi_wdata[2] top.fm_receiver_top.s_axi_wdata[1] top.fm_receiver_top.s_axi_wdata[0]
+#{top.fm_receiver_top.s_axi_wstrb[3:0]} top.fm_receiver_top.s_axi_wstrb[3] top.fm_receiver_top.s_axi_wstrb[2] top.fm_receiver_top.s_axi_wstrb[1] top.fm_receiver_top.s_axi_wstrb[0]
+#{top.fm_receiver_top.s_axi_wdata[31:0]} top.fm_receiver_top.s_axi_wdata[31] top.fm_receiver_top.s_axi_wdata[30] top.fm_receiver_top.s_axi_wdata[29] top.fm_receiver_top.s_axi_wdata[28] top.fm_receiver_top.s_axi_wdata[27] top.fm_receiver_top.s_axi_wdata[26] top.fm_receiver_top.s_axi_wdata[25] top.fm_receiver_top.s_axi_wdata[24] top.fm_receiver_top.s_axi_wdata[23] top.fm_receiver_top.s_axi_wdata[22] top.fm_receiver_top.s_axi_wdata[21] top.fm_receiver_top.s_axi_wdata[20] top.fm_receiver_top.s_axi_wdata[19] top.fm_receiver_top.s_axi_wdata[18] top.fm_receiver_top.s_axi_wdata[17] top.fm_receiver_top.s_axi_wdata[16] top.fm_receiver_top.s_axi_wdata[15] top.fm_receiver_top.s_axi_wdata[14] top.fm_receiver_top.s_axi_wdata[13] top.fm_receiver_top.s_axi_wdata[12] top.fm_receiver_top.s_axi_wdata[11] top.fm_receiver_top.s_axi_wdata[10] top.fm_receiver_top.s_axi_wdata[9] top.fm_receiver_top.s_axi_wdata[8] top.fm_receiver_top.s_axi_wdata[7] top.fm_receiver_top.s_axi_wdata[6] top.fm_receiver_top.s_axi_wdata[5] top.fm_receiver_top.s_axi_wdata[4] top.fm_receiver_top.s_axi_wdata[3] top.fm_receiver_top.s_axi_wdata[2] top.fm_receiver_top.s_axi_wdata[1] top.fm_receiver_top.s_axi_wdata[0]
+@28
+top.fm_receiver_top.s_axi_arvalid
+#{top.fm_receiver_top.s_axi_araddr[2:0]} top.fm_receiver_top.s_axi_araddr[2] top.fm_receiver_top.s_axi_araddr[1] top.fm_receiver_top.s_axi_araddr[0]
+#{top.fm_receiver_top.s_axi_arprot[2:0]} top.fm_receiver_top.s_axi_arprot[2] top.fm_receiver_top.s_axi_arprot[1] top.fm_receiver_top.s_axi_arprot[0]
+top.fm_receiver_top.s_axi_arvalid
+top.fm_receiver_top.s_axi_arready
+top.fm_receiver_top.s_axi_awready
+top.fm_receiver_top.s_axi_wvalid
+top.fm_receiver_top.s_axi_wready
+top.fm_receiver_top.s_axi_bvalid
+top.fm_receiver_top.s_axi_bready
+#{top.fm_receiver_top.s_axi_bresp[1:0]} top.fm_receiver_top.s_axi_bresp[1] top.fm_receiver_top.s_axi_bresp[0]
+top.fm_receiver_top.s_axi_rvalid
+top.fm_receiver_top.s_axi_rready
+#{top.fm_receiver_top.s_axi_rresp[1:0]} top.fm_receiver_top.s_axi_rresp[1] top.fm_receiver_top.s_axi_rresp[0]
+@22
+#{top.fm_receiver_top.s_axi_rdata[31:0]} top.fm_receiver_top.s_axi_rdata[31] top.fm_receiver_top.s_axi_rdata[30] top.fm_receiver_top.s_axi_rdata[29] top.fm_receiver_top.s_axi_rdata[28] top.fm_receiver_top.s_axi_rdata[27] top.fm_receiver_top.s_axi_rdata[26] top.fm_receiver_top.s_axi_rdata[25] top.fm_receiver_top.s_axi_rdata[24] top.fm_receiver_top.s_axi_rdata[23] top.fm_receiver_top.s_axi_rdata[22] top.fm_receiver_top.s_axi_rdata[21] top.fm_receiver_top.s_axi_rdata[20] top.fm_receiver_top.s_axi_rdata[19] top.fm_receiver_top.s_axi_rdata[18] top.fm_receiver_top.s_axi_rdata[17] top.fm_receiver_top.s_axi_rdata[16] top.fm_receiver_top.s_axi_rdata[15] top.fm_receiver_top.s_axi_rdata[14] top.fm_receiver_top.s_axi_rdata[13] top.fm_receiver_top.s_axi_rdata[12] top.fm_receiver_top.s_axi_rdata[11] top.fm_receiver_top.s_axi_rdata[10] top.fm_receiver_top.s_axi_rdata[9] top.fm_receiver_top.s_axi_rdata[8] top.fm_receiver_top.s_axi_rdata[7] top.fm_receiver_top.s_axi_rdata[6] top.fm_receiver_top.s_axi_rdata[5] top.fm_receiver_top.s_axi_rdata[4] top.fm_receiver_top.s_axi_rdata[3] top.fm_receiver_top.s_axi_rdata[2] top.fm_receiver_top.s_axi_rdata[1] top.fm_receiver_top.s_axi_rdata[0]
+[pattern_trace] 1
+[pattern_trace] 0

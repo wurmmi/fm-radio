@@ -1,0 +1,16 @@
+#-------------------------------------------------------------------------------
+# File        : .gitignore
+# Author      : Michael Wurm <wurm.michael95@gmail.com>
+# Description : Local gitignore file for VHDL
+#-------------------------------------------------------------------------------
+
+# cocotb
+sim_build/
+**/*.lst
+**/tb/**/*.xml
+**/*.txt
+*.o
+__pycache__
+
+**/integration_test/fm_receiver_top
+**/unit_test/FIR/dspfir

@@ -21,20 +21,20 @@ int XFm_receiver_hls_CfgInitialize(XFm_receiver_hls *InstancePtr, XFm_receiver_h
 }
 #endif
 
-void XFm_receiver_hls_Set_config_led_ctrl(XFm_receiver_hls *InstancePtr, u32 Data) {
+void XFm_receiver_hls_Set_config_led_ctrl_V(XFm_receiver_hls *InstancePtr, u32 Data) {
     Xil_AssertVoid(InstancePtr != NULL);
     Xil_AssertVoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
 
-    XFm_receiver_hls_WriteReg(InstancePtr->Api_BaseAddress, XFM_RECEIVER_HLS_API_ADDR_CONFIG_LED_CTRL_DATA, Data);
+    XFm_receiver_hls_WriteReg(InstancePtr->Api_BaseAddress, XFM_RECEIVER_HLS_API_ADDR_CONFIG_LED_CTRL_V_DATA, Data);
 }
 
-u32 XFm_receiver_hls_Get_config_led_ctrl(XFm_receiver_hls *InstancePtr) {
+u32 XFm_receiver_hls_Get_config_led_ctrl_V(XFm_receiver_hls *InstancePtr) {
     u32 Data;
 
     Xil_AssertNonvoid(InstancePtr != NULL);
     Xil_AssertNonvoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
 
-    Data = XFm_receiver_hls_ReadReg(InstancePtr->Api_BaseAddress, XFM_RECEIVER_HLS_API_ADDR_CONFIG_LED_CTRL_DATA);
+    Data = XFm_receiver_hls_ReadReg(InstancePtr->Api_BaseAddress, XFM_RECEIVER_HLS_API_ADDR_CONFIG_LED_CTRL_V_DATA);
     return Data;
 }
 

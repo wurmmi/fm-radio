@@ -11,7 +11,7 @@ SHELL        = /bin/bash
 MAKEFILE_DIR = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 VIVADO_DIR = ./generated
-IP_DIRS     = "./ip ../vhdl"
+IP_DIRS     = "./ip ../vhdl/ip"
 
 vivado = vivado -nojournal -nolog -notrace -mode batch -source ./scripts/$1 $2
 
@@ -19,25 +19,35 @@ vivado = vivado -nojournal -nolog -notrace -mode batch -source ./scripts/$1 $2
 ##Makefile Help for Vivado project.
 ##==============================================================================
 ##
+##Parameters
+##----------
+##Targets: project, upgrade_ips, bitstream, sdk
+##  GUI=<0 or 1> (default: 0)
+##  e.g. `make project GUI=1`
+##
 ##Supported Targets
 ##-----------------
 
-all: project synth sdk ##		- Default target.
+all: project bitstream sdk ##		- Default target.
 ##
-project: ##			- Create/Open Vivado project.
+project: ##				- Create/Open Vivado project.
 	@mkdir -p $(VIVADO_DIR)
 	@$(call vivado,create_project.tcl,-tclargs $(VIVADO_DIR) $(IP_DIRS) $(GUI))
 
-upgrade_ips: ##			- Upgrade changed IPs in the design.
+upgrade_ips: ##				- Upgrade changed IPs in the design.
 	@echo "Upgrading IPs ..."
 	@$(call vivado,upgrade_ips.tcl,-tclargs $(VIVADO_DIR) $(IP_DIRS) $(GUI))
 
-bitstream: upgrade_ips ##		- Synthesize project and create a bitstream.
+ip_version: ##				- Generate VHDL IP version.
+	@echo "Generating VHDL IP version ..."
+	@make -C ../vhdl/ registers
+
+bitstream: ip_version upgrade_ips ##	- Synthesize project and create a bitstream.
 	@echo "Synthesize Vivado project ..."
 	@mkdir -p $(VIVADO_DIR)
 	@$(call vivado,synth.tcl,-tclargs $(VIVADO_DIR) $(GUI))
 
-sdk: ##				- Create/Open SDK project.
+sdk: ##					- Create/Open SDK project.
 	@echo "Creating SDK ..."
 	@xsdk -batch -source ./scripts/create_sdk.tcl $(GUI)
 ifeq ($(GUI),1)
@@ -45,24 +55,28 @@ ifeq ($(GUI),1)
 endif
 
 ##
-clean-sdk: ##			- Clean all outputs of SDK.
+clean-sdk: ##				- Clean all outputs of SDK.
 	@echo "Cleaning SDK stuff..."
 	git clean -xdf sdk/
 
-clean-all: ##			- Clean all outputs.
+clean-vivado: ##				- Clean all outputs of Vivado project.
+	@echo "Cleaning SDK stuff..."
+	git clean -xdf generated/
+
+clean-all: ##				- Clean all outputs.
 	@echo "Cleaning..."
 	git clean -xdf
 
-help: ##				- Show this help message.
+help: ##					- Show this help message.
 	@grep -h "##" Makefile | grep -v "\"##\"" | sed -e 's/##//g'
 
-.PHONY: project synth sdk clean-all clean-sdk help
+.PHONY: all project upgrade_ips ip_version bitstream sdk clean-sdk clean-vivado clean-all help
 
 ##
 ##==============================================================================
 ##*** NOTE: Makefile requires following setup:
 ##
 ##      - Vivado (vivado) can be found in PATH.
-##      - Vivado HLS (vivado_hls) can be found in PATH.
+##      - Vivado SDK (xsdk) can be found in PATH.
 ##
 ##==============================================================================

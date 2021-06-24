@@ -1,0 +1,13 @@
+#-------------------------------------------------------------------------------
+# File        : .gitignore
+# Author      : Michael Wurm <wurm.michael95@gmail.com>
+# Description : Local gitignore file for HLS
+#-------------------------------------------------------------------------------
+
+# Vivado
+generated/
+output/
+vivado/**/*.str
+.Xil/
+Packages/
+*.log

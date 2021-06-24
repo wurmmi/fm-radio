@@ -1,0 +1,60 @@
+---
+name: "FM Radio"
+description: "FM Radio IP (VHDL)"
+prefix: FM
+
+registers:
+  - name: "MAGIC_VALUE"
+    description: "Magic constant to identify FM Radio IP."
+    access: "READ_ONLY"
+    fields:
+      - name: "VALUE"
+        description: ""
+        width: 32
+        offset: 0
+        reset: 0xDEADBEEF
+        connect: "status_i.magic_value"
+
+  - name: "LED_CONTROL"
+    description: "Represents the physical LED value."
+    access: "READ_WRITE"
+    fields:
+      - name: "VALUE"
+        description: ""
+        width: 3
+        offset: 0
+        reset: 0x0
+        connect: "control_o.led_ctrl"
+
+  - name: "ENABLE_FM_RADIO"
+    description: "Enables FM Radio DSP mode; Passthrough mode if disabled."
+    access: "READ_WRITE"
+    fields:
+      - name: "VALUE"
+        description: ""
+        width: 1
+        offset: 0
+        reset: 0x1
+        connect: "control_o.enable_fm_radio"
+
+  - name: "VERSION_ADDR"
+    description: "Set version register to be read."
+    access: "READ_WRITE"
+    fields:
+      - name: "VALUE"
+        description: ""
+        width: 4
+        offset: 0
+        reset: 0x0
+        connect: "control_o.version_addr"
+
+  - name: "VERSION"
+    description: "Version value at address VERSION_ADDR."
+    access: "READ_ONLY"
+    fields:
+      - name: "VALUE"
+        description: ""
+        width: 32
+        offset: 0
+        reset: 0x0
+        connect: "status_i.version"

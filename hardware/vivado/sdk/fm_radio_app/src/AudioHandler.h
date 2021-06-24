@@ -12,7 +12,7 @@
 #include "ADAU1761.h"
 #include "AudioStreamDMA.h"
 #include "FIFO.h"
-#include "FMRadioIP.h"
+#include "FMRadioIP_HLS.h"
 #include "SDCardReader.h"
 
 class AudioHandler {
@@ -33,11 +33,15 @@ class AudioHandler {
   void FillAudioBuffer();
   void ApplyVolume();
   void PrintVolumeInfo(std::string const& limit);
+  void SwapLeftAndRight();
+
   void AudioStreamEmptyCallback();
 
  public:
-  AudioHandler(FMRadioIP* radioIP);
+  AudioHandler();
   ~AudioHandler();
+
+  void SetIP(FMRadioIP* ip);
 
   void VolumeUp();
   void VolumeDown();

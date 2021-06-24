@@ -4,6 +4,10 @@
 
 Several design files are located in the `./src` directory.
 
+### Register Interface
+
+- see [Register Map](./ip/registers.md)
+
 ## Testbench
 
 Several testbench files are located in the `./tb` directory.

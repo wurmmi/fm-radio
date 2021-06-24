@@ -35,7 +35,7 @@ def loadDataFromFile(filename, num_samples, bitwidth, bitwidth_frac, use_fixed=T
     return data
 
 
-def get_dataset_by_name(datalist, data_name, log_func=cocotb.log.error):
+def get_dataset_by_name(datalist, data_name, log_func=cocotb.logging.error):
     # Find the dataset with the matching data_name
     dataset = [x for x in datalist if x['name'] == data_name]
     if len(dataset) == 0:

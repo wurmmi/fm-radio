@@ -36,9 +36,9 @@ port (
     RVALID                :out  STD_LOGIC;
     RREADY                :in   STD_LOGIC;
     -- user signals
-    config_led_ctrl       :out  STD_LOGIC_VECTOR(7 downto 0);
+    config_led_ctrl_V     :out  STD_LOGIC_VECTOR(3 downto 0);
     config_enable_fm_radio_ip :out  STD_LOGIC_VECTOR(7 downto 0);
-    status_git_hash_V     :in   STD_LOGIC_VECTOR(27 downto 0);
+    status_git_hash_V     :in   STD_LOGIC_VECTOR(31 downto 0);
     status_build_time_V   :in   STD_LOGIC_VECTOR(47 downto 0)
 );
 end entity fm_receiver_hls_API_s_axi;
@@ -48,8 +48,8 @@ end entity fm_receiver_hls_API_s_axi;
 -- 0x04 : reserved
 -- 0x08 : reserved
 -- 0x0c : reserved
--- 0x10 : Data signal of config_led_ctrl
---        bit 7~0 - config_led_ctrl[7:0] (Read/Write)
+-- 0x10 : Data signal of config_led_ctrl_V
+--        bit 3~0 - config_led_ctrl_V[3:0] (Read/Write)
 --        others  - reserved
 -- 0x14 : reserved
 -- 0x18 : Data signal of config_enable_fm_radio_ip
@@ -57,8 +57,7 @@ end entity fm_receiver_hls_API_s_axi;
 --        others  - reserved
 -- 0x1c : reserved
 -- 0x20 : Data signal of status_git_hash_V
---        bit 27~0 - status_git_hash_V[27:0] (Read)
---        others   - reserved
+--        bit 31~0 - status_git_hash_V[31:0] (Read)
 -- 0x24 : reserved
 -- 0x28 : Data signal of status_build_time_V
 --        bit 31~0 - status_build_time_V[31:0] (Read)
@@ -73,8 +72,8 @@ architecture behave of fm_receiver_hls_API_s_axi is
     signal wstate  : states := wrreset;
     signal rstate  : states := rdreset;
     signal wnext, rnext: states;
-    constant ADDR_CONFIG_LED_CTRL_DATA_0           : INTEGER := 16#10#;
-    constant ADDR_CONFIG_LED_CTRL_CTRL             : INTEGER := 16#14#;
+    constant ADDR_CONFIG_LED_CTRL_V_DATA_0         : INTEGER := 16#10#;
+    constant ADDR_CONFIG_LED_CTRL_V_CTRL           : INTEGER := 16#14#;
     constant ADDR_CONFIG_ENABLE_FM_RADIO_IP_DATA_0 : INTEGER := 16#18#;
     constant ADDR_CONFIG_ENABLE_FM_RADIO_IP_CTRL   : INTEGER := 16#1c#;
     constant ADDR_STATUS_GIT_HASH_V_DATA_0         : INTEGER := 16#20#;
@@ -96,9 +95,9 @@ architecture behave of fm_receiver_hls_API_s_axi is
     signal ARREADY_t           : STD_LOGIC;
     signal RVALID_t            : STD_LOGIC;
     -- internal registers
-    signal int_config_led_ctrl : UNSIGNED(7 downto 0) := (others => '0');
+    signal int_config_led_ctrl_V : UNSIGNED(3 downto 0) := (others => '0');
     signal int_config_enable_fm_radio_ip : UNSIGNED(7 downto 0) := (others => '0');
-    signal int_status_git_hash_V : UNSIGNED(27 downto 0) := (others => '0');
+    signal int_status_git_hash_V : UNSIGNED(31 downto 0) := (others => '0');
     signal int_status_build_time_V : UNSIGNED(47 downto 0) := (others => '0');
 
 
@@ -213,12 +212,12 @@ begin
             if (ACLK_EN = '1') then
                 if (ar_hs = '1') then
                     case (TO_INTEGER(raddr)) is
-                    when ADDR_CONFIG_LED_CTRL_DATA_0 =>
-                        rdata_data <= RESIZE(int_config_led_ctrl(7 downto 0), 32);
+                    when ADDR_CONFIG_LED_CTRL_V_DATA_0 =>
+                        rdata_data <= RESIZE(int_config_led_ctrl_V(3 downto 0), 32);
                     when ADDR_CONFIG_ENABLE_FM_RADIO_IP_DATA_0 =>
                         rdata_data <= RESIZE(int_config_enable_fm_radio_ip(7 downto 0), 32);
                     when ADDR_STATUS_GIT_HASH_V_DATA_0 =>
-                        rdata_data <= RESIZE(int_status_git_hash_V(27 downto 0), 32);
+                        rdata_data <= RESIZE(int_status_git_hash_V(31 downto 0), 32);
                     when ADDR_STATUS_BUILD_TIME_V_DATA_0 =>
                         rdata_data <= RESIZE(int_status_build_time_V(31 downto 0), 32);
                     when ADDR_STATUS_BUILD_TIME_V_DATA_1 =>
@@ -232,15 +231,15 @@ begin
     end process;
 
 -- ----------------------- Register logic ----------------
-    config_led_ctrl      <= STD_LOGIC_VECTOR(int_config_led_ctrl);
+    config_led_ctrl_V    <= STD_LOGIC_VECTOR(int_config_led_ctrl_V);
     config_enable_fm_radio_ip <= STD_LOGIC_VECTOR(int_config_enable_fm_radio_ip);
 
     process (ACLK)
     begin
         if (ACLK'event and ACLK = '1') then
             if (ACLK_EN = '1') then
-                if (w_hs = '1' and waddr = ADDR_CONFIG_LED_CTRL_DATA_0) then
-                    int_config_led_ctrl(7 downto 0) <= (UNSIGNED(WDATA(7 downto 0)) and wmask(7 downto 0)) or ((not wmask(7 downto 0)) and int_config_led_ctrl(7 downto 0));
+                if (w_hs = '1' and waddr = ADDR_CONFIG_LED_CTRL_V_DATA_0) then
+                    int_config_led_ctrl_V(3 downto 0) <= (UNSIGNED(WDATA(3 downto 0)) and wmask(3 downto 0)) or ((not wmask(3 downto 0)) and int_config_led_ctrl_V(3 downto 0));
                 end if;
             end if;
         end if;

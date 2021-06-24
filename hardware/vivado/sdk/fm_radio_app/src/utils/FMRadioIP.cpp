@@ -20,74 +20,31 @@
 
 using namespace std;
 
-FMRadioIP::FMRadioIP(uint32_t device_id) : mDeviceId(device_id) {
-  Initialize();
-}
+FMRadioIP::FMRadioIP(uint32_t device_id) : mDeviceId(device_id) {}
 
 FMRadioIP::~FMRadioIP() {}
 
-bool FMRadioIP::Initialize() {
-  int status = XFm_receiver_hls_Initialize(&mDev, mDeviceId);
-  if (status != XST_SUCCESS) {
-    LOG_ERROR("Could not initialize FM Receiver IP");
-    return false;
-  }
-
-  return true;
-}
-
-void FMRadioIP::LED_SetOn(TLed led) {
-  uint32_t state = XFm_receiver_hls_Get_config_led_ctrl(&mDev);
-
-  state |= (1 << (uint8_t)led);
-  if (led == TLed::ALL)
-    state = 0xFF;
-
-  XFm_receiver_hls_Set_config_led_ctrl(&mDev, state);
-}
-
-void FMRadioIP::LED_Toggle(TLed led) {
-  uint32_t state = XFm_receiver_hls_Get_config_led_ctrl(&mDev);
-
-  state ^= (1 << (uint8_t)led);
-  if (led == TLed::ALL)
-    state ^= 0xFF;
-
-  XFm_receiver_hls_Set_config_led_ctrl(&mDev, state);
-}
-
-void FMRadioIP::LED_SetOff(TLed led) {
-  uint32_t state = XFm_receiver_hls_Get_config_led_ctrl(&mDev);
-
-  state &= ~(1 << (uint8_t)led);
-  if (led == TLed::ALL)
-    state = 0x0;
-
-  XFm_receiver_hls_Set_config_led_ctrl(&mDev, state);
-}
-
-string FMRadioIP::UintToHexString(uint64_t num) {
-  // Convert number to string and hex-format
+/**
+ * @brief Convert number to string in hex-format
+ * @return string
+ */
+string FMRadioIP::UintToHexString(uint64_t num) const {
   stringstream ss;
   ss << hex << num;
   return string(ss.str());
 }
 
-string FMRadioIP::GetGitHash() {
-  auto git_hash = XFm_receiver_hls_Get_status_git_hash_V(&mDev);
-
-  return UintToHexString(git_hash);
-}
-
-string FMRadioIP::GetBuildTime() {
-  auto build_time_uint = XFm_receiver_hls_Get_status_build_time_V(&mDev);
-
-  // Convert to human-readable date string
-  // NOTE: I'm sure there's a much better way to do this...  :)
-  // Example build_time result:
-  //    yymmddhhmmss
-  //    210609184711 --> 2021/06/09 18:47:11
-  string build_time = UintToHexString(build_time_uint);
+/**
+ * @brief Convert to human-readable date string
+ *        NOTE: I'm sure there's a much better way to do this...  :)
+ *        Example build_time result:
+ *           yymmddhhmmss
+ *           210609184711 --> 2021/06/09 18:47:11
+ * @param datetime_int
+ * @return std::string
+ */
+std::string FMRadioIP::DatetimeToString(uint64_t datetime_int) const {
+  string build_time = UintToHexString(datetime_int);
 
   // Sanity check
   uint8_t const expected_length_c = 12;
@@ -108,16 +65,12 @@ string FMRadioIP::GetBuildTime() {
   build_time.insert(2, 1, '/');
   build_time.insert(0, "20");
 
+  build_time += " UTC";
+
   return build_time;
 }
 
-void FMRadioIP::SetMode(TMode mode) {
-  XFm_receiver_hls_Set_config_enable_fm_radio_ip(&mDev,
-                                                 static_cast<uint32_t>(mode));
-}
-
-TMode FMRadioIP::GetMode() {
-  auto mode = XFm_receiver_hls_Get_config_enable_fm_radio_ip(&mDev);
-
-  return static_cast<TMode>(mode);
+void FMRadioIP::PrintInfo() {
+  printf("     build date :  %s\n", GetBuildTime().c_str());
+  printf("     git hash   :  %s\n", GetGitHash().c_str());
 }

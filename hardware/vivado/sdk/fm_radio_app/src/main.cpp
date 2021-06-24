@@ -10,7 +10,9 @@
 #include <iostream>
 
 #include "AudioHandler.h"
-#include "FMRadioIP.h"
+#include "AxiStreamRouter.h"
+#include "FMRadioIP_HLS.h"
+#include "FMRadioIP_VHDL.h"
 #include "MenuControl.h"
 #include "log.h"
 
@@ -22,17 +24,21 @@ using namespace std;
 static TaskHandle_t task_heartbeat_handle;
 static TaskHandle_t task_audio_handle;
 
-static FMRadioIP fmRadioIP(XPAR_FM_RECEIVER_HLS_0_DEVICE_ID);
+static FMRadioIP_HLS fmRadioIP_HLS(XPAR_FM_RECEIVER_HLS_0_DEVICE_ID);
+static FMRadioIP_VHDL fmRadioIP_VHDL(XPAR_FM_RECEIVER_VHDL_0_DEVICE_ID);
 
 static void task_heartbeat(void *) {
   while (true) {
-    fmRadioIP.LED_Toggle(TLed::LED1);
+    fmRadioIP_HLS.LED_Toggle(TLed::LED1);
+    fmRadioIP_VHDL.LED_Toggle(TLed::LED1);
     vTaskDelay(pdMS_TO_TICKS(1000));
   }
 }
 
 static void task_audio(void *) {
-  AudioHandler audioHandler(&fmRadioIP);
+  AxiStreamRouter axiStreamRouter;
+  AudioHandler audioHandler;
+  audioHandler.SetIP(&fmRadioIP_HLS);
 
   MenuControl::PrintMainMenu();
   while (true) {
@@ -41,28 +47,14 @@ static void task_audio(void *) {
     printf("%c\n", choice);
 
     switch (choice) {
-      case 'p': {
-        fmRadioIP.SetMode(TMode::PASSTHROUGH);
-        audioHandler.PlayFile("cantina_band_44100.wav");
-      } break;
-      case 'u':
-        audioHandler.VolumeUp();
+      /*-- GENERAL --*/
+      case 'h':
+        axiStreamRouter.SelectIP(IPSelection::HLS);
+        audioHandler.SetIP(&fmRadioIP_HLS);
         break;
-      case 'd':
-        audioHandler.VolumeDown();
-        break;
-
-      case 'x': {
-        fmRadioIP.SetMode(TMode::FMRADIO);
-        audioHandler.PlayFile("over_rx_fm_bb.wav");
-      } break;
-      case 'r': {
-        fmRadioIP.SetMode(TMode::FMRADIO);
-        audioHandler.PlayFile("limit_rx_fm_bb.wav");
-      } break;
-      case 's':
-        audioHandler.Stop();
-        LOG_INFO("DMA stopped.");
+      case 'v':
+        axiStreamRouter.SelectIP(IPSelection::VHDL);
+        audioHandler.SetIP(&fmRadioIP_VHDL);
         break;
 
       case 'm':
@@ -72,21 +64,56 @@ static void task_audio(void *) {
         audioHandler.ShowAvailableFiles();
         break;
       case 'i': {
-        string build_time = fmRadioIP.GetBuildTime();
-        string git_hash   = fmRadioIP.GetGitHash();
-
+        printf("=== STATUS ========================================\n");
+        printf("Currently selected IP: '%s'\n",
+               axiStreamRouter.GetCurrentlySelectedIPString().c_str());
+        printf("=== GENERAL =======================================\n");
         printf("This program is developed by Michael Wurm.\n");
         printf("SDK firmware build date :  %s, %s\n", __DATE__, __TIME__);
-        printf("FM Radio IP build date  :  %s, (git hash: %s)\n",
-               build_time.c_str(),
-               git_hash.c_str());
+        printf("FM Radio IPs:\n");
+        fmRadioIP_VHDL.PrintInfo();
+        fmRadioIP_HLS.PrintInfo();
+        printf("===================================================\n");
       } break;
+
+      /*-- MODE: PASS-THROUGH --*/
+      case 'p':
+        fmRadioIP_HLS.SetMode(TMode::PASSTHROUGH);
+        fmRadioIP_VHDL.SetMode(TMode::PASSTHROUGH);
+        audioHandler.PlayFile("cantina_band_44100.wav");
+        break;
+      case 's':
+        audioHandler.Stop();
+        LOG_INFO("DMA stopped.");
+        break;
+      case 'u':
+        audioHandler.VolumeUp();
+        break;
+      case 'd':
+        audioHandler.VolumeDown();
+        break;
+
+      /*-- MODE: FM RADIO --*/
+      case 'x':
+        fmRadioIP_HLS.SetMode(TMode::FMRADIO);
+        fmRadioIP_VHDL.SetMode(TMode::FMRADIO);
+        audioHandler.PlayFile("over_rx_fm_bb.wav");
+        break;
+      case 'r':
+        fmRadioIP_HLS.SetMode(TMode::FMRADIO);
+        fmRadioIP_VHDL.SetMode(TMode::FMRADIO);
+        audioHandler.PlayFile("limit_rx_fm_bb.wav");
+        break;
 
       default:
         LOG_WARN("Unknown input.\n");
         break;
     }
   }
+}
+
+static void Xil_AssertCallbackRoutine(uint8_t *file, int32_t line) {
+  LOG_ERROR("Assertion in file %s, on line %0ld\n", file, line);
 }
 
 int main() {
@@ -109,6 +136,10 @@ int main() {
               NULL,
               tskIDLE_PRIORITY,
               &task_audio_handle);
+
+  /* Enable exceptions. */
+  Xil_AssertSetCallback((Xil_AssertCallback)Xil_AssertCallbackRoutine);
+  Xil_ExceptionEnable();
 
   vTaskStartScheduler();
   LOG_ERROR("vTaskStartScheduler() returned unexpectedly!");

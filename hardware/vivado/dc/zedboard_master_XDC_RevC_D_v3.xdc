@@ -90,7 +90,7 @@ set_property PACKAGE_PIN AB5 [get_ports {spi_miso_i}];  # "AC-SDA"
 # ----------------------------------------------------------------------------
 # JA Pmod - Bank 13
 # ----------------------------------------------------------------------------
-set_property PACKAGE_PIN Y11  [get_ports {fm_radio_led_o[7]}];  # "JA1"
+set_property PACKAGE_PIN Y11  [get_ports {fm_radio_vhdl_led_o[3]}];  # "JA1"
 #set_property PACKAGE_PIN AA8  [get_ports {JA10}];  # "JA10"
 #set_property PACKAGE_PIN AA11 [get_ports {JA2}];  # "JA2"
 #set_property PACKAGE_PIN Y10  [get_ports {JA3}];  # "JA3"
@@ -178,14 +178,14 @@ set_property PACKAGE_PIN Y11  [get_ports {fm_radio_led_o[7]}];  # "JA1"
 # ----------------------------------------------------------------------------
 # User LEDs - Bank 33
 # ----------------------------------------------------------------------------
-set_property PACKAGE_PIN T22 [get_ports {led0_heartbeat_o}];   # "LD0"
-set_property PACKAGE_PIN T21 [get_ports {fm_radio_led_o[0]}];  # "LD1"
-set_property PACKAGE_PIN U22 [get_ports {fm_radio_led_o[1]}];  # "LD2"
-set_property PACKAGE_PIN U21 [get_ports {fm_radio_led_o[2]}];  # "LD3"
-set_property PACKAGE_PIN V22 [get_ports {fm_radio_led_o[3]}];  # "LD4"
-set_property PACKAGE_PIN W22 [get_ports {fm_radio_led_o[4]}];  # "LD5"
-set_property PACKAGE_PIN U19 [get_ports {fm_radio_led_o[5]}];  # "LD6"
-set_property PACKAGE_PIN U14 [get_ports {fm_radio_led_o[6]}];  # "LD7"
+set_property PACKAGE_PIN T22 [get_ports {led0_heartbeat_o}];       # "LD0"
+set_property PACKAGE_PIN T21 [get_ports {fm_radio_hls_led_o[0]}];  # "LD1"
+set_property PACKAGE_PIN U22 [get_ports {fm_radio_hls_led_o[1]}];  # "LD2"
+set_property PACKAGE_PIN U21 [get_ports {fm_radio_hls_led_o[2]}];  # "LD3"
+set_property PACKAGE_PIN V22 [get_ports {fm_radio_hls_led_o[3]}];  # "LD4"
+set_property PACKAGE_PIN W22 [get_ports {fm_radio_vhdl_led_o[0]}]; # "LD5"
+set_property PACKAGE_PIN U19 [get_ports {fm_radio_vhdl_led_o[1]}]; # "LD6"
+set_property PACKAGE_PIN U14 [get_ports {fm_radio_vhdl_led_o[2]}]; # "LD7"
 
 # ----------------------------------------------------------------------------
 # VGA Output - Bank 33
