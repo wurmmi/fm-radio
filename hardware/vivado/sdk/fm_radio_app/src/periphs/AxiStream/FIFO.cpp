@@ -68,14 +68,14 @@ void FIFO::irq_handler() {
       XLlFifo_IntClear(&mDev, XLLF_INT_TC_MASK);
     } else if (pending & XLLF_INT_TFPE_MASK) {
       // Tx FIFO Programmable Empty
+      XLlFifo_IntClear(&mDev, XLLF_INT_TFPE_MASK);
       if (mCallbackOnTxEmptyIRQ != nullptr)
         mCallbackOnTxEmptyIRQ();
-      XLlFifo_IntClear(&mDev, XLLF_INT_TFPE_MASK);
     } else if (pending & XLLF_INT_RFPF_MASK) {
       // Rx FIFO Programmable Full
+      XLlFifo_IntClear(&mDev, XLLF_INT_RFPF_MASK);
       if (mCallbackOnRxFullIRQ != nullptr)
         mCallbackOnRxFullIRQ();
-      XLlFifo_IntClear(&mDev, XLLF_INT_RFPF_MASK);
     } else if (pending & XLLF_INT_ERROR_MASK) {
       // Error status
       XLlFifo_IntClear(&mDev, XLLF_INT_ERROR_MASK);
