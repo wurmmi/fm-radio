@@ -1,25 +1,24 @@
 /**
- * @file    ConfigFIFO.h
+ * @file    IPOutputFIFO.h
  * @author  Michael Wurm <wurm.michael95@gmail.com>
  * @brief   Class definition
  */
 
-#ifndef _CONFIGFIFO_H_
-#define _CONFIGFIFO_H_
+#ifndef _IPOUTPUTFIFO_H_
+#define _IPOUTPUTFIFO_H_
 
 #include "FIFO.h"
 
 // TODO: can this be retrieved from the generated driver includes?
 #define FIFO_CHIP_ADDR 0
 
-class ConfigFIFO : public FIFO {
+class IPOutputFIFO : public FIFO {
  private:
  public:
-  ConfigFIFO(uint32_t device_id);
-  ~ConfigFIFO();
+  IPOutputFIFO(uint32_t device_id);
+  ~IPOutputFIFO();
 
   uint8_t read(uint16_t addr);
-  void write(uint16_t addr, uint8_t value);
 };
 
-#endif /* _CONFIGFIFO_H_ */
+#endif /* _IPOUTPUTFIFO_H_ */
