@@ -22,24 +22,33 @@ vector<uint32_t> IPOutputFIFO::ReadAll() {
   // Read all data from Rx FIFO and store into vector
   vector<uint32_t> data;
   uint32_t value;
-  uint32_t available_values = XLlFifo_RxOccupancy(&mDev);
-  LOG_INFO("available_values: %d", available_values);
+  uint32_t available_values  = XLlFifo_iRxGetLen(&mDev) / 4;
+  uint32_t available_values2 = XLlFifo_iRxOccupancy(&mDev);
+  LOG_INFO("available_values  (iRxGetLen)   : %d", available_values);
+  LOG_INFO("available_values2 (iRxOccupancy): %d", available_values2);
 
-  auto ReceiveLength = (XLlFifo_iRxGetLen(&mDev)) / 4;
-  for (uint32_t i = 0; i < ReceiveLength; i++) {
-    uint32_t RxWord = XLlFifo_RxGetWord(&mDev);
-    // ********
-    // do something here with the data
-    // ********
-    if (XLlFifo_iRxOccupancy(&mDev)) {
-      RxWord = XLlFifo_RxGetWord(&mDev);
-    }
-  }
-  while (XLlFifo_RxOccupancy(&mDev) > 1) {  // NOTE: option 1
-    // while(!XLlFifo_IsRxEmpty()) {        // NOTE: option 2
+  for (uint32_t i = 0; i < available_values; i++) {
     value = XLlFifo_RxGetWord(&mDev);
     data.emplace_back(value);
+
+    // if (XLlFifo_iRxOccupancy(&mDev)) {
+    //  RxWord = XLlFifo_RxGetWord(&mDev);
+    //}
   }
 
+  //  while (XLlFifo_RxOccupancy(&mDev) > 1) {  // NOTE: option 1
+  //    // while(!XLlFifo_IsRxEmpty()) {        // NOTE: option 2
+  //    value = XLlFifo_RxGetWord(&mDev);
+  //    data.emplace_back(value);
+  //  }
+
   return data;
+}
+
+void IPOutputFIFO::ResetRx() {
+  LOG_INFO("reset IPOutputFIFO Rx");
+  XLlFifo_RxReset(&mDev);
+
+  LOG_INFO("reset IPOutputFIFO Total");
+  XLlFifo_Reset(&mDev);
 }

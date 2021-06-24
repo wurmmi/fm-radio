@@ -64,6 +64,10 @@ void AudioHandler::IPOutputFifoFullCallback() {
   mSdCardReader.WriteFile(filename, data, overwrite);
 }
 
+void AudioHandler::ResetIPOutputFIFO() {
+  mIPOutputFifo.ResetRx();
+}
+
 void AudioHandler::SetIP(FMRadioIP* radioIP) {
   if (!radioIP) {
     LOG_ERROR("nullptr");

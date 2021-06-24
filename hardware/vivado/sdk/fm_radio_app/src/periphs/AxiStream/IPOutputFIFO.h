@@ -21,6 +21,7 @@ class IPOutputFIFO : public FIFO {
   ~IPOutputFIFO();
 
   std::vector<uint32_t> ReadAll();
+  void ResetRx();
 };
 
 #endif /* _IPOUTPUTFIFO_H_ */

@@ -50,6 +50,8 @@ class AudioHandler {
   void PlayFile(std::string const& filename);
   void Stop();
   void ShowAvailableFiles();
+
+  void ResetIPOutputFIFO();
 };
 
 #endif /* _AUDIOHANDLER_H_ */

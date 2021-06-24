@@ -36,6 +36,8 @@ static void task_heartbeat(void *) {
 }
 
 static void task_audio(void *) {
+  MenuControl::PrintAppHeader();
+
   AxiStreamRouter axiStreamRouter;
   AudioHandler audioHandler;
   audioHandler.SetIP(&fmRadioIP_HLS);
@@ -59,6 +61,9 @@ static void task_audio(void *) {
 
       case 'm':
         MenuControl::PrintMainMenu();
+        break;
+      case 'f':
+        audioHandler.ResetIPOutputFIFO();
         break;
       case 'c':
         audioHandler.ShowAvailableFiles();
