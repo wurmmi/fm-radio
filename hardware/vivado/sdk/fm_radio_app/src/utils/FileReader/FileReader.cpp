@@ -163,6 +163,11 @@ bool FileReader::FileRead(void* target_buf,
 bool FileReader::FileWrite(std::vector<uint32_t> data) {
   size_t const num_bytes_to_write = sizeof(uint32_t);
 
+  /** TODO: speed up this process
+   *        - no loop: store entire vector at once
+   *           use std::vector.data() to get pointer and .size()*4 to get length
+   *       - no log prints
+   */
   int count = 0;
   for (size_t i = 0; i < data.size(); i++) {
     uint32_t elem = data[i];
