@@ -167,5 +167,11 @@ bool WavReader::LoadFile(string const& filename) {
       num_fmt_chunks,
       num_data_chunks);
 
+  /** NOTE:
+   * Apparently, the WAV format stores channel left-right data swapped.
+   * Thus, simply swapping it back the way I need it. :)
+   */
+  SwapLeftAndRight();
+
   return true;
 }

@@ -32,6 +32,24 @@ FileReader::~FileReader() {
     FileClose();
 }
 
+void FileReader::SwapLeftAndRight() {
+  if (mBuffer.buffer == nullptr) {
+    LOG_ERROR("no file loaded yet");
+    return;
+  }
+
+  LOG_DEBUG("swap left and right channel");
+  uint32_t* pSource = (uint32_t*)mBuffer.buffer;
+  for (size_t i = 0; i < mBuffer.size / 4; i++) {
+    // Split 32 bit into 2x 16 bit
+    int16_t left  = (int16_t)((pSource[i] >> 16) & 0xFFFF);
+    int16_t right = (int16_t)((pSource[i] >> 0) & 0xFFFF);
+
+    // Combine to 32 bit again (reversed)
+    pSource[i] = ((uint32_t)right << 16) + (uint32_t)left;
+  }
+}
+
 bool FileReader::LoadFile(std::string const& filename) {
   LOG_ERROR("Not implemented here");
   return false;
@@ -112,6 +130,7 @@ void FileReader::FileClose() {
 #else
   f_close(&mFile);
 #endif
+  mFileIsOpen = false;
 }
 
 bool FileReader::FileRead(void* target_buf,
@@ -142,14 +161,15 @@ bool FileReader::FileRead(void* target_buf,
 }
 
 bool FileReader::FileWrite(std::vector<uint32_t> data) {
+  size_t const num_bytes_to_write = sizeof(uint32_t);
+
   int count = 0;
   for (size_t i = 0; i < data.size(); i++) {
     uint32_t elem = data[i];
 #ifdef __CSIM__
-    size_t n_bytes_written = fwrite((void*)&elem, sizeof(elem), 1, mFile);
+    size_t n_bytes_written = fwrite((void*)&elem, num_bytes_to_write, 1, mFile);
 #else
-    size_t n_bytes_written    = 0;
-    size_t num_bytes_to_write = sizeof(elem);
+    size_t n_bytes_written = 0;
     FRESULT fres =
         f_write(&mFile, (void*)&elem, num_bytes_to_write, &n_bytes_written);
     if (fres) {
@@ -167,7 +187,7 @@ bool FileReader::FileWrite(std::vector<uint32_t> data) {
       FileClose();
       return false;
     }
-    LOG_INFO("%5d: %ld", count, elem);
+    LOG_INFO("%5d: %d", count, (unsigned int)elem);
     count++;
   }
   return true;

@@ -36,6 +36,8 @@ class FileReader {
   FIL mFile;
 #endif
 
+  void SwapLeftAndRight();
+
  public:
   FileReader();
   ~FileReader();

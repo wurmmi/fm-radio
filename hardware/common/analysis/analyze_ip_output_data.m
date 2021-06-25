@@ -15,7 +15,7 @@ clc;
 %% Read data
 %=========================================================================
 
-y = loadFile('./data_rec_from_ip/HLS.TXT',"IP");
+y = loadFile('./data_rec_from_ip/HLS_inv.TXT',"IP");
 audioDataLeft_IP_HLS  = y(:,1);
 audioDataRight_IP_HLS = y(:,2);
 

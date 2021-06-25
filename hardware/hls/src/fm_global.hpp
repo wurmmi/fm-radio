@@ -40,7 +40,7 @@ struct iq_sample_t {
     return ((i == rhs.i) && (q == rhs.q));
   }
   friend std::ostream &operator<<(std::ostream &out, const iq_sample_t &rhs) {
-    out << "I: " << rhs.i << " Q: " << rhs.q;
+    out << "I: " << std::setw(10) << rhs.i << " Q: " << std::setw(10) << rhs.q;
     return out;
   }
 };
