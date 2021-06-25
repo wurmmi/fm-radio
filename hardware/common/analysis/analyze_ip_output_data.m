@@ -23,8 +23,8 @@ y = loadFile('./data_rec_from_ip/VHDL.TXT',"IP");
 audioDataLeft_IP_VHDL  = y(:,1);
 audioDataRight_IP_VHDL = y(:,2);
 
-audioDataLeft_Matlab  = loadFile('../../../sim/matlab/verification_data/rx_audio_L.txt', "Matlab");
-audioDataRight_Matlab = loadFile('../../../sim/matlab/verification_data/rx_audio_R.txt', "Matlab");
+audioDataLeft_Matlab  = loadFile('../../../sim/matlab/verification_data/rx_audio_L_long.txt', "Matlab");
+audioDataRight_Matlab = loadFile('../../../sim/matlab/verification_data/rx_audio_R_long.txt', "Matlab");
 
 %% =========================================================================
 % Plots
@@ -37,15 +37,15 @@ sgtitle(fig_title);
 ymax = max([audioDataLeft_IP_HLS;audioDataRight_IP_HLS])*1.1;
 ymin = min([audioDataLeft_IP_HLS;audioDataRight_IP_HLS])*1.1;
 ax1 = subplot(2,1,1); hold on;
+plot(audioDataLeft_Matlab, 'b', 'DisplayName', 'left (Matlab)');
 plot(audioDataLeft_IP_HLS, 'r', 'DisplayName', 'left (IP HLS)');
 plot(audioDataLeft_IP_VHDL,'g', 'DisplayName', 'left (IP VHDL)');
-plot(audioDataLeft_Matlab, 'b', 'DisplayName', 'left (Matlab)');
 grid on; legend();
 ylim([ymin,ymax]);
 ax2 = subplot(2,1,2); hold on;
+plot(audioDataRight_Matlab, 'b', 'DisplayName', 'right (Matlab)');
 plot(audioDataRight_IP_HLS, 'r', 'DisplayName', 'right (IP HLS)');
 plot(audioDataRight_IP_VHDL,'g', 'DisplayName', 'right (IP VHDL)');
-plot(audioDataRight_Matlab, 'b', 'DisplayName', 'right (Matlab)');
 grid on; legend();
 ylim([ymin,ymax]);
 
