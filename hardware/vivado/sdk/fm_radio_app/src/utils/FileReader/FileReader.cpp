@@ -167,7 +167,7 @@ bool FileReader::FileWrite(std::vector<uint32_t> data) {
       FileClose();
       return false;
     }
-    LOG_INFO("%5d", count);
+    LOG_INFO("%5d: %ld", count, elem);
     count++;
   }
   return true;

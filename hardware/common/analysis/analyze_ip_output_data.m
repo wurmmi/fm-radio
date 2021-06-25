@@ -2,7 +2,8 @@
 % File        : analyze_ip_output_data.m
 % Author      : Michael Wurm <wurm.michael95@gmail.com>
 % Description : Loads data file that was recorded from the
-%               FPGA IP output by the firmware and analyzes it.
+%               FPGA IP output by the firmware.
+%               Compares this data with the simulation by the Matlab model.
 %-------------------------------------------------------------------------
 
 %% Prepare environment
@@ -11,36 +12,55 @@ close all;
 clc;
 
 %=========================================================================
-%% Read file
+%% Read data
+%=========================================================================
+
+% --- IP output data ---
 
 % Read binary file
 fid = fopen('./data_rec_from_ip/HLS.TXT','rb');
 if fid == -1
     assert(false, sprintf("Could not find file '%s'!", filename));
 end
-y = fread(fid,'uint32=>uint32');
+y = fread(fid,'int32=>int32');
+fclose(fid);
 
 % Split 32 bit into 2x16 bit (left and right channel)
-y_uint16 = typecast(y,'uint16');
-audioDataLeft  = y_uint16(1:2:end);
-audioDataRight = y_uint16(2:2:end);
+y_int16  = typecast(y,'int16');
 
-%=========================================================================
-%% Plots
+% Convert to double and scale with 16 bit
+y_double = double(y_int16)/2^16;
+audioDataLeft_IP  = y_double(1:2:end)/2^16;
+audioDataRight_IP = y_double(2:2:end)/2^16;
 
-fig_title = 'Time domain signal';
+% --- Matlab simulation data ---
+
+fid = fopen('./data_rec_from_ip/HLS.TXT','rb');
+if fid == -1
+    assert(false, sprintf("Could not find file '%s'!", filename));
+end
+y = fread(fid,'int32=>int32');
+fclose(fid);
+
+
+%% =========================================================================
+% Plots
+%% =========================================================================
+
+fig_title = 'IP Audio Output';
 fig_audio_time = figure('Name',fig_title);
-title(fig_title);
+sgtitle(fig_title);
 
-ymax = 2;
+ymax = max([audioDataLeft_IP;audioDataRight_IP])*1.1;
+ymin = min([audioDataLeft_IP;audioDataRight_IP])*1.1;
 ax1 = subplot(2,1,1);
-plot(audioDataLeft,  'r', 'DisplayName', 'audioDataL');
+plot(audioDataLeft_IP,  'r', 'DisplayName', 'audioDataL');
 grid on; legend();
-ylim([-ymax,ymax]);
+ylim([ymin,ymax]);
 ax2 = subplot(2,1,2);
-plot(audioDataRight, 'g', 'DisplayName', 'audioDataR');
+plot(audioDataRight_IP, 'g', 'DisplayName', 'audioDataR');
 grid on; legend();
-ylim([-ymax,ymax]);
+ylim([ymin,ymax]);
 
 xlabel('time [s]');
 grid on; legend();

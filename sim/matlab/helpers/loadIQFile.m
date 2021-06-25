@@ -24,3 +24,5 @@ y = y-127.5;
 
 % Convert interleaved I/Q values to complex values
 y = y(1:2:end) + 1j*y(2:2:end);
+
+fclose(fid);
