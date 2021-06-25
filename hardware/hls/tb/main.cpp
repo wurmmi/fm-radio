@@ -100,8 +100,8 @@ int main() {
     iq_sample_t sample_wav_in;
     for (uint32_t i = 0; i < buffer.size / 4; i++) {
       // Split 32 bit into 2x 16 bit
-      int16_t left  = (int16_t)((pSource[i] >> 16) & 0xFFFF);
-      int16_t right = (int16_t)((pSource[i] >> 0) & 0xFFFF);
+      int16_t left  = (int16_t)((pSource[i] >> 0) & 0xFFFF);
+      int16_t right = (int16_t)((pSource[i] >> 16) & 0xFFFF);
 
       // Convert to ap_fixed data type
       sample_wav_in.i.range() = left;
