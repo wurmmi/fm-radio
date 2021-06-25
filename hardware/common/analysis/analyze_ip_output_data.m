@@ -28,18 +28,25 @@ fclose(fid);
 % Split 32 bit into 2x16 bit (left and right channel)
 y_int16  = typecast(y,'int16');
 
-% Convert to double and scale with 16 bit
-y_double = double(y_int16)/2^16;
-audioDataLeft_IP  = y_double(1:2:end)/2^16;
-audioDataRight_IP = y_double(2:2:end)/2^16;
+% Convert to double and scale with 16 bit (2.14 fixed point format!)
+y_double = double(y_int16)/2^14 * -1; % INVERT
+audioDataLeft_IP  = y_double(1:2:end);
+audioDataRight_IP = y_double(2:2:end);
 
 % --- Matlab simulation data ---
 
-fid = fopen('./data_rec_from_ip/HLS.TXT','rb');
+fid = fopen('../../../sim/matlab/verification_data/rx_audio_L.txt','rb');
 if fid == -1
     assert(false, sprintf("Could not find file '%s'!", filename));
 end
-y = fread(fid,'int32=>int32');
+audioDataLeft_Matlab = fscanf(fid,"%f\n");
+fclose(fid);
+
+fid = fopen('../../../sim/matlab/verification_data/rx_audio_R.txt','rb');
+if fid == -1
+    assert(false, sprintf("Could not find file '%s'!", filename));
+end
+audioDataRight_Matlab = fscanf(fid,'%f\n');
 fclose(fid);
 
 
@@ -53,12 +60,14 @@ sgtitle(fig_title);
 
 ymax = max([audioDataLeft_IP;audioDataRight_IP])*1.1;
 ymin = min([audioDataLeft_IP;audioDataRight_IP])*1.1;
-ax1 = subplot(2,1,1);
-plot(audioDataLeft_IP,  'r', 'DisplayName', 'audioDataL');
+ax1 = subplot(2,1,1); hold on;
+plot(audioDataLeft_IP,     'r', 'DisplayName', 'left (IP)');
+plot(audioDataLeft_Matlab, 'b', 'DisplayName', 'left (Matlab)');
 grid on; legend();
 ylim([ymin,ymax]);
-ax2 = subplot(2,1,2);
-plot(audioDataRight_IP, 'g', 'DisplayName', 'audioDataR');
+ax2 = subplot(2,1,2); hold on;
+plot(audioDataRight_IP,     'r', 'DisplayName', 'right (IP)');
+plot(audioDataRight_Matlab, 'b', 'DisplayName', 'right (Matlab)');
 grid on; legend();
 ylim([ymin,ymax]);
 
