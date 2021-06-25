@@ -15,40 +15,12 @@ clc;
 %% Read data
 %=========================================================================
 
-% --- IP output data ---
+y = loadFile('./data_rec_from_ip/HLS.TXT',"IP");
+audioDataLeft_IP  = y(:,1);
+audioDataRight_IP = y(:,2);
 
-% Read binary file
-fid = fopen('./data_rec_from_ip/HLS.TXT','rb');
-if fid == -1
-    assert(false, sprintf("Could not find file '%s'!", filename));
-end
-y = fread(fid,'int32=>int32');
-fclose(fid);
-
-% Split 32 bit into 2x16 bit (left and right channel)
-y_int16  = typecast(y,'int16');
-
-% Convert to double and scale with 16 bit (2.14 fixed point format!)
-y_double = double(y_int16)/2^14 * -1; % INVERT
-audioDataLeft_IP  = y_double(1:2:end);
-audioDataRight_IP = y_double(2:2:end);
-
-% --- Matlab simulation data ---
-
-fid = fopen('../../../sim/matlab/verification_data/rx_audio_L.txt','rb');
-if fid == -1
-    assert(false, sprintf("Could not find file '%s'!", filename));
-end
-audioDataLeft_Matlab = fscanf(fid,"%f\n");
-fclose(fid);
-
-fid = fopen('../../../sim/matlab/verification_data/rx_audio_R.txt','rb');
-if fid == -1
-    assert(false, sprintf("Could not find file '%s'!", filename));
-end
-audioDataRight_Matlab = fscanf(fid,'%f\n');
-fclose(fid);
-
+audioDataLeft_Matlab  = loadFile('../../../sim/matlab/verification_data/rx_audio_L.txt', "Matlab");
+audioDataRight_Matlab = loadFile('../../../sim/matlab/verification_data/rx_audio_R.txt', "Matlab");
 
 %% =========================================================================
 % Plots
