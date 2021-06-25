@@ -177,7 +177,6 @@ bool SDCardReader::WriteFile(std::string const& filename,
 
   FileReader mFileReader;
 
-  // Open the file to write
   bool success = mFileReader.FileOpen(filename, FileOpenMode::WRITE);
   if (!success)
     return false;
@@ -188,6 +187,7 @@ bool SDCardReader::WriteFile(std::string const& filename,
 
   mFileReader.FileClose();
 
+  LOG_INFO("Done.");
   return true;
 }
 

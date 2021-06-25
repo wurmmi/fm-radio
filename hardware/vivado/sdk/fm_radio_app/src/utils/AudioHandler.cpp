@@ -61,8 +61,11 @@ void AudioHandler::IPOutputFifoFullCallback() {
   /** TODO: move this into another thread and notify it
    *       (don't write a file here in the ISR)
    */
-  string filename = mSdCardReader.GetCurrentlyLoadedFilename() + "_" +
-                    mFmRadioIP->GetTypeStr() + ".txt";
+  /** NOTE:
+   *    Filename needs to be in short form, so that
+   *    the XilFFS (see <ff.h>) driver understands it..
+   */
+  string filename = mFmRadioIP->GetTypeStr() + ".txt";
 
   static uint8_t write_counter = 0;
   if (write_counter == 0) {

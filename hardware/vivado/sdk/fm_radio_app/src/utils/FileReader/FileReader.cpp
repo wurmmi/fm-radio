@@ -34,6 +34,7 @@ FileReader::~FileReader() {
 
 bool FileReader::LoadFile(std::string const& filename) {
   LOG_ERROR("Not implemented here");
+  return false;
 }
 
 FileType FileReader::GetFileType(string const& filename) {
@@ -88,7 +89,7 @@ bool FileReader::FileOpen(std::string const& filename, FileOpenMode openMode) {
       break;
     case FileOpenMode::WRITE:
       mode_str = "write";
-      fres     = f_open(&mFile, filename.c_str(), FA_CREATE_ALWAYS);
+      fres     = f_open(&mFile, filename.c_str(), FA_WRITE | FA_CREATE_ALWAYS);
       break;
 
     default:
@@ -122,7 +123,7 @@ bool FileReader::FileRead(void* target_buf,
 #else
   FRESULT fres = f_read(&mFile, target_buf, num_bytes_to_read, &n_bytes_read);
   if (fres) {
-    LOG_ERROR("Failed to read file.");
+    LOG_ERROR("Failed to read file. (error: %d)", fres);
     FileClose();
     return false;
   }
@@ -141,15 +142,34 @@ bool FileReader::FileRead(void* target_buf,
 }
 
 bool FileReader::FileWrite(std::vector<uint32_t> data) {
-  // for (auto const& elem : data) {
-  //  fp << elem << endl;
-  // }
+  int count = 0;
+  for (size_t i = 0; i < data.size(); i++) {
+    uint32_t elem = data[i];
 #ifdef __CSIM__
-
+    size_t n_bytes_written = fwrite((void*)&elem, sizeof(elem), 1, mFile);
 #else
-
+    size_t n_bytes_written    = 0;
+    size_t num_bytes_to_write = sizeof(elem);
+    FRESULT fres =
+        f_write(&mFile, (void*)&elem, num_bytes_to_write, &n_bytes_written);
+    if (fres) {
+      LOG_ERROR("Failed to write to file. (error: %d)", fres);
+      FileClose();
+      return false;
+    }
 #endif
 
+    // Check if the requested amount was written
+    if (n_bytes_written != num_bytes_to_write) {
+      LOG_WARN("Wrote less than requested (%zu < %zu).",
+               n_bytes_written,
+               n_bytes_written);
+      FileClose();
+      return false;
+    }
+    LOG_INFO("%5d", count);
+    count++;
+  }
   return true;
 }
 
