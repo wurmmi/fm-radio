@@ -1,8 +1,8 @@
-################################################################################
+#-------------------------------------------------------------------------------
 # File        : .gitignore
 # Author      : Michael Wurm <wurm.michael95@gmail.com>
 # Description : Local SDK gitignore file
-################################################################################
+#-------------------------------------------------------------------------------
 
 # Ignore, because they are imported on each build
 # by the open_sdk.tcl (command importsources).

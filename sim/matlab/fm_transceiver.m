@@ -32,6 +32,7 @@ dir_output  = "./matlab_output/";
 % Simulation options
 EnableWriteDataFiles = true;
 EnablePlots          = true;
+EnableSavePlotsToPng = true;
 
 EnableSenderSourceRecordedFile = false;
 EnableSenderSourceCreateSim    = true;
@@ -40,7 +41,6 @@ EnableTrafficInfoTrigger       = false;
 
 EnableRxAudioReplay    = true;
 EnableFilterAnalyzeGUI = false;
-EnableSavePlotsToPng   = false;
 EnablePlotsLogarithmic = true;
 
 % Signal processing options

@@ -1,12 +1,9 @@
 #-------------------------------------------------------------------------------
 # File        : .gitignore
 # Author      : Michael Wurm <wurm.michael95@gmail.com>
-# Description : Local gitignore file for HLS
+# Description : Local gitignore file for sim
 #-------------------------------------------------------------------------------
 
 # Matlab
 *.asv
-*.png
-
-# Python
-__pycache__
+matlab_output/
