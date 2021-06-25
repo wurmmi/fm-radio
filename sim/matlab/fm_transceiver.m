@@ -147,6 +147,8 @@ if EnableWriteDataFiles
     writeDataToFile(rx_audio_lrdiff,  num_samples_audio, './verification_data/rx_audio_lrdiff.txt',  fp_config);
     writeDataToFile(rx_audio_L,       num_samples_audio, './verification_data/rx_audio_L.txt',       fp_config);
     writeDataToFile(rx_audio_R,       num_samples_audio, './verification_data/rx_audio_R.txt',       fp_config);
+    writeDataToFile(rx_audio_L,       n_sec * fs_audio,  './verification_data/rx_audio_L_long.txt',  fp_config);
+    writeDataToFile(rx_audio_R,       n_sec * fs_audio,  './verification_data/rx_audio_R_long.txt',  fp_config);
 
     writeDataToFileWAV(rx_fm_bb, fs, '../../hardware/vivado/sdk/fm_radio_app/resource/wav/','rx_fm_bb', fp_config);
     disp('Done.');
