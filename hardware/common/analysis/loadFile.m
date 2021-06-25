@@ -24,7 +24,7 @@ if filetype == "IP"
     % Convert to double and scale with 16 bit (2.14 fixed point format!)
     y_double = double(y_int16)/2^14;
 
-    % Interleaved left/right (NOTE: left/right may be swapped)
+    % Interleaved left/right
     left  = y_double(1:2:end);
     right = y_double(2:2:end);
     y(:,1) = left; 
