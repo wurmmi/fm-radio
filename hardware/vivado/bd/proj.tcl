@@ -240,9 +240,9 @@ proc create_root_design { parentCell } {
   # Create instance: axi_fifo_mm_s1_ip_output, and set properties
   set axi_fifo_mm_s1_ip_output [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_fifo_mm_s:4.1 axi_fifo_mm_s1_ip_output ]
   set_property -dict [ list \
-   CONFIG.C_RX_FIFO_DEPTH {8192} \
+   CONFIG.C_RX_FIFO_DEPTH {65536} \
    CONFIG.C_RX_FIFO_PE_THRESHOLD {100} \
-   CONFIG.C_RX_FIFO_PF_THRESHOLD {8000} \
+   CONFIG.C_RX_FIFO_PF_THRESHOLD {65000} \
    CONFIG.C_TX_FIFO_DEPTH {512} \
    CONFIG.C_TX_FIFO_PE_THRESHOLD {2} \
    CONFIG.C_TX_FIFO_PF_THRESHOLD {507} \
