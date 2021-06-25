@@ -58,12 +58,20 @@ void AudioHandler::IPOutputFifoFullCallback() {
 
   LOG_INFO("read %d data values from IPOutputFIFO", data.size());
 
-  // TODO: move this into another thread and notify it
-  //       (don't write a file here in the ISR)
+  /** TODO: move this into another thread and notify it
+   *       (don't write a file here in the ISR)
+   */
   string filename = mSdCardReader.GetCurrentlyLoadedFilename() + "_" +
                     mFmRadioIP->GetTypeStr() + ".txt";
-  const bool overwrite = true;
-  mSdCardReader.WriteFile(filename, data, overwrite);
+
+  static uint8_t write_counter = 0;
+  if (write_counter == 0) {
+    const bool overwrite = true;
+    bool success         = mSdCardReader.WriteFile(filename, data, overwrite);
+    if (!success)
+      return;
+    write_counter++;
+  }
 }
 
 void AudioHandler::ResetIPOutputFIFO() {

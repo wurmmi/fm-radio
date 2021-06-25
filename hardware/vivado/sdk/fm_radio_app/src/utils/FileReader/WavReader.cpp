@@ -45,7 +45,7 @@ bool WavReader::LoadFile(string const& filename) {
   LOG_INFO("Loading WAV file '%s' ...", filename.c_str());
 
   // Open the file
-  bool success = FileOpen(filename);
+  bool success = FileOpen(filename, FileOpenMode::READ);
   if (!success)
     return false;
 

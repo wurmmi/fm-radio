@@ -22,9 +22,12 @@ typedef struct {
 } DMABuffer;
 
 enum class FileType { UNKNOWN, WAV, TXT };
+enum class FileOpenMode { READ, WRITE };
 
 class FileReader {
  private:
+  bool mFileIsOpen;
+
  protected:
   DMABuffer mBuffer = {nullptr, 0};
 #if defined(__CSIM__) || defined(__RTL_SIMULATION__)
@@ -33,23 +36,21 @@ class FileReader {
   FIL mFile;
 #endif
 
-  bool FileOpen(std::string const& filename);
-  void FileClose();
-  bool FileRead(void* target_buf,
-                size_t num_bytes_to_read,
-                size_t& n_bytes_read);
-  bool FileWrite(std::string const& filename,
-                 std::vector<uint32_t> data,
-                 bool overwrite);
-  bool FileSeek(size_t num_bytes_offset);
-
  public:
   FileReader();
   ~FileReader();
 
+  bool FileOpen(std::string const& filename, FileOpenMode openMode);
+  void FileClose();
+  bool FileRead(void* target_buf,
+                size_t num_bytes_to_read,
+                size_t& n_bytes_read);
+  bool FileWrite(std::vector<uint32_t> data);
+  bool FileSeek(size_t num_bytes_offset);
+
   static FileType GetFileType(std::string const& filename);
 
-  virtual bool LoadFile(std::string const& filename) = 0;
+  virtual bool LoadFile(std::string const& filename);
   DMABuffer GetBuffer();
 };
 

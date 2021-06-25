@@ -19,13 +19,21 @@
 
 using namespace std;
 
-FileReader::FileReader() {}
+FileReader::FileReader() {
+  mFileIsOpen = false;
+}
 
 FileReader::~FileReader() {
   if (mBuffer.buffer) {
     delete[] mBuffer.buffer;
     mBuffer = {nullptr, 0};
   }
+  if (mFileIsOpen)
+    FileClose();
+}
+
+bool FileReader::LoadFile(std::string const& filename) {
+  LOG_ERROR("Not implemented here");
 }
 
 FileType FileReader::GetFileType(string const& filename) {
@@ -47,21 +55,53 @@ DMABuffer FileReader::GetBuffer() {
   return mBuffer;
 }
 
-bool FileReader::FileOpen(std::string const& filename) {
+bool FileReader::FileOpen(std::string const& filename, FileOpenMode openMode) {
 #ifdef __CSIM__
-  mFile = fopen(filename.c_str(), "r");
+  string mode_str;
+  switch (openMode) {
+    case FileOpenMode::READ:
+      mode_str = "read";
+      mFile    = fopen(filename.c_str(), "r");
+      break;
+    case FileOpenMode::WRITE:
+      mode_str = "write";
+      mFile    = fopen(filename.c_str(), "w");
+      break;
+
+    default:
+      LOG_ERROR("unhandled FileOpenMode");
+      break;
+  }
   if (!mFile) {
-    LOG_ERROR("Error opening file! (error: %s)", strerror(errno));
+    LOG_ERROR("Error opening file to %s! (error: %s)",
+              mode_str.c_str(),
+              strerror(errno));
     return false;
   }
 #else
-  FRESULT fres = f_open(&mFile, filename.c_str(), FA_READ);
+  string mode_str;
+  FRESULT fres;
+  switch (openMode) {
+    case FileOpenMode::READ:
+      mode_str = "read";
+      fres     = f_open(&mFile, filename.c_str(), FA_READ);
+      break;
+    case FileOpenMode::WRITE:
+      mode_str = "write";
+      fres     = f_open(&mFile, filename.c_str(), FA_CREATE_ALWAYS);
+      break;
+
+    default:
+      LOG_ERROR("unhandled FileOpenMode");
+      break;
+  }
   if (fres) {
-    LOG_ERROR("Error opening file! (error: %d)", fres);
+    LOG_ERROR("Error opening file to %s! (error: %d)", mode_str.c_str(), fres);
     return false;
   }
 #endif
 
+  mFileIsOpen = true;
   return true;
 }
 
@@ -100,9 +140,16 @@ bool FileReader::FileRead(void* target_buf,
   return true;
 }
 
-bool FileReader::FileWrite(std::string const& filename,
-                           std::vector<uint32_t> data,
-                           bool overwrite) {
+bool FileReader::FileWrite(std::vector<uint32_t> data) {
+  // for (auto const& elem : data) {
+  //  fp << elem << endl;
+  // }
+#ifdef __CSIM__
+
+#else
+
+#endif
+
   return true;
 }
 

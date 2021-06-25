@@ -175,20 +175,18 @@ bool SDCardReader::WriteFile(std::string const& filename,
   }
   LOG_INFO("Writing TXT file '%s' ...", filename.c_str());
 
-  ofstream fp;
-  if (overwrite)
-    fp.open(filename, ios::out);
-  else
-    fp.open(filename, ios::out | ios::app);
-  if (!fp.is_open()) {
-    LOG_ERROR("could not create/open file '%s'!", filename.c_str());
-    return false;
-  }
+  FileReader mFileReader;
 
-  for (auto const& elem : data) {
-    fp << elem << endl;
-  }
-  fp.close();
+  // Open the file to write
+  bool success = mFileReader.FileOpen(filename, FileOpenMode::WRITE);
+  if (!success)
+    return false;
+
+  success = mFileReader.FileWrite(data);
+  if (!success)
+    return false;
+
+  mFileReader.FileClose();
 
   return true;
 }
