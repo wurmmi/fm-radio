@@ -160,41 +160,41 @@ bool FileReader::FileRead(void* target_buf,
   return true;
 }
 
-bool FileReader::FileWrite(std::vector<uint32_t> data) {
-  size_t const num_bytes_to_write = sizeof(uint32_t);
-
-  /** TODO: speed up this process
-   *        - no loop: store entire vector at once
-   *           use std::vector.data() to get pointer and .size()*4 to get length
-   *       - no log prints
-   */
-  int count = 0;
-  for (size_t i = 0; i < data.size(); i++) {
-    uint32_t elem = data[i];
+bool FileReader::FileWrite(std::vector<uint32_t> const& data) {
 #ifdef __CSIM__
-    size_t n_bytes_written = fwrite((void*)&elem, num_bytes_to_write, 1, mFile);
-#else
-    size_t n_bytes_written = 0;
-    FRESULT fres =
-        f_write(&mFile, (void*)&elem, num_bytes_to_write, &n_bytes_written);
-    if (fres) {
-      LOG_ERROR("Failed to write to file. (error: %d)", fres);
-      FileClose();
-      return false;
-    }
-#endif
+  size_t num_elems_to_write = data.size();
+  size_t n_elems_written =
+      fwrite((void*)data.data(), sizeof(uint32_t), num_elems_to_write, mFile);
 
-    // Check if the requested amount was written
-    if (n_bytes_written != num_bytes_to_write) {
-      LOG_WARN("Wrote less than requested (%zu < %zu).",
-               n_bytes_written,
-               n_bytes_written);
-      FileClose();
-      return false;
-    }
-    LOG_INFO("%5d: %d", count, (unsigned int)elem);
-    count++;
+  // Check if the requested amount was written
+  if (n_elems_written != num_elems_to_write) {
+    LOG_WARN("Wrote less than requested (%zu < %zu).",
+             n_elems_written,
+             n_elems_written);
+    FileClose();
+    return false;
   }
+
+#else
+  size_t num_bytes_to_write = data.size() * sizeof(uint32_t);
+  size_t n_bytes_written    = 0;
+  FRESULT fres =
+      f_write(&mFile, (void*)data.data(), num_bytes_to_write, &n_bytes_written);
+  if (fres) {
+    LOG_ERROR("Failed to write to file. (error: %d)", fres);
+    FileClose();
+    return false;
+  }
+
+  // Check if the requested amount was written
+  if (n_bytes_written != num_bytes_to_write) {
+    LOG_WARN("Wrote less than requested (%zu < %zu).",
+             n_bytes_written,
+             n_bytes_written);
+    FileClose();
+    return false;
+  }
+#endif
   return true;
 }
 

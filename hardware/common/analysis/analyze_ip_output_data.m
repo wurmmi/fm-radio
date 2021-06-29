@@ -12,7 +12,7 @@ close all;
 clc;
 
 %% Settings
-EnableZoomToBegin = true;
+EnableZoomToBegin = false;
 
 %=========================================================================
 %% Read data
@@ -71,10 +71,10 @@ ymin = min([audioDataLeft_HLS_FPGA;audioDataRight_HLS_FPGA])*1.1;
 ax1 = subplot(2,1,1); hold on;
 title('Left channel');
 h0 = plot(audioDataLeft_Matlab,   'b',  'DisplayName', 'Matlab', 'LineWidth',2);
-h1 = plot(audioDataLeft_HLS_FPGA, 'r',  'DisplayName', 'HLS FPGA');
-h2 = plot(audioDataLeft_HLS_SIM,  'r--','DisplayName', 'HLS SIM');
-h3 = plot(audioDataLeft_VHDL_FPGA,'g',  'DisplayName', 'VHDL FPGA');
-h4 = plot(audioDataLeft_VHDL_SIM, 'g--','DisplayName', 'VHDL SIM');
+h1 = plot(audioDataLeft_VHDL_FPGA,'g',  'DisplayName', 'VHDL FPGA');
+h2 = plot(audioDataLeft_VHDL_SIM, 'g--','DisplayName', 'VHDL SIM');
+h3 = plot(audioDataLeft_HLS_FPGA, 'r',  'DisplayName', 'HLS FPGA');
+h4 = plot(audioDataLeft_HLS_SIM,  'r--','DisplayName', 'HLS SIM');
 xline(length(audioDataLeft_HLS_FPGA),'k--','FPGA');
 xline(length(audioDataLeft_HLS_SIM), 'k--','HLS SIM');
 xline(length(audioDataLeft_VHDL_SIM),'k--','VHDL SIM');
@@ -84,10 +84,10 @@ ylim([ymin,ymax]);
 ax2 = subplot(2,1,2); hold on;
 title('Right channel');
 h0 = plot(audioDataRight_Matlab,   'b',  'DisplayName', 'Matlab', 'LineWidth',2);
-h1 = plot(audioDataRight_HLS_FPGA, 'r',  'DisplayName', 'HLS FPGA');
-h2 = plot(audioDataRight_HLS_SIM,  'r--','DisplayName', 'HLS SIM');
-h3 = plot(audioDataRight_VHDL_FPGA,'g',  'DisplayName', 'VHDL FPGA');
-h4 = plot(audioDataRight_VHDL_SIM, 'g--','DisplayName', 'VHDL SIM');
+h1 = plot(audioDataRight_VHDL_FPGA,'g',  'DisplayName', 'VHDL FPGA');
+h2 = plot(audioDataRight_VHDL_SIM, 'g--','DisplayName', 'VHDL SIM');
+h3 = plot(audioDataRight_HLS_FPGA, 'r',  'DisplayName', 'HLS FPGA');
+h4 = plot(audioDataRight_HLS_SIM,  'r--','DisplayName', 'HLS SIM');
 xline(length(audioDataRight_HLS_FPGA),'k--','FPGA');
 xline(length(audioDataRight_HLS_SIM), 'k--','HLS SIM');
 xline(length(audioDataRight_VHDL_SIM),'k--','VHDL SIM');

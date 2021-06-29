@@ -37,7 +37,7 @@ class SDCardReader {
   void DiscoverFiles();
   bool LoadFile(std::string const& filename);
   bool WriteFile(std::string const& filename,
-                 std::vector<uint32_t> data,
+                 std::vector<uint32_t> const& data,
                  bool overwrite);
   void PrintAvailableFilenames() const;
   DMABuffer GetBuffer();

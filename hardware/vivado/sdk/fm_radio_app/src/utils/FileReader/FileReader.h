@@ -47,7 +47,7 @@ class FileReader {
   bool FileRead(void* target_buf,
                 size_t num_bytes_to_read,
                 size_t& n_bytes_read);
-  bool FileWrite(std::vector<uint32_t> data);
+  bool FileWrite(std::vector<uint32_t> const& data);
   bool FileSeek(size_t num_bytes_offset);
 
   static FileType GetFileType(std::string const& filename);

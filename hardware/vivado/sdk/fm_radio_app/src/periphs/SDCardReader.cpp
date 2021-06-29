@@ -168,7 +168,7 @@ bool SDCardReader::LoadFile(string const& filename) {
 }
 
 bool SDCardReader::WriteFile(std::string const& filename,
-                             std::vector<uint32_t> data,
+                             std::vector<uint32_t> const& data,
                              bool overwrite) {
   if (!IsMounted()) {
     return false;
