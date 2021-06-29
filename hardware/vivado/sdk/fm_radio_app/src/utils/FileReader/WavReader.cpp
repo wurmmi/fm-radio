@@ -45,7 +45,7 @@ bool WavReader::LoadFile(string const& filename) {
   LOG_INFO("Loading WAV file '%s' ...", filename.c_str());
 
   // Open the file
-  bool success = FileOpen(filename);
+  bool success = FileOpen(filename, FileOpenMode::READ);
   if (!success)
     return false;
 
@@ -166,6 +166,12 @@ bool WavReader::LoadFile(string const& filename) {
       num_unknown_chunks,
       num_fmt_chunks,
       num_data_chunks);
+
+  /** NOTE:
+   * Apparently, the WAV format stores channel left-right data swapped.
+   * Thus, simply swapping it back the way I need it. :)
+   */
+  SwapLeftAndRight();
 
   return true;
 }

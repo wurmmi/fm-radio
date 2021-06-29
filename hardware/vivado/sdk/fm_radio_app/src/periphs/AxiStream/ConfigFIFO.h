@@ -9,8 +9,6 @@
 
 #include "FIFO.h"
 
-#define FIFO_CHIP_ADDR 0
-
 class ConfigFIFO : public FIFO {
  private:
  public:

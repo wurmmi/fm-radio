@@ -80,7 +80,7 @@ async def axi_lite_memory_map_test(dut):
     dut._log.info("Execution took {:02d}:{:02d} minutes.".format(mins, secs))
 
 
-@ cocotb.test()
+@cocotb.test()
 async def axi_stream_dsp_test(dut):
     """
     Load test data from files and send them through the DUT.
@@ -92,7 +92,7 @@ async def axi_stream_dsp_test(dut):
     # --------------------------------------------------------------------------
 
     # Number of seconds to process
-    n_sec = 0.001
+    n_sec = 0.0025
 
     # --------------------------------------------------------------------------
     # Prepare environment
@@ -190,6 +190,12 @@ async def axi_stream_dsp_test(dut):
     # --------------------------------------------------------------------------
     dut._log.info("Comparing data ...")
     tb.compareData()
+
+    # --------------------------------------------------------------------------
+    # Write data to file
+    # --------------------------------------------------------------------------
+    dut._log.info("Writing data to file ...")
+    tb.writeDataToFile()
 
     # --------------------------------------------------------------------------
     # Plots

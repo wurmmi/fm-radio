@@ -13,6 +13,7 @@
 #include "AudioStreamDMA.h"
 #include "FIFO.h"
 #include "FMRadioIP_HLS.h"
+#include "IPOutputFIFO.h"
 #include "SDCardReader.h"
 
 class AudioHandler {
@@ -22,6 +23,7 @@ class AudioHandler {
   SDCardReader mSdCardReader;
   AudioStreamDMA mStreamDMA;
   FMRadioIP* mFmRadioIP;
+  IPOutputFIFO mIPOutputFifo;
   uint16_t mVolume;
   bool mIsPlaying;
 
@@ -35,7 +37,7 @@ class AudioHandler {
   void PrintVolumeInfo(std::string const& limit);
   void SwapLeftAndRight();
 
-  void AudioStreamEmptyCallback();
+  void IPOutputFifoFullCallback();
 
  public:
   AudioHandler();
@@ -48,6 +50,8 @@ class AudioHandler {
   void PlayFile(std::string const& filename);
   void Stop();
   void ShowAvailableFiles();
+
+  void ResetIPOutputFIFO();
 };
 
 #endif /* _AUDIOHANDLER_H_ */

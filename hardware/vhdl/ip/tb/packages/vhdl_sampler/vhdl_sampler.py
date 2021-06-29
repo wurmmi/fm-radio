@@ -45,7 +45,7 @@ class VHDL_SAMPLER():
                     "---> {} received all samples".format(self.data_name))
                 break
 
-    @ cocotb.coroutine
+    @cocotb.coroutine
     async def read_vhdl_output_32bit_split(self, data_L, data_R):
         while(True):
             await RisingEdge(self.signal_valid)

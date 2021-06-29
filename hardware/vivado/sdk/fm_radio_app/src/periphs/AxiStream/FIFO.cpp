@@ -13,7 +13,15 @@
 
 using namespace std;
 
-FIFO::FIFO(uint32_t device_id) : mDeviceId(device_id) {}
+// Interrupt controller of FreeRTOS
+extern XScuGic xInterruptController;
+
+FIFO::FIFO(uint32_t device_id) : mDeviceId(device_id) {
+  /* Use the FreeRTOS interrupt controller here.
+   * Otherwise we would crash/overwrite all the interrupt settings of the OS.
+   */
+  mIrqCtrl = &xInterruptController;
+}
 
 FIFO::~FIFO() {}
 
@@ -60,13 +68,19 @@ void FIFO::irq_handler() {
       XLlFifo_IntClear(&mDev, XLLF_INT_TC_MASK);
     } else if (pending & XLLF_INT_TFPE_MASK) {
       // Tx FIFO Programmable Empty
+      XLlFifo_IntClear(&mDev, XLLF_INT_TFPE_MASK);
       if (mCallbackOnTxEmptyIRQ != nullptr)
         mCallbackOnTxEmptyIRQ();
-      XLlFifo_IntClear(&mDev, XLLF_INT_TFPE_MASK);
+    } else if (pending & XLLF_INT_RFPF_MASK) {
+      // Rx FIFO Programmable Full
+      XLlFifo_IntClear(&mDev, XLLF_INT_RFPF_MASK);
+      if (mCallbackOnRxFullIRQ != nullptr)
+        mCallbackOnRxFullIRQ();
     } else if (pending & XLLF_INT_ERROR_MASK) {
       // Error status
       XLlFifo_IntClear(&mDev, XLLF_INT_ERROR_MASK);
     } else {
+      // Unhandled - clear all
       XLlFifo_IntClear(&mDev, pending);
     }
     pending = XLlFifo_IntPending(&mDev);
@@ -78,9 +92,10 @@ void FIFO::irq_handler_callback(void* context) {
 }
 
 bool FIFO::SetupInterrupts(uint32_t irq_id,
-                           std::function<void()> const& isEmptyCallback) {
-  assert(isEmptyCallback);
-  mCallbackOnTxEmptyIRQ = isEmptyCallback;
+                           std::function<void()> const& callbackOnTxEmptyIRQ,
+                           std::function<void()> const& callbackOnRxFullIRQ) {
+  mCallbackOnTxEmptyIRQ = callbackOnTxEmptyIRQ;
+  mCallbackOnRxFullIRQ  = callbackOnRxFullIRQ;
 
   // Initialize the interrupt controller driver so that it is ready to use.
   XScuGic_Config* IntcConfig =
@@ -91,25 +106,25 @@ bool FIFO::SetupInterrupts(uint32_t irq_id,
   }
 
   int status =
-      XScuGic_CfgInitialize(&mIrqCtrl, IntcConfig, IntcConfig->CpuBaseAddress);
+      XScuGic_CfgInitialize(mIrqCtrl, IntcConfig, IntcConfig->CpuBaseAddress);
   if (status != XST_SUCCESS) {
     printf("XScuGic_CfgInitialize() failed\n");
     return false;
   }
 
-  XScuGic_SetPriorityTriggerType(&mIrqCtrl, irq_id, 0xA0, 0x03);
+  XScuGic_SetPriorityTriggerType(mIrqCtrl, irq_id, 0xA0, 0x03);
 
   // Connect the device driver handler that will be called when an
   // interrupt for the device occurs, the handler defined above performs
   // the specific interrupt processing for the device.
   status = XScuGic_Connect(
-      &mIrqCtrl, irq_id, (Xil_InterruptHandler)irq_handler_callback, this);
+      mIrqCtrl, irq_id, (Xil_InterruptHandler)irq_handler_callback, this);
   if (status != XST_SUCCESS) {
     printf("XScuGic_Connect() failed\n");
     return false;
   }
 
-  XScuGic_Enable(&mIrqCtrl, irq_id);
+  XScuGic_Enable(mIrqCtrl, irq_id);
 
   // Initialize the exception table.
   Xil_ExceptionInit();
@@ -117,7 +132,7 @@ bool FIFO::SetupInterrupts(uint32_t irq_id,
   // Register the interrupt controller handler with the exception table.
   Xil_ExceptionRegisterHandler(XIL_EXCEPTION_ID_INT,
                                (Xil_ExceptionHandler)XScuGic_InterruptHandler,
-                               (void*)&mIrqCtrl);
+                               (void*)mIrqCtrl);
 
   // Enable exceptions.
   Xil_ExceptionEnable();
@@ -125,6 +140,7 @@ bool FIFO::SetupInterrupts(uint32_t irq_id,
   // Enable FIFO interrupts
   XLlFifo_IntEnable(&mDev, XLLF_INT_ALL_MASK);
 
+  // Start first transmission
   if (mCallbackOnTxEmptyIRQ != nullptr)
     mCallbackOnTxEmptyIRQ();
 

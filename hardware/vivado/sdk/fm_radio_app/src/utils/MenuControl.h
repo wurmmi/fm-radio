@@ -14,6 +14,7 @@ class MenuControl {
   ~MenuControl();
 
   static void PrintMainMenu();
+  static void PrintAppHeader();
 };
 
 #endif /* _MENUCONTROL_H_ */

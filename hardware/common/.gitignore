@@ -1,0 +1,12 @@
+#-------------------------------------------------------------------------------
+# File        : .gitignore
+# Author      : Michael Wurm <wurm.michael95@gmail.com>
+# Description : Local gitignore file for HLS
+#-------------------------------------------------------------------------------
+
+# Matlab
+*.asv
+*.png
+
+# Python
+__pycache__

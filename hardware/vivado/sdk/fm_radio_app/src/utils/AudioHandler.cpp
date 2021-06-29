@@ -18,7 +18,9 @@
 
 using namespace std;
 
-AudioHandler::AudioHandler() : mStreamDMA(XPAR_AXI_DMA_0_DEVICE_ID) {
+AudioHandler::AudioHandler()
+    : mStreamDMA(XPAR_AXI_DMA_0_DEVICE_ID),
+      mIPOutputFifo(XPAR_AXI_FIFO_MM_S1_IP_OUTPUT_DEVICE_ID) {
   mFmRadioIP = nullptr;
   mVolume    = volume_default_c;
   mIsPlaying = false;
@@ -33,9 +35,50 @@ bool AudioHandler::Initialize() {
   if (!mAdau1761.Initialize()) {
     return false;
   }
-  LOG_DEBUG("AudioHandler hardware initialization OKAY");
+
+  LOG_DEBUG("Configuring the IPOutput-FIFO ...");
+  int status = mIPOutputFifo.Initialize();
+  if (!status) {
+    LOG_ERROR("could not initialize the IPOutput-FIFO");
+    return false;
+  }
+
+  status = mIPOutputFifo.SetupInterrupts(
+      XPAR_FABRIC_AXI_FIFO_MM_S1_IP_OUTPUT_INTERRUPT_INTR,
+      nullptr,
+      bind(&AudioHandler::IPOutputFifoFullCallback, this));
+  LOG_DEBUG("Done.");
 
   return true;
+}
+
+void AudioHandler::IPOutputFifoFullCallback() {
+  LOG_DEBUG("IPOutputFIFO full!");
+  auto data = mIPOutputFifo.ReadAll();
+
+  LOG_INFO("read %d data values from IPOutputFIFO", data.size());
+
+  /** TODO: move this into another thread and notify it (or use a DMA)
+   *       (Writing a file here in the ISR is bad practise...)
+   */
+  /** NOTE:
+   *    Filename needs to be in short form, so that
+   *    the XilFFS (see <ff.h>) driver understands it..
+   */
+  string filename = mFmRadioIP->GetTypeStr() + ".txt";
+
+  static uint8_t write_counter = 0;
+  if (write_counter == 0) {
+    const bool overwrite = true;
+    bool success         = mSdCardReader.WriteFile(filename, data, overwrite);
+    if (!success)
+      return;
+    write_counter++;
+  }
+}
+
+void AudioHandler::ResetIPOutputFIFO() {
+  mIPOutputFifo.ResetRx();
 }
 
 void AudioHandler::SetIP(FMRadioIP* radioIP) {
@@ -86,25 +129,6 @@ void AudioHandler::PrintVolumeInfo(string const& limit) {
     msg += " (STOP and START again to apply)";
 
   LOG_INFO("%s", msg.c_str());
-}
-
-void AudioHandler::SwapLeftAndRight() {
-  auto buffer = mSdCardReader.GetBuffer();
-  if (buffer.buffer == nullptr) {
-    LOG_ERROR("no file loaded yet");
-    return;
-  }
-
-  LOG_DEBUG("swap left and right channel");
-  uint32_t* pSource = (uint32_t*)buffer.buffer;
-  for (size_t i = 0; i < buffer.size / 4; i++) {
-    // Split 32 bit into 2x 16 bit
-    int16_t left  = (int16_t)((pSource[i] >> 16) & 0xFFFF);
-    int16_t right = (int16_t)((pSource[i] >> 0) & 0xFFFF);
-
-    // Combine to 32 bit again (reversed)
-    pSource[i] = ((uint32_t)right << 16) + (uint32_t)left;
-  }
 }
 
 void AudioHandler::VolumeUp() {

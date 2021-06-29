@@ -81,7 +81,7 @@ bool ADAU1761::Initialize() {
   LOG_DEBUG("Configuring the Config-FIFO ...");
   int status = mConfigFifo.Initialize();
   if (!status) {
-    LOG_ERROR("ERROR");
+    LOG_ERROR("could not initialize the Config-FIFO");
     return false;
   }
   LOG_DEBUG("Done.");
@@ -89,7 +89,7 @@ bool ADAU1761::Initialize() {
   LOG_DEBUG("Configuring the ADAU1761 chip ...");
   status = adau1761_chip_config();
   if (!status) {
-    LOG_ERROR("ERROR");
+    LOG_ERROR("could not initialize the ADAU1761 chip");
     return false;
   }
   LOG_DEBUG("Done.");

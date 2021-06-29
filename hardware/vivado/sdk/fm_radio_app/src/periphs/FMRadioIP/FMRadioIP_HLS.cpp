@@ -86,6 +86,10 @@ string FMRadioIP_HLS::GetBuildTime() {
   return build_time;
 }
 
+string FMRadioIP_HLS::GetTypeStr() {
+  return "HLS";
+}
+
 void FMRadioIP_HLS::SetMode(TMode mode) {
   XFm_receiver_hls_Set_config_enable_fm_radio_ip(&mDev,
                                                  static_cast<uint32_t>(mode));

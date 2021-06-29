@@ -50,7 +50,7 @@ end;
 architecture behav of fm_receiver_hls is 
     attribute CORE_GENERATION_INFO : STRING;
     attribute CORE_GENERATION_INFO of behav : architecture is
-    "fm_receiver_hls,hls_ip_2018_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=1,HLS_INPUT_PART=xc7z020clg484-1,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=8.457000,HLS_SYN_LAT=1358,HLS_SYN_TPT=none,HLS_SYN_MEM=8,HLS_SYN_DSP=6,HLS_SYN_FF=1485,HLS_SYN_LUT=1309,HLS_VERSION=2018_2}";
+    "fm_receiver_hls,hls_ip_2018_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=1,HLS_INPUT_PART=xc7z020clg484-1,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=8.457000,HLS_SYN_LAT=1358,HLS_SYN_TPT=none,HLS_SYN_MEM=8,HLS_SYN_DSP=6,HLS_SYN_FF=1491,HLS_SYN_LUT=1309,HLS_VERSION=2018_2}";
     constant ap_const_logic_1 : STD_LOGIC := '1';
     constant ap_const_logic_0 : STD_LOGIC := '0';
     constant ap_ST_fsm_state1 : STD_LOGIC_VECTOR (3 downto 0) := "0001";
@@ -69,8 +69,8 @@ architecture behav of fm_receiver_hls is
     constant ap_const_lv32_2 : STD_LOGIC_VECTOR (31 downto 0) := "00000000000000000000000000000010";
     constant ap_const_lv32_3 : STD_LOGIC_VECTOR (31 downto 0) := "00000000000000000000000000000011";
     constant C_S_AXI_DATA_WIDTH : INTEGER range 63 downto 0 := 20;
-    constant ap_const_lv32_870D25E0 : STD_LOGIC_VECTOR (31 downto 0) := "10000111000011010010010111100000";
-    constant ap_const_lv48_210623230320 : STD_LOGIC_VECTOR (47 downto 0) := "001000010000011000100011001000110000001100100000";
+    constant ap_const_lv32_32F12DD3 : STD_LOGIC_VECTOR (31 downto 0) := "00110010111100010010110111010011";
+    constant ap_const_lv48_210629210635 : STD_LOGIC_VECTOR (47 downto 0) := "001000010000011000101001001000010000011000110101";
     constant ap_const_lv48_0 : STD_LOGIC_VECTOR (47 downto 0) := "000000000000000000000000000000000000000000000000";
     constant ap_const_lv4_0 : STD_LOGIC_VECTOR (3 downto 0) := "0000";
     constant ap_const_lv4_2 : STD_LOGIC_VECTOR (3 downto 0) := "0010";
@@ -384,14 +384,16 @@ begin
     begin
         if (ap_clk'event and ap_clk =  '1') then
             if (ap_rst_n_inv = '1') then
+                status_build_time_V_preg(0) <= '0';
+                status_build_time_V_preg(2) <= '0';
+                status_build_time_V_preg(4) <= '0';
                 status_build_time_V_preg(5) <= '0';
-                status_build_time_V_preg(8) <= '0';
                 status_build_time_V_preg(9) <= '0';
+                status_build_time_V_preg(10) <= '0';
                 status_build_time_V_preg(16) <= '0';
-                status_build_time_V_preg(17) <= '0';
                 status_build_time_V_preg(21) <= '0';
                 status_build_time_V_preg(24) <= '0';
-                status_build_time_V_preg(25) <= '0';
+                status_build_time_V_preg(27) <= '0';
                 status_build_time_V_preg(29) <= '0';
                 status_build_time_V_preg(33) <= '0';
                 status_build_time_V_preg(34) <= '0';
@@ -399,14 +401,16 @@ begin
                 status_build_time_V_preg(45) <= '0';
             else
                 if (((ap_const_logic_1 = ap_CS_fsm_state1) and (ap_start = ap_const_logic_1))) then 
+                    status_build_time_V_preg(0) <= '1';
+                    status_build_time_V_preg(2) <= '1';
+                    status_build_time_V_preg(4) <= '1';
                     status_build_time_V_preg(5) <= '1';
-                    status_build_time_V_preg(8) <= '1';
                     status_build_time_V_preg(9) <= '1';
+                    status_build_time_V_preg(10) <= '1';
                     status_build_time_V_preg(16) <= '1';
-                    status_build_time_V_preg(17) <= '1';
                     status_build_time_V_preg(21) <= '1';
                     status_build_time_V_preg(24) <= '1';
-                    status_build_time_V_preg(25) <= '1';
+                    status_build_time_V_preg(27) <= '1';
                     status_build_time_V_preg(29) <= '1';
                     status_build_time_V_preg(33) <= '1';
                     status_build_time_V_preg(34) <= '1';
@@ -422,34 +426,42 @@ begin
     begin
         if (ap_clk'event and ap_clk =  '1') then
             if (ap_rst_n_inv = '1') then
-                status_git_hash_V_preg(5) <= '0';
+                status_git_hash_V_preg(0) <= '0';
+                status_git_hash_V_preg(1) <= '0';
+                status_git_hash_V_preg(4) <= '0';
                 status_git_hash_V_preg(6) <= '0';
                 status_git_hash_V_preg(7) <= '0';
                 status_git_hash_V_preg(8) <= '0';
                 status_git_hash_V_preg(10) <= '0';
+                status_git_hash_V_preg(11) <= '0';
                 status_git_hash_V_preg(13) <= '0';
                 status_git_hash_V_preg(16) <= '0';
-                status_git_hash_V_preg(18) <= '0';
-                status_git_hash_V_preg(19) <= '0';
-                status_git_hash_V_preg(24) <= '0';
+                status_git_hash_V_preg(20) <= '0';
+                status_git_hash_V_preg(21) <= '0';
+                status_git_hash_V_preg(22) <= '0';
+                status_git_hash_V_preg(23) <= '0';
                 status_git_hash_V_preg(25) <= '0';
-                status_git_hash_V_preg(26) <= '0';
-                status_git_hash_V_preg(31) <= '0';
+                status_git_hash_V_preg(28) <= '0';
+                status_git_hash_V_preg(29) <= '0';
             else
                 if (((ap_const_logic_1 = ap_CS_fsm_state1) and (ap_start = ap_const_logic_1))) then 
-                    status_git_hash_V_preg(5) <= '1';
+                    status_git_hash_V_preg(0) <= '1';
+                    status_git_hash_V_preg(1) <= '1';
+                    status_git_hash_V_preg(4) <= '1';
                     status_git_hash_V_preg(6) <= '1';
                     status_git_hash_V_preg(7) <= '1';
                     status_git_hash_V_preg(8) <= '1';
                     status_git_hash_V_preg(10) <= '1';
+                    status_git_hash_V_preg(11) <= '1';
                     status_git_hash_V_preg(13) <= '1';
                     status_git_hash_V_preg(16) <= '1';
-                    status_git_hash_V_preg(18) <= '1';
-                    status_git_hash_V_preg(19) <= '1';
-                    status_git_hash_V_preg(24) <= '1';
+                    status_git_hash_V_preg(20) <= '1';
+                    status_git_hash_V_preg(21) <= '1';
+                    status_git_hash_V_preg(22) <= '1';
+                    status_git_hash_V_preg(23) <= '1';
                     status_git_hash_V_preg(25) <= '1';
-                    status_git_hash_V_preg(26) <= '1';
-                    status_git_hash_V_preg(31) <= '1';
+                    status_git_hash_V_preg(28) <= '1';
+                    status_git_hash_V_preg(29) <= '1';
                 end if; 
             end if;
         end if;
@@ -496,19 +508,23 @@ begin
             end if;
         end if;
     end process;
-    status_git_hash_V_preg(4 downto 0) <= "00000";
+    status_git_hash_V_preg(3 downto 2) <= "00";
+    status_git_hash_V_preg(5 downto 5) <= "0";
     status_git_hash_V_preg(9 downto 9) <= "0";
-    status_git_hash_V_preg(12 downto 11) <= "00";
+    status_git_hash_V_preg(12 downto 12) <= "0";
     status_git_hash_V_preg(15 downto 14) <= "00";
-    status_git_hash_V_preg(17 downto 17) <= "0";
-    status_git_hash_V_preg(23 downto 20) <= "0000";
-    status_git_hash_V_preg(30 downto 27) <= "0000";
-    status_build_time_V_preg(4 downto 0) <= "00000";
-    status_build_time_V_preg(7 downto 6) <= "00";
-    status_build_time_V_preg(15 downto 10) <= "000000";
-    status_build_time_V_preg(20 downto 18) <= "000";
+    status_git_hash_V_preg(19 downto 17) <= "000";
+    status_git_hash_V_preg(24 downto 24) <= "0";
+    status_git_hash_V_preg(27 downto 26) <= "00";
+    status_git_hash_V_preg(31 downto 30) <= "00";
+    status_build_time_V_preg(1) <= '0';
+    status_build_time_V_preg(3 downto 3) <= "0";
+    status_build_time_V_preg(8 downto 6) <= "000";
+    status_build_time_V_preg(15 downto 11) <= "00000";
+    status_build_time_V_preg(20 downto 17) <= "0000";
     status_build_time_V_preg(23 downto 22) <= "00";
-    status_build_time_V_preg(28 downto 26) <= "000";
+    status_build_time_V_preg(26 downto 25) <= "00";
+    status_build_time_V_preg(28 downto 28) <= "0";
     status_build_time_V_preg(32 downto 30) <= "000";
     status_build_time_V_preg(39 downto 35) <= "00000";
     status_build_time_V_preg(44 downto 41) <= "0000";
@@ -707,7 +723,7 @@ begin
     status_build_time_V_assign_proc : process(ap_start, ap_CS_fsm_state1, status_build_time_V_preg)
     begin
         if (((ap_const_logic_1 = ap_CS_fsm_state1) and (ap_start = ap_const_logic_1))) then 
-            status_build_time_V <= ap_const_lv48_210623230320;
+            status_build_time_V <= ap_const_lv48_210629210635;
         else 
             status_build_time_V <= status_build_time_V_preg;
         end if; 
@@ -717,7 +733,7 @@ begin
     status_git_hash_V_assign_proc : process(ap_start, ap_CS_fsm_state1, status_git_hash_V_preg)
     begin
         if (((ap_const_logic_1 = ap_CS_fsm_state1) and (ap_start = ap_const_logic_1))) then 
-            status_git_hash_V <= ap_const_lv32_870D25E0;
+            status_git_hash_V <= ap_const_lv32_32F12DD3;
         else 
             status_git_hash_V <= status_git_hash_V_preg;
         end if; 

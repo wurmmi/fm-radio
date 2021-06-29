@@ -1,0 +1,9 @@
+#-------------------------------------------------------------------------------
+# File        : .gitignore
+# Author      : Michael Wurm <wurm.michael95@gmail.com>
+# Description : Local gitignore file for sim
+#-------------------------------------------------------------------------------
+
+# Matlab
+*.asv
+matlab_output/

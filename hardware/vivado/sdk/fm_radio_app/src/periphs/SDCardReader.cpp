@@ -7,6 +7,7 @@
 #include "SDCardReader.h"
 
 #include <algorithm>
+#include <fstream>
 #include <iostream>
 
 #include "TxtReader.h"
@@ -16,8 +17,8 @@
 using namespace std;
 
 SDCardReader::SDCardReader() {
-  mMounted = false;
-
+  mMounted                  = false;
+  mCurrentlyLoadedFilename  = "";
   const uint8_t num_retries = 5;
   MountSDCard(num_retries);
   DiscoverFiles();
@@ -161,7 +162,33 @@ bool SDCardReader::LoadFile(string const& filename) {
 
   if (!success)
     LOG_ERROR("Could not load file!");
+  mCurrentlyLoadedFilename = filename;
+
   return success;
+}
+
+bool SDCardReader::WriteFile(std::string const& filename,
+                             std::vector<uint32_t> const& data,
+                             bool overwrite) {
+  if (!IsMounted()) {
+    return false;
+  }
+  LOG_INFO("Writing TXT file '%s' ...", filename.c_str());
+
+  FileReader mFileReader;
+
+  bool success = mFileReader.FileOpen(filename, FileOpenMode::WRITE);
+  if (!success)
+    return false;
+
+  success = mFileReader.FileWrite(data);
+  if (!success)
+    return false;
+
+  mFileReader.FileClose();
+
+  LOG_INFO("Done.");
+  return true;
 }
 
 void SDCardReader::PrintAvailableFilenames() const {
@@ -174,4 +201,8 @@ void SDCardReader::PrintAvailableFilenames() const {
 
 DMABuffer SDCardReader::GetBuffer() {
   return mFileReader->GetBuffer();
+}
+
+std::string const& SDCardReader::GetCurrentlyLoadedFilename() {
+  return mCurrentlyLoadedFilename;
 }

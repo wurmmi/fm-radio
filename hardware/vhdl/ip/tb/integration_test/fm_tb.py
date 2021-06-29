@@ -10,7 +10,7 @@ import fm_global
 import helpers as helper
 from cocotb.triggers import RisingEdge, Timer
 from cocotb_bus.drivers import BitDriver
-from cocotbext.axi import AxiLiteBus, AxiLiteMaster, AxiLiteRam
+from cocotbext.axi import AxiLiteBus, AxiLiteMaster
 from cocotbext.axi4stream.drivers import Axi4StreamMaster
 from fm_receiver_model import FM_RECEIVER_MODEL
 from tb_analyzer_helper import TB_ANALYZER_HELPER
@@ -175,6 +175,18 @@ class FM_TB():
 
     def compareData(self):
         self.tb_analyzer_helper.compare_data()
+
+    def writeDataToFile(self):
+        directory_file_output = "./sim_build/"
+        data_L_ptr = helper.get_dataset_by_name(self.tb_data_handler.data, 'audio_L')
+        with open(directory_file_output + 'audio_L.txt', 'w') as fp:
+            for value in data_L_ptr:
+                fp.write("{:.16f}\n".format(value))
+
+        data_R_ptr = helper.get_dataset_by_name(self.tb_data_handler.data, 'audio_R')
+        with open(directory_file_output + 'audio_R.txt', 'w') as fp:
+            for value in data_R_ptr:
+                fp.write("{:.16f}\n".format(value))
 
     def generatePlots(self):
         if not self.EnablePlots:
