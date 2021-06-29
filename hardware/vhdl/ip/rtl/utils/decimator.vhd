@@ -58,7 +58,7 @@ begin -- architecture rtl
     procedure reset is
     begin
       valid  <= '0';
-      count  <= 0;
+      count  <= decimation_g - 1;
       sample <= (others => '0');
     end procedure;
   begin -- process regs

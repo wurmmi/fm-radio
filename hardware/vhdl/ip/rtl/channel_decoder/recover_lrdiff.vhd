@@ -44,6 +44,7 @@ architecture rtl of recover_lrdiff is
   -----------------------------------------------------------------------------
   --! @{
 
+  signal carrier_38k         : sample_t;
   signal lrdiff_mod_bb       : sample_t;
   signal lrdiff_mod_bb_valid : std_ulogic;
 
@@ -80,6 +81,7 @@ begin -- architecture rtl
   regs : process (clk_i) is
     procedure reset is
     begin
+      carrier_38k         <= (others => '0');
       lrdiff_mod_bb       <= (others => '0');
       lrdiff_mod_bb_valid <= '0';
     end procedure reset;
@@ -91,11 +93,14 @@ begin -- architecture rtl
         -- Defaults
         lrdiff_mod_bb_valid <= '0';
 
+        if carrier_38k_valid_i = '1' then
+          carrier_38k <= carrier_38k_i;
+        end if;
+
         -- Modulate down to baseband
-        -- TODO: check when carier_38k_i is valid, or store it here internally
         if lrdiff_bpfilt_valid = '1' then
           lrdiff_mod_bb <= ResizeTruncAbsVal(
-            lrdiff_bpfilt * carrier_38k_i * to_sfixed(2, 2, 0), lrdiff_mod_bb);
+            lrdiff_bpfilt * carrier_38k * to_sfixed(2, 2, 0), lrdiff_mod_bb);
 
           lrdiff_mod_bb_valid <= '1';
         end if;
