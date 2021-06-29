@@ -58,15 +58,6 @@ clang-format on
 
 using namespace std;
 
-// TODO:
-// use a axilite config register to select between passthrough and FM radio
-
-/** Select implementation variant
- *  NOTE: Selection is mutually exclusive - only enable one at a time!
- */
-#define IMPL_DATA_FORWARDING_ONLY 0
-#define IMPL_FM_RADIO             1
-
 #ifndef GIT_HASH
 #warning GIT_HASH is undefined!
 #define GIT_HASH undefined

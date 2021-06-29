@@ -59,7 +59,7 @@ void AudioHandler::IPOutputFifoFullCallback() {
   LOG_INFO("read %d data values from IPOutputFIFO", data.size());
 
   /** TODO: move this into another thread and notify it
-   *       (don't write a file here in the ISR)
+   *       (Writing a file here in the ISR is bad practise...)
    */
   /** NOTE:
    *    Filename needs to be in short form, so that
