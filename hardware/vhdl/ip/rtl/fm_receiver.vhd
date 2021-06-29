@@ -67,15 +67,15 @@ architecture rtl of fm_receiver is
   -----------------------------------------------------------------------------
   --! @{
 
-  signal fm_demod       : sample_t;
-  signal fm_demod_valid : std_ulogic;
+  signal fm_demod       : sample_t   := (others => '0');
+  signal fm_demod_valid : std_ulogic := '0';
 
-  signal fm_channel_data       : sample_t;
-  signal fm_channel_data_valid : std_ulogic;
+  signal fm_channel_data       : sample_t   := (others => '0');
+  signal fm_channel_data_valid : std_ulogic := '0';
 
-  signal audio_L     : sample_t;
-  signal audio_R     : sample_t;
-  signal audio_valid : std_ulogic;
+  signal audio_L     : sample_t   := (others => '0');
+  signal audio_R     : sample_t   := (others => '0');
+  signal audio_valid : std_ulogic := '0';
 
   --! @}
 

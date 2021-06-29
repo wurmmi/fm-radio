@@ -44,9 +44,9 @@ architecture rtl of recover_lrdiff is
   -----------------------------------------------------------------------------
   --! @{
 
-  signal carrier_38k         : sample_t;
-  signal lrdiff_mod_bb       : sample_t;
-  signal lrdiff_mod_bb_valid : std_ulogic;
+  signal carrier_38k         : sample_t   := (others => '0');
+  signal lrdiff_mod_bb       : sample_t   := (others => '0');
+  signal lrdiff_mod_bb_valid : std_ulogic := '0';
 
   --! @}
   -----------------------------------------------------------------------------
