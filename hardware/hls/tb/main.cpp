@@ -31,7 +31,7 @@ using namespace std;
 #ifdef __RTL_SIMULATION__
 constexpr double n_sec_c = 0.001;
 #else
-constexpr double n_sec_c = 0.1;
+constexpr double n_sec_c = 0.8;
 #endif
 
 #define DEBUG_OUTPUT 0

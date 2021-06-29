@@ -133,7 +133,7 @@ if EnableWriteDataFiles
     
     disp('--- Verification data');
     % Only write a fraction of the simulation time to file
-    n_sec_file  = 0.1;
+    n_sec_file  = 0.8;
     num_samples = n_sec_file * fs_rx;
     num_samples_audio = n_sec_file * fs_audio;
     
