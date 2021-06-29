@@ -25,7 +25,7 @@ package fm_radio_pkg is
 
   --! Pilot recovery
   constant pilot_scale_factor_c : sfixed(4 downto 0)  := to_sfixed(pilot_scale_factor_spec_c, 4, 0);
-  constant carrier_38k_offset_c : sfixed(2 downto -2) := to_sfixed(carrier_38k_offset_spec_c, 2, -2);
+  constant carrier_38k_offset_c : sfixed(2 downto -3) := to_sfixed(carrier_38k_offset_spec_c, 2, -3);
 
   --! Sample value type
   subtype sample_t is sfixed(fp_width_int_spec_c - 1 downto -fp_width_frac_spec_c);

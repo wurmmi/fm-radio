@@ -7,9 +7,12 @@
 %-------------------------------------------------------------------------
 
 %% Prepare environment
-clear; 
-close all; 
+clear;
+close all;
 clc;
+
+%% Settings
+EnableZoomToBegin = true;
 
 %=========================================================================
 %% Read data
@@ -51,8 +54,11 @@ audioDataRight_Matlab = circshift(audioDataRight_Matlab,-4);
 audioDataLeft_HLS_SIM  = circshift(audioDataLeft_HLS_SIM, 1);
 audioDataRight_HLS_SIM = circshift(audioDataRight_HLS_SIM,1);
 
-audioDataLeft_VHDL_SIM  = circshift(audioDataLeft_VHDL_SIM, 3);
-audioDataRight_VHDL_SIM = circshift(audioDataRight_VHDL_SIM,3);
+audioDataLeft_VHDL_SIM  = circshift(audioDataLeft_VHDL_SIM, 1);
+audioDataRight_VHDL_SIM = circshift(audioDataRight_VHDL_SIM,1);
+
+audioDataLeft_VHDL_FPGA  = circshift(audioDataLeft_VHDL_FPGA, 3);
+audioDataRight_VHDL_FPGA = circshift(audioDataRight_VHDL_FPGA,3);
 
 % Plot
 fig_title = 'Audio Output';
@@ -90,4 +96,8 @@ ylim([ymin,ymax]);
 
 xlabel('time [sample]');
 linkaxes([ax1,ax2],'xy');
+if EnableZoomToBegin
+    xlim([0,length(audioDataLeft_VHDL_SIM)]);
+    ylim([-0.035,0.035]);
+end
 saveas(fig_audio_time, "./audio_output.png");
