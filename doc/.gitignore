@@ -1,9 +1,10 @@
 #-------------------------------------------------------------------------------
 # File        : .gitignore
 # Author      : Michael Wurm <wurm.michael95@gmail.com>
-# Description : Local gitignore file for LaTeX docs
+# Description : Local gitignore file for doc
 #-------------------------------------------------------------------------------
 
+# LaTeX
 *.aux
 *.fls
 *.log
@@ -17,3 +18,5 @@
 *.run.xml
 *.synctex
 *.tps
+
+lines-of-code-analysis/*.txt
