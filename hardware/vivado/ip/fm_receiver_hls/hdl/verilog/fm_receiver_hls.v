@@ -7,7 +7,7 @@
 
 `timescale 1 ns / 1 ps 
 
-(* CORE_GENERATION_INFO="fm_receiver_hls,hls_ip_2018_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=1,HLS_INPUT_PART=xc7z020clg484-1,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=8.457000,HLS_SYN_LAT=1358,HLS_SYN_TPT=none,HLS_SYN_MEM=8,HLS_SYN_DSP=6,HLS_SYN_FF=1485,HLS_SYN_LUT=1309,HLS_VERSION=2018_2}" *)
+(* CORE_GENERATION_INFO="fm_receiver_hls,hls_ip_2018_2,{HLS_INPUT_TYPE=cxx,HLS_INPUT_FLOAT=0,HLS_INPUT_FIXED=1,HLS_INPUT_PART=xc7z020clg484-1,HLS_INPUT_CLOCK=10.000000,HLS_INPUT_ARCH=others,HLS_SYN_CLOCK=8.457000,HLS_SYN_LAT=1358,HLS_SYN_TPT=none,HLS_SYN_MEM=8,HLS_SYN_DSP=6,HLS_SYN_FF=1491,HLS_SYN_LUT=1309,HLS_VERSION=2018_2}" *)
 
 module fm_receiver_hls (
         ap_clk,
@@ -315,14 +315,16 @@ end
 
 always @ (posedge ap_clk) begin
     if (ap_rst_n_inv == 1'b1) begin
-                status_build_time_V_preg[5] <= 1'b0;
-        status_build_time_V_preg[8] <= 1'b0;
+                status_build_time_V_preg[0] <= 1'b0;
+        status_build_time_V_preg[2] <= 1'b0;
+        status_build_time_V_preg[4] <= 1'b0;
+        status_build_time_V_preg[5] <= 1'b0;
         status_build_time_V_preg[9] <= 1'b0;
+        status_build_time_V_preg[10] <= 1'b0;
         status_build_time_V_preg[16] <= 1'b0;
-        status_build_time_V_preg[17] <= 1'b0;
         status_build_time_V_preg[21] <= 1'b0;
         status_build_time_V_preg[24] <= 1'b0;
-        status_build_time_V_preg[25] <= 1'b0;
+        status_build_time_V_preg[27] <= 1'b0;
         status_build_time_V_preg[29] <= 1'b0;
         status_build_time_V_preg[33] <= 1'b0;
         status_build_time_V_preg[34] <= 1'b0;
@@ -330,14 +332,16 @@ always @ (posedge ap_clk) begin
         status_build_time_V_preg[45] <= 1'b0;
     end else begin
         if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
-                        status_build_time_V_preg[5] <= 1'b1;
-            status_build_time_V_preg[8] <= 1'b1;
+                        status_build_time_V_preg[0] <= 1'b1;
+            status_build_time_V_preg[2] <= 1'b1;
+            status_build_time_V_preg[4] <= 1'b1;
+            status_build_time_V_preg[5] <= 1'b1;
             status_build_time_V_preg[9] <= 1'b1;
+            status_build_time_V_preg[10] <= 1'b1;
             status_build_time_V_preg[16] <= 1'b1;
-            status_build_time_V_preg[17] <= 1'b1;
             status_build_time_V_preg[21] <= 1'b1;
             status_build_time_V_preg[24] <= 1'b1;
-            status_build_time_V_preg[25] <= 1'b1;
+            status_build_time_V_preg[27] <= 1'b1;
             status_build_time_V_preg[29] <= 1'b1;
             status_build_time_V_preg[33] <= 1'b1;
             status_build_time_V_preg[34] <= 1'b1;
@@ -349,34 +353,42 @@ end
 
 always @ (posedge ap_clk) begin
     if (ap_rst_n_inv == 1'b1) begin
-                status_git_hash_V_preg[5] <= 1'b0;
+                status_git_hash_V_preg[0] <= 1'b0;
+        status_git_hash_V_preg[1] <= 1'b0;
+        status_git_hash_V_preg[4] <= 1'b0;
         status_git_hash_V_preg[6] <= 1'b0;
         status_git_hash_V_preg[7] <= 1'b0;
         status_git_hash_V_preg[8] <= 1'b0;
         status_git_hash_V_preg[10] <= 1'b0;
+        status_git_hash_V_preg[11] <= 1'b0;
         status_git_hash_V_preg[13] <= 1'b0;
         status_git_hash_V_preg[16] <= 1'b0;
-        status_git_hash_V_preg[18] <= 1'b0;
-        status_git_hash_V_preg[19] <= 1'b0;
-        status_git_hash_V_preg[24] <= 1'b0;
+        status_git_hash_V_preg[20] <= 1'b0;
+        status_git_hash_V_preg[21] <= 1'b0;
+        status_git_hash_V_preg[22] <= 1'b0;
+        status_git_hash_V_preg[23] <= 1'b0;
         status_git_hash_V_preg[25] <= 1'b0;
-        status_git_hash_V_preg[26] <= 1'b0;
-        status_git_hash_V_preg[31] <= 1'b0;
+        status_git_hash_V_preg[28] <= 1'b0;
+        status_git_hash_V_preg[29] <= 1'b0;
     end else begin
         if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
-                        status_git_hash_V_preg[5] <= 1'b1;
+                        status_git_hash_V_preg[0] <= 1'b1;
+            status_git_hash_V_preg[1] <= 1'b1;
+            status_git_hash_V_preg[4] <= 1'b1;
             status_git_hash_V_preg[6] <= 1'b1;
             status_git_hash_V_preg[7] <= 1'b1;
             status_git_hash_V_preg[8] <= 1'b1;
             status_git_hash_V_preg[10] <= 1'b1;
+            status_git_hash_V_preg[11] <= 1'b1;
             status_git_hash_V_preg[13] <= 1'b1;
             status_git_hash_V_preg[16] <= 1'b1;
-            status_git_hash_V_preg[18] <= 1'b1;
-            status_git_hash_V_preg[19] <= 1'b1;
-            status_git_hash_V_preg[24] <= 1'b1;
+            status_git_hash_V_preg[20] <= 1'b1;
+            status_git_hash_V_preg[21] <= 1'b1;
+            status_git_hash_V_preg[22] <= 1'b1;
+            status_git_hash_V_preg[23] <= 1'b1;
             status_git_hash_V_preg[25] <= 1'b1;
-            status_git_hash_V_preg[26] <= 1'b1;
-            status_git_hash_V_preg[31] <= 1'b1;
+            status_git_hash_V_preg[28] <= 1'b1;
+            status_git_hash_V_preg[29] <= 1'b1;
         end
     end
 end
@@ -506,7 +518,7 @@ end
 
 always @ (*) begin
     if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
-        status_build_time_V = 48'd36310243017504;
+        status_build_time_V = 48'd36310343550517;
     end else begin
         status_build_time_V = status_build_time_V_preg;
     end
@@ -514,7 +526,7 @@ end
 
 always @ (*) begin
     if (((1'b1 == ap_CS_fsm_state1) & (ap_start == 1'b1))) begin
-        status_git_hash_V = 32'd2265785824;
+        status_git_hash_V = 32'd854666707;
     end else begin
         status_git_hash_V = status_git_hash_V_preg;
     end
@@ -624,19 +636,23 @@ assign tmp_fu_354_p2 = ((config_enable_fm_radio_ip == 8'd1) ? 1'b1 : 1'b0);
 assign toggle_assign_fu_331_p2 = (toggle ^ 1'd1);
 
 always @ (posedge ap_clk) begin
-    status_git_hash_V_preg[4:0] <= 5'b00000;
+    status_git_hash_V_preg[3:2] <= 2'b00;
+    status_git_hash_V_preg[5:5] <= 1'b0;
     status_git_hash_V_preg[9:9] <= 1'b0;
-    status_git_hash_V_preg[12:11] <= 2'b00;
+    status_git_hash_V_preg[12:12] <= 1'b0;
     status_git_hash_V_preg[15:14] <= 2'b00;
-    status_git_hash_V_preg[17:17] <= 1'b0;
-    status_git_hash_V_preg[23:20] <= 4'b0000;
-    status_git_hash_V_preg[30:27] <= 4'b0000;
-    status_build_time_V_preg[4:0] <= 5'b00000;
-    status_build_time_V_preg[7:6] <= 2'b00;
-    status_build_time_V_preg[15:10] <= 6'b000000;
-    status_build_time_V_preg[20:18] <= 3'b000;
+    status_git_hash_V_preg[19:17] <= 3'b000;
+    status_git_hash_V_preg[24:24] <= 1'b0;
+    status_git_hash_V_preg[27:26] <= 2'b00;
+    status_git_hash_V_preg[31:30] <= 2'b00;
+    status_build_time_V_preg[1] <= 1'b0;
+    status_build_time_V_preg[3:3] <= 1'b0;
+    status_build_time_V_preg[8:6] <= 3'b000;
+    status_build_time_V_preg[15:11] <= 5'b00000;
+    status_build_time_V_preg[20:17] <= 4'b0000;
     status_build_time_V_preg[23:22] <= 2'b00;
-    status_build_time_V_preg[28:26] <= 3'b000;
+    status_build_time_V_preg[26:25] <= 2'b00;
+    status_build_time_V_preg[28:28] <= 1'b0;
     status_build_time_V_preg[32:30] <= 3'b000;
     status_build_time_V_preg[39:35] <= 5'b00000;
     status_build_time_V_preg[44:41] <= 4'b0000;

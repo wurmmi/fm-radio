@@ -58,7 +58,7 @@ void AudioHandler::IPOutputFifoFullCallback() {
 
   LOG_INFO("read %d data values from IPOutputFIFO", data.size());
 
-  /** TODO: move this into another thread and notify it
+  /** TODO: move this into another thread and notify it (or use a DMA)
    *       (Writing a file here in the ISR is bad practise...)
    */
   /** NOTE:

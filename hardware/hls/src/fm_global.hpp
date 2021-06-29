@@ -20,8 +20,9 @@
 
 #include <ap_fixed.h>
 
-#include "fm_global_spec.hpp"
+#include <iomanip>
 
+#include "fm_global_spec.hpp"
 typedef ap_fixed<FP_WIDTH, FP_WIDTH_INT> sample_t;
 typedef sample_t coeff_t;
 typedef sample_t acc_t;
