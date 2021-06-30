@@ -39,8 +39,9 @@ cloc hardware/vhdl/                                           \
 # HLS IP
 cloc hardware/hls/src/ \
         --by-file-by-lang \
+        --not-match-f='(filter_(.*).h)' \
             | tee $SCRIPT_PATH/ip_design_hls.txt
-
+exit 0
 #-------------------------------------------------------------------------------
 # IP testbench
 #-------------------------------------------------------------------------------
