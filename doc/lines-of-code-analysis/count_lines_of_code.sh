@@ -7,16 +7,59 @@
 
 SCRIPT_PATH=$(dirname $(readlink -f $0))
 cd $SCRIPT_PATH/../..
-echo "SCRIPT_PATH: $SCRIPT_PATH"
 
 ###
+# Analysis done with CLOC (version 1.82)
 # For more information on how to use CLOC, please visit:
 #   https://github.com/AlDanial/cloc
 ###
 
+#-------------------------------------------------------------------------------
+# Matlab system design
+#-------------------------------------------------------------------------------
+
+cloc sim/matlab/ \
+        --by-file-by-lang \
+        --exclude-dir="auto-arrange-figs" \
+        --exclude-ext="mat" \
+        --not-match-f="RBDSExample.m" \
+            | tee $SCRIPT_PATH/matlab_system_design.txt
+
+exit 0
+#-------------------------------------------------------------------------------
+# IP design
+#-------------------------------------------------------------------------------
 
 # VHDL IP
-cloc hardware/vhdl/ip/rtl/ --by-file --not-match-f="fixed_" | tee $SCRIPT_PATH/VHDL_IP.txt
+cloc hardware/vhdl/ip/rtl/ \
+        --by-file \
+        --not-match-f="fixed_"       \
+            | tee $SCRIPT_PATH/ip_design_vhdl.txt
 
 # HLS IP
-cloc hardware/hls/ --by-file --not-match-f="fixed_" | tee $SCRIPT_PATH/HLS_IP.txt
+cloc hardware/hls/src/ \
+        --by-file-by-lang \
+            | tee $SCRIPT_PATH/ip_design_hls.txt
+
+#-------------------------------------------------------------------------------
+# IP testbench
+#-------------------------------------------------------------------------------
+
+# Common
+
+# VHDL testbench
+cloc hardware/vhdl/ip/tb/ \
+        --by-file \
+        --not-match-f="fixed_"       \
+            | tee $SCRIPT_PATH/ip_testbench_vhdl.txt
+
+# HLS testbench
+cloc hardware/hls/tb/ \
+        --by-file-by-lang \
+
+            | tee $SCRIPT_PATH/ip_testbench_hls.txt
+
+
+#-------------------------------------------------------------------------------
+# Vivado
+#-------------------------------------------------------------------------------
