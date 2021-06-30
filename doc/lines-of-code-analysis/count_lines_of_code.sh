@@ -18,22 +18,22 @@ cd $SCRIPT_PATH/../..
 # Matlab system design
 #-------------------------------------------------------------------------------
 
-cloc sim/matlab/ \
-        --by-file-by-lang \
-        --exclude-dir="auto-arrange-figs" \
-        --exclude-ext="mat" \
-        --not-match-f="RBDSExample.m" \
+cloc sim/matlab/                                 \
+        --by-file-by-lang                        \
+        --exclude-dir="auto-arrange-figs"        \
+        --exclude-ext="mat"                      \
+        --not-match-f="RBDSExample.m"            \
             | tee $SCRIPT_PATH/matlab_system_design.txt
 
-exit 0
 #-------------------------------------------------------------------------------
 # IP design
 #-------------------------------------------------------------------------------
 
 # VHDL IP
-cloc hardware/vhdl/ip/rtl/ \
-        --by-file \
-        --not-match-f="fixed_"       \
+cloc hardware/vhdl/                                           \
+        --by-file-by-lang                                     \
+        --match-d='(rtl|utils)'                               \
+        --not-match-f='(fixed_|fm_radio_axi|filter_(.*)_pkg)' \
             | tee $SCRIPT_PATH/ip_design_vhdl.txt
 
 # HLS IP
@@ -56,7 +56,6 @@ cloc hardware/vhdl/ip/tb/ \
 # HLS testbench
 cloc hardware/hls/tb/ \
         --by-file-by-lang \
-
             | tee $SCRIPT_PATH/ip_testbench_hls.txt
 
 
