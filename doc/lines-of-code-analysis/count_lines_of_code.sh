@@ -35,7 +35,8 @@ $CLOC_CMD sim/matlab/                                 \
         --exclude-dir="auto-arrange-figs"        \
         --exclude-ext="mat"                      \
         --not-match-f="RBDSExample.m"            \
-            | tee $SCRIPT_PATH/sim_matlab_system_design.txt
+        --ignored=/tmp/doc/lines-of-code-analysis/matlab_system_design_ignored.txt        \
+            | tee $SCRIPT_PATH/matlab_system_design.txt
 
 #-------------------------------------------------------------------------------
 # IP design
@@ -46,13 +47,15 @@ $CLOC_CMD hardware/vhdl/                         \
         --by-file-by-lang                        \
         --match-d='(rtl|utils)'                  \
         --not-match-f='(fixed_|fm_radio_axi|filter_(.*)_pkg)' \
-            | tee $SCRIPT_PATH/hw_ip_design_vhdl.txt
+        --ignored=/tmp/doc/lines-of-code-analysis/ip_design_vhdl_ignored.txt        \
+            | tee $SCRIPT_PATH/ip_design_vhdl.txt
 
 # HLS IP
 $CLOC_CMD hardware/hls/src/                      \
         --by-file-by-lang                        \
         --not-match-f='(filter_(.*).h)'          \
-            | tee $SCRIPT_PATH/hw_ip_design_hls.txt
+        --ignored=/tmp/doc/lines-of-code-analysis/ip_design_hls_ignored.txt        \
+            | tee $SCRIPT_PATH/ip_design_hls.txt
 
 #-------------------------------------------------------------------------------
 # IP testbench
@@ -62,17 +65,20 @@ $CLOC_CMD hardware/hls/src/                      \
 $CLOC_CMD hardware/common/                       \
         --by-file-by-lang                        \
         --exclude-dir="fixed_point"              \
-            | tee $SCRIPT_PATH/hw_common.txt
+        --ignored=/tmp/doc/lines-of-code-analysis/common_ignored.txt \
+            | tee $SCRIPT_PATH/common.txt
 
 # VHDL testbench
 $CLOC_CMD hardware/vhdl/ip/tb/                   \
         --by-file-by-lang                        \
+        --ignored=/tmp/doc/lines-of-code-analysis/ip_testbench_vhdl_ignored.txt \
             | tee $SCRIPT_PATH/ip_testbench_vhdl.txt
 
 # HLS testbench
 $CLOC_CMD hardware/hls/                          \
         --by-file-by-lang                        \
         --match-d='(tb|scripts)'                 \
+        --ignored=/tmp/doc/lines-of-code-analysis/ip_testbench_hls_ignored.txt \
         --not-match-f='(export|synth)'           \
             | tee $SCRIPT_PATH/ip_testbench_hls.txt
 
@@ -80,3 +86,9 @@ $CLOC_CMD hardware/hls/                          \
 # Vivado
 #-------------------------------------------------------------------------------
 
+# SDK firmware
+$CLOC_CMD hardware/vivado/sdk/                   \
+        --by-file-by-lang                        \
+        --not-match-f='(.+project)'               \
+        --ignored=/tmp/doc/lines-of-code-analysis/vivado_sdk_firmware_ignored.txt \
+            | tee $SCRIPT_PATH/vivado_sdk_firmware.txt
