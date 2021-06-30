@@ -87,8 +87,11 @@ $CLOC_CMD hardware/hls/                          \
 #-------------------------------------------------------------------------------
 
 # SDK firmware
-$CLOC_CMD hardware/vivado/sdk/                   \
+$CLOC_CMD hardware/vivado/                       \
         --by-file-by-lang                        \
-        --not-match-f='(.+project)'               \
+        --match-d='(sdk|scripts)'                \
+        --not-match-f='(upgrade_ips|wav_to_txt|synth|create_project)'              \
         --ignored=/tmp/doc/lines-of-code-analysis/vivado_sdk_firmware_ignored.txt \
             | tee $SCRIPT_PATH/vivado_sdk_firmware.txt
+
+# Scripts
