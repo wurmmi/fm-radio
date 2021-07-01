@@ -30,14 +30,19 @@ cd $REPO_ROOT
 # Matlab system design
 #-------------------------------------------------------------------------------
 
-$CLOC_CMD sim/matlab/                            \
-        --by-file-by-lang                        \
-        --exclude-dir="auto-arrange-figs"        \
-        --exclude-ext="mat"                      \
-        --not-match-f="RBDSExample.m"            \
-        --ignored=/tmp/doc/lines-of-code-analysis/matlab_system_design_ignored.txt \
-            | tee $SCRIPT_PATH/matlab_system_design.txt
+FILE=doc/lines-of-code-analysis/matlab_system_design
+OPTIONS="sim/matlab/                    \
+        --by-file-by-lang                          \
+        --exclude-dir=\"auto-arrange-figs\"        \
+        --exclude-ext=\"mat\"                      \
+        --not-match-f=\"RBDSExample.m\"            \
+        --ignored=/tmp/${FILE}_ignored.txt"
 
+$SCRIPT_PATH/get_total_columns.sh $OPTIONS | tee $FILE.txt
+echo -e "\n\n--- Detailed output ---\n" >> $FILE.txt
+$CLOC_CMD $OPTIONS >> $FILE.txt
+
+exit 0
 #-------------------------------------------------------------------------------
 # IP design
 #-------------------------------------------------------------------------------
