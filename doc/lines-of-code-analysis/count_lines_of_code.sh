@@ -26,16 +26,16 @@ CLOC_CMD="docker run --rm -v $REPO_ROOT:/tmp/ aldanial/cloc:latest"
 
 cd $REPO_ROOT
 
-#------------------------------------------------------------------------------      -
+#-------------------------------------------------------------------------------
 # Matlab system design
 #-------------------------------------------------------------------------------
 
-$CLOC_CMD sim/matlab/                                 \
+$CLOC_CMD sim/matlab/                            \
         --by-file-by-lang                        \
         --exclude-dir="auto-arrange-figs"        \
         --exclude-ext="mat"                      \
         --not-match-f="RBDSExample.m"            \
-        --ignored=/tmp/doc/lines-of-code-analysis/matlab_system_design_ignored.txt        \
+        --ignored=/tmp/doc/lines-of-code-analysis/matlab_system_design_ignored.txt \
             | tee $SCRIPT_PATH/matlab_system_design.txt
 
 #-------------------------------------------------------------------------------
@@ -47,14 +47,14 @@ $CLOC_CMD hardware/vhdl/                         \
         --by-file-by-lang                        \
         --match-d='(rtl|utils)'                  \
         --not-match-f='(fixed_|fm_radio_axi|filter_(.*)_pkg)' \
-        --ignored=/tmp/doc/lines-of-code-analysis/ip_design_vhdl_ignored.txt        \
+        --ignored=/tmp/doc/lines-of-code-analysis/ip_design_vhdl_ignored.txt \
             | tee $SCRIPT_PATH/ip_design_vhdl.txt
 
 # HLS IP
 $CLOC_CMD hardware/hls/src/                      \
         --by-file-by-lang                        \
         --not-match-f='(filter_(.*).h)'          \
-        --ignored=/tmp/doc/lines-of-code-analysis/ip_design_hls_ignored.txt        \
+        --ignored=/tmp/doc/lines-of-code-analysis/ip_design_hls_ignored.txt \
             | tee $SCRIPT_PATH/ip_design_hls.txt
 
 #-------------------------------------------------------------------------------
@@ -90,8 +90,13 @@ $CLOC_CMD hardware/hls/                          \
 $CLOC_CMD hardware/vivado/                       \
         --by-file-by-lang                        \
         --match-d='(sdk|scripts)'                \
-        --not-match-f='(upgrade_ips|wav_to_txt|synth|create_project)'              \
+        --not-match-f='(upgrade_ips|wav_to_txt|synth|create_project)' \
         --ignored=/tmp/doc/lines-of-code-analysis/vivado_sdk_firmware_ignored.txt \
             | tee $SCRIPT_PATH/vivado_sdk_firmware.txt
 
 # Scripts
+$CLOC_CMD hardware/vivado/                       \
+        --by-file-by-lang                        \
+        --exclude-dir='bd,dc,doc,ip,sdk'         \
+        --ignored=/tmp/doc/lines-of-code-analysis/vivado_scripts_ignored.txt \
+            | tee $SCRIPT_PATH/vivado_scripts.txt
