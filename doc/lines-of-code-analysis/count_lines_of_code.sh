@@ -25,83 +25,103 @@ rm -f *.txt
 CLOC_CMD="docker run --rm -v $REPO_ROOT:/tmp/ aldanial/cloc:latest"
 
 cd $REPO_ROOT
+SCRIPT_PATH_RELATIVE=doc/lines-of-code-analysis
+
+#-------------------------------------------------------------------------------
+
+create_report () {
+    $SCRIPT_PATH/get_total_columns.sh $OPTIONS | tee $FILE.txt
+    echo -e "\n\n--- Detailed output ---\n" | tee -a $FILE.txt
+    $CLOC_CMD $OPTIONS | tee -a $FILE.txt
+}
 
 #-------------------------------------------------------------------------------
 # Matlab system design
 #-------------------------------------------------------------------------------
 
-FILE=doc/lines-of-code-analysis/matlab_system_design
-OPTIONS="sim/matlab/                    \
-        --by-file-by-lang                          \
-        --exclude-dir=\"auto-arrange-figs\"        \
-        --exclude-ext=\"mat\"                      \
-        --not-match-f=\"RBDSExample.m\"            \
+FILE=$SCRIPT_PATH_RELATIVE/matlab_system_design
+OPTIONS="sim/matlab/                             \
+        --by-file-by-lang                        \
+        --exclude-dir=auto-arrange-figs          \
+        --exclude-ext=mat                        \
+        --not-match-f=RBDSExample.m              \
         --ignored=/tmp/${FILE}_ignored.txt"
 
-$SCRIPT_PATH/get_total_columns.sh $OPTIONS | tee $FILE.txt
-echo -e "\n\n--- Detailed output ---\n" >> $FILE.txt
-$CLOC_CMD $OPTIONS >> $FILE.txt
+create_report;
 
-exit 0
 #-------------------------------------------------------------------------------
 # IP design
 #-------------------------------------------------------------------------------
 
 # VHDL IP
-$CLOC_CMD hardware/vhdl/                         \
+FILE=$SCRIPT_PATH_RELATIVE/ip_design_vhdl.txt
+OPTIONS="hardware/vhdl/                          \
         --by-file-by-lang                        \
         --match-d='(rtl|utils)'                  \
         --not-match-f='(fixed_|fm_radio_axi|filter_(.*)_pkg)' \
-        --ignored=/tmp/doc/lines-of-code-analysis/ip_design_vhdl_ignored.txt \
-            | tee $SCRIPT_PATH/ip_design_vhdl.txt
+        --ignored=/tmp/${FILE}_ignored.txt"
+
+create_report;
 
 # HLS IP
-$CLOC_CMD hardware/hls/src/                      \
+FILE=$SCRIPT_PATH_RELATIVE/ip_design_hls.txt
+OPTIONS="hardware/hls/src/                       \
         --by-file-by-lang                        \
         --not-match-f='(filter_(.*).h)'          \
-        --ignored=/tmp/doc/lines-of-code-analysis/ip_design_hls_ignored.txt \
-            | tee $SCRIPT_PATH/ip_design_hls.txt
+        --ignored=/tmp/${FILE}_ignored.txt"
+
+create_report;
 
 #-------------------------------------------------------------------------------
 # IP testbench
 #-------------------------------------------------------------------------------
 
 # Common
-$CLOC_CMD hardware/common/                       \
+FILE=$SCRIPT_PATH_RELATIVE/common.txt
+OPTIONS="hardware/common/                        \
         --by-file-by-lang                        \
         --exclude-dir="fixed_point"              \
-        --ignored=/tmp/doc/lines-of-code-analysis/common_ignored.txt \
-            | tee $SCRIPT_PATH/common.txt
+        --ignored=/tmp/${FILE}_ignored.txt"
+
+create_report;
 
 # VHDL testbench
-$CLOC_CMD hardware/vhdl/ip/tb/                   \
+FILE=$SCRIPT_PATH_RELATIVE/ip_testbench_vhdl.txt
+OPTIONS="hardware/vhdl/ip/tb/                    \
         --by-file-by-lang                        \
-        --ignored=/tmp/doc/lines-of-code-analysis/ip_testbench_vhdl_ignored.txt \
-            | tee $SCRIPT_PATH/ip_testbench_vhdl.txt
+        --ignored=/tmp/${FILE}_ignored.txt"
+
+create_report;
 
 # HLS testbench
-$CLOC_CMD hardware/hls/                          \
+FILE=$SCRIPT_PATH_RELATIVE/ip_testbench_hls.txt
+OPTIONS="hardware/hls/                           \
         --by-file-by-lang                        \
         --match-d='(tb|scripts)'                 \
-        --ignored=/tmp/doc/lines-of-code-analysis/ip_testbench_hls_ignored.txt \
         --not-match-f='(export|synth)'           \
-            | tee $SCRIPT_PATH/ip_testbench_hls.txt
+        --ignored=/tmp/${FILE}_ignored.txt"
+
+create_report;
 
 #-------------------------------------------------------------------------------
 # Vivado
 #-------------------------------------------------------------------------------
 
 # SDK firmware
-$CLOC_CMD hardware/vivado/                       \
+FILE=$SCRIPT_PATH_RELATIVE/vivado_sdk_firmware.txt
+OPTIONS="hardware/vivado/                        \
         --by-file-by-lang                        \
         --match-d='(sdk|scripts)'                \
         --not-match-f='(upgrade_ips|wav_to_txt|synth|create_project)' \
-        --ignored=/tmp/doc/lines-of-code-analysis/vivado_sdk_firmware_ignored.txt \
-            | tee $SCRIPT_PATH/vivado_sdk_firmware.txt
+        --ignored=/tmp/${FILE}_ignored.txt"
+
+create_report;
 
 # Scripts
-$CLOC_CMD hardware/vivado/                       \
+FILE=$SCRIPT_PATH_RELATIVE/vivado_scripts.txt
+OPTIONS="hardware/vivado/                        \
         --by-file-by-lang                        \
         --exclude-dir='bd,dc,doc,ip,sdk'         \
-        --ignored=/tmp/doc/lines-of-code-analysis/vivado_scripts_ignored.txt \
-            | tee $SCRIPT_PATH/vivado_scripts.txt
+        --ignored=/tmp/${FILE}_ignored.txt"
+
+create_report;
