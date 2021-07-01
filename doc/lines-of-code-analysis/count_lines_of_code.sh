@@ -5,6 +5,8 @@
 # Description : Count lines of code in this repository and produce some statistics.
 #-------------------------------------------------------------------------------
 
+set -euo pipefail
+
 SCRIPT_PATH=$(dirname $(readlink -f $0))
 REPO_ROOT=$SCRIPT_PATH/../../
 
@@ -36,6 +38,21 @@ create_report () {
 }
 
 #-------------------------------------------------------------------------------
+# Overall
+#-------------------------------------------------------------------------------
+
+REPORT_FILE=$SCRIPT_PATH_RELATIVE/overall
+OPTIONS="./                                      \
+        --by-file-by-lang                        \
+        --fullpath                               \
+        --not-match-d=(auto-arrange-figs|vivado/ip|fixed_point|gnuradio|bd) \
+        --not-match-f=(RBDSExample.m|fixed_pkg*|fixed_float*|fm_radio_axi|filter_.*_pkg|filter_.*.h|component.xml|sqlite_formatter|.project) \
+        --exclude-ext=mat,cls,sty                \
+        --ignored=/tmp/${REPORT_FILE}_ignored.txt"
+
+create_report;
+
+#-------------------------------------------------------------------------------
 # Matlab system design
 #-------------------------------------------------------------------------------
 
@@ -60,7 +77,7 @@ REPORT_FILE=$SCRIPT_PATH_RELATIVE/ip_design_vhdl
 OPTIONS="hardware/vhdl/                          \
         --by-file-by-lang                        \
         --match-d=(rtl|utils)                    \
-        --not-match-f=(fixed_|fm_radio_axi|filter_(.*)_pkg) \
+        --not-match-f=(fixed_pkg*|fixed_float*|fm_radio_axi|filter_.*_pkg) \
         --ignored=/tmp/${REPORT_FILE}_ignored.txt"
 
 create_report;
