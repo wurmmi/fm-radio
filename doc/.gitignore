@@ -19,4 +19,4 @@
 *.synctex
 *.tps
 
-lines-of-code-analysis/*.txt
+lines-of-code-analysis/output/

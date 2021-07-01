@@ -8,9 +8,7 @@
 SCRIPT_PATH=$(dirname $(readlink -f $0))
 REPO_ROOT=$SCRIPT_PATH/../../
 
-# Clean previous output products
-cd $SCRIPT_PATH
-rm -f *.txt
+cd $REPO_ROOT
 
 ###
 # NOTE:
@@ -24,8 +22,10 @@ rm -f *.txt
 #CLOC_CMD="cloc"
 CLOC_CMD="docker run --rm -v $REPO_ROOT:/tmp/ aldanial/cloc:latest"
 
-cd $REPO_ROOT
-SCRIPT_PATH_RELATIVE=doc/lines-of-code-analysis
+# Clean previous output products
+SCRIPT_PATH_RELATIVE=doc/lines-of-code-analysis/output
+mkdir -p $SCRIPT_PATH_RELATIVE
+rm -f $SCRIPT_PATH_RELATIVE/*.txt
 
 #-------------------------------------------------------------------------------
 
