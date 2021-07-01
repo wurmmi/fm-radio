@@ -18,7 +18,7 @@ rm -f *.txt
 #  For more information on how to use CLOC, please visit: https://github.com/AlDanial/cloc
 #
 #  Choose a cloc version with the CLOC_CMD.
-#    (1) need to 'sudo apt install cloc' (version 1.82 on Ubuntu 20.04)
+#    (1) need to `sudo apt install cloc` (version 1.82 on Ubuntu 20.04)
 #    (2) need to have Docker installed on your system - always uses latest available version
 ###
 #CLOC_CMD="cloc"
@@ -39,6 +39,7 @@ create_report () {
 # Matlab system design
 #-------------------------------------------------------------------------------
 
+echo "### Matlab system design"
 FILE=$SCRIPT_PATH_RELATIVE/matlab_system_design
 OPTIONS="sim/matlab/                             \
         --by-file-by-lang                        \
@@ -54,20 +55,22 @@ create_report;
 #-------------------------------------------------------------------------------
 
 # VHDL IP
-FILE=$SCRIPT_PATH_RELATIVE/ip_design_vhdl.txt
+echo "### IP design VHDL"
+FILE=$SCRIPT_PATH_RELATIVE/ip_design_vhdl
 OPTIONS="hardware/vhdl/                          \
         --by-file-by-lang                        \
-        --match-d='(rtl|utils)'                  \
-        --not-match-f='(fixed_|fm_radio_axi|filter_(.*)_pkg)' \
+        --match-d=(rtl|utils)                    \
+        --not-match-f=(fixed_|fm_radio_axi|filter_(.*)_pkg) \
         --ignored=/tmp/${FILE}_ignored.txt"
 
 create_report;
 
 # HLS IP
-FILE=$SCRIPT_PATH_RELATIVE/ip_design_hls.txt
+echo "### IP design HLS"
+FILE=$SCRIPT_PATH_RELATIVE/ip_design_hls
 OPTIONS="hardware/hls/src/                       \
         --by-file-by-lang                        \
-        --not-match-f='(filter_(.*).h)'          \
+        --not-match-f=(filter_(.*).h)            \
         --ignored=/tmp/${FILE}_ignored.txt"
 
 create_report;
@@ -77,16 +80,18 @@ create_report;
 #-------------------------------------------------------------------------------
 
 # Common
-FILE=$SCRIPT_PATH_RELATIVE/common.txt
+echo "### IP testbench common"
+FILE=$SCRIPT_PATH_RELATIVE/ip_testbench_common
 OPTIONS="hardware/common/                        \
         --by-file-by-lang                        \
-        --exclude-dir="fixed_point"              \
+        --exclude-dir=fixed_point                \
         --ignored=/tmp/${FILE}_ignored.txt"
 
 create_report;
 
 # VHDL testbench
-FILE=$SCRIPT_PATH_RELATIVE/ip_testbench_vhdl.txt
+echo "### IP testbench VHDL"
+FILE=$SCRIPT_PATH_RELATIVE/ip_testbench_vhdl
 OPTIONS="hardware/vhdl/ip/tb/                    \
         --by-file-by-lang                        \
         --ignored=/tmp/${FILE}_ignored.txt"
@@ -94,11 +99,12 @@ OPTIONS="hardware/vhdl/ip/tb/                    \
 create_report;
 
 # HLS testbench
-FILE=$SCRIPT_PATH_RELATIVE/ip_testbench_hls.txt
+echo "### IP testbench HLS"
+FILE=$SCRIPT_PATH_RELATIVE/ip_testbench_hls
 OPTIONS="hardware/hls/                           \
         --by-file-by-lang                        \
-        --match-d='(tb|scripts)'                 \
-        --not-match-f='(export|synth)'           \
+        --match-d=(tb|scripts)                   \
+        --not-match-f=(export|synth)             \
         --ignored=/tmp/${FILE}_ignored.txt"
 
 create_report;
@@ -108,20 +114,22 @@ create_report;
 #-------------------------------------------------------------------------------
 
 # SDK firmware
-FILE=$SCRIPT_PATH_RELATIVE/vivado_sdk_firmware.txt
+echo "### Vivado SDK firmware"
+FILE=$SCRIPT_PATH_RELATIVE/vivado_sdk_firmware
 OPTIONS="hardware/vivado/                        \
         --by-file-by-lang                        \
-        --match-d='(sdk|scripts)'                \
-        --not-match-f='(upgrade_ips|wav_to_txt|synth|create_project)' \
+        --match-d=(sdk|scripts)                  \
+        --not-match-f=(upgrade_ips|wav_to_txt|synth|create_project) \
         --ignored=/tmp/${FILE}_ignored.txt"
 
 create_report;
 
 # Scripts
-FILE=$SCRIPT_PATH_RELATIVE/vivado_scripts.txt
+echo "### Vivado scripts"
+FILE=$SCRIPT_PATH_RELATIVE/vivado_scripts
 OPTIONS="hardware/vivado/                        \
         --by-file-by-lang                        \
-        --exclude-dir='bd,dc,doc,ip,sdk'         \
+        --exclude-dir=bd,dc,doc,ip,sdk           \
         --ignored=/tmp/${FILE}_ignored.txt"
 
 create_report;
