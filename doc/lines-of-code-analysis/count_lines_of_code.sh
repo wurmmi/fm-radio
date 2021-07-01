@@ -30,9 +30,9 @@ rm -f $SCRIPT_PATH_RELATIVE/*.txt
 #-------------------------------------------------------------------------------
 
 create_report () {
-    $SCRIPT_PATH/get_total_columns.sh $OPTIONS | tee $FILE.txt
-    echo -e "\n\n--- Detailed output ---\n" | tee -a $FILE.txt
-    $CLOC_CMD $OPTIONS | tee -a $FILE.txt
+    $SCRIPT_PATH/get_total_columns.sh $OPTIONS | tee $REPORT_FILE.txt
+    echo -e "\n\n--- Detailed output ---\n" | tee -a $REPORT_FILE.txt
+    $CLOC_CMD $OPTIONS | tee -a $REPORT_FILE.txt
 }
 
 #-------------------------------------------------------------------------------
@@ -40,13 +40,13 @@ create_report () {
 #-------------------------------------------------------------------------------
 
 echo "### Matlab system design"
-FILE=$SCRIPT_PATH_RELATIVE/matlab_system_design
+REPORT_FILE=$SCRIPT_PATH_RELATIVE/matlab_system_design
 OPTIONS="sim/matlab/                             \
         --by-file-by-lang                        \
         --exclude-dir=auto-arrange-figs          \
         --exclude-ext=mat                        \
         --not-match-f=RBDSExample.m              \
-        --ignored=/tmp/${FILE}_ignored.txt"
+        --ignored=/tmp/${REPORT_FILE}_ignored.txt"
 
 create_report;
 
@@ -56,22 +56,22 @@ create_report;
 
 # VHDL IP
 echo "### IP design VHDL"
-FILE=$SCRIPT_PATH_RELATIVE/ip_design_vhdl
+REPORT_FILE=$SCRIPT_PATH_RELATIVE/ip_design_vhdl
 OPTIONS="hardware/vhdl/                          \
         --by-file-by-lang                        \
         --match-d=(rtl|utils)                    \
         --not-match-f=(fixed_|fm_radio_axi|filter_(.*)_pkg) \
-        --ignored=/tmp/${FILE}_ignored.txt"
+        --ignored=/tmp/${REPORT_FILE}_ignored.txt"
 
 create_report;
 
 # HLS IP
 echo "### IP design HLS"
-FILE=$SCRIPT_PATH_RELATIVE/ip_design_hls
+REPORT_FILE=$SCRIPT_PATH_RELATIVE/ip_design_hls
 OPTIONS="hardware/hls/src/                       \
         --by-file-by-lang                        \
         --not-match-f=(filter_(.*).h)            \
-        --ignored=/tmp/${FILE}_ignored.txt"
+        --ignored=/tmp/${REPORT_FILE}_ignored.txt"
 
 create_report;
 
@@ -81,31 +81,31 @@ create_report;
 
 # Common
 echo "### IP testbench common"
-FILE=$SCRIPT_PATH_RELATIVE/ip_testbench_common
+REPORT_FILE=$SCRIPT_PATH_RELATIVE/ip_testbench_common
 OPTIONS="hardware/common/                        \
         --by-file-by-lang                        \
         --exclude-dir=fixed_point                \
-        --ignored=/tmp/${FILE}_ignored.txt"
+        --ignored=/tmp/${REPORT_FILE}_ignored.txt"
 
 create_report;
 
 # VHDL testbench
 echo "### IP testbench VHDL"
-FILE=$SCRIPT_PATH_RELATIVE/ip_testbench_vhdl
+REPORT_FILE=$SCRIPT_PATH_RELATIVE/ip_testbench_vhdl
 OPTIONS="hardware/vhdl/ip/tb/                    \
         --by-file-by-lang                        \
-        --ignored=/tmp/${FILE}_ignored.txt"
+        --ignored=/tmp/${REPORT_FILE}_ignored.txt"
 
 create_report;
 
 # HLS testbench
 echo "### IP testbench HLS"
-FILE=$SCRIPT_PATH_RELATIVE/ip_testbench_hls
+REPORT_FILE=$SCRIPT_PATH_RELATIVE/ip_testbench_hls
 OPTIONS="hardware/hls/                           \
         --by-file-by-lang                        \
         --match-d=(tb|scripts)                   \
         --not-match-f=(export|synth)             \
-        --ignored=/tmp/${FILE}_ignored.txt"
+        --ignored=/tmp/${REPORT_FILE}_ignored.txt"
 
 create_report;
 
@@ -115,21 +115,21 @@ create_report;
 
 # SDK firmware
 echo "### Vivado SDK firmware"
-FILE=$SCRIPT_PATH_RELATIVE/vivado_sdk_firmware
+REPORT_FILE=$SCRIPT_PATH_RELATIVE/vivado_sdk_firmware
 OPTIONS="hardware/vivado/                        \
         --by-file-by-lang                        \
         --match-d=(sdk|scripts)                  \
         --not-match-f=(upgrade_ips|wav_to_txt|synth|create_project) \
-        --ignored=/tmp/${FILE}_ignored.txt"
+        --ignored=/tmp/${REPORT_FILE}_ignored.txt"
 
 create_report;
 
 # Scripts
 echo "### Vivado scripts"
-FILE=$SCRIPT_PATH_RELATIVE/vivado_scripts
+REPORT_FILE=$SCRIPT_PATH_RELATIVE/vivado_scripts
 OPTIONS="hardware/vivado/                        \
         --by-file-by-lang                        \
         --exclude-dir=bd,dc,doc,ip,sdk           \
-        --ignored=/tmp/${FILE}_ignored.txt"
+        --ignored=/tmp/${REPORT_FILE}_ignored.txt"
 
 create_report;
