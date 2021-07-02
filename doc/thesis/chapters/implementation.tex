@@ -1,26 +1,31 @@
 %%%%%%%%%%%%%%%%%%%%
 \chapter{Implementation}
 \label{cha:Implementation}
-\section{Matlab/Python Model}
-  in fixed point, close to hardware level algorithm
+\section{Matlab Model}
+in fixed point, close to hardware level algorithm
 
-  \section{VHDL (no shortcut)}
+\section{GNURadio}
+  \subsection{Introduction}
+  \subsection{Transmitter}
+  \subsection{Receiver}
+
+\section{VHDL (no shortcut)}
   \subsection{Channel Selection (IF to Channel-BB)}
   \subsection{Phase Detector}
   \subsection{other Elements}
 
-  \section{High-Level Synthesis}
+\section{High-Level Synthesis}
   \subsection{Channel Selection (IF to Channel-BB)}
   \subsection{Phase Detector}
   \subsection{other Elements}
 
-  \section{Common Testbench}
+\section{Common Testbench}
   \subsection{Architecture (same tb for VHDL and HLS-generated HDL)}
   \subsection{Framework cocotb, with ghdl compiler}
   Instantiate both HDL models in the testbench.\\
   Display a direct comparison of outputs in graphs. This is practical, since the cocotb framework runs in python and graphs can be generated using Python's matplotlib.
 
-  \section{Develop HLS compiler independent code (optional)}
+\section{Develop HLS compiler independent code (optional)}
   \subsection{Challenges}
   Different compilers use different \#pragmas, etc.\\
   The \#pragmas need to be within the code, at the appropriate positions, which makes it difficult to write compiler independent code....

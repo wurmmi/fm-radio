@@ -4,17 +4,47 @@
 %%%%%%%%%%%%%%%%%%%%%%%
 \section{Motivation}
 
-FM is a common RF signal that's available everywhere.\\
-The demodulated signal is an audio signal, that can be listened to. This is subjectively more attractive than a generic data stream.
+In the master's degree program Embedded Systems Design a wide range of topics relate to digital signal processing, chip design and software development.
+All of these disciplines find their application in an embedded system.
+Multiple different methods of implementation are introduced for each topic and their usage is tested in practical sessions.
+However, in the setting of a university course it is not always possible to look at the currently handled topic as a part of a larger, integrated system.
+Instead, it is often treated as a standalone part that fulfills its own, specific functionality.
+
+Therefore, one of the main motivation points of this thesis is to combine several disciplines and multiple implementation methods in a common context of a single project.
+
+In a more general perspective, the current electronics market situation is a huge motivational factor as well.
+Smart devices, smart sensors, Internet of Things (IoT) and many similar terms are well-known and are becoming more and more present in the publics daily lives.
+In some degree, all of these devices represent embedded systems, since they all consist of processing units, combined with sensors and interfaces to communicate with their outside world.
+In the future, the number of devices and the range of applications in this area is likely going to grow.
+This will require a lot of engineering work to advance the state of technology we have today and explore new areas of application.
+Since the development of an embedded system combines so many displines, it is of advantage to have knowledge of as many as possible of them.
+However, not only understanding single parts, but to have an overview and understanding of the entire, integrated system and the interaction between those single parts is important in an embedded system.
+
+Those major reasons lead to the choice of topic for this thesis - understanding all the single parts by themselves, while maintaining the understanding over an interated embedded system that fulfills a task as a whole.
 
 %%%%%%%%%%%%%%%%%%%%%%%
-\section{Broadcast Radio}
-Evolution from AM to FM because of certain advantages, etc.\\
-Explain FM usage/existence nowadays (geographical; frequencies; devices; new standard DAB, etc)
+\section{Choice of Application}
+
+In order to elaborate on the theoretical topics of this thesis, a comprehensive practical project is developed along with it.
+The project of choice is a digital FM broadcast radio receiver.
+It combines several disciplines that appear in the master's program Embedded Systems Design, such as digital signal processing (DSP), software development and system design and thus is a perfect candidate for this project.
+
+FM broadcast radio is chosen as the input signal, because it is a common radio frequency signal that is available almost everywhere.
+Furthermore, the demodulated signal is an audio signal, usually music or speech, that can be listened to.
+This is subjectively more attractive than a generic data stream.
+Additionally, it is a comparably simple signal to demodulate, but still requires several techniques of signal processing to decode it.
 
 \section{Goal}
-put all knowledge that was accumulated during studies (HSD, ESD, mention subjects such as DSP) together in a project.\\
-practical usage of DSP in an FPGA\\
+
+The main goal of this thesis is to elaborate a system design for an embedded system, that combines all the knowledge of different disciplines and topics that are accumulated over the time of studies in a single project.
+
+This includes the development of a system model in a tool like Matlab, the practical usage and implementation of DSP in an FPGA, the development of a digital receiver and the deployment on actual hardware.
+
+Furthermore, the receiver implementation on the FPGA is to be done in two variants.
+The first variant is traditional, manually written hardware description language (HDL) in the programming language VHDL.
+For the second variant, high-level synthesis (HLS) is employed, to generate the low-level HDL from high-level C++ code.
+These two methods are implemented and compared on the basis of usability and some metrics.
+
 develop an FM receiver and explain it, so that it can be followed in a tutorial with an affordable budget in hardware.\\
 show multiple ways of how to implement the same thing, in different levels of abstraction. Weigh each ways' field of application, efficiency and applicability.
 
