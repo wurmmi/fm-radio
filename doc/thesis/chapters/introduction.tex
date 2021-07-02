@@ -10,24 +10,25 @@ Multiple different methods of implementation are introduced for each topic and t
 However, in the setting of a university course it is not always possible to look at the currently handled topic as a part of a larger, integrated system.
 Instead, it is often treated as a standalone part that fulfills its own, specific functionality.
 
-Therefore, one of the main motivation points of this thesis is to combine several disciplines and multiple implementation methods in a common context of a single project.
+Therefore, one of the main motivation points of this thesis is to combine several disciplines and multiple implementation methods in a common context of a single project.\\
 
 In a more general perspective, the current electronics market situation is a huge motivational factor as well.
-Smart devices, smart sensors, Internet of Things (IoT) and many similar terms are well-known and are becoming more and more present in the publics daily lives.
+Smart devices, smart sensors, Internet of Things (IoT) and many similar terms are well-known and are becoming more and more present in the publics' daily lives.
 In some degree, all of these devices represent embedded systems, since they all consist of processing units, combined with sensors and interfaces to communicate with their outside world.
-In the future, the number of devices and the range of applications in this area is likely going to grow.
-This will require a lot of engineering work to advance the state of technology we have today and explore new areas of application.
-Since the development of an embedded system combines so many displines, it is of advantage to have knowledge of as many as possible of them.
-However, not only understanding single parts, but to have an overview and understanding of the entire, integrated system and the interaction between those single parts is important in an embedded system.
+In the future, the number of devices and the range of applications in this area is going to grow from todays' point of view.
+This will require a lot of engineering work to advance the state of technology we have today and explore new areas of application.\\
 
-Those major reasons lead to the choice of topic for this thesis - understanding all the single parts by themselves, while maintaining the understanding over an interated embedded system that fulfills a task as a whole.
+Since the development of an embedded system combines so many displines, it is of advantage to have knowledge of as many as possible of them.
+However, not only understanding single parts, but to have an overview and understanding of the entire, integrated system and the interaction between those single parts is important in an embedded system.\\
+
+Those major reasons lead to the choice of topic for this thesis - understanding all the single parts by themselves, while maintaining the understanding over an integrated embedded system that fulfills a task as a whole.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \section{Choice of Application}
 
 In order to elaborate on the theoretical topics of this thesis, a comprehensive practical project is developed along with it.
 The project of choice is a digital FM broadcast radio receiver.
-It combines several disciplines that appear in the master's program Embedded Systems Design, such as digital signal processing (DSP), software development and system design and thus is a perfect candidate for this project.
+It combines several disciplines that appear in the master's program Embedded Systems Design, such as digital signal processing (DSP), software development and system design and thus is a perfect candidate for this project.\\
 
 FM broadcast radio is chosen as the input signal, because it is a common radio frequency signal that is available almost everywhere.
 Furthermore, the demodulated signal is an audio signal, usually music or speech, that can be listened to.
@@ -36,19 +37,19 @@ Additionally, it is a comparably simple signal to demodulate, but still requires
 
 \section{Goals}
 
-The main goal of this thesis is to elaborate a system design for an embedded system, that combines all the knowledge of different disciplines and topics that are accumulated over the time of studies in a single project.
+The main goal of this thesis is to elaborate a system design for an embedded system, that combines all the knowledge of different disciplines and topics which are accumulated over the time of the university program, in a single project.
 
-This includes the development of a system model in a tool like Matlab, the practical usage and implementation of DSP in an FPGA, the development of a digital receiver and the deployment on actual hardware.
+This includes the development of a system model in a tool like Matlab, the practical usage and implementation of DSP in an FPGA, the development of a digital receiver and the deployment on actual hardware.\\
 
-Furthermore, the receiver implementation on the FPGA is to be done in two variants.
-The first variant is traditional, manually written hardware description language (HDL) in the programming language VHDL.
-For the second variant, high-level synthesis (HLS) is employed, to generate the low-level HDL from high-level C++ code.
+The receiver implementation on the FPGA is to be done in two variants.
+The first variant is traditional, manually written hardware description language (HDL) in the programming language VHDL, as it has been done for years.
+For the second variant, high-level synthesis (HLS) is employed, to generate the low-level HDL from high-level \cplusplus code.
 These two methods are implemented and compared on the basis of usability and some metrics.
 
 In the view of a system design approach, another focus is put on a sustainable testing and development strategy for the entire system.
-Above mentioned implementation variants should optimally share as much as possible of verification code, in order to save time and effort in implementation.
-Also, as many tasks as possible should be automated by scripts, to save time in manual labor for the software engineers.
-All that enables an efficient development cycle of the product.
+Above mentioned implementation variants should optimally share as much as possible of testing and verification code, in order to save time and effort in implementation.
+Also, as many tasks as possible should be automated by scripts, to save time in manual labor for the engineers working on the development.
+All that enables an efficient development cycle of the product.\\
 
 By the end of this thesis, the implementation of an FM radio receiver in multiple methods and abstraction levels should be achieved, as well as a good understanding of the overall system level design.
 Knowledge of each methods' preferred field of application, efficiency and application should be gained.
