@@ -34,7 +34,7 @@ Furthermore, the demodulated signal is an audio signal, usually music or speech,
 This is subjectively more attractive than a generic data stream.
 Additionally, it is a comparably simple signal to demodulate, but still requires several techniques of signal processing to decode it.
 
-\section{Goal}
+\section{Goals}
 
 The main goal of this thesis is to elaborate a system design for an embedded system, that combines all the knowledge of different disciplines and topics that are accumulated over the time of studies in a single project.
 
@@ -45,33 +45,39 @@ The first variant is traditional, manually written hardware description language
 For the second variant, high-level synthesis (HLS) is employed, to generate the low-level HDL from high-level C++ code.
 These two methods are implemented and compared on the basis of usability and some metrics.
 
-develop an FM receiver and explain it, so that it can be followed in a tutorial with an affordable budget in hardware.\\
-show multiple ways of how to implement the same thing, in different levels of abstraction. Weigh each ways' field of application, efficiency and applicability.
+In the view of a system design approach, another focus is put on a sustainable testing and development strategy for the entire system.
+Above mentioned implementation variants should optimally share as much as possible of verification code, in order to save time and effort in implementation.
+Also, as many tasks as possible should be automated by scripts, to save time in manual labor for the software engineers.
+All that enables an efficient development cycle of the product.
 
+By the end of this thesis, the implementation of an FM radio receiver in multiple methods and abstraction levels should be achieved, as well as a good understanding of the overall system level design.
+Knowledge of each methods' preferred field of application, efficiency and application should be gained.
+
+%develop an FM receiver and explain it, so that it can be followed in a tutorial with an affordable budget in hardware.\\
 
 %%%%%%%%%%%%%%%%%%%%%%%
 % NOTES:
 %%%%%%%%%%%%%%%%%%%%%%%
-
-Thesis Design Decisions: \\
-\\
-Main focus on system design. \\
-\\
-How to achieve the same result in 3 (4?) different levels of abstraction?
-
-\begin{enumerate}
-  \item GnuRadio (?)
-  \item Matlab/Python
-  \item HLS\\
-      Implementation targeting Xilinx' ZedBoard.\\
-      Optionally: \\
-      Intel as a comparison (synth only, no HW) - "How platform-independent is HLS?"
-  \item VHDL
-\end{enumerate}
-\vspace{.5 cm}
-
-Compare:
-- Implementation effort (difficulty)
-- Implementation time
-- Usefulness on Target Systems (uC, SoC, RasPi, etc)
-- others?
+%
+%Thesis Design Decisions: \\
+%\\
+%Main focus on system design. \\
+%\\
+%How to achieve the same result in 3 (4?) different levels of abstraction?
+%
+%\begin{enumerate}
+%  \item GnuRadio (?)
+%  \item Matlab/Python
+%  \item HLS\\
+%      Implementation targeting Xilinx' ZedBoard.\\
+%      Optionally: \\
+%      Intel as a comparison (synth only, no HW) - "How platform-independent is HLS?"
+%  \item VHDL
+%\end{enumerate}
+%\vspace{.5 cm}
+%
+%Compare:
+%- Implementation effort (difficulty)
+%- Implementation time
+%- Usefulness on Target Systems (uC, SoC, RasPi, etc)
+%- others?
