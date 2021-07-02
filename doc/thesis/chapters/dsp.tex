@@ -4,7 +4,7 @@
 
 This chapter describes techniques of signal processing, which are required to receive and decode an FM broadcast radio signal.
 The entire signal processing chain from the antenna, through the analog front-end, to the digital processing parts is explained.
-However, the main focus is put on the digital signal processing part, since this is also the main focus of the practical implementation of this thesis.
+However, the main focus is put on the digital signal processing part, since this is a major part of the practical implementation of this thesis.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Overview}
@@ -17,13 +17,13 @@ Various frequency bands and different types of modulation are being used for thi
 The choice of frequency, as well as the choice of the modulation type, have impacts on the transmission characteristics.
 Depending on these choices, positive effects can be achieved in the amount of data that can be sent over the transmission channel, for example.
 Another advantage is the ability to adapt the ongoing transmission to the changing characteristics of the channel.
-This is especially useful for mobile receivers, since the signals path is inherently changing over time there, which leads to challenging conditions for the receiver.
+This is especially useful for mobile receivers, since the signals' path is inherently changing over time there, which leads to challenging conditions for the receiver.
 Additionally, varying signal strength, or multipath propagation may occur.
 Multipath propagation is caused by reflections of the signal, which - for example - can occur on a house facade, or a large vehicle that is passing by.
 The receiver then gets a signal, that is a summation of the direct path and the reflected path - a signal from multiple paths.
 Besides that, environmental impacts, such as rain or fog have an effect on the transmission channel and thus the received signal.\\
 
-Many more factors could be listed, and an elaboration of the various modulation types can fill entire books.
+Many more factors could be listed, and elaborations over the various modulation types fill entire books.
 However, with all these different facts, there are things that they all have in common.
 On the transmitter side, all these signals are transmitted in a band-limited, high frequency signal.
 The band limitation needs to be given at the transmitting antenna, to minimize interference to other bands in the frequency spectrum.
@@ -34,10 +34,10 @@ The antenna signal needs to be amplified and filtered at first.
 Both steps depend on the antenna characteristics, but usually the received signal is of relatively low power, and the antenna receives a wider range of frequencies than required.
 The filter therefor selects the frequency area that is of interest.
 Another reason for the filter is to avoid spectral replicas in the subsequent modulation, or down-conversion.
-Here, the front-end often down-converts to a low intermediate frequency, instead of directly going to baseband.
+Here, the front-end often down-converts to a low intermediate frequency (IF), instead of directly going to baseband.
 The intermediate frequency is then shifted down to baseband by a modulator later in the digital domain, which brings advantages in the downstream processing chain. %TODO check this or explain more which advantages (HF to BB directly --> i/q complex signal? ; HF to IF to BB --> real signal ) ??
 
-These three steps - amplification, filtering and down-conversion - are usually done in the analog domain, since digital circuits cannot work with such high frequencies.
+These three steps - amplification, filtering and down-conversion to an IF - are often done in the analog domain, since digital circuits cannot work with such high frequencies.
 After the analog signal is down-converted to baseband, it needs to be digitized.
 This is done by an analog-digital-converter (ADC).
 
@@ -47,17 +47,32 @@ This decoding process depends on the respective modulation type that is used.\\
 \noindent
 The block diagram in Fig.\ref{fig:bd_dsp_overview} gives a high-level overview of a receiver structure.
 
-\includepicture [1.0] [0] {An overview of the signal processing chain.} {bd_dsp_overview} {img/draw.io/bd_dsp_overview}
-
+\includepicture [1.0] [0] {High-level block diagram of a signal processing chain.} {bd_dsp_overview} {img/draw.io/bd_dsp_overview}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Receiver types}
+\section{Superheterodyne Receiver}
 
-\subsection{heterodyne}
-block diagram
+Multiple different receiver structures exist and are implemented in receivers.
+A very common structure is the so-called superheterodyne receiver.
+In the literature, short forms like \textit{superhet}, or simply \textit{super} are found.
 
-\subsection{super-heterodyne}
-block diagram
+The main characteristic of a superhet is, that it converts the radio-frequency (RF) antenna signal to an IF in a first stage, instead of going to baseband directly.\\
+
+The IF is usually set to a fixed frequency.
+This results in the advantage, that the subsequent IF filter can be optimized, since it does not have to be flexible in frequency.
+
+Fig.\ref{fig:bd_superhet} shows a block diagram of a superhet receiver.
+The antenna signal first runs through an RF amplifier and filter.
+It selects the desired frequency band and filters out any unwanted signals outside of this band.
+The next step is the mixer, which is fed by a local oscillator.
+This shifts, or down-converts, the antenna signal down to the IF.
+Afterwards, the IF signal is amplified and filtered again.
+This is to remove the side-products of the mixer and may also be called as image rejection filter.
+The demodulator stage can now perform any further signal processing on the signal, until the required signal is retrieved.
+In the shown case, which may be an FM broadcast receiver, an audio output is generated.
+
+\includepicture [1.0] [0] {Block design of a superhetorodyne receiver.} {bd_superhet} {img/superheterodyne-receiver-block-diagram.png}
+%https://www.electronics-notes.com/articles/radio/superheterodyne-receiver/block-diagram.php
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
