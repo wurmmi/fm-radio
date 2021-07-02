@@ -50,12 +50,21 @@ The block diagram in Fig.\ref{fig:bd_dsp_overview} gives a high-level overview o
 \includepicture [1.0] [0] {High-level block diagram of a signal processing chain.} {bd_dsp_overview} {img/draw.io/bd_dsp_overview}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Superheterodyne Receiver}
+\section{Receiver types}
 
-Multiple different receiver structures exist and are implemented in receivers.
-A very common structure is the so-called superheterodyne receiver.
-In the literature, short forms like \textit{superhet}, or simply \textit{super} are found.
+Multiple different receiver architectures exist and are implemented in receivers.
+Two common examples are explained in the following sections.
 
+\subsection{Direct-Conversion Receiver}
+
+A direct-conversion receiver, as its name suggests, converts an RF signal to baseband directly.
+It can also be called homodyne, synchrodyne, or zero-IF receiver.
+
+In order to achieve direct down-conversion, the local oscillator of the mixer needs to be set exactly to the center frequency of the desired signal.
+
+\subsection{Superheterodyne Receiver}
+
+The superheterodyne receiver is often found in the literature with short forms like \textit{superhet}, or simply \textit{super}.
 The main characteristic of a superhet is, that it converts the radio-frequency (RF) antenna signal to an IF in a first stage, instead of going to baseband directly.\\
 
 The IF is usually set to a fixed frequency.
@@ -78,8 +87,14 @@ In the shown case, which may be an FM broadcast receiver, an audio output is gen
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Down-Conversion}
 
-from HF to BB\\
-math. formulas
+The process of down-conversion is used to convert an RF signal to a signal of lower frequency, while preserving its information content.
+This is the explanation in the time domain.
+However, it may be easier look at the process in the frequency domain.
+In the frequency domain, the band-limited RF signal is shifted down to a lower frequency.
+This lower frequency can either be zero, i.e. baseband, or an intermediate frequency, such as in the application of a superheterodyne receiver.
+
+math. formulas\\
+digital: meet nyquist criteria, just like any other DSP (show in spectrum)\\
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Oversampling / Sample Rate Reduction}
