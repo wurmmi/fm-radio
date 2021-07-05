@@ -55,6 +55,33 @@ The block diagram in Fig.\ref{fig:bd_dsp_overview} gives a high-level overview o
 Multiple different receiver architectures exist and are implemented in receivers.
 Two common examples are explained in the following sections.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Superheterodyne Receiver}
+
+The superheterodyne receiver is often referred to as \textit{superhet}, or \textit{super} in the literature.
+The main characteristic of a superhet is, that it converts the radio-frequency (RF) antenna signal to an IF in a first stage, instead of going to baseband directly.\\
+
+The IF is usually set to a fixed frequency, which results in the advantage, that the subsequent IF filter can be optimized, since it does not have to be adapted in frequency.
+Therefore, a superhet receiver is able to select narrow band signals, even if the bands' surrounding frequencies are being used by other signals.
+This is one of the superhets' main advantages.
+A disadvantage is that the signal noise around the image frequency band is translated into the IF output band.
+Thus, the filter requirements are relatively high, since they need to deliver a strong attenuation in order to suppress noise outside the desired band.
+
+Fig.\ref{fig:bd_superhet} shows a block diagram of a superhet receiver.
+The antenna signal first runs through a band selection filter.
+It selects the desired frequency band and filters out any unwanted signals outside of this band.
+A low-noise amplifier (LNA) may be used to boost the signal strenght.
+The next step is the mixer, which is fed by a local oscillator (LO).
+This shifts, or down-converts, the antenna signal down to the IF.
+Afterwards, the IF signal is amplified and filtered again to remove the side-products of the mixer, namely the image replicas.
+Thus, it is also called an image rejection filter.
+The demodulator stage can now perform any further signal processing on the signal, until the required signal is retrieved \cite{PassosFábio2020AHSo}.\\
+
+The depicted block diagram may represent an FM broadcast receiver, where an audio output is generated from the antenna input.
+
+\includepicture [1.0] [0] {Block design of a superhetorodyne receiver \cite[Fig.2.1]{PassosFábio2020AHSo}} {bd_superhet} {img/superheterodyne-receiver-block-diagram-2.png}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Direct-Conversion Receiver}
 
 A direct-conversion receiver, as its name suggests, converts an RF signal to baseband directly.
@@ -62,26 +89,12 @@ It can also be called homodyne, synchrodyne, or zero-IF receiver.
 
 In order to achieve direct down-conversion, the local oscillator of the mixer needs to be set exactly to the center frequency of the desired signal.
 
-\subsection{Superheterodyne Receiver}
+The main advantage of direct-conversion receivers is, that their output is an image-free signal.
+This is due to the properties of the mixer.
+The strongest disadvantages are the LO leakage, which leads to a DC offset at the mixer output, and the flicker noise, also called $\frac{1}{f}$-noise, which induces strong noise at low frequencies \cite{PassosFábio2020AHSo}.
+These effects are not explained into more detail here, since this is not the focus of this thesis.
 
-The superheterodyne receiver is often found in the literature with short forms like \textit{superhet}, or simply \textit{super}.
-The main characteristic of a superhet is, that it converts the radio-frequency (RF) antenna signal to an IF in a first stage, instead of going to baseband directly.\\
-
-The IF is usually set to a fixed frequency.
-This results in the advantage, that the subsequent IF filter can be optimized, since it does not have to be flexible in frequency.
-
-Fig.\ref{fig:bd_superhet} shows a block diagram of a superhet receiver.
-The antenna signal first runs through an RF amplifier and filter.
-It selects the desired frequency band and filters out any unwanted signals outside of this band.
-The next step is the mixer, which is fed by a local oscillator.
-This shifts, or down-converts, the antenna signal down to the IF.
-Afterwards, the IF signal is amplified and filtered again.
-This is to remove the side-products of the mixer and may also be called as image rejection filter.
-The demodulator stage can now perform any further signal processing on the signal, until the required signal is retrieved.
-In the shown case, which may be an FM broadcast receiver, an audio output is generated.
-
-\includepicture [1.0] [0] {Block design of a superhetorodyne receiver.} {bd_superhet} {img/superheterodyne-receiver-block-diagram.png}
-%https://www.electronics-notes.com/articles/radio/superheterodyne-receiver/block-diagram.php
+\includepicture [0.9] [0] {Block design of a direct-conversion receiver \cite[Fig.2.3]{PassosFábio2020AHSo}.} {bd_direct_conversion} {img/direct-conversion-receiver-block-diagram.png}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
