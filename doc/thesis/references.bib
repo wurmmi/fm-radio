@@ -1,5 +1,9 @@
 %%% Biber accepts '%' for marking comments
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% literature
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 @book{PassosFábio2020AHSo,
 abstract = {This book describes a new design methodology that allows optimization-based synthesis of RF systems in a hierarchical multilevel approach, in which the system is designed in a bottom-up fashion, from the device level up to the (sub)system level. At each level of the design hierarchy, the authors discuss methods that increase the design robustness and increase the accuracy and efficiency of the simulations. The methodology described enables circuit sizing and layout in a complete and automated integrated manner, achieving optimized designs in significantly less time than with traditional approaches. Describes an efficient and accurate methodology to design automatically RF systems, with guaranteed accuracy from the device to the system level; Discusses analytical and machine learning techniques for modelling integrated inductors and uses such models in synthesis approaches; Compares synthesis strategies for RF circuits based on bottom-up versus flat approaches; Discusses layout-aware bottom-up design methodologies for RF circuits; Discusses variability-aware bottom-up design methodologies for RF circuits; Describes multilevel bottom-up design methodologies from the device up to the system level},
 isbn = {978-3-030-47247-4},
@@ -39,6 +43,7 @@ keywords = {Engineering},
 	url    = {https://www.ris.bka.gv.at/Dokumente/Bundesnormen/NOR40219692/II_390_2016_Anlage_2.pdf},
 }
 
+%TODO: check where the empty "()" comes from in reference in generated pdf
 @article{EuCommissionRadioSpectrumHarmonization,
 	author          = {European Commission},
 	title           = {Commission Decision on harmonisation of the radio spectrum for use by short-range devices},
@@ -64,6 +69,68 @@ keywords = {Engineering},
 	date            = {2017-04},
 	number          = {ETSI EN 302 018}
 }
+
+@article{RohdeSchwarzFM,
+	author          = {Rohde \& Schwarz},
+	title           = {Messungen an FM-Sendern für Abnahme, Inbetriebnahme oder Wartung},
+	number          = {Sep-13 - 7BM105\_0D},
+	url             = {https://cdn.rohde-schwarz.com/pws/dl_downloads/dl_application/application_notes/7bm105/7BM105_0D.pdf},
+	urldate         = {2021-07-05}
+}
+
+@online{ElectronicsNotesFmTutorial,
+	author={Electronics Notes},
+	title={Broadcast VHF FM Tutorial \& Basics},
+	url={https://www.electronics-notes.com/articles/audio-video/broadcast-audio/vhf-fm-frequency-modulation-basics.php},
+	urldate={2021-07-05},
+}
+
+@online{DSPRelatedEnvelopeDetection,
+	author={Lyons, Rick},
+	title={Digital Envelope Detection: The Good, the Bad, and the Ugly},
+	date={2016-04-03},
+	url={https://www.dsprelated.com/showarticle/938.php},
+	urldate={2021-07-06},
+}
+
+@online{RoppelBegleitmaterial,
+	author={Roppel, Carsten},
+	title={Analoge Modulationsverfahren und Rundfunktechnik; Begleitmaterial zum Buch 'Grundlagen der digitalen Kommunikationstechnik, Übertragungstechnik - Signalverarbeitung - Netze'},
+	date={2010-08-24},
+	url={https://www.hs-schmalkalden.de/fileadmin/portal/Dokumente/Fakult%C3%A4t_ET/Personal/Roppel/Buch/Analoge_Modulationsverfahren.pdf},
+	hyphenation={german},
+	urldate={2021-07-06},
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% images
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@image{FigFmChannelFreqSpectrum,
+	title   = {Basisbandsignal eines UKW-Rundfunkprogrammes},
+	url     = {https://de.wikipedia.org/wiki/UKW-Rundfunk#Technische_Details},
+	urldate = {2021-07-05}
+}
+
+@image{FigBdFreqDiscriminator,
+	title   = {Frequency Discriminator Block Diagram},
+	url     = {https://www.tutorialspoint.com/analog_communication/analog_communication_fm_demodulators.htm},
+	urldate = {2020-12-16}
+}
+
+@thesis{SchnyderHaller2002,
+	author={Schnyder, Franz and Haller, Christoph},
+	title={Implementation of FM Demodulator Algorithms on a High Performance Digital Signal Processor},
+	type={diploma thesis},
+	institution={HSR Hochschule für Technik Rapperswil, Elektrotechnik},
+	date={2002-1-11},
+	url={https://www.veron.nl/wp-content/uploads/2014/01/FmDemodulator.pdf},
+	urldate={2021-07-06}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% from template
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 @thesis{Artner2007,
 	author={Artner, Nicole Maria},

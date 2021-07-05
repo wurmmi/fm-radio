@@ -206,12 +206,12 @@ However, neighboring channels need to be considered therefore, since this may re
 Fig.\ref{fig_channel_baseband_freqs} shows the frequency spectrum of a single channel, located at its carrier- or center frequency.
 For a better overview, only the positive spectum part is shown.
 The negative part is an exact mirror, because the transmitted and received signals from the antenna are real signals - they do not have an imaginary part.
-The spectrum consists of multiple parts. Therefore, it is also referred to as `multiplex signal' in the literature. Several parts are described in the following paragraphs \cite{EbuFmRegulators}\cite{EtsiFmSoundBroadcastingServiceHarmonizedStandard}.
+The spectrum consists of multiple parts. Therefore, it is also referred to as `multiplex signal' in the literature. Several parts are described in the following paragraphs \cite{EbuFmRegulators}\cite{EtsiFmSoundBroadcastingServiceHarmonizedStandard}\cite{ElectronicsNotesFmTutorial}.
 
 \begin{figure}[!h]
   \centering
     \includegraphics[width=9cm]{img/fm-channel-baseband.png}
-  \caption{Allocation of frequencies in an FM channel \cite{ref_fig_channel_freqs}.}
+  \caption{Allocation of frequencies in an FM channel \cite{FigFmChannelFreqSpectrum}.}
   \label{fig_channel_baseband_freqs}
 \end{figure}
 
@@ -247,7 +247,7 @@ Even though the carrier is suppressed, it can still be recovered, because it is 
 
 The bandwidth for this difference-signal spans 15 kHz on either side of the subcarrier.
 It is used to generate a stereo audio signal, in combination with the mono signal.
-This process is explained into more detail in chapter \ref{sec_fm_sig_demod}.
+This process is explained into more detail in chapter \ref{sec:demodulation-of-broadcast-fm}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Additional Services}
@@ -255,12 +255,10 @@ This process is explained into more detail in chapter \ref{sec_fm_sig_demod}.
 Considering all these parts in the spectrum, there is still free bandwidth available to use up to the maximum channel bandwitdh of 100 kHz in one sideband.
 Because of that, additional services were added to the pure audio transmission, to provide additional data services and information.
 
-Services that were implemented are the Data Radio Channel (DARC), which is mostly used in Japan and the USA, the Subsidary Communication Authorization (SCA) and the Radio Data System (RDS) \cite{ref_rohde_u_schwarz}.
+Services that were implemented are the Data Radio Channel (DARC), which is mostly used in Japan and the USA, the Subsidary Communication Authorization (SCA) and the Radio Data System (RDS) \cite{RohdeSchwarzFM}.
 Out of these, RDS is the most significant service in Europe.
-It is used to transmit additional information about the channel, such as the radio stations' name, the currently playing songs' title or traffic information.\\
+It is used to transmit additional information about the channel, such as the radio stations' name, the currently playing songs' title or traffic information.
 
-\noindent
-The information about the frequency spectrum was taken from \cite{ref_fm_broadcast_tutorial_and_basics}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Algorithms for Digital FM Demodulation}
@@ -291,7 +289,7 @@ The discriminator consists of two main parts - a differentiator and an envelope 
 Different strategies can be implemented for both parts.
 A block diagram for a frequency discriminator with its two main parts is shown in Fig.\ref{fig:bd_freq_discriminator}.
 
-\includepicture [0.75] [0] {Frequency discriminator block diagram \cite{ref_fig_freq_discriminator}.} {bd_freq_discriminator} {img/draw.io/bd_freq_discriminator}
+\includepicture [0.75] [0] {Frequency discriminator block diagram \cite{FigBdFreqDiscriminator}.} {bd_freq_discriminator} {img/draw.io/bd_freq_discriminator}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Differentiator}
@@ -311,7 +309,7 @@ It is described by the term within the square brackets.
 
 A time-domain example for this signal is shown in the top left diagram in Fig.\ref{fig:time_domain_envelope_detect}.\\
 
-An important requirement for the differentiator is, that the input signal is of a constant amplitude \cite{ref_schnyder_haller}.
+An important requirement for the differentiator is, that the input signal is of a constant amplitude \cite{SchnyderHaller2002}.
 The transmitted signal is subject to random additive noise on the transmission channel.
 The differentiator would deliver wrong results because of this noise, when substracting two consecutive samples, as described in Eq.\eqref{equ:differentiator_two_samples}.
 To achieve a constant amplitude, the received complex baseband signal $s(t)$ can be normalized to a value of one.
@@ -336,7 +334,7 @@ The differentiated signal still consists of a FM part, as explained above, using
 In order to remove this high-frequeny part and extract the low-frequency envelope, the signal needs to be fed into an envelope detector.
 A block diagram is shown in Fig.\ref{fig:bd_freq_discriminator}.
 
-The method implemented in Fig.\ref{fig:time_domain_envelope_detect} is one of the most simple ones and is usually referred to as `Asynchronous Half-Wave Envelope Detector'\cite{ref_envelope_detector}.
+The method implemented in Fig.\ref{fig:time_domain_envelope_detect} is one of the most simple ones and is usually referred to as `Asynchronous Half-Wave Envelope Detector' \cite{DSPRelatedEnvelopeDetection}.
 It consists of a thresholding unit to remove negative values and a conventional lowpass filter.
 In analog implementations, the thresholding unit is a diode.
 The cutoff frequency of the lowpass needs to be adapted to the envelope signals' maximum frequency.
@@ -345,12 +343,12 @@ It needs to be able to follow the signal, but also sufficiently smooth out the r
 Different methods may be implemented for the envelope detector.
 For example, an `Asynchronous Full-Wave Envelope Detector' can be used.
 Therefor, the previous method only needs to swap the thresholding unit with an unit that calculates the absolut value.
-In that architecture, a full-wave rectification is performed on the signal, which significantly improves the envelope detection accuracy \cite{ref_envelope_detector}.
+In that architecture, a full-wave rectification is performed on the signal, which significantly improves the envelope detection accuracy \cite{DSPRelatedEnvelopeDetection}.
 The envelope is followed more exactly, because of the higher power that is available in the signal, since the entire signal is taken into account, and not only the positive half, as in the previous half-wave method.
 
-\includepicture [0.75] [0] {Time-domain signals in envelope detection \cite{ref_roppel}.} {time_domain_envelope_detect} {img/envelope-detect-time-domain.jpg}
+\includepicture [0.75] [0] {Time-domain signals in envelope detection \cite{RoppelBegleitmaterial}.} {time_domain_envelope_detect_orig} {img/envelope-detect-time-domain.jpg}
 
-\includepicture [1.0] [0] {Time-domain signals in envelope detection \cite{ref_roppel}.} {time_domain_envelope_detect} {img/draw.io/envelope-detect-time-domain}
+\includepicture [1.0] [0] {Time-domain signals in envelope detection \cite{RoppelBegleitmaterial}.} {time_domain_envelope_detect} {img/draw.io/envelope-detect-time-domain}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Phase-Locked Loop}
@@ -365,12 +363,13 @@ The envelope is followed more exactly, because of the higher power that is avail
 A Phase-Locked Loop (PLL) can also be used to transform an FM signal to an AM signal.
 A PLL is a feedback loop that is usually used to generate an output signal that has a fixed phase reference to its input.
 In the case of FM demodulation, the loop filter in the feedback branch is configured to be able to follow the frequency variations on the input, which is directly related to the encoded information.
-The output of the PLL directly delivers an AM signal, which corresponds to the transmitted information. \cite{ref_schnyder_haller}
+The output of the PLL directly delivers an AM signal, which corresponds to the transmitted information. \cite{SchnyderHaller2002}
 
 FM demodulation with a PLL is not described into more detail, since this thesis is focussing on the concept of an entire system architecture.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Demodulation of Broadcast FM}
+\label{sec:demodulation-of-broadcast-fm}
 %TODO: once FM is converted to AM, traditional AM DSP techniques can be employed
 
 This chapter describes the demodulation of the information content of an FM broadcast channel, as it is used in commercial FM radio broadcasting.
@@ -417,7 +416,7 @@ The signals $x_l(t)$ and $x_r(t)$ describe the left and right audio signal, resp
 \begin{figure}[!h]
   \centering
     \includegraphics[width=1.0\textwidth]{img/draw.io/bd_fm_demod_stereo_audio}
-  \caption{Block diagram of FM stereo audio demodulation \cite{ref_roppel}.}
+  \caption{Block diagram of FM stereo audio demodulation \cite{RoppelBegleitmaterial}.}
   \label{fig_bd_stereo_demod}
 \end{figure}
 
