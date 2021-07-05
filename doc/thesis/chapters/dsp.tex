@@ -100,6 +100,8 @@ These effects are not explained into more detail here, since this is not the foc
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Down-Conversion}
 
+(TODO: this is amplitude modulation!) -->see \cite[sec 4.2 AM]{MatinMohammadA2018CSfE} \\
+
 The process of down-conversion is used to convert an RF signal to a signal of lower frequency, while preserving its information content.
 This is the explanation in the time domain.
 However, it may be easier look at the process in the frequency domain.
@@ -166,24 +168,24 @@ By inserting this message signal into the generic FM formula \eqref{equ:fm_func}
 \begin{equation}
   y(t) = A_c\ cos \Big(2 \pi f_c t + \beta\ sin(2 \pi f_m t)\Big )
 \end{equation}
-Several formulas, as well as their derivations are described according to \cite{ref_FM_Maths_Info_1}\cite{ref_FMMaths2}.
+Several formulas, as well as their derivations are described according to \cite[pg.54-55]{MatinMohammadA2018CSfE}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Frequency Band}
 
 The frequency band that is used for FM broadcasting is defined worldwide and spans from 87.5 to 108 MHz.
-However, some countries only partially use the band \cite{ref_itu_regulations}.
+However, some countries only partially use the band \cite[RR5-39]{ItuRadioRegulations}.
 The range is located within the so-called Very-High-Frequency (VHF) band, which is open to the public in terms of usage.
 This means, that any transmitter may use the specified frequency range freely.
-Austria allowed the legal usage in 2006 \cite{ref_austria_rundfunkgesetz_2006}.
+Austria allowed the legal usage in 2006 \cite{AustriaRundfunkgesetz2014}.
 However, the transmission power needs to be limited, so that neighboring receivers are not disturbed in receiving any existing channels.
-The European Commision specifies the power limit as 50 nW of effective radiated power (ERP) \cite{ref_eu_commision_radio_spectrum}.
+The European Commision specifies the power limit as 50 nW of effective radiated power (ERP) \cite{EuCommissionRadioSpectrumHarmonization}.
 Another limitation is, that a transmitter must be capable to transmit on multiple center frequencies within the broadcasting band.
 It must not be fixed to a single center frequency.
 Through this specification, a transmitter is capable of switching its transmission center frequency, in order to avoid interference with another transmitters signal.
 
 In a practical usecase this means that a transmitter needs to select a channel or frequency range, that is not already occupied by an official transmitter.
-If a free range is found, the transmitter may start sending an FM signal with the mentioned power limitations \cite{ref_ebu_fm_modulators_in_europe_power_regulations}.
+If a free range is found, the transmitter may start sending an FM signal with the mentioned power limitations \cite{EbuFmRegulators}.
 
 %https://www.ris.bka.gv.at/GeltendeFassung.wxe?Abfrage=Bundesnormen&Gesetzesnummer=20008807
 
@@ -204,7 +206,7 @@ However, neighboring channels need to be considered therefore, since this may re
 Fig.\ref{fig_channel_baseband_freqs} shows the frequency spectrum of a single channel, located at its carrier- or center frequency.
 For a better overview, only the positive spectum part is shown.
 The negative part is an exact mirror, because the transmitted and received signals from the antenna are real signals - they do not have an imaginary part.
-The spectrum consists of multiple parts. Therefore, it is also referred to as `multiplex signal' in the literature. Several parts are described in the following paragraphs.
+The spectrum consists of multiple parts. Therefore, it is also referred to as `multiplex signal' in the literature. Several parts are described in the following paragraphs \cite{EbuFmRegulators}\cite{EtsiFmSoundBroadcastingServiceHarmonizedStandard}.
 
 \begin{figure}[!h]
   \centering
