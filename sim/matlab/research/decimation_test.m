@@ -49,7 +49,7 @@ y1_dec = decimate(signal, osr, 'fir');
 %% 2: Manual, using filter and pick every nth sample.
 
 % Low-pass filter
-Nfilt = 30;
+Nfilt = 50;
 filter_dec = fir1(Nfilt, 1/osr);
 y2_man_filt = filter(filter_dec,1, signal);
 
@@ -62,7 +62,7 @@ y2_man = y2_man_filt(1:osr:end);
 %=========================================================================
 %% Analysis
 
-skip_end = 3;
+skip_end = 10;
 
 fprintf("norm resample-decimate : %.3f\n", norm(y0_res(1:end-skip_end) - y1_dec(1:end-skip_end)));
 fprintf("norm own-resample      : %.3f\n", norm(y0_res(1:end-skip_end) - y2_man(1:end-skip_end)));
