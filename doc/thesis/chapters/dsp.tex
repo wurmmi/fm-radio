@@ -100,16 +100,52 @@ These effects are not explained into more detail here, since this is not the foc
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Down-Conversion}
 
-(TODO: this is amplitude modulation!) -->see \cite[sec 4.2 AM]{MatinMohammadA2018CSfE} \\
-
-The process of down-conversion is used to convert an RF signal to a signal of lower frequency, while preserving its information content.
+The process of down-conversion is a technique of amplitude modulation (AM).
+It is used to convert an RF signal to a signal of lower frequency, while preserving its information content.
 This is the explanation in the time domain.
 However, it may be easier look at the process in the frequency domain.
 In the frequency domain, the band-limited RF signal is shifted down to a lower frequency.
 This lower frequency can either be zero, i.e. baseband, or an intermediate frequency, such as in the application of a superheterodyne receiver.
 
-math. formulas\\
-digital: meet nyquist criteria, just like any other DSP (show in spectrum)\\
+In order to achieve this, the incoming signal needs to be multiplicated with a carrier signal, that is generated locally in the receiver, by a local oscillator (LO).
+Depending on the frequency $f_{LO}$ of this local carrier, the resulting signal will be shifted to baseband, or an IF.
+
+A block diagram, as well as the signal spectrum of the process is shown in Fig.\ref{fig:bd_down_conversion_spectrum}.
+
+%\includepicture [0.6] [0] {Block diagram of a down-conversion \cite[Fig.4.3]{MatinMohammadA2018CSfE}.} {bd_down_conversion_spectrum} {img/bd-down-conversion-AM-dsb-sc}
+\includepicture [1.0] [0] {Signal spectrum before the down-conversion.} {bd_down_conversion_spectrum} {img/down-conversion-AM}
+
+\subsection{Mathematical description}
+
+The procedure that is used for down-conversion is an amplitude modulation (AM).
+The equation for a generic AM signal is $ S_{AM}(t) = A_m m(t) \cdot A_c c(t) $, where $m(t)$ represents the message signal, and $c(t)$ is the high-frequency carrier.
+Their respective amplitudes are $A_m$ and $A_c$.
+This equation is depicted as a block diagram and signal spectrum in Fig.\ref{fig:bd_down_conversion_spectrum}, where $S_{AM}$ is denoted as the baseband signal $m_{BB}$ of the original signal $m$.
+
+The signal $m(t)$ is a baseband signal.
+It may be antenna signal that was filtered by a bandpass filter.
+The received signal is a real signal, and thus its negative frequency spectrum is an exact mirror of the positive frequencies.
+This fact can be explained in two simple equations.
+
+It is well-known that the real signal $cos(wt) = \frac{1}{2} \Big( e^{jw} + e^{-jw} \Big)$, which follows from $e^{jw} = cos(wt)+jsin(wt)$.
+Looking at the frequencies of the first equation, the negative and positive parts can be seen.\\
+
+The process of down-conversion is described in the following formulas.
+The denotation of the subscripts is assuming a direct conversion to baseband.
+
+\begin{equation}
+  m_{BB}(t) = m(t) \cdot c(t)
+\end{equation}
+
+
+
+\includepicture [1.0] [0] {Signal spectrum after the down-conversion.} {down_conversion_spectrum} {img/down-conversion-AM-dsb-sc}
+
+
+\section{Nyquist criteria}
+
+in digital: any DSP must meet nyquist criteria \\
+show aliasing in spectrum\\
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Oversampling / Sample Rate Reduction}
