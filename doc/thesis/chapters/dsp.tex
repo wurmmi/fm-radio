@@ -204,10 +204,11 @@ To guarantee this, the Nyquist sampling theorem must still be met after the down
 
 A lower sample rate is especially useful for efficient filter design.
 Factors such as the transition bandwidth or the width of the passband are important there.
-Short transition bandwidths, or a narrow passband require a high order of the filter to fulfill the specifications, which translates into a high computational effort.
-Thus, it is of advantage to downsample the input, in order to generate better conditions for the filter design.
+Short transition bandwidths, or a narrow passband require a high filter order to fulfill the specifications.
+This translates into a high computational effort.
+In such cases, it is of advantage to downsample the input, in order to create better conditions for the filter design.
 Downsampling spreads the spectrum of interest, in terms of the relative bandwidth between passband and sampling frequency.
-Therefore, the filter can be designed with wider transition bandwidth and passband, which significantly reduces the required filter order.
+Therefore, the filter can be designed with wider transition bandwidth and passband, which significantly reduces the required filter order.\\
 
 As an example, assuming the signal of interest has a bandwidth of 20 kHz.
 The Nyquist theorem thus requires a remaining sampling rate of at least twice the signals' frequency, so 40 kHz.
@@ -219,10 +220,9 @@ The process consists of two parts: filtering and skipping samples.
 Let us assume downsampling by a factor of $M=4$.
 In the first step, a low-pass filter with a normalized cut-off frequency of \textit{1/M} is applied.
 This is required in order to avoid aliasing later in the process.
-The second step simply skips a number of M-1 samples in the sequence.
+The second step simply skips a number of M-1 samples in the sequence.\\
 
-More detailed information can be found in \cite[chpt. 6.9]{AlessioSilviaMaria2016DSPa}, \cite[chpt. 4.1]{GopiE.S2018MDSP}
-\cite[chpt. 10.2.2]{ThyagarajanK.S2019ItDS}.
+More detailed information can be found in \cite[chpt. 6.9]{AlessioSilviaMaria2016DSPa}, \cite[chpt. 4.1]{GopiE.S2018MDSP} and \cite[chpt. 10.2.2]{ThyagarajanK.S2019ItDS}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Frequency Modulation in Broadcasting}
