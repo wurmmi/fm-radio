@@ -134,18 +134,63 @@ The process of down-conversion is described in the following formulas.
 The denotation of the subscripts is assuming a direct conversion to baseband.
 
 \begin{equation}
-  m_{BB}(t) = m(t) \cdot c(t)
+  m_{BB}(t) = A_m m(t) \cdot A_c c(t)
 \end{equation}
 
+Assuming that $m(t) = cos(\omega_mt)$, $c(t) = cos(\omega_ct)$ and $A_m = A_c = 1$,
+
+\begin{equation}
+  m_{BB}(t) = cos(\omega_mt) \cdot cos(\omega_ct)
+\end{equation}
+
+follows.
+By applying the mathematical theorem
+
+\begin{equation}
+  cos(\alpha) \cdot cos(\beta) = \frac{1}{2} \cdot \bigl[ cos(\alpha-\beta) + cos(\alpha+\beta) \bigr]
+\end{equation}
+
+the final formula of the conversion can be represented as
+
+\begin{equation}
+ m_{BB}(t) = \frac{1}{2} \cdot \Bigl[ cos\bigl((w_m-w_c)t\bigr) + cos\bigl((w_m+w_c)t\bigr) \Bigr]
+\end{equation}
+
+The graphical representation in the frequency spectrum is shown in Fig.\ref{fig:down_conversion_spectrum_steps}.
+As mentioned above, the assumption is a direct conversion to baseband, so $w_m = w_c$.
+Looking at the positive original part, it is shown that only half of its energy is translated into the desired baseband.
+However, half of the energy of the original negative part is also shifted to baseband.
+The superposition of the two parts results in an amount of energy that is again equal to the original signal.
+
+\includepicture [1.0] [0] {Signal spectrum, explaining the process of down-conversion.} {down_conversion_spectrum_steps} {img/down-conversion-AM-dsb-sc}
 
 
-\includepicture [1.0] [0] {Signal spectrum after the down-conversion.} {down_conversion_spectrum} {img/down-conversion-AM-dsb-sc}
+\section{Sampling theorem}
 
+Signal processing is often done in the digital domain, using digital signals.
+A digital signal is obtained by sampling an analog signal in a periodic interval, the so-called sampling frequency $f_s$.
 
-\section{Nyquist criteria}
+The sampling frequency needs to meet the sampling theorem, in order to correctly represent the analog signal.
+The sampling theorem, by Nyquist and Shannon mainly consists of the following formula.
 
-in digital: any DSP must meet nyquist criteria \\
-show aliasing in spectrum\\
+\begin{equation}
+  f_{s} > 2*f_{signal}
+\end{equation}
+
+In words: The sampling frequency must be higher than twice the frequency of the signals' highest frequency content.
+Any digital signal processing technique must hold the specification of the sampling theorem \cite{AlessioSilviaMaria2016DSPa}.
+
+In case the theorem is violated, the effect of aliasing occurs on the generated signal.
+The sampling process introduces spectral replicas at integer multiples of the sampling frequency $f_s$.
+These replicas overlap, if $f_s$ does not meet the theorem, which results in signal distortion.
+Fig.\ref{fig:aliasing_freq_spectrum} illustrates the effect of aliasing in the frequency spectrum \cite{ThyagarajanK.S2019ItDS}.
+
+\includepicture [0.9] [0] {
+  Signal spectrum, explaining the process of down-conversion.\\
+  Diagram A) $f_s$ is high enough and thus meets the theorem.\\
+  Diagram B) $f_s$ exactly meets the theorem.\\
+  Diagram C) $f_s$ is too low and thus creates overlaps of the spectral replicas - aliasing \cite{ThyagarajanK.S2019ItDS}.
+} {aliasing_freq_spectrum} {img/sampling-aliasing}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Oversampling / Sample Rate Reduction}
