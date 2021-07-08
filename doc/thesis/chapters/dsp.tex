@@ -113,7 +113,7 @@ Note, that in the case of down-conversion, the local oscillator frequency $f_{LO
 
 A block diagram, as well as the signal spectrum of the process is shown in Fig.\ref{fig:bd_down_conversion_spectrum}. In this example, the frequency of the LO is set to shift the signal from $f_m$ to baseband.
 
-\includepicture [1.3] [0] {Block diagram and signal spectrum of down-conversion.} {bd_down_conversion_spectrum} {img/draw.io/down-conversion-AM-spectrum-and-bd}
+\includepicture [1.0] [0] {Block diagram and signal spectrum of down-conversion.} {bd_down_conversion_spectrum} {img/draw.io/down-conversion-AM-spectrum-and-bd}
 
 \subsection{Mathematical description}
 
@@ -172,7 +172,6 @@ A digital signal is obtained by sampling an analog signal in a periodic interval
 
 The sampling frequency needs to meet the sampling theorem, in order to correctly represent the analog signal.
 The sampling theorem, by Nyquist and Shannon mainly consists of the following formula.
-
 \begin{equation}
   f_{s} > 2 \cdot f_{signal}
 \end{equation}
@@ -190,7 +189,7 @@ Fig.\ref{fig:aliasing_freq_spectrum} illustrates the effect of aliasing in the f
   Diagram A) $f_s$ is high enough and thus meets the theorem.\\
   Diagram B) $f_s$ exactly meets the theorem.\\
   Diagram C) $f_s$ is too low and thus creates overlaps of the spectral replicas - aliasing \cite{ThyagarajanK.S2019ItDS}.
-} {aliasing_freq_spectrum} {img/sampling-aliasing}
+} {aliasing_freq_spectrum} {img/draw.io/sampling-aliasing}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Sample Rate Reduction}

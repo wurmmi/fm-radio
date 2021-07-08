@@ -12,7 +12,7 @@
 % example:  \includepicture [0.75] [0] {A nice picture.} {img/img.png} {figure_label}
 \newcommandx{\includepicture}[5][1=1,2=0]
 {
-	\begin{figure}[H] %TODO: maybe remove the [H], to let figures float
+	\begin{figure}[] %TODO: maybe remove the [H], to let figures float
 		\centering
 		\includegraphics[width=#1\textwidth,angle=#2]{\string"#5"}
 		\caption{#3}
