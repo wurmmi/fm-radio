@@ -79,7 +79,7 @@ The demodulator stage can now perform any further signal processing on the signa
 
 The depicted block diagram may represent an FM broadcast receiver, where an audio output is generated from the antenna input.
 
-\includepicture [1.0] [0] {Block design of a superhetorodyne receiver \cite[Fig.2.1]{PassosFábio2020AHSo}} {bd_superhet} {img/superheterodyne-receiver-block-diagram-2.png}
+\includepicture [1.0] [0] {Block design of a superhetorodyne receiver \cite[Fig.2.1]{PassosFábio2020AHSo}} {bd_superhet} {img/draw.io/superheterodyne-receiver-block-diagram}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Direct-Conversion Receiver}
@@ -94,7 +94,7 @@ This is due to the properties of the mixer.
 The strongest disadvantages are the LO leakage, which leads to a DC offset at the mixer output, and the flicker noise, also called \textit{1/f}-noise, which induces strong noise at low frequencies \cite{PassosFábio2020AHSo}.
 These effects are not explained into more detail here, since this is not the focus of this thesis.
 
-\includepicture [0.9] [0] {Block design of a direct-conversion receiver \cite[Fig.2.3]{PassosFábio2020AHSo}.} {bd_direct_conversion} {img/direct-conversion-receiver-block-diagram.png}
+\includepicture [1.0] [0] {Block design of a direct-conversion receiver \cite[Fig.2.3]{PassosFábio2020AHSo}.} {bd_direct_conversion} {img/draw.io/direct-conversion-receiver-block-diagram}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -110,10 +110,9 @@ This lower frequency can either be zero, i.e. baseband, or an intermediate frequ
 In order to achieve this, the incoming signal needs to be multiplicated with a carrier signal, that is generated locally in the receiver, by a local oscillator (LO).
 Depending on the frequency $f_{LO}$ of this local carrier, the resulting signal will be shifted to baseband, or an IF.
 
-A block diagram, as well as the signal spectrum of the process is shown in Fig.\ref{fig:bd_down_conversion_spectrum}.
+A block diagram, as well as the signal spectrum of the process is shown in Fig.\ref{fig:bd_down_conversion_spectrum}. In this example, the frequency of the LO is set to shift the signal from $f_m$ to baseband.
 
-%\includepicture [0.6] [0] {Block diagram of a down-conversion \cite[Fig.4.3]{MatinMohammadA2018CSfE}.} {bd_down_conversion_spectrum} {img/bd-down-conversion-AM-dsb-sc}
-\includepicture [1.0] [0] {Signal spectrum before the down-conversion.} {bd_down_conversion_spectrum} {img/down-conversion-AM}
+\includepicture [1.0] [0] {Block diagram and signal spectrum of down-conversion.} {bd_down_conversion_spectrum} {img/draw.io/down-conversion-AM-spectrum-and-bd}
 
 \subsection{Mathematical description}
 
