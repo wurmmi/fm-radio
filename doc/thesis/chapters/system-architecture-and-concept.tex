@@ -1,17 +1,69 @@
 %%%%%%%%%%%%%%%%%%%%
-\chapter{System Architecture/Concept}
-\label{cha:SystemArchitecture/Concept}
+\chapter{System Architecture and Concept}
+\label{cha:SystemArchitectureAndConcept}
 
-  \section{Overview}
+This chapter introduces the FM radio receiver project that is implemented as a major part of this thesis.
+It specifically talks about the system level approach that is taken in the implementation of the project.
+The main concept, as well as the architecture are explained.
+
+%%%%%%%%%%%%%%%%%%%%
+\section{Overview}
+
+In the development of a project that includes multiple functional parts, it is always of advantage to start with a system level overview.
+Major decisions can be made at this stage, before any implementation has begun.
+This can have a direct impact on the efficiency of the entire development, which concequently has an impact on the final quality of the product.
+A thorough system level design can also prevent from issues that would otherwise arise while the development is already ongoing.
+As an example it could turn out that one of the functional parts is not able to fit into the integrated system, in the way it is implemented.
+This leads to the necessity to re-engineer this entire functional block.
+As a result, it takes more effort to implement the functionality, which directly correlates with the development cost and the time-to-market, in order to deliver the final product.
+Summing up, a comprehensive system level architecture and concept can pave the way for a successful implementation of a project from start to finish.\\
+
+In order to create a system level design, considerations around the high-level, final goal of the product are a good starting point.
+This includes the definition of its functional range.
+Once this is done, the target system or target hardware should be considered, because there are various ways to implement a certain functionality.
+All of these variants will eventually result in the same output, but will, however, heavily differ in their implementation effort, efficiency, or their applicability for the products' aim in general.
+Thus, things like the available hardware platform, implementation time, degree of optimization, output quality, and similar things are important factors at this stage.
+Of course, there are many more factors to consider when a product is to be developed.
+However, only a subset of these is covered here, since this chapter is focused on how this thesis' accompanying project was developed and is thus written in that context.\\
+
+%%%%%%%%%%%%%%%%%%%%
+\section{The project}
+
+The aim of this thesis is to implement an FM radio receiver in multiple different methods and ways of implementation.
+The final goal thereby is always be the same, that is: Listen to the music of a radio station that is transmitted over FM broadcast radio.
+
+In the context of a system level design approach, several steps are necessary to find a solution that is ready to be implemented.
+As a very first step, the inner workings of an FM receiver need to be understood.
+This mainly regards the signal processing theory, to be able to decode the signal that is received by the antenna.
+Chapter \ref{cha:SignalProcessingTheory} describes this part into detail.
+
+As already mentioned above, multiple ways of technology and implementation can lead to a similar result.
+Thus, the next step is to define a set of possible ways, which will actually be implemented.
+For this thesis, the decision was made to implement the FM radio receiver, using the following methods.
+
+\begin{itemize}
+  \item \textbf{GNU Radio} \cite{GnuRadio}\\
+      GNU Radio is a free and open-source software development toolkit to implement a software-defined radio. The implementation is done by connecting functional blocks in a block design. This abstracts the inner workings of each functional block and thus provides an implementation approach on a very high level of abstraction.
+  \item Matlab
+  \item FPGA: \cplusplus High-Level Synthesis
+  \item FPGA: VHDL
+\end{itemize}
+
+Once the basic theory is understood, implementation can begin.
 
 
--  implementation of a model and DSP concept in Matlab \\
--  implementation in VHDL and HLS \\
--  both use the same testbench source \\
--  both are integrated into FPGA
--  the FPGA output is read back into the firmware, for analysis \\
 
-  \section{Block Diagram (with details)}
-    \subsection{describe blocks}
+% list of variants
+%-  implementation of a model and DSP concept in Matlab \\
+%-  implementation in VHDL and HLS \\
+%-  both use the same testbench source \\
+%-  both are integrated into FPGA
+%-  the FPGA output is read back into the firmware, for analysis \\
 
-  \section{Test Environment}
+%%%%%%%%%%%%%%%%%%%%
+\section{Block Diagram (with details)}
+%%%%%%%%%%%%%%%%%%%%
+\subsection{describe blocks}
+
+%%%%%%%%%%%%%%%%%%%%
+\section{Test Environment}
