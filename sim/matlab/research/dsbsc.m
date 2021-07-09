@@ -39,7 +39,7 @@ A_tx_c = 1;
 
 % Rx carrier
 fc_rx  = 57e3;       % <-- ADAPT FREQUENCY ERROR
-phi_rx = 180*pi/180;  % <-- ADAPT PHASE ERROR
+phi_rx = 160*pi/180;  % <-- ADAPT PHASE ERROR
 A_rx_c = 1;
 
 %=========================================================================
@@ -80,7 +80,7 @@ if EnableEqirippleFIR
     filter_name = sprintf("./filters/lowpass_rx.mat");
     ripple_pass_dB = 0.1;                % Passband ripple in dB
     ripple_stop_db = 50;                 % Stopband ripple in dB
-    cutoff_freqs   = [fmsg*5 fmsg*20];   % Cutoff frequencies
+    cutoff_freqs   = [fmsg 3*fmsg];   % Cutoff frequencies
     
     filter_lp_rx = getLPfilter( ...
         filter_name, ...
@@ -126,6 +126,7 @@ fprintf('fft_bin: %.2f Hz\n', fft_bin);
 fft_freqs = (-Nfft/2:Nfft/2-1)/(Nfft*1/fs);
 
 fft_msg    = abs(fftshift( fft( hanning(length(msg)) .* msg,    Nfft) ))/Nfft;
+fft_msg_rx_demod = abs(fftshift( fft( hanning(length(msg)) .* rx_msg_demod, Nfft) ))/Nfft;
 fft_msg_rx = abs(fftshift( fft( hanning(length(msg)) .* rx_msg, Nfft) ))/Nfft;
 
 
@@ -197,13 +198,14 @@ xline(-fmsg,'k--','-fmsg');
 xline( fmsg,'k--','fmsg');
 yline(abs(cos(phi_rx))*max(fft_msg), 'k--', 'power loss due to Rx phase error')
 h0 = plot(fft_freqs, fft_msg,    'b', 'DisplayName', 'msg tx');
-h1 = plot(fft_freqs, fft_msg_rx, 'r', 'DisplayName', 'msg rx');
+h1 = plot(fft_freqs, fft_msg_rx_demod, 'm', 'DisplayName', 'msg rx demod');
+h2 = plot(fft_freqs, fft_msg_rx, 'r', 'DisplayName', 'msg rx');
 grid on;
-xlim([0,fmsg*2]);
+xlim([-fmsg*4,fmsg*4]);
 title(fig_title);
 xlabel('Frequency [Hz]');
 ylabel('magnitude');
-legend([h0,h1],'Location','east');
+legend([h0,h1,h2],'Location','east');
 
 
 %% Arrange all plots on the display

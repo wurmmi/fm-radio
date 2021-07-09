@@ -15,7 +15,7 @@
 	bibwarn=true,
 	sortcites=true,
 	defernumbers=true,
-	isbn=false,
+	isbn=true,
 	doi=false,
 	backref=true,
 	backrefstyle=three}
@@ -25,13 +25,13 @@
 \newcommand{\@bibtitleLiteratur}{Literatur}
 \newcommand{\@bibtitleMedia}{Medien}
 \newcommand{\@bibtitleOnline}{Online-Quellen}
-\newcommand{\@bibtitleSoftware}{Software}	
+\newcommand{\@bibtitleSoftware}{Software}
 
 \ifthenelse{\equal{\hgb@MainLanguage}{english}}{%
 	\renewcommand{\@bibtitle}{References}
 	\renewcommand{\@bibtitleLiteratur}{Literature}
 	\renewcommand{\@bibtitleMedia}{Media}
-	\renewcommand{\@bibtitleOnline}{Online sources}	
+	\renewcommand{\@bibtitleOnline}{Online sources}
 	\renewcommand{\@bibtitleSoftware}{Software}
 }{}
 
@@ -72,7 +72,7 @@
 \defbibheading{noheader}[]{}		% 'none' should be defined but isn't
 
 %Assign a given bibliography entry to one of the defined categories.
-\newcommand{\@AssignToBibCategory}[1]% argument 1: entry key 
+\newcommand{\@AssignToBibCategory}[1]% argument 1: entry key
 {\ifthenelse{%
 		\ifentrytype{online}\OR
 		\ifentrytype{www}}
@@ -138,7 +138,7 @@
 }
 
 %See http://www.jr-x.de/publikationen/latex/tipps/zeilenumbruch.html
-\newenvironment{bibhyphenation}% 
+\newenvironment{bibhyphenation}%
 	{\hyphenpenalty=2%		(default 50)
 	 \tolerance=9999%			(default 200)
 	 \exhyphenpenalty=2%	(default 50)
@@ -160,7 +160,7 @@
 	\ifthenelse{\equal{#1}{nosplit}}%
 		{% create a single bibliography with all entries:
 			\printbibheading[heading=bibintoc,title={\@bibtitle}]
-			\begin{bibhyphenation}	
+			\begin{bibhyphenation}
 			\printbibliography[heading=noheader]
 			\end{bibhyphenation}
 		}
@@ -172,7 +172,7 @@
 		}%
 }
 
-% Suppress unusual "In:" within journal article references. 
+% Suppress unusual "In:" within journal article references.
 % see http://tex.stackexchange.com/questions/10682/suppress-in-biblatex
 \renewbibmacro{in:}{%
 	\ifentrytype{article}{}{%

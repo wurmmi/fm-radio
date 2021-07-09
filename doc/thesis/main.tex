@@ -16,7 +16,7 @@
 
 \RequirePackage[utf8]{inputenc}		% Remove when using lualatex or xelatex entfernen!
 
-\graphicspath{{images/}}    % location of images and graphics
+\graphicspath{{img/}}    % location of images and graphics
 \logofile{logo}				% logo file = images/logo.pdf (use \logofile{} for no logo)
 \bibliography{references}  	% name of bibliography file (references.bib)
 
@@ -57,14 +57,15 @@
 \mainmatter          			% main part (arabic page numbers)
 %%%----------------------------------------------------------
 
+%TODO: add List of Abbreviations ??
 \include{chapters/introduction}
-\include{chapters/fm_radio}
-%\include{chapters/latex}
-%\include{chapters/figures}
-%\include{chapters/mathematics}
-%\include{chapters/literature}
-%\include{chapters/printing}
-%\include{chapters/closing}
+\include{chapters/dsp}
+\include{chapters/hls}
+\include{chapters/system-architecture-and-concept}
+\include{chapters/implementation}
+\include{chapters/deployment-on-hardware}
+\include{chapters/results}
+\include{chapters/literature}
 
 %%%----------------------------------------------------------
 \appendix                                         % appendix
