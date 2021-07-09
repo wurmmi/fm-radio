@@ -47,7 +47,7 @@ This decoding process depends on the respective modulation type that is used.\\
 \noindent
 The block diagram in Fig.\ref{fig:bd_dsp_overview} gives a high-level overview of a receiver structure.
 
-\includepicture [1.0] [0] {High-level block diagram of a signal processing chain.} {bd_dsp_overview} {img/draw.io/bd_dsp_overview}
+\includepicture [1.0] {High-level block diagram of a signal processing chain.} {bd_dsp_overview} {img/draw.io/bd_dsp_overview}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Receiver types}
@@ -79,7 +79,7 @@ The demodulator stage can now perform any further signal processing on the signa
 
 The depicted block diagram may represent an FM broadcast receiver, where an audio output is generated from the antenna input.
 
-\includepicture [1.0] [0] {Block design of a superhetorodyne receiver \cite[Fig.2.1]{PassosFábio2020AHSo}} {bd_superhet} {img/draw.io/superheterodyne-receiver-block-diagram}
+\includepicture [1.0] {Block design of a superhetorodyne receiver \cite[Fig.2.1]{PassosFábio2020AHSo}} {bd_superhet} {img/draw.io/superheterodyne-receiver-block-diagram}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Direct-Conversion Receiver}
@@ -94,7 +94,7 @@ This is due to the properties of the mixer.
 The strongest disadvantages are the LO leakage, which leads to a DC offset at the mixer output, and the flicker noise, also called \textit{1/f}-noise, which induces strong noise at low frequencies \cite{PassosFábio2020AHSo}.
 These effects are not explained into more detail here, since this is not the focus of this thesis.
 
-\includepicture [1.0] [0] {Block design of a direct-conversion receiver \cite[Fig.2.3]{PassosFábio2020AHSo}.} {bd_direct_conversion} {img/draw.io/direct-conversion-receiver-block-diagram}
+\includepicture [1.0] {Block design of a direct-conversion receiver \cite[Fig.2.3]{PassosFábio2020AHSo}.} {bd_direct_conversion} {img/draw.io/direct-conversion-receiver-block-diagram}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -113,7 +113,7 @@ Note, that in the case of down-conversion, the local oscillator frequency $f_{LO
 
 A block diagram, as well as the signal spectrum of the process is shown in Fig.\ref{fig:bd_down_conversion_spectrum}. In this example, the frequency of the LO is set to shift the signal from $f_m$ to baseband.
 
-\includepicture [1.0] [0] {Block diagram and signal spectrum of down-conversion.} {bd_down_conversion_spectrum} {img/draw.io/down-conversion-AM-spectrum-and-bd}
+\includepicture [1.0] {Block diagram and signal spectrum of down-conversion.} {bd_down_conversion_spectrum} {img/draw.io/down-conversion-AM-spectrum-and-bd}
 
 \subsection{Mathematical description}
 
@@ -162,7 +162,7 @@ Looking at the positive original part, it is shown that only half of its energy 
 However, half of the energy of the original negative part is also shifted to baseband.
 The superposition of the two parts results in an amount of energy that is again equal to the original signal.
 
-\includepicture [1.0] [0] {Signal spectrum, explaining the process of down-conversion.} {down_conversion_spectrum_steps} {img/draw.io/down-conversion-steps-AM-spectrum}
+\includepicture [1.0] {Signal spectrum, explaining the process of down-conversion.} {down_conversion_spectrum_steps} {img/draw.io/down-conversion-steps-AM-spectrum}
 
 
 \section{Sampling theorem}
@@ -184,7 +184,7 @@ The sampling process introduces spectral replicas at integer multiples of the sa
 These replicas overlap, if $f_s$ does not meet the theorem, which results in signal distortion.
 Fig.\ref{fig:aliasing_freq_spectrum} illustrates the effect of aliasing in the frequency spectrum \cite{ThyagarajanK.S2019ItDS}.
 
-\includepicture [0.95] [0] {
+\includepicture [0.95] {
   Frequency spectrum of the sampled baseband signal with its replicas at integer multiples of $f_s$ \cite{ThyagarajanK.S2019ItDS}.\\
   A) $f_s > 2f_{signal}$: $f_s$ is high enough and thus meets the theorem.\\
   B) $f_s = 2f_{signal}$: $f_s$ exactly meets the theorem.\\
@@ -314,7 +314,7 @@ For a better overview, only the positive spectum part is shown.
 The negative part is an exact mirror, because the transmitted and received signals from the antenna are real signals - they do not have an imaginary part.
 The spectrum consists of multiple parts. Therefore, it is also referred to as `multiplex signal' in the literature. Several parts are described in the following paragraphs \cite{EbuFmRegulators}\cite{EtsiFmSoundBroadcastingServiceHarmonizedStandard}\cite{ElectronicsNotesFmTutorial}.
 
-\includepicture [1.0] [0] {Allocation of frequencies in an FM channel \cite{FigFmChannelFreqSpectrum}.} {fm_channel_baseband_freqs} {img/draw.io/fm-channel-baseband-freqs}
+\includepicture [1.0] {Allocation of frequencies in an FM channel \cite{FigFmChannelFreqSpectrum}.} {fm_channel_baseband_freqs} {img/draw.io/fm-channel-baseband-freqs}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Mono Audio Part}
@@ -390,7 +390,7 @@ The discriminator consists of two main parts - a differentiator and an envelope 
 Different strategies can be implemented for both parts.
 A block diagram for a frequency discriminator with its two main parts is shown in Fig.\ref{fig:bd_freq_discriminator}.
 
-\includepicture [0.75] [0] {Frequency discriminator block diagram \cite{FigBdFreqDiscriminator}.} {bd_freq_discriminator} {img/draw.io/bd_freq_discriminator}
+\includepicture [0.75] {Frequency discriminator block diagram \cite{FigBdFreqDiscriminator}.} {bd_freq_discriminator} {img/draw.io/bd_freq_discriminator}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Differentiator}
@@ -447,7 +447,7 @@ Therefor, the previous method only needs to swap the thresholding unit with an u
 In that architecture, a full-wave rectification is performed on the signal, which significantly improves the envelope detection accuracy \cite{DSPRelatedEnvelopeDetection}.
 The envelope is followed more exactly, because of the higher power that is available in the signal, since the entire signal is taken into account, and not only the positive half, as in the previous half-wave method.
 
-\includepicture [1.0] [0] {Time-domain signals in envelope detection \cite{RoppelBegleitmaterial}.} {time_domain_envelope_detect} {img/draw.io/envelope-detect-time-domain.png}
+\includepicture [1.0] {Time-domain signals in envelope detection \cite{RoppelBegleitmaterial}.} {time_domain_envelope_detect} {img/draw.io/envelope-detect-time-domain.png}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Phase-Locked Loop}
