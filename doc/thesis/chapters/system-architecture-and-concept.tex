@@ -29,7 +29,7 @@ However, only a subset of these is covered here, since this chapter is focused o
 %%%%%%%%%%%%%%%%%%%%
 \section{The project}
 
-The aim of this thesis is to implement an FM radio receiver in multiple different methods and ways of implementation.
+The aim of this thesis is develop a system architecture and concept, that allows the implementation of an FM radio receiver in multiple different ways, while providing an elegant way to compare the different solutions.
 The final goal thereby is always be the same, that is: Listen to the music of a radio station that is transmitted over FM broadcast radio.
 
 In the context of a system level design approach, several steps are necessary to find a solution that is ready to be implemented.
@@ -42,18 +42,28 @@ Thus, the next step is to define a set of possible ways, which will actually be 
 For this thesis, the decision was made to implement the FM radio receiver, using the following methods.
 
 \begin{itemize}
-  \item \textbf{GNU Radio} \cite{GnuRadio}\\
-      GNU Radio is a free and open-source software development toolkit to implement a software-defined radio. The implementation is done by connecting functional blocks in a block design. This abstracts the inner workings of each functional block and thus provides an implementation approach on a very high level of abstraction.
-  \item Matlab
-  \item FPGA: \cplusplus High-Level Synthesis
-  \item FPGA: VHDL
+  \item \textbf{GNU Radio}\\
+      GNU Radio is a free and open-source software development toolkit to implement a software-defined radio.
+      The implementation is done by connecting functional blocks in a block design.
+      This abstracts the inner workings of each functional block and thus provides an implementation approach on a very high level of abstraction.
+      GNU Radio supports interfaces to external RF hardware \cite{SoftwareGnuRadio}.
+  \item \textbf{Matlab}\\
+      Matlab is a software platform that can work with matrices and compute numerical solutions.
+      Matlab also includes various toolboxes, that support developers with complex calculations and tasks on datasets.
+      This includes a range of toolboxes for signal processing, such as filter designers or FFT functions, as well as convenient ways to visualize data \cite{SoftwareMatlab}.
+  \item \textbf{FPGA: \cplusplus High-Level Synthesis}\\
+      In order to use an FPGA, a hardware design needs to be developed for it.
+      This can be done using high-level synthesis.
+      High-level synthesis (HLS) is explained in detail in Chapter \ref{cha:HLS}.
+  \item \textbf{FPGA: VHDL}\\
+      Similar to the HLS approach, this is a variant to write a hardware design for an FPGA.
+      The language VHDL is used in this approach.
 \end{itemize}
 
-Once the basic theory is understood, implementation can begin.
+In order to implement an FM radio receiver, all of the listed methods require deep knowledge about the neccessary details of signal processing.
+However, the implementation of the various different methods require more or less knowledge and effort on the exact underlying implementation of each signal processing part.
+This depends on their level of abstraction.
 
-
-
-% list of variants
 %-  implementation of a model and DSP concept in Matlab \\
 %-  implementation in VHDL and HLS \\
 %-  both use the same testbench source \\
@@ -61,7 +71,10 @@ Once the basic theory is understood, implementation can begin.
 %-  the FPGA output is read back into the firmware, for analysis \\
 
 %%%%%%%%%%%%%%%%%%%%
-\section{Block Diagram (with details)}
+\section{Block Diagram}
+
+
+
 %%%%%%%%%%%%%%%%%%%%
 \subsection{describe blocks}
 
