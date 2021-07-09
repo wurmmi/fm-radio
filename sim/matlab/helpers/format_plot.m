@@ -50,6 +50,6 @@ else
     error('unknown parameter for label_axis');
 end
 
-pos = [x,y]
+pos = [x,y];
 
 end

@@ -184,7 +184,7 @@ The sampling process introduces spectral replicas at integer multiples of the sa
 These replicas overlap, if $f_s$ does not meet the theorem, which results in signal distortion.
 Fig.\ref{fig:aliasing_freq_spectrum} illustrates the effect of aliasing in the frequency spectrum \cite{ThyagarajanK.S2019ItDS}.
 
-\includepicture [0.9] [0] {
+\includepicture [0.95] [0] {
   Frequency spectrum of the sampled baseband signal with its replicas at integer multiples of $f_s$ \cite{ThyagarajanK.S2019ItDS}.\\
   A) $f_s > 2f_{signal}$: $f_s$ is high enough and thus meets the theorem.\\
   B) $f_s = 2f_{signal}$: $f_s$ exactly meets the theorem.\\
@@ -314,8 +314,7 @@ For a better overview, only the positive spectum part is shown.
 The negative part is an exact mirror, because the transmitted and received signals from the antenna are real signals - they do not have an imaginary part.
 The spectrum consists of multiple parts. Therefore, it is also referred to as `multiplex signal' in the literature. Several parts are described in the following paragraphs \cite{EbuFmRegulators}\cite{EtsiFmSoundBroadcastingServiceHarmonizedStandard}\cite{ElectronicsNotesFmTutorial}.
 
-\includepicture [0.9] [0] {Allocation of frequencies in an FM channel \cite{FigFmChannelFreqSpectrum}.
-} {fm_channel_baseband_freqs} {img/draw.io/fm-channel-baseband-freqs}
+\includepicture [1.0] [0] {Allocation of frequencies in an FM channel \cite{FigFmChannelFreqSpectrum}.} {fm_channel_baseband_freqs} {img/draw.io/fm-channel-baseband-freqs}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Mono Audio Part}
@@ -448,9 +447,7 @@ Therefor, the previous method only needs to swap the thresholding unit with an u
 In that architecture, a full-wave rectification is performed on the signal, which significantly improves the envelope detection accuracy \cite{DSPRelatedEnvelopeDetection}.
 The envelope is followed more exactly, because of the higher power that is available in the signal, since the entire signal is taken into account, and not only the positive half, as in the previous half-wave method.
 
-\includepicture [0.75] [0] {Time-domain signals in envelope detection \cite{RoppelBegleitmaterial}.} {time_domain_envelope_detect_orig} {img/envelope-detect-time-domain.jpg}
-
-\includepicture [1.0] [0] {Time-domain signals in envelope detection \cite{RoppelBegleitmaterial}.} {time_domain_envelope_detect} {img/draw.io/envelope-detect-time-domain}
+\includepicture [1.0] [0] {Time-domain signals in envelope detection \cite{RoppelBegleitmaterial}.} {time_domain_envelope_detect} {img/draw.io/envelope-detect-time-domain.png}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Phase-Locked Loop}

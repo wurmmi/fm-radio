@@ -9,15 +9,18 @@ clear;
 close all;
 clc;
 
-addpath(genpath('../../../../sim/matlab/helpers/'));
+addpath(genpath('../helpers/'));
 
 %=========================================================================
 %% Settings
+
+dir_output = '../../../doc/thesis/img/matlab';
 
 % Simulation Options
 EnableFilterAnalyzeGUI = false;
 EnableShowFigures      = true;
 EnablePlotSaveSVG      = true;
+EnablePlotSavePDF      = false;
 EnablePlotSavePNG      = false;
 
 % Common
@@ -76,39 +79,41 @@ set(0,'defaulttextinterpreter','latex')
 
 % Plots
 %-------------------------------------------------------------------------
-dir_output = './out';
 fontsize = 22;
 
 fig_title = 'RF signal';
 fig_time_rf = figure('Name',fig_title);
 hold on;
-plot(tn/fs, msg,       'r--', 'LineWidth',2, 'DisplayName', 'msg');
+plot(tn/fs, msg,       'r--', 'LineWidth',3, 'DisplayName', 'msg');
 plot(tn/fs, rf_signal, 'b',   'LineWidth',1, 'DisplayName', 'rf\_signal');
 xlim([-0.1/fmsg,3/fmsg]);
 ylim([-3,3]);
 fig_time_rf = format_plot(fig_time_rf,fig_title,fontsize);
 if EnablePlotSaveSVG saveas(fig_time_rf, sprintf("%s/%s",dir_output, "fig_1_time_rf.svg"),'svg'); end
+if EnablePlotSavePDF saveas(fig_time_rf, sprintf("%s/%s",dir_output, "fig_1_time_rf.pdf"),'pdf'); end
 if EnablePlotSavePNG exportgraphics(fig_time_rf, sprintf("%s/%s",dir_output, "fig_1_time_rf.png")); end
 
 fig_title = 'Half-wave rectified';
 fig_time_rf_thresh = figure('Name',fig_title);
 hold on;
-plot(tn/fs, msg,              'r--', 'LineWidth',2, 'DisplayName', 'msg');
-plot(tn/fs, rf_signal_thresh, 'b', 'LineWidth',1, 'DisplayName', 'rf\_signal\_thresh');
+plot(tn/fs, msg,              'r--', 'LineWidth',3, 'DisplayName', 'msg');
+plot(tn/fs, rf_signal_thresh, 'b',   'LineWidth',1, 'DisplayName', 'rf\_signal\_thresh');
 xlim([-0.1/fmsg,3/fmsg]);
 ylim([-1,3]);
 fig_time_rf_thresh = format_plot(fig_time_rf_thresh,fig_title,fontsize);
 if EnablePlotSaveSVG saveas(fig_time_rf_thresh, sprintf("%s/%s",dir_output, "fig_2_time_rf_thresh.svg"),'svg'); end
+if EnablePlotSavePDF saveas(fig_time_rf_thresh, sprintf("%s/%s",dir_output, "fig_2_time_rf_thresh.pdf"),'pdf'); end
 if EnablePlotSavePNG exportgraphics(fig_time_rf_thresh, sprintf("%s/%s",dir_output, "fig_2_time_rf_thresh.png")); end
 
 fig_title = 'Detected envelope';
 fig_time_envelope = figure('Name',fig_title);
 hold on;
-plot(tn/fs, envelope, 'r', 'LineWidth',2, 'DisplayName', 'envelope');
+plot(tn/fs, envelope, 'r', 'LineWidth',3, 'DisplayName', 'envelope');
 xlim([-0.1/fmsg,3/fmsg]);
 ylim([-1,3]);
 fig_time_envelope = format_plot(fig_time_envelope,fig_title,fontsize);
 if EnablePlotSaveSVG saveas(fig_time_envelope, sprintf("%s/%s",dir_output, "fig_3_time_envelope.svg"),'svg'); end
+if EnablePlotSavePDF saveas(fig_time_envelope, sprintf("%s/%s",dir_output, "fig_3_time_envelope.pdf"),'pdf'); end
 if EnablePlotSavePNG exportgraphics(fig_time_envelope, sprintf("%s/%s",dir_output, "fig_3_time_envelope.png")); end
 
 
