@@ -1,8 +1,16 @@
 %%%%%%%%%%%%%%%%%%%%
 \chapter{Implementation}
 \label{cha:Implementation}
+
+\section{Detailed block diagram of digital signal processing chain}
+
+\includepicture [1.0] [0] {Detailed block diagram of the digital signal processing chain.} {bd_dsp_detailed} {img/bd_detailed_dsp}
+
 \section{Matlab Model}
+
 in fixed point, close to hardware level algorithm
+
+\subsection{Transmitter block diagram}
 
 \section{GNU Radio}
   \subsection{Introduction}
@@ -29,3 +37,10 @@ in fixed point, close to hardware level algorithm
   \subsection{Challenges}
   Different compilers use different \#pragmas, etc.\\
   The \#pragmas need to be within the code, at the appropriate positions, which makes it difficult to write compiler independent code....
+
+  TODO: \\
+  - comparison of VHDL vs HLS\\
+  - in the point of view:\\
+  - system integration (IP generation, AXI interfaces),\\
+  - logic utilization\\
+--> see introduction.tex
