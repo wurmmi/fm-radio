@@ -38,7 +38,7 @@ fc_tx  = 57e3;
 A_tx_c = 1;
 
 % Rx carrier
-fc_rx  = 57e3;       % <-- ADAPT FREQUENCY ERROR
+fc_rx  = 57e3;        % <-- ADAPT FREQUENCY ERROR (e.g.  57.1e3)
 phi_rx = 160*pi/180;  % <-- ADAPT PHASE ERROR
 A_rx_c = 1;
 
@@ -125,9 +125,9 @@ fprintf('fft_bin: %.2f Hz\n', fft_bin);
 %Nfft      = 2^nextpow2(Nfft);
 fft_freqs = (-Nfft/2:Nfft/2-1)/(Nfft*1/fs);
 
-fft_msg    = abs(fftshift( fft( hanning(length(msg)) .* msg,    Nfft) ))/Nfft;
+fft_msg          = abs(fftshift( fft( hanning(length(msg)) .* msg,          Nfft) ))/Nfft;
 fft_msg_rx_demod = abs(fftshift( fft( hanning(length(msg)) .* rx_msg_demod, Nfft) ))/Nfft;
-fft_msg_rx = abs(fftshift( fft( hanning(length(msg)) .* rx_msg, Nfft) ))/Nfft;
+fft_msg_rx       = abs(fftshift( fft( hanning(length(msg)) .* rx_msg,       Nfft) ))/Nfft;
 
 
 % Plots
