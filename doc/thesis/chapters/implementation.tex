@@ -12,30 +12,66 @@ In this section however, the DSP chain is described into more detail and with mo
 
 Fig.\ref{fig:bd_dsp_detailed} displays the detailed DSP chain as a block diagram. The following list explains implementation details about the respective DSP blocks.
 
-\includepicture [1.0] {Detailed block diagram of the digital signal processing chain.} {bd_dsp_detailed} {img/bd_detailed_dsp}
+\includepicture [1.0] [0] {Detailed block diagram of the digital signal processing chain.} {bd_dsp_detailed} {img/bd_detailed_dsp}
 
 \begin{itemize}
   \item \textbf{Data Source}\\
-    Matlab is used to generate the data source file, which is used as an input to the system.
-    An audio file is read and modulated as an FM channel signal.
-  \item \textbf{FM Demodulator}\\
-    The FM demodulator is implemented as a Baseband Delay Modulator, as described in \ref{sec:BasebandDelayDemodulator}.
-  \item \textbf{De-Emphasis Filter}\\
-    The above described Matlab source generation does not include an Emphasis filter.
-    Thus, a de-emphasis filter is not implemented as it is not required.
-  \item \textbf{Downsample}\\
-    Downsampling is implemented in a simplified version, without an anti-aliasing filter.
-    It is not required, because of the following explanation.
-    At this point the sampling frequency is set to 960 kHz.
-    The input is band-limited at 75 kHz, which is the maximum frequency in an FM channel, as explained in Section \ref{sec:FrequencySpectrumOfABroadcastFmChannel}.
-    Thus, the input has an oversampling rate of 12.8, while downsampling is only performed with a factor of 8.
-  \item \textbf{Filter Group Delay Compensation}\\
-    FIR filters introduce a delay on the output signal, with respect to the input.
-    This is due to the property of the FIR filters' linear phase response \cite{GaziOrhan2018UDSP}.
-    Since phase is directly proportional to time, the term \textit{group delay} is often used.
-    This delay needs to be accounted for and compensated in digital signal processing.
+      Matlab is used to generate the data source file, which is used as an input to the system.
+      An audio file is read and modulated as an FM channel signal.
 
+  \item \textbf{FM Demodulator}\\
+      The FM demodulator is implemented as a Baseband Delay Modulator, as described in \ref{sec:BasebandDelayDemodulator}.
+
+  \item \textbf{De-Emphasis Filter}\\
+      The above described Matlab source generation does not include an Emphasis filter.
+      Thus, a de-emphasis filter is not implemented as it is not required.
+
+  \item \textbf{Downsample}\\
+      Downsampling is implemented in a simplified version, without an anti-aliasing filter.
+      It is not required, because of the following explanation.
+      At this point the sampling frequency is set to 960 kHz.
+      The input is band-limited at 75 kHz, which is the maximum frequency in an FM channel, as explained in Section \ref{sec:FrequencySpectrumOfABroadcastFmChannel}.
+      Thus, the input has an oversampling rate of 12.8, while downsampling is only performed with a factor of 8.
+
+  \item \textbf{Filters}\\
+      Several filters are implemented as FIR filters.
+      The 15 kHz lowpass (LP) filter is instantiated twice, with the exact same coefficients.
+
+  \item \textbf{Filter Group Delay Compensation}\\
+      FIR filters introduce a delay on the output signal, with respect to the input.
+      The group delay in number of samples can be computed with the following formula.
+      \begin{equation}
+        group\ delay = \frac{filter\ order}{2} = \frac{(N\ coefficients - 1)}{2}
+      \end{equation}
+      This is due to the property of the FIR filters' linear phase response \cite{GaziOrhan2018UDSP}.
+      Since phase is directly proportional to time, the term \textit{group delay} is often used.
+      This delay needs to be accounted for, depending on where the signal is used subsequently.
+
+      Looking at the block diagram, the group delay needs to be compensated at two places.
+      \begin{itemize}
+        \item \textbf{Between the branches \textit{Recover LR diff} and \textit{Recover Mono}:}\\
+          The \textit{Mono} branch only contains a single LP filter, while the \textit{LR diff} branch contains two filters, namely a BP and an LP filter.
+          The latter branches' signal is therefore delayed, with respect to the \textit{Mono} branch.\\
+          The issue here is, that both signals are added and substracted at the end of the processing chain, to compute the left and right channel signals, respectively.
+          Thus, they need to be aligned in time at that point.
+          Consequently, a delay block needs to be inserted in the \textit{Mono} branch, to compensate the group delay of the BP.
+
+        \item \textbf{Between the branches \textit{Recover LR diff} and \textit{Recover Carriers}:}\\
+          Both branches only contain a single BP filter.
+          However, they have properties, like the transition bandwidth and the passband.
+          Thus, their filter order may be different as well, which leads to a non-matching group delay.
+          Since the two signals are multiplicated in the subsequent mixer, and an important factor is the phase-coherency of the recovered carrier (as explained in Section \ref{sec:demodulation-of-broadcast-fm}), the group delay compensation becomes necessary here.\\
+
+          To overcome the issue at this point in the actual hardware implementation, the filters were manually 'tuned' to have a matching order.
+      \end{itemize}
+
+  \item \textbf{Carrier Recovery}\\
+      The 38 kHz carrier can be recovered from the 19 kHz pilot tone.
+      It is important that the recovered carrier is phase-coherent with the received input, as described in Section \ref{sec:demodulation-of-broadcast-fm}.
+      This can be achieved, by simply multiplying the pilot tone with itself, which is the way it is implemented here.
 \end{itemize}
+
+Several of the listed details are implemented, in order to achieve a successful demodulation of the FM signal.
 
 \section{Matlab Model}
 
