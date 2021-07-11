@@ -50,7 +50,7 @@ The block diagram in Fig.\ref{fig:bd_dsp_overview} gives a high-level overview o
 \includepicture [1.0] {High-level block diagram of a signal processing chain.} {bd_dsp_overview} {img/draw.io/bd_dsp_overview}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Receiver types}
+\section{Receiver Types}
 
 Multiple different receiver architectures exist and are implemented in receivers.
 Two common examples are explained in the following sections.
@@ -115,7 +115,8 @@ A block diagram, as well as the signal spectrum of the process is shown in Fig.\
 
 \includepicture [1.0] {Block diagram and signal spectrum of down-conversion.} {bd_down_conversion_spectrum} {img/draw.io/down-conversion-AM-spectrum-and-bd}
 
-\subsection{Mathematical description}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Mathematical Description}
 
 The procedure that is used for down-conversion is an amplitude modulation (AM).
 The equation for a generic AM signal is $ S_{AM}(t) = A_m m(t) \cdot A_c c(t) $, where $m(t)$ represents the message signal, and $c(t)$ is the high-frequency carrier.
@@ -164,8 +165,8 @@ The superposition of the two parts results in an amount of energy that is again 
 
 \includepicture [1.0] {Signal spectrum, explaining the process of down-conversion.} {down_conversion_spectrum_steps} {img/draw.io/down-conversion-steps-AM-spectrum}
 
-
-\section{Sampling theorem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Sampling Theorem}
 
 Signal processing is often done in the digital domain, using digital signals.
 A digital signal is obtained by sampling an analog signal in a periodic interval, the so-called sampling frequency $f_s$.

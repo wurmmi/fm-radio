@@ -8,6 +8,7 @@
 *.aux
 *.fls
 *.log
+*.lof
 *.out
 *.synctex.gz
 *.toc
