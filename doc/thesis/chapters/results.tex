@@ -3,12 +3,26 @@
 \label{cha:ComparisonAndResults}
   \section{Functionality}
   % Functionality same?
-  % Sim speed of x min of recorded FM signal
-  % lines of code
-  \subsection{Implementation effort/time}
-  \subsection{Hardware Utilization}
-  \subsection{Others}
+  % DSP yes, AXI no (FSM of axi-stream)
 
-  % TODO Überlegungen in diesem Kapitel
-  % kann Demodulator geändert werden? Bsp. von FM zu DAB+, QAM, etc..
-  % - von matlab heraus VHDL generieren, etc
+  \section{Code Development}
+  % lines of code
+  % Implementation effort/time
+  \section{Simulation}
+  % Sim speed of x min of recorded FM signal
+  \section{Useability}
+  % IP generation and integration into Vivado
+  \section{Hardware Utilization}
+  % especially VHDL<->HLS
+  \section{Latency}
+  % especially VHDL<->HLS
+
+  % NOTES:
+  % - The system level architecture that was chosen, can be applied to any DSP project. Simply replace the main IP, e.g. from FM to DAB+, QAM, etc. and the environment can run in the exact same way.
+  %
+  % Further steps:
+  % - generate VHDL from Matlab receiver code
+  % - use the common input file and feed it to GNU Radio; also produce an output file with GNU Radio for comparison
+  %- Develop HLS compiler independent code (optional)}
+  %   -- Different compilers use different #pragmas, etc.
+  %   -- These #pragmas need to be within the code, at the appropriate positions, which makes it difficult to write compiler independent code....

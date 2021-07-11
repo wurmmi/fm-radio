@@ -2,7 +2,9 @@
 \chapter{Implementation}
 \label{cha:Implementation}
 
-\section{Detailed block diagram of digital signal processing chain}
+This chapter describes the most important details of each implementation variant.
+
+\section{Digital Signal Processing Chain}
 
 \includepicture [1.0] {Detailed block diagram of the digital signal processing chain.} {bd_dsp_detailed} {img/bd_detailed_dsp}
 
@@ -18,11 +20,13 @@ in fixed point, close to hardware level algorithm
   \subsection{Receiver}
 
 \section{VHDL (no shortcut)}
+  \subsection{Testbench}
   \subsection{Channel Selection (IF to Channel-BB)}
   \subsection{Phase Detector}
   \subsection{other Elements}
 
-\section{High-Level Synthesis}
+  \section{High-Level Synthesis}
+  \subsection{Testbench}
   \subsection{Channel Selection (IF to Channel-BB)}
   \subsection{Phase Detector}
   \subsection{other Elements}
@@ -33,14 +37,3 @@ in fixed point, close to hardware level algorithm
   Instantiate both HDL models in the testbench.\\
   Display a direct comparison of outputs in graphs. This is practical, since the cocotb framework runs in python and graphs can be generated using Python's matplotlib.
 
-\section{Develop HLS compiler independent code (optional)}
-  \subsection{Challenges}
-  Different compilers use different \#pragmas, etc.\\
-  The \#pragmas need to be within the code, at the appropriate positions, which makes it difficult to write compiler independent code....
-
-  TODO: \\
-  - comparison of VHDL vs HLS\\
-  - in the point of view:\\
-  - system integration (IP generation, AXI interfaces),\\
-  - logic utilization\\
---> see introduction.tex
