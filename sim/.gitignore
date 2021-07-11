@@ -7,3 +7,6 @@
 # Matlab
 *.asv
 matlab_output/
+
+# GNU Radio
+__pycache__
