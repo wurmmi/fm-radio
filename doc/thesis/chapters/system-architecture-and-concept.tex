@@ -87,28 +87,30 @@ This structure should include a description of the data source, the data process
 A good system structure tries to share as many parts as possible in the system.
 This is to minimize the points of failure, as well as to reduce the effort of implementation.
 
-In the apparent projects' case, a single block of the system is implemented in multiple ways, which should however, all compute an equal output.
+In the apparent projects' case, a single block of the system is implemented in multiple ways, which should, however, all compute an equal output.
 Thus, it is of advantage to define the data source to be common for all of these variants, to create a unified situation at the input.
+Additionally, the data source may be chosen to be recorded, to have a known, reproducable set of input data.
 This significantly eases the verification of the functionality in the final step, since all variants are expected to create the same output in the optimum, fully functioning case.
 Not only the data source is important to be common, but also the way of verification.
 In order to achieve that, the verification block needs to be able to compare multiple data outputs with the verification data, which is chosen to serve as the reference.\\
 
-An example of a system concept and its architecture is shown in Fig.\ref{fig:bd_system_overview_detailed}.
+An example of a system concept and its architecture is developed and shown in Fig.\ref{fig:bd_system_overview_detailed}.
 Here, a common data source is provided by the block called \textit{Front End}.
-It delivers data, that the \textit{FM Radio Receiver} block requires at its input.
-Within this block, all the different implementation variants are shown in parallel.
+It records data from an antenna and saves it to a file, in a format that the consequent blocks require at their input.
+Therefore, a reproducable input is ensured.
+Within the \textit{FM Radio Receiver} block, all the different implementation variants are shown in parallel.
 They all work on this common input source and generate their respective output.
-This output is written to a file.
-Hereby, it is important to note, that the output of the \textit{Matlab} implementation is chosen to be the reference model of 'correct output'.
-Its output is used as the verification data.
+This output data is again written to a file.
+Hereby it is important to note, that the output of the \textit{Matlab} implementation is chosen to be the 'golden reference model' of correct output.
+Its output is used as the verification data later in the process.
 This is because Matlab was used to research decoding algorithms and to develop the DSP chain, which is used in the GNU Radio, HLS and VHDL implementations.
 In addition to the verification data, the Matlab model also writes common parameters to a file.
 These parameters are directly used in the other implementations, to ensure a common setup.
-The final block, is the \textit{Verification} entity, which compares the output of all the respective variants, with respective to the chosen model parameters.
+The final block is the \textit{Verification} entity, which compares the output files of all the variants, with respect to the chosen model parameters.\\
 
 A major point in this system concept is, that it works independently of the respective implementation methodology.
 This is especially important, since there is no possible way to run all these different variants in a single verification environment.
-Instead, each methodology writes an output file, which is a functionality that is available anywhere.
+Instead, each methodology writes an output file, which is a supported functionality that is available anywhere.
 
 \includepicture [1.0] [0] {Block diagram of the overall system concept.} {bd_system_overview_detailed} {img/draw.io/bd_system_overview_detailed}
 
