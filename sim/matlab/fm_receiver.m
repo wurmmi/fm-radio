@@ -35,8 +35,10 @@ rx_fm_q = imag(rx_fm_bb_norm);
 
 if EnableProcessingLikeHW
     n_shift = 3;
-    rx_fm_i_diff = rx_fm_i - [zeros(n_shift,1); rx_fm_i(1:end-n_shift)];
-    rx_fm_q_diff = rx_fm_q - [zeros(n_shift,1); rx_fm_q(1:end-n_shift)];
+    rx_fm_i_delayed = [zeros(n_shift,1); rx_fm_i(1:end-n_shift)];
+    rx_fm_q_delayed = [zeros(n_shift,1); rx_fm_q(1:end-n_shift)];
+    rx_fm_i_diff = rx_fm_i - rx_fm_i_delayed;
+    rx_fm_q_diff = rx_fm_q - rx_fm_q_delayed;
 else
     % Design differentiator
     filter_diff = [1,0,-1];
@@ -45,8 +47,9 @@ else
     rx_fm_q_diff = filter(filter_diff,1, rx_fm_q);
     
     % Compensate group delay of filter
-    rx_fm_i_diff = circshift(rx_fm_i_diff,-1);
-    rx_fm_q_diff = circshift(rx_fm_q_diff,-1);
+    filter_diff_grp_delay = (length(filter_diff)-1)/2;
+    rx_fm_i_diff = circshift(rx_fm_i_diff,-filter_diff_grp_delay);
+    rx_fm_q_diff = circshift(rx_fm_q_diff,-filter_diff_grp_delay);
     
     %rx_fm_demod =  ...
     %    (rx_fm_i .* conv(rx_fm_q,filter_diff,'same') -   ...

@@ -6,14 +6,46 @@ This chapter describes the most important details of each implementation variant
 
 \section{Digital Signal Processing Chain}
 
-The theory behind the demodulation of an FM signal, especially as it is used in FM radio broadcasting, is already explained in Chapter \ref{cha:SignalProcessingTheory}. In this section, however, the exact implementation of the used DSP chain is described.
+The theory behind the demodulation of an FM signal is already explained in Chapter \ref{cha:SignalProcessingTheory}.
+The demodulation of an FM broadcast channel specifically, is described in Section \ref{sec:demodulation-of-broadcast-fm}.
+In this section however, the DSP chain is described into more detail and with more information, as it is implemented in the various methods.\\
 
+Fig.\ref{fig:bd_dsp_detailed} displays the detailed DSP chain as a block diagram. The following list explains implementation details about the respective DSP blocks.
 
 \includepicture [1.0] {Detailed block diagram of the digital signal processing chain.} {bd_dsp_detailed} {img/bd_detailed_dsp}
 
+\begin{itemize}
+  \item \textbf{Data Source}\\
+    Matlab is used to generate the data source file, which is used as an input to the system.
+    An audio file is read and modulated as an FM channel signal.
+  \item \textbf{FM Demodulator}\\
+    The FM demodulator is implemented as a Baseband Delay Modulator, as described in \ref{sec:BasebandDelayDemodulator}.
+  \item \textbf{De-Emphasis Filter}\\
+    The above described Matlab source generation does not include an Emphasis filter.
+    Thus, a de-emphasis filter is not implemented as it is not required.
+  \item \textbf{Downsample}\\
+    Downsampling is implemented in a simplified version, without an anti-aliasing filter.
+    It is not required, because of the following explanation.
+    At this point the sampling frequency is set to 960 kHz.
+    The input is band-limited at 75 kHz, which is the maximum frequency in an FM channel, as explained in Section \ref{sec:FrequencySpectrumOfABroadcastFmChannel}.
+    Thus, the input has an oversampling rate of 12.8, while downsampling is only performed with a factor of 8.
+  \item \textbf{Filter Group Delay Compensation}\\
+    FIR filters introduce a delay on the output signal, with respect to the input.
+    This is due to the property of the FIR filters' linear phase response \cite{GaziOrhan2018UDSP}.
+    Since phase is directly proportional to time, the term \textit{group delay} is often used.
+    This delay needs to be accounted for and compensated in digital signal processing.
+
+\end{itemize}
+
 \section{Matlab Model}
 
-in fixed point, close to hardware level algorithm
+\subsection{Emphasis and De-Emphasis}
+show effects in spectrum, show how to design the filters
+
+\subsection{Fixed Point Arithmetic}
+not developed in actual fixed point, but close to hardware level algorithm
+
+
 
 \subsection{Transmitter block diagram}
 
