@@ -33,7 +33,10 @@ The aim of this thesis is develop a system architecture and concept, that allows
 The final goal thereby is always be the same, that is: Listen to the music of a radio station that is transmitted over FM broadcast radio.\\
 
 \noindent
-A very high-level overview of the entire system is given the block diagram in Fig.\ref{fig:bd_system_overview_highlevel}.
+A very high-level overview of the entire system is given by the block diagram in Fig.\ref{fig:bd_system_overview_highlevel}.
+It shows the front end, which processes the received antenna signal, so that it can be used in the FM radio receiver block.
+The radio receiver itself is implemented in multiple different variants.
+The produced audio output is sent to a speaker, since the ultimate goal is to listen to a radio stations' audio signal.
 
 \includepicture [1.0] [0] [H] {High-level overview of the system.} {bd_system_overview_highlevel} {img/draw.io/bd_system_overview_highlevel}
 
@@ -78,11 +81,37 @@ This depends on their respective level of abstraction.
 %%%%%%%%%%%%%%%%%%%%
 \section{System concept}
 
-\includepicture [1.0] [0] [H] {Block diagram of the overall system concept.} {bd_system_overview_detailed} {img/draw.io/bd_system_overview_detailed}
+The overall system concept has to be developed in a way, to fit the respective projects' needs and requirements.
+There should be a clear structure, in order to help to create a working system successfully.
+This structure should include a description of the data source, the data processing blocks and stages, commonly used parameters, as well as a strategy to verify the correct functionality of the system.
+A good system structure tries to share as many parts as possible in the system.
+This is to minimize the points of failure, as well as to reduce the effort of implementation.
 
+In the apparent projects' case, a single block of the system is implemented in multiple ways, which should however, all compute an equal output.
+Thus, it is of advantage to define the data source to be common for all of these variants, to create a unified situation at the input.
+This significantly eases the verification of the functionality in the final step, since all variants are expected to create the same output in the optimum, fully functioning case.
+Not only the data source is important to be common, but also the way of verification.
+In order to achieve that, the verification block needs to be able to compare multiple data outputs with the verification data, which is chosen to serve as the reference.\\
 
-%%%%%%%%%%%%%%%%%%%%
-\subsection{describe blocks}
+An example of a system concept and its architecture is shown in Fig.\ref{fig:bd_system_overview_detailed}.
+Here, a common data source is provided by the block called \textit{Front End}.
+It delivers data, that the \textit{FM Radio Receiver} block requires at its input.
+Within this block, all the different implementation variants are shown in parallel.
+They all work on this common input source and generate their respective output.
+This output is written to a file.
+Hereby, it is important to note, that the output of the \textit{Matlab} implementation is chosen to be the reference model of 'correct output'.
+Its output is used as the verification data.
+This is because Matlab was used to research decoding algorithms and to develop the DSP chain, which is used in the GNU Radio, HLS and VHDL implementations.
+In addition to the verification data, the Matlab model also writes common parameters to a file.
+These parameters are directly used in the other implementations, to ensure a common setup.
+The final block, is the \textit{Verification} entity, which compares the output of all the respective variants, with respective to the chosen model parameters.
+
+A major point in this system concept is, that it works independently of the respective implementation methodology.
+This is especially important, since there is no possible way to run all these different variants in a single verification environment.
+Instead, each methodology writes an output file, which is a functionality that is available anywhere.
+
+\includepicture [1.0] [0] {Block diagram of the overall system concept.} {bd_system_overview_detailed} {img/draw.io/bd_system_overview_detailed}
+
 
 %%%%%%%%%%%%%%%%%%%%
 \section{Test Environment}
