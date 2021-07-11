@@ -77,6 +77,32 @@ Several of the listed details are implemented, in order to achieve a successful 
 
 \section{Matlab Model}
 
+Matlab is used to create a model of the receiver, which is used as a reference for the other implementation variants.
+Here, DSP algorithms are tested and evaluated, to find a method that is suitable to implement in hardware, specifically in an FPGA.
+
+The Matlab script consists of a transmitter, the receiver model, and additional code for analysis.
+
+\subsection{Transmitter}
+
+The transmitter is implemented to provide a reproducable source of data, which can be used to feed the receiver.
+Another option would be to use external hardware as a software-defined radio and record some antenna data.
+However, the main advantage of a locally implemented transmitter over a recording is, that the raw data input is known.
+Thus, the expected output of the receiver model is this raw data, that was previously modulated by the local transmitter.
+In the case of a recording, the original data is not known, which does not allow to actually verify the receiver.\\
+
+In the implemented version, an audio file is modulated into the FM channel.
+The audio file contains data that represents speech with the words \textit{'Left channel... Right channel...'}.
+In terms of audio channels, the words exactly match the respective channels' output - the first part is modulated on the left audio channel only, while the second part only targets the right audio channel.
+This is particulary useful for verification, especially to verify the functionality of channel separation.
+From the experience during development, the channel separation is a good indicator of whether the system is functioning correctly.
+This left-right indication also simplifies the verification process, because a developer can recognize it with their visual and acoustic senses.
+It is possible to audibly verify it by listening to the output.
+It is also possible to just visually inspect the the output data, where a clear separation is visible.
+
+A block diagram of the transmitter structure is depicted in Fig.\ref{fig:bd_matlab_transmitter}.
+
+\includepicture [1.0] [0] [H] {Block diagram of the implemented transmitter in Matlab.} {bd_matlab_transmitter} {img/draw.io/bd_matlab_transmitter}
+
 \subsection{Emphasis and De-Emphasis}
 show effects in spectrum, show how to design the filters
 
@@ -85,7 +111,6 @@ not developed in actual fixed point, but close to hardware level algorithm
 
 
 
-\subsection{Transmitter block diagram}
 
 \section{GNU Radio}
   \subsection{Introduction}
