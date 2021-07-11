@@ -363,6 +363,11 @@ It is used to transmit additional information about the channel, such as the rad
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Emphasis and De-Emphasis}
+
+TODO
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Algorithms for Digital FM Demodulation}
 \label{sec:algorithms-for-digital-fm-demodulation}
   %see literature/FmDemodulator.pdf (Sect. 3.3)
@@ -470,10 +475,13 @@ FM demodulation with a PLL is not described into more detail, since this thesis 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Demodulation of Broadcast FM}
 \label{sec:demodulation-of-broadcast-fm}
-%TODO: once FM is converted to AM, traditional AM DSP techniques can be employed
 
 This section describes the demodulation of the information content of an FM broadcast channel, as it is used in commercial FM radio broadcasting.
-The assumption here is, that the actual FM demodulation, as described in chapter \ref{sec:algorithms-for-digital-fm-demodulation} is already done correctly.
+The assumption here is, that the actual FM demodulation, as described in chapter \ref{sec:algorithms-for-digital-fm-demodulation} is already done correctly, including the de-emphasis of the signal.
+
+So at this point the FM signal is converted to an AM signal.
+Thus, traditional AM DSP techniques can be employed to decode the FM broadcast channel.
+
 A frequency spectrum of the multiplex signal of an FM channel is shown in Fig.\ref{fig:fm_channel_baseband_freqs}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
