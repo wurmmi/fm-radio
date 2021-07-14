@@ -26,13 +26,15 @@ end
 %% Settings
 
 % Paths
-dir_filters = "./filters/stored/";
-dir_output  = "./matlab_output/";
+dir_filters    = "./filters/stored/";
+dir_output     = "./matlab_output/";
+dir_output_doc = "../../doc/thesis/img/matlab/";
 
 % Simulation options
 EnableWriteDataFiles = true;
 EnablePlots          = true;
 EnableSavePlotsToPng = true;
+EnableSavePlotsToPDF = true;
 
 EnableSenderSourceRecordedFile = false;
 EnableSenderSourceCreateSim    = true;

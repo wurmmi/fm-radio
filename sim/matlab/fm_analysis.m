@@ -126,7 +126,6 @@ disp('-- Plots');
 
 fig_title = 'Time domain signal';
 fig_audio_time = figure('Name',fig_title);
-title(fig_title);
 ax1='';
 ax2='';
 if EnableSenderSourceCreateSim
@@ -157,8 +156,13 @@ ylim([-ymax,ymax]);
 xlabel('time [s]');
 grid on; legend();
 linkaxes([ax1,ax2,ax3,ax4,ax5,ax6],'x');
+title(ax1,fig_title);
 if EnableSavePlotsToPng
     saveas(fig_audio_time, sprintf("%s%s",dir_output, "time_audio.png"));
+end
+if EnableSavePlotsToPDF
+    fig_audio_time.Position(3:4) = [900 600];
+    exportgraphics(fig_audio_time,sprintf("%s%s",dir_output_doc, "matlab_analysis_time_domain.pdf"),'ContentType','vector')
 end
 
 if EnableSenderSourceCreateSim
@@ -250,26 +254,38 @@ end
 
 fig_title = 'FM channel spectrum';
 fig_tx_spec = figure('Name',fig_title);
-hold on;
+ax1 = subplot(2,1,1);
+title(fig_title);
+hold on; grid on;
 xline(19e3,'k--','19 kHz');
 xline(38e3,'k--','38 kHz');
 xline(57e3,'k--','57 kHz');
 h0 ='';
 if EnableSenderSourceCreateSim
-    h0 = plot(psxx_tx_fmChannelData_f, psxx_tx_fmChannelData, 'b','DisplayName', 'Tx (pre-mod)');
+    h0 = plot(psxx_tx_fmChannelData_f, psxx_tx_fmChannelData, 'b','DisplayName', 'Tx (pre-mod.)');
+    xlim([0 62e3]);
+    legend([h0],'Location','northeast');
 end
-h1 = plot(psxx_rxChannelData_f, psxx_rx_fmChannelData,  'r','DisplayName', 'Rx Demod');
+ax2 = subplot(2,1,2);
+hold on; grid on;
+xline(19e3,'k--','19 kHz');
+xline(38e3,'k--','38 kHz');
+xline(57e3,'k--','57 kHz');
+h1 = plot(psxx_rxChannelData_f, psxx_rx_fmChannelData,  'r','DisplayName', 'Rx (demod.)');
+legend([h1],'Location','northeast');
 %h2 = plot(fft_freqs, fmChannelSpec, 'k--', 'DisplayName', 'FFT');
 h2 = '';
-grid on;
-title(fig_title);
 xlabel('frequency [Hz]');
-ylabel('magnitude');
-legend([h0,h1,h2],'Location','east');
+ylabel('magnitude [dB]');
+%legend([h0,h1,h2],'Location','east');
 xlim([0 62e3]);
 ylimits = ylim();
 if EnableSavePlotsToPng
     saveas(fig_tx_spec, sprintf("%s%s",dir_output, "psd_rx_tx.png"));
+end
+if EnableSavePlotsToPDF
+    fig_tx_spec.Position(3:4) = [900 400];
+    exportgraphics(fig_tx_spec,sprintf("%s%s",dir_output_doc, "matlab_analysis_freq_domain.pdf"),'ContentType','vector')
 end
 
 fig_title = 'Rx spectrum parts';
