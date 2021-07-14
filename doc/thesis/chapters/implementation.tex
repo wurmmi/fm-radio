@@ -261,27 +261,50 @@ Again, an audio file is used as an input, which is modulated as an FM channel si
 The entire multiplex signal is then modulated onto an actual carrier frequency of 99 MHz, that is within the FM radio broadcast band.
 This entire DSP chain is being run in the GNU Radio software, on a host PC.
 Only the final signal - FM modulated, and on a carrier of 99 MHz - is then sent to the USRP device in the form of digital signal samples.
-The USRP hardware then transmits the signal via its antenna.
+The USRP hardware then transmits the signal via its antenna.\\
 
-\textit{NOTE:}\\
-Care needs to be taken when transmitting signals over the air.
+\noindent
+Special care needs to be taken when transmitting signals over the air.
 The frequency spectrum is strongly limited by the radio regulations and may be monitored by the authorities.
 Please make sure to adapt your setup to the respective local regulations, to avoid any legal issues.
 Some of the regulations are mentioned in \ref{sec:FrequencyBand}, but may differ in various countries, however.
 
-Fig.\ref{fig:bd_gnuradio_transmitter} shows a block diagram of the application.
+Fig.\ref{fig:bd_gnuradio_setup_transmitter} shows a block diagram of the transmitter application.
 
-%\includepicture [1.0] [0] {Block diagram of the GNU Radio transmitter setup.} {matlab_analysis_freq_domain} {img/draw.io/gnuradio_setup_transmitter}
+\includepicture [0.9] [0] [H] {Block diagram of the GNU Radio transmitter setup.} {bd_gnuradio_setup_transmitter} {img/draw.io/bd_gnuradio_setup_transmitter}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Receiver}
 
+The receiver is also implemented, by using standard DSP blocks that are available in GNU Radio.
+The implemented structure however does not represent a stereo receiver.
+Instead, a mono receiver is implemented.
+The antenna signal is FM-demodulated, decimated and then directly sent to the speakers as the output, without any further processing.
+This simple receiver was intended as a proof-of-concept and a first example of the cooperation of the external hardware and the GNU Radio software.
+Thus, the mono receiver was sufficient, as the focus of the GNU Radio application is put on the transmitter side.
+
+This receiver works with both devices, the USRP b200mini and the RTL-SDR.
+
+Fig.\ref{fig:bd_gnuradio_setup_receiver} shows a block diagram of the receiver application.
+
+\includepicture [0.9] [0] [H] {Block diagram of the GNU Radio receiver setup.} {bd_gnuradio_setup_receiver} {img/draw.io/bd_gnuradio_setup_receiver}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{System Level Integration for Verification}
 
-system level view: can be used as a local transmitter for testing and verification.
-sent signal is known, thus the receiver can be verified
+The usage of a software like GNU Radio in combination with external hardware is an interesting tool for a use-case like this project.
+An FM receiver is to be implemented in multiple different versions.
+All of them need to be verified somehow - this is where the SDR transmitter created with GNU Radio and external hardware opens up an entire new possibility from the viewpoint of system level design integration.\\
+
+Previously it was explained that it is not possible to use recorded antenna data for verification.
+The reason was, that the underlying original data is not known and therefor a comparison of the original versus the received, decoded data is not feasible.
+Consequently, the Matlab transmitter model was justified by the fact, that its originally encoded audio data is well-known.\\
+
+However, with the current approach of using a GNU Radio SDR transmitter, the encoded data \textit{is} well-known, because it is generated locally.
+Thus, the SDR can be used to transmit a verification signal.
+This signal could be recorded to file by another SDR, or sourced into the DUT (device under test) directly.
+
 
 \section{VHDL (no shortcut)}
   \subsection{Testbench}
