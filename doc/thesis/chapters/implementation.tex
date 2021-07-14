@@ -255,11 +255,24 @@ Based on its hardware, the RTL-SDR can only be used as a receiver.
 
 GNU Radio provides a comprehensive set of DSP blocks, which are available to build various functionalities.
 Multiple blocks are connected to a block diagram, that is very similar to the one in Fig.\ref{fig:bd_matlab_transmitter}.
+The USRP device is used to broadcast the RF signal over the air.
 
 Again, an audio file is used as an input, which is modulated as an FM channel signal.
 The entire multiplex signal is then modulated onto an actual carrier frequency of 99 MHz, that is within the FM radio broadcast band.
+This entire DSP chain is being run in the GNU Radio software, on a host PC.
+Only the final signal - FM modulated, and on a carrier of 99 MHz - is then sent to the USRP device in the form of digital signal samples.
+The USRP hardware then transmits the signal via its antenna.
 
-take care in using the FM band - follow regulations in \ref{}!.
+\textit{NOTE:}\\
+Care needs to be taken when transmitting signals over the air.
+The frequency spectrum is strongly limited by the radio regulations and may be monitored by the authorities.
+Please make sure to adapt your setup to the respective local regulations, to avoid any legal issues.
+Some of the regulations are mentioned in \ref{sec:FrequencyBand}, but may differ in various countries, however.
+
+Fig.\ref{fig:bd_gnuradio_transmitter} shows a block diagram of the application.
+
+%\includepicture [1.0] [0] {Block diagram of the GNU Radio transmitter setup.} {matlab_analysis_freq_domain} {img/draw.io/gnuradio_setup_transmitter}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Receiver}
