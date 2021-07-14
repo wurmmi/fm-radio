@@ -4,6 +4,7 @@
 
 This chapter describes the most important details of each implementation variant.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Digital Signal Processing Chain}
 
 The theory behind the demodulation of an FM signal is already explained in Chapter \ref{cha:SignalProcessingTheory}.
@@ -75,6 +76,7 @@ The following list explains implementation details about the respective DSP bloc
 \noindent
 Several of the listed details are implemented, in order to achieve a successful demodulation of the FM signal.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Matlab Model}
 
 Matlab is used to create a model of the receiver, which is used as a reference for the other implementation variants.
@@ -82,6 +84,7 @@ Here, DSP algorithms are tested and evaluated, to find a method that is suitable
 
 The Matlab script consists of a transmitter, the receiver model, and additional code for analysis.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Transmitter}
 
 The transmitter is implemented to provide a reproducable source of data, which can be used to feed the receiver.
@@ -145,13 +148,33 @@ As a final step, the sample rate is decreased again, back to the chosen sampling
 
 This signal can now be processed in a digital FM receiver.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Pre-Emphasis and De-Emphasis}
-show effects in spectrum, show how to design the filters
+TODO: show effects in spectrum, show how to design the filters
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Fixed Point Arithmetic}
-not developed in actual fixed point, but close to hardware level algorithm
 
+The target hardware platform of the FM radio receiver project is an FPGA.
+These are devices that have a limited number of logic cells, which can be used to implement logical and computational functions.
+Any kind of computation can be implemented within these logic cells.
+However, depending on its detailed implementation, the amount of required logic cells may differ by a large factor.
+In order to overcome this issue, mathematical operations are often implemented in fixed point arithmetic, rather than floating point.
+This is due to the fact, that fixed point operations can be implemented with much less logic cells than floating point operations.
+The reason therefor is, that the bitwidth of input and output numbers is previously known in fixed point.
+Floating point calculations do not have this assumption and thus need to be more flexible, which requires a larger amount of logic cells.\\
 
+The Matlab model is therefore developed by keeping in mind this limitation.
+Matlab provides special datatypes for fixed point number representation.
+However, these were not used in this implementation.
+Instead, everything is calculated in floating point representation, using the standard \textit{double} datatype.
+Then, in certain positions in the DSP chain, the numbers are rounded to the resolution of a fixed point datatype.
+A fixed point format of \textit{2.14}, meaning 2 bit for integer- and 14 bit for fractional number representation is chosen.
+This is sufficient for the FM receiver and could potentially be lowered to a lower bitwidth.
+Again, an optimization of the DSP chain is not the focus of this thesis.\\
+
+Summing up, the Matlab model is not implemented in fixed point arithmetic, but is implemented in a way, that is close enough to the hardware implementation.
+Therefore, it can serve as a reference for the hardware implementation.
 
 
 \section{GNU Radio}
