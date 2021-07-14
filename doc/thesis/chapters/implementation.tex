@@ -124,7 +124,7 @@ It band-limits the spectrum of the LR Diff part between 23 and 53 kHz.
 The BP filter introduces a constant group delay of the signal.
 In order to maintain the alignment of all signals, this side-effect needs to be accounted for and be compensated in the other signal branches.
 Thus, the Mono signal, as well as the Pilot Tone need to be delayed by the amount of samples defined by the BP filters' group delay.
-The subsequent amplifier blocks create the defined proportions of the sub-band, such as 90\% for the audio parts, and 10\% for the Pilot Tone [ref TODO].
+The subsequent amplifier blocks create the defined proportions of the sub-band, such as 90\% for the audio parts, and 10\% for the Pilot Tone \cite{FmMultiplexingForStereo}.
 
 One part in this block diagram is the so-called Hinz Triller, which was part of the Autofahrer-Rundfunk-Information service (ARI, German for Automotive-Driver's-Broadcasting-Information).
 It was used as an indicator for traffic announcements.
@@ -141,7 +141,7 @@ In the final chain of DSP blocks, the sample rate is increased again, to be able
 The resulting frequency modulated signal represents the signal that is received by an antenna - the RF signal of an FM channel.
 This signal is then processed by a complex baseband mixer, which results in inphase-, and quadrature components in the baseband.
 An LP filter band-limits the signal and removes artifacts of the mixer.
-As a final step, the sample rate is decreased again, back to the chosen sampling rate of 960 kHz.\\
+As a final step, the sample rate is decreased again, back to the chosen sampling rate of 960 kHz.
 
 This signal can now be processed in a digital FM receiver.
 
