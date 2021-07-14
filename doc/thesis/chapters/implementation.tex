@@ -213,9 +213,62 @@ The artifact is very low in energy, because it is attenuated by a BP filter in t
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{GNU Radio}
-  \subsection{Introduction}
-  \subsection{Transmitter}
-  \subsection{Receiver}
+
+This section describes the implementation in GNU Radio.
+A transmitter, as well as a receiver are implemented using this software.
+Both can be deployed on actual hardware, so a continuous transmitter or receiver is built in a real environment.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Introduction}
+
+GNU Radio is a free and open-source software development toolkit to implement a software-defined radio.
+The implementation is done by connecting functional blocks in a block design.
+This abstracts the inner workings of each functional block and thus provides an implementation approach on a very high level of abstraction.
+GNU Radio supports interfaces to external RF hardware \cite{SoftwareGnuRadio}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{External Hardware}
+
+In order to interface with the real world, two different hardware devices are used.
+Both devices are supported by GNU Radio and are briefly described here.
+
+\subsubsection{USRP b200mini}
+
+The USRP b200mini is a device that can be used to create a software-defined radio.
+It resembles the size of a business card and is developed by Ettus Research.
+A signal range from 70 MHz to 6 GHz can be covered by the front end.
+The board further features a Xilinx Spartan-6 FPGA that is user-programmable, which makes the device very flexible for various applications with the received signal \cite{USRPb200Mini}.
+
+GNU Radio supports this device with the blocks \textit{UHD: USRP Sink} and \textit{UHD: USRP Source}.
+Therefore, it can be used as both a receiver and a transmitter.
+
+\subsubsection{RTL-SDR}
+
+The RTL-SDR is a cheap USB dongle, that was originally developed as a DVB-T TV tuner.
+It is based on the RTL2832U chipset, which includes an 8-bit ADC and a digital signal processor.
+The device delivers IQ data via the USB interface \cite{RTLSDR}.
+
+Based on its hardware, the RTL-SDR can only be used as a receiver.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Transmitter}
+
+GNU Radio provides a comprehensive set of DSP blocks, which are available to build various functionalities.
+Multiple blocks are connected to a block diagram, that is very similar to the one in Fig.\ref{fig:bd_matlab_transmitter}.
+
+Again, an audio file is used as an input, which is modulated as an FM channel signal.
+The entire multiplex signal is then modulated onto an actual carrier frequency of 99 MHz, that is within the FM radio broadcast band.
+
+take care in using the FM band - follow regulations in \ref{}!.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Receiver}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{System Level Integration for Verification}
+
+system level view: can be used as a local transmitter for testing and verification.
+sent signal is known, thus the receiver can be verified
 
 \section{VHDL (no shortcut)}
   \subsection{Testbench}
