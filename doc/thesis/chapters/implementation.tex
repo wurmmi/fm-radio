@@ -393,7 +393,7 @@ The architecture for this testbench is created under the assumptions and accordi
 
 Fig.\ref{fig:bd_vhdl_implemented_tb_architecture} shows a block diagram of the implemented architecture.
 The split between the Python environment and the VHDL implementation is clearly visible but is represented from the developers perspective.
-The actual interfaces, as described in \ref{sub:FrameworkCocotb}, are hidden to maintain the overview of the implemented architecture.
+The actual interfaces, as described in \ref{sub:FrameworkCocotb}, are hidden to maintain the overview of the implemented architecture.\\
 
 \includepicture [1.0] [0]  {Block diagram of the implemented testbench architecture.} {bd_vhdl_implemented_tb_architecture} {img/draw.io/bd_vhdl_implemented_tb_architecture}
 
@@ -401,15 +401,18 @@ The test cases are using the external verification data, that was previously gen
 This data is supplied to the input of the DUT.
 The DUTs' input and output is implemented as an AXI Stream interface, which is an interface that features a valid-, as well as a ready-signal along with the data.
 The cocotb framework supports both an AXI Stream Master, and an AXI Stream Slave class, to write and read the input and output, respectively.
-In that way, the interface signals are abstracted to simple read and write function calls in the Python code, while the actual signal handling is done in the mentioned cocotb library classes.
+In that way, the interface signals are abstracted to simple read- and write-function calls in the Python code, while the actual signal handling is done in the mentioned cocotb library classes.
+
 A clock generator class is also available from cocotb, which is used to provide the system clock to the DUT.
+
 The Python classes \textit{tb\_analyzer\_helper}, \textit{tb\_data\_handler} and \textit{fm\_receiver\_model} are implemented to create a better structure of the testbench and to provide code that is re-useable for the testbench of the HLS implementation.
-The \textit{tb\_analyzer\_helper} class provides functions to analyze the data, such as comparison against defined error thresholds or the creation of graphical plots.
+The \textit{tb\_analyzer\_helper} class provides functions to analyze the data, such as comparison against defined error thresholds or the creation of graphical plots with Pythons' matplotlib library.
 The \textit{tb\_data\_handler} only works as a data storage class, that encapsulates the data that is captured from the DUT.
 The class called \textit{fm\_receiver\_model} serves as the 'golden model reference' that is used to compare the DUT against.
 Internally, it loads the Matlab verification data.
-However, Python can be used to actually implement an FM receiver, just like in Matlab.
+This could be implemented differently, since Python can be used to actually implement an FM receiver including the entire DSP functionality, just like in Matlab.
 Because the Matlab model already exists, this is not done here - loading the Matlab data is sufficient as it is been seen as 'the single source of truth' in this project.
+
 At the end of the test cases, the DUTs' output data is written to a file.
 This data is later used to directly compare the different implementation variants against each other.
 
@@ -442,9 +445,3 @@ This data is later used to directly compare the different implementation variant
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Architecture (same tb for VHDL and HLS-generated HDL)}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Framework cocotb, with ghdl compiler}
-  Instantiate both HDL models in the testbench.\\
-  Display a direct comparison of outputs in graphs. This is practical, since the cocotb framework runs in python and graphs can be generated using Python's matplotlib.
-
