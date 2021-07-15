@@ -351,12 +351,39 @@ In order to simplify such complex operations, various testbench frameworks are a
 %%%%%%%%%%%%%
 \subsubsection{Simulator GHDL}
 
+Multiple different simulators are available on the market, such as Mentor Graphics ModelSim or QuestaSim, Synopsys VCS or the Cadence Simulator.
+The issue with most simulators is, that they are subject to a license fee, depending on the required set of features, or simulation speed.\\
+
+However, there are simulators available, that are free to use.
+An example therefor is GHDL, which is an analyzer, compiler and simulator for VHDL and is developed as an open-source project.
+GHDL translates the VHDL code to a binary file that contains machine code, which can be executed.
+This is supported for a all common operating systems such as Linux, Windows and macOS.
+The simulator further supports a VPI (Verilog Procedural Interface), which can be used to control the simulator \cite{GHDLDoc}.
 
 %%%%%%%%%%%%%
 \subsubsection{Framework cocotb}
 
-\cite{cocotbDoc}.
+The testbench framework cocotb is developed as a free, open-source project.
+It can be used to verify VHDL and SystemVerilog RTL code, in combination with an external simulator.
+Various different simulators can be used with cocotb - amongst others, GHDL is supported.
+The interface that is used to the simulator is the industry-standard VPI.\\
 
+One of the main advantages of cocotb is, that test cases for the respective RTL code are written in the language Python.
+It is therefore also called a co-simulation framework.
+Using Python provides a large factor of flexibility and possibilities, since it is a comprehensive language, considering all its extension libraries.
+Additionally, Python may be more familiar to engineers in comparison to VHDL and thus, writing testbenches is made simpler with cocotb.
+
+The test cases in Python are implemented as coroutines.
+By the way, the name cocotb is constructed by the words \textit{CO}routine, \textit{CO}simulation and \textit{T}est\textit{B}ench \cite{cocotbDoc}.\\
+
+Fig.\ref{fig:bd_cocotb_interface_simulator} gives an overview of how cocotb interfaces with a simulator.
+The Python test cases are shown as a list of coroutines, which are managed by a scheduler.
+This Python code interfaces with the simulator through standard interfaces like VPI.
+The block called \textit{GPI} is developed by cocotb and abstracts the different simulator interfaces, such as VPI, VHPI or FLI.
+In the simulator, the device under test (DUT) is instantiated.
+The RTL simulation itself is managed by the simulators' scheduler.
+
+\includepicture [1.0] [0]  {Block diagram of the interface between cocotb and a simulator \cite{cocotbDoc}.} {bd_cocotb_interface_simulator} {img/draw.io/bd_cocotb_interface_simulator}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Channel Selection (IF to Channel-BB)}
