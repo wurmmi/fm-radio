@@ -84,7 +84,7 @@ Here, DSP algorithms are tested and evaluated, to find a method that is suitable
 
 The Matlab script consists of a transmitter, the receiver model, and additional code for analysis.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Transmitter}
 
 The transmitter is implemented to provide a reproducable source of data, which can be used to feed the receiver.
@@ -148,11 +148,11 @@ As a final step, the sample rate is decreased again, back to the chosen sampling
 
 This signal can now be processed in a digital FM receiver.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Pre-Emphasis and De-Emphasis}
 TODO: show effects in spectrum, show how to design the filters
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Fixed Point Arithmetic}
 
 The target hardware platform of the FM radio receiver project is an FPGA.
@@ -177,13 +177,13 @@ Summing up, the Matlab model is not implemented in fixed point arithmetic, but i
 Therefore, it can serve as a reference for the hardware implementation.
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Receiver}
 
 The receiver is implemented, following the block diagram in Fig.\ref{fig:bd_dsp_detailed}.
 Further assumptions and simplifications, such as the fixed point arithmetic are described into detail above.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Analysis}
 
 The Matlab implementation also includes a comprehensive range of analysis, especially in terms of visual plots.
@@ -218,7 +218,7 @@ This section describes the implementation in GNU Radio.
 A transmitter, as well as a receiver are implemented using this software.
 Both can be deployed on actual hardware, so a continuous transmitter or receiver is built in a real environment.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Introduction}
 
 GNU Radio is a free and open-source software development toolkit to implement a software-defined radio.
@@ -226,7 +226,7 @@ The implementation is done by connecting functional blocks in a block design.
 This abstracts the inner workings of each functional block and thus provides an implementation approach on a very high level of abstraction.
 GNU Radio supports interfaces to external RF hardware \cite{SoftwareGnuRadio}.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{External Hardware}
 
 In order to interface with the real world, two different hardware devices are used.
@@ -250,7 +250,7 @@ The device delivers IQ data via the USB interface \cite{RTLSDR}.
 
 Based on its hardware, the RTL-SDR can only be used as a receiver.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Transmitter}
 
 GNU Radio provides a comprehensive set of DSP blocks, which are available to build various functionalities.
@@ -274,7 +274,7 @@ Fig.\ref{fig:bd_gnuradio_setup_transmitter} shows a block diagram of the transmi
 \includepicture [0.9] [0] [H] {Block diagram of the GNU Radio transmitter setup.} {bd_gnuradio_setup_transmitter} {img/draw.io/bd_gnuradio_setup_transmitter}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Receiver}
 
 The receiver is also implemented, by using standard DSP blocks that are available in GNU Radio.
@@ -290,7 +290,7 @@ Fig.\ref{fig:bd_gnuradio_setup_receiver} shows a block diagram of the receiver a
 
 \includepicture [0.9] [0] [H] {Block diagram of the GNU Radio receiver setup.} {bd_gnuradio_setup_receiver} {img/draw.io/bd_gnuradio_setup_receiver}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{System Level Integration for Verification}
 
 The usage of a software like GNU Radio in combination with external hardware is an interesting tool for a use-case like this project.
@@ -306,21 +306,44 @@ Thus, the SDR can be used to transmit a verification signal.
 This signal could be recorded to file by another SDR, or sourced into the DUT (device under test) directly.
 
 
-\section{VHDL (no shortcut)}
-  \subsection{Testbench}
-  \subsection{Channel Selection (IF to Channel-BB)}
-  \subsection{Phase Detector}
-  \subsection{other Elements}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{VHDL (no shortcut?)}
 
-  \section{High-Level Synthesis}
-  \subsection{Testbench}
-  \subsection{Channel Selection (IF to Channel-BB)}
-  \subsection{Phase Detector}
-  \subsection{other Elements}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Testbench}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Channel Selection (IF to Channel-BB)}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Phase Detector}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{other Elements}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{High-Level Synthesis}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Testbench}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Channel Selection (IF to Channel-BB)}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Phase Detector}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{other Elements}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Common Testbench}
-  \subsection{Architecture (same tb for VHDL and HLS-generated HDL)}
-  \subsection{Framework cocotb, with ghdl compiler}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Architecture (same tb for VHDL and HLS-generated HDL)}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Framework cocotb, with ghdl compiler}
   Instantiate both HDL models in the testbench.\\
   Display a direct comparison of outputs in graphs. This is practical, since the cocotb framework runs in python and graphs can be generated using Python's matplotlib.
 
