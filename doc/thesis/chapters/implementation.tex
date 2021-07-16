@@ -320,6 +320,7 @@ The general significance of a simulation testbench in hardware description langu
 
 %%%%%%%%%%%%%
 \subsubsection{General}
+\label{sub:VHDL:Testbench:General}
 
 In the development of software that runs on a CPU, the tool of step-by-step debugging is commonly used during the development process.
 Various verification and testing libraries exist, in order to create unit tests, for example.
@@ -362,7 +363,7 @@ The simulator further supports a VPI (Verilog Procedural Interface), which can b
 
 %%%%%%%%%%%%%
 \subsubsection{Framework cocotb}
-\label{sub:FrameworkCocotb}
+\label{sub:VHDL:FrameworkCocotb}
 
 The testbench framework cocotb is developed as a free, open-source project.
 It can be used to verify VHDL and SystemVerilog RTL code, in combination with an external simulator.
@@ -388,12 +389,13 @@ The RTL simulation itself is managed by the simulators' scheduler.
 
 %%%%%%%%%%%%%
 \subsection{Testbench Architecture}
+\label{sub:VHDL:TestbenchArchitecture}
 
 The architecture for this testbench is created under the assumptions and according to the guidelines that are developed in Chapter \ref{cha:SystemArchitectureAndConcept}.
 
 Fig.\ref{fig:bd_testbench_architecture_vhdl} shows a block diagram of the implemented architecture.
 The split between the Python environment and the VHDL implementation is clearly visible but is represented from the developers perspective.
-The actual interfaces, as described in \ref{sub:FrameworkCocotb}, are hidden to maintain the overview of the implemented architecture.\\
+The actual simulator interfaces, as described in \ref{sub:VHDL:FrameworkCocotb}, are hidden to maintain the overview of the implemented architecture.\\
 
 \includepicture [1.0] [0]  {Block diagram of the implemented testbench architecture.} {bd_testbench_architecture_vhdl} {img/draw.io/bd_testbench_architecture_vhdl}
 
@@ -417,28 +419,47 @@ At the end of the test cases, the DUTs' output data is written to a file.
 This data is later used to directly compare the different implementation variants against each other.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Channel Selection (IF to Channel-BB)}
+\subsection{Testing Strategies}
+
+Common strategies for testing are unit tests and integration tests, which represent different levels of testing.
+Unit tests specifically target a single unit, while integration tests verify the combination of multiple units as a whole.
+Both of these stragegies are important.
+Given all unit tests being successful, it is ensured that all these single units are implemented correctly.
+However, their combination and interaction may still be subject to error - this is where integration tests unfold their potential.
+Implementation errors in the glue logic between the units, as well as the interaction of the respective interfaces can be found in these integration tests.
+
+The testbench architecture presented above represents an integration test, since the DUT is tested as an entire block.
+The advantage thereof is, that it tests the DUT in the same way as it will be integrated within the target hardware, the FPGA.
+However, in case the DUT fails to produce a correct output in the integration test, it is not always visible where exactly the error is located.
+Thus, in addition to the DUTs' interfaces, additional signals are logged from the inside of the DUT. that can be accessed through the testbench. white box: disadvantage: test needs to change as well, when implementation changes
+--> white box, black box
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Phase Detector}
+\subsection{Unit Tests}
+FIR the only unit that is worth the effort (others are only delays, and additions/substractions respectively)
+
+A unit test only targets a single unit of the system, as the name already describes.
+This is in the contrary to an integration test, which tests the combination of several units into an integrated system.
+The testbench architecture that is developed in \ref{sub:VHDL:TestbenchArchitecture} represents such an integration test.
+However, if an integration test fails, it is not always
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{other Elements}
+\subsection{TODO: Other Stuff...}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{High-Level Synthesis}
 
+The implemented testbench structure, as well as some specific implementation details are explained here.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Testbench}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Channel Selection (IF to Channel-BB)}
+A testbench is equally important in the HLS implementation, as it is for the VHDL implementation, explained in \ref{sub:VHDL:Testbench:General}.
+The testbench simulation is
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Phase Detector}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{other Elements}
+\subsection{TODO: Other Stuff...}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Common Testbench}
