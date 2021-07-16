@@ -431,6 +431,7 @@ Implementation errors in the glue logic between the units, as well as the intera
 The testbench architecture presented above represents an integration test, since the DUT is tested as an entire block.
 The advantage thereof is, that it tests the DUT in the same way as it will be integrated within the target hardware, the FPGA.
 However, in case the DUT fails to produce a correct output in the integration test, it is not always visible where exactly the error is located.
+The source of error may be located, or hidden within the nested and interconnected units.
 Thus, in addition to the DUTs' interfaces, additional signals are logged from the inside of the DUT. that can be accessed through the testbench. white box: disadvantage: test needs to change as well, when implementation changes
 --> white box, black box
 
