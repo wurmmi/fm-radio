@@ -128,12 +128,21 @@ However, this additional effort may potentially already be paid off, when a sing
 \subsection{Validation and Verification}
 
 The terms validation and verification are closely related, but have a different meaning in system design.
+Verification tests the properties of the developed product against the previously determined specification and requirements.
+It stives to build the \textit{system right}.
+Validation on the other hand tries to build the \textit{right system}.
+It proves that the product does what it is intended to do.
+This is important in order to develop the product according to what the customer actually needs.
+To avoid to divert from these customer needs, validation is done throughout the products' development cycle, from the beginning to the end.
+Various artifacts can be collected during the process, in order to have a traceable documentation of the decision that were made.\\
 
-Validation fulfils the purpose to prove that the developed product does what it is intended to do.
-It strives to build the \textit{right system}.
-Verification on the other hand tries to build the \textit{system right}, by testing its properties against the previously determined specification and requirements.\\
+Validation may also fail, which means that the chosen system may be the wrong system for the respective customers needs.
+As an example, the system may be very sensitive to variations of a parameter that a customer cannot influence.
+Another example is when a system is more sensitive to certain parameters than to its inputs.
+In both cases, the system may be the wrong system for the specific problem and should urgently be re-evaluated.\\
 
-
+In order to expose such failures as early as possible, any test engineer should be instructed to always keep an eye on the process of validation, which means to check if the team is building the \textit{right system}.
+Therefore, a test engineer should be familiar with the problem statement.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{System Design Targeting FPGAs}
