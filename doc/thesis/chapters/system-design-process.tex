@@ -146,35 +146,36 @@ Therefore, a test engineer should be familiar with the problem statement.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{System Design Targeting FPGAs}
-The research for this chapter is mainly based on \cite{GesslerRalf2014EES}.
-%https://link-springer-com.fhooe.idm.oclc.org/content/pdf/10.1007%2F978-3-319-26408-0.pdf
-%chapter 3
+
+A wide range of design approaches are available that are targeting FPGAs.
+In this section, some selected approaches are described.
+The research for this section is mainly based on \cite{GesslerRalf2014EES}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{V-Modell}
 
-%applies to general software development, but can directly be mapped to FPGA development.
+applies to general software development, but can directly be mapped to FPGA development.
 
-%Abbildung 3.5 in
-%https://link-springer-com.fhooe.idm.oclc.org/content/pdf/10.1007%2F978-3-8348-2080-8.pdf
+\includepicture [1.0] [0] [H] {The V-Modell \cite[Abbildung 3.5]{GesslerRalf2014EES}.} {v_modell} {img/draw.io/v_modell}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{High-Level Synthesis}
-%\cplusplus\\
-%SystemC (deprecated for synthesis by Xilinx)\\
+\cplusplus\\
+SystemC (deprecated for synthesis by Xilinx)\\
 
-A comprehensive list of HLS tools can be found in Section 3.3 of
-%https://link-springer-com.fhooe.idm.oclc.org/content/pdf/10.1007%2F978-3-319-26408-0.pdf
+A comprehensive list of HLS tools can be found in Section 3.3 of \cite{2016FfSP}
+
+HLS is described into more detail in section \ref{cha:HLS}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Implementation with Tool Support}
-%https://link-springer-com.fhooe.idm.oclc.org/content/pdf/10.1007%2F978-3-8348-2080-8.pdf
+see \cite{GesslerRalf2014EES}\\
 
-%Matlab Simulink System Generator\\
-%Matlab Simulink HDL Coder\\
+Matlab Simulink System Generator\\
+Matlab Simulink HDL Coder\\
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Direct Implementation}
 
-%direct, or 'manual' implementation\\
-%VHDL/Verilog\\
+direct, or 'manual' implementation\\
+VHDL/Verilog\\
