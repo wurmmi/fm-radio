@@ -204,11 +204,47 @@ Synthesis, as well as simulation is supported, which allows efficient developmen
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Implementation with Tool Support}
-see \cite{GesslerRalf2014EES}\\
 
-Matlab Simulink System Generator\\
-Matlab Simulink HDL Coder\\
+The implementation of FPGA designs with tool support focuses on the development as a model-based approach, that is often featured by a graphical programmers interface.
+This is often used for prototyping in an early phase of product development.
+A well-known example for such a model-based approach is Matlab, and its graphical tool Simulink.\\
 
-In Fig.\ref{fig:fpga_design_levels}, multiple implementation methods are compared, with their respective levels of abstraction.
+Matlab can be used to describe and develop hardware-oriented algorithms, since it supports various library functions, such as the fixed point representation of numbers.
+A major advantage is, that fast prototyping of an algorithm, as well as a fast simulation of the system is achievable.
+Simulink is a graphical editor, that allows to connect functional blocks in a block diagram and create a system in that way.
+Multiple toolboxes support additional blocks, that abstract complex functionalities, so that a fast prototyping is possible here as well.\\
 
-\includepicture [0.5] [0] {Abstraction levels of the different implementation languages \cite[Abbildung 5.1]{GesslerRalf2014EES}.} {fpga_design_levels} {img/fpga_design_levels}
+A powerful feature of Matlab and Simulink is, that it can be used similar to an HLS tool.
+Matlab code, as well as Simulink block diagrams can be transformed into low-level RTL code for an FPGA design.
+
+%%%%%
+\subsubsection{Simulink System Generator}
+
+A full system-level design approach can be covered with the Simulink System Generator.
+This includes the high-level development of the system as a block diagram in Simulink, the automated generation of low-level RTL code for the FPGA hardware, and the verification in simulation and in hardware, in the form of hardware-in-the-loop.
+This workflow is supported for Xilinx FPGAs and is specifically targeting system design engineers, who work in rapid prototyping to generate hardware utilization estimates for the final products' hardware.\\
+
+Fig. \ref{fig:simulink_system_generator} shows this entire design approach in a block diagram.
+The abbreviation ISE stands for Integrated Software Environment, and is Xilinx' development environment that includes the FPGA synthesis tool.
+
+\includepicture [0.8] [0] {Overview of the capabilities of the Simulink System Generator \cite[Abbildung 5.11]{GesslerRalf2014EES}.} {simulink_system_generator} {img/simulink_system_generator}
+
+%%%%%
+\subsubsection{Simulink HDL Coder}
+
+The Simulink HDL Coder tool can generate VHDL or Verilog code from Matlab functions or Simulink block diagrams and state diagrams.
+The generated code can be used in Xilinx, as well as Intel/Altera FPGA hardware.
+This allows prototyping of algorithms, while continuously having detailed information of the target implementation, such as an estimate of the hardware logic utilization, or even the critical path in the logic.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Level of Abstraction}
+
+Multiple implementation methods are introduced in above sections, which all have different levels of abstraction.
+VHDL and Verilog require, or allow, a very detailed description of the RTL code, while SystemC, \cplusplus, or Matlab and Simulink provide a high level of abstraction.
+In Fig.\ref{fig:fpga_design_levels}, the various implementation methods are compared, with their respective levels of abstraction.\\
+
+In conclusion, it is an engineers' choice which implementation method to use in order to develop a product.
+A trade-off between optimization and the level of abstraction is likely to be made.
+The decision may not always be obvious, but should be based on the fundamental requirements of the final product.
+
+\includepicture [0.5] [0] [H] {Abstraction levels of the different implementation languages \cite[Abbildung 5.1]{GesslerRalf2014EES}.} {fpga_design_levels} {img/fpga_design_levels}
