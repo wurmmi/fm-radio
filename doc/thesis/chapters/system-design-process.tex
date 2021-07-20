@@ -200,7 +200,7 @@ The implementation of low-level hardware description language (HDL) in the regis
 Two commonly used languages therefor are VHDL and Verilog.
 Both have similar features to describe hardware in the signal level, with parallel structures and timing-dependent architectures.
 The languages can describe a design in a hierarchical order, so that the separate modules can be constructed in a way that an overview of the functionality of the system remains given.
-Synthesis, as well as simulation is supported, which allows efficient development of RTL designs.\\
+Synthesis, as well as simulation is supported, which allows efficient development of RTL designs.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Implementation with Tool Support}
@@ -226,8 +226,9 @@ This workflow is supported for Xilinx FPGAs and is specifically targeting system
 
 Fig. \ref{fig:simulink_system_generator} shows this entire design approach in a block diagram.
 The abbreviation ISE stands for Integrated Software Environment, and is Xilinx' development environment that includes the FPGA synthesis tool.
+ModelSim is a HDL simulator software, that is developed by Mentor Graphics.
 
-\includepicture [0.8] [0] {Overview of the capabilities of the Simulink System Generator \cite[Abbildung 5.11]{GesslerRalf2014EES}.} {simulink_system_generator} {img/simulink_system_generator}
+\includepicture [0.9] [0] {Capabilities of the Simulink System Generator \cite[Abbildung 5.11]{GesslerRalf2014EES}.} {simulink_system_generator} {img/draw.io/simulink_system_generator}
 
 %%%%%
 \subsubsection{Simulink HDL Coder}
@@ -247,4 +248,6 @@ In conclusion, it is an engineers' choice which implementation method to use in 
 A trade-off between optimization and the level of abstraction is likely to be made.
 The decision may not always be obvious, but should be based on the fundamental requirements of the final product.
 
-\includepicture [0.5] [0] [H] {Abstraction levels of the different implementation languages \cite[Abbildung 5.1]{GesslerRalf2014EES}.} {fpga_design_levels} {img/fpga_design_levels}
+\includepicture [0.65] [0] [H] {Abstraction levels of the implementation methods \cite[Abbildung 5.1]{GesslerRalf2014EES}.} {fpga_design_levels} {img/draw.io/fpga_design_levels}
+
+%TODO: try to get this figure up into the last page...
