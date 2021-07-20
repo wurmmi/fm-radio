@@ -37,7 +37,7 @@ The acronym SIMILAR consists of the following components.
 Each of these terms represents a separate step in the process diagram shown in Fig.\ref{fig:similar_process}.
 The steps can be seen as iterative and parallel, as the process runs during the product development cycle.
 
-\includepicture [0.8] [0] {The SIMILAR process in a graphical representation.} {similar_process} {img/draw.io/similar_process}
+\includepicture [0.95] [0] {The SIMILAR process in a graphical representation \cite{BahillA.Terry2017TDiS}.} {similar_process} {img/draw.io/similar_process}
 
 %%%%%
 \subsubsection{State the Problem}
@@ -126,6 +126,7 @@ However, this additional effort may potentially already be paid off, when a sing
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Validation and Verification}
+\label{sec:ValidationAndVerification}
 
 The terms validation and verification are closely related, but have a different meaning in system design.
 Verification tests the properties of the developed product against the previously determined specification and requirements.
@@ -154,9 +155,23 @@ The research for this section is mainly based on \cite{GesslerRalf2014EES}.
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{V-Modell}
 
-applies to general software development, but can directly be mapped to FPGA development.
+The development of a product requires an organized approach, in order to successfully achieve the requirements.
+The common term for such an organized approach is the process model, which represents a guideline on how to organize and structure the development cycle.\\
 
-\includepicture [1.0] [0] [H] {The V-Modell \cite[Abbildung 3.5]{GesslerRalf2014EES}.} {v_modell} {img/draw.io/v_modell}
+A well-known process model is the so called V-Model.
+It is based on the similarly well-known Waterfall Model, and has its name because of the distinct V-shape of its process diagram, as it is shown in Fig.\ref{fig:v_modell}.
+One of the main characteristics of the V-Model is, that one phase needs to be completed before the following phase can start.
+This classifies the model as a static process model and is one of the main disadvantages at the same time, because it makes the model inflexible to adaptions of the requirements.
+The advantages however are that it is easy to install and apply, each phase has its specific deliverables, good results can be achieved for large projects with simple requirements and the early test phases.\\
+
+The disadvantages of inflexibility towards changes of requirements and the fact, that it is difficult to consider all all eventualities in the creation of the V-model, led to the innovation of modern process models, which are iterative and thus more flexible.\\
+
+The V-model applies to general software development, or project development, but can directly be mapped to FPGA development.
+The model is covered in this thesis section, because it shows the clear testing structure of module tests (unit tests), integration tests and system tests, which is especially important in projects that target hardware, such as FPGA projects.\\
+
+Furthermore, the V-model diagram in Fig.\ref{fig:v_modell} shows the difference between validation and verification, as it is explained in the previous section \ref{sec:ValidationAndVerification}.
+
+\includepicture [1.0] [0] {The V-Modell process diagram \cite[Abbildung 3.5]{GesslerRalf2014EES}.} {v_modell} {img/draw.io/v_modell}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{High-Level Synthesis}
