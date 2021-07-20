@@ -28,7 +28,6 @@ However, with all these different facts, there are things that they all have in 
 On the transmitter side, all these signals are transmitted in a band-limited, high frequency signal.
 The band limitation needs to be given at the transmitting antenna, to minimize interference to other bands in the frequency spectrum.
 The frequency needs to be high, to radiate the signal by an antenna.
-
 On the receiver side, once the signal reaches the antenna of a receiver, there are further similarities.
 The antenna signal needs to be amplified and filtered at first.
 Both steps depend on the antenna characteristics, but usually the received signal is of relatively low power, and the antenna receives a wider range of frequencies than required.
@@ -36,11 +35,9 @@ The filter therefor selects the frequency area that is of interest.
 Another reason for the filter is to avoid spectral replicas in the subsequent modulation, or down-conversion.
 Here, the front-end often down-converts to a low intermediate frequency (IF), instead of directly going to baseband.
 The intermediate frequency is then shifted down to baseband by a modulator later in the digital domain, which brings advantages in the downstream processing chain. %TODO check this or explain more which advantages (HF to BB directly --> i/q complex signal? ; HF to IF to BB --> real signal ) ??
-
 These three steps - amplification, filtering and down-conversion to an IF - are often done in the analog domain, since digital circuits cannot work with such high frequencies.
 After the analog signal is down-converted to baseband, it needs to be digitized.
 This is done by an analog-digital-converter (ADC).
-
 After the signal is processed to digital baseband, the received signal can finally be decoded to get the actual data content.
 This decoding process depends on the respective modulation type that is used.\\
 
@@ -65,7 +62,7 @@ The IF is usually set to a fixed frequency, which results in the advantage, that
 Therefore, a superhet receiver is able to select narrow band signals, even if the bands' surrounding frequencies are being used by other signals.
 This is one of the superhets' main advantages.
 A disadvantage is that the signal noise around the image frequency band is translated into the IF output band.
-Thus, the filter requirements are relatively high, since they need to deliver a strong attenuation in order to suppress noise outside the desired band.
+Thus, the filter requirements are relatively high, since they need to deliver a strong attenuation in order to suppress noise outside the desired band.\\
 
 Fig.\ref{fig:bd_superhet} shows a block diagram of a superhet receiver.
 The antenna signal first runs through a band selection filter.
@@ -85,10 +82,9 @@ The depicted block diagram may represent an FM broadcast receiver, where an audi
 \subsection{Direct-Conversion Receiver}
 
 A direct-conversion receiver, as its name suggests, converts an RF signal to baseband directly.
-It can also be called homodyne, synchrodyne, or zero-IF receiver.
+It can also be called homodyne, synchrodyne, or zero-IF receiver.\\
 
 In order to achieve direct down-conversion, the local oscillator of the mixer needs to be set exactly to the center frequency of the desired signal.
-
 The main advantage of direct-conversion receivers is, that their output is an image-free signal.
 This is due to the properties of the mixer.
 The strongest disadvantages are the LO leakage, which leads to a DC offset at the mixer output, and the flicker noise, also called \textit{1/f}-noise, which induces strong noise at low frequencies \cite{PassosFábio2020AHSo}.
@@ -106,10 +102,9 @@ This is the explanation in the time domain.
 However, it may be easier look at the process in the frequency domain.
 In the frequency domain, the band-limited RF signal is shifted down to a lower frequency.
 This lower frequency can either be zero, i.e. baseband, or an intermediate frequency, such as in the application of a superheterodyne receiver.
-
 In order to achieve this, the incoming signal needs to be multiplicated with a carrier signal, that is generated locally in the receiver, by a local oscillator (LO).
 Depending on the frequency $f_{LO}$ of this local carrier, the resulting signal will be shifted to baseband, or an IF.
-Note, that in the case of down-conversion, the local oscillator frequency $f_{LO}$ is interchangeably denoted as carrier frequency $f_c$.
+Note, that in the case of down-conversion, the local oscillator frequency $f_{LO}$ is interchangeably denoted as carrier frequency $f_c$.\\
 
 A block diagram, as well as the signal spectrum of the process is shown in Fig.\ref{fig:bd_down_conversion_spectrum}. In this example, the frequency of the LO is set to shift the signal from $f_m$ to baseband.
 
@@ -122,11 +117,10 @@ The procedure that is used for down-conversion is an amplitude modulation (AM).
 The equation for a generic AM signal is $ S_{AM}(t) = A_m m(t) \cdot A_c c(t) $, where $m(t)$ represents the message signal, and $c(t)$ is the high-frequency carrier.
 Their respective amplitudes are $A_m$ and $A_c$.
 This equation is depicted as a block diagram and signal spectrum in Fig.\ref{fig:bd_down_conversion_spectrum}, where $S_{AM}$ is denoted as the baseband signal $m_{BB}$ of the original signal $m$.
-
 The signal $m(t)$ is a baseband signal.
 It may be antenna signal that was filtered by a bandpass filter.
 The received signal is a real signal, and thus its negative frequency spectrum is an exact mirror of the positive frequencies.
-This fact can be explained in two simple equations.
+This fact can be explained in two simple equations.\\
 
 It is well-known that the real signal $cos(wt) = \frac{1}{2} \Big( e^{jw} + e^{-jw} \Big)$, which follows from $e^{jw} = cos(wt)+jsin(wt)$.
 Looking at the frequencies of the first equation, the negative and positive parts can be seen.\\
@@ -171,7 +165,6 @@ The superposition of the two parts results in an amount of energy that is again 
 
 Signal processing is often done in the digital domain, using digital signals.
 A digital signal is obtained by sampling an analog signal in a periodic interval, the so-called sampling frequency $f_s$.
-
 The sampling frequency needs to meet the sampling theorem, in order to correctly represent the analog signal.
 The sampling theorem, by Nyquist and Shannon mainly consists of the following formula.
 \begin{equation}
@@ -180,7 +173,6 @@ The sampling theorem, by Nyquist and Shannon mainly consists of the following fo
 
 In words: The sampling frequency must be higher than twice the frequency of the signals' highest frequency content.
 Any digital signal processing technique must hold the specification of the sampling theorem \cite[chpt. 4.2]{AlessioSilviaMaria2016DSPa}.
-
 In case the theorem is violated, the effect of aliasing occurs on the generated signal.
 The sampling process introduces spectral replicas at integer multiples of the sampling frequency $f_s$.
 These replicas overlap, if $f_s$ does not meet the theorem, which results in signal distortion.
@@ -232,7 +224,7 @@ More detailed information can be found in \cite[chpt. 6.9]{AlessioSilviaMaria201
 
 Frequency modulation (FM) is a widely used standard to transmit data streams.
 The probably best known usecase therefor is commercial broadcast radio, where an audio stream is transmitted.
-Devices to receive these streams are available for low prices to the public.
+Devices to receive these streams are available for low prices to the public.\\
 
 This section describes the main properties of broadcast FM, such as the mathematical description, frequency bands that are used, or the specific frequency parts within a channel spectrum.
 
@@ -251,7 +243,6 @@ The instantanious frequency $f_i$ of an FM signal can be described as
 \end{equation}
 where $f_c$ is the carrier- or center frequency, $\Delta f$ is the maximum frequency deviation and $m(t)$ is the information or message signal that is to be transmitted.
 Simply looking at this equation, the frequency deviation, which is sometimes also called the swing, varies in the range between $f_c \pm \Delta f$.
-
 Considering the relationship between frequency and angle, as described above, and after some simple substitutions which will not be described into detail here, the equation for a generic frequency modulated wave is the following
 \begin{equation}
   s(t) = A_c\ cos \Big( 2 \pi f_c t + 2 \pi k_f \int m(t) dt \Big)
@@ -264,7 +255,6 @@ This sensitivity factor has a direct relationship with the modulation index $\be
 \end{equation}
 where $f_m$ is the highest existing frequency, or the bandwidth of the information signal.
 % More info on modulation index: https://fas.org/man/dod-101/navy/docs/es310/FM.htm
-
 Formula \eqref{equ:fm_func} describes a frequency modulated signal with a generic message signal $m(t)$.
 A widely used example application of FM is broadcast radio, where audio streams are transmitted.
 An audio stream can be described as a cosine wave.
@@ -291,7 +281,7 @@ However, the transmission power needs to be limited, so that neighboring receive
 The European Commision specifies the power limit as 50 nW of effective radiated power (ERP) \cite{EuCommissionRadioSpectrumHarmonization}.
 Another limitation is, that a transmitter must be capable to transmit on multiple center frequencies within the broadcasting band.
 It must not be fixed to a single center frequency.
-Through this specification, a transmitter is capable of switching its transmission center frequency, in order to avoid interference with another transmitters signal.
+Through this specification, a transmitter is capable of switching its transmission center frequency, in order to avoid interference with another transmitters signal.\\
 
 In a practical usecase this means that a transmitter needs to select a channel or frequency range, that is not already occupied by an official transmitter.
 If a free range is found, the transmitter may start sending an FM signal with the mentioned power limitations \cite{EbuFmRegulators}.
@@ -328,9 +318,8 @@ This signal is built by the sum of the left and right audio channels.
 %The lower limit at 30 Hz is to prevent the transmission of a direct current (DC) part, which would require a large amount of power in transmission.
 %This effect is one of the downsides of amplitude modulation (AM), where the carrier is located at the channels' center frequeny and requires a high transmission power. % TODO: check this fact
 The upper limit at 15 kHz is chosen to maintain a sufficient spacing to the first subcarrier.
-
 For audio streaming, as in FM broadcasting, this is not a limitation, since it is unlikely to have frequencies higher than 15 kHz in an audio stream.
-Also, this already reaches the upper limit of the human ears' bandwith, so higher spectral parts will not be heard anyway.
+Also, this already reaches the upper limit of the human ears' bandwidth, so higher spectral parts will not be heard anyway.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Pilot Tone}
@@ -348,7 +337,7 @@ A signal that is constructed by the difference between the left and right audio 
 This subcarrier is an integer multiple of the pilot tone at 19 kHz, for practical reasons.
 However, the 38 kHz carrier is suppressed and thus not visible in the received spectrum.
 The modulation technique that is used for this spectral part is called dual-sideband suppressed-carrier (DSB-SC).
-Even though the carrier is suppressed, it can still be recovered, because it is phase coherent with the 19 kHz pilot tone per definition.
+Even though the carrier is suppressed, it can still be recovered, because it is phase coherent with the 19 kHz pilot tone per definition.\\
 
 The bandwidth for this difference-signal spans 15 kHz on either side of the subcarrier.
 It is used to generate a stereo audio signal, in combination with the mono signal.
@@ -358,7 +347,7 @@ This process is explained into more detail in chapter \ref{sec:demodulation-of-b
 \subsubsection{Additional Services}
 
 Considering all these parts in the spectrum, there is still free bandwidth available to use up to the maximum channel bandwitdh of 100 kHz in one sideband.
-Because of that, additional services were added to the pure audio transmission, to provide additional data services and information.
+Because of that, additional services were added to the pure audio transmission, to provide additional data services and information.\\
 
 Services that were implemented are the Data Radio Channel (DARC), which is mostly used in Japan and the USA, the Subsidary Communication Authorization (SCA) and the Radio Data System (RDS) \cite{RohdeSchwarzFM}.
 Out of these, RDS is the most significant service in Europe.
@@ -366,9 +355,9 @@ It is used to transmit additional information about the channel, such as the rad
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Pre-Emphasis and De-Emphasis}
-
-TODO
+%\subsection{Pre-Emphasis and De-Emphasis}
+%\label{sec:PreEmphasisAndDeEmphasis}
+%TODO
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Algorithms for Digital FM Demodulation}
@@ -382,10 +371,10 @@ In general, an FM demodulator serves the purpose to transform a frequency modula
 The radio frequency antenna signal usually needs to be amplified, bandpass-filtered, and down-converted to baseband, using subsampling and quadrature-mixing, or similar strategies.
 This part of the signal processing chain is assumed to be working correctly and is out of the scope of this chapter. %TODO: write up/down conversion in other chapter?
 The FM signal that is evaluated here is assumed to be a quadrature-mixed signal in baseband, which means that inphase and quadrature (I/Q) signals are available.
-
+%
 %TODO: show downconversion path (maybe as a figure?)
 %https://www.veron.nl/wp-content/uploads/2014/01/FmDemodulator.pdf
-
+%
 In the following sections, two digital FM demodulator variants are described.
 
 % TODO: add img/discrimination_method_bd2.png here (?)
@@ -405,7 +394,7 @@ The discriminator consists of two main parts - a differentiator and an envelope 
 Different strategies can be implemented for both parts.
 A block diagram for a frequency discriminator with its two main parts is shown in Fig.\ref{fig:bd_freq_discriminator}.
 
-\includepicture [0.75] {Frequency discriminator block diagram \cite{FigBdFreqDiscriminator}.} {bd_freq_discriminator} {img/draw.io/bd_freq_discriminator}
+\includepicture [0.75] [0] [H] {Frequency discriminator block diagram \cite{FigBdFreqDiscriminator}.} {bd_freq_discriminator} {img/draw.io/bd_freq_discriminator}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Differentiator}
@@ -448,7 +437,7 @@ where $\Delta t$ is the inverse of the sample frequency.\\ %TODO: check this (i'
 
 The differentiated signal still consists of a FM part, as explained above, using Eq.\eqref{equ:fm_demod_discriminator}.
 In order to remove this high-frequeny part and extract the low-frequency envelope, the signal needs to be fed into an envelope detector.
-A block diagram is shown in Fig.\ref{fig:bd_freq_discriminator}.
+A block diagram is shown in Fig.\ref{fig:bd_freq_discriminator}.\\
 
 The method implemented in Fig.\ref{fig:time_domain_envelope_detect} is one of the most simple ones and is usually referred to as `Asynchronous Half-Wave Envelope Detector' \cite{DSPRelatedEnvelopeDetection}.
 It consists of a thresholding unit to remove negative values and a conventional lowpass filter.
@@ -477,7 +466,7 @@ The envelope is followed more exactly, because of the higher power that is avail
 A Phase-Locked Loop (PLL) can also be used to transform an FM signal to an AM signal.
 A PLL is a feedback loop that is usually used to generate an output signal that has a fixed phase reference to its input.
 In the case of FM demodulation, the loop filter in the feedback branch is configured to be able to follow the frequency variations on the input, which is directly related to the encoded information.
-The output of the PLL directly delivers an AM signal, which corresponds to the transmitted information. \cite{SchnyderHaller2002}
+The output of the PLL directly delivers an AM signal, which corresponds to the transmitted information. \cite{SchnyderHaller2002}\\
 
 FM demodulation with a PLL is not described into more detail, since this thesis is focussing on the concept of an entire system architecture.
 
@@ -487,9 +476,8 @@ FM demodulation with a PLL is not described into more detail, since this thesis 
 
 This section describes the demodulation of the information content of an FM broadcast channel, as it is used in commercial FM radio broadcasting.
 The assumption here is, that the actual FM demodulation, as described in chapter \ref{sec:algorithms-for-digital-fm-demodulation} is already done correctly, including the de-emphasis of the signal.
-
 So at this point the FM signal is converted to an AM signal.
-Thus, traditional AM DSP techniques can be employed to decode the FM broadcast channel.
+Thus, traditional AM DSP techniques can be employed to decode the FM broadcast channel.\\
 
 A frequency spectrum of the multiplex signal of an FM channel is shown in Fig.\ref{fig:fm_channel_baseband_freqs}.
 
@@ -540,7 +528,7 @@ The signals $x_l(t)$ and $x_r(t)$ describe the left and right audio signal, resp
 The central branch selects the pilot tone at 19 kHz with a bandpass filter.
 This bandpass needs to have a frequency response that is sharp enough to have a sufficient attenuation at $\pm$4 kHz, since this is where the mono and difference signals' frequency spectra are allocated.
 Afterwards, the pilot tone frequency is doubled to achieve a 38 kHz subcarrier.
-This guarantees a phase-coherency between pilot and subcarrier, which is required to correctly shift the difference signal down to baseband.
+This guarantees a phase-coherency between pilot and subcarrier, which is required to correctly shift the difference signal down to baseband.\\
 
 The frequency doubling can be implemented with multiple methods.
 The pilot tone can be modulated by simply multiplying it with itself.

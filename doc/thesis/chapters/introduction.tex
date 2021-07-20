@@ -9,8 +9,7 @@ All of these disciplines find their application in an embedded system.
 Multiple different methods of implementation are introduced for each topic and their usage is tested in practical sessions.
 However, in the setting of a university course it is not always possible to look at the currently handled topic as a part of a larger, integrated system.
 Instead, it is often treated as a standalone part that fulfills its own, specific functionality.
-
-Therefore, one of the main motivation points of this thesis is to combine several disciplines and multiple implementation methods in a common context of a single project.\\
+Therefore, one of the main motivation points of this thesis is to combine several disciplines and multiple implementation methods into a single system design, and treat it in this common project context.\\
 
 In a more general perspective, the current electronics market situation is a huge motivational factor as well.
 Smart devices, smart sensors, Internet of Things (IoT) and many similar terms are well-known and are becoming more and more present in the publics' daily lives.
@@ -38,13 +37,12 @@ Additionally, it is a comparably simple signal to demodulate, but still requires
 \section{Objective}
 
 The main objective of this thesis is to elaborate a system design for an embedded system, that combines all the knowledge of different disciplines and topics which are accumulated over the time of the university program, in a single project.
-
 This includes the development of a system model in a tool like Matlab, the practical usage and implementation of DSP in an FPGA, the development of a digital receiver and the deployment on actual hardware.\\
 
 The receiver implementation on the FPGA is to be done in two variants.
 The first variant is traditional, manually written hardware description language (HDL) in the programming language VHDL, as it has been done for years.
 For the second variant, high-level synthesis (HLS) is employed, to generate the low-level HDL from high-level \cplusplus\ code.
-These two methods are implemented and compared on the basis of usability and some metrics.
+These two methods are implemented and compared on the basis of usability and some metrics.\\
 
 In the view of a system design approach, another focus is put on a sustainable testing and development strategy for the entire system.
 Above mentioned implementation variants should optimally share as much as possible of testing and verification code, in order to save time and effort in implementation.
