@@ -12,10 +12,12 @@ The theory behind the demodulation of an FM signal is already explained in Chapt
 The demodulation of an FM broadcast channel specifically, is described in Section \ref{sec:demodulation-of-broadcast-fm}.
 In this section however, the DSP chain is described into more detail and with more information, as it is implemented in the various methods.\\
 
-Fig.\ref{fig:bd_dsp_detailed} displays the detailed DSP chain as a block diagram.
+\noindent
+Fig.\ref{fig:bd_dsp_detailed} displays the detailed DSP chain as a block diagram.\\
 
-\includepicture [1.02] [0] [H] {Detailed block diagram of the digital signal processing chain.} {bd_dsp_detailed} {img/draw.io/bd_dsp_detailed}
+%\includepicture [1.02] [0] [H] {Detailed block diagram of the digital signal processing chain.} {bd_dsp_detailed} {img/draw.io/bd_dsp_detailed}
 
+\noindent
 The following list explains implementation details about the respective DSP blocks.
 \begin{itemize}
   \item \textbf{Data Source}\\
@@ -71,8 +73,10 @@ The following list explains implementation details about the respective DSP bloc
   \item \textbf{Carrier Recovery}\\
       The 38 kHz carrier can be recovered from the 19 kHz pilot tone.
       It is important that the recovered carrier is phase-coherent with the received input, as described in Section \ref{sec:demodulation-of-broadcast-fm}.
-      This can be achieved, by simply multiplying the pilot tone with itself, which is the way it is implemented here.
+      This can be achieved, by simply multiplying the pilot tone with itself, which is the way it is implemented here.\\
 \end{itemize}
+
+\includepicture [1.02] [0] [H] {Detailed block diagram of the digital signal processing chain.} {bd_dsp_detailed} {img/draw.io/bd_dsp_detailed}
 
 \noindent
 Several of the listed details are implemented, in order to achieve a successful demodulation of the FM signal.
@@ -81,7 +85,7 @@ Several of the listed details are implemented, in order to achieve a successful 
 \section{Matlab Model}
 
 Matlab is used to create a model of the receiver, which is used as a reference for the other implementation variants.
-Here, DSP algorithms are tested and evaluated, to find a method that is suitable to implement in hardware, specifically in an FPGA.
+Here, DSP algorithms are tested and evaluated, to find a method that is suitable to implement in hardware, specifically in an FPGA.\\
 
 The Matlab script consists of a transmitter, the receiver model, and additional code for analysis.
 
@@ -110,15 +114,15 @@ To facilitate an easy understanding of the block diagram, it is of advantage to 
 
 The transmitter reads an audio file, including a left and a right channel in the first step.
 The audio file contains data in a sample rate of 48 kHz.
-Next, the sample rate is increased by an oversampling factor of 20, to achieve a sufficient sample rate for the subsequent DSP procedures.
+Next, the sample rate is increased by an oversampling factor of 20, to achieve a sufficient sample rate for the subsequent DSP procedures.\\
 
 The achieved sample rate of 960 kHz could actually be chosen much lower, since an FM channels' maximum frequency is 75 kHz (see \ref{sec:FrequencySpectrumOfABroadcastFmChannel}), and according to the Nyquist theorem the sample rate thus only needs to have 150 kHz (see \ref{sec:SamplingTheorem}).
 However, the higher rate was chosen, mainly because a higher number of signal samples beautify any plots that are created during analysis.
-Since a thorough optimization of the DSP chain is not the focus of this thesis, this was an acceptable trade-off.
+Since a thorough optimization of the DSP chain is not the focus of this thesis, this was an acceptable trade-off.\\
 
 The next step is the pre-emphasis filter, which is implemented, but is disabled in the receiver.
 This is done to reduce some complexity in the hardware implementation.
-The following stage generates the Mono and LR Diff signals, by simply calculating the summation and diffence of the left and right channels, respectively.
+The following stage generates the Mono and LR Diff signals, by simply calculating the summation and diffence of the left and right channels, respectively.\\
 
 The next section in the block diagram represents multiple processes in parallel.
 The LR Diff part is shifted to 38 kHz in the spectrum.
@@ -128,25 +132,24 @@ It band-limits the spectrum of the LR Diff part between 23 and 53 kHz.
 The BP filter introduces a constant group delay of the signal.
 In order to maintain the alignment of all signals, this side-effect needs to be accounted for and be compensated in the other signal branches.
 Thus, the Mono signal, as well as the Pilot Tone need to be delayed by the amount of samples defined by the BP filters' group delay.
-The subsequent amplifier blocks create the defined proportions of the sub-band, such as 90\% for the audio parts, and 10\% for the Pilot Tone \cite{FmMultiplexingForStereo}.
+The subsequent amplifier blocks create the defined proportions of the sub-band, such as 90\% for the audio parts, and 10\% for the Pilot Tone \cite{FmMultiplexingForStereo}.\\
 
 One part in this block diagram is the so-called Hinz Triller, which was part of the Autofahrer-Rundfunk-Information service (ARI, German for Automotive-Driver's-Broadcasting-Information).
 It was used as an indicator for traffic announcements.
 It is now obsolete and is replaced by the more modern Radio Data System (RDS).
 However, the Hinz Triller is still transmitted in many radio stations and can often be heard before and after the traffic announcements \cite{HinzTriller}.
-In the implemented transmitter, the Hinz Triller is implemented, but is disabled, since it only represents a temporarily transmitted signal.
+In the implemented transmitter, the Hinz Triller is implemented, but is disabled, since it only represents a temporarily transmitted signal.\\
 
 The Radio Data System (RDS) signal is not implemented in the transmitter, since it consists of a comprehensive protocol and multiple steps of modulation, such as differentially-coded BPSK \cite{IntroFmStereoRdsModulation} and is therefor too time-consuming to implement.
-Furthermore, it would not contribute any additional value to this project, since this is not the main focus.
+Furthermore, it would not contribute any additional value to this project, since this is not the main focus.\\
 
-At this point in the DSP chain, the signal resembles the frequency spectrum of Fig.\ref{fig:fm_channel_baseband_freqs}.
+At this point in the DSP chain, the signal resembles the frequency spectrum that is displayed in Fig.\ref{fig:fm_channel_baseband_freqs}.\\
 
 In the final chain of DSP blocks, the sample rate is increased again, to be able to frequency-modulate the signal.
 The resulting frequency modulated signal represents the signal that is received by an antenna - the RF signal of an FM channel.
 This signal is then processed by a complex baseband mixer, which results in inphase-, and quadrature components in the baseband.
 An LP filter band-limits the signal and removes artifacts of the mixer.
 As a final step, the sample rate is decreased again, back to the chosen sampling rate of 960 kHz.
-
 This signal can now be processed in a digital FM receiver.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -202,7 +205,7 @@ However, the result shows a clear separation of the left and right channels, as 
 \includepicture [1.0] [0] {Matlab analysis in the time domain.} {matlab_analysis_time_domain} {img/matlab/matlab_analysis_time_domain}
 
 Further analysis is done in the frequency domain, especially in order to better understand the modulation of the different spectral parts in the FM channel.
-An example thereof is shown in Fig.\ref{fig:matlab_analysis_freq_domain}.
+An example thereof is shown in Fig.\ref{fig:matlab_analysis_freq_domain}.\\
 
 The spectrum of an FM channel, as it is generated by a transmitter before the modulation, is shown in the upper diagram.
 The spectrum after the demodulation through a receiver is shown in the lower diagram.
@@ -239,7 +242,7 @@ Both devices are supported by GNU Radio and are briefly described here.
 The USRP b200mini is a device that can be used to create a software-defined radio.
 It resembles the size of a business card and is developed by Ettus Research.
 A signal range from 70 MHz to 6 GHz can be covered by the front end.
-The board further features a Xilinx Spartan-6 FPGA that is user-programmable, which makes the device very flexible for various applications with the received signal \cite{USRPb200Mini}.
+The board further features a Xilinx Spartan-6 FPGA that is user-programmable, which makes the device very flexible for various applications with the received signal \cite{USRPb200Mini}.\\
 
 GNU Radio supports this device with the blocks \textit{UHD: USRP Sink} and \textit{UHD: USRP Source}.
 Therefore, it can be used as both a receiver and a transmitter.
@@ -248,8 +251,9 @@ Therefore, it can be used as both a receiver and a transmitter.
 
 The RTL-SDR is a cheap USB dongle, that was originally developed as a DVB-T TV tuner.
 It is based on the RTL2832U chipset, which includes an 8-bit ADC and a digital signal processor.
-The device delivers IQ data via the USB interface \cite{RTLSDR}.
+The device delivers IQ data via the USB interface \cite{RTLSDR}.\\
 
+\noindent
 Based on its hardware, the RTL-SDR can only be used as a receiver.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -257,7 +261,7 @@ Based on its hardware, the RTL-SDR can only be used as a receiver.
 
 GNU Radio provides a comprehensive set of DSP blocks, which are available to build various functionalities.
 Multiple blocks are connected to a block diagram, that is very similar to the one in Fig.\ref{fig:bd_matlab_transmitter}.
-The USRP device is used to broadcast the RF signal over the air.
+The USRP device is used to broadcast the RF signal over the air.\\
 
 Again, an audio file is used as an input, which is modulated as an FM channel signal.
 The entire multiplex signal is then modulated onto an actual carrier frequency of 99 MHz, that is within the FM radio broadcast band.
@@ -265,12 +269,12 @@ This entire DSP chain is being run in the GNU Radio software, on a host PC.
 Only the final signal - FM modulated, and on a carrier of 99 MHz - is then sent to the USRP device in the form of digital signal samples.
 The USRP hardware then transmits the signal via its antenna.\\
 
-\noindent
 Special care needs to be taken when transmitting signals over the air.
 The frequency spectrum is strongly limited by the radio regulations and may be monitored by the authorities.
 Please make sure to adapt your setup to the respective local regulations, to avoid any legal issues.
-Some of the regulations are mentioned in \ref{sec:FrequencyBand}, but may differ in various countries, however.
+Some of the regulations are mentioned in \ref{sec:FrequencyBand}, but may differ in various countries, however.\\
 
+\noindent
 Fig.\ref{fig:bd_gnuradio_setup_transmitter} shows a block diagram of the transmitter application.
 
 \includepicture [0.9] [0] [H] {Block diagram of the GNU Radio transmitter setup.} {bd_gnuradio_setup_transmitter} {img/draw.io/bd_gnuradio_setup_transmitter}
@@ -284,10 +288,9 @@ The implemented structure however does not represent a stereo receiver.
 Instead, a mono receiver is implemented.
 The antenna signal is FM-demodulated, decimated and then directly sent to the speakers as the output, without any further processing.
 This simple receiver was intended as a proof-of-concept and a first example of the cooperation of the external hardware and the GNU Radio software.
-Thus, the mono receiver was sufficient, as the focus of the GNU Radio application is put on the transmitter side.
+Thus, the mono receiver was sufficient, as the focus of the GNU Radio application is put on the transmitter side.\\
 
 This receiver works with both devices, the USRP b200mini and the RTL-SDR.
-
 Fig.\ref{fig:bd_gnuradio_setup_receiver} shows a block diagram of the receiver application.
 
 \includepicture [0.9] [0] [H] {Block diagram of the GNU Radio receiver setup.} {bd_gnuradio_setup_receiver} {img/draw.io/bd_gnuradio_setup_receiver}
@@ -309,7 +312,7 @@ This signal could be recorded to file by another SDR, or sourced into the DUT (d
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{VHDL (TODO: no shortcut?)}
+\section{VHDL}
 
 In this section, the most important details of the VHDL implementation are described.
 This implementation variant is one of the two major implementation focus points of this thesis.
@@ -325,7 +328,7 @@ The general significance of a simulation testbench in hardware description langu
 
 In the development of software that runs on a CPU, the tool of step-by-step debugging is commonly used during the development process.
 Various verification and testing libraries exist, in order to create unit tests, for example.
-The advantage is, that the code that is developed there, can be compiled and run on the target CPU directly, while maintaining the direct step-by-step representation of the code.
+The advantage is, that the code that is developed there, can be compiled and run on the target CPU directly, while maintaining the direct step-by-step representation of the code.\\
 
 However, in the development of hardware with any HDL, this is not possible.
 HDL languages provide a syntax and semantic representation that allow to create parallel structures and a dependency on timing, such as a system clock.
@@ -338,8 +341,7 @@ Additionally, it is impossible to access every single signal within the design d
 Synthesis tools like Xilinx Vivado provide support to make debugging possible in hardware, but require a large effort to implement them, especially in terms of synthesis time.
 Another big factor that speaks against debugging in hardware generally, is that the process of synthesis takes a comparably large amount of time to transform code into the target technology.
 Each time the code is adapted, the entire synthesis process needs to be started over again.
-
-Because of all these reasons, debugging HDL code step-by-step as in software is not possible.\\
+Because of all of these reasons, debugging HDL code step-by-step as in software is not possible.\\
 
 Thus, in order to allow debugging and verification of HDL code, the technology of simulation was invented.
 Here, the HDL is also translated into a netlist that represents all the parallel processes just like in hardware, but the subsequent step of synthesis is not taken.
@@ -374,10 +376,11 @@ The interface that is used to the simulator is the industry-standard VPI.\\
 One of the main advantages of cocotb is, that test cases for the respective RTL code are written in the language Python.
 It is therefore also called a co-simulation framework.
 Using Python provides a large factor of flexibility and possibilities, since it is a comprehensive language, considering all its extension libraries.
-Additionally, Python may be more familiar to engineers in comparison to VHDL and thus, writing testbenches is made simpler with cocotb.
+Additionally, Python may be more familiar to engineers in comparison to VHDL and thus, writing testbenches is made simpler with cocotb.\\
 
 The test cases in Python are implemented as coroutines.
-By the way, the name cocotb is constructed by the words \textit{CO}routine, \textit{CO}simulation and \textit{T}est\textit{B}ench \cite{cocotbDoc}.\\
+By the way, this is where cocotb gets its name from.
+It is constructed by the words \textit{CO}routine, \textit{CO}simulation and \textit{T}est\textit{B}ench \cite{cocotbDoc}.\\
 
 Fig.\ref{fig:bd_cocotb_interface_simulator} gives an overview of how cocotb interfaces with a simulator.
 The Python test cases are shown as a list of coroutines, which are managed by a scheduler.
@@ -392,7 +395,7 @@ The RTL simulation itself is managed by the simulators' scheduler.
 \subsection{Testbench Architecture}
 \label{sub:VHDL:TestbenchArchitecture}
 
-The architecture for this testbench is created under the assumptions and according to the guidelines that are developed in Chapter \ref{cha:SystemArchitectureAndConcept}.
+The architecture for this testbench is created under the assumptions and according to the guidelines that are developed in Chapter \ref{cha:SystemArchitectureAndConcept}.\\
 
 Fig.\ref{fig:bd_testbench_architecture_vhdl} shows a block diagram of the implemented architecture.
 The split between the Python environment and the VHDL implementation is clearly visible but is represented from the developers perspective.
@@ -405,8 +408,7 @@ This data is supplied to the input of the DUT.
 The DUTs' input and output is implemented as an AXI Stream interface, which is an interface that features a valid-, as well as a ready-signal along with the data.
 The cocotb framework supports both an AXI Stream Master, and an AXI Stream Slave class, to write and read the input and output, respectively.
 In that way, the interface signals are abstracted to simple read- and write-function calls in the Python code, while the actual signal handling is done in the mentioned cocotb library classes.
-
-A clock generator class is also available from cocotb, which is used to provide the system clock to the DUT.
+A clock generator class is also available from cocotb, which is used to provide the system clock to the DUT.\\
 
 The Python classes \textit{tb\_analyzer\_helper}, \textit{tb\_data\_handler} and \textit{fm\_receiver\_model} are implemented to create a better structure of the testbench and to provide code that is re-useable for the testbench of the HLS implementation.
 The \textit{tb\_analyzer\_helper} class provides functions to analyze the data, such as comparison against defined error thresholds or the creation of graphical plots with Pythons' matplotlib library.
@@ -414,7 +416,7 @@ The \textit{tb\_data\_handler} only works as a data storage class, that encapsul
 The class called \textit{fm\_receiver\_model} serves as the 'golden model reference' that is used to compare the DUT against.
 Internally, it loads the Matlab verification data.
 This could be implemented differently, since Python can be used to actually implement an FM receiver including the entire DSP functionality, just like in Matlab.
-Because the Matlab model already exists, this is not done here - loading the Matlab data is sufficient as it is been seen as 'the single source of truth' in this project.
+Because the Matlab model already exists, this is not done here - loading the Matlab data is sufficient as it is been seen as 'the single source of truth' in this project.\\
 
 At the end of the test cases, the DUTs' output data is written to a file.
 This data is later used to directly compare the different implementation variants against each other.
@@ -427,23 +429,37 @@ Unit tests specifically target a single unit, while integration tests verify the
 Both of these stragegies are important.
 Given all unit tests being successful, it is ensured that all these single units are implemented correctly.
 However, their combination and interaction may still be subject to error - this is where integration tests unfold their potential.
-Implementation errors in the glue logic between the units, as well as the interaction of the respective interfaces can be found in these integration tests.
+Implementation errors in the glue logic between the units, as well as the interaction of the respective interfaces can be found in these integration tests.\\
 
 The testbench architecture presented above represents an integration test, since the DUT is tested as an entire block.
 The advantage thereof is, that it tests the DUT in the same way as it will be integrated within the target hardware, the FPGA.
 However, in case the DUT fails to produce a correct output in the integration test, it is not always visible where exactly the error is located.
-The source of error may be located, or hidden within the nested and interconnected units.
-Thus, in addition to the DUTs' interfaces, additional signals are logged from the inside of the DUT. that can be accessed through the testbench. white box: disadvantage: test needs to change as well, when implementation changes
---> white box, black box
+The source of error may be hidden anywhere within the nested and interconnected units.
+Thus, in addition to the DUTs' interfaces, further signals are logged from the inside of the DUT.
+These internal signals can be accessed through the Python testbench.\\
+
+In this context, there are further keywords that need to be mentioned - black box testing and white box testing.
+These are testing strategies, and describe how the DUT is treated.
+In the case of black box, the DUTs internals, such as implementation details, are not known.
+Thus, only the exposed interfaces can be tested.
+In the white box as a contrary, every detail of the internal structure is known.
+Thus, even single signals can be accessed, which is what is done in this Python testbench.
+The advantage of the white box is, that these internals can be tested.
+However, any time the implementation changes, even if it is just the naming of a signal, the testbench code needs to be adapted as well.
+In black box testing, the testbench code is independent of the detailed implementation of the DUT, as long as it maintains its required behaviour at the exposed interfaces.
+However, the disadvantage is that internal states cannot be observed.\\
+
+The Python testbench that is implemented combines the advantages of both worlds and uses black box testing, as well as white box testing.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Unit Tests}
-FIR the only unit that is worth the effort (others are only delays, and additions/substractions respectively)
 
-A unit test only targets a single unit of the system, as the name already describes.
-This is in the contrary to an integration test, which tests the combination of several units into an integrated system.
-The testbench architecture that is developed in \ref{sub:VHDL:TestbenchArchitecture} represents such an integration test.
-However, if an integration test fails, it is not always
+A unit test only targets a single unit, or module, of the system, as the name already describes.
+This is in the contrary to an integration test, which tests the combination of several units into an integrated system, as explained above.\\
+
+In this project, the only module that has its dedicated unit test is the FIR filter.
+The reason therefor is, that it is the most complex unit within the entire design and is used in multiple instances.
+All the other design units mostly consist of simple delay lines, additions or substractions and thus a special unit test is not implemented.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{TODO: Other Stuff...}
