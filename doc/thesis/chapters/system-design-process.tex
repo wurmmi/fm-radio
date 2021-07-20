@@ -148,7 +148,7 @@ Therefore, a test engineer should be familiar with the problem statement.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{System Design Targeting FPGAs}
 
-A wide range of design approaches are available that are targeting FPGAs.
+A wide range of system-level design approaches are available that are targeting FPGAs.
 In this section, some selected approaches are described.
 The research for this section is mainly based on \cite{GesslerRalf2014EES}.
 
@@ -175,12 +175,32 @@ Furthermore, the V-model diagram in Fig.\ref{fig:v_modell} shows the difference 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{High-Level Synthesis}
-\cplusplus\\
-SystemC (deprecated for synthesis by Xilinx)\\
 
-A comprehensive list of HLS tools can be found in Section 3.3 of \cite{2016FfSP}
+High-Level Synthes (HLS) is an FPGA design methodology that provides a high level of abstraction, and thus can be seen as a system level design method.
+Different languages are used for HLS - two well-known languages are SystemC, which is a library for \cplusplus\ to provide modelling and simulation features, and plain \cplusplus.
+A comprehensive list of available HLS tools and languages can be found in Section 3.3 of \cite{2016FfSP}.\\
 
-HLS is described into more detail in section \ref{cha:HLS}.
+The main idea of HLS is, that the hardware design can be written in abstract modules, that represent the actual functional meaning of a feature or algorithm, rather than the complex, low-level hardware details.
+HLS achieves this by allowing to develop the code in a high-level language, such as \cplusplus.
+This high-level code is then automatically transformed into hardware description language (HDL) by the respective HLS tool.\\
+
+In this thesis, only the HLS of plain \cplusplus\ is covered.
+SystemC is not discussed, since it may potentially be less important in the future.
+In the latest Xilinx HLS tools 'Vitis HLS' and 'Vivado HLS', the language SystemC is already deprecated \cite{VivadoHlsSystemC}.\\
+
+\noindent
+HLS is described into more detail in Chapter \ref{cha:HLS}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Direct Implementation}
+
+The implementation of low-level hardware description language (HDL) in the register transfer level (RTL) is denoted as 'direct', or 'manual' implementation in this thesis.\\
+
+Two commonly used languages therefor are VHDL and Verilog.
+Both have similar features to describe hardware in the signal level, with parallel structures and timing-dependent architectures.
+The languages can describe a design in a hierarchical order, so that the separate modules can be constructed in a way that an overview of the functionality of the system remains given.
+Synthesis, as well as simulation is supported, which allows efficient development of RTL designs.\\
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Implementation with Tool Support}
@@ -189,8 +209,6 @@ see \cite{GesslerRalf2014EES}\\
 Matlab Simulink System Generator\\
 Matlab Simulink HDL Coder\\
 
-%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Direct Implementation}
+In Fig.\ref{fig:fpga_design_levels}, multiple implementation methods are compared, with their respective levels of abstraction.
 
-direct, or 'manual' implementation\\
-VHDL/Verilog\\
+\includepicture [0.5] [0] {Abstraction levels of the different implementation languages \cite[Abbildung 5.1]{GesslerRalf2014EES}.} {fpga_design_levels} {img/fpga_design_levels}
