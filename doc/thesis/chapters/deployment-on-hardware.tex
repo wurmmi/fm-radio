@@ -2,31 +2,99 @@
 \chapter{Deployment on Hardware}
 \label{cha:DeploymentOnHardware}
 
+This chapter describes the additional parts of implementation that are necessary in order to run the implemented FM radio on actual hardware.
+The hardware that is used is introduced as well.
+
 %%%%%%%%%%%%%%%%%%%%
-\section{GNU Radio Transmitter}
+\section{GNU Radio}
 
+The GNU Radio implementations, both receiver and transmitter, are used in combination with external hardware.
+The specific hardware that is used is briefly described here.\\
+
+In order to interface with the real world, two different hardware devices are used.
+Both devices are supported by GNU Radio and are briefly described here.
 
 %%%%%%%%%%%%%%%%%%%%
-\section{Hardware Platform}
-ZedBoard
+\subsection{Ettus Research USRP b200mini}
 
+The USRP b200mini is a device that can be used to create a software-defined radio.
+It resembles the size of a business card and is developed by Ettus Research.
+A signal range from 70 MHz to 6 GHz can be covered by the front end.
+The board further features a Xilinx Spartan-6 FPGA that is user-programmable, which makes the device very flexible for various applications with the received signal \cite{USRPb200Mini}.\\
+
+GNU Radio supports this device with the blocks \textit{UHD: USRP Sink} and \textit{UHD: USRP Source}.
+Therefore, it can be used as both a receiver and a transmitter.
 
 %%%%%%%%%%%%%%%%%%%%
 \subsection{RTL-SDR}
-RTL2832U USB Dongle
+
+The RTL-SDR is a cheap USB dongle, that was originally developed as a DVB-T TV tuner.
+It is based on the RTL2832U chipset, which includes an 8-bit ADC and a digital signal processor.
+The device delivers IQ data via the USB interface \cite{RTLSDR}.\\
+
+\noindent
+Based on its hardware, the RTL-SDR can only be used as a receiver.
+
 
 %%%%%%%%%%%%%%%%%%%%
-\section{Additional Implementation}
+\section{FPGA Hardware Platform}
 
-Chapter \ref{cha:Implementation} already described the development of the main IP.
-In order to embed this IP on actual hardware, a significant additional amount of implementation is neccessary.
+The ZedBoard is a development board that is developed by Xilinx.
+It is specifically designed around the Xilinx Zynq-7000 SoC, which contains a dual-core ARM Cortex A9 processor core and a programmable logic, the FPGA.
+The board further offers a range of features from external DDR3 memory, over various connectors, such as RJ45 Ethernet, USB, 3.5 mm audio, HDMI, Pmod, buttons to LEDs and a display.\\
+
+The most important features for this project are the audio line-out connector and the SD card port.
+Additionally, the LEDs are used to display various status information during runtime of the FM receiver.
+
+\includepicture [0.75] [0] [H] {The ZedBoard PCB \cite{ZedBoard}.} {zedboard_photo} {img/zedboard_photo}
+
+%%%%%%%%%%%%%%%%%%%%
+\section{System-On-Chip Design}
+
+Chapter \ref{cha:Implementation} already described the development of the main IP core, which is the FM radio receiver in the VHDL and HLS variants.
+In order to embed this IP on actual FPGA, or rather SoC hardware, a significant additional amount of implementation is neccessary.
 In this section, these additional parts of the implementation, which specifically enable and support the deployment on hardware, are described.
 
 %%%%%%%%%%%%%%%%%%%%
-\subsection{Block Diagram}
+\subsection{Architecture}
+
+The block diagram in Fig.\ref{fig:bd_impl_vivado} shows the implemented architecture that is used in the SoC.
+The various design domains in and around the SoC are depicted in different visual representations.
+The FPGA domain blocks are highlighted in gray.
+The processor system domain is shown as white blocks.
+Blocks that are external to the SoC are drawn with dashed lines.
 
 \includepicture [1.0] {Block diagram of the Vivado implementation.} {bd_impl_vivado} {img/draw.io/bd_impl_vivado}
 
 %%%%%%%%%%%%%%%%%%%%
+\subsection{Functionality}
+%TODO: re-work this section for better wording
+%TODO: refer to above theory chapters, with verification and HIL, etc..
+The FM receiver IP is the main functionality of the design.
+However, the design around it needs to function properly in order for the IP to work correctly, which is explained in the following passage.\\
+
+The CPU is the main actor that determines any actions on the system.
+It reads a file from the external SD card and stores this data in a dedicated memory area.
+Next, the DMA is configured and a continuous transfer mode is initiated, so that the data in the mentioned memory area is transferred into the FPGA in a loop.
+Any data connection in the following IP block chain is implemented as an AXI stream bus.
+The first block after the DMA is an AXI Stream Switch.
+It can switch its single input to be forwarded to either of the outputs.
+The switch is configured by the CPU, to enable one output at a time.
+Consequently, one of the FM radio receiver IPs is provided with data, which is processed to produce an audio output.
+This audio output data is delivered to another AXI Stream Switch, that fulfills the function to either select the output of above or below IP, in coordination with the first switch, obviously.
+The next block is an AXI Stream Broadcaster, which takes a single stream input and simply duplicates it at its output, so that the outputs are an exact copy of the input.
+One of these duplicates is sourced to an AXI-Stream-To-I2S converter, which generates the I2S signals for the external audio codec chip.
+The second duplicate is connected to a FIFO, which simply stores the generated output data.
+The FIFO asserts an interrupt to the CPU, on which it reads out the entire FIFO buffer.
+The CPU then stores this data on the external SD card again.
+In that way, the loop of data is closed, which enables the verification of the respective IPs correct functionality.
+Therefore, this system design can be described as a hardware-in-the-loop system, in the point of view of the FPGA IPs.\\
+
+It is to note, that Xilinx provides all the AXI infrastructure IPs, and thus the only self-implemented IPs are the FM radio receivers, as well as the I2S interface.
+Nevertheless, the correct design and implementation of the architecture still needs to be formulated by the user.
+
+%%%%%%%%%%%%%%%%%%%%
 \subsection{Software}
 
+drivers for IPs, libraries to interface with e.g. SD card, etc\\
+--> look at software which parts may be interesting to highlight
