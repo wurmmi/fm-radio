@@ -2,7 +2,7 @@
 \chapter{High-Level Synthesis}
 \label{cha:HLS}
 
-This chapter talks about High-Level Synthesis in general, but also specifically describes the details of the Xilinx HLS.
+This chapter covers High-Level Synthesis in general, but also describes details that specifically apply to Xilinx.
 The main sources of information for this chapter are found in \cite{VivadoUgHLSIntro}and \cite{VivadoUgHLS}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -24,26 +24,59 @@ This high-level code is then transformed into the low-level RTL automatically, b
 
 The usage of HLS tries to bring software- and hardware development closer together and tries to make these two worlds more similar.
 In software development, there are different compilers for multiple processor architectures, which can be used to port a program to another target hardware.
-The idea of HLS is to create the same level of abstraction - write code in a high-level language, which is agnostic of its target hardware architecture.
+The idea of HLS is to create the same level of abstraction - write code in a high-level language, which is agnostic of its target hardware architecture.\\
+
+A major achievement in the usage of HLS is the shorter development time.
+The time that it takes to develop a first working version of the intended design can be significantly reduced, compared to the development in RTL code directly.
+This is especially important when an FPGA design is combined with a software part, like in a System On Chip, since software development is comparably fast.
+Fig.\ref{fig:timeline_performance_first_prototype} schematically displays the difference in development time, over performance and degree of optimization, when the same functionality of a prototype is implemented in different methods for various targets.
+The compared targets are an x86 processor CPU, a digital signal processor (DSP), a graphics processing unit (GPU) and the FPGA design in RTL or HLS implementation.
+It is clearly visible, that the FPGA design with the HLS design approach achieves a first working prototype much earlier than the direct RTL approach.
+
+\includepicture [0.8] [0] {Design Time vs. Application Performance, if the same functionality is implemented in different methods for various targets \cite[Figure 1-1]{VivadoUgHLSIntro}.} {timeline_performance_first_prototype} {img/timeline_performance_first_prototype}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{State Of The Art}
 
+- usage in percentage (market share), compared to direct RTL coding\\
+
+-  Language Support\\
+\cplusplus and SystemC\\
+In the latest Xilinx HLS tools 'Vitis HLS' and 'Vivado HLS', the language SystemC is already deprecated \cite{VivadoHlsSystemC}.\\
+
+- efficiency (see \cite[II.C.: State of the Art]{CompareHlsVHDLArticle})\\
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Functionality}
-transform high-level code to HDL
+
+transform high-level code to HDL.\\
+-analysis\\
+-scheduling\\
+-pipelining\\
+
+- Limitations\\
+dynamic memory allocation, etc.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Language Support}
+\section{Workflow}
 
+see Chapter "Software Verification and Vivado HLS" of \cite{VivadoUgHLSIntro}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{\cplusplus}
+- recommended to use software verification tools, like valgrind or Coverity (dynamic code checker)\\
+- use code coverage with e.g. gcov for testbench
 
-%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{SystemC}
+general workflow:
+- develop c/c++\\
+- verify it using above mentioned software tools \\
+- HLS testbench it (c-sim)\\
+- transform to RTL\\
+- HLS testbench it (co-sim)\\
+- integrate the generated RTL to a larger FPGA design\\
+- synthesize FPGA bitstream\\
+- use on FPGA\\
 
-In the latest Xilinx HLS tools 'Vitis HLS' and 'Vivado HLS', the language SystemC is already deprecated \cite{VivadoHlsSystemC}.\\
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Coding}
@@ -105,10 +138,3 @@ This is done in three steps.\\
 
 \noindent
 This type of simulation takes a significantly longer time to execute, because timing information now actually needs to be considered for the RTL code.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Advantages / Disadvantages}
-
-easy and much faster to get complex HDL code, such as image/video processing, through libraries like OpenCV.
-However, it may be less optimized.
-A developer still needs to have a strong hardware background, to be able to understand what is being generated in hardware from x lines of code in HLS/Cpp.
