@@ -78,20 +78,39 @@ Its usage is being promoted and pushed forward with serious effort by the major 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Workflow}
 
-see Chapter "Software Verification and Vivado HLS" of \cite{VivadoUgHLSIntro}
+This section describes the workflow for Xilinx HLS, as it is recommended in the user guide \textit{Introduction to FPGA Design with Vivado High-Level Synthesis} \cite{VivadoUgHLSIntro}.\\
 
-- recommended to use software verification tools, like valgrind or Coverity (dynamic code checker)\\
-- use code coverage with e.g. gcov for testbench
+Generally, as the user guide states, the quality and the correctness of the generated output can only be as good as its input.
+Consequently, it is very important to follow the design recommendations and adhere to specific rules in order to produce a high-quality input software.\\
 
-general workflow:
-- develop c/c++\\
-- verify it using above mentioned software tools \\
-- HLS testbench it (c-sim)\\
-- transform to RTL\\
-- HLS testbench it (co-sim)\\
-- integrate the generated RTL to a larger FPGA design\\
-- synthesize FPGA bitstream\\
-- use on FPGA\\
+The following list presents the main steps that are required in the implementation workflow of an HLS IP core project.\\
+
+\begin{itemize}
+  \item \textbf{Software Testbench}\\
+      The developed HLS IP code needs to be verified and checked for correct functionality in a software testbench, before it gets processed to RTL code.
+      This can be done by using using conventional software development tools.
+      Xilinx specifically recommends dynamic code checker tools like \textit{valgrind} or \textit{Coverity}.
+      They support a developer in finding memory leaks, out-of-bounds memory access, uninitialized variables and similar issues.
+      Furthermore, the application of code coverage tools like \textit{gcov} is recommended as well.
+      In that way, the percentage of executed code lines of testbench and HLS code can be measured, to ensure a sufficient level of testing.
+      The software testbench is also called 'C Simulation'.\\
+
+      The implementation of the HLS IP code is subject to restrictions.
+      As an example, dynamic memory allocation is not supported, since the entire code must be analyzable at runtime to be processed into RTL code.
+      %For further details, please read the user guides regarding Xilinx HLS.
+      In contrast, the testbench code does not have any restrictions.
+      Anything that is supported in C/\cplusplus\ may be used here.\\
+
+  \item \textbf{Co-Simulation}\\
+      Co-Simulation serves the purpose verify the correct functionality of the generated RTL code.
+      However, the main goal is not to verify the algorithm here.
+      This is already done by above described C simulation.
+
+
+  \item \textbf{integrate the generated RTL to a larger FPGA design}\\
+  \item \textbf{synthesize FPGA bitstream}\\
+  \item \textbf{use on FPGA}\\
+\end{itemize}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
