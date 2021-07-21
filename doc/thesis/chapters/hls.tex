@@ -39,13 +39,29 @@ It is clearly visible, that the FPGA design with the HLS design approach achieve
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{State Of The Art}
 
-- usage in percentage (market share), compared to direct RTL coding\\
+Information for this section is found in \cite{EvolutionOfHLS}, \cite{XilinxVivisHLSOpenSource} and \cite{CompareHlsVHDLArticle}.\\
 
--  Language Support\\
-\cplusplus and SystemC\\
-In the latest Xilinx HLS tools 'Vitis HLS' and 'Vivado HLS', the language SystemC is already deprecated \cite{VivadoHlsSystemC}.\\
+HLS has been developed over 20 years ago, but has not been able to replace the manual, traditional implementation of RTL, using VHDL and Verilog, so far.
+Unfortunately, no published numbers about the market share of HLS in relation to traditional implementations could be found during the research in this thesis.
+However, according to the given sources it is becoming more and more popular in recent years.
+This is mainly based on the fact that the HLS tools keep producing results of better quality as they are developed further.
+This especially regards the efficiency of the produced RTL code, the useability of the tools, as well as the better understandable correlation between the high-level code and the generated RTL code.\\
 
-- efficiency (see \cite[II.C.: State of the Art]{CompareHlsVHDLArticle})\\
+Xilinx is the largest manufacturer of FPGAs globally and therefore its tool 'Xilinx HLS' is widely used.
+Intel, the second largest FPGA manufacturer, also has its HLS tool called 'Intel oneAPI' \cite{IntelHLSOneAPI}.
+Both companies are conducting serious effort to push the HLS implementation method.
+Xilinx recently open-sourced the code for the front-end of their HLS compiler.
+The front-end processes the HLS code, specifically \cplusplus, and creates an intermediate representation from it.
+The company expects to expand the community engagement and the encouragement of innovation, driven by users, with this step.
+Also Intel with its oneAPI toolkit is trying to introduce a wider usage of HLS to the community.\\
+
+In terms of language support, several tools settle for \cplusplus.
+Intel oneAPI uses library APIs and DP\cplusplus\ (Data-Parallel \cplusplus), which is an extension to the ISO \cplusplus\ standard.
+Xilinx also decided in favor of the \cplusplus\ language for their tools 'Vivado HLS' and 'Vitis HLS'.
+In older versions, SystemC was supported for synthesis as well, but is now deprecated in the respective latest versions \cite{VivadoHlsDeprecatesSystemC}.\\
+
+Summing up, HLS is gaining more and more attention as it becomes more efficient.
+Its usage is being promoted and pushed forward with serious effort by the major FPGA chip manufacturers and tool vendors.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\section{Functionality}
