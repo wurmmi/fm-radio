@@ -1,30 +1,89 @@
-%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{High-Level Synthesis}
 \label{cha:HLS}
 
+The main sources of information for this chapter are found in \cite{VivadoUgHLS}, TODO.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{State Of The Art}
 
-\section{Functionality (transform high-level code to HDL)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Functionality}
+transform high-level code to HDL
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Language Support}
 
-  \subsection{\cplusplus}
 
-  \subsection{SystemC}
+%%%%%%%%%%%%%%%%%%%%
+\subsection{\cplusplus}
+
+%%%%%%%%%%%%%%%%%%%%
+\subsection{SystemC}
 
 \section{Coding}
 
-  \subsection{Compiler Directives (\#pragma's)}
+%%%%%%%%%%%%%%%%%%%%
+\subsection{Compiler Directives (\#pragma's)}
 
-  \subsection{Data types}
+%%%%%%%%%%%%%%%%%%%%
+\subsection{Data types}
 
-  \subsection{Functions}
+%%%%%%%%%%%%%%%%%%%%
+\subsection{Functions}
 
-  \subsection{Loops}
+%%%%%%%%%%%%%%%%%%%%
+\subsection{Loops}
 
-  \subsection{Conditional statements}
+%%%%%%%%%%%%%%%%%%%%
+\subsection{Conditional statements}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Testbench}
+
+An HLS testbench can be executed in different levels of abstraction, which is a major difference between a VHDL testbench and an HLS testbench.
+The most important impact thereof is the execution speed - the time it takes to simulate a number of test cases on the DUT.
+
+%%%%%%%%%%%%%%%%%%%%
+\subsection{C Simulation}
+
+In C Simulation, the HLS compiler is used to create an executable binary that includes the testbench code, as well as the IP design of the DUT.
+This binary can be run just like any other program.
+The most important note here is, that the HLS code is \textit{not} transformed into RTL at this point.
+Instead, the HLS code is treated as a regular \cplusplus\ code, that uses some libraries, like the fixed-point library.
+This means, that the HLS IP cores' top-level function is used as a regular function call in the testbench.\\
+
+The main advantage of this type of simulation is the major increase of execution speed.
+The reason for this speed-up is the abstraction of timing, such as clock cycles or similar constraints.
+In fact, there is absolutely no timing information that needs to be taken into account in this simulation.
+
+%%%%%%%%%%%%%%%%%%%%
+\subsection{C/RTL Co-Simulation}
+
+This type of simulation actually transforms the HLS IP code into RTL code, such as Verilog or VHDL, for the testbench.
+This is done in three steps.\\
+
+\begin{itemize}
+  \item \textbf{Create input vectors}\\
+  In this first step, the above explained, regular C simulation is executed.
+  Hereby, the inputs that are sent to the DUT are stored as 'input vectors'.
+
+  \item \textbf{Perform RTL simulation}\\
+  Next, the previously generated input vectors are applied to the DUT.
+  At this point, the DUT is already translated into RTL code, so the code that is used here is either VHDL or Verilog code.
+  The default simulator is the Vivado Simulator (XSim).
+  However, various other simulators like ModelSim are supported.
+  The generated outputs of this step are stored as 'output vectors'.
+  \item \textbf{Verify the results}\\
+  The final verification step sources the output vectors back to the C testbench, which compares the outputs with the expected results.\\
+\end{itemize}
+
+\noindent
+This type of simulation takes a significantly longer time to execute, because timing information now actually needs to be considered for the RTL code.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Advantages / Disadvantages}
-    easy and much faster to get complex HDL code, such as image/video processing, through libraries like OpenCV. However, it is less optimized, and a developer still needs to have a strong hardware background, to be able to understand what is being generated in hardware from x lines of code in HLS/Cpp.
+easy and much faster to get complex HDL code, such as image/video processing, through libraries like OpenCV. However, it is less optimized, and a developer still needs to have a strong hardware background, to be able to understand what is being generated in hardware from x lines of code in HLS/Cpp.

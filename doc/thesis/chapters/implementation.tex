@@ -448,11 +448,9 @@ The implemented testbench structure, as well as some specific implementation det
 \subsection{Testbench}
 
 A testbench is equally important in the HLS implementation, as it is for the VHDL implementation.
-Just like the IPs' HDL code, the testbench is also written in the language \cplusplus.
-The execution of the testbench is done in the Xilinx HLS software.
+The HDL code for the IP is written in \cplusplus and thus the testbench is also written in this language.
+The execution of the testbench is done in the Xilinx HLS software.\\
 
-A major difference between a VHDL testbench and a HLS testbench is its execution speed.
-HLS faster because it does not simulate any timing info; its just plain c++ code thats run
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Design for Reuse}
