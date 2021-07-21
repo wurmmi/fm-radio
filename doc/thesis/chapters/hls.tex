@@ -77,6 +77,7 @@ Its usage is being promoted and pushed forward with serious effort by the major 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Workflow}
+\label{sec:hls:workflow}
 
 This section describes the workflow for Xilinx HLS, as it is recommended in the user guide \textit{Introduction to FPGA Design with Vivado High-Level Synthesis} \cite{VivadoUgHLSIntro}.\\
 
@@ -102,16 +103,33 @@ The following list presents the main steps that are required in the implementati
       Anything that is supported in C/\cplusplus\ may be used here.\\
 
   \item \textbf{Co-Simulation}\\
-      Co-Simulation serves the purpose verify the correct functionality of the generated RTL code.
-      However, the main goal is not to verify the algorithm here.
-      This is already done by above described C simulation.
+      Co-Simulation serves the purpose to verify the correct functionality of the generated RTL code.
+      It is not the goal to verify the algorithm, though.
+      This is already done in the previous C simulation step.
+      However, the issue is that the C simulation is executed like a regular program, which means it is executed sequentially, instruction by instruction and thus parallelism cannot be represented.\\
 
+      This is where the Co-Simulation becomes neccessary.
+      The RTL code is simulated with an HDL simulator software, which can actually simulate the parallelism as it exists in the FPGA hardware.
+      In that way it can be ensured, that the user did not break the functional correctness of the algorithm, by giving wrong parallelization guidance to the HLS tool.\\
 
-  \item \textbf{integrate the generated RTL to a larger FPGA design}\\
-  \item \textbf{synthesize FPGA bitstream}\\
-  \item \textbf{use on FPGA}\\
+      The external simulator software has to run the complex HDL simulation and return data results, which is a time consuming task.
+      Therefore, the execution time of this simulation type is expected to be approximately 10.000 times slower, compared to the C simulation.\\
+
+  \item \textbf{Integration of the generated IP}\\
+      At this point, the developed HLS code is fully verified and can successfully be transformed into working RTL code.
+      Xilinx HLS exports the generated RTL code in an IP structure that is supported by its IP integrator tool, that is used in Vivado or Vitis.
+      Therefore, the developed IP core can be imported to the block design as another processing block, get connected with other IPs, and in that way get integrated into a larger design.\\
+
+  \item \textbf{Synthesize FPGA bitstream}\\
+      Like in any other FPGA development cycle, the created block design can now be synthesized.
+      This generates a bitstream file, which can be programmed into an actual FPGA hardware.
+      Depending on the architecture of the system, the developed IP may now interface with the on-chip CPU, in the example of a System-On-Chip.\\
 \end{itemize}
 
+These steps represent the standard workflow for the development of an integrated HLS IP.
+A successful deployment on hardware can be achieved if they are completed accurately.
+There may be more and deeper knowledge necessary, in order to use this design approach.
+This thesis however focuses on system design, not on HLS specifically, and thus a comprehensive study of the referenced literature is recommended.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Coding}
@@ -137,7 +155,10 @@ e.g. \#pragma's
 \section{Testbench}
 
 An HLS testbench can be executed in different levels of abstraction, which is a major difference between a VHDL testbench and an HLS testbench.
-The most important impact thereof is the execution speed - the time it takes to simulate a number of test cases on the DUT.
+The most important impact thereof is the execution speed - the time it takes to simulate a number of test cases on the DUT.\\
+
+Section \ref{sec:hls:workflow} above already mentioned the topic of testbenches.
+The following descriptions are a comprehensive extension around this topic and the simulation types.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{C Simulation}
