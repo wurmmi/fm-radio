@@ -436,7 +436,7 @@ The reason therefor is, that it is the most complex unit within the entire desig
 All the other design units mostly consist of simple delay lines, additions or substractions and thus a special unit test is not implemented.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{TODO: Other Stuff...}
+%\subsection{TODO: Other Stuff...}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -447,8 +447,17 @@ The implemented testbench structure, as well as some specific implementation det
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Testbench}
 
-A testbench is equally important in the HLS implementation, as it is for the VHDL implementation, explained in \ref{sub:VHDL:Testbench:General}.
-The testbench simulation is
+A testbench is equally important in the HLS implementation, as it is for the VHDL implementation.
+Just like the IPs' HDL code, the testbench is also written in the language \cplusplus.
+The execution of the testbench is done in the Xilinx HLS software.
+
+A major difference between a VHDL testbench and a HLS testbench is its execution speed.
+HLS faster because it does not simulate any timing info; its just plain c++ code thats run
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Design for Reuse}
+
+testbench is using Firmware code! --> enables reuse and early testing on the code, before a hardware prototype exists
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{TODO: Other Stuff...}
