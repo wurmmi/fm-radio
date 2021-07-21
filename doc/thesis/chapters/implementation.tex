@@ -294,37 +294,7 @@ This implementation variant is one of the two major implementation focus points 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Testbench Simulator and Framework}
 
-The general significance of a simulation testbench in hardware description language (HDL) design is explained here, as well as an introduction to the used testbench framework that is used in this project.
-
-%%%%%%%%%%%%%
-\subsubsection{General}
-\label{sub:VHDL:Testbench:General}
-
-In the development of software that runs on a CPU, the tool of step-by-step debugging is commonly used during the development process.
-Various verification and testing libraries exist, in order to create unit tests, for example.
-The advantage is, that the code that is developed there, can be compiled and run on the target CPU directly, while maintaining the direct step-by-step representation of the code.\\
-
-However, in the development of hardware with any HDL, this is not possible.
-HDL languages provide a syntax and semantic representation that allow to create parallel structures and a dependency on timing, such as a system clock.
-The design is based on signals that perform logic operations and transfer values into registers.
-Thus, HDL code is often called register-transfer level, or short, RTL code.
-Before this code can be run on the target hardware, i.e. an FPGA, it needs to run through a process called synthesis.
-In synthesis, the HDL code is translated into a netlist and is consequently mapped into hardware logic cells that are available in the target device.
-Various optimizations are done during this process, so that the direct connection to the code representation is lost.
-Additionally, it is impossible to access every single signal within the design during debugging on the hardware, which is probably also one of the main issues.
-Synthesis tools like Xilinx Vivado provide support to make debugging possible in hardware, but require a large effort to implement them, especially in terms of synthesis time.
-Another big factor that speaks against debugging in hardware generally, is that the process of synthesis takes a comparably large amount of time to transform code into the target technology.
-Each time the code is adapted, the entire synthesis process needs to be started over again.
-Because of all of these reasons, debugging HDL code step-by-step as in software is not possible.\\
-
-Thus, in order to allow debugging and verification of HDL code, the technology of simulation was invented.
-Here, the HDL is also translated into a netlist that represents all the parallel processes just like in hardware, but the subsequent step of synthesis is not taken.
-Therefore, simulation comes to a result much faster.
-Since HDL designs actually only consist of electrical wires and some basic block primitives, like Flipflops or lookup tables, it is difficult to verify correct values.
-They would need to be compared in their binary bit-pattern format, at the correct point in time.
-Of course the HDL language provides support with different datatypes, that abstract the binary number representation and make the numbers human-readable.
-However, it remains an enormous effort to manually write testing code to verify a bus interface, for example.
-In order to simplify such complex operations, various testbench frameworks are available to developers.
+The HDL compiler and the testbench framework that are used in this project are introduced here.
 
 %%%%%%%%%%%%%
 \subsubsection{Simulator GHDL}
@@ -339,7 +309,7 @@ This is supported for a all common operating systems such as Linux, Windows and 
 The simulator further supports a VPI (Verilog Procedural Interface), which can be used to control the simulator \cite{GHDLDoc}.
 
 %%%%%%%%%%%%%
-\subsubsection{Framework cocotb}
+\subsubsection{Testbench framework cocotb}
 \label{sub:VHDL:FrameworkCocotb}
 
 The testbench framework cocotb is developed as a free, open-source project.
