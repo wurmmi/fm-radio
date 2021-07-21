@@ -2,10 +2,29 @@
 \chapter{High-Level Synthesis}
 \label{cha:HLS}
 
-The main sources of information for this chapter are found in \cite{VivadoUgHLS}, TODO.
+This chapter talks about High-Level Synthesis in general, but also specifically describes the details of the Xilinx HLS.
+The main sources of information for this chapter are found in \cite{VivadoUgHLSIntro}and \cite{VivadoUgHLS}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
+
+In software development, engineers are used to writing code in a high-level language, such as C or \cplusplus.
+With these languages, specific hardware details are abstracted and thus, very little knowledge of the target hardware is required.
+The compiler takes over these details as it transforms the code by using the underlying, supported instruction set of the target hardware.
+This has been the standard for many years by now.
+In the earlier times however, it was common practise to develop programs in the low-level assembly language.
+The supported instruction set of the target CPU had to be implemented directly by the software engineer.\\
+
+A direct comparison can be drawn to FPGA design.
+An FPGA engineer historically develops code in the register-transfer level (RTL), which is common practise until today.
+This can be compared to developing software in the assembly language.
+However, the recent development towards automation and code generation brought up High-Level Synthesis (HLS).
+There, the FPGA design can be described in a high-level language, such as C or \cplusplus, which is convenient and allows to focus on the algorithm, rather than hardware details.
+This high-level code is then transformed into the low-level RTL automatically, by the HLS tool.\\
+
+The usage of HLS tries to bring software- and hardware development closer together and tries to make these two worlds more similar.
+In software development, there are different compilers for multiple processor architectures, which can be used to port a program to another target hardware.
+The idea of HLS is to create the same level of abstraction - write code in a high-level language, which is agnostic of its target hardware architecture.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{State Of The Art}
@@ -90,4 +109,6 @@ This type of simulation takes a significantly longer time to execute, because ti
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Advantages / Disadvantages}
 
-easy and much faster to get complex HDL code, such as image/video processing, through libraries like OpenCV. However, it is less optimized, and a developer still needs to have a strong hardware background, to be able to understand what is being generated in hardware from x lines of code in HLS/Cpp.
+easy and much faster to get complex HDL code, such as image/video processing, through libraries like OpenCV.
+However, it may be less optimized.
+A developer still needs to have a strong hardware background, to be able to understand what is being generated in hardware from x lines of code in HLS/Cpp.
