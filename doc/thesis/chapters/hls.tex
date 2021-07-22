@@ -144,16 +144,37 @@ HLS supports special data types, which are not available in standard \cplusplus.
 The focus of these data types is mainly to support an optimized translation into RTL, which requires the least amount of logic cells in the FPGA.\\
 
 Standard \cplusplus\ only supports variables in the bitwidth of byte-boundaries, so in multiples of 8 bit.
-However, this may be inefficient to fit into available FPGA hardware.
+However, this may be inefficient to fit into the available FPGA target hardware.
 One example therefor is the DSP48 macro that Xilinx FPGAs have built-in.
 They support the multiplication of only up to 18 bit.
 In an example application, the reachable number range of a variable might be limited to 17 bit for the multiplication.
 However, in order to represent that, using a 32 bit data type would be necessary in standard \cplusplus.
 The HLS compiler does not have this prior knowledge of the number range limit and would thus implement a 32 bit multiplication, which is a waste of resources in this case.
 Because of this reason, a major feature of HLS is the possibility to define data types with arbitrary bitwidths.
-In that way, the above example can be optimized to use a data type that has a bitwidth of 17 bit, which is wide enough for the application.
+In that way, the above example can be optimized to use a data type that has a bitwidth of 17 bit, which is exactly the bitwidth that is required for the application.
+This results in a lower logic utilization, which in turn results in a higher maximum clock frequency that can be used.
+Consequently, more functionality an be implemented in the FPGA device.
+The referenced user guide shows a design example where an area reduction of 75\% is achieved by just reducing the bitwidths.\\
 
-todo: fixed point
+The argumentation is equally valid for integer data types, as well as fixed point data types.
+In calculations it is often necessary to represent fractional numbers.
+In standard \cplusplus, floating point data types are used therefor.
+However, floating point operations require a large amount of logic to implement and thus, HLS provides fixed point data types.
+These can be instantiated in arbitrary bitwidths, where integer and fractional bitwidths can be specified separately.
+The fixed point format is often described in the format 'integer.fractional', like '2.14', which represents a 16 bit fixed point data type that has 2 integer bits and 14 fractional bits.\\
+
+An example for the usage of integer and fixed point data types is given in the following code section.
+
+\begin{CppCode}
+  #include <ap_int.h>
+  #include <ap_fixed.h>
+
+  ap_int<9>   custom_integer_var1;         //  9 bit integer, signed
+  ap_uint<17> custom_integer_var2;         // 17 bit integer, unsigned
+
+  ap_fixed<16,2>  custom_fixedpoint_var1;  // 16 bit fixed point, 2.14 format, signed
+  ap_ufixed<14,4> custom_fixedpoint_var2;  // 12 bit fixed point, 4.10 format, unsigned
+\end{CppCode}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Interfaces}

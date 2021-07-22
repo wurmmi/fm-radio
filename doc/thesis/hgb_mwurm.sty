@@ -9,8 +9,11 @@
 \RequirePackage{relsize}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Pictures
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% NOTE:
+% GENERAL NOTE:
 % [] ... optional argument
 % {} ... required argument
 
@@ -18,13 +21,17 @@
 % example: \includepicture [0.75] [0] [H] {A nice picture.} {img/img.png} {figure_label}
 \newcommandx{\includepicture}[6][1=1,2=0,3=]
 {
-	\begin{figure}[#3] %TODO: maybe use [H], to fix figures, or let figures float
-		\centering
-		\includegraphics[width=#1\textwidth,angle=#2]{\string"#6"}
-		\caption{#4}
-	  \label{fig:#5}
-	\end{figure}
-}
+  \begin{figure}[#3] %TODO: maybe use [H], to fix figures, or let figures float
+    \centering
+    \includegraphics[width=#1\textwidth,angle=#2]{\string"#6"}
+    \caption{#4}
+    \label{fig:#5}
+  \end{figure}
+  }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Other
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Beautify the C++ represenation
 \newcommand{\cplusplus}{C\texttt{++}}
