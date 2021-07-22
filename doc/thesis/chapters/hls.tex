@@ -134,11 +134,26 @@ This thesis however focuses on system design, not on HLS specifically, and thus 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Coding}
 
-This section gives a brief overview of the \cplusplus\ HLS code style that is supported with Xilinx tools.
+This section gives a brief overview of some HLS-specific \cplusplus\ features that are supported with Xilinx tools.
 More detailed information can be found in the respective user guide \cite{VivadoUgHLS}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Data Types}
+
+HLS supports special data types, which are not available in standard \cplusplus.
+The focus of these data types is mainly to support an optimized translation into RTL, which requires the least amount of logic cells in the FPGA.\\
+
+Standard \cplusplus\ only supports variables in the bitwidth of byte-boundaries, so in multiples of 8 bit.
+However, this may be inefficient to fit into available FPGA hardware.
+One example therefor is the DSP48 macro that Xilinx FPGAs have built-in.
+They support the multiplication of only up to 18 bit.
+In an example application, the reachable number range of a variable might be limited to 17 bit for the multiplication.
+However, in order to represent that, using a 32 bit data type would be necessary in standard \cplusplus.
+The HLS compiler does not have this prior knowledge of the number range limit and would thus implement a 32 bit multiplication, which is a waste of resources in this case.
+Because of this reason, a major feature of HLS is the possibility to define data types with arbitrary bitwidths.
+In that way, the above example can be optimized to use a data type that has a bitwidth of 17 bit, which is wide enough for the application.
+
+todo: fixed point
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Interfaces}
