@@ -212,49 +212,55 @@ However, port-level interfaces can also be implemented as AXI interfaces, such a
 This is an especially useful function, since the implementation of the actual interface logic is abstracted from the user.
 Additionally, software drivers are automatically generated along with the respective interfaces, which provides a fast and simple integration into a larger system.\\
 
-The following code example shows the specification of an AXI4-Lite memory-mapped slave interface.
-The provided registers are separated into config registers and status registers.
-The config is readable and writeable, while the status registers are implemented as read-only, which requires less logic in the RTL implementation.\\
+The program code example \ref{prog:axi4_lite} shows the specification of an AXI4-Lite memory-mapped slave interface.
+The provided registers are separated into configuration registers and status registers.
+The configuration is readable and writeable, while the status registers are implemented as read-only, which requires less logic in the RTL implementation.\\
 
 \begin{program}
-  \caption{Implementation of an AXI4-Lite memory-mapped slave with read-only and read-write registers.}
+  \caption{Implementation of an AXI4-Lite memory-mapped slave with a separation of read-only status registers and read-write configuration registers.}
   \label{prog:axi4_lite}
-  \begin{CppCode}
-    typedef struct {
-      ap_int<NUM_LEDS> led_ctrl;
-      uint8_t code;
-    } config_t;
+\begin{CppCode}
+ typedef struct {
+   ap_int<NUM_LEDS> led_ctrl;
+   uint8_t code;
+ } config_t;
 
-    typedef struct {
-      uint32_t uptime;
-      uint32_t result;
-    } status_t;
+ typedef struct {
+   uint32_t uptime;
+   uint32_t result;
+ } status_t;
 
-    void hls_ip_top_level(config_t& config,
-                          status_t* status) {
-        #pragma HLS INTERFACE s_axilite port = status bundle = API
-        #pragma HLS INTERFACE s_axilite port = config bundle = API
+ void hls_ip_top_level(config_t& config,
+                       status_t* status) {
+     #pragma HLS INTERFACE s_axilite port = status bundle = API
+     #pragma HLS INTERFACE s_axilite port = config bundle = API
 
-        if (config.code == 0xFF) {
-          status->result = 0;
-          ...
-        }
-        ...
-    }
-  \end{CppCode}
+     if (config.code == 0xFF) {
+       status->result = 0;
+       ...
+     }
+     ...
+ }
+\end{CppCode}
 \end{program}
 
-Another code example demonstrates the equally simple definition of an AXI4-Stream interface.
+The second program code example \ref{prog:axi4_stream} demonstrates the equally simple definition of an AXI4-Stream interface.
 
+\begin{program}
+  \caption{Implementation of an AXI4-Stream interface.}
+  \label{prog:axi4_stream}
 \begin{CppCode}
-  #include <hls_stream.h>
+ #include <hls_stream.h>
 
-  void hls_ip_top_level(hls::stream<uint32_t>& sample_in,
-                        hls::stream<uint32_t>& audio_out) {
-      #pragma HLS INTERFACE axis port = sample_in
-      #pragma HLS INTERFACE axis port = audio_out
-  }
+ void hls_ip_top_level(hls::stream<uint32_t>& sample_in,
+                       hls::stream<uint32_t>& audio_out) {
+     #pragma HLS INTERFACE axis port = sample_in
+     #pragma HLS INTERFACE axis port = audio_out
+
+     ...
+ }
 \end{CppCode}
+\end{program}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Testbench}
