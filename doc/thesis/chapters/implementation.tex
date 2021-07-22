@@ -452,6 +452,7 @@ The implemented testbench structure, as well as some specific implementation det
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Testbench}
+\label{sec:impl:hls:testbench}
 
 A testbench is equally important in the HLS implementation, as it is for the VHDL implementation.
 The HDL code for the IP is written in \cplusplus\ and thus the testbench is also written in this language.
@@ -483,10 +484,28 @@ audio_sample_t fm_receiver( ... ) {
 \subsection{Design For Reuse}
 
 The testbench is especially designed around the 'Design For Reuse' segment of the SIMILAR concept, which is introduced in Section \ref{sec:SimilarProcess}.
+This is the case because of two major parts.
+%It is not only using the exact same Python code for analysis, but is also using parts of the application software code directly, to load the testbench input data.\\
 
-testbench is using Firmware code to load the data! --> enables reuse and early testing on the code, before a hardware prototype exists\\
+%%%%%
+\subsubsection{Testbench}
 
-also, the same Python analyzer code is used as in the VHDL tb
+In the previous Section \ref{sec:impl:hls:testbench} it is explained, that the HLS testbench generates output files during its execution.
+These output files are analyzed with the exact same Python analysis code, that is already used in the VHDL testbench analysis.
+
+%%%%%
+\subsubsection{Application Software Code}
+
+The testbench is developed in the language \cplusplus\ and does not have any restrictions in the usage thereof, as Section \ref{sec:hls:workflow} described.
+Thus, the \cplusplus\ code that is later used in the application software to interface with the IP, can already be used in the testbench here, for the same purpose.
+This is especially useful in the development process of such a combined system, consisting of software and hardware, that relies on these two parts working together successfully.
+The fact that the application software can directly be used in the testbench, enables the development of software that interfaces with the hardware in a very early stage of the project, before any actual hardware exists.
+It also allows that the software part is already tested before the deployment on hardware.\\
+
+Fig.\ref{fig:testbench_hls_overview_reuse} gives an overview of the testbench and specifically points out the reuse of the application software.
+The diagram displays the HLS IP in the testbench and in the hardware with dotted lines, to emphasize that they are actually the same.\\
+
+\includepicture [0.8] [0] [H] {Overview of the testbench and the reuse of the application software. The HLS IP is displayed with dotted lines, to point out that it is the same in testbench and hardware.} {testbench_hls_overview_reuse} {img/draw.io/testbench_hls_overview_reuse}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{TODO: Other Stuff...}
+%\subsection{TODO: Other Stuff...}
