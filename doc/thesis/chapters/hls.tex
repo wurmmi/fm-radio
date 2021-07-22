@@ -179,30 +179,82 @@ An example for the usage of integer and fixed point data types is given in the f
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Optimization Directives}
 
-The HLS code can be instumented with additional optimization directives.
-This is used to provide the HLS compiler with additional information and instruct it on how to implement certain parts of the code in RTL.\\
+The HLS code can be instumented with optimization directives.
+This is used to provide the HLS compiler with additional information and to instruct it on how to implement certain parts of the code in RTL.\\
 
 Directives can be applied to interfaces, functions, loops, arrays or code regions.
-The directives can be written in a Tcl file that is provided to the HLS project, or in the design code directly, in the form of a pre-processor pragma.
+They can be written in a Tcl file that is provided to the HLS project, or in the design code directly, in the form of a pre-processor pragma.
 Both variants have their advantages and disadvantages.\\
 
-Examples for such directives are optimization strategies for thoughput and dataflow optimization, such as pipelining or loop unrolling.
+Examples for such directives are optimization strategies for throughput and dataflow optimization, such as pipelining or loop unrolling.
 Also the implementation of the required interface types, such as various AXI interfaces, is controlled with directives.\\
 
 Since this topic is very comprehensive, it cannot be covered into more detail here.
 For further information, refer to the user guide \cite{VivadoUgHLS}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Interfaces}
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Optimization}
-
+%\subsection{Optimization}
 %\subsection{Functions}
 %\subsection{Loops}
 %\subsection{Conditional Statements}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Interfaces}
+
+Interfaces are an important asset to any IP design, since this is where they communicate with their surroundings.
+This may be another IP that processes data, but may also be a CPU that reads status information or configures the IPs' settings.\\
+
+Xilinx HLS implements two different types of interfaces: block-level, and port-level interfaces.
+The block-level interface is a general interface to the IP, that can provide a handshaking functionality for when it is idle and ready to start a new operation, or when the operation is completed.
+The port-level interfaces on the other hand are specific to input and output ports.
+They can also provide handshaking functionality, such as data-valid indicators, acknowledge signals, or implement a FIFO for the IOs.
+However, port-level interfaces can also be implemented as AXI interfaces, such as AXI4-Stream, AXI4-Lite Slave or an AXI4 Master.
+This is an especially useful function, since the implementation of the actual interface logic is abstracted from the user.
+Additionally, software drivers are automatically generated along with the respective interfaces, which provides a fast and simple integration into a larger system.\\
+
+The following code example shows the specification of an AXI4-Lite memory-mapped slave interface.
+The provided registers are separated into config registers and status registers.
+The config is readable and writeable, while the status registers are implemented as read-only, which requires less logic in the RTL implementation.\\
+
+\begin{program}
+  \caption{Implementation of an AXI4-Lite memory-mapped slave with read-only and read-write registers.}
+  \label{prog:axi4_lite}
+  \begin{CppCode}
+    typedef struct {
+      ap_int<NUM_LEDS> led_ctrl;
+      uint8_t code;
+    } config_t;
+
+    typedef struct {
+      uint32_t uptime;
+      uint32_t result;
+    } status_t;
+
+    void hls_ip_top_level(config_t& config,
+                          status_t* status) {
+        #pragma HLS INTERFACE s_axilite port = status bundle = API
+        #pragma HLS INTERFACE s_axilite port = config bundle = API
+
+        if (config.code == 0xFF) {
+          status->result = 0;
+          ...
+        }
+        ...
+    }
+  \end{CppCode}
+\end{program}
+
+Another code example demonstrates the equally simple definition of an AXI4-Stream interface.
+
+\begin{CppCode}
+  #include <hls_stream.h>
+
+  void hls_ip_top_level(hls::stream<uint32_t>& sample_in,
+                        hls::stream<uint32_t>& audio_out) {
+      #pragma HLS INTERFACE axis port = sample_in
+      #pragma HLS INTERFACE axis port = audio_out
+  }
+\end{CppCode}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Testbench}
