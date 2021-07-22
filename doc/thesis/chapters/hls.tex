@@ -177,12 +177,25 @@ An example for the usage of integer and fixed point data types is given in the f
 \end{CppCode}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Interfaces}
+\subsection{Optimization Directives}
+
+The HLS code can be instumented with additional optimization directives.
+This is used to provide the HLS compiler with additional information and instruct it on how to implement certain parts of the code in RTL.\\
+
+Directives can be applied to interfaces, functions, loops, arrays or code regions.
+The directives can be written in a Tcl file that is provided to the HLS project, or in the design code directly, in the form of a pre-processor pragma.
+Both variants have their advantages and disadvantages.\\
+
+Examples for such directives are optimization strategies for thoughput and dataflow optimization, such as pipelining or loop unrolling.
+Also the implementation of the required interface types, such as various AXI interfaces, is controlled with directives.\\
+
+Since this topic is very comprehensive, it cannot be covered into more detail here.
+For further information, refer to the user guide \cite{VivadoUgHLS}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Compiler Directives}
+\subsection{Interfaces}
 
-e.g. \#pragma's
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Optimization}
