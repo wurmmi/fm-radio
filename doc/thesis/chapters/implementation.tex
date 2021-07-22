@@ -334,6 +334,7 @@ The block called \textit{GPI} is developed by cocotb and abstracts the different
 In the simulator, the device under test (DUT) is instantiated.
 The RTL simulation itself is managed by the simulators' scheduler.
 
+%TODO: use mathematical typesetting in this diagram
 \includepicture [1.0] [0]  {Block diagram of the interface between cocotb and a simulator \cite{cocotbDoc}.} {bd_cocotb_interface_simulator} {img/draw.io/bd_cocotb_interface_simulator}
 
 %%%%%%%%%%%%%
@@ -446,26 +447,46 @@ The Python script takes the register definitions from the YAML file, and uses te
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{High-Level Synthesis}
 
+This section describes the HLS version of the FM radio receiver implementation.
 The implemented testbench structure, as well as some specific implementation details are explained here.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Testbench}
 
 A testbench is equally important in the HLS implementation, as it is for the VHDL implementation.
-The HDL code for the IP is written in \cplusplus and thus the testbench is also written in this language.
-The execution of the testbench is done in the Xilinx HLS software.\\
+The HDL code for the IP is written in \cplusplus\ and thus the testbench is also written in this language.
+The execution of the testbench is done in the Xilinx HLS software.
+A detailed explanation of how an HLS testbench works in general is given in Chapter \ref{cha:HLS}.\\
+
+The testbench is developed in a similar manner as the VHDL testbench.
+It applies input data to the DUT and generates output data of multiple signals, which need to be observed.
+This output data is in turn saved to output files, which are analyzed in a subsequent step.\\
+
+The actual implementation to write the HLS signal data to a file, is implemented as a file-writer \cplusplus\ class within the HLS design code.
+These code parts are only evaluated during simulation, which is achieved by using pre-processor defines.
+The following code shows an example of this file-writer class.\\
+
+\begin{CppCode}
+audio_sample_t fm_receiver( ... ) {
+  ...
+#ifndef __SYNTHESIS__
+  static DataWriter writer("data_out_audio.txt");
+  writer.write(audio);
+#endif
+  ...
+  return audio;
+}
+\end{CppCode}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Design for Reuse}
+\subsection{Design For Reuse}
 
-testbench is using Firmware code! --> enables reuse and early testing on the code, before a hardware prototype exists
+The testbench is especially designed around the 'Design For Reuse' segment of the SIMILAR concept, which is introduced in Section \ref{sec:SimilarProcess}.
+
+testbench is using Firmware code to load the data! --> enables reuse and early testing on the code, before a hardware prototype exists\\
+
+also, the same Python analyzer code is used as in the VHDL tb
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{TODO: Other Stuff...}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Common Testbench}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Architecture (same tb for VHDL and HLS-generated HDL)}
