@@ -507,4 +507,49 @@ The diagram displays the HLS IP in the testbench and in the hardware with dotted
 \includepicture [0.8] [0] [H] {Overview of the testbench and the reuse of the application software. The HLS IP is displayed with dotted lines, to point out that it is the same in testbench and hardware.} {testbench_hls_overview_reuse} {img/draw.io/testbench_hls_overview_reuse}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
-%\subsection{TODO: Other Stuff...}
+\subsection{Interfaces}
+
+HLS can automatically implement interfaces, as described in Section \ref{sec:hls:coding:interfaces}.
+This is a major feature that is used in the implementation of the HLS IP.\\
+
+The design uses an AXI4-Lite memory mapped interface, as well as multiple AXI4-Streams.
+Additionally, a data-only interface is used for the connected LEDs.
+The actual implementation is demonstrated in the following lines of code.\\
+
+\begin{CppCode}
+void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
+                     hls::stream<audio_sample_t>& audio_out,
+                     config_t& config,
+                     status_t* status,
+                     ap_int<NUM_LEDS>* led_out) {
+
+  /*----------- HLS interface settings ------------*/
+  #pragma HLS INTERFACE ap_ctrl_hs port = return
+
+  #pragma HLS INTERFACE axis port = iq_in
+  #pragma HLS DATA_PACK variable  = iq_in
+
+  #pragma HLS INTERFACE axis port = audio_out
+  #pragma HLS DATA_PACK variable  = audio_out
+
+  #pragma HLS INTERFACE s_axilite port = status bundle = API
+  #pragma HLS INTERFACE s_axilite port = config bundle = API
+
+  #pragma HLS INTERFACE ap_none port = led_out
+
+  ...
+}
+\end{CppCode}
+
+These few lines of code already implement the entire functionality of each interface type.
+The streams use the types \texttt{iq\_sample\_t} and \texttt{audio\_sample\_t}, which are structs of two 16-bit fixed-point variables and thus represent a width of 32 bit.
+The configuration and status registers are also implemented as structs, that contain multiple variables to represent the separate registers.
+For the registers, a special detail is the distinction between the register types read-write and read-only.
+This difference is made by using a value-by-reference or a pointer value, for configuration and status interface, respectively.
+Consequently, the configuration registers become read-writeable and the status registers remain read-only.
+The \texttt{bundle} keyword in the pragma-directives combine the two register groups into a single AXI4-Lite bus interface, instead of creating one bus each.
+This may be of advantage in the application software later, since it only needs to handle a single base address.
+The interface for the LEDs that can be connected is implemented as a data-only type, which does not have any protocol assigned.
+It simply represents the data value that is written to the \cplusplus\ variable.
+The usage of a data type with variable bitwidth, such as \texttt{ap\_int} in the example, is of advantage since only the actually required number of connections is implemented in the interface.
+
