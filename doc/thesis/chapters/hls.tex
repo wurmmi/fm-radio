@@ -214,7 +214,7 @@ However, port-level interfaces can also be implemented as AXI interfaces, such a
 This is an especially useful function, since the implementation of the actual interface logic is abstracted from the user.
 Additionally, software drivers are automatically generated along with the respective interfaces, which provides a fast and simple integration into a larger system.\\
 
-The program code example \ref{prog:axi4_lite} shows the specification of an AXI4-Lite memory-mapped slave interface.
+The code example in Program \ref{prog:axi4_lite} shows the specification of an AXI4-Lite memory-mapped slave interface.
 The provided registers are separated into configuration registers and status registers.
 The configuration is readable and writeable, while the status registers are implemented as read-only, which requires less logic in the RTL implementation.\\
 
@@ -246,7 +246,7 @@ The configuration is readable and writeable, while the status registers are impl
 \end{CppCode}
 \end{program}
 
-The second program code example \ref{prog:axi4_stream} demonstrates the equally simple definition of an AXI4-Stream interface.
+The second code example, Program \ref{prog:axi4_stream}, demonstrates the equally simple definition of an AXI4-Stream interface.
 
 \begin{program}
   \caption{Implementation of an AXI4-Stream interface.}

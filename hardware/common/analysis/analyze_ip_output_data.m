@@ -61,7 +61,9 @@ audioDataLeft_VHDL_FPGA  = circshift(audioDataLeft_VHDL_FPGA, 3);
 audioDataRight_VHDL_FPGA = circshift(audioDataRight_VHDL_FPGA,3);
 
 % Plot
-fig_title = 'Audio Output';
+set(0,'defaulttextinterpreter','latex')
+
+fig_title = 'Audio Output Comparison Of All Implementation Types';
 fig_audio_time = figure('Name',fig_title);
 sgtitle(fig_title);
 
@@ -100,4 +102,9 @@ if EnableZoomToBegin
     xlim([0,length(audioDataLeft_VHDL_SIM)]);
     ylim([-0.035,0.035]);
 end
-saveas(fig_audio_time, "./audio_output.png");
+
+% Adapt figure size and save it
+fig_audio_time.Position(3:4) = [900 600];
+%saveas(fig_audio_time, "./audio_output_compare_all_ips.png");
+dir_output_doc = "../../../doc/thesis/img/matlab";
+exportgraphics(fig_audio_time,sprintf("%s/%s",dir_output_doc, "audio_output_compare_all_ips.pdf"),'ContentType','vector')
