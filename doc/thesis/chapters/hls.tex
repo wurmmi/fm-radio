@@ -259,10 +259,19 @@ The second program code example \ref{prog:axi4_stream} demonstrates the equally 
      #pragma HLS INTERFACE axis port = sample_in
      #pragma HLS INTERFACE axis port = audio_out
 
+     auto input = sample_in.read();
      ...
+     audio_out.write(audio);
  }
 \end{CppCode}
 \end{program}
+
+HLS stream interface variables can be accessed via read- and write-functions.
+One very important property of these functions is, that they are blocking calls.
+The HLS streams are implemented with an underlying FIFO.
+Thus, values can only be written into it when there is an empty spot, and can only be read if there is a at least one value available.
+If the respective condition is not satisfied, the functions block the execution, until the FIFO state changes.
+During simulation in the testbench, this may result in an endlessly blocking behaviour.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Testbench}
