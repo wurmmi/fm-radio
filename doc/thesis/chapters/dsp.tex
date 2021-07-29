@@ -481,7 +481,7 @@ FM demodulation with a PLL is not described into more detail, since this thesis 
 \label{sec:demodulation-of-broadcast-fm}
 
 This section describes the demodulation of the information content of an FM broadcast channel, as it is used in commercial FM radio broadcasting.
-The assumption here is, that the actual FM demodulation, as described in chapter \ref{sec:algorithms-for-digital-fm-demodulation} is already done correctly, including the de-emphasis of the signal.
+The assumption here is, that the actual FM demodulation, as described in Chapter \ref{sec:algorithms-for-digital-fm-demodulation} is already done correctly, including the de-emphasis of the signal.
 So at this point the FM signal is converted to an AM signal.
 Thus, traditional AM DSP techniques can be employed to decode the FM broadcast channel.\\
 
@@ -543,8 +543,6 @@ The PLL lock indicator can then be re-used as an indicator, whether a pilot tone
 
 In the upper branch, a bandpass filter selects the difference signal with ranges from 23 to 53~kHz.
 It is then modulated to baseband by the previously generated 38~kHz subcarrier.
-Subsequently, a lowpass limits signal bandwidth to 15~kHz, which removes the generated modulation artifacts.\\
-
-The lower branch lowpass-filters the summation, or mono signal, as described in paragraph \ref{subsec:demod_mono}.\\
-
+Subsequently, a lowpass limits signal bandwidth to 15~kHz, which removes the generated modulation artifacts.
+The lower branch lowpass-filters the summation, or mono signal, as described in Section \ref{subsec:demod_mono}.
 The rightmost part in the diagram performs the combination of the mono and the difference signal, according to Equation \eqref{equ_stereo_from_sum_diff}.

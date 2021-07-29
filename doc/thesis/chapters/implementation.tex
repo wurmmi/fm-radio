@@ -38,13 +38,13 @@ The following list explains implementation details about the respective DSP bloc
   \item \textbf{Downsample}\\
       Downsampling is implemented in a simplified version, without an anti-aliasing filter.
       It is not required, because of the following explanation.
-      At this point the sampling frequency is set to 960 kHz.
-      The input is band-limited at 75 kHz, which is the maximum frequency in an FM channel, as explained in Section \ref{sec:FrequencySpectrumOfABroadcastFmChannel}.
+      At this point the sampling frequency is set to 960~kHz.
+      The input is band-limited at 75~kHz, which is the maximum frequency in an FM channel, as explained in Section \ref{sec:FrequencySpectrumOfABroadcastFmChannel}.
       Thus, the input has an oversampling rate of 12.8, while downsampling is only performed with a factor of 8.
 
   \item \textbf{Filters}\\
       Several filters are implemented as FIR filters.
-      The 15 kHz lowpass (LP) filter is instantiated twice, with the exact same coefficients.
+      The 15~kHz lowpass (LP) filter is instantiated twice, with the exact same coefficients.
 
   \item \textbf{Filter Group Delay Compensation}\\
       FIR filters introduce a delay on the output signal, with respect to the input.
@@ -75,7 +75,7 @@ The following list explains implementation details about the respective DSP bloc
       \end{itemize}
 
   \item \textbf{Carrier Recovery}\\
-      The 38 kHz carrier can be recovered from the 19 kHz pilot tone.
+      The 38~kHz carrier can be recovered from the 19~kHz pilot tone.
       It is important that the recovered carrier is phase-coherent with the received input, as described in Section \ref{sec:demodulation-of-broadcast-fm}.
       This can be achieved, by simply multiplying the pilot tone with itself, which is the way it is implemented here.\\
 \end{itemize}
@@ -117,10 +117,10 @@ To facilitate an easy understanding of the block diagram, it is of advantage to 
 \includepicture [1.0] [0] {Block diagram of the implemented transmitter in Matlab.} {bd_matlab_transmitter} {img/draw.io/bd_matlab_transmitter}
 
 The transmitter reads an audio file, including a left and a right channel in the first step.
-The audio file contains data in a sample rate of 48 kHz.
+The audio file contains data in a sample rate of 48~kHz.
 Next, the sample rate is increased by an oversampling factor of 20, to achieve a sufficient sample rate for the subsequent DSP procedures.\\
 
-The achieved sample rate of 960 kHz could actually be chosen much lower, since an FM channels' maximum frequency is 75 kHz (see \ref{sec:FrequencySpectrumOfABroadcastFmChannel}), and according to the Nyquist theorem the sample rate thus only needs to have 150 kHz (see \ref{sec:SamplingTheorem}).
+The achieved sample rate of 960~kHz could actually be chosen much lower, since an FM channels' maximum frequency is 75~kHz (see Section \ref{sec:FrequencySpectrumOfABroadcastFmChannel}), and according to the Nyquist theorem the sample rate thus only needs to have 150~kHz (see Section \ref{sec:SamplingTheorem}).
 However, the higher rate was chosen, mainly because a higher number of signal samples beautify any plots that are created during analysis.
 Since a thorough optimization of the DSP chain is not the focus of this thesis, this was an acceptable trade-off.\\
 
@@ -129,10 +129,10 @@ This is done to reduce some complexity in the hardware implementation.
 The following stage generates the Mono and LR Diff signals, by simply calculating the summation and diffence of the left and right channels, respectively.\\
 
 The next section in the block diagram represents multiple processes in parallel.
-The LR Diff part is shifted to 38 kHz in the spectrum.
-This is done by modulating the signal with its sub-carrier of 38 kHz.
+The LR Diff part is shifted to 38~kHz in the spectrum.
+This is done by modulating the signal with its sub-carrier of 38~kHz.
 A subsequent BP filter serves to remove the artifacts of the modulation, such as the image replica.
-It band-limits the spectrum of the LR Diff part between 23 and 53 kHz.
+It band-limits the spectrum of the LR Diff part between 23 and 53~kHz.
 The BP filter introduces a constant group delay of the signal.
 In order to maintain the alignment of all signals, this side-effect needs to be accounted for and be compensated in the other signal branches.
 Thus, the Mono signal, as well as the Pilot Tone need to be delayed by the amount of samples defined by the BP filters' group delay.
@@ -153,7 +153,7 @@ In the final chain of DSP blocks, the sample rate is increased again, to be able
 The resulting frequency modulated signal represents the signal that is received by an antenna - the RF signal of an FM channel.
 This signal is then processed by a complex baseband mixer, which results in inphase-, and quadrature components in the baseband.
 An LP filter band-limits the signal and removes artifacts of the mixer.
-As a final step, the sample rate is decreased again, back to the chosen sampling rate of 960 kHz.
+As a final step, the sample rate is decreased again, back to the chosen sampling rate of 960~kHz.
 This signal can now be processed in a digital FM receiver.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -212,8 +212,8 @@ Further analysis is done in the frequency domain, especially in order to better 
 An example thereof is shown in Figure \ref{fig:matlab_analysis_freq_domain}.
 The spectrum of an FM channel multiplex signal, as it is generated by a transmitter before the modulation, is shown in this diagram.
 The spectrum after the demodulation through a receiver is shown in the lower diagram.
-Spectral parts, such as the pilot tone at 19 kHz, or the LR Diff part around 38 kHz can be seen clearly.
-The demodulated spectrum shows an artifact at 57 kHz, which does not exist in the original transmitter spectrum.
+Spectral parts, such as the pilot tone at 19~kHz, or the LR Diff part around 38~kHz can be seen clearly.
+The demodulated spectrum shows an artifact at 57~kHz, which does not exist in the original transmitter spectrum.
 This is an artifact of the demodulation process, specifically the frequency-shift of the LR Diff part to baseband.
 The artifact is very low in energy, because it is attenuated by a BP filter in the down-conversion process, and can thus be ignored for further processing, even though it can still be seen in the spectral analysis.
 
@@ -250,7 +250,7 @@ The USRP hardware then transmits the signal via its antenna.\\
 Special care needs to be taken when transmitting signals over the air.
 The frequency spectrum is strongly limited by the radio regulations and may be monitored by the authorities.
 Please make sure to adapt your setup to the respective local regulations, to avoid any legal issues.
-Some of the regulations are mentioned in \ref{sec:FrequencyBand}, but may differ in various countries, however.\\
+Some of the regulations are mentioned in Section \ref{sec:FrequencyBand}, but may differ in various countries, however.\\
 
 \noindent
 Figure \ref{fig:bd_gnuradio_setup_transmitter} shows a block diagram of the transmitter application.
@@ -347,7 +347,7 @@ The architecture for this testbench is created under the assumptions and accordi
 
 Figure \ref{fig:bd_testbench_architecture_vhdl} shows a block diagram of the implemented architecture.
 The split between the Python environment and the VHDL implementation is clearly visible but is represented from the developers perspective.
-The actual simulator interfaces, as described in \ref{sub:VHDL:FrameworkCocotb}, are hidden to maintain the overview of the implemented architecture.\\
+The actual simulator interfaces, as described in Section \ref{sub:VHDL:FrameworkCocotb}, are hidden to maintain the overview of the implemented architecture.\\
 
 \includepicture [1.0] [0]  {Block diagram of the implemented testbench architecture.} {bd_testbench_architecture_vhdl} {img/draw.io/bd_testbench_architecture_vhdl}
 
@@ -568,7 +568,7 @@ The usage of a data type with variable bitwidth, such as \texttt{ap\_int} in the
 \subsection{Sample Rate Reduction}
 
 Multiple steps in the DSP chain require the operation of sample rate reduction.
-This is explained in section \ref{sec:impl:dsp-chain}.\\
+This is explained in Section \ref{sec:impl:dsp-chain}.\\
 
 In the VHDL implementation, this is implemented with a counter that counts the number of incoming samples.
 If the counter reaches the number that matches the downsampling rate, is forwards the current sample.
