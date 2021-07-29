@@ -8,12 +8,13 @@ However, the main focus is to compare the results that are achieved with HLS and
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{General}
 
-The main goal of this thesis is to implement an FM radio receiver in multiple different methods.
+A main objective of this thesis is to implement an FM radio receiver in multiple different methods.
 This includes GNU Radio, Matlab, VHDL and HLS.
 The target functionality is to listen to the audio broadcast signal of an FM radio station.\\
 
-All of these methods are implemented and the target functionality is achieved with all of them.
-However, the level of detail that is required in the implementation, and the resulting effort and time it takes to implement the respective variant, differs by a large factor.\\
+All of the listed methods are implemented and the target functionality is achieved with all of them.
+However, the level of detail that is required in the implementation, and the resulting effort and time it takes to implement the respective variant, differs by a large factor.
+This is mainly due to the different levels of abstraction, so that the low-level algorithms do not need to be known.\\
 
 In the following sections, especially the HLS and VHDL implementations are compared on the basis of metrics, but also based on the experience during development.
 
@@ -21,22 +22,30 @@ In the following sections, especially the HLS and VHDL implementations are compa
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Functionality}
 
-Generally, both tools - HLS and VHDL - provide the capabilities to implement any functionality in one or the other method.
-However,
+Generally, both tools --- HLS and VHDL --- provide the capabilities to implement any functionality in one or the other method.
+However, the implementation is done in a different level.
+VHDL uses an approach that is very close to the hardware, such as clock cycles and flipflops, while HLS describes the logic on an algorithmic level.\\
+
+The implementation is split into two main parts, the communication interfaces and the DSP.
+The results are presented in the following sections.
 
 % Functionality same?
 % DSP yes, AXI no (FSM of axi-stream)
 % unit tests
 
 %%%%%%%%%%%%%%%%%%%%
+\subsection{Interfaces}
+
+
+%%%%%%%%%%%%%%%%%%%%
 \subsection{Audio Output}
+
+Regarding the DSP, both implementation variants achieve a very similar result.
+
 % show plots of the common analyzer python script
 Demodulated Signal
 
 \includepicture [1.0] [0] {Comparison of the audio signal.} {audio_output_compare_all_ips} {img/matlab/audio_output_compare_all_ips}
-
-%%%%%%%%%%%%%%%%%%%%
-\subsection{Interfaces}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
