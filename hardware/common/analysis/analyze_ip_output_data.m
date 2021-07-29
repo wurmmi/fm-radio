@@ -15,7 +15,7 @@ clc;
 dir_output_doc = "../../../doc/thesis/img/matlab";
 
 EnableSaveToFile                = true;
-EnableZoomToBegin               = true;
+EnableZoomToVhdlTimeRange       = true;
 EnableZoomToComparisonTimeRange = false;
 
 %=========================================================================
@@ -67,7 +67,7 @@ audioDataRight_VHDL_FPGA = circshift(audioDataRight_VHDL_FPGA,3);
 % Plot
 set(0,'defaulttextinterpreter','latex')
 
-fig_title = 'Audio Output Comparison Of All Implementation Types';
+fig_title = 'Audio Output Comparison';
 fig_audio_time = figure('Name',fig_title);
 sgtitle(fig_title);
 
@@ -107,12 +107,14 @@ ylabel('amplitude');
 linkaxes([ax1,ax2],'xy');
 
 % Adapt figure size
-fig_audio_time.Position(3:4) = [900 450];
+fig_audio_time.Position(3:4) = [900 600];
 
 % Zoom area of interest, and save
-if EnableZoomToBegin
+if EnableZoomToVhdlTimeRange
     xlim([0,length(audioDataLeft_VHDL_SIM)]);
-    ylim([-0.035,0.035]);
+    xlim([2800,3950]);
+    exportgraphics(fig_audio_time,sprintf("%s/%s",dir_output_doc, "audio_output_compare_tb_vs_hw.pdf"),'ContentType','vector')
+    ylim([-0.45,0.6]);
 end
 if EnableZoomToComparisonTimeRange
     xlim([3450,4250]);
@@ -120,6 +122,9 @@ if EnableZoomToComparisonTimeRange
 end
 
 if EnableSaveToFile
-    %saveas(fig_audio_time, "./audio_output_compare_all_ips.png");
-    exportgraphics(fig_audio_time,sprintf("%s/%s",dir_output_doc, "audio_output_compare_all_ips.pdf"),'ContentType','vector')
+    %exportgraphics(fig_audio_time,sprintf("%s/%s",dir_output_doc, "audio_output_compare_ips_vs_matlab.pdf"),'ContentType','vector')
+    
+%    xlim auto
+%    ylim auto
+%    exportgraphics(fig_audio_time,sprintf("%s/%s",dir_output_doc, "audio_output_compare_all_ips.pdf"),'ContentType','vector')
 end

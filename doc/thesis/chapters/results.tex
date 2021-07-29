@@ -56,12 +56,14 @@ Additionally, the results of the testbench are compared with their respective re
 In summary, it can be stated that the DSP chain produces a very similar audio output in all the compared data sets.
 However, differences remain, which are presented in the following paragraphs and diagrams.
 
+\includepicture [1.0] [0] {Comparison of the IP audio output signals, in simulation and hardware, against the Matlab model. The HLS variant matches the model, while the VHDL output diverts by a certain amount. Also, VHDL differs between simulation- and hardware results.} {audio_output_compare_tb_vs_hw} {img/matlab/audio_output_compare_tb_vs_hw}
+
 \subsubsection{Comparing against the Matlab reference}
 
 In the comparison against the Matlab model, the HLS variant achieves a very exact match of the output signal.
 However, the VHDL implementation differs by a certain amount.
 There seems to be an issue in the signal separation between the left and right audio channels.
-This is visible in the analysis of the audio signal, as shown is Fig. \ref{fig:audio_output_compare_ips_vs_matlab}.
+This is visible in the analysis of the audio signal, as shown is Fig. \ref{fig:audio_output_compare_tb_vs_hw}.
 The signal strength of the left channel in the upper diagram is weaker than expected, while the right channel in the lower diagram is stronger.
 This imbalance can also be observed by listening to the audio output via speakers.\\
 
@@ -72,8 +74,7 @@ Also the fixed-point data type with its overflow- and rounding behaviour is susp
 Due to the time limitation in the elaboration of this thesis, this issue can not be traced down to the root cause and thus still persists in the current implementation.
 However, from the system-level point of view of this thesis, the IP works and can be integrated into the final system.
 
-%TODO: find a good time-range for this picture and format it correctly
-\includepicture [1.0] [0] {Comparison of the IPs audio signals against the Matlab model. The HLS variant matches the model, while the VHDL output diverts by a certain amount.} {audio_output_compare_ips_vs_matlab} {img/matlab/audio_output_compare_ips_vs_matlab}
+%\includepicture [1.0] [0] {Comparison of the IP audio output signals against the Matlab model. The HLS variant matches the model, while the VHDL output diverts by a certain amount.} {audio_output_compare_ips_vs_matlab} {img/matlab/audio_output_compare_ips_vs_matlab}
 
 
 \subsubsection{Comparing simulation- against hardware results}
@@ -92,9 +93,6 @@ Again, the time limitation in the elaboration of this thesis does not allow a de
 However, the end-to-end system design enables the developer to analyze an issue like this in a convenient way, in quick iterations.
 Any adaptions in the VHDL design can be simulated and integrated into the FPGA with automated scripts.
 Both results can then be analyzed and compared, which may lead to further adaptions.\\
-
-%TODO: find a good time-range for this picture and format it correctly
-\includepicture [1.0] [0] [H] {Comparison of the audio signal in simulation testbench and hardware.} {audio_output_compare_tb_vs_hw} {img/matlab/audio_output_compare_tb_vs_hw}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
