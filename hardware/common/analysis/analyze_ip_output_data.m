@@ -107,7 +107,7 @@ ylabel('amplitude');
 linkaxes([ax1,ax2],'xy');
 
 % Adapt figure size
-fig_audio_time.Position(3:4) = [900 600];
+fig_audio_time.Position(3:4) = [900 550];
 
 % Zoom area of interest, and save
 if EnableZoomToVhdlTimeRange
