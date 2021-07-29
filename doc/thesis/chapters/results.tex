@@ -2,23 +2,53 @@
 \chapter{Comparison and Results}
 \label{cha:ComparisonAndResults}
 
-% especially VHDL<->HLS
+This chapter presents the results that are achieved in the development of the FM Radio Receiver project, with the chosen different methods.
+However, the main focus is to compare the results that are achieved with HLS and VHDL, since these are the major implementation variants of the project.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Demodulated Signal}
-% show plots of the common analyzer python script
+\section{General}
 
-\includepicture [1.0] [0] {Comparison of the audio signal.} {audio_output_compare_all_ips} {img/matlab/audio_output_compare_all_ips}
+The main goal of this thesis is to implement an FM radio receiver in multiple different methods.
+This includes GNU Radio, Matlab, VHDL and HLS.
+The target functionality is to listen to the audio broadcast signal of an FM radio station.\\
+
+All of these methods are implemented and the target functionality is achieved with all of them.
+However, the level of detail that is required in the implementation, and the resulting effort and time it takes to implement the respective variant, differs by a large factor.\\
+
+In the following sections, especially the HLS and VHDL implementations are compared on the basis of metrics, but also based on the experience during development.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Functionality}
+
+Generally, both tools - HLS and VHDL - provide the capabilities to implement any functionality in one or the other method.
+However,
+
 % Functionality same?
 % DSP yes, AXI no (FSM of axi-stream)
 % unit tests
 
+%%%%%%%%%%%%%%%%%%%%
+\subsection{Audio Output}
+% show plots of the common analyzer python script
+Demodulated Signal
+
+\includepicture [1.0] [0] {Comparison of the audio signal.} {audio_output_compare_all_ips} {img/matlab/audio_output_compare_all_ips}
+
+%%%%%%%%%%%%%%%%%%%%
+\subsection{Interfaces}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Code Development}
-% lines of code
+
+%%%%%%%%%%%%%%%%%%%%
+\subsection{Lines of Code}
+% of the entire project
+
+%%%%%%%%%%%%%%%%%%%%
+\subsection{Implementation Time}
+
 % Implementation effort/time
 %    -- see logged times; is subjective; had no previous knowledge
 %    -- AXI interfaces --> huge effort in VHDL...
@@ -32,39 +62,32 @@
 \section{Simulation}
 % Sim speed of x min of recorded FM signal
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Useability}
+\section{System Design}
+
+% - The system level architecture that was chosen, can be applied to any DSP project. Simply replace the main IP, e.g. from FM to DAB+, QAM, etc. and the environment can run in the exact same way.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Deployment On Hardware}
+
+%%%%%%%%%%%%%%%%%%%%
+\subsection{Integration}
 % IP generation and integration into Vivado
+
+%%%%%%%%%%%%%%%%%%%%
+\subsection{Hardware Utilization}
+% --> utilization reports
+
+%%%%%%%%%%%%%%%%%%%%
+\subsection{Latency}
+% --> utilization reports
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Applicability}
-% of implementation variant (GNU Radio for fast prototyping, Matlab for research, HLS/VHDL deployment on HW, etc.)
+% of all implementation variants
+%   GNU Radio for fast prototyping,
+%   Matlab for research
+%   HLS/VHDL for deployment on HW, product development
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Advantages / Disadvantages}
-
-easy and much faster to get complex HDL code, such as image/video processing, through libraries like OpenCV.\\
-However, it may be less optimized.\\
-A developer still needs to have a strong hardware background, to be able to understand what is being generated in hardware from x lines of code in HLS/Cpp.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Hardware Utilization}
-% --> utilization reports
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Latency}
-% --> utilization reports
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \section{Lines of Code}
-  % of the entire project
-
-  % NOTES:
-  % - The system level architecture that was chosen, can be applied to any DSP project. Simply replace the main IP, e.g. from FM to DAB+, QAM, etc. and the environment can run in the exact same way.
-  %
-  % Further steps:
-  % - generate VHDL from Matlab receiver code
-  % - use the common input file and feed it to GNU Radio; also produce an output file with GNU Radio for comparison
-  %- Develop HLS compiler independent code (optional)}
-  %   -- Different compilers use different #pragmas, etc.
-  %   -- These #pragmas need to be within the code, at the appropriate positions, which makes it difficult to write compiler independent code....

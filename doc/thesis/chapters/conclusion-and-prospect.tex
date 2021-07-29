@@ -4,18 +4,34 @@
 
 
 % NOTES:
+%
+% Further steps:
+%  - generate VHDL from Matlab receiver code
+%  - use the common input file and feed it to GNU Radio;
+%    also produce an output file with GNU Radio for comparison
+%  - Develop HLS compiler independent code (optional)}
+%    -- Different compilers use different #pragmas, etc.
+%    -- These #pragmas need to be within the code, at the appropriate positions,
+%       which makes it difficult to write compiler independent code....
 %  - use Matlab Simulink HDL Coder and System Generator
-%    as additional implementation variants
+%     as additional implementation variants
 %  - use Intel oneAPI HLS compiler
-%     -- try to develop compiler-independent code
-%     -- how platform-independent is HLS?
+%      -- try to develop compiler-independent code
+%      -- how platform-independent is HLS?
 %  - explore HLS optimizations
 %  - explore HLS libraries (e.g. DSP library --> pre-made FIR filter)
 %  - create another IP in the same system
-%     -- due to the modular system design this is easy to do
+%      -- due to the modular system design this is easy to do
 %  - use Linux OS on the SoC, to enable live-data streaming with the RTL-SDR
 %
 %
 %
 %
 %
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Advantages / Disadvantages}
+
+easy and much faster to get complex HDL code, such as image/video processing, through libraries like OpenCV.\\
+However, it may be less optimized.\\
+A developer still needs to have a strong hardware background, to be able to understand what is being generated in hardware from x lines of code in HLS/Cpp.
