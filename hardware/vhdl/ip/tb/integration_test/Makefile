@@ -10,11 +10,11 @@ TOPLEVEL_LANG = vhdl
 USE_WAVE_VCD = 0
 
 COMPILE_ARGS = --std=08
-ifeq ($(USE_WAVE_VCD),1)
-	SIM_ARGS = --vcd=sim_build/waveform.vcd --read-wave-opt=gtkwave/waveopt.gtkw
-else
-	SIM_ARGS = --wave=sim_build/waveform.ghw --read-wave-opt=gtkwave/waveopt.gtkw
-endif
+#ifeq ($(USE_WAVE_VCD),1)
+#	SIM_ARGS = --vcd=sim_build/waveform.vcd --read-wave-opt=gtkwave/waveopt.gtkw
+#else
+#	SIM_ARGS = --wave=sim_build/waveform.ghw --read-wave-opt=gtkwave/waveopt.gtkw
+#endif
 #SIM_ARGS +=
 
 # VHDL sources in compile order

@@ -12,7 +12,11 @@ close all;
 clc;
 
 %% Settings
-EnableZoomToBegin = false;
+dir_output_doc = "../../../doc/thesis/img/matlab";
+
+EnableSaveToFile                = true;
+EnableZoomToBegin               = true;
+EnableZoomToComparisonTimeRange = false;
 
 %=========================================================================
 %% Read data
@@ -80,8 +84,10 @@ h4 = plot(audioDataLeft_HLS_SIM,  'r--','DisplayName', 'HLS SIM');
 xline(length(audioDataLeft_HLS_FPGA),'k--','FPGA');
 xline(length(audioDataLeft_HLS_SIM), 'k--','HLS SIM');
 xline(length(audioDataLeft_VHDL_SIM),'k--','VHDL SIM');
-grid on; legend([h0,h1,h2,h3,h4],'Location','east');
+grid on; legend([h0,h1,h2,h3,h4],'Location','southeast');
 ylim([ymin,ymax]);
+xlabel('time [sample]');
+ylabel('amplitude');
 
 ax2 = subplot(2,1,2); hold on;
 title('Right channel');
@@ -93,18 +99,27 @@ h4 = plot(audioDataRight_HLS_SIM,  'r--','DisplayName', 'HLS SIM');
 xline(length(audioDataRight_HLS_FPGA),'k--','FPGA');
 xline(length(audioDataRight_HLS_SIM), 'k--','HLS SIM');
 xline(length(audioDataRight_VHDL_SIM),'k--','VHDL SIM');
-grid on; legend([h0,h1,h2,h3,h4],'Location','east');
+grid on; legend([h0,h1,h2,h3,h4],'Location','southeast');
 ylim([ymin,ymax]);
 
 xlabel('time [sample]');
+ylabel('amplitude');
 linkaxes([ax1,ax2],'xy');
+
+% Adapt figure size
+fig_audio_time.Position(3:4) = [900 450];
+
+% Zoom area of interest, and save
 if EnableZoomToBegin
     xlim([0,length(audioDataLeft_VHDL_SIM)]);
     ylim([-0.035,0.035]);
 end
+if EnableZoomToComparisonTimeRange
+    xlim([3450,4250]);
+    ylim([-0.45,0.65]);
+end
 
-% Adapt figure size and save it
-fig_audio_time.Position(3:4) = [900 600];
-%saveas(fig_audio_time, "./audio_output_compare_all_ips.png");
-dir_output_doc = "../../../doc/thesis/img/matlab";
-exportgraphics(fig_audio_time,sprintf("%s/%s",dir_output_doc, "audio_output_compare_all_ips.pdf"),'ContentType','vector')
+if EnableSaveToFile
+    %saveas(fig_audio_time, "./audio_output_compare_all_ips.png");
+    exportgraphics(fig_audio_time,sprintf("%s/%s",dir_output_doc, "audio_output_compare_all_ips.pdf"),'ContentType','vector')
+end

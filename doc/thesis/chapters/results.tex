@@ -22,7 +22,7 @@ In the following sections, especially the HLS and VHDL implementations are compa
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Functionality}
 
-Generally, both tools --- HLS and VHDL --- provide the capabilities to implement any functionality in one or the other method.
+Generally, both tools -- HLS and VHDL -- provide the capabilities to implement any functionality in one or the other method.
 However, the implementation is done in a different level.
 VHDL uses an approach that is very close to the hardware, such as clock cycles and flipflops, while HLS describes the logic on an algorithmic level.\\
 
@@ -36,16 +36,65 @@ The results are presented in the following sections.
 %%%%%%%%%%%%%%%%%%%%
 \subsection{Interfaces}
 
+The AXI4-Lite memory-mapped bus is implemented to have an exactly equal behaviour in both variants.
+There are read-only and read-writeable registers, which are all mapped onto a single base address.\\
+
+The AXI stream interface however does not show the exact same behaviour.
+Here, the HLS variant is using the AXI stream according to its protocol, while the VHDL variant is implemented differently.
+It uses a simplified logic for the ready-flag, which reduces the effort in implementation.
+However, from the perspective of the communicating blocks, the interface is usable like a regular AXI stream.
+The implementation details are explained in Section \ref{sec:impl:vhdl:interfaces}.\\
+
+In the final, integrated system on the SoC hardware, the CPU is able to communicate with both IPs via their interfaces successfully.
+Status and configuration data can be read and written through the AXI4-Lite interface, and the streaming data for the DSP chain is successfully sent through the AXI streams as well.
 
 %%%%%%%%%%%%%%%%%%%%
 \subsection{Audio Output}
 
-Regarding the DSP, both implementation variants achieve a very similar result.
+The audio output of the HLS and VHDL variants is compared with the Matlab model, which serves as the reference.
+Additionally, the results of the testbench are compared with their respective result in the actual hardware.
+In summary, it can be stated that the DSP chain produces a very similar audio output in all the compared data sets.
+However, differences remain, which are presented in the following paragraphs and diagrams.
 
-% show plots of the common analyzer python script
-Demodulated Signal
+\subsubsection{Comparing against the Matlab reference}
 
-\includepicture [1.0] [0] {Comparison of the audio signal.} {audio_output_compare_all_ips} {img/matlab/audio_output_compare_all_ips}
+In the comparison against the Matlab model, the HLS variant achieves a very exact match of the output signal.
+However, the VHDL implementation differs by a certain amount.
+There seems to be an issue in the signal separation between the left and right audio channels.
+This is visible in the analysis of the audio signal, as shown is Fig. \ref{fig:audio_output_compare_ips_vs_matlab}.
+The signal strength of the left channel in the upper diagram is weaker than expected, while the right channel in the lower diagram is stronger.
+This imbalance can also be observed by listening to the audio output via speakers.\\
+
+The cause for this issue may be located in several components in the design.
+This includes the FM demodulator, the carrier recovery, i.e. the 38~kHz carrier, as well as a sample timing shift in the final summation and substraction to recover the left and right channels.
+The FIR filter has a successfully passing unit test and is thus assumed to be correct.
+Also the fixed-point data type with its overflow- and rounding behaviour is suspected to be a potential issue.
+Due to the time limitation in the elaboration of this thesis, this issue can not be traced down to the root cause and thus still persists in the current implementation.
+However, from the system-level point of view of this thesis, the IP works and can be integrated into the final system.
+
+%TODO: find a good time-range for this picture and format it correctly
+\includepicture [1.0] [0] {Comparison of the IPs audio signals against the Matlab model. The HLS variant matches the model, while the VHDL output diverts by a certain amount.} {audio_output_compare_ips_vs_matlab} {img/matlab/audio_output_compare_ips_vs_matlab}
+
+
+\subsubsection{Comparing simulation- against hardware results}
+
+Here, the results of the simulation testbenches are compared against the values that are read from the FPGA directly.
+Ideally, the values should be exactly the same.
+However, Figure \ref{fig:audio_output_compare_tb_vs_hw} shows that this is not always the case.
+Again, the HLS implementation does have a matching result, whereas the VHDL variant has deviating values.
+The explanation here may be linked with above suspicions, but may also be linked to the initial reset values that exist in the hardware.
+In the HLS implementation, the reset logic of several registers is implemented automatically, whereas in VHDL these conditions need to be implemented manually.
+Therefore, the IPs internal state, i.e. the register values, may be different at the beginning, which leads to an error propagation throughout the design.
+The entire DSP chain is built like a pipeline and therefor it takes a number of samples to process, before the 'wrong' intermediate values are flushed out.
+All that may be the cause for the deviating values in the VHDL design.\\
+
+Again, the time limitation in the elaboration of this thesis does not allow a deeper analysis of this issue.
+However, the end-to-end system design enables the developer to analyze an issue like this in a convenient way, in quick iterations.
+Any adaptions in the VHDL design can be simulated and integrated into the FPGA with automated scripts.
+Both results can then be analyzed and compared, which may lead to further adaptions.\\
+
+%TODO: find a good time-range for this picture and format it correctly
+\includepicture [1.0] [0] [H] {Comparison of the audio signal in simulation testbench and hardware.} {audio_output_compare_tb_vs_hw} {img/matlab/audio_output_compare_tb_vs_hw}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

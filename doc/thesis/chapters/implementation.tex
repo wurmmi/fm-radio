@@ -409,6 +409,7 @@ All the other design units mostly consist of simple delay lines, additions or su
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Interfaces}
+\label{sec:impl:vhdl:interfaces}
 
 The main interfaces of the FM radio receiver IP are two AXI4-Stream interfaces and one AXI4-Lite memory-mapped slave interface.
 The streaming interfaces are used for the input of IQ samples and output of the processed audio samples, while the memory-mapped interface provides configuration options and status information.
@@ -509,6 +510,7 @@ The diagram displays the HLS IP in the testbench and in the hardware with dotted
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Interfaces}
+\label{sec:impl:hls:interfaces}
 
 HLS can automatically implement interfaces, as described in Section \ref{sec:hls:coding:interfaces}.
 This is a major feature that is used in the implementation of the HLS IP.\\
