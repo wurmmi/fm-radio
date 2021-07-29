@@ -104,7 +104,7 @@ In the case of a recording, the original data is not known, which does not allow
 
 In the implemented version, an audio file is modulated into the FM channel.
 The audio file contains data that represents speech with the words \textit{'Left channel... Right channel...'}.
-In terms of audio channels, the words exactly match the respective channels' output - the first part is modulated on the left audio channel only, while the second part only targets the right audio channel.
+In terms of audio channels, the words exactly match the respective channels' output -- the first part is modulated on the left audio channel only, while the second part only targets the right audio channel.
 This is particulary useful for verification, especially to verify the functionality of channel separation.
 From the experience during development, the channel separation is a good indicator of whether the system is functioning correctly.
 This left-right indication also simplifies the verification process, because a developer can recognize it with their visual and acoustic senses.
@@ -150,7 +150,7 @@ Furthermore, it would not contribute any additional value to this project, since
 At this point in the DSP chain, the signal resembles the frequency spectrum that is displayed in Figure \ref{fig:fm_channel_baseband_freqs}.\\
 
 In the final chain of DSP blocks, the sample rate is increased again, to be able to frequency-modulate the signal.
-The resulting frequency modulated signal represents the signal that is received by an antenna - the RF signal of an FM channel.
+The resulting frequency modulated signal represents the signal that is received by an antenna -- the RF signal of an FM channel.
 This signal is then processed by a complex baseband mixer, which results in inphase-, and quadrature components in the baseband.
 An LP filter band-limits the signal and removes artifacts of the mixer.
 As a final step, the sample rate is decreased again, back to the chosen sampling rate of 960~kHz.
@@ -244,7 +244,7 @@ The USRP device is used to broadcast the RF signal over the air.\\
 Again, an audio file is used as an input, which is modulated as an FM channel signal.
 The entire multiplex signal is then modulated onto an actual carrier frequency of 99~MHz, that is within the FM radio broadcast band.
 This entire DSP chain is being run in the GNU Radio software, on a host PC.
-Only the final signal - FM modulated, and on a carrier of 99~MHz - is then sent to the USRP device in the form of digital signal samples.
+Only the final signal -- FM modulated, and on a carrier of 99~MHz -- is then sent to the USRP device in the form of digital signal samples.
 The USRP hardware then transmits the signal via its antenna.\\
 
 Special care needs to be taken when transmitting signals over the air.
@@ -278,7 +278,7 @@ Figure \ref{fig:bd_gnuradio_setup_receiver} shows a block diagram of the receive
 
 The usage of a software like GNU Radio in combination with external hardware is an interesting tool for a use-case like this project.
 An FM receiver is to be implemented in multiple different versions.
-All of them need to be verified somehow - this is where the SDR transmitter created with GNU Radio and external hardware opens up an entire new possibility from the viewpoint of system level design integration.\\
+All of them need to be verified somehow -- this is where the SDR transmitter created with GNU Radio and external hardware opens up an entire new possibility from the viewpoint of system level design integration.\\
 
 Previously it was explained that it is not possible to use recorded antenna data for verification.
 The reason was, that the underlying original data is not known and therefor a comparison of the original versus the received, decoded data is not feasible.
@@ -318,7 +318,7 @@ The simulator further supports a VPI (Verilog Procedural Interface), which can b
 
 The testbench framework cocotb is developed as a free, open-source project.
 It can be used to verify VHDL and SystemVerilog RTL code, in combination with an external simulator.
-Various different simulators can be used with cocotb - amongst others, GHDL is supported.
+Various different simulators can be used with cocotb -- amongst others, GHDL is supported.
 The interface that is used to the simulator is the industry-standard VPI.\\
 
 One of the main advantages of cocotb is, that test cases for the respective RTL code are written in the language Python.
@@ -364,7 +364,7 @@ The \textit{tb\_data\_handler} only works as a data storage class, that encapsul
 The class called \textit{fm\_receiver\_model} serves as the 'golden model reference' that is used to compare the DUT against.
 Internally, it loads the Matlab verification data.
 This could be implemented differently, since Python can be used to actually implement an FM receiver including the entire DSP functionality, just like in Matlab.
-Because the Matlab model already exists, this is not done here - loading the Matlab data is sufficient as it is been seen as 'the single source of truth' in this project.\\
+Because the Matlab model already exists, this is not done here -- loading the Matlab data is sufficient as it is been seen as 'the single source of truth' in this project.\\
 
 At the end of the test cases, the DUTs' output data is written to a file.
 This data is later used to directly compare the different implementation variants against each other.
@@ -376,7 +376,7 @@ Common strategies for testing are unit tests and integration tests, which repres
 Unit tests specifically target a single unit, while integration tests verify the combination of multiple units as a whole.
 Both of these stragegies are important.
 Given all unit tests being successful, it is ensured that all these single units are implemented correctly.
-However, their combination and interaction may still be subject to error - this is where integration tests unfold their potential.
+However, their combination and interaction may still be subject to error -- this is where integration tests unfold their potential.
 Implementation errors in the glue logic between the units, as well as the interaction of the respective interfaces can be found in these integration tests.\\
 
 The testbench architecture presented above represents an integration test, since the DUT is tested as an entire block.
@@ -386,7 +386,7 @@ The source of error may be hidden anywhere within the nested and interconnected 
 Thus, in addition to the DUTs' interfaces, further signals are logged from the inside of the DUT.
 These internal signals can be accessed through the Python testbench.\\
 
-In this context, there are further keywords that need to be mentioned - black box testing and white box testing.
+In this context, there are further keywords that need to be mentioned -- black box testing and white box testing.
 These are testing strategies, and describe how the DUT is treated.
 In the case of black box, the DUTs internals, such as implementation details, are not known.
 Thus, only the exposed interfaces can be tested.
@@ -426,7 +426,7 @@ An IP may indicate that it is not ready, while its current operation is still ru
 In the VHDL version of the FM radio receiver IP, this handshaking is not implemented according to the AXI stream specification.
 Specifically, the ready signal handshake is implemented with a workaround, to simplify the development.
 The DSP chain of the IP is not fully pipelined and thus cannot consume an input sample on every clock cycle.
-This is mainly because of the FIR filter implementation - it takes multiple clock cycles to compute an output sample, before it can take a new sample.
+This is mainly because of the FIR filter implementation -- it takes multiple clock cycles to compute an output sample, before it can take a new sample.
 Ideally, this situation should be handled by the ready signal, since this is exactly what it is intended for.
 However, in order to simplify the implementation a strobe generator is used, which is a counter that generates a repetitive pulse with a defined period.
 This pulse, in combination with some additional logic, is used as the ready signal, to guarantee enough spacing between two consecutive input samples.
@@ -439,7 +439,7 @@ It is connected with the CPU, which uses these registers in the application soft
 
 The VHDL code for this register interface is generated by a 'Register Engine' Python script.
 The registers can be defined in a YAML-file.
-Additionally, documentation in the form of a Markdown language file is generated, and - more importantly - a C/\cplusplus\ code header, which defines all the register addresses and can be used in the application software.\\
+Additionally, documentation in the form of a Markdown language file is generated, and -- more importantly -- a C/\cplusplus\ code header, which defines all the register addresses and can be used in the application software.\\
 
 Figure \ref{fig:register_engine} gives an overview of how the Register Engine script works.
 The Python script takes the register definitions from the YAML file, and uses templates to generate the respecitive output files.\\

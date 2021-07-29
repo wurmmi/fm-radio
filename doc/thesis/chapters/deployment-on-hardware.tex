@@ -87,7 +87,7 @@ However, the design around it needs to function properly in order for the IP to 
 The CPU is the main actor that determines any actions on the system.
 First, it reads a file from the external SD card and stores this data in a dedicated area in the memory.
 Next, the DMA is configured and its data transfer mode is initiated, so that the DMA starts to transfer data from the mentioned memory area towards the FPGA.
-The DMA is configured in a mode that creates a continuous transfer, by looping through the data - once the end is reached, the transfer starts at the beginning of the memory area.
+The DMA is configured in a mode that creates a continuous transfer, by looping through the data -- once the end is reached, the transfer starts at the beginning of the memory area.
 Any data connection in the following processing chain is implemented as an AXI stream bus.
 The first block after the DMA is an AXI Stream Switch.
 It can switch its single input to be forwarded to either of the outputs.
