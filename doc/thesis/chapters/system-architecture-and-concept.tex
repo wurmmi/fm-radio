@@ -33,7 +33,7 @@ The aim of this thesis is develop a system architecture and concept, that allows
 The final goal thereby is always be the same, that is: Listen to the music of a radio station that is transmitted over FM broadcast radio.\\
 
 \noindent
-A very high-level overview of the entire system is given by the block diagram in Fig.\ref{fig:bd_system_overview_highlevel}.
+A very high-level overview of the entire system is given by the block diagram in Figure \ref{fig:bd_system_overview_highlevel}.
 It shows the front end, which processes the received antenna signal, so that it can be used in the FM radio receiver block.
 The radio receiver itself is implemented in multiple different variants.
 The produced audio output is sent to a speaker, since the ultimate goal is to listen to a radio stations' audio signal.
@@ -96,7 +96,7 @@ This significantly eases the verification of the functionality in the final step
 Not only the data source is important to be common, but also the way of verification.
 In order to achieve that, the verification block needs to be able to compare multiple data outputs with the verification data, which is chosen to serve as the reference.\\
 
-An example of a system concept and its architecture is developed and shown in Fig.\ref{fig:bd_system_overview_detailed}.
+An example of a system concept and its architecture is developed and shown in Figure \ref{fig:bd_system_overview_detailed}.
 Here, a common data source is provided by the block called \textit{Front End}.
 It records data from an antenna and saves it to a file, in a format that the consequent blocks require at their input.
 Therefore, a reproducable input is ensured.

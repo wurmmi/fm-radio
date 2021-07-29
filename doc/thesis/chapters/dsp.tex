@@ -42,7 +42,7 @@ After the signal is processed to digital baseband, the received signal can final
 This decoding process depends on the respective modulation type that is used.\\
 
 \noindent
-The block diagram in Fig.\ref{fig:bd_dsp_overview} gives a high-level overview of a receiver structure.
+The block diagram in Figure \ref{fig:bd_dsp_overview} gives a high-level overview of a receiver structure.
 
 \includepicture [1.0] {High-level block diagram of a signal processing chain.} {bd_dsp_overview} {img/draw.io/bd_dsp_overview}
 
@@ -64,7 +64,7 @@ This is one of the superhets' main advantages.
 A disadvantage is that the signal noise around the image frequency band is translated into the IF output band.
 Thus, the filter requirements are relatively high, since they need to deliver a strong attenuation in order to suppress noise outside the desired band.\\
 
-Fig.\ref{fig:bd_superhet} shows a block diagram of a superhet receiver.
+Figure \ref{fig:bd_superhet} shows a block diagram of a superhet receiver.
 The antenna signal first runs through a band selection filter.
 It selects the desired frequency band and filters out any unwanted signals outside of this band.
 A low-noise amplifier (LNA) may be used to boost the signal strenght.
@@ -76,7 +76,7 @@ The demodulator stage can now perform any further signal processing on the signa
 
 The depicted block diagram may represent an FM broadcast receiver, where an audio output is generated from the antenna input.
 
-\includepicture [1.0] {Block design of a superhetorodyne receiver \cite[Fig.2.1]{PassosFábio2020AHSo}} {bd_superhet} {img/draw.io/superheterodyne-receiver-block-diagram}
+\includepicture [1.0] {Block design of a superhetorodyne receiver \cite{PassosFábio2020AHSo}} {bd_superhet} {img/draw.io/superheterodyne-receiver-block-diagram}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Direct-Conversion Receiver}
@@ -90,7 +90,7 @@ This is due to the properties of the mixer.
 The strongest disadvantages are the LO leakage, which leads to a DC offset at the mixer output, and the flicker noise, also called \textit{1/f}-noise, which induces strong noise at low frequencies \cite{PassosFábio2020AHSo}.
 These effects are not explained into more detail here, since this is not the focus of this thesis.
 
-\includepicture [1.0] {Block design of a direct-conversion receiver \cite[Fig.2.3]{PassosFábio2020AHSo}.} {bd_direct_conversion} {img/draw.io/direct-conversion-receiver-block-diagram}
+\includepicture [1.0] {Block design of a direct-conversion receiver \cite{PassosFábio2020AHSo}.} {bd_direct_conversion} {img/draw.io/direct-conversion-receiver-block-diagram}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -106,7 +106,7 @@ In order to achieve this, the incoming signal needs to be multiplicated with a c
 Depending on the frequency $f_{LO}$ of this local carrier, the resulting signal will be shifted to baseband, or an IF.
 Note, that in the case of down-conversion, the local oscillator frequency $f_{LO}$ is interchangeably denoted as carrier frequency $f_c$.\\
 
-A block diagram, as well as the signal spectrum of the process is shown in Fig.\ref{fig:bd_down_conversion_spectrum}. In this example, the frequency of the LO is set to shift the signal from $f_m$ to baseband.
+A block diagram, as well as the signal spectrum of the process is shown in Figure \ref{fig:bd_down_conversion_spectrum}. In this example, the frequency of the LO is set to shift the signal from $f_m$ to baseband.
 
 \includepicture [1.0] {Block diagram and signal spectrum of down-conversion.} {bd_down_conversion_spectrum} {img/draw.io/down-conversion-AM-spectrum-and-bd}
 
@@ -116,7 +116,7 @@ A block diagram, as well as the signal spectrum of the process is shown in Fig.\
 The procedure that is used for down-conversion is an amplitude modulation (AM).
 The equation for a generic AM signal is $ S_{AM}(t) = A_m m(t) \cdot A_c c(t) $, where $m(t)$ represents the message signal, and $c(t)$ is the high-frequency carrier.
 Their respective amplitudes are $A_m$ and $A_c$.
-This equation is depicted as a block diagram and signal spectrum in Fig.\ref{fig:bd_down_conversion_spectrum}, where $S_{AM}$ is denoted as the baseband signal $m_{BB}$ of the original signal $m$.
+This equation is depicted as a block diagram and signal spectrum in Figure \ref{fig:bd_down_conversion_spectrum}, where $S_{AM}$ is denoted as the baseband signal $m_{BB}$ of the original signal $m$.
 The signal $m(t)$ is a baseband signal.
 It may be antenna signal that was filtered by a bandpass filter.
 The received signal is a real signal, and thus its negative frequency spectrum is an exact mirror of the positive frequencies.
@@ -151,7 +151,7 @@ the final formula of the conversion can be represented as
  m_{BB}(t) = \frac{1}{2} \cdot \Bigl[ cos\bigl((w_m-w_c)t\bigr) + cos\bigl((w_m+w_c)t\bigr) \Bigr]
 \end{equation}
 
-The graphical representation in the frequency spectrum is shown in Fig.\ref{fig:down_conversion_spectrum_steps}.
+The graphical representation in the frequency spectrum is shown in Figure \ref{fig:down_conversion_spectrum_steps}.
 As mentioned above, the assumption is a direct conversion to baseband, so $w_m = w_c$.
 Looking at the positive original part, it is shown that only half of its energy is translated into the desired baseband.
 However, half of the energy of the original negative part is also shifted to baseband.
@@ -176,7 +176,7 @@ Any digital signal processing technique must hold the specification of the sampl
 In case the theorem is violated, the effect of aliasing occurs on the generated signal.
 The sampling process introduces spectral replicas at integer multiples of the sampling frequency $f_s$.
 These replicas overlap, if $f_s$ does not meet the theorem, which results in signal distortion.
-Fig.\ref{fig:aliasing_freq_spectrum} illustrates the effect of aliasing in the frequency spectrum \cite{ThyagarajanK.S2019ItDS}.
+Figure \ref{fig:aliasing_freq_spectrum} illustrates the effect of aliasing in the frequency spectrum \cite{ThyagarajanK.S2019ItDS}.
 
 \includepicture [0.95] {
   Frequency spectrum of the sampled baseband signal with its replicas at integer multiples of $f_s$ \cite{ThyagarajanK.S2019ItDS}.\\
@@ -303,7 +303,7 @@ This leaves a guard band of 25 kHz on either side, to minimize interference with
 Center frequencies may be allocated on multiples of 100 kHz.
 However, neighboring channels need to be considered therefore, since this may result in an overlap in the spectrum.\\
 
-Fig.\ref{fig:fm_channel_baseband_freqs} shows the frequency spectrum of a single channel, located at its carrier- or center frequency.
+Figure \ref{fig:fm_channel_baseband_freqs} shows the frequency spectrum of a single channel, located at its carrier- or center frequency.
 For a better overview, only the positive spectum part is shown.
 The negative part is an exact mirror, because the transmitted and received signals from the antenna are real signals - they do not have an imaginary part.
 The spectrum consists of multiple parts. Therefore, it is also referred to as `multiplex signal' in the literature. Several parts are described in the following paragraphs \cite{EbuFmRegulators}\cite{EtsiFmSoundBroadcastingServiceHarmonizedStandard}\cite{ElectronicsNotesFmTutorial}.
@@ -392,7 +392,7 @@ A frequency discriminator generates an output that is directly proportional to t
 In other words, it converts FM to AM.
 The discriminator consists of two main parts - a differentiator and an envelope detector.
 Different strategies can be implemented for both parts.
-A block diagram for a frequency discriminator with its two main parts is shown in Fig.\ref{fig:bd_freq_discriminator}.
+A block diagram for a frequency discriminator with its two main parts is shown in Figure \ref{fig:bd_freq_discriminator}.
 
 \includepicture [0.75] [0] [H] {Frequency discriminator block diagram \cite{FigBdFreqDiscriminator}.} {bd_freq_discriminator} {img/draw.io/bd_freq_discriminator}
 
@@ -412,7 +412,7 @@ The FM part is described by the sine function, with its argument.
 The more important part is the AM part, which resembles the message signal.
 It is described by the term within the square brackets.
 
-A time-domain example for this signal is shown in the top left diagram in Fig.\ref{fig:time_domain_envelope_detect}.\\
+A time-domain example for this signal is shown in the top left diagram in Figure \ref{fig:time_domain_envelope_detect}.\\
 
 An important requirement for the differentiator is, that the input signal is of a constant amplitude \cite{SchnyderHaller2002}.
 The transmitted signal is subject to random additive noise on the transmission channel.
@@ -437,9 +437,9 @@ where $\Delta t$ is the inverse of the sample frequency.\\ %TODO: check this (i'
 
 The differentiated signal still consists of a FM part, as explained above, using Eq.\eqref{equ:fm_demod_discriminator}.
 In order to remove this high-frequeny part and extract the low-frequency envelope, the signal needs to be fed into an envelope detector.
-A block diagram is shown in Fig.\ref{fig:bd_freq_discriminator}.\\
+A block diagram is shown in Figure \ref{fig:bd_freq_discriminator}.\\
 
-The method implemented in Fig.\ref{fig:time_domain_envelope_detect} is one of the most simple ones and is usually referred to as `Asynchronous Half-Wave Envelope Detector' \cite{DSPRelatedEnvelopeDetection}.
+The method implemented in Figure \ref{fig:time_domain_envelope_detect} is one of the most simple ones and is usually referred to as `Asynchronous Half-Wave Envelope Detector' \cite{DSPRelatedEnvelopeDetection}.
 It consists of a thresholding unit to remove negative values and a conventional lowpass filter.
 In analog implementations, the thresholding unit is a diode.
 The cutoff frequency of the lowpass needs to be adapted to the envelope signals' maximum frequency.
@@ -479,7 +479,7 @@ The assumption here is, that the actual FM demodulation, as described in chapter
 So at this point the FM signal is converted to an AM signal.
 Thus, traditional AM DSP techniques can be employed to decode the FM broadcast channel.\\
 
-A frequency spectrum of the multiplex signal of an FM channel is shown in Fig.\ref{fig:fm_channel_baseband_freqs}.
+A frequency spectrum of the multiplex signal of an FM channel is shown in Figure \ref{fig:fm_channel_baseband_freqs}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Mono Audio}
@@ -514,7 +514,7 @@ The following equations need to be applied, to compute a left and a right channe
 
 where $(L+R)$ represents the mono part and $(L-R)$ the stereo difference.\\
 
-The block diagram in Fig.\ref{fig_bd_stereo_demod} illustrates the signal processing chain for stereo audio.
+The block diagram in Figure \ref{fig_bd_stereo_demod} illustrates the signal processing chain for stereo audio.
 In the block diagram, $x(t)$ represents the multiplex signal from the FM demodulator.
 The signals $x_l(t)$ and $x_r(t)$ describe the left and right audio signal, respectively.\\
 

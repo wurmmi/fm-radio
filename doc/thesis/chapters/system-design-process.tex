@@ -36,7 +36,7 @@ The acronym SIMILAR consists of the following components.
   \item \textbf{R}e-evaluate\\
 \end{itemize}
 
-Each of these terms represents a separate step in the process diagram shown in Fig.\ref{fig:similar_process}.
+Each of these terms represents a separate step in the process diagram shown in Figure \ref{fig:similar_process}.
 The steps can be seen as iterative and parallel, as the process runs during the product development cycle.
 
 \includepicture [0.95] [0] {The SIMILAR process in a graphical representation \cite{BahillA.Terry2017TDiS}.} {similar_process} {img/draw.io/similar_process}
@@ -161,7 +161,7 @@ The development of a product requires an organized approach, in order to success
 The common term for such an organized approach is the process model, which represents a guideline on how to organize and structure the development cycle.\\
 
 A well-known process model is the so called V-Model.
-It is based on the similarly well-known Waterfall Model, and has its name because of the distinct V-shape of its process diagram, as it is shown in Fig.\ref{fig:v_modell}.
+It is based on the similarly well-known Waterfall Model, and has its name because of the distinct V-shape of its process diagram, as it is shown in Figure \ref{fig:v_modell}.
 One of the main characteristics of the V-Model is, that one phase needs to be completed before the following phase can start.
 This classifies the model as a static process model and is one of the main disadvantages at the same time, because it makes the model inflexible to adaptions of the requirements.
 The advantages however are that it is easy to install and apply, each phase has its specific deliverables, good results can be achieved for large projects with simple requirements and the early test phases.\\
@@ -171,7 +171,7 @@ The disadvantages of inflexibility towards changes of requirements and the fact,
 The V-model applies to general software development, or project development, but can directly be mapped to FPGA development.
 The model is covered in this thesis section, because it shows the clear testing structure of module tests (unit tests), integration tests and system tests, which is especially important in projects that target hardware, such as FPGA projects.\\
 
-Furthermore, the V-model diagram in Fig.\ref{fig:v_modell} shows the difference between validation and verification, as it is explained in the previous section \ref{sec:ValidationAndVerification}.
+Furthermore, the V-model diagram in Figure \ref{fig:v_modell} shows the difference between validation and verification, as it is explained in the previous section \ref{sec:ValidationAndVerification}.
 
 \includepicture [1.0] [0] {The V-Modell process diagram \cite[Abbildung 3.5]{GesslerRalf2014EES}.} {v_modell} {img/draw.io/v_modell}
 
@@ -226,7 +226,7 @@ A full system-level design approach can be covered with the Simulink System Gene
 This includes the high-level development of the system as a block diagram in Simulink, the automated generation of low-level RTL code for the FPGA hardware, and the verification in simulation and in hardware, in the form of hardware-in-the-loop.
 This workflow is supported for Xilinx FPGAs and is specifically targeting system design engineers, who work in rapid prototyping to generate hardware utilization estimates for the final products' hardware.\\
 
-Fig. \ref{fig:simulink_system_generator} shows this entire design approach in a block diagram.
+Figure \ref{fig:simulink_system_generator} shows this entire design approach in a block diagram.
 The abbreviation ISE stands for Integrated Software Environment, and is Xilinx' development environment that includes the FPGA synthesis tool.
 ModelSim is a HDL simulator software, that is developed by Mentor Graphics.
 
@@ -244,7 +244,7 @@ This allows prototyping of algorithms, while continuously having detailed inform
 
 Multiple implementation methods are introduced in above sections, which all have different levels of abstraction.
 VHDL and Verilog require, or allow, a very detailed description of the RTL code, while SystemC, \cplusplus, or Matlab and Simulink provide a high level of abstraction.
-In Fig.\ref{fig:fpga_design_levels}, the various implementation methods are compared.
+In Figure \ref{fig:fpga_design_levels}, the various implementation methods are compared.
 The respective level of abstraction is higher towards the upper end, while the level of detail increases towards the bottom of the figure.\\
 
 In conclusion, it is an engineers' choice which implementation method to use in order to develop a product.

@@ -14,7 +14,7 @@ The demodulation of an FM broadcast channel specifically, is described in Sectio
 In this section however, the DSP chain is described into more detail and with more information, as it is implemented in the various methods.\\
 
 \noindent
-Fig.\ref{fig:bd_dsp_detailed} displays the detailed DSP chain as a block diagram.\\
+Figure \ref{fig:bd_dsp_detailed} displays the detailed DSP chain as a block diagram.\\
 
 %see duplicate below
 %\includepicture [1.02] [0] [H] {Detailed block diagram of the digital signal processing chain.} {bd_dsp_detailed} {img/draw.io/bd_dsp_detailed}
@@ -27,6 +27,8 @@ The following list explains implementation details about the respective DSP bloc
       An audio file is read and modulated as an FM channel signal.
 
   \item \textbf{FM Demodulator}\\
+       TODO\\
+       % TODO
       The FM demodulator is implemented as a Baseband Delay Modulator, as described in Section \ref{sec:BasebandDelayDemodulator}.
 
   \item \textbf{De-Emphasis Filter}\\
@@ -109,8 +111,8 @@ This left-right indication also simplifies the verification process, because a d
 It is possible to audibly verify it by listening to the output.
 It is also possible to just visually inspect the output data, where a clear separation is visible between the channels.\\
 
-The transmitter is implemented according to the structure that is depicted as a block diagram in Fig.\ref{fig:bd_matlab_transmitter}.
-To facilitate an easy understanding of the block diagram, it is of advantage to keep in mind that it exactly resembles the frequency spectrum that is previously shown in Fig.\ref{fig:fm_channel_baseband_freqs}.\\
+The transmitter is implemented according to the structure that is depicted as a block diagram in Figure \ref{fig:bd_matlab_transmitter}.
+To facilitate an easy understanding of the block diagram, it is of advantage to keep in mind that it exactly resembles the frequency spectrum that is previously shown in Figure \ref{fig:fm_channel_baseband_freqs}.\\
 
 \includepicture [1.0] [0] {Block diagram of the implemented transmitter in Matlab.} {bd_matlab_transmitter} {img/draw.io/bd_matlab_transmitter}
 
@@ -145,7 +147,7 @@ In the implemented transmitter, the Hinz Triller is implemented, but is disabled
 The Radio Data System (RDS) signal is not implemented in the transmitter, since it consists of a comprehensive protocol and multiple steps of modulation, such as differentially-coded BPSK \cite{IntroFmStereoRdsModulation} and is therefor too time-consuming to implement.
 Furthermore, it would not contribute any additional value to this project, since this is not the main focus.\\
 
-At this point in the DSP chain, the signal resembles the frequency spectrum that is displayed in Fig.\ref{fig:fm_channel_baseband_freqs}.\\
+At this point in the DSP chain, the signal resembles the frequency spectrum that is displayed in Figure \ref{fig:fm_channel_baseband_freqs}.\\
 
 In the final chain of DSP blocks, the sample rate is increased again, to be able to frequency-modulate the signal.
 The resulting frequency modulated signal represents the signal that is received by an antenna - the RF signal of an FM channel.
@@ -187,7 +189,7 @@ Therefore, it can serve as a reference for the hardware implementation.
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Receiver}
 
-The receiver is implemented, following the block diagram in Fig.\ref{fig:bd_dsp_detailed}.
+The receiver is implemented, following the block diagram in Figure \ref{fig:bd_dsp_detailed}.
 Further assumptions and simplifications, such as the fixed point arithmetic are described into detail above.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -196,7 +198,7 @@ Further assumptions and simplifications, such as the fixed point arithmetic are 
 The Matlab implementation also includes a comprehensive range of analysis, especially in terms of visual plots.
 These plots are useful during the development of new DSP algorithms, in order to verify the correct thereof.\\
 
-An example of a plot that is created by the analysis is depicted in Fig.\ref{fig:matlab_analysis_time_domain}.
+An example of a plot that is created by the analysis is depicted in Figure \ref{fig:matlab_analysis_time_domain}.
 The diagram shows the respective signals in the time domain.
 Above two timelines display the input data, as it is read from the input audio file.
 The two diagrams in the center plot the Mono and LR Diff signals.
@@ -207,7 +209,7 @@ However, the result shows a clear separation of the left and right channels, as 
 \includepicture [1.0] [0] {Matlab analysis in the time domain.} {matlab_analysis_time_domain} {img/matlab/matlab_analysis_time_domain}
 
 Further analysis is done in the frequency domain, especially in order to better understand the modulation of the different spectral parts in the FM channel.
-An example thereof is shown in Fig.\ref{fig:matlab_analysis_freq_domain}.
+An example thereof is shown in Figure \ref{fig:matlab_analysis_freq_domain}.
 The spectrum of an FM channel multiplex signal, as it is generated by a transmitter before the modulation, is shown in this diagram.
 The spectrum after the demodulation through a receiver is shown in the lower diagram.
 Spectral parts, such as the pilot tone at 19 kHz, or the LR Diff part around 38 kHz can be seen clearly.
@@ -236,7 +238,7 @@ GNU Radio supports interfaces to external RF hardware \cite{SoftwareGnuRadio}.
 \subsection{Transmitter}
 
 GNU Radio provides a comprehensive set of DSP blocks, which are available to build various functionalities.
-Multiple blocks are connected to a block diagram, that is very similar to the one in Fig.\ref{fig:bd_matlab_transmitter}.
+Multiple blocks are connected to a block diagram, that is very similar to the one in Figure \ref{fig:bd_matlab_transmitter}.
 The USRP device is used to broadcast the RF signal over the air.\\
 
 Again, an audio file is used as an input, which is modulated as an FM channel signal.
@@ -251,7 +253,7 @@ Please make sure to adapt your setup to the respective local regulations, to avo
 Some of the regulations are mentioned in \ref{sec:FrequencyBand}, but may differ in various countries, however.\\
 
 \noindent
-Fig.\ref{fig:bd_gnuradio_setup_transmitter} shows a block diagram of the transmitter application.
+Figure \ref{fig:bd_gnuradio_setup_transmitter} shows a block diagram of the transmitter application.
 
 \includepicture [0.9] [0] [H] {Block diagram of the GNU Radio transmitter setup.} {bd_gnuradio_setup_transmitter} {img/draw.io/bd_gnuradio_setup_transmitter}
 
@@ -267,7 +269,7 @@ This simple receiver was intended as a proof-of-concept and a first example of t
 Thus, the mono receiver was sufficient, as the focus of the GNU Radio application is put on the transmitter side.\\
 
 This receiver works with both devices, the USRP b200mini and the RTL-SDR.
-Fig.\ref{fig:bd_gnuradio_setup_receiver} shows a block diagram of the receiver application.
+Figure \ref{fig:bd_gnuradio_setup_receiver} shows a block diagram of the receiver application.
 
 \includepicture [0.9] [0] [H] {Block diagram of the GNU Radio receiver setup.} {bd_gnuradio_setup_receiver} {img/draw.io/bd_gnuradio_setup_receiver}
 
@@ -328,7 +330,7 @@ The test cases in Python are implemented as coroutines.
 By the way, this is where cocotb gets its name from.
 It is constructed by the words \textit{CO}routine, \textit{CO}simulation and \textit{T}est\textit{B}ench \cite{cocotbDoc}.\\
 
-Fig.\ref{fig:bd_cocotb_interface_simulator} gives an overview of how cocotb interfaces with a simulator.
+Figure \ref{fig:bd_cocotb_interface_simulator} gives an overview of how cocotb interfaces with a simulator.
 The Python test cases are shown as a list of coroutines, which are managed by a scheduler.
 This Python code interfaces with the simulator through standard interfaces like VPI.
 The block called \textit{GPI} is developed by cocotb and abstracts the different simulator interfaces, such as VPI, VHPI or FLI.
@@ -343,7 +345,7 @@ The RTL simulation itself is managed by the simulators' scheduler.
 
 The architecture for this testbench is created under the assumptions and according to the guidelines that are developed in Chapter \ref{cha:SystemArchitectureAndConcept}.\\
 
-Fig.\ref{fig:bd_testbench_architecture_vhdl} shows a block diagram of the implemented architecture.
+Figure \ref{fig:bd_testbench_architecture_vhdl} shows a block diagram of the implemented architecture.
 The split between the Python environment and the VHDL implementation is clearly visible but is represented from the developers perspective.
 The actual simulator interfaces, as described in \ref{sub:VHDL:FrameworkCocotb}, are hidden to maintain the overview of the implemented architecture.\\
 
@@ -439,7 +441,7 @@ The VHDL code for this register interface is generated by a 'Register Engine' Py
 The registers can be defined in a YAML-file.
 Additionally, documentation in the form of a Markdown language file is generated, and - more importantly - a C/\cplusplus\ code header, which defines all the register addresses and can be used in the application software.\\
 
-Fig.\ref{fig:register_engine} gives an overview of how the Register Engine script works.
+Figure \ref{fig:register_engine} gives an overview of how the Register Engine script works.
 The Python script takes the register definitions from the YAML file, and uses templates to generate the respecitive output files.\\
 
 \includepicture [1.0] [0] [H] {Overview of the Register Engine script.} {register_engine} {img/draw.io/register_engine}
@@ -503,7 +505,7 @@ This is especially useful in the development process of such a combined system, 
 The fact that the application software can directly be used in the testbench, enables the development of software that interfaces with the hardware in a very early stage of the project, before any actual hardware exists.
 It also allows that the software part is already tested before the deployment on hardware.\\
 
-Fig.\ref{fig:testbench_hls_overview_reuse} gives an overview of the testbench and specifically points out the reuse of the application software.
+Figure \ref{fig:testbench_hls_overview_reuse} gives an overview of the testbench and specifically points out the reuse of the application software.
 The diagram displays the HLS IP in the testbench and in the hardware with dotted lines, to emphasize that they are actually the same.\\
 
 \includepicture [0.8] [0] [H] {Overview of the testbench and the reuse of the application software. The HLS IP is displayed with dotted lines, to point out that it is the same in testbench and hardware.} {testbench_hls_overview_reuse} {img/draw.io/testbench_hls_overview_reuse}
