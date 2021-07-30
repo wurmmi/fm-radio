@@ -21,8 +21,8 @@ value_txt = {'Matlab','VHDL IP Design (VHDL)', 'VHDL IP Design (Python)', 'VHDL 
 values    = [2730, 2743+208, 708+107+27, 430+489, 224+129+182+119+85];
 value_txt = {'Matlab','VHDL IP Design', 'VHDL Testbench', 'HLS IP Design', 'HLS Testbench'};
 
-%values    = [2730, 2743+208+708+107+27, 430+489+224+129+182+119+85];
-%value_txt = {'Matlab','VHDL', 'HLS'};
+values    = [2730, 2743+208+708+107+27, 430+489+224+129+182+119+85];
+value_txt = {'Matlab','VHDL', 'HLS'};
 
 set(0,'defaulttextinterpreter','latex');
 
