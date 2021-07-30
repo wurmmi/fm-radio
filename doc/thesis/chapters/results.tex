@@ -9,7 +9,7 @@ However, the main focus is to compare the results that are achieved with HLS and
 \section{General}
 
 A main objective of this thesis is to implement an FM radio receiver in multiple different methods.
-This includes GNU Radio, Matlab, VHDL and HLS.
+This includes GNU Radio, Matlab, VHDL and HLS, which all have their advantages and disadvantages and surface different challenges to the developer.
 The target functionality is to listen to the audio broadcast signal of an FM radio station.\\
 
 All of the listed methods are implemented and the target functionality is achieved with all of them.
@@ -99,13 +99,53 @@ Both results can then be analyzed and compared, which may lead to further adapti
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Code Development}
 
-asdf
+In the development of a software project, the metric for the lines of code is sometimes used to give an idea of the complexity of the project.
+The time it takes to implement a certain set of features can also give such an insight, even though it is a subjective metric, since it is influenced by the respective delopers experience.
+However, both metrics are applied to the FM Radio Receiver project.
 
 %%%%%%%%%%%%%%%%%%%%
 \subsection{Lines of Code}
 
-% of the entire project
-asdf
+Several parts of the system design are taken into account to analyze the lines of code, to give an impression over the largest code parts in the project.
+
+\includepicture [0.75] [0] {Lines of code of the respective system design parts, presented in a pie chart.} {lines_of_code_pie_chart} {img/matlab/lines_of_code_pie_chart}
+
+
+\begin{GenericCode}
+Matlab:
+  Language     files blank comment code TotalWithoutBlank Total
+  ____________ _____ _____ _______ ____ _________________ _____
+  MATLAB          34   551     728 1451              2179  2730
+
+VHDL IP Design:
+  Language     files blank comment code TotalWithoutBlank Total
+  ____________ _____ _____ _______ ____ _________________ _____
+  VHDL            20   525     787 1431              2218  2743
+  Python           1    45      22  141               163   208
+
+VHDL Testbench:
+  Language     files blank comment code TotalWithoutBlank Total
+  ____________ _____ _____ _______ ____ _________________ _____
+  Python           5   141     141  426               567   708
+  make             2    19      18   70                88   107
+  Bourne Shell     1     5       6   16                22    27
+
+HLS IP Design:
+  Language     files blank comment code TotalWithoutBlank Total
+  ____________ _____ _____ _______ ____ _________________ _____
+  C/C++ Header    14    90     119  221               340   430
+  C++              9    97     197  195               392   489
+
+HLS Testbench:
+  Language     files blank comment code TotalWithoutBlank Total
+  ____________ _____ _____ _______ ____ _________________ _____
+  C++              1    39      44  141               185   224
+  Tcl/Tk           5    33      37  112               149   182
+  C/C++ Header     2    24      18   87               105   129
+  make             1    24      26   69                95   119
+  Python           1    19      21   45                66    85
+\end{GenericCode}
+
 
 %%%%%%%%%%%%%%%%%%%%
 \subsection{Implementation Time}
