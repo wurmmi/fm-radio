@@ -14,15 +14,33 @@ plt.rcParams.update({
 
 
 # Create data
-group_names = ['\\textbf{Matlab}', '\\textbf{VHDL}', '\\textbf{HLS}']
-group_size = [2730,
-              2743 + 208 + 708 + 107 + 27,
-              430 + 489 + 224 + 129 + 182 + 119 + 85]
-subgroup_names = [' ', ' ', ' ', ' ', ' ']
-# subgroup_names = ['Matlab',
-#                       'IP Design', 'Testbench',
-#                       'IP Design', 'Testbench']
-subgroup_size = [2730, 2743 + 208, 708 + 107 + 27, 430 + 489, 224 + 129 + 182 + 119 + 85]
+group_names = [
+    '\\textbf{HLS}',
+    '\\textbf{Matlab}',
+    '\\textbf{VHDL}',
+]
+group_size = [
+    430 + 489 + 224 + 129 + 182 + 119 + 85,
+    2730,
+    2743 + 208 + 708 + 107 + 27,
+]
+#subgroup_names = [' ', ' ', ' ', ' ', ' ']
+subgroup_names = [
+    'IP Design', 'Testbench',
+    'Matlab',
+    'IP Design', 'Testbench',
+]
+subgroup_names_legs = [
+    'IP Design', 'Testbench',
+    'Matlab',
+    'IP Design', 'Testbench',
+]
+
+subgroup_size = [
+    430 + 489, 224 + 129 + 182 + 119 + 85,
+    2730,
+    2743 + 208, 708 + 107 + 27,
+]
 # subgroup_size = [2730,
 #                 2743, 208,
 #                 708, 107, 27,
@@ -40,7 +58,10 @@ mypie, _ = ax.pie(group_size, radius=1.45,
                   labels=group_names,
                   labeldistance=0.72,
                   colors=[
-                      color_matlab(0.6), color_vhdl(0.6), color_hls(0.6)])
+                      color_hls(0.6),
+                      color_matlab(0.6),
+                      color_vhdl(0.6),
+                  ])
 plt.setp(mypie, width=0.6, edgecolor='white')
 
 # Second Ring (Inside)
@@ -48,16 +69,14 @@ mypie2, _ = ax.pie(subgroup_size, radius=1.3 - 0.3,
                    labels=subgroup_names,
                    labeldistance=0.5,
                    colors=[
+                       color_hls(0.5), color_hls(0.4),
                        color_matlab(0.5),
                        color_vhdl(0.5), color_vhdl(0.4),
-                       color_hls(0.5), color_hls(0.4)])
+                   ])
 plt.setp(mypie2, width=0.6, edgecolor='white')
 plt.margins(0, 0)
 
 plt.legend()
-subgroup_names_legs = ['Matlab',
-                       'IP Design', 'Testbench',
-                       'IP Design', 'Testbench']
 handles, labels = ax.get_legend_handles_labels()
 
 ax.legend(handles[len(group_names):], subgroup_names_legs, loc=(0.95, 0.4))
