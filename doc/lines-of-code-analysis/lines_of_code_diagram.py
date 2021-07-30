@@ -6,26 +6,22 @@
 
 import matplotlib.pyplot as plt
 
-# plt.rcParams.update({
-#    "text.usetex": True,
-#    "font.family": "sans-serif",
-#    "font.sans-serif": ["Helvetica"]
-# })
-# for Palatino and other serif fonts use:
 plt.rcParams.update({
     "text.usetex": True,
     "font.family": "serif",
-    #    "font.serif": ["Palatino"],
     "font.sans-serif": ["Helvetica"]
 })
 
 
-# Make data: I have 3 groups and 7 subgroups
+# Create data
 group_names = ['\\textbf{Matlab}', '\\textbf{VHDL}', '\\textbf{HLS}']
 group_size = [2730,
               2743 + 208 + 708 + 107 + 27,
               430 + 489 + 224 + 129 + 182 + 119 + 85]
-subgroup_names = ['', 'IP Design', 'Testbench', 'IP Design', 'Testbench']
+subgroup_names = [' ', ' ', ' ', ' ', ' ']
+# subgroup_names = ['Matlab',
+#                       'IP Design', 'Testbench',
+#                       'IP Design', 'Testbench']
 subgroup_size = [2730, 2743 + 208, 708 + 107 + 27, 430 + 489, 224 + 129 + 182 + 119 + 85]
 # subgroup_size = [2730,
 #                 2743, 208,
@@ -42,7 +38,7 @@ fig.set_size_inches(6, 4)
 ax.axis('equal')
 mypie, _ = ax.pie(group_size, radius=1.45,
                   labels=group_names,
-                  labeldistance=0.75,
+                  labeldistance=0.72,
                   colors=[
                       color_matlab(0.6), color_vhdl(0.6), color_hls(0.6)])
 plt.setp(mypie, width=0.6, edgecolor='white')
