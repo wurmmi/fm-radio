@@ -15,16 +15,19 @@ dir_output_doc = "../thesis/img/matlab";
 
 %% Plot
 
-%values    = [2730, 2743, 208, 708, 107, 27, 430+489, 224+129, 182, 119, 85];
-%value_txt = {'Matlab','VHDL IP Design (VHDL)', 'VHDL IP Design (Python)', 'VHDL Tb (Py)','VHDL Tb (make)', 'VHDL Tb (shell)', 'HLS IP Design (C++)', 'HLS Tb (C++)','HLS Tb (Tcl)','HLS Tb (make)','HLS Tb (Py)'};
+values    = [2730, 2743, 208, 708, 107, 27, 430+489, 224+129, 182, 119, 85];
+value_txt = {'Matlab','VHDL IP Design (VHDL)', 'VHDL IP Design (Python)', 'VHDL Tb (Py)','VHDL Tb (make)', 'VHDL Tb (shell)', 'HLS IP Design (C++)', 'HLS Tb (C++)','HLS Tb (Tcl)','HLS Tb (make)','HLS Tb (Py)'};
 
 values    = [2730, 2743+208, 708+107+27, 430+489, 224+129+182+119+85];
 value_txt = {'Matlab','VHDL IP Design', 'VHDL Testbench', 'HLS IP Design', 'HLS Testbench'};
 
+%values    = [2730, 2743+208+708+107+27, 430+489+224+129+182+119+85];
+%value_txt = {'Matlab','VHDL', 'HLS'};
+
 set(0,'defaulttextinterpreter','latex');
 
 p = pie(values);
-title('\textbf{Lines Of Code}');
+%title('\textbf{Lines Of Code}');
 
 pText = findobj(p,'Type','text');
 percentValues = get(pText,'String');
