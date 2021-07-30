@@ -90,7 +90,7 @@ Therefore, the IPs internal state, i.e. the register values, may be different at
 The entire DSP chain is built like a pipeline and therefor it takes a number of samples to process, before the 'wrong' intermediate values are flushed out.
 All that may be the cause for the deviating values in the VHDL design.\\
 
-Again, the time limitation in the elaboration of this thesis does not allow a deeper analysis of this issue.
+Again, the time limitation in the elaboration of this thesis does not allow a deeper analysis and investigation of this issue.
 However, the end-to-end system design enables the developer to analyze an issue like this in a convenient way, in quick iterations.
 Any adaptions in the VHDL design can be simulated and integrated into the FPGA with automated scripts.
 Both results can then be analyzed and compared, which may lead to further adaptions.\\
@@ -137,7 +137,12 @@ asdf
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{System Design}
 
-% - The system level architecture that was chosen, can be applied to any DSP project. Simply replace the main IP, e.g. from FM to DAB+, QAM, etc. and the environment can run in the exact same way.
+The system design architecture that is chosen in this project covers several parts of the system.
+This includes a reference model, the development of the IP itself, including the simulation testbench, as well as the final integration into the productive system.
+Because of this structured approach, that is given by this system design, it can be applied to almost any DSP project.
+The main processing IP can simply be replaced with another implementation, while the environment does not need to be modified.
+The reason therefor is, that DSP projects almost always use streaming interfaces for their inputs and outputs.
+Also a configuration interface is commonly used, to adapt certain parameters of the IP during runtime.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
