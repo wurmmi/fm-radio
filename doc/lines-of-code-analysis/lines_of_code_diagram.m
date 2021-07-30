@@ -38,4 +38,4 @@ end
 fig = gcf;
 fig.Position(3:4) = [700 500];
 
-exportgraphics(fig,sprintf("%s/%s",dir_output_doc, "lines_of_code_pie_chart.pdf"),'ContentType','vector')
+exportgraphics(fig,sprintf("%s/%s",dir_output_doc, "lines_of_code_pie_chart_matlab.pdf"),'ContentType','vector')
