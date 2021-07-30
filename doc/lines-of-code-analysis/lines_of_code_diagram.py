@@ -10,7 +10,7 @@ plt.rcParams.update({
     "text.usetex": True,
     "font.family": "serif",
     "font.sans-serif": ["Helvetica"],
-    "font.size": 20,
+    "font.size": 16,
     #    "legend.fontsize": 10,
     #    "axes.labelsize": 10,
 })
@@ -18,9 +18,9 @@ plt.rcParams.update({
 
 # Create data
 group_names = [
-    '\\textbf{Matlab}',
-    '\\textbf{HLS}',
-    '\\textbf{VHDL}',
+    '33\%',
+    '25\%',
+    '25\%',
 ]
 group_size = [
     2730,
@@ -29,9 +29,9 @@ group_size = [
 ]
 #subgroup_names = [' ', ' ', ' ', ' ', ' ']
 subgroup_names = [
-    'Matlab',
-    'IP Design', 'Testbench',
-    'IP Design', 'Testbench',
+    '33\%',
+    '25\%', 'xx\%',
+    '25\%', 'xx\%',
 ]
 subgroup_names_legs = [
     'Matlab',
@@ -59,7 +59,7 @@ fig.set_size_inches(6, 4)
 ax.axis('equal')
 mypie, _ = ax.pie(group_size, radius=1.45,
                   labels=group_names,
-                  labeldistance=0.78,
+                  labeldistance=0.75,
                   colors=[
                       color_blue(0.6),
                       color_green(0.6),
@@ -70,7 +70,7 @@ plt.setp(mypie, width=0.6, edgecolor='white')
 # Second Ring (Inside)
 mypie2, _ = ax.pie(subgroup_size, radius=1.3 - 0.3,
                    labels=subgroup_names,
-                   labeldistance=0.45,
+                   labeldistance=0.5,
                    colors=[
                        color_blue(0.5),
                        color_green(0.5), color_green(0.4),
@@ -82,7 +82,7 @@ plt.margins(0, 0)
 plt.legend()
 handles, labels = ax.get_legend_handles_labels()
 
-ax.legend(handles[len(group_names):], subgroup_names_legs, loc=(0.9, 0.35))
+ax.legend(handles[len(group_names):], subgroup_names_legs, loc=(0.95, 0.2))
 #plt.suptitle('\\textbf{Lines Of Code}', fontsize=14)
 plt.tight_layout()
 
