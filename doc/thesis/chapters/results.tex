@@ -101,14 +101,25 @@ Both results can then be analyzed and compared, which may lead to further adapti
 
 In the development of a software project, the metric for the lines of code is sometimes used to give an idea of the scale, or volume of the project.
 The time it takes to implement a certain set of features can also give such an insight and a link to the project's complexity.
-It is a subjective metric though, since it is influenced by the respective developers experience in the specific application.
-However, both metrics are applied to the FM Radio Receiver project.
+It is a subjective metric though, since it is influenced by the respective developer's experience in the specific application.
+However, both metrics are applied to the FM Radio Receiver project.\\
+
+At this point, it is important to note that the results that presented in this section are very specific to the chosen architecture, testbench framework, and the implementation style generally.
+Therefore, the numbers that are presented here may vary widely by modifying any of these factors, i.e. using a different testbench framework for VHDL.
+Thus, a generalization in the art of \textit{HLS always requires less code than VHDL} can not be stated.
+However, the results in this section can give an idea and overview of this topic and provide a detailed comparison for this specific project.
 
 %%%%%%%%%%%%%%%%%%%%
 \subsection{Lines of Code}
 
 Several parts of the system design are taken into account to analyze the lines of code, to give an impression over the largest code parts in the project.
-Figure \ref{fig:lines_of_code_pie_charts} shows multiple pie charts, which represent the proportions of the lines of code in the respective system design parts.
+Figure \ref{fig:lines_of_code_pie_charts} shows multiple pie charts, which represent the proportions of the lines of code in the respective system design parts.\\
+
+Interesting details can be found by analyzing the charts.
+The upper chart reveals that the VHDL implementation with its accompanying testbench requires more than twice the amount of code, compared to the HLS version.
+The lower charts also highlight several differences between HLS and VHDL.
+The code proportions between IP design and testbench show, that HLS requires about the same amount for these parts, while VHDL requires the largest part of code in the IP design.
+
 
 \begin{figure}%
   \centering
@@ -129,8 +140,8 @@ Figure \ref{fig:lines_of_code_pie_charts} shows multiple pie charts, which repre
   \begin{tabular}{l|c|c|}
   \cline{2-3}
   \textbf{}                                     & \multicolumn{1}{r|}{\textbf{IP Design}} & \multicolumn{1}{l|}{\textbf{Testbench}} \\ \hline
-  \multicolumn{1}{|l|}{VHDL IP}                 & 3000                                    & 850                                     \\ \hline
-  \multicolumn{1}{|l|}{HLS IP}                  & 920                                     & 740                                     \\ \hline
+  \multicolumn{1}{|l|}{VHDL}                 & 3000                                    & 850                                     \\ \hline
+  \multicolumn{1}{|l|}{HLS}                  & 920                                     & 740                                     \\ \hline
   \multicolumn{1}{|l|}{Common Testbench}        & \multicolumn{2}{c|}{630}                                                          \\ \hline
   \multicolumn{1}{|l|}{Matlab Model}            & \multicolumn{2}{c|}{2730}                                                         \\ \hline
   \multicolumn{1}{|l|}{Vivado Scripts}          & \multicolumn{2}{c|}{490}                                                          \\ \hline
