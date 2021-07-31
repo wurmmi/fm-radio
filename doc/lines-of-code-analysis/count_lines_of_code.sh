@@ -136,7 +136,7 @@ REPORT_FILE=$SCRIPT_PATH_RELATIVE/vivado_sdk_firmware
 OPTIONS="hardware/vivado/                        \
         --by-file-by-lang                        \
         --match-d=(sdk|scripts)                  \
-        --not-match-f=(upgrade_ips|wav_to_txt|synth|create_project) \
+        --not-match-f=(upgrade_ips|wav_to_txt|synth|create_project|.cproject|.project) \
         --ignored=/tmp/${REPORT_FILE}_ignored.txt"
 
 create_report;

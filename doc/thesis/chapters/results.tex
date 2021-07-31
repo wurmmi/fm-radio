@@ -111,18 +111,33 @@ Several parts of the system design are taken into account to analyze the lines o
 
 \begin{figure}%
   \centering
-  \subfloat[\centering Overview of ]{{\includegraphics[trim=10 10 10 10,clip, width=0.5\textwidth]{img/matlab/lines_of_code_pie_chart_py_all} }}%
+  \subfloat[\centering Overview of the proportions between the Matlab model, the HLS and VHDL IPs.]{{\includegraphics[trim=10 10 10 10,clip, width=0.5\textwidth]{img/matlab/lines_of_code_pie_chart_py_all} }}%
   \\
   %\hspace{\fill}
-  \subfloat[\centering HLS]{{\includegraphics[trim=10 10 10 10,clip, width=0.5\textwidth]{img/matlab/lines_of_code_pie_chart_py_hls} }}%
+  \subfloat[\centering HLS in detail.]{{\includegraphics[trim=10 10 10 10,clip, width=0.49\textwidth]{img/matlab/lines_of_code_pie_chart_py_hls} }}%
   %\hspace{\fill}
   %\vspace{3cm}
-  \subfloat[\centering VHDL]{{\includegraphics[trim=10 10 10 10,clip, width=0.5\textwidth]{img/matlab/lines_of_code_pie_chart_py_vhdl} }}%
+  \subfloat[\centering VHDL in detail.]{{\includegraphics[trim=10 10 10 10,clip, width=0.49\textwidth]{img/matlab/lines_of_code_pie_chart_py_vhdl} }}%
 
-  \caption{Lines of code of the respective system design parts, presented in multiple pie charts.}%
+  \caption{Lines of code of the respective system design parts, presented in multiple pie charts. The percentages of code in IP design and testbench for the HLS and VHDL implementations are shown in detail.}%
   \label{fig:lines_of_code_pie_chart}%
 \end{figure}
 
+\begin{table}[]
+  \centering
+  \begin{tabular}{l|c|c|}
+  \cline{2-3}
+  \textbf{}                                     & \multicolumn{1}{r|}{\textbf{IP Design}} & \multicolumn{1}{l|}{\textbf{Testbench}} \\ \hline
+  \multicolumn{1}{|l|}{VHDL IP}                 & 3000                                    & 850                                     \\ \hline
+  \multicolumn{1}{|l|}{HLS IP}                  & 920                                     & 740                                     \\ \hline
+  \multicolumn{1}{|l|}{Common Testbench}        & \multicolumn{2}{c|}{630}                                                          \\ \hline
+  \multicolumn{1}{|l|}{Matlab Model}            & \multicolumn{2}{c|}{2730}                                                         \\ \hline
+  \multicolumn{1}{|l|}{Vivado Scripts}          & \multicolumn{2}{c|}{490}                                                          \\ \hline
+  \multicolumn{1}{|l|}{\cplusplus\ Application} & \multicolumn{2}{c|}{2800}                                                         \\ \hline
+  \end{tabular}
+  \caption{asdf}
+  \label{tab:lines_of_code}
+\end{table}
 
 %\begin{GenericCode}
 %Matlab:
