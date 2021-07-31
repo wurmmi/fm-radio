@@ -24,12 +24,20 @@ dir_output_doc = "../thesis/img/matlab";
 %value_txt = {'HLS IP Design', 'HLS Testbench'};
 
 % hls, tb
-values    = [224+129,182,119,85];
-value_txt = {'cpp','Tcl','make','Python'};
+%values    = [224+129,182,119,85];
+%value_txt = {'cpp','Tcl','make','Python'};
 
 % vhdl, tb/design
 %values    = [2743+208, 708+107+27];
 %value_txt = {'VHDL IP Design', 'VHDL Testbench'};
+
+% vhdl, tb
+values    = [708, 107, 27];
+value_txt = {'Python','make','shell'};
+
+% vhdl, design
+%values    = [2743,208];
+%value_txt = {'vhdl','Python'};
 
 % all, tb/design
 %values    = [2730, 2743+208, 708+107+27, 430+489, 224+129+182+119+85];

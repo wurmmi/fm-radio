@@ -111,13 +111,13 @@ Several parts of the system design are taken into account to analyze the lines o
 
 \begin{figure}%
   \centering
-  \subfloat[\centering Overview of ]{{\includegraphics[trim=10 10 10 10,clip, width=0.45\textwidth]{img/matlab/lines_of_code_pie_chart_py_all} }}%
+  \subfloat[\centering Overview of ]{{\includegraphics[trim=10 10 10 10,clip, width=0.5\textwidth]{img/matlab/lines_of_code_pie_chart_py_all} }}%
   \\
   %\hspace{\fill}
-  \subfloat[\centering HLS]{{\includegraphics[trim=10 10 10 10,clip, width=0.45\textwidth]{img/matlab/lines_of_code_pie_chart_py_hls} }}%
+  \subfloat[\centering HLS]{{\includegraphics[trim=10 10 10 10,clip, width=0.5\textwidth]{img/matlab/lines_of_code_pie_chart_py_hls} }}%
   %\hspace{\fill}
   %\vspace{3cm}
-  \subfloat[\centering VHDL]{{\includegraphics[trim=10 10 10 10,clip, width=0.45\textwidth]{img/matlab/lines_of_code_pie_chart_py_vhdl} }}%
+  \subfloat[\centering VHDL]{{\includegraphics[trim=10 10 10 10,clip, width=0.5\textwidth]{img/matlab/lines_of_code_pie_chart_py_vhdl} }}%
 
   \caption{Lines of code of the respective system design parts, presented in multiple pie charts.}%
   \label{fig:lines_of_code_pie_chart}%
@@ -158,6 +158,9 @@ Several parts of the system design are taken into account to analyze the lines o
 %  make             1    24      26   69                95   119
 %  Python           1    19      21   45                66    85
 %\end{GenericCode}
+
+Also note, that the common Python testbench consists of XXX lines of Python code.
+Therefor, the testbench code of the respective IPs is relatively small, because the entire analysis part is shared.
 
 
 %%%%%%%%%%%%%%%%%%%%

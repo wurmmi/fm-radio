@@ -115,7 +115,8 @@ mypie, _ = ax.pie(group_size, radius=1.45,
                       color_red(0.6),
                   ],
                   rotatelabels=False,
-                  textprops=dict(rotation_mode='anchor', va='center', ha='center')
+                  textprops=dict(rotation_mode='anchor', va='center', ha='center'),
+                  startangle=-10
                   )
 plt.setp(mypie, width=0.6, edgecolor='white')
 
@@ -128,7 +129,8 @@ mypie2, _ = ax.pie(subgroup_size, radius=1.3 - 0.3,
                        color_red(0.5), color_red(0.4), color_red(0.3), color_red(0.2),
                    ],
                    rotatelabels=True,
-                   textprops=dict(rotation_mode='anchor', va='center', ha='center')
+                   textprops=dict(rotation_mode='anchor', va='center', ha='center'),
+                   startangle=-10
                    )
 plt.setp(mypie2, width=0.6, edgecolor='white')
 plt.margins(0, 0)
@@ -156,31 +158,30 @@ group_names_legs = [
     'Testbench',
 ]
 group_size = [
-    # TODO HERE
-    430 + 489,
-    224 + 129 + 182 + 119 + 85,
+    2743 + 208,
+    708 + 107 + 27,
 ]
 
 subgroup_names = [
-    '33\%',
-    '33\%',
-    '25\%',
-    'xx\%',
-    'xx\%',
+    '93\%',
+    '7\%',
+    '84\%',
+    '13\%',
+    '',
 ]
 subgroup_names_legs = [
-    'C\\texttt{++}',
-    'C\\texttt{++}',
-    'Tcl',
-    'make',
+    'VHDL',
     'Python',
+    'Python',
+    'make',
+    'shell',
 ]
 subgroup_size = [
-    430 + 489,  # C++ IP
-    224 + 129,  # C++ Tb
-    182,        # Tcl Tb
-    119,        # make Tb
-    85,         # python Tb
+    2743,  # Tb:     VHDL
+    208,   # Tb:     Python
+    708,   # Design: Python
+    107,   # Design: make
+    27,    # Design: shell
 ]
 
 # Create colors
@@ -192,21 +193,29 @@ fig.set_size_inches(6, 4)
 ax.axis('equal')
 mypie, _ = ax.pie(group_size, radius=1.45,
                   labels=group_names,
-                  labeldistance=0.75,
+                  labeldistance=0.82,
                   colors=[
                       color_blue(0.6),
                       color_red(0.6),
-                  ])
+                  ],
+                  rotatelabels=False,
+                  textprops=dict(rotation_mode='anchor', va='center', ha='center'),
+                  startangle=-45
+                  )
 plt.setp(mypie, width=0.6, edgecolor='white')
 
 # Second Ring (Inside)
 mypie2, _ = ax.pie(subgroup_size, radius=1.3 - 0.3,
                    labels=subgroup_names,
-                   labeldistance=0.5,
+                   labeldistance=0.7,
                    colors=[
-                       color_blue(0.5),
+                       color_blue(0.5), color_blue(0.4),
                        color_red(0.5), color_red(0.4), color_red(0.3), color_red(0.2),
-                   ])
+                   ],
+                   rotatelabels=True,
+                   textprops=dict(rotation_mode='anchor', va='center', ha='center'),
+                   startangle=-45
+                   )
 plt.setp(mypie2, width=0.6, edgecolor='white')
 plt.margins(0, 0)
 
@@ -218,7 +227,7 @@ ax.legend(handles[len(group_names):], subgroup_names_legs, loc=(0.95, 0.2))
 plt.tight_layout()
 
 # show and save
-plt.savefig('../thesis/img/matlab/lines_of_code_pie_chart_py_hls.pdf')
+plt.savefig('../thesis/img/matlab/lines_of_code_pie_chart_py_vhdl.pdf')
 plt.show()
 
 # -------------------------------------------------------------------------
