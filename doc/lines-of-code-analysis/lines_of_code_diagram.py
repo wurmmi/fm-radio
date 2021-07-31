@@ -66,12 +66,8 @@ plt.show()
 # ---------------------- HLS --------------------------------------------------
 # Create data
 group_names = [
-    'IP Design',
-    'Testbench',
-]
-group_names_legs = [
-    'IP Design',
-    'Testbench',
+    'IP Design (55\%)',
+    'Testbench (45\%)',
 ]
 group_size = [
     430 + 489,
@@ -109,7 +105,7 @@ fig.set_size_inches(6, 4)
 ax.axis('equal')
 mypie, _ = ax.pie(group_size, radius=1.45,
                   labels=group_names,
-                  labeldistance=0.82,
+                  labeldistance=0.78,
                   colors=[
                       color_blue(0.6),
                       color_red(0.6),
@@ -150,12 +146,8 @@ plt.show()
 # ---------------------- VHDL --------------------------------------------------
 # Create data
 group_names = [
-    'IP Design',
-    'Testbench',
-]
-group_names_legs = [
-    'IP Design',
-    'Testbench',
+    'IP Design (78\%)',
+    'Testbench (22\%)',
 ]
 group_size = [
     2743 + 208,
@@ -193,14 +185,14 @@ fig.set_size_inches(6, 4)
 ax.axis('equal')
 mypie, _ = ax.pie(group_size, radius=1.45,
                   labels=group_names,
-                  labeldistance=0.82,
+                  labeldistance=0.78,
                   colors=[
                       color_blue(0.6),
                       color_red(0.6),
                   ],
                   rotatelabels=False,
                   textprops=dict(rotation_mode='anchor', va='center', ha='center'),
-                  startangle=-45
+                  startangle=-49
                   )
 plt.setp(mypie, width=0.6, edgecolor='white')
 
@@ -214,7 +206,7 @@ mypie2, _ = ax.pie(subgroup_size, radius=1.3 - 0.3,
                    ],
                    rotatelabels=True,
                    textprops=dict(rotation_mode='anchor', va='center', ha='center'),
-                   startangle=-45
+                   startangle=-49
                    )
 plt.setp(mypie2, width=0.6, edgecolor='white')
 plt.margins(0, 0)

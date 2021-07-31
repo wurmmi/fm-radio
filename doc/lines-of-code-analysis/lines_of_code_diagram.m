@@ -28,8 +28,8 @@ dir_output_doc = "../thesis/img/matlab";
 %value_txt = {'cpp','Tcl','make','Python'};
 
 % vhdl, tb/design
-%values    = [2743+208, 708+107+27];
-%value_txt = {'VHDL IP Design', 'VHDL Testbench'};
+values    = [2743+208, 708+107+27];
+value_txt = {'VHDL IP Design', 'VHDL Testbench'};
 
 % vhdl, tb
 %values    = [708, 107, 27];
