@@ -113,18 +113,21 @@ However, the results in this section can give an idea and overview of this topic
 \subsection{Lines of Code}
 
 Several parts of the system design are taken into account to analyze the lines of code, to give an impression over the largest code parts in the project.
-Figure \ref{fig:lines_of_code_pie_charts} shows multiple pie charts, which represent the proportions of the lines of code in the respective system design parts.\\
+Figure \ref{fig:lines_of_code_pie_charts} shows multiple pie charts, which represent the proportions of the lines of code in the respective system design parts.
+Table \ref{tab:lines_of_code} displays the actual numbers of code lines, to quantify the size of the respective parts.\\
 
 Interesting details can be found by analyzing these charts.
 The upper chart shows that the implementation of the hardware support, in the form of Vivado project scripts and the \cplusplus\ application software, takes a large part of the code with 27\%.
 The remaining majority of the code belongs to the development of the IPs.
 This includes the implementation of the Matlab model, the VHDL and HLS code, as well as the common testbench.
-The chart also reveals that the VHDL implementation with its accompanying testbench requires more than twice the amount of code, compared to the HLS version, i.e. 32\% versus 14\%.\\
+The chart also reveals that the VHDL implementation with its accompanying testbench requires more than twice the amount of code compared to the HLS version, i.e. 32\% versus 14\%.\\
 
 The lower charts highlight several differences between HLS and VHDL.
 Specifically, the code proportions between IP design and testbench are pointed out.
 The charts show that HLS requires about the same amount of code for IP design and testbench.
 VHDL requires the largest part of code in the IP design, while the testbench code amount is relatively small.
+It is to be noted, that the common testbench consists of 4\%, which equals 630 lines of Python code.
+Therefor, the testbench code of both IPs is relatively small, because the entire analysis part is shared.
 
 \begin{figure}%
   \centering
@@ -152,7 +155,7 @@ VHDL requires the largest part of code in the IP design, while the testbench cod
   \multicolumn{1}{|l|}{Vivado Scripts}          & \multicolumn{2}{c|}{490}                                                          \\ \hline
   \multicolumn{1}{|l|}{\cplusplus\ Application} & \multicolumn{2}{c|}{2800}                                                         \\ \hline
   \end{tabular}
-  \caption{asdf}
+  \caption{The actual number of code lines, split in IP design and testbench, where applicable. All numbers are rounded up to tens.}
   \label{tab:lines_of_code}
 \end{table}
 
@@ -191,8 +194,6 @@ VHDL requires the largest part of code in the IP design, while the testbench cod
 %  Python           1    19      21   45                66    85
 %\end{GenericCode}
 
-Also note, that the common Python testbench consists of XXX lines of Python code.
-Therefor, the testbench code of the respective IPs is relatively small, because the entire analysis part is shared.
 
 
 %%%%%%%%%%%%%%%%%%%%
