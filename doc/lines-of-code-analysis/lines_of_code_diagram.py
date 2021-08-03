@@ -29,16 +29,16 @@ group_names = [
 group_size = [
     2743 + 208 + 708 + 107 + 27,
     2730,
-    430 + 489 + 224 + 129 + 182 + 119 + 85,
     2800,
+    430 + 489 + 224 + 129 + 182 + 119 + 85,
     490,
     460
 ]
 group_names_legs = [
     'VHDL',
     'Matlab',
-    'HLS',
     'C++ Application',
+    'HLS',
     'Common Testbench',
     'Vivado Scripts',
 ]

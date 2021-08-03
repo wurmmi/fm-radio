@@ -115,11 +115,16 @@ However, the results in this section can give an idea and overview of this topic
 Several parts of the system design are taken into account to analyze the lines of code, to give an impression over the largest code parts in the project.
 Figure \ref{fig:lines_of_code_pie_charts} shows multiple pie charts, which represent the proportions of the lines of code in the respective system design parts.\\
 
-Interesting details can be found by analyzing the charts.
-The upper chart reveals that the VHDL implementation with its accompanying testbench requires more than twice the amount of code, compared to the HLS version.
-The lower charts also highlight several differences between HLS and VHDL.
-The code proportions between IP design and testbench show, that HLS requires about the same amount for these parts, while VHDL requires the largest part of code in the IP design.
+Interesting details can be found by analyzing these charts.
+The upper chart shows that the implementation of the hardware support, in the form of Vivado project scripts and the \cplusplus\ application software, takes a large part of the code with 27\%.
+The remaining majority of the code belongs to the development of the IPs.
+This includes the implementation of the Matlab model, the VHDL and HLS code, as well as the common testbench.
+The chart also reveals that the VHDL implementation with its accompanying testbench requires more than twice the amount of code, compared to the HLS version, i.e. 32\% versus 14\%.\\
 
+The lower charts highlight several differences between HLS and VHDL.
+Specifically, the code proportions between IP design and testbench are pointed out.
+The charts show that HLS requires about the same amount of code for IP design and testbench.
+VHDL requires the largest part of code in the IP design, while the testbench code amount is relatively small.
 
 \begin{figure}%
   \centering
@@ -131,7 +136,7 @@ The code proportions between IP design and testbench show, that HLS requires abo
   %\vspace{3cm}
   \subfloat[\centering VHDL in detail.]{{\includegraphics[trim=10 10 10 10,clip, width=0.49\textwidth]{img/matlab/lines_of_code_pie_chart_py_vhdl} }}%
 
-  \caption{Lines of code of the respective system design parts, presented in multiple pie charts. The percentages of code in IP design and testbench for the HLS and VHDL implementations are shown in detail.}%
+  \caption{Lines of code of the respective code parts in the entire project, presented in multiple pie charts. The percentages of code in IP design and testbench for the HLS and VHDL implementations are shown in detail in the lower diagrams.}%
   \label{fig:lines_of_code_pie_charts}%
 \end{figure}
 
