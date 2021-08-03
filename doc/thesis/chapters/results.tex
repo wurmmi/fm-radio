@@ -99,12 +99,12 @@ Both results can then be analyzed and compared, which may lead to further adapti
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Code Development}
 
-In the development of a software project, the metric for the lines of code is sometimes used to give an idea of the scale, or volume of the project.
-The time it takes to implement a certain set of features can also give such an insight and a link to the project's complexity.
-It is a subjective metric though, since it is influenced by the respective developer's experience in the specific application.
+In the development of a software project, the metric for the lines of code can be used to give an idea of the scale, or volume of the project.
+The time it takes to implement a certain set of features can also give such an insight and a hint of the project's complexity.
+It is a subjective metric though, since it is heavily influenced by the respective developer's experience in the specific application.
 However, both metrics are applied to the FM Radio Receiver project.\\
 
-At this point, it is important to note that the results that presented in this section are very specific to the chosen architecture, testbench framework, and the implementation style generally.
+At this point, it is important to note that the results that are presented in this section are very specific to the chosen architecture, testbench framework, and the implementation style generally.
 Therefore, the numbers that are presented here may vary widely by modifying any of these factors, i.e. using a different testbench framework for VHDL.
 Thus, a generalization in the art of \textit{HLS always requires less code than VHDL} can not be stated.
 However, the results in this section can give an idea and overview of this topic and provide a detailed comparison for this specific project.
@@ -123,7 +123,7 @@ The code proportions between IP design and testbench show, that HLS requires abo
 
 \begin{figure}%
   \centering
-  \subfloat[\centering Overview of the proportions between the Matlab model, the HLS and VHDL IPs.]{{\includegraphics[trim=10 10 10 10,clip, width=0.5\textwidth]{img/matlab/lines_of_code_pie_chart_py_all} }}%
+  \subfloat[\centering Overview of the proportions between all the implemented code parts of the entire project.]{{\includegraphics[trim=10 40 10 10,clip, width=0.65\textwidth]{img/matlab/lines_of_code_pie_chart_py_all} }}%
   \\
   %\hspace{\fill}
   \subfloat[\centering HLS in detail.]{{\includegraphics[trim=10 10 10 10,clip, width=0.49\textwidth]{img/matlab/lines_of_code_pie_chart_py_hls} }}%

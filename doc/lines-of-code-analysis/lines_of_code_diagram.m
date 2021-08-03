@@ -28,8 +28,8 @@ dir_output_doc = "../thesis/img/matlab";
 %value_txt = {'cpp','Tcl','make','Python'};
 
 % vhdl, tb/design
-values    = [2743+208, 708+107+27];
-value_txt = {'VHDL IP Design', 'VHDL Testbench'};
+%values    = [2743+208, 708+107+27];
+%value_txt = {'VHDL IP Design', 'VHDL Testbench'};
 
 % vhdl, tb
 %values    = [708, 107, 27];
@@ -44,8 +44,11 @@ value_txt = {'VHDL IP Design', 'VHDL Testbench'};
 %value_txt = {'Matlab','VHDL IP Design', 'VHDL Testbench', 'HLS IP Design', 'HLS Testbench'};
 
 % all
-%values    = [2730, 2743+208+708+107+27, 430+489+224+129+182+119+85, 459];
-%value_txt = {'Matlab','VHDL', 'HLS', 'Common Tb'};
+%values    = [2730, 2743+208+708+107+27, 430+489+224+129+182+119+85, 490, 2800, 460];
+%value_txt = {'Matlab','VHDL', 'HLS', 'Vivado Scripts', 'C++ Application', 'Common Tb'};
+
+values    = [2730, 2743+208+708+107+27, 430+489+224+129+182+119+85, 2800, 490, 460];
+value_txt = {'Matlab','VHDL', 'HLS', 'C++ Application', 'Vivado Scripts', 'Common Tb'};
 
 set(0,'defaulttextinterpreter','latex');
 

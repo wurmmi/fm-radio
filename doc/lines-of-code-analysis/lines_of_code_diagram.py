@@ -19,23 +19,37 @@ plt.rcParams.update({
 # ------------------------- ALL -----------------------------------------------
 # Create data
 group_names = [
-    '33\%',
-    '20\%',
-    '47\%',
+    '32\%',
+    '23\%',
+    '23\%',
+    '14\%',
+    '4\%',
+    '4\%',
 ]
 group_size = [
+    2743 + 208 + 708 + 107 + 27,
     2730,
     430 + 489 + 224 + 129 + 182 + 119 + 85,
-    2743 + 208 + 708 + 107 + 27,
+    2800,
+    490,
+    460
 ]
 group_names_legs = [
+    'VHDL',
     'Matlab',
     'HLS',
-    'VHDL',
+    'C++ Application',
+    'Common Testbench',
+    'Vivado Scripts',
 ]
 
 # Create colors
-color_blue, color_red, color_green = [plt.cm.Blues, plt.cm.Reds, plt.cm.Greens]
+color_blue = plt.cm.Blues
+color_red = plt.cm.Reds
+color_green = plt.cm.Greens
+color_purples = plt.cm.Purples
+color_oranges = plt.cm.Oranges
+color_greys = plt.cm.Greys
 
 # First Ring (outside)
 fig, ax = plt.subplots()
@@ -43,19 +57,27 @@ fig.set_size_inches(6, 4)
 ax.axis('equal')
 mypie, _ = ax.pie(group_size, radius=1.45,
                   labels=group_names,
-                  labeldistance=0.6,
+                  labeldistance=0.65,
                   colors=[
                       color_blue(0.6),
                       color_green(0.6),
                       color_red(0.6),
-                  ])
-plt.setp(mypie, width=0.9, edgecolor='white')
+                      color_purples(0.6),
+                      color_oranges(0.6),
+                      color_greys(0.4),
+                  ],
+                  textprops=dict(rotation_mode='anchor', va='center', ha='center', size=13),
+                  startangle=10,
+                  # frame=True,
+                  )
+plt.setp(mypie, width=1.45 - 0.45, edgecolor='white')
+# fig.subplots_adjust(0.15, 0.0, 0.6, 1.0)  # left, bottom, right, top
 
 plt.margins(0, 0)
 plt.legend()
 handles, labels = ax.get_legend_handles_labels()
 
-ax.legend(handles[:], group_names_legs, loc=(0.95, 0.3))
+ax.legend(handles[:], group_names_legs, loc=(1.0, 0.25), prop={'size': 13})
 #plt.suptitle('\\textbf{Lines Of Code}', fontsize=14)
 plt.tight_layout()
 
