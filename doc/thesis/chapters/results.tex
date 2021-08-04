@@ -164,6 +164,31 @@ Therefor, the testbench code of both IPs is relatively small, because the entire
 %%%%%%%%%%%%%%%%%%%%
 \subsection{Implementation Time}
 
+The metric of implementation time -- the time it takes to implement a specific feature -- is a subjective measure, since it heavily depends on the respective developer's experience, as already noted above.
+However, this metric is used in this section to specifically compare HLS with VHDL.
+Certain features are chosen for this comparison and their implementation times were logged during the actual implementation process.
+Table \ref{tab:implementation_time_logging} shows the direct comparison between HLS and VHDL implementation times.
+
+\begin{table}[]
+  \centering
+  \begin{tabular}{l|c|c|}
+  \cline{2-3}
+                                                   & \multicolumn{2}{c|}{\textbf{Time [h]}} \\ \hline
+  \multicolumn{1}{|l|}{\textbf{Feature}}           & \textbf{HLS}      & \textbf{VHDL}      \\ \hline
+  \multicolumn{1}{|l|}{AXI Stream Interface}       & 8                 & 12                 \\ \hline
+  \multicolumn{1}{|l|}{AXI4-Lite Interface}        & 2                 & 10                 \\ \hline
+  \multicolumn{1}{|l|}{LED Control Register}       & 1                 & 2                  \\ \hline
+  \multicolumn{1}{|l|}{Build Information Register} & 8                 & 5                  \\ \hline
+  \multicolumn{1}{|l|}{Pass-Through Mode Register} & 1                 & 1                  \\ \hline
+  \multicolumn{1}{|l|}{FIR Filter}                 & 13                & 7                  \\ \hline
+  \multicolumn{1}{|l|}{Sample Decimation}          & 15                & 1                  \\ \hline
+  \multicolumn{1}{|l|}{Receiver Structure}         & 13                & 33                 \\ \hline
+  \multicolumn{1}{|l|}{\textbf{Sum}}               & \textbf{61}       & \textbf{71}        \\ \hline
+  \end{tabular}
+  \caption{Implementation time logging for a specific set of features, for the direct comparison between HLS and VHDL.}
+  \label{tab:implementation_time_logging}
+\end{table}
+
 % Implementation effort/time
 %    -- see logged times; is subjective; had no previous knowledge
 %    -- AXI interfaces --> huge effort in VHDL...
@@ -173,9 +198,23 @@ Therefor, the testbench code of both IPs is relatively small, because the entire
 %        --> difference between R/W and RO!;
 %        and show screenshots of the IP in the block design)
 
+% Issues
+% -- HLS Debug Error with Bitwidth:
+%       Not sure what the error was.
+%       Parallel delay for I/Q didn't work.
+%       The order of every 2nd data value was wrong.
+%       Using a single delay fixed it.
+% -- HLS driver generation
+%       Fixing issue with auto-generated driver.
+%       It did not get imported into the SDK.
+%       Problem was that HLS project and top-level
+%       did not have the same name....
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Simulation}
-% Sim speed of x min of recorded FM signal
+
+Sim speed of x min of recorded FM signal\\
+bla bla
 %
 % VHDL:
 %          time                samples
@@ -212,7 +251,7 @@ Also a configuration interface is commonly used, to adapt certain parameters of 
 %%%%%%%%%%%%%%%%%%%%
 \subsection{Integration}
 % IP generation and integration into Vivado
-
+% Issue: HLS driver import did not work - Vivado SDK is a mess (bad UI based on Eclipse, has bugs, no error output, etc...)
 %%%%%%%%%%%%%%%%%%%%
 \subsection{Hardware Utilization}
 % --> utilization reports
