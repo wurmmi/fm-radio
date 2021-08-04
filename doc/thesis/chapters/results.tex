@@ -155,19 +155,54 @@ Therefor, the testbench code of both IPs is relatively small, because the entire
   \multicolumn{1}{|l|}{Vivado Scripts}          & \multicolumn{2}{c|}{490}                                                          \\ \hline
   \multicolumn{1}{|l|}{\cplusplus\ Application} & \multicolumn{2}{c|}{2800}                                                         \\ \hline
   \end{tabular}
-  \caption{The actual number of code lines, split in IP design and testbench, where applicable. All numbers are rounded up to tens.}
+  \caption{The actual number of code lines for each code part, split in IP design and testbench, where applicable. All numbers are rounded up to tens.}
   \label{tab:lines_of_code}
 \end{table}
-
 
 
 %%%%%%%%%%%%%%%%%%%%
 \subsection{Implementation Time}
 
 The metric of implementation time -- the time it takes to implement a specific feature -- is a subjective measure, since it heavily depends on the respective developer's experience, as already noted above.
-However, this metric is used in this section to specifically compare HLS with VHDL.
+In the present case, there is a strong background of knowledge and practical experience in VHDL design, while there is only very little of such in HLS design.
+However, this metric is used in this section to specifically compare HLS with VHDL in this project.
 Certain features are chosen for this comparison and their implementation times were logged during the actual implementation process.
-Table \ref{tab:implementation_time_logging} shows the direct comparison between HLS and VHDL implementation times.
+The implementation is always considered as the HDL description, including the corresponding testbench code, to verify the respective correct functionality.
+Table \ref{tab:implementation_time_logging} shows the direct comparison between HLS and VHDL implementation times for these features.\\
+
+The following paragraphs present an insight into how the implementation times of the listed code parts arise.
+
+\subsubsection{AXI Stream Inferface}
+
+This is the main interface for the data input and -output of the DSP chain.
+In HLS it can be automatically inferred by adding pragma directives to the respective function parameter variables.
+Also the testbench code is implemented like a regular function call.
+Therefore, the actual interface logic is completely hidden from the developer.
+In VHDL on the other hand, this logic has to be implemented manually.
+Also the testbench has to be hooked up with the correct signals and have a verificator logic, that supports the functional verification of an AXI stream interface.
+Otherwise, this logic would have to be implemented manually as well.
+In the time comparison, the larger amount of manual implementation in VHDL is clearly visible.
+It is to note that this comparison does not compare functionally equivalent implementations, because the actually implemented logic in VHDL does not use the ready-flag correctly, as explained in the previous chapters.
+According to this fact, an increase in implementation hours should actually be considered for VHDL.
+However, also the HLS implementation has its particular characteristics that need to be understood for a fully functional implementation.
+Following the respective user guides and implementation examples provides a good starting point for that.
+
+\subsubsection{AXI4-Lite Interface}
+
+
+
+\subsubsection{Registers}
+
+LED Control, Build Information Register, Pass-Through
+\subsubsection{FIR Filter}
+
+\subsubsection{Sample Decimation}
+
+\subsubsection{Receiver Structure}
+
+
+In the final summation, the implementation time of the two variants only differ by around 15\%.
+However,  ... \dots
 
 \begin{table}[]
   \centering
