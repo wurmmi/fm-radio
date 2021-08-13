@@ -170,6 +170,26 @@ Certain features are chosen for this comparison and their implementation times w
 The implementation is always considered as the HDL description, including the corresponding testbench code, to verify the respective correct functionality.
 Table \ref{tab:implementation_time_logging} shows the direct comparison between HLS and VHDL implementation times for these features.\\
 
+\begin{table}[]
+  \centering
+  \begin{tabular}{l|c|c|}
+  \cline{2-3}
+                                                   & \multicolumn{2}{c|}{\textbf{Time [h]}} \\ \hline
+  \multicolumn{1}{|l|}{\textbf{Feature}}           & \textbf{HLS}      & \textbf{VHDL}      \\ \hline
+  \multicolumn{1}{|l|}{AXI Stream Interface}       & 8                 & 12                 \\ \hline
+  \multicolumn{1}{|l|}{AXI4-Lite Interface}        & 2                 & 10                 \\ \hline
+  \multicolumn{1}{|l|}{LED Control Register}       & 1                 & 2                  \\ \hline
+  \multicolumn{1}{|l|}{Build Information Register} & 8                 & 5                  \\ \hline
+  \multicolumn{1}{|l|}{Pass-Through Mode Register} & 1                 & 1                  \\ \hline
+  \multicolumn{1}{|l|}{FIR Filter}                 & 13                & 7                  \\ \hline
+  \multicolumn{1}{|l|}{Sample Decimation}          & 15                & 1                  \\ \hline
+  \multicolumn{1}{|l|}{Receiver Structure}         & 13                & 33                 \\ \hline
+  \multicolumn{1}{|l|}{\textbf{Sum}}               & \textbf{61}       & \textbf{71}        \\ \hline
+  \end{tabular}
+  \caption{Implementation time logging for a specific set of features, for the direct comparison between HLS and VHDL.}
+  \label{tab:implementation_time_logging}
+\end{table}
+
 The following paragraphs present an insight into how the implementation times of the listed code parts arise.
 
 \subsubsection{AXI Stream Inferface}
@@ -183,7 +203,7 @@ Also the testbench has to be hooked up with the correct signals and have a verif
 Otherwise, this logic would have to be implemented manually as well.
 In the time comparison, the larger amount of manual implementation in VHDL is clearly visible.
 It is to note that this comparison does not compare functionally equivalent implementations, because the actually implemented logic in VHDL does not use the ready-flag correctly, as explained in the previous chapters.
-According to this fact, an increase in implementation hours should actually be considered for VHDL.
+According to this fact, a further increase in implementation hours should actually be considered for VHDL.
 However, also the HLS implementation has its particular characteristics that need to be understood for a fully functional implementation.
 Following the respective user guides and implementation examples provides a good starting point for that.
 
@@ -244,30 +264,24 @@ The process of finding this issue explains the largely varying implementation ti
 
 \subsubsection{Receiver Structure}
 
-todo \\
+The implementation of the receiver structure requires the combination of several previously implemented blocks, such as the FIR filter and any interfaces.
+This is done according to the Matlab model, to resemble its functionality.
+The VHDL version is significantly more time consuming in comparison to HLS.
+However, it is to note at this point that the VHDL version is implemented first, and thus some issues are already solved by the time of the HLS implementation.
+Nevertheless, the VHDL implementation takes longer, as it requires more detailed care in the signal level.
+This specifically includes the clock-alignment of any signals that need to be used in a combination.
+For example, if two parallel FIR filters produce output signals that are to be added, they need to be aligned so that they are valid at the time of the summation.
+This often requires analysis and debugging in a signal wave form.
+In HLS this is not required, since the validity of a signal is determined internally by the HLS compiler, according to the usage of the respective data variables.
+Another factor that adds up to the implementation time is the number of lines of code, as presented in Table \ref{tab:lines_of_code}.
+The VHDL IP design requires 3000 lines, while the HLS IP design only takes 920 for the same functionality.
+Again, this is a subjective measure -- several factors such as code style, or the developer's experience play a role -- but still shows a good representation of the implementation effort for this project.\\
 
-In the final summation, the implementation time of the two variants only differ by around 15\%.
-However,  ... \dots
+In the final summation over several implementation times of all the listed features, the two variants HLS and VHDL only differ by 10 hours, which is around 15\%.
+However, as the previous paragraphs explain, prior knowledge regarding HLS was limited and had to be gathered during the ongoing implementation.
+Nevertheless, even consiering this fact, the HLS implementation is faster than the VHDL equivalent.
+Thus, with an equal amount of prior knowledge and experience, it is assumed that an HLS implementation can lead to a successfully functioning result significantly faster.
 
-\begin{table}[]
-  \centering
-  \begin{tabular}{l|c|c|}
-  \cline{2-3}
-                                                   & \multicolumn{2}{c|}{\textbf{Time [h]}} \\ \hline
-  \multicolumn{1}{|l|}{\textbf{Feature}}           & \textbf{HLS}      & \textbf{VHDL}      \\ \hline
-  \multicolumn{1}{|l|}{AXI Stream Interface}       & 8                 & 12                 \\ \hline
-  \multicolumn{1}{|l|}{AXI4-Lite Interface}        & 2                 & 10                 \\ \hline
-  \multicolumn{1}{|l|}{LED Control Register}       & 1                 & 2                  \\ \hline
-  \multicolumn{1}{|l|}{Build Information Register} & 8                 & 5                  \\ \hline
-  \multicolumn{1}{|l|}{Pass-Through Mode Register} & 1                 & 1                  \\ \hline
-  \multicolumn{1}{|l|}{FIR Filter}                 & 13                & 7                  \\ \hline
-  \multicolumn{1}{|l|}{Sample Decimation}          & 15                & 1                  \\ \hline
-  \multicolumn{1}{|l|}{Receiver Structure}         & 13                & 33                 \\ \hline
-  \multicolumn{1}{|l|}{\textbf{Sum}}               & \textbf{61}       & \textbf{71}        \\ \hline
-  \end{tabular}
-  \caption{Implementation time logging for a specific set of features, for the direct comparison between HLS and VHDL.}
-  \label{tab:implementation_time_logging}
-\end{table}
 
 % Implementation effort/time
 %    -- see logged times; is subjective; had no previous knowledge
@@ -294,7 +308,15 @@ However,  ... \dots
 \section{Simulation}
 
 Sim speed of x min of recorded FM signal\\
-bla bla
+Sim speed of x min of recorded FM signal\\
+Sim speed of x min of recorded FM signal\\
+Sim speed of x min of recorded FM signal\\
+Sim speed of x min of recorded FM signal\\
+Sim speed of x min of recorded FM signal\\
+Sim speed of x min of recorded FM signal\\
+Sim speed of x min of recorded FM signal\\
+Sim speed of x min of recorded FM signal\\
+
 %
 % VHDL:
 %          time                samples
