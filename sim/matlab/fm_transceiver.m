@@ -34,7 +34,7 @@ dir_output_doc = "../../doc/thesis/img/matlab/";
 EnableWriteDataFiles = true;
 EnablePlots          = true;
 EnableSavePlotsToPng = true;
-EnableSavePlotsToPDF = true;
+EnableSavePlotsToPDF = false;
 
 EnableSenderSourceRecordedFile = false;
 EnableSenderSourceCreateSim    = true;

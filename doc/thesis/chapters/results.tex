@@ -33,7 +33,7 @@ The results are presented in the following sections.
 % DSP yes, AXI no (FSM of axi-stream)
 % unit tests
 
-%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Interfaces}
 
 The AXI4-Lite memory-mapped bus is implemented to have an exactly equal behaviour in both variants.
@@ -48,7 +48,7 @@ The implementation details are explained in Section \ref{sec:impl:vhdl:interface
 In the final, integrated system on the SoC hardware, the CPU is able to communicate with both IPs via their interfaces successfully.
 Status and configuration data can be read and written through the AXI4-Lite interface, and the streaming data for the DSP chain is successfully sent through the AXI streams as well.
 
-%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Audio Output}
 
 The audio output of the HLS and VHDL variants is compared with the Matlab model, which serves as the reference.
@@ -109,7 +109,7 @@ Therefore, the numbers that are presented here may vary widely by modifying any 
 Thus, a generalization in the art of \textit{HLS always requires less code than VHDL} can not be stated.
 However, the results in this section can give an idea and overview of this topic and provide a detailed comparison for this specific project.
 
-%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Lines of Code}
 
 Several parts of the system design are taken into account to analyze the lines of code, to give an impression over the largest code parts in the project.
@@ -160,7 +160,7 @@ Therefor, the testbench code of both IPs is relatively small, because the entire
 \end{table}
 
 
-%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Implementation Time}
 
 The metric of implementation time -- the time it takes to implement a specific feature -- is a subjective measure, since it heavily depends on the respective developer's experience, as already noted above.
@@ -192,6 +192,7 @@ Table \ref{tab:implementation_time_logging} shows the direct comparison between 
 
 The following paragraphs present an insight into how the implementation times of the listed code parts arise.
 
+%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{AXI Stream Inferface}
 
 This is the main interface for the data input and -output of the DSP chain.
@@ -207,6 +208,7 @@ According to this fact, a further increase in implementation hours should actual
 However, also the HLS implementation has its particular characteristics that need to be understood for a fully functional implementation.
 Following the respective user guides and implementation examples provides a good starting point for that.
 
+%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{AXI4-Lite Interface}
 
 This interface is used to control IP settings and to read status information.
@@ -223,6 +225,7 @@ Again, the amount of manual steps in the VHDL implementation are clearly represe
 % TODO: mention figure out of read-only and read-write types (pointer/reference)
 % TODO: mention testbench (vhdl: support block, hls: simple access to variable)
 
+%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Registers}
 
 Once the AXI4-Lite memory-mapped interface's main functionality is implemented, further registers can be added.
@@ -234,6 +237,7 @@ The DSP mode register can select the regular FM radio mode and a pass-through mo
 Summing up, the addition of registers to the design can be time-consuming in both variants, depending on the required driver functionality.
 However, the general tendency is that VHDL requires more time, because of this driver issue.
 
+%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{FIR Filter}
 
 The FIR filter is one of the main DSP blocks of the design, as it is used in multiple instances throughout the design.
@@ -249,6 +253,7 @@ The VHDL implementation was straightforward in comparison.
 The testbenches compare the FIR filters' output with the Matlab model's pilot tone output.
 Both variants match the output results of the Matlab model successfully.
 
+%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Sample Decimation}
 
 The implementation of the sample decimation functionality differs slightly between the two variants, HLS and VHDL.
@@ -262,6 +267,7 @@ Because the sample decimator did not write a sample every time, the subsequent r
 A thorough investigation in several user guides, in combination with step-by-step debugging, the issue was found and led to the current, working implementation, which processes a number of samples, before it forwards one sample.
 The process of finding this issue explains the largely varying implementation times, as listed in Table \ref{tab:implementation_time_logging}.
 
+%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Receiver Structure}
 
 The implementation of the receiver structure requires the combination of several previously implemented blocks, such as the FIR filter and any interfaces.
@@ -308,32 +314,34 @@ Thus, with an equal amount of prior knowledge and experience, it is assumed that
 \section{Simulation}
 
 Sim speed of x min of recorded FM signal\\
-Sim speed of x min of recorded FM signal\\
-Sim speed of x min of recorded FM signal\\
-Sim speed of x min of recorded FM signal\\
-Sim speed of x min of recorded FM signal\\
-Sim speed of x min of recorded FM signal\\
-Sim speed of x min of recorded FM signal\\
-Sim speed of x min of recorded FM signal\\
-Sim speed of x min of recorded FM signal\\
 
+measurements are always including loading of data, running through DUT and storing the results.
+exclusively result analysis, since this is shared and thus taking the same amount of time.
+several measurements are done multiple times, to achieve a good average result, that is independent of the current processor load of the host PC.
+
+Figure \ref{fig:impl_time_analysis} shows something
 %
 % VHDL:
-%          time                samples
-%   audio         sim        in      out
-%  0.1000 s    73:44 min  (96000 -> 4000)
-%  0.0100 s    09:37 min  ( 9600 ->  400)
-%  0.0025 s    02:36 min  ( 2400 ->  100)
+%          time                   samples
+%   audio         sim           in      out
+%  0.1000 s    73:44 min       96000 -> 4000
+%  0.0100 s    09:37 min        9600 ->  400
+%  0.0025 s    02:36 min        2400 ->  100
 %
 % HLS:
+%          time                   samples
+%   audio         sim           in      out
+%     0.8 s    00:17 min       768000 -> 32000
+%     1.7 s    00:36 min      1632000 -> 68000
 %
 %
 % Matlab:
-%          time                samples
-%   audio         sim        in      out
-%  1.7 s    0.45 sec     1632000   68000
+%          time                   samples
+%   audio         sim           in      out
+%     1.7 s  00:00:00.52 min   1632000   68000
 %
 
+\includepicture [0.55] [0, trim=10 20 10 10, clip] {The implementation time of the implementation variants. Note the logarithmic scale of the y-axis.} {impl_time_analysis} {img/matlab/impl_time_analysis}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -350,17 +358,17 @@ Also a configuration interface is commonly used, to adapt certain parameters of 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Deployment on Hardware}
 
-%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Integration}
 % - IP generation and integration into Vivado
 % - Another manual step in VHDL is the addition of the AXI bus interfaces to the IP.
 % - Issue: HLS driver import did not work - Vivado SDK is a mess (bad UI based on Eclipse, has bugs, no error output, etc...)
 
-%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Hardware Utilization}
 % --> utilization reports
 
-%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Latency}
 % --> utilization reports
 
