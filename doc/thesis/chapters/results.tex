@@ -231,8 +231,16 @@ Both variants match the output results of the Matlab model successfully.
 
 \subsubsection{Sample Decimation}
 
-VHDL: counter that only forwards one when valid, every n samples\\
-HLS: consume and process n, before one output (understand blocking AXI stream)
+The implementation of the sample decimation functionality differs slightly between the two variants, HLS and VHDL.
+This is explained in Section \ref{sec:impl:hls:sample_rate_reduction}.
+The implementation time of the HLS version is severely larger than the VHDL version.
+This is mainly due to the limited knowledge of the functionality of the AXI stream interface at this stage in the project's implementation, just as previously mentioned with the FIR filter.
+The initial version was implemented like the VHDL version -- a counter that only triggers the subsequent DSP blocks upon a certain number of samples was received.
+However, this led to an endlessly blocking AXI stream in the testbench execution.
+The reason was, that the read-function can only read a sample when the respective stream contains a sample, and that it is a blocking function.
+Because the sample decimator did not write a sample every time, the subsequent read-function blocked indefinitely.
+A thorough investigation in several user guides, in combination with step-by-step debugging, the issue was found and led to the current, working implementation, which processes a number of samples, before it forwards one sample.
+The process of finding this issue explains the largely varying implementation times, as listed in Table \ref{tab:implementation_time_logging}.
 
 \subsubsection{Receiver Structure}
 
