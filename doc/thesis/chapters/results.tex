@@ -216,7 +216,18 @@ However, the general tendency is that VHDL requires more time, because of this d
 
 \subsubsection{FIR Filter}
 
-with TB
+The FIR filter is one of the main DSP blocks of the design, as it is used in multiple instances throughout the design.
+Therefore, its implementation was done with special care, in order to guarantee its correct functionality.
+Consequently, a unit test is implemented in the testbench, which is also included in the listed number of implementation hours.\\
+
+For the \cplusplus\ version, a code example for an FIR filter, which is provided by Xilinx HLS, is taken and modified for the present purpose.
+The VHDL variant is taken from an older DSP project, which was previously developed during a university course.
+However, the integration and testbench code is developed for this project, specifically.
+Here, the HLS implementation took significantly longer, because of the limited knowledge regarding the usage of an AXI stream interface.
+It is the first time in the project, that this type of interface is applied in the IP design and used in the testbench.
+The VHDL implementation was straightforward in comparison.
+The testbenches compare the FIR filters' output with the Matlab model's pilot tone output.
+Both variants match the output results of the Matlab model successfully.
 
 \subsubsection{Sample Decimation}
 
