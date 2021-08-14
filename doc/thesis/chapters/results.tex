@@ -311,7 +311,7 @@ Thus, with an equal amount of prior knowledge and experience, it is assumed that
 %       did not have the same name....
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Simulation}
+\section{Simulation Speed}
 
 In this section, the simulation speed of the multiple implementation variants in their various abstraction levels are compared.
 Simulation speed in this context refers to the number of input samples that the DUT can process in a time unit, like one second.
@@ -378,11 +378,32 @@ Also a configuration interface is commonly used, to adapt certain parameters of 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Deployment on Hardware}
 
+The VHDL and HLS implementation variants are implemented, simulated in their testbenches to verify the correct functionality, as well as deployed on hardware, to test their performance in an actual application.
+Important parts of this end-to-end integration are presented here.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Integration}
-% - IP generation and integration into Vivado
-% - Another manual step in VHDL is the addition of the AXI bus interfaces to the IP.
-% - Issue: HLS driver import did not work - Vivado SDK is a mess (bad UI based on Eclipse, has bugs, no error output, etc...)
+
+The aim is to create IP blocks, that can be integrated into a block design in the Xilinx Vivado software.
+The IP blocks should be able to be connected with their AXI interfaces, in order to successfully communicate and interact with the embedded hard-processor, the ARM CPU.
+In the case of HLS, several files that are required for this integration are generated automatically.
+The files are already placed into the specific folder structure, that Vivado requires to recognize it as an IP block.
+In the case of VHDL on the other hand, this needs to be done manually.
+There is an assistant, the IP Packager, which helps the developer to create the IP.
+However, at this point the folder structure already needs to be in place, so that the assistant works correctly, which again requires manual action.
+Regarding the top-level interfaces, the IP Packager supports an auto-detection of the signals that belong to the respective interface types, as long as they follow the expected naming guidelines.
+However, the interface itself needs to be defined and updated manually in the IP Packager.
+This is especially important, if the interfaces change in the VHDL code.\\
+
+However, also the auto-generation of the HLS IP has characteristics that require special attention.
+One issue during the implementation was, that the auto-generated software driver did not get imported into the Vivado SDK.
+The reason therefor was, that the top-level function of the IP did not have the exact same naming as the Vivado HLS project.
+For issues like that, the Eclipse-based SDK does not give any error output or any kind of information.
+This however is a general issue with the SDK, where error handling is poor and error log outputs are not existent, or at least not useful to the developer, so that the SDK sometimes crashes without an obvious reason.
+It is to note, that version v2018.2 is used for the entire Vivado toolchain, which is not the latest version that is currently available.
+Thus, some of the occuring issues may already be fixed in the newer versions.\\
+
+However, both IPs could successfully be integrated into the Vivado block design, and the tests on the hardware show that they function correctly within the system.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Hardware Utilization}
