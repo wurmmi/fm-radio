@@ -313,13 +313,33 @@ Thus, with an equal amount of prior knowledge and experience, it is assumed that
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Simulation}
 
-Sim speed of x min of recorded FM signal\\
+In this section, the simulation speed of the multiple implementation variants in their various abstraction levels are compared.
+Simulation speed in this context refers to the number of input samples that the DUT can process in a time unit, like one second.
+In the current application, the antenna signal is recorded and replayed to the DUT in the simulation.
+This ensures a reproducable result, so that the different variants can be compared against each other reliably.\\
 
-measurements are always including loading of data, running through DUT and storing the results.
-exclusively result analysis, since this is shared and thus taking the same amount of time.
-several measurements are done multiple times, to achieve a good average result, that is independent of the current processor load of the host PC.
+Figure \ref{fig:impl_time_analysis} shows this direct comparison of processed samples per second for the implementation variants.
+The measurements always include the testbench setup-phase, and the run-phase.
+The setup-phase mainly consists of loading the recorded data and its preparation, so that it can be fed into the DUT.
+The run-phase then actually applies this test data to the DUT and stores the respective output results.
+All time measurements are taken without the result analysis, since this is the exact same, shared code between all variants and thus takes the same amount of time everywhere.
+Several measurements are done multiple times, to achieve an average result, that is independent of the current processor load of the host PC.\\
 
-Figure \ref{fig:impl_time_analysis} shows something
+The diagram shows an immense difference of simulation speed between the variants.
+It is important to note that the y-axis has a logarithmic scale, as a method to enable the presentation of the values in multiple orders of magnitude.
+VHDL only achieves around 20 samples per second.
+This is by far the slowest method, which is expected because of the way of how VHDL is simulated.
+This can not be explained in detail here, but one main feature of a VHDL simulator is its capability to simulate parallel processes, as they occur in actual parallel hardware.
+The VHDL simulator therefor needs to evaluate several concurrent processes and statements, whenever any of the interacting signals change their value, and this is time-consuming.
+In the current case, there is an additional interface between the VHDL simulator and the Python testbench framework, which likely additionally slows down the simulation.
+The HLS testbench in comparison achieves around 50000 samples per second, which is a speed-up factor of 2500.
+This is specifically talking about the HLS C/\cplusplus-simulation.
+The main reason for the speed-up therefor is, that in this type of simulation no timing behaviour is simulated -- any processes are treated as C/\cplusplus\ functions that runs like a regular executable on the host CPU.
+Also, the HLS compiler is using native \cplusplus\ data types to represent the signals, where possible, which results in the faster execution of the code.
+Finally, the simulation in Matlab achieves a further speed-up by a factor of 70.
+Matlab is specifically designed for applications which require matrix calculations and utilizes highly optimized algorithms in its underlying functions therefor.
+Thus, Matlab runs very efficiently and achieves the highest simulation speed of around 3 million samples per second.
+
 %
 % VHDL:
 %          time                   samples
@@ -341,7 +361,7 @@ Figure \ref{fig:impl_time_analysis} shows something
 %     1.7 s  00:00:00.52 min   1632000   68000
 %
 
-\includepicture [0.55] [0, trim=10 10 10 10, clip] {The implementation time of the implementation variants. Note the logarithmic scale of the y-axis.} {impl_time_analysis} {img/matlab/impl_time_analysis}
+\includepicture [0.55] [0, trim=10 10 10 10, clip] {The measured simulation speed of the different implementation variants, in samples per second. The arrows show the speed-up factors. Note the logarithmic scale of the y-axis.} {impl_time_analysis} {img/matlab/impl_time_analysis}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -349,7 +369,7 @@ Figure \ref{fig:impl_time_analysis} shows something
 
 The system design architecture that is chosen in this project covers several parts of the system.
 This includes a reference model, the development of the IP itself, including the simulation testbench, as well as the final integration into the productive system.
-Because of this structured approach, that is given by this system design, it can be applied to almost any DSP project.
+Because of this modular and structured approach, that is given by this system design, it can be applied to almost any DSP project.
 The main processing IP can simply be replaced with another implementation, while the environment does not need to be modified.
 The reason therefor is, that DSP projects almost always use streaming interfaces for their inputs and outputs.
 Also a configuration interface is commonly used, to adapt certain parameters of the IP during runtime.
