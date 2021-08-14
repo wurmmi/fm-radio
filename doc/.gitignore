@@ -22,5 +22,6 @@
 *.tps
 *.bdic
 
-lines-of-code-analysis/output/
+# Analysis
+**/lines-of-code/output/
 *.asv

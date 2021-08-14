@@ -56,5 +56,5 @@ plt.annotate('x70',
 
 # show and save
 plt.tight_layout()
-plt.savefig('impl_time_analysis.pdf')
+plt.savefig('../../thesis/img/matlab/impl_time_analysis.pdf')
 plt.show()
