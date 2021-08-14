@@ -82,7 +82,7 @@ ax.legend(handles[:], group_names_legs, loc=(1.0, 0.25), prop={'size': 13})
 plt.tight_layout()
 
 # show and save
-plt.savefig('../thesis/img/matlab/lines_of_code_pie_chart_py_all.pdf')
+plt.savefig('../../thesis/img/matlab/lines_of_code_pie_chart_py_all.pdf')
 plt.show()
 
 # ---------------------- HLS --------------------------------------------------
@@ -161,7 +161,7 @@ ax.legend(handles[len(group_names):], subgroup_names_legs, loc=(0.95, 0.2))
 plt.tight_layout()
 
 # show and save
-plt.savefig('../thesis/img/matlab/lines_of_code_pie_chart_py_hls.pdf')
+plt.savefig('../../thesis/img/matlab/lines_of_code_pie_chart_py_hls.pdf')
 plt.show()
 
 
@@ -241,7 +241,7 @@ ax.legend(handles[len(group_names):], subgroup_names_legs, loc=(0.95, 0.2))
 plt.tight_layout()
 
 # show and save
-plt.savefig('../thesis/img/matlab/lines_of_code_pie_chart_py_vhdl.pdf')
+plt.savefig('../../thesis/img/matlab/lines_of_code_pie_chart_py_vhdl.pdf')
 plt.show()
 
 # -------------------------------------------------------------------------

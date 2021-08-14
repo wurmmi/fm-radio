@@ -8,7 +8,7 @@
 set -euo pipefail
 
 SCRIPT_PATH=$(dirname $(readlink -f $0))
-REPO_ROOT=$SCRIPT_PATH/../../
+REPO_ROOT=$SCRIPT_PATH/../../../
 
 cd $REPO_ROOT
 
@@ -25,7 +25,7 @@ cd $REPO_ROOT
 CLOC_CMD="docker run --rm -v $REPO_ROOT:/tmp/ aldanial/cloc:latest"
 
 # Clean previous output products
-SCRIPT_PATH_RELATIVE=doc/lines-of-code-analysis/output
+SCRIPT_PATH_RELATIVE=doc/analysis/lines-of-code/output
 mkdir -p $SCRIPT_PATH_RELATIVE
 rm -f $SCRIPT_PATH_RELATIVE/*.txt
 

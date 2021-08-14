@@ -10,7 +10,7 @@ close all;
 clc;
 
 %% Settings
-dir_output_doc = "../thesis/img/matlab";
+dir_output_doc = "../../thesis/img/matlab";
 
 
 %% Plot

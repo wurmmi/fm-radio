@@ -11,7 +11,7 @@
 ###
 
 SCRIPT_PATH=$(dirname $(readlink -f $0))
-REPO_ROOT=$SCRIPT_PATH/../../
+REPO_ROOT=$SCRIPT_PATH/../../../
 cd $REPO_ROOT
 
 if test $# -eq 0 ; then
