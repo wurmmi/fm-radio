@@ -431,17 +431,20 @@ In VHDL, it requires 44 LUTs and 54 FFs, while HLS consumes only 36 LUTs and 37 
 So it seems that the manual VHDL implementation requires more resources in all the comparable parts.
 By further investigating the report, the VHDL version apparently utilizes a large amount of LUTs for the delays, which are used to clock-align the FIR output signals.
 For an optimization of the VHDL design, this would be a good point to start at.
+However, for this project, both implementation variants are compared without any optimizations from the developer's side.
+
 
 \includepicture [0.75] [0, trim=10 10 10 10, clip] {A comparison of the resource utilization of the VHDL and HLS implementations. The VHDL variant requires significantly more resources.} {hardware_utilization} {img/matlab/hardware_utilization}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Latency}
-% --> utilization reports
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Applicability}
-% of all implementation variants
-%   GNU Radio for fast prototyping,
-%   Matlab for research
-%   HLS/VHDL for deployment on HW, product development
+Latency is the time it takes for the design to produce an output sample.
+The latency of the HLS version is taken from the report that is produced after the C-synthesis of the HLS compiler.
+The report shows an estimated resource utilization, as well as the latency as a number of clock cycles.
+The latency is given with 2712 clock cycles.
+For the VHDL version, a similar report is not available.
+Instead, the testbench of the integration test is executed, which produces a signal wave form.
+The latency is measured from this wave form and results in a number of around 2470 clock cycles.
+With regards to latency, the two implementation variants appear to have a similar behaviour.
 
