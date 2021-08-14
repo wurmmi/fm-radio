@@ -39,7 +39,7 @@ rects2 = ax.bar(x2, values_hls, barwidth, label='HLS', color=plt.cm.Blues(0.6), 
 ax.set_title('Hardware Utilization')
 plt.xticks([r + barwidth / 2 for r in x1], labels)
 ax.set_xticklabels(labels)
-ax.legend(loc='best')
+ax.legend(loc='right')
 #ax.legend(loc=(1.0, 0.2))
 #ax.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
 

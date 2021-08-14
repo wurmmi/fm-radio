@@ -411,10 +411,28 @@ However, both IPs could successfully be integrated into the Vivado block design,
 The hardware utilization of the HLS and VHDL implementations are compared in detail in this section.
 The numbers are taken from the final utilization report, that is created by Vivado at the end of the bitstream creation, since this is assumed to be the most accurate report that shows the actual utilization.\\
 
-Figure \ref{fig:hardware_utilization} shows the utilization numbers of different FPGA resources.
+Figure \ref{fig:hardware_utilization} shows the utilization numbers of the different FPGA resources.
+It reveals that the manual VHDL implementation clearly requires more resources in the FPGA.
+The study of the detailed utilization report however does not enable a deeper direct comparison of the respective single blocks, such as VHDL FIR filter against HLS FIR filter.
+This is because the HLS compiler automatically applies optimizations, so that the direct connection between code and resource report is partially lost.
+Examples for optimizations are inlining of functions, re-ordering of operations and time-sharing.
+The latter has an especially large impact on the resource utilization.
+Generally, in hardware design there is a trade-off between resource utilization and throughput, which leads to time-sharing.
+For example, an entirely parallel-duplicated pipeline can process the double amount of data, but also requires the double amount of resources.
+On the other hand, time-sharing a resource may take the double amount of time, thus only processes half of the data, but also only requires half of the resource utilization.
+In HLS, this trade-off can be influenced and determined by the developer.
+Depending on the requirements of the design, the optimization may either be set towards a lower resource utilization, or towards a high throughput.
+In the current HLS implementation, no measures are taken towards any optimization and thus, the compiler is free to decide.
+However, the only requirement is the correct functionality within the given situation, of course.
+This specifically means that the throughput needs to be high enough, in order to process the audio signal output accordingly.\\
 
+Nevertheless, the resource report allows the comparison of the configuration interface, which is the AXI4-Lite interface.
+In VHDL, it requires 44 LUTs and 54 FFs, while HLS consumes only 36 LUTs and 37 FFs.
+So it seems that the manual VHDL implementation requires more resources in all the comparable parts.
+By further investigating the report, the VHDL version apparently utilizes a large amount of LUTs for the delays, which are used to clock-align the FIR output signals.
+For an optimization of the VHDL design, this would be a good point to start at.
 
-\includepicture [0.75] [0, trim=10 10 10 10, clip] {hardware utilization} {hardware_utilization} {img/matlab/hardware_utilization}
+\includepicture [0.75] [0, trim=10 10 10 10, clip] {A comparison of the resource utilization of the VHDL and HLS implementations. The VHDL variant requires significantly more resources.} {hardware_utilization} {img/matlab/hardware_utilization}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Latency}
