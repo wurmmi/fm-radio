@@ -28,28 +28,45 @@ This is especially true, when it comes to the development of complex functionali
 However, the often heard statement that HLS enables any software developer to develop hardware IPs, can not be supported.
 A developer that writes HLS code, still needs to have a strong hardware background, to be able to understand what is being generated in hardware.
 It is important to know about the limitations of the target hardware, i.e. FPGA, in order to write an efficient design.
-Therefore, the connection between specific HLS \cplusplus\ code lines, as well as the general structure and algorithm, and the hardware target need to be understood.
+Therefore, the connection between specific HLS \cplusplus\ code lines, as well as the general structure and algorithm, and the hardware target need to be understood.\\
 
+In prospect, there are many ideas on how the project can potentially be extended.
+Additional implementation methods could be used to develop the FM radio receiver IP.
+For example, Matlab can be used to create VHDL code, in a high-level synthesis fashion, which can be used to create the IP.
+Regarding the verification environment, also the GNU Radio implementation could be included.
+The common input that is produced by the Matlab model, and the common output analysis, which are both used for the VHDL and HLS testbenches, can be used in GNU Radio as well.
+This would allow another comparison.
+Looking at the HLS code, it could be evaluated how compiler-independent it is.
+The question could be, if it is possible to write code that can be compiled with multiple compilers for different target platforms and vendors, e.g. Xilinx and Intel FPGAs, at the same time.
+Furthermore, the various optimization strategies that Xilinx HLS provides could be evaluated on the existing HLS code.
+Also, currently manually implemented functions, such as the FIR filter, could be replaced with build-in library functions.
+Finally, the application software could be upgraded from the current bare-metal, real-time OS, to an embedded Linux OS which runs on the ARM CPU.
+This would additionally allow the support of the RTL-SDR device to be used for live data streaming, instead of the current replay of the recorded antenna data from the SD card.\\
 
-
+The amount of ideas for potential extensions to the project shows how comprehensive the project is and how many topics it covers.
+Summing up, it can be said that the project revealed a range of interesting and partially unexpected insights into multiple topics, and that a lot of knowledge was gained during the elaboration of this thesis.
 
 % NOTES:
 %
 % Further steps:
 %  - generate VHDL from Matlab receiver code
+%  - use Matlab Simulink HDL Coder and System Generator
+%     as additional implementation variants
+
 %  - use the common input file and feed it to GNU Radio;
 %    also produce an output file with GNU Radio for comparison
+
 %  - Develop HLS compiler independent code (optional)}
 %    -- Different compilers use different #pragmas, etc.
 %    -- These #pragmas need to be within the code, at the appropriate positions,
 %       which makes it difficult to write compiler independent code....
-%  - use Matlab Simulink HDL Coder and System Generator
-%     as additional implementation variants
 %  - use Intel oneAPI HLS compiler
 %      -- try to develop compiler-independent code
 %      -- how platform-independent is HLS?
+
 %  - explore HLS optimizations
 %  - explore HLS libraries (e.g. DSP library --> pre-made FIR filter)
+
 %  - create another IP in the same system
 %      -- due to the modular system design this is easy to do
 %  - use Linux OS on the SoC, to enable live-data streaming with the RTL-SDR
