@@ -57,7 +57,7 @@ The main source of information for this section is \cite{PassosFábio2020AHSo}.
 \subsection{Superheterodyne Receiver}
 
 The superheterodyne receiver is often referred to as \textit{superhet}, or \textit{super} in the literature.
-The main characteristic of a superhet is, that it converts the radio-frequency (RF) antenna signal to an IF in a first stage, instead of going to baseband directly.\\
+The main characteristic of a superhet is that it converts the radio-frequency (RF) antenna signal to an IF in a first stage, instead of going to baseband directly.\\
 
 The IF is usually set to a fixed frequency, which results in the advantage, that the subsequent IF filter can be optimized, since it does not have to be adapted in frequency.
 Therefore, a superhet receiver is able to select narrow band signals, even if the bands' surrounding frequencies are being used by other signals.
@@ -75,7 +75,7 @@ Afterwards, the IF signal is amplified and filtered again to remove the side-pro
 Thus, it is also called an image rejection filter.
 The demodulator stage can now perform any further signal processing on the signal, until the required signal is retrieved.\\
 
-The depicted block diagram represents a superhet receiver structure, for example an FM broadcast receiver, where an audio output is generated from the antenna input.
+The depicted block diagram represents a superhet receiver structure, for example as it can be used in an FM broadcast receiver, where an audio output is generated from the antenna input.
 
 \includepicture [1.0] {Block design of a superhetorodyne receiver \cite{PassosFábio2020AHSo}} {bd_superhet} {img/draw.io/superheterodyne-receiver-block-diagram}
 
@@ -90,6 +90,7 @@ The main advantage of direct-conversion receivers is, that their output is an im
 This is due to the properties of the mixer.
 The strongest disadvantages are the LO leakage, which leads to a DC offset at the mixer's output, and the flicker noise, also called \textit{1/f}-noise, which induces strong noise at low frequencies.
 These effects are not explained into more detail here, since this is not the focus of this thesis.
+Figure~\ref{fig:bd_direct_conversion} shows a block diagram of a direct-conversion receiver.
 
 \includepicture [1.0] {Block design of a direct-conversion receiver \cite{PassosFábio2020AHSo}.} {bd_direct_conversion} {img/draw.io/direct-conversion-receiver-block-diagram}
 
@@ -107,20 +108,18 @@ In order to achieve this, the incoming signal needs to be multiplicated with a c
 Depending on the frequency $f_{LO}$ of this local carrier, the resulting signal will be shifted to baseband, or an IF.
 Note, that in the case of down-conversion, the local oscillator frequency $f_{LO}$ is interchangeably denoted as carrier frequency $f_c$.\\
 
-A block diagram, as well as the signal spectrum of the process is shown in Figure~\ref{fig:bd_down_conversion_spectrum}. In this example, the frequency of the LO is set to shift the signal from $f_m$ to baseband.
+A block diagram, as well as the signal spectrum of the process is shown in Figure~\ref{fig:bd_down_conversion_spectrum}. In this example, the frequency of the LO is set to shift the signal from $f_m$, which is drawn in solid lines, to baseband, which is drawn in dashed lines.
 
 \includepicture [1.0] {Block diagram and signal spectrum of down-conversion.} {bd_down_conversion_spectrum} {img/draw.io/down-conversion-AM-spectrum-and-bd}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Mathematical Description}
 
-The procedure that is used for down-conversion is an amplitude modulation (AM).
 The equation for a generic AM signal is $ S_{AM}(t) = A_m m(t) \cdot A_c c(t) $, where $m(t)$ represents the message signal, and $c(t)$ is the high-frequency carrier.
 Their respective amplitudes are $A_m$ and $A_c$.
-This equation is depicted as a block diagram and signal spectrum in Figure~\ref{fig:bd_down_conversion_spectrum}, where $S_{AM}$ is denoted as the baseband signal $m_{BB}$ of the original signal $m$.
-The signal $m(t)$ is a baseband signal.
-It may be antenna signal that was filtered by a bandpass filter.
-The received signal is a real signal, and thus, its negative frequency spectrum is an exact mirror of the positive frequencies.
+This equation is depicted as a block diagram and signal spectrum in Figure~\ref{fig:bd_down_conversion_spectrum}, in which $S_{AM}$ is denoted as the baseband signal $m_{BB}$, because it is already down-converted.
+The original HF signal $m$, before the down-conversion, is a bandpass signal, such as an antenna signal that was filtered by a bandpass filter.
+This received signal is a real signal, and thus, its negative frequency spectrum is an exact mirror of the positive frequencies.
 This fact can be explained in two simple equations.\\
 
 It is well-known that the real signal $cos(wt) = \frac{1}{2} \Big( e^{jw} + e^{-jw} \Big)$, which follows from $e^{jw} = cos(wt)+jsin(wt)$.
@@ -194,10 +193,10 @@ Figure~\ref{fig:aliasing_freq_spectrum} illustrates the effect of aliasing in th
 %TODO: explain DSP functions that are actually used in Matlab FM demod
 
 Sample rate reduction is also called downsampling.
-Downsampling is a way to reduce the amount of data that needs to be processed, without losing any of the signals' information.
+It is a way to reduce the amount of data that needs to be processed, without losing any of the signals' information.
 In some applications, the digital signal is oversampled by a large factor.
 However, if the frequency spectrum of the desired signal is a narrow band, a high oversampling rate is not necessary and the signal can be downsampled without losing any information content.
-To guarantee this, the Nyquist sampling theorem must still be met after the downsampling process.
+To guarantee this, the Nyquist sampling theorem must still be met after the downsampling process.\\
 
 A lower sample rate is especially useful for efficient filter design.
 Factors such as the transition bandwidth or the width of the passband are important there.
@@ -208,7 +207,7 @@ Downsampling spreads the spectrum of interest, in terms of the relative bandwidt
 Therefore, the filter can be designed with wider transition bandwidth and passband, which significantly reduces the required filter order.\\
 
 As an example, assuming the signal of interest has a bandwidth of 20~kHz.
-The Nyquist theorem thus requires a remaining sampling rate of at least twice the signals' frequency, so 40~kHz.
+The Nyquist theorem thus requires a remaining sampling rate of at least twice the signal's frequency, so 40~kHz.
 The signal is sampled with an oversampling factor of 10 -- meaning a sample rate of 200~kHz.
 A downsampling factor of 4 is now applied, which results in a sample rate of 50~kHz.
 The resulting signal is now downsampled and can be processed at this lower data rate, while none of the original data content is lost.\\
@@ -219,7 +218,7 @@ In the first step, a low-pass filter with a normalized cut-off frequency of \tex
 This is required in order to avoid aliasing later in the process.
 The second step simply skips a number of M-1 samples in the sequence.\\
 
-More detailed information can be found in \cite[Ch.~6.9]{AlessioSilviaMaria2016DSPa}, \cite[Ch.~4.1]{GopiE.S2018MDSP} and \cite[Ch.~10.2.2]{ThyagarajanK.S2019ItDS}.
+More detailed information can be found in the literature \cite[Ch.~6.9]{AlessioSilviaMaria2016DSPa}, \cite[Ch.~4.1]{GopiE.S2018MDSP} and \cite[Ch.~10.2.2]{ThyagarajanK.S2019ItDS}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Frequency Modulation in Broadcasting}
