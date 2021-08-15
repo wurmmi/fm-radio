@@ -43,7 +43,7 @@ The AXI stream interface however does not show the exact same behaviour.
 Here, the HLS variant is using the AXI stream according to its protocol, while the VHDL variant is implemented differently.
 It uses a simplified logic for the ready-flag, which reduces the effort in implementation.
 However, from the perspective of the communicating blocks, the interface is usable like a regular AXI stream.
-The implementation details are explained in Section \ref{sec:impl:vhdl:interfaces}.\\
+The implementation details are explained in Section~\ref{sec:impl:vhdl:interfaces}.\\
 
 In the final, integrated system on the SoC hardware, the CPU is able to communicate with both IPs via their interfaces successfully.
 Status and configuration data can be read and written through the AXI4-Lite interface, and the streaming data for the DSP chain is successfully sent through the AXI streams as well.
@@ -64,7 +64,7 @@ However, differences remain, which are presented in the following paragraphs and
 In the comparison against the Matlab model, the HLS variant achieves a very exact match of the output signal.
 However, the VHDL implementation differs by a certain amount.
 There seems to be an issue in the signal separation between the left and right audio channels.
-This is visible in the analysis of the audio signal, as shown is Figure \ref{fig:audio_output_compare_tb_vs_hw}.
+This is visible in the analysis of the audio signal, as shown is Figure~\ref{fig:audio_output_compare_tb_vs_hw}.
 The signal strength of the left channel in the upper diagram is weaker than expected, while the right channel in the lower diagram is stronger.
 This imbalance can also be observed by listening to the audio output via speakers.\\
 
@@ -82,7 +82,7 @@ However, from the system-level point of view of this thesis, the IP works and ca
 
 Here, the results of the simulation testbenches are compared against the values that are read from the FPGA directly.
 Ideally, the values should be exactly the same.
-However, Figure \ref{fig:audio_output_compare_tb_vs_hw} shows that this is not always the case.
+However, Figure~\ref{fig:audio_output_compare_tb_vs_hw} shows that this is not always the case.
 Again, the HLS implementation does have a matching result, whereas the VHDL variant has deviating values.
 The explanation here may be linked with above suspicions, but may also be linked to the initial reset values that exist in the hardware.
 In the HLS implementation, the reset logic of several registers is implemented automatically, whereas in VHDL these conditions need to be implemented manually.
@@ -113,8 +113,8 @@ However, the results in this section can give an idea and overview of this topic
 \subsection{Lines of Code}
 
 Several parts of the system design are taken into account to analyze the lines of code, to give an impression over the largest code parts in the project.
-Figure \ref{fig:lines_of_code_pie_charts} shows multiple pie charts, which represent the proportions of the lines of code in the respective system design parts.
-Table \ref{tab:lines_of_code} displays the actual numbers of code lines, to quantify the size of the respective parts.\\
+Figure~\ref{fig:lines_of_code_pie_charts} shows multiple pie charts, which represent the proportions of the lines of code in the respective system design parts.
+Table~\ref{tab:lines_of_code} displays the actual numbers of code lines, to quantify the size of the respective parts.\\
 
 Interesting details can be found by analyzing these charts.
 The upper chart shows that the implementation of the hardware support, in the form of Vivado project scripts and the \cplusplus\ application software, takes a large part of the code with 27\%.
@@ -168,7 +168,7 @@ In the present case, there is a strong background of knowledge and practical exp
 However, this metric is used in this section to specifically compare HLS with VHDL in this project.
 Certain features are chosen for this comparison and their implementation times were logged during the actual implementation process.
 The implementation is always considered as the HDL description, including the corresponding testbench code, to verify the respective correct functionality.
-Table \ref{tab:implementation_time_logging} shows the direct comparison between HLS and VHDL implementation times for these features.\\
+Table~\ref{tab:implementation_time_logging} shows the direct comparison between HLS and VHDL implementation times for these features.\\
 
 \begin{table}[]
   \centering
@@ -257,7 +257,7 @@ Both variants match the output results of the Matlab model successfully.
 \subsubsection{Sample Decimation}
 
 The implementation of the sample decimation functionality differs slightly between the two variants, HLS and VHDL.
-This is explained in Section \ref{sec:impl:hls:sample_rate_reduction}.
+This is explained in Section~\ref{sec:impl:hls:sample_rate_reduction}.
 The implementation time of the HLS version is severely larger than the VHDL version.
 This is mainly due to the limited knowledge of the functionality of the AXI stream interface at this stage in the project's implementation, just as previously mentioned with the FIR filter.
 The initial version was implemented like the VHDL version -- a counter that only triggers the subsequent DSP blocks upon a certain number of samples was received.
@@ -265,7 +265,7 @@ However, this led to an endlessly blocking AXI stream in the testbench execution
 The reason was, that the read-function can only read a sample when the respective stream contains a sample, and that it is a blocking function.
 Because the sample decimator did not write a sample every time, the subsequent read-function blocked indefinitely.
 A thorough investigation in several user guides, in combination with step-by-step debugging, the issue was found and led to the current, working implementation, which processes a number of samples, before it forwards one sample.
-The process of finding this issue explains the largely varying implementation times, as listed in Table \ref{tab:implementation_time_logging}.
+The process of finding this issue explains the largely varying implementation times, as listed in Table~\ref{tab:implementation_time_logging}.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Receiver Structure}
@@ -279,7 +279,7 @@ This specifically includes the clock-alignment of any signals that need to be us
 For example, if two parallel FIR filters produce output signals that are to be added, they need to be aligned so that they are valid at the time of the summation.
 This often requires analysis and debugging in a signal wave form.
 In HLS this is not required, since the validity of a signal is determined internally by the HLS compiler, according to the usage of the respective data variables.
-Another factor that adds up to the implementation time is the number of lines of code, as presented in Table \ref{tab:lines_of_code}.
+Another factor that adds up to the implementation time is the number of lines of code, as presented in Table~\ref{tab:lines_of_code}.
 The VHDL IP design requires 3000 lines, while the HLS IP design only takes 920 for the same functionality.
 Again, this is a subjective measure -- several factors such as code style, or the developer's experience play a role -- but still shows a good representation of the implementation effort for this project.\\
 
@@ -318,7 +318,7 @@ Simulation speed in this context refers to the number of input samples that the 
 In the current application, the antenna signal is recorded and replayed to the DUT in the simulation.
 This ensures a reproducable result, so that the different variants can be compared against each other reliably.\\
 
-Figure \ref{fig:impl_time_analysis} shows this direct comparison of processed samples per second for the implementation variants.
+Figure~\ref{fig:impl_time_analysis} shows this direct comparison of processed samples per second for the implementation variants.
 The measurements always include the testbench setup-phase, and the run-phase.
 The setup-phase mainly consists of loading the recorded data and its preparation, so that it can be fed into the DUT.
 The run-phase then actually applies this test data to the DUT and stores the respective output results.
@@ -411,7 +411,7 @@ However, both IPs could successfully be integrated into the Vivado block design,
 The hardware utilization of the HLS and VHDL implementations are compared in detail in this section.
 The numbers are taken from the final utilization report, that is created by Vivado at the end of the bitstream creation, since this is assumed to be the most accurate report that shows the actual utilization.\\
 
-Figure \ref{fig:hardware_utilization} shows the utilization numbers of the different FPGA resources.
+Figure~\ref{fig:hardware_utilization} shows the utilization numbers of the different FPGA resources.
 It reveals that the manual VHDL implementation clearly requires more resources in the FPGA.
 The study of the detailed utilization report however does not enable a deeper direct comparison of the respective single blocks, such as VHDL FIR filter against HLS FIR filter.
 This is because the HLS compiler automatically applies optimizations, so that the direct connection between code and resource report is partially lost.

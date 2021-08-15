@@ -30,7 +30,7 @@ The idea of HLS is to create the same level of abstraction -- write code in a hi
 A major achievement in the usage of HLS is the shorter development time.
 The time that it takes to develop a first working version of the intended design can be significantly reduced, compared to the development in RTL code directly.
 This is especially important when an FPGA design is combined with a software part, like in a System On Chip, since software development is comparably fast.
-Figure \ref{fig:timeline_performance_first_prototype} schematically displays the difference in development time, over performance and degree of optimization, when the same functionality of a prototype is implemented in different methods for various targets.
+Figure~\ref{fig:timeline_performance_first_prototype} schematically displays the difference in development time, over performance and degree of optimization, when the same functionality of a prototype is implemented in different methods for various targets.
 The compared targets are an x86 processor CPU, a digital signal processor (DSP), a graphics processing unit (GPU) and the FPGA design in RTL or HLS implementation.
 It is clearly visible, that the FPGA design with the HLS design approach achieves a first working prototype much earlier than the direct RTL approach.
 
@@ -218,7 +218,7 @@ However, port-level interfaces can also be implemented as AXI interfaces, such a
 This is an especially useful function, since the implementation of the actual interface logic is abstracted from the user.
 Additionally, software drivers are automatically generated along with the respective interfaces, which provides a fast and simple integration into a larger system.\\
 
-The code example in Program \ref{prog:axi4_lite} shows the specification of an AXI4-Lite memory-mapped slave interface.
+The code example in Program~\ref{prog:axi4_lite} shows the specification of an AXI4-Lite memory-mapped slave interface.
 The provided registers are separated into configuration registers and status registers.
 The configuration is readable and writeable, while the status registers are implemented as read-only, which requires less logic in the RTL implementation.\\
 
@@ -250,7 +250,7 @@ The configuration is readable and writeable, while the status registers are impl
 \end{CppCode}
 \end{program}
 
-The second code example, Program \ref{prog:axi4_stream}, demonstrates the equally simple definition of an AXI4-Stream interface.
+The second code example, Program~\ref{prog:axi4_stream}, demonstrates the equally simple definition of an AXI4-Stream interface.
 
 \begin{program}
   \caption{Implementation of an AXI4-Stream interface.}
@@ -284,7 +284,7 @@ The general significance of the simulation testbench for a HDL design is explain
 These different levels of abstraction in the testbench execution are a major difference between a VHDL testbench and an HLS testbench.
 The most important impact thereof is the execution speed -- the time it takes to simulate a number of test cases on the DUT.\\
 
-Section \ref{sec:hls:workflow} above already mentioned the topics of testbenches and simulation types.
+Section~\ref{sec:hls:workflow} above already mentioned the topics of testbenches and simulation types.
 The following descriptions shall be seen as a comprehensive extension around these topics.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%

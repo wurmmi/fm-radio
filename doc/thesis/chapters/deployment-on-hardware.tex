@@ -63,14 +63,14 @@ However, the chosen solution is sufficient for the aims of this thesis.
 %%%%%%%%%%%%%%%%%%%%
 \section{System-On-Chip Design}
 
-Chapter \ref{cha:Implementation} already described the development of the main IP core, which is the FM radio receiver in the VHDL and HLS variants.
+Chapter~\ref{cha:Implementation} already described the development of the main IP core, which is the FM radio receiver in the VHDL and HLS variants.
 In order to embed these IPs on the actual FPGA, or rather SoC hardware, a significant additional amount of implementation is neccessary.
 This section describes these additional parts of the implementation, which specifically enable and support the deployment on the SoC.
 
 %%%%%%%%%%%%%%%%%%%%
 \subsection{Architecture}
 
-The block diagram in Figure \ref{fig:bd_impl_vivado} shows the implemented architecture that is used in the SoC.
+The block diagram in Figure~\ref{fig:bd_impl_vivado} shows the implemented architecture that is used in the SoC.
 The various design domains in and around the SoC are depicted in different visual representations.
 The FPGA domain blocks are highlighted in gray, with the main IPs being surrounded by emphasized lines.
 The processor system domain is shown as white blocks.
@@ -102,7 +102,7 @@ Once the FIFO is almost full, it asserts an interrupt to the CPU, which triggers
 The CPU then stores this data on the external SD card again.
 In that way, the loop of data is closed, which enables the verification of the respective IPs' correct functionality.
 Therefore, this system design can be described as a hardware-in-the-loop system, in the point of view of the FPGA IPs.
-This ability refers to the knowledge gained with the SIMILAR concept, that is introduced in Section \ref{sec:SimilarProcess}.
+This ability refers to the knowledge gained with the SIMILAR concept, that is introduced in Section~\ref{sec:SimilarProcess}.
 Specifically, this implemented system design enables the application of the steps 'Assess Performance' and 'Re-evaluate', since the IPs' performance can be measured and their design can be re-evaluated.\\
 
 It is to note, that Xilinx provides all the AXI infrastructure IPs, and thus the only self-implemented IPs are the FM radio receivers, as well as the I2S interface.
