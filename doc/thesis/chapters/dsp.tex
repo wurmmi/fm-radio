@@ -227,28 +227,28 @@ More detailed information can be found in the literature \cite[Ch.~6.9]{AlessioS
 
 Frequency modulation (FM) is a widely used standard to transmit data streams.
 The probably best known usecase therefor is commercial broadcast radio, where an audio stream is transmitted.
-Devices to receive these streams are available for low prices to the public.\\
-
+Devices to receive these streams are available for low prices to the public.
 This section describes the main properties of broadcast FM, such as the mathematical description, frequency bands that are used, or the specific frequency parts within a channel spectrum.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Mathematical description}
 
 The mathematical description of an FM baseband signal can be described with the formulas presented in this section.
-FM encodes the information content in its instantanious frequency.
+FM encodes the information content in its instantaneous frequency.
 This means that the measured frequency at any moment in time represents a specific value of a transmitted message.
-For a general classification, FM belongs to the group of angle, or phase modulated signals (PM).
-The simple reason therefor is, that a frequency has a direct relationship to an angle, if the signal is seen on a unit circle.\\
+For a general classification, FM belongs to the group of angle-, or phase modulated signals (PM).
+The simple reason therefor is that a frequency has a direct relationship to an angle, if the signal is seen on a unit circle.\\
 
-The instantanious frequency $f_i$ of an FM signal can be described as
+\noindent
+The instantaneous frequency $f_i$ of an FM signal can be described as
 \begin{equation}
   f_i = f_c + \Delta f \cdot m(t)
 \end{equation}
 where $f_c$ is the carrier- or center frequency, $\Delta f$ is the maximum frequency deviation and $m(t)$ is the information or message signal that is to be transmitted.
-Simply looking at this equation, the frequency deviation, which is sometimes also called the swing, varies in the range between $f_c \pm \Delta f$.
+Simply looking at this equation, the instantaneous frequency varies in the range between $f_c \pm \Delta f$, which is sometimes also called the swing.
 Considering the relationship between frequency and angle, as described above, and after some simple substitutions which will not be described into detail here, the equation for a generic frequency modulated wave is the following
 \begin{equation}
-  s(t) = A_c\ cos \Big( 2 \pi f_c t + 2 \pi k_f \int m(t) dt \Big),
+  s(t) = A_c\ cos \Big( 2 \pi f_c t + 2 \pi k_f \int_{0}^{t} m(\tau) d\tau \Big),
   \label{equ:fm_func}
 \end{equation}
 where $A_c$ is the amplitude of the resulting FM signal and $k_f$ is the frequency sensitivity factor.
@@ -258,7 +258,7 @@ This sensitivity factor has a direct relationship with the modulation index $\be
 \end{equation}
 where $f_m$ is the highest existing frequency, or the bandwidth of the information signal.
 % More info on modulation index: https://fas.org/man/dod-101/navy/docs/es310/FM.htm
-Formula~\eqref{equ:fm_func} describes a frequency modulated signal with a generic message signal $m(t)$.
+Equation~\eqref{equ:fm_func} describes a frequency modulated signal with a generic message signal $m(t)$.
 A widely used example application of FM is broadcast radio, where audio streams are transmitted.
 An audio stream can be described as a cosine wave.
 Therefore, the information signal that is to be transmitted in broadcast radio can be represented as a cosine wave in the form of
@@ -311,7 +311,7 @@ For a better overview, only the positive spectum part is shown.
 The negative part is an exact mirror, because the transmitted and received signals from the antenna are real signals -- they do not have an imaginary part.
 The spectrum consists of multiple parts.
 Therefore, it is also referred to as `multiplex signal' in the literature.
-Several parts are described in the following paragraphs \cite{EbuFmRegulators},\cite{EtsiFmSoundBroadcastingServiceHarmonizedStandard},\cite{ElectronicsNotesFmTutorial}.
+Several of these parts are described in the following paragraphs, according to \cite{EbuFmRegulators},\cite{EtsiFmSoundBroadcastingServiceHarmonizedStandard} and \cite{ElectronicsNotesFmTutorial}.
 
 \includepicture [1.0] {Allocation of frequencies in an FM channel \cite{FigFmChannelFreqSpectrum}.} {fm_channel_baseband_freqs} {img/draw.io/fm-channel-baseband-freqs}
 
@@ -408,7 +408,7 @@ The differentiator already converts the FM signal into an AM signal, but still l
 The transformation that happens here can be expressed in a formula, by simply differentiating Equation~\eqref{equ:fm_func}.
 This operation, with some additional simple algebraic transformations, results in
 \begin{equation}
-  \frac{d s(t)}{dt} = A_c 2 \pi \Big[f_c + k_f m(t) \Big] sin \Big(\omega_c t + 2 \pi k_f \int m(t) dt -pi \Big)
+  \frac{d s(t)}{dt} = A_c 2 \pi \Big[f_c + k_f m(t) \Big] sin \Big(\omega_c t + 2 \pi k_f \int_{0}^{t} m(\tau) d\tau - \pi \Big)
   \label{equ:fm_demod_discriminator}
 \end{equation}
 
@@ -416,7 +416,6 @@ This formula shows AM and FM contents clearly.
 The FM part is described by the sine function, with its argument.
 The more important part is the AM part, which resembles the message signal.
 It is described by the term within the square brackets.
-
 A time-domain example for this signal is shown in the top left diagram in Figure~\ref{fig:time_domain_envelope_detect}.\\
 
 An important requirement for the differentiator is, that the input signal is of a constant amplitude \cite{SchnyderHaller2002}.
@@ -430,9 +429,10 @@ To achieve a constant amplitude, the received complex baseband signal $s(t)$ can
   |e^{j\phi_{FM}(n)}| = 1
 \end{equation}
 
+\noindent
 In a hardware implementation, a differentiation is simply performed by substracting two consecutive samples, like
 \begin{equation}
-  \frac{d s(t)}{dt} = s(t) - s(t-\Delta t)
+  \frac{d s(t)}{dt} = s(t) - s(t-\Delta t),
   \label{equ:differentiator_two_samples}
 \end{equation}
 where $\Delta t$ is the inverse of the sample frequency.\\ %TODO: check this (i'm using a 3-tap FIR in FPGA)
@@ -480,10 +480,11 @@ FM demodulation with a PLL is not described into more detail, since this thesis 
 \label{sec:demodulation-of-broadcast-fm}
 
 This section describes the demodulation of the information content of an FM broadcast channel, as it is used in commercial FM radio broadcasting.
-The assumption here is, that the actual FM demodulation, as described in Chapter~\ref{sec:algorithms-for-digital-fm-demodulation} is already done correctly, including the de-emphasis of the signal.
-So at this point the FM signal is converted to an AM signal.
+The assumption here is, that the actual FM demodulation, as described in Chapter~\ref{sec:algorithms-for-digital-fm-demodulation} is already done correctly.
+So at this point, the FM signal is converted to an AM signal.
 Thus, traditional AM DSP techniques can be employed to decode the FM broadcast channel.\\
 
+\noindent
 A frequency spectrum of the multiplex signal of an FM channel is shown in Figure~\ref{fig:fm_channel_baseband_freqs}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -512,7 +513,7 @@ The following equations need to be applied, to compute a left and a right channe
 \begin{equation}
   \begin{split}
     (L+R) + (L-R) = (2)L \\
-    (L+R) - (L-R) = (2)R,
+    (L+R) - (L-R) = (2)R
     \label{equ_stereo_from_sum_diff}
   \end{split}
 \end{equation}
