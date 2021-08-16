@@ -71,7 +71,7 @@ This imbalance can also be observed by listening to the audio output via speaker
 The cause for this issue may be located in several components in the design.
 This includes the FM demodulator, the carrier recovery, i.e. the 38~kHz carrier, as well as a sample timing shift in the final summation and substraction to recover the left and right channels.
 The FIR filter has a successfully passing unit test and is thus assumed to be correct.
-Also the fixed-point data type with its overflow- and rounding behaviour is suspected to be a potential issue.
+Also the fixed point data type with its overflow- and rounding behaviour is suspected to be a potential issue.
 Due to the time limitation in the elaboration of this thesis, this issue can not be traced down to the root cause and thus still persists in the current implementation.
 However, from the system-level point of view of this thesis, the IP works and can be integrated into the final system.
 
