@@ -87,7 +87,7 @@ Again, the HLS implementation does have a matching result, whereas the VHDL vari
 The explanation here may be linked with above suspicions, but may also be linked to the initial reset values that exist in the hardware.
 In the HLS implementation, the reset logic of several registers is implemented automatically, whereas in VHDL these conditions need to be implemented manually.
 Therefore, the IPs internal state, i.e. the register values, may be different at the beginning, which leads to an error propagation throughout the design.
-The entire DSP chain is built like a pipeline and therefor it takes a number of samples to process, before the 'wrong' intermediate values are flushed out.
+The entire DSP chain is built like a pipeline and therefor it takes a number of samples to process, before the wrong, intermediate values are flushed out.
 All that may be the cause for the deviating values in the VHDL design.\\
 
 Again, the time limitation in the elaboration of this thesis does not allow a deeper analysis and investigation of this issue.

@@ -48,8 +48,8 @@ However, according to the given sources it is becoming more and more popular in 
 This is mainly based on the fact that the HLS tools keep producing results of better quality as they are developed further.
 This especially regards the efficiency of the produced RTL code, the useability of the tools, as well as the better understandable correlation between the high-level code and the generated RTL code.\\
 
-Xilinx is the largest manufacturer of FPGAs globally and therefore its tool 'Xilinx HLS' is widely used.
-Intel, the second largest FPGA manufacturer, also has its HLS tool called 'Intel oneAPI' \cite{IntelHLSOneAPI}.
+Xilinx is the largest manufacturer of FPGAs globally and therefore its tool \textit{Xilinx HLS} is widely used.
+Intel, the second largest FPGA manufacturer, also has its HLS tool called \textit{Intel oneAPI} \cite{IntelHLSOneAPI}.
 Both companies are conducting serious effort to push the HLS implementation method.
 Xilinx recently open-sourced the code for the front-end of their HLS compiler.
 The front-end processes the HLS code, specifically \cplusplus, and creates an intermediate representation from it.
@@ -58,7 +58,7 @@ Also Intel with its oneAPI toolkit is trying to introduce a wider usage of HLS t
 
 In terms of language support, several tools settle for \cplusplus.
 Intel oneAPI uses library APIs and DP\cplusplus\ (Data-Parallel \cplusplus), which is an extension to the ISO \cplusplus\ standard.
-Xilinx also decided in favor of the \cplusplus\ language for their tools 'Vivado HLS' and 'Vitis HLS'.
+Xilinx also decided in favor of the \cplusplus\ language for their tools \textit{Vivado HLS} and \textit{Vitis HLS}.
 In older versions, SystemC was supported for synthesis as well, but is now deprecated in the respective latest versions \cite{VivadoHlsDeprecatesSystemC}.\\
 
 Another feature of HLS is the support of libraries for complex functionalities, such as video processing.
@@ -99,7 +99,7 @@ The following list presents the main steps that are required in the implementati
       They support a developer in finding memory leaks, out-of-bounds memory access, uninitialized variables and similar issues.
       Furthermore, the application of code coverage tools like \textit{gcov} is recommended as well.
       In that way, the percentage of executed code lines of testbench and HLS code can be measured, to ensure a sufficient level of testing.
-      The software testbench is also called 'C Simulation'.\\
+      The software testbench is also called \textit{C Simulation}.\\
 
       The implementation of the HLS IP code is subject to restrictions.
       As an example, dynamic memory allocation is not supported, since the entire code must be analyzable at runtime to be processed into RTL code.
@@ -166,7 +166,7 @@ In calculations it is often necessary to represent fractional numbers.
 In standard \cplusplus, floating point data types are used therefor.
 However, floating point operations require a large amount of logic to implement and thus, HLS provides fixed point data types.
 These can be instantiated in arbitrary bitwidths, where integer and fractional bitwidths can be specified separately.
-The fixed point format is often described in the format 'integer.fractional', like '2.14', which represents a 16 bit fixed point data type that has 2 integer bits and 14 fractional bits.\\
+The fixed point format is often described in the format \textit{integer.fractional}, like \textit{2.14}, which represents a 16 bit fixed point data type that has 2 integer bits and 14 fractional bits.\\
 
 An example for the usage of integer and fixed point data types is given in the following code section.\\
 
@@ -339,14 +339,13 @@ This is done in three steps.\\
 \begin{itemize}
   \item \textbf{Create input vectors}\\
   In this first step, the above explained, regular C simulation is executed.
-  Hereby, the inputs that are sent to the DUT are stored as 'input vectors'.
-
+  Hereby, the inputs that are sent to the DUT are stored as \textit{input vectors}.
   \item \textbf{Perform RTL simulation}\\
   Next, the previously generated input vectors are applied to the DUT.
   At this point, the DUT is already translated into RTL code, so the code that is used here is either VHDL or Verilog code.
   The default simulator is the Vivado Simulator (XSim).
   However, various other simulators like ModelSim are supported.
-  The generated outputs of this step are stored as 'output vectors'.
+  The generated outputs of this step are stored as \textit{output vectors}.
   \item \textbf{Verify the results}\\
   The final verification step sources the output vectors back to the C testbench, which compares the outputs with the expected results.\\
 \end{itemize}
