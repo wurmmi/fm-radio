@@ -14,25 +14,27 @@ With these languages, specific hardware details are abstracted and thus, very li
 The compiler takes over these details as it transforms the code by using the underlying, supported instruction set of the target hardware.
 This has been the standard for many years by now.
 In the earlier times however, it was common practise to develop programs in the low-level assembly language.
-The supported instruction set of the target CPU had to be implemented directly by the software engineer.\\
+The software engineer had to implement the software by directly using the supported instruction set of the target CPU.\\
 
 A direct comparison can be drawn to FPGA design.
 An FPGA engineer historically develops code in the register-transfer level (RTL), which is common practise until today.
-This can be compared to developing software in the assembly language.
-However, the recent development towards automation and code generation brought up High-Level Synthesis (HLS).
+This can be compared to the development of software in the assembly language.
+However, the recent efforts towards automation and code generation brought up High-Level Synthesis (HLS).
 There, the FPGA design can be described in a high-level language, such as C or \cplusplus, which is convenient and allows to focus on the algorithm, rather than hardware details.
-This high-level code is then transformed into the low-level RTL automatically, by the HLS tool.\\
+This high-level code is then transformed into the low-level RTL automatically by the HLS tool.\\
 
 The usage of HLS tries to bring software- and hardware development closer together and tries to make these two worlds more similar.
 In software development, there are different compilers for multiple processor architectures, which can be used to port a program to another target hardware.
 The idea of HLS is to create the same level of abstraction -- write code in a high-level language, which is agnostic of its target hardware architecture.\\
 
 A major achievement in the usage of HLS is the shorter development time.
-The time that it takes to develop a first working version of the intended design can be significantly reduced, compared to the development in RTL code directly.
-This is especially important when an FPGA design is combined with a software part, like in a System On Chip, since software development is comparably fast.
+The time that it takes to develop a first working version of the intended design can be significantly reduced, compared to the development of RTL code directly.
+This is especially important if an FPGA design is combined with a software part, like in a System On Chip, because software development is comparably fast and thus, it is important to also be fast on the hardware design side, to be able to bring the two parts together as soon as possible.\\
+
 Figure~\ref{fig:timeline_performance_first_prototype} schematically displays the difference in development time, over performance and degree of optimization, when the same functionality of a prototype is implemented in different methods for various targets.
-The compared targets are an x86 processor CPU, a digital signal processor (DSP), a graphics processing unit (GPU) and the FPGA design in RTL or HLS implementation.
+The compared targets are an x86 processor CPU, a digital signal processor (DSP), a graphics processing unit (GPU) and the FPGA design in RTL and HLS implementation.
 It is clearly visible, that the FPGA design with the HLS design approach achieves a first working prototype much earlier than the direct RTL approach.
+Even the optimized HLS version can be achieved within comparably short time, while both RTL versions, the first working version and the optimization, are beyond the typical design time limit in a software project.
 
 \includepicture [1.0] [0] {Design Time vs. Application Performance, if the same functionality is implemented in different methods for various targets \cite[Figure 1-1]{VivadoUgHLSIntro}.} {timeline_performance_first_prototype} {img/draw.io/timeline_performance_first_prototype}
 
@@ -42,13 +44,13 @@ It is clearly visible, that the FPGA design with the HLS design approach achieve
 
 Information for this section is found in \cite{EvolutionOfHLS}, \cite{XilinxVivisHLSOpenSource} and \cite{CompareHlsVHDLArticle}.\\
 
-HLS has been developed over 20 years ago, but has not been able to replace the manual, traditional implementation of RTL, using VHDL and Verilog, so far.
+HLS has been developed over 20 years ago in a first version, but has not yet been able to replace the manual, traditional implementation of RTL, by using the languages VHDL or Verilog.
 Unfortunately, no published numbers about the market share of HLS in relation to traditional implementations could be found during the research in this thesis.
 However, according to the given sources it is becoming more and more popular in recent years.
-This is mainly based on the fact that the HLS tools keep producing results of better quality as they are developed further.
+This is mainly based on the fact that the HLS tools keep producing results of better quality as they evolve.
 This especially regards the efficiency of the produced RTL code, the useability of the tools, as well as the better understandable correlation between the high-level code and the generated RTL code.\\
 
-Xilinx is the largest manufacturer of FPGAs globally and therefore its tool \textit{Xilinx HLS} is widely used.
+Xilinx is the largest manufacturer of FPGAs globally and therefore its tool called \textit{Vivado HLS} is widely used.
 Intel, the second largest FPGA manufacturer, also has its HLS tool called \textit{Intel oneAPI} \cite{IntelHLSOneAPI}.
 Both companies are conducting serious effort to push the HLS implementation method.
 Xilinx recently open-sourced the code for the front-end of their HLS compiler.
@@ -57,8 +59,8 @@ The company expects to expand the community engagement and the encouragement of 
 Also Intel with its oneAPI toolkit is trying to introduce a wider usage of HLS to the community.\\
 
 In terms of language support, several tools settle for \cplusplus.
-Intel oneAPI uses library APIs and DP\cplusplus\ (Data-Parallel \cplusplus), which is an extension to the ISO \cplusplus\ standard.
-Xilinx also decided in favor of the \cplusplus\ language for their tools \textit{Vivado HLS} and \textit{Vitis HLS}.
+Intel oneAPI uses library APIs and Data-Parallel \cplusplus\ (DP\cplusplus), which is an extension to the ISO \cplusplus\ standard.
+Xilinx also decided in favor of the \cplusplus\ language for their tools \textit{Vivado HLS} and the latest tool \textit{Vitis HLS}.
 In older versions, SystemC was supported for synthesis as well, but is now deprecated in the respective latest versions \cite{VivadoHlsDeprecatesSystemC}.\\
 
 Another feature of HLS is the support of libraries for complex functionalities, such as video processing.
@@ -87,15 +89,15 @@ Its usage is being promoted and pushed forward with serious effort by the major 
 This section describes the workflow for Xilinx HLS, as it is recommended in the user guide \textit{Introduction to FPGA Design with Vivado High-Level Synthesis} \cite{VivadoUgHLSIntro}.\\
 
 Generally, as the user guide states, the quality and the correctness of the generated output can only be as good as its input.
-Consequently, it is very important to follow the design recommendations and adhere to specific rules in order to produce a high-quality input software.\\
+Consequently, it is very important to follow the design recommendations and adhere to specific coding rules in order to produce a high-quality input software.\\
 
 The following list presents the main steps that are required in the implementation workflow of an HLS IP core project.\\
 
 \begin{itemize}
   \item \textbf{Software Testbench}\\
       The developed HLS IP code needs to be verified and checked for correct functionality in a software testbench, before it gets processed to RTL code.
-      This can be done by using using conventional software development tools.
-      Xilinx specifically recommends dynamic code checker tools like \textit{valgrind} or \textit{Coverity}.
+      This can be done by using conventional software development tools.
+      Xilinx specifically recommends dynamic code checker tools like \textit{valgrind} and \textit{Coverity}.
       They support a developer in finding memory leaks, out-of-bounds memory access, uninitialized variables and similar issues.
       Furthermore, the application of code coverage tools like \textit{gcov} is recommended as well.
       In that way, the percentage of executed code lines of testbench and HLS code can be measured, to ensure a sufficient level of testing.
@@ -117,22 +119,22 @@ The following list presents the main steps that are required in the implementati
       The RTL code is simulated with an HDL simulator software, which can actually simulate the parallelism as it exists in the FPGA hardware.
       In that way it can be ensured, that the user did not break the functional correctness of the algorithm, by giving wrong parallelization guidance to the HLS tool.\\
 
-      The external simulator software has to run the complex HDL simulation and return data results, which is a time consuming task.
+      The external simulator software has to run the complex HDL simulation and return data results, which is a time-consuming task.
       Therefore, the execution time of this simulation type is expected to be approximately 10.000 times slower, compared to the C simulation.\\
 
   \item \textbf{Integration of the generated IP}\\
       At this point, the developed HLS code is fully verified and can successfully be transformed into working RTL code.
-      Xilinx HLS exports the generated RTL code in an IP structure that is supported by its IP integrator tool, that is used in Vivado or Vitis.
+      Xilinx HLS exports the generated RTL code in an IP file- and folder structure that is supported by its IP integrator tool, that is used in Vivado or Vitis.
       Therefore, the developed IP core can be imported to the block design as another processing block, get connected with other IPs, and in that way get integrated into a larger design.\\
 
   \item \textbf{Synthesize FPGA bitstream}\\
       Like in any other FPGA development cycle, the created block design can now be synthesized.
-      This generates a bitstream file, which can be programmed into an actual FPGA hardware.
+      This generates a bitstream file, which can be programmed into the actual FPGA hardware.
       Depending on the architecture of the system, the developed IP may now interface with the on-chip CPU, in the example of a System-On-Chip.\\
 \end{itemize}
 
 These steps represent the standard workflow for the development of an integrated HLS IP.
-A successful deployment on hardware can be achieved if they are completed accurately.
+The successful deployment of hardware can be achieved if they are completed accurately.
 There may be more and deeper knowledge necessary, in order to use this design approach.
 This thesis however focuses on system design, not on HLS specifically, and thus a comprehensive study of the referenced literature is recommended.
 
