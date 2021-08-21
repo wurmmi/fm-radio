@@ -282,12 +282,12 @@ During simulation in the testbench, this may result in an endlessly blocking beh
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Testbench}
 
-The general significance of the simulation testbench for a HDL design is explained here, as well as the different levels of abstraction in which a HLS testbench can be executed.
+The general significance of the simulation testbench for an HDL design is explained here, as well as the different levels of abstraction in which an HLS testbench can be executed.
 These different levels of abstraction in the testbench execution are a major difference between a VHDL testbench and an HLS testbench.
 The most important impact thereof is the execution speed -- the time it takes to simulate a number of test cases on the DUT.\\
 
-Section~\ref{sec:hls:workflow} above already mentioned the topics of testbenches and simulation types.
-The following descriptions shall be seen as a comprehensive extension around these topics.
+Section~\ref{sec:hls:workflow} already mentioned the topics of testbenches and simulation types briefly, in the context of workflow.
+The following descriptions are a comprehensive extension around these topics.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{General}
@@ -310,14 +310,15 @@ Another big factor that speaks against debugging in hardware generally, is that 
 Each time the code is adapted, the entire synthesis process needs to be started over again.
 Because of all of these reasons, debugging HDL code step-by-step as in software is not possible.\\
 
-Thus, in order to allow debugging and verification of HDL code, the technology of simulation was invented.
-Here, the HDL is also translated into a netlist that represents all the parallel processes just like in hardware, but the subsequent step of synthesis is not taken.
+Thus, in order to allow debugging and verification of HDL design code, the technology of simulation was invented.
+Here, the time-consuming step of synthesis is not taken.
+Instead, the HDL simulator software is able to simulate the code in a way, that can represent parallel processes, just like they exist in hardware.
 Therefore, simulation comes to a result much faster.
 Since HDL designs actually only consist of electrical wires and some basic block primitives, like flipflops or lookup tables, it is difficult to verify correct values.
 They would need to be compared in their binary bit-pattern format, at the correct point in time.
-Of course the HDL language provides support with different datatypes, that abstract the binary number representation and make the numbers human-readable.
-However, it remains an enormous effort to manually write testing code to verify a bus interface, for example.
-In order to simplify such complex operations, various testbench frameworks and libraries are available to developers.
+Of course the HDL language provides support with different data types, that abstract the binary number representation and make the numbers human-readable.
+However, it remains an enormous effort to manually write testing code to verify bus interfaces, for example, because they consist of a large number of signals.
+In order to simplify such complex verification operations, various testbench frameworks and libraries are available to developers.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{C Simulation}
@@ -325,8 +326,8 @@ In order to simplify such complex operations, various testbench frameworks and l
 In C Simulation, the HLS compiler is used to create an executable binary that includes the testbench code, as well as the IP design of the DUT.
 This binary can be run just like any other program.
 The most important note here is, that the HLS code is \textit{not} transformed into RTL at this point.
-Instead, the HLS code is treated as a regular \cplusplus\ code, that uses some libraries, like the fixed-point library.
-This means, that the HLS IP cores' top-level function is used as a regular function call in the testbench.\\
+Instead, the HLS code is treated as a regular \cplusplus\ code, that uses some libraries, like the fixed point library.
+This means, that the HLS IP core's top-level function is used as a regular function call in the testbench.\\
 
 The main advantage of this type of simulation is the major increase of execution speed.
 The reason for this speed-up is the abstraction of timing, such as clock cycles or similar constraints.
@@ -353,4 +354,4 @@ This is done in three steps.\\
 \end{itemize}
 
 \noindent
-This type of simulation takes a significantly longer time to execute, because timing information now actually needs to be considered for the RTL code.
+This type of simulation takes a significantly longer time to execute, because timing information now actually needs to be considered for the RTL code, which is done by using an HDL simulator.

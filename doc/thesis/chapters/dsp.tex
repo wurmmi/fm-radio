@@ -246,7 +246,7 @@ The instantaneous frequency $f_i$ of an FM signal can be described as
 \end{equation}
 where $f_c$ is the carrier- or center frequency, $\Delta f$ is the maximum frequency deviation and $m(t)$ is the information or message signal that is to be transmitted.
 Simply looking at this equation, the instantaneous frequency varies in the range between $f_c \pm \Delta f$, which is sometimes also called the swing.
-Considering the relationship between frequency and angle, as described above, and after some simple substitutions which will not be described into detail here, the equation for a generic frequency modulated wave is the following
+Considering the relationship between frequency and angle, and after some simple substitutions which will not be described into detail here, the equation for a generic frequency modulated wave is the following
 \begin{equation}
   s(t) = A_c\ cos \Big( 2 \pi f_c t + 2 \pi k_f \int_{0}^{t} m(\tau) d\tau \Big),
   \label{equ:fm_func}
@@ -440,7 +440,7 @@ where $\Delta t$ is the inverse of the sample frequency.\\ %TODO: check this (i'
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Envelope Detector}
 
-The differentiated signal still consists of a FM part, as explained above, using Equation~\eqref{equ:fm_demod_discriminator}.
+The differentiated signal still consists of a FM part, as explained earlier, using Equation~\eqref{equ:fm_demod_discriminator}.
 In order to remove this high-frequeny part and extract the low-frequency envelope, the signal needs to be fed into an envelope detector.
 A block diagram is shown in Figure~\ref{fig:bd_freq_discriminator}.\\
 

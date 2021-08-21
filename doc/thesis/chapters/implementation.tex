@@ -174,10 +174,10 @@ The reason therefor is, that the bitwidth of input and output numbers is previou
 Floating point calculations do not have this assumption and thus need to be more flexible, which requires a larger amount of logic cells.\\
 
 The Matlab model is therefore developed by keeping in mind this limitation.
-Matlab provides special datatypes for fixed point number representation.
+Matlab provides special data types for fixed point number representation.
 However, these were not used in this implementation.
-Instead, everything is calculated in floating point representation, using the standard \textit{double} datatype.
-Then, in certain positions in the DSP chain, the numbers are rounded to the resolution of a fixed point datatype.
+Instead, everything is calculated in floating point representation, using the standard \textit{double} data type.
+Then, in certain positions in the DSP chain, the numbers are rounded to the resolution of a fixed point data type.
 A fixed point format of \textit{2.14}, meaning 2 bit for integer- and 14 bit for fractional number representation is chosen.
 This is sufficient for the FM receiver and could potentially be lowered to a lower bitwidth.
 Again, an optimization of the DSP chain is not the focus of this thesis.\\
