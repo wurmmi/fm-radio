@@ -89,8 +89,7 @@ Several of the listed details are implemented, in order to achieve a successful 
 \section{Matlab Model}
 
 Matlab is used to create a model of the receiver, which is used as a reference for the other implementation variants.
-Here, the DSP algorithms are tested and evaluated, to find a method that is suitable to implement in hardware, specifically in an FPGA.\\
-
+Here, the DSP algorithms are tested and evaluated, to find a method that is suitable to implement in hardware, specifically in an FPGA.
 The Matlab script consists of a transmitter model, the receiver model, and additional code for analysis.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -108,7 +107,7 @@ In terms of audio channels, the words exactly match the respective channel's out
 This is particulary useful for verification, especially to verify the functionality of the stereo channel separation.
 From the experience during development, the channel separation is a good indicator of whether the system is functioning correctly.
 This left-right indication also simplifies the verification process, because a developer can recognize it with their visual and acoustic senses.
-It is possible to audibly verify it by listening to the output, and also to just visually inspect the output data, where a clear separation is visible between the channels.\\
+It is possible to audibly verify it by listening to the output, and also to just visually inspect the output data, where a clear separation is visible between the channels, as presented in Figure~\ref{fig:matlab_analysis_time_domain}.\\
 
 The transmitter is implemented according to the structure that is depicted as a block diagram in Figure~\ref{fig:bd_matlab_transmitter}.
 To facilitate an easy understanding of the block diagram, it is of advantage to keep in mind that it exactly resembles the frequency spectrum that is previously shown in Figure~\ref{fig:fm_channel_baseband_freqs}.\\
@@ -117,8 +116,7 @@ To facilitate an easy understanding of the block diagram, it is of advantage to 
 
 The transmitter reads an audio file, including a left and a right channel in the first step.
 The audio file contains data in a sample rate of 48~kHz.
-Next, the sample rate is increased by an oversampling factor of 20, to achieve a sufficient sample rate for the subsequent DSP procedures.\\
-
+Next, the sample rate is increased by an oversampling factor of 20, to achieve a sufficient sample rate for the subsequent DSP procedures.
 The achieved sample rate of 960~kHz could actually be chosen much lower, since an FM channel's maximum frequency is 75~kHz (see Section~\ref{sec:FrequencySpectrumOfABroadcastFmChannel}), and according to the Nyquist theorem the sample rate thus only needs to have 150~kHz (see Section~\ref{sec:SamplingTheorem}).
 However, the higher rate is chosen, mainly because a higher number of signal samples beautify any plots that are created during analysis.
 Since a thorough optimization of the DSP chain is not the focus of this thesis, this is an acceptable trade-off.\\
@@ -166,7 +164,7 @@ This signal can now be processed in a digital FM receiver.
 The target hardware platform of the FM radio receiver project is an FPGA.
 These are devices that have a limited number of logic cells, which can be used to implement logical and computational functions.
 Any kind of computation can be implemented within these logic cells.
-However, depending on its detailed implementation, the amount of required logic cells may differ by a large factor.
+However, depending on the detailed implementation of these computations, the amount of required logic cells may differ by a large factor.
 In order to overcome this issue, mathematical operations are often implemented in fixed point arithmetic, rather than floating point.
 This is due to the fact, that fixed point operations can be implemented with much less logic cells than floating point operations.
 The reason therefor is, that the bitwidth of input and output numbers is previously known in fixed point.
