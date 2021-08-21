@@ -4,74 +4,73 @@
 
 This chapter introduces the FM radio receiver project that is implemented as a major part of this thesis.
 It specifically talks about the system level approach that is taken in the implementation of the project.
-The main concept, as well as the architecture are explained.
+The main concept, as well as the architecture is explained.
 
 %%%%%%%%%%%%%%%%%%%%
 \section{Overview}
 
 In the development of a project that includes multiple functional parts, it is always of advantage to start with a system level overview.
 Major decisions can be made at this stage, before any implementation has begun.
-This can have a direct impact on the efficiency of the entire development, which concequently has an impact on the final quality of the product.
+This can have a direct impact on the efficiency of the entire development, which consequently has an impact on the final quality of the product.
 A thorough system level design can also prevent from issues that would otherwise arise while the development is already ongoing.
-As an example it could turn out that one of the functional parts is not able to fit into the integrated system, in the way it is implemented.
+As an example, it could turn out that one of the functional parts is not able to fit into the integrated system, in the way it is implemented.
 This leads to the necessity to re-engineer this entire functional block.
 As a result, it takes more effort to implement the functionality, which directly correlates with the development cost and the time-to-market, in order to deliver the final product.
-Summing up, a comprehensive system level architecture and concept can pave the way for a successful implementation of a project from start to finish.\\
+Summing up, a comprehensive system level architecture and -concept can pave the way for a successful implementation of a project from start to finish.\\
 
 In order to create a system level design, considerations around the high-level, final goal of the product are a good starting point.
 This includes the definition of its functional range.
-Once this is done, the target system or target hardware should be considered, because there are various ways to implement a certain functionality.
-All of these variants will eventually result in the same output, but will, however, heavily differ in their implementation effort, efficiency, or their applicability for the products' aim in general.
-Thus, things like the available hardware platform, implementation time, degree of optimization, output quality, and similar things are important factors at this stage.
+Once this is done, the target system or target hardware should be considered, because often there are various ways to implement a certain functionality.
+All of these ways will eventually result in the same output, but will, however, heavily differ in their implementation effort, efficiency, or their applicability for the product's aim in general.
+Thus, things like the available hardware platform, estimated implementation effort and time, degree of optimization, output quality, and similar things are important factors at this stage.
 Of course, there are many more factors to consider when a product is to be developed.
 However, only a subset of these is covered here, since this chapter is focused on how this thesis' accompanying project was developed and is thus written in that context.\\
 
 %%%%%%%%%%%%%%%%%%%%
 \section{The Project}
 
-The aim of this thesis is develop a system architecture and concept, that allows the implementation of an FM radio receiver in multiple different ways, while providing an elegant way to compare the different solutions.
-The final goal thereby is always be the same, that is: Listen to the music of a radio station that is transmitted over FM broadcast radio.\\
+The aim of this thesis is develop a system architecture and -concept, that allows the implementation of an FM radio receiver in multiple different ways, while providing an elegant way to compare the different solutions.
+The ultimate goal thereby is always the same, that is: Listen to the music of a radio station that is transmitted over FM broadcast radio.\\
 
 \noindent
 A very high-level overview of the entire system is given by the block diagram in Figure~\ref{fig:bd_system_overview_highlevel}.
 It shows the front end, which processes the received antenna signal, so that it can be used in the FM radio receiver block.
-The radio receiver itself is implemented in multiple different variants.
-The produced audio output is sent to a speaker, since the ultimate goal is to listen to a radio stations' audio signal.
+The FM radio receiver itself is implemented in multiple different variants.
+The produced audio output is sent to a speaker, since the ultimate goal is to listen to a radio station's audio signal.
 
-\includepicture [1.0] [0] [H] {High-level overview of the system.} {bd_system_overview_highlevel} {img/draw.io/bd_system_overview_highlevel}
+\includepicture [1.0] [0] [H] {High-level overview of the system, representing the signal flow from the antenna, via the front end to the FM receiver, which is implemented in multiple variants, to the speakers for audio output.} {bd_system_overview_highlevel} {img/draw.io/bd_system_overview_highlevel}
 
 In the context of a system level design approach, several steps are necessary to find a solution that is ready to be implemented.
 As a very first step, the inner workings of an FM receiver need to be understood.
 This mainly regards the signal processing theory, to be able to decode the signal that is received by the antenna.
 Chapter~\ref{cha:SignalProcessingTheory} describes this part into detail.
-
 As already mentioned above, multiple ways of technology and implementation can lead to a similar result.
 Thus, the next step is to define a set of possible ways which will actually be implemented.
-For this thesis, the decision was made to implement the FM radio receiver by using the following methods.
+For this thesis, the decision was made to implement the FM radio receiver by using the following methods.\\
 
 \begin{itemize}
   \item \textbf{GNU Radio}\\
       GNU Radio is a free and open-source software development toolkit to implement a software-defined radio.
       The implementation is done by connecting functional blocks in a block design.
       This abstracts the inner workings of each functional block and thus provides an implementation approach on a very high level of abstraction.
-      GNU Radio supports interfaces to external RF hardware \cite{SoftwareGnuRadio}.
+      GNU Radio supports interfaces to external RF hardware \cite{SoftwareGnuRadio}.\\
   \item \textbf{Matlab}\\
       Matlab is a software platform that can work with matrices and compute numerical solutions.
-      Matlab also includes various toolboxes, that support developers with complex calculations and tasks on datasets.
+      Matlab also includes various toolboxes, that support developers in complex calculations and tasks on datasets.
       This includes a range of toolboxes for signal processing, such as filter designers or FFT functions, as well as convenient ways to visualize data \cite{SoftwareMatlab}.
   \item \textbf{FPGA: \cplusplus\ High-Level Synthesis}\\
       In order to use an FPGA, a hardware design needs to be developed for it.
       This can be done using high-level synthesis.
-      This thesis focuses in \cplusplus and does not implement a SystemC variant, because Xilinx has deprecated SystemC support for synthesis in their latest HLS tools.
+      This thesis focuses on \cplusplus\ HLS and does not implement a SystemC variant, because Xilinx has deprecated SystemC support for synthesis in their latest HLS tools.
       This, and the details of High-level synthesis (HLS) are explained in Chapter~\ref{cha:HLS}.
 
   \item \textbf{FPGA: VHDL}\\
       Similar to the HLS approach, this is a variant to write a hardware design for an FPGA.
-      The language VHDL is used in this approach.
+      The language VHDL is used in this approach.\\
 \end{itemize}
 
 In order to implement an FM radio receiver, all of the listed methods require deep knowledge about the neccessary details of signal processing.
-However, the implementation of the various different methods require more or less knowledge and effort on the exact underlying implementation of each signal processing part.
+However, the implementation of the various different methods require more or less knowledge and effort on the exact underlying implementation of the algorithm of each signal processing part.
 This depends on their respective level of abstraction.
 
 %-  implementation of a model and DSP concept in Matlab \\
