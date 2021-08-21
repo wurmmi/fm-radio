@@ -2,22 +2,20 @@
 \chapter{Deployment on Hardware}
 \label{cha:DeploymentOnHardware}
 
-This chapter describes the additional parts of implementation that are necessary in order to run the implemented FM radio on actual hardware.
+This chapter describes the additional parts of implementation that are necessary, in order to run the implemented FM radio receiver on actual hardware.
 
 %%%%%%%%%%%%%%%%%%%%
 \section{GNU Radio}
 \label{sec:deployment-on-hw:gnu-radio-devices}
 
 The GNU Radio implementations, both receiver and transmitter, are used in combination with external hardware.
-The specific hardware that is used is briefly described here.\\
-
-In order to interface with the real world, two different hardware devices are used.
-Both devices are supported by GNU Radio and are briefly described here.
+Two different hardware devices are used to interface with the real world, which are both supported by GNU Radio directly.
+The specific devices are briefly described here.
 
 %%%%%%%%%%%%%%%%%%%%
-\subsection{Ettus Research USRP b200mini}
+\subsection{Ettus Research USRP B200mini}
 
-The USRP b200mini is a device that can be used to create a software-defined radio.
+The USRP B200mini is a device that can be used to create a software-defined radio.
 It resembles the size of a business card and is developed by Ettus Research.
 A signal range from 70~MHz to 6~GHz can be covered by the front end.
 The board further features a Xilinx Spartan-6 FPGA that is user-programmable, which makes the device very flexible for various applications with the received signal \cite{USRPb200Mini}.\\
@@ -28,7 +26,7 @@ Therefore, it can be used as both a receiver and a transmitter.
 %%%%%%%%%%%%%%%%%%%%
 \subsection{RTL-SDR}
 
-The RTL-SDR is a cheap USB dongle, that was originally developed as a DVB-T TV tuner.
+The RTL-SDR is a low-cost USB dongle, that was originally developed as a DVB-T TV tuner.
 It is based on the RTL2832U chipset, which includes an 8-bit ADC and a digital signal processor.
 The device delivers IQ data via the USB interface \cite{RTLSDR}.\\
 
@@ -40,23 +38,23 @@ Based on its hardware, the RTL-SDR can only be used as a receiver.
 \section{FPGA Hardware Platform}
 
 The ZedBoard is a development board that is developed by Xilinx.
-It is specifically designed around the Xilinx Zynq-7000 SoC, which contains a dual-core ARM Cortex A9 processor and a programmable logic fabric, the FPGA.
-The board further offers a range of features from external DDR3 memory, over various connectors, such as RJ45 Ethernet, USB, 3.5 mm audio, HDMI, Pmod, to buttons, LEDs and a display.\\
+It is specifically designed around the Xilinx Zynq-7000 SoC, which contains a dual-core ARM Cortex~A9 processor and a programmable logic fabric, the FPGA.
+The board further offers a range of features like external DDR3 memory, various connectors, such as RJ45 ethernet, USB, 3.5~mm audio in- and output, HDMI, Pmod, as well as user interface hardware such as buttons, LEDs and a display.\\
 
-The most important features for this project are the audio line-out connector and the SD card port.
-Additionally, the LEDs are used to display various status information during runtime of the FM receiver.
+The most important features for this project are the 3.5~mm audio line-out connector and the SD card port.
+Additionally, the LEDs are used to display various status information during the runtime of the FM receiver.
 
 \includepicture [0.75] [0] [H] {The ZedBoard PCB \cite{ZedBoard}.} {zedboard_photo} {img/zedboard_photo}
 
 %%%%%%%%%%%%%%%%%%%%
 \section{Product Design}
 
-The implemented version of the FM Radio Receiver on the ZedBoard is a working prototype at this point.
+The implemented version of the FM radio receiver on the ZedBoard is a working prototype at this point.
 The implementation does not support live data streaming.
 Instead, antenna data is recorded to a file with the RTL-SDR hardware, using a regular PC.
-The antenna data is recorded as IQ data in the baseband.
+The data is recorded as IQ data in the baseband.
 The file is then stored onto an SD card, that is plugged into the ZedBoard.
-The CPU on the SoC then reads it and replays the antenna data to the FPGA.
+The CPU on the SoC reads it and replays the antenna data to the FPGA.
 In the future, this design may be extended to use an embedded Linux operating system.
 In that way, the RTL-SDR could be connected to the ZedBoard PCB directly via USB, which would enable a live data stream from the antenna to the FPGA.
 However, the chosen solution is sufficient for the aims of this thesis.
@@ -72,10 +70,10 @@ This section describes these additional parts of the implementation, which speci
 \subsection{Architecture}
 
 The block diagram in Figure~\ref{fig:bd_impl_vivado} shows the implemented architecture that is used in the SoC.
-The various design domains in and around the SoC are depicted in different visual representations.
+The various design domains in, and around the SoC, are depicted in different visual representations.
 The FPGA domain blocks are highlighted in gray, with the main IPs being surrounded by emphasized lines.
 The processor system domain is shown as white blocks.
-Blocks that are external to the SoC are drawn with dashed lines.
+Blocks, which are external to the SoC, are drawn with dashed lines.
 
 \includepicture [1.0] {Block diagram of the Vivado implementation.} {bd_impl_vivado} {img/draw.io/bd_impl_vivado}
 
@@ -97,11 +95,11 @@ Consequently, one of the FM radio receiver IPs is provided with data.
 The IP processes this data to produce an audio output, which is delivered to another AXI Stream Switch.
 It fulfills the function to either select the output of above or below IP, in coordination with the first switch, obviously.
 The next block is an AXI Stream Broadcaster, which takes a single stream input and simply duplicates it at its output, so that the outputs are an exact copy of the input stream.
-One of these duplicates is sourced to an AXI-Stream-To-I2S converter, which generates the I2S signals for the external audio codec chip.
+One of these duplicates is sourced to an AXI-Stream-To-I2S Converter, which generates the I2S signals for the external audio codec chip.
 The second duplicate is connected to a FIFO, which simply stores the generated output data.
 Once the FIFO is almost full, it asserts an interrupt to the CPU, which triggers it to read out the entire FIFO buffer.
-The CPU then stores this data on the external SD card again.
-In that way, the loop of data is closed, which enables the verification of the respective IPs' correct functionality.
+The CPU then stores this data on the external SD card.
+In that way, the loop of data is closed, which enables the verification of the respective IP's correct functionality.
 Therefore, this system design can be described as a hardware-in-the-loop system, in the point of view of the FPGA IPs.
 This ability refers to the knowledge gained with the SIMILAR concept, that is introduced in Section~\ref{sec:SimilarProcess}.
 Specifically, this implemented system design enables the application of the steps \textit{Assess Performance} and \textit{Re-evaluate}, since the IPs' performance can be measured and their design can be re-evaluated.\\
@@ -112,17 +110,16 @@ Nevertheless, the correct design and implementation of the architecture still ne
 %%%%%%%%%%%%%%%%%%%%
 \subsection{Software}
 
-The application software is running on a single core of the dual-core ARM Cortex A9 CPU and is built upon a real-time operating system, namely FreeRTOS.
+The application software is running on a single core of the dual-core ARM Cortex~A9 CPU and is built upon a real-time operating system, namely FreeRTOS.
 Xilinx provides a ported version of this RTOS with the installation of their software development kit, the Xilinx SDK.
 The SDK also includes drivers to support various functionalities, such as support for accessing a FAT file system on the external SD card.\\
 
-The respective software drivers for several IPs that are used in the FPGA design are automatically imported into the SDK project.
-They are embedded in the so-called hardware definition file (HDF) that is generated by Vivado after the synthesis process, and provided together with the bitstream file.
-It is a file with the extension \textit{*.hdf} and can be opened like a regular archive file, with any ZIP archive viewer.\\
+The respective software drivers for several IPs, which are used in the FPGA design, are automatically imported into the SDK project.
+They are embedded in the so-called hardware definition file (HDF) that is generated by Vivado after the synthesis process, and is provided together with the bitstream file.
+It is a file with the extension \textit{.hdf} and can be opened like a regular archive file, with any archive viewer.\\
 
 Generally, the application software for this project is developed as an object-oriented \cplusplus\ program.
 It uses common software development patterns and a class structure that fits the purpose.
 The main tasks of the application are to configure several IPs in the FPGA, so that they can fulfill their respective purpose in the system, and to read the recorded data from the SD card, which is then streamed to the FPGA.
-It also provides a basic user interface over the serial console, with which a user can interact with the FM Radio Receiver product.\\
-
-However, software design is not the main focus of this thesis, and thus no further details are discussed here.
+It also provides a basic user interface over the serial console, which a user can use to interact with the FM Radio Receiver product.
+However, software design is not the main focus of this thesis, and thus, no further details are discussed here.
