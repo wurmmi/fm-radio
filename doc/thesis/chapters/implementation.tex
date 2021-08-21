@@ -458,8 +458,8 @@ The implemented testbench structure, as well as some specific implementation det
 \label{sec:impl:hls:testbench}
 
 A testbench is equally important in the HLS implementation, as it is for the VHDL implementation.
-The HDL code for the IP is written in \cplusplus\ and thus the testbench is also written in this language.
-The execution of the testbench is done in the Xilinx HLS software.
+The HDL code for the IP is written in \cplusplus\ and thus, the testbench is also written in this language.
+The execution of the testbench is done in the Xilinx Vivado HLS software.
 A detailed explanation of how an HLS testbench works in general is given in Chapter~\ref{cha:HLS}.\\
 
 The testbench is developed in a similar manner as the VHDL testbench.
@@ -467,8 +467,8 @@ It applies input data to the DUT and generates output data of multiple signals, 
 This output data is in turn saved to output files, which are analyzed in a subsequent step.\\
 
 The actual implementation to write the HLS signal data to a file, is implemented as a file-writer \cplusplus\ class within the HLS design code.
-These code parts are only evaluated during simulation, which is achieved by using pre-processor defines.
-The following code shows an example of this file-writer class.\\
+These code parts are only compiled for simulation, which is achieved by using pre-processor defines.
+The following code shows an example of the usage of this file-writer class.\\
 
 \begin{CppCode}
 audio_sample_t fm_receiver( ... ) {
@@ -486,7 +486,7 @@ audio_sample_t fm_receiver( ... ) {
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Design For Reuse}
 
-The testbench is especially designed around the \textit{Design For Reuse} segment of the SIMILAR concept, which is introduced in Section~\ref{sec:SimilarProcess}.
+The testbench is especially designed around the \textit{Design For Reuse} segment of the \mbox{SIMILAR} concept, which is introduced in Section~\ref{sec:SimilarProcess}.
 This is the case because of two major parts.
 %It is not only using the exact same Python code for analysis, but is also using parts of the application software code directly, to load the testbench input data.\\
 
@@ -508,7 +508,7 @@ It also allows that the software part is already tested before the deployment on
 Figure~\ref{fig:testbench_hls_overview_reuse} gives an overview of the testbench and specifically points out the reuse of the application software.
 The diagram displays the HLS IP in the testbench and in the hardware with dotted lines, to emphasize that they are actually the same.\\
 
-\includepicture [0.8] [0] [H] {Overview of the testbench and the reuse of the application software. The HLS IP is displayed with dotted lines, to point out that it is the same in testbench and hardware.} {testbench_hls_overview_reuse} {img/draw.io/testbench_hls_overview_reuse}
+\includepicture [0.8] [0] [H] {Overview of the testbench and the reuse of the application software in testbench and hardware. The HLS IP is displayed with dotted lines, to point out that it is the same in testbench and hardware.} {testbench_hls_overview_reuse} {img/draw.io/testbench_hls_overview_reuse}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Interfaces}
@@ -553,14 +553,14 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
 \end{program}
 
 The streams use the types \texttt{iq\_sample\_t} and \texttt{audio\_sample\_t}, which are structs of two 16-bit fixed point variables and thus represent a width of 32 bit.
-The configuration and status registers are also implemented as structs, that contain multiple variables to represent the separate registers.
+The configuration- and status registers are also implemented as structs, that contain multiple variables to represent the separate registers.
 For the registers, a special detail is the distinction between the register types read-write and read-only.
 This difference is made by using a value-by-reference or a pointer value, for configuration and status interface, respectively.
 Consequently, the configuration registers become read-writeable and the status registers remain read-only.\\
 
 The \texttt{bundle} keyword in the pragma-directives combine the two register groups into a single AXI4-Lite bus interface, instead of creating one bus each.
-This may be of advantage in the application software later, since it only needs to handle a single base address.
-The interface for the LEDs that can be connected is implemented as a data-only type, which does not have any protocol assigned.
+This is of advantage in the application software later, since it only needs to handle a single base address.
+The interface for the LEDs that can be connected, is implemented as a data-only type, which does not have any protocol assigned.
 It simply represents the data value that is written to the \cplusplus\ variable.
 The usage of a data type with variable bitwidth, such as \texttt{ap\_int} in the example, is of advantage since only the actually required number of connections is implemented in the interface.
 
@@ -572,7 +572,7 @@ Multiple steps in the DSP chain require the operation of sample rate reduction.
 This is explained in Section~\ref{sec:impl:dsp-chain}.\\
 
 In the VHDL implementation, this is implemented with a counter that counts the number of incoming samples.
-If the counter reaches the number that matches the downsampling rate, is forwards the current sample.
+If the counter reaches the number that matches the downsampling rate, it forwards the current sample.
 Otherwise, the incoming samples are discarded.\\
 
 In the HLS implementation however, this is done in another way.
