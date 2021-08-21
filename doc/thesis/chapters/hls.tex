@@ -113,7 +113,7 @@ The following list presents the main steps that are required in the implementati
       Co-Simulation serves the purpose to verify the correct functionality of the generated RTL code.
       It is not the goal to verify the algorithm, though.
       This is already done in the previous C simulation step.
-      However, the issue is that the C simulation is executed like a regular program, which means it is executed sequentially, instruction by instruction and thus parallelism cannot be represented.\\
+      However, the issue is that the C simulation is executed like a regular program, which means it is executed sequentially, instruction by instruction and thus parallelism can not be represented.\\
 
       This is where the Co-Simulation becomes neccessary.
       The RTL code is simulated with an HDL simulator software, which can actually simulate the parallelism as it exists in the FPGA hardware.
@@ -143,25 +143,25 @@ This thesis however focuses on system design, not on HLS specifically, and thus 
 %continue here
 
 This section gives a brief overview of some HLS-specific \cplusplus\ features that are supported with Xilinx tools.
-More detailed information can be found in the respective user guide \cite{VivadoUgHLS}.
+More detailed information can be found in the respective Xilinx user guide \cite{VivadoUgHLS}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Data Types}
 
 HLS supports special data types, which are not available in standard \cplusplus.
-The focus of these data types is mainly to support an optimized translation into RTL, which requires the least amount of logic cells in the FPGA.\\
+The focus of these data types is mainly to support an optimized translation into RTL, to achieve the least amount of logic cells in the FPGA.\\
 
-Standard \cplusplus\ only supports variables in the bitwidth of byte-boundaries, so in multiples of 8 bit.
+Standard \cplusplus\ only supports variables in the bitwidth of byte-boundaries, so in multiples of 8~bit.
 However, this may be inefficient to fit into the available FPGA target hardware.
-One example therefor is the DSP48 macro that Xilinx FPGAs have built-in.
-They support the multiplication of only up to 18 bit.
-In an example application, the reachable number range of a variable might be limited to 17 bit for the multiplication.
-However, in order to represent that, using a 32 bit data type would be necessary in standard \cplusplus.
-The HLS compiler does not have this prior knowledge of the number range limit and would thus implement a 32 bit multiplication, which is a waste of resources in this case.
+One example therefor is the DSP48 macro cell that Xilinx FPGAs have built-in.
+They support the direct multiplication of two vectors, with a bitwidth of up to 18~bit each.
+In an example application, the achievable maximum value of a variable might be limited, and thus, able to fit into a range of 17~bit for the multiplication.
+However, in order to represent that, using a 32~bit data type would be necessary in standard \cplusplus.
+The HLS compiler does not have this prior knowledge of the number range limit and would thus implement a 32~bit multiplication, which is a waste of resources in this case.
 Because of this reason, a major feature of HLS is the possibility to define data types with arbitrary bitwidths.
-In that way, the above example can be optimized to use a data type that has a bitwidth of 17 bit, which is exactly the bitwidth that is required for the application.
+In that way, the above example can be optimized to use a data type that actually has a bitwidth of 17~bit, which is exactly the bitwidth that is required for the application.
 This results in a lower logic utilization, which in turn results in a higher maximum clock frequency that can be used.
-Consequently, more functionality an be implemented in the FPGA device.
+Consequently, more functionality can be implemented and packed into the FPGA device.
 The referenced user guide shows a design example where an area reduction of 75\% is achieved by just reducing the bitwidths.\\
 
 The argumentation is equally valid for integer data types, as well as fixed point data types.
@@ -169,7 +169,7 @@ In calculations it is often necessary to represent fractional numbers.
 In standard \cplusplus, floating point data types are used therefor.
 However, floating point operations require a large amount of logic to implement and thus, HLS provides fixed point data types.
 These can be instantiated in arbitrary bitwidths, where integer and fractional bitwidths can be specified separately.
-The fixed point format is often described in the format \textit{integer.fractional}, like \textit{2.14}, which represents a 16 bit fixed point data type that has 2 integer bits and 14 fractional bits.\\
+The fixed point format is often described in the format \textit{integer.fractional}, like \textit{2.14}, which represents a 16~bit fixed point data type that has 2 integer bits and 14 fractional bits.\\
 
 An example for the usage of integer and fixed point data types is given in the following code section.\\
 
@@ -188,8 +188,7 @@ An example for the usage of integer and fixed point data types is given in the f
 \subsection{Optimization Directives}
 
 The HLS code can be instumented with optimization directives.
-This is used to provide the HLS compiler with additional information and to instruct it on how to implement certain parts of the code in RTL.\\
-
+This is used to provide additional information to the HLS compiler, to assist and instruct it on how to implement certain parts of the code in RTL.
 Directives can be applied to interfaces, functions, loops, arrays or code regions.
 They can be written in a Tcl file that is provided to the HLS project, or in the design code directly, in the form of a pre-processor pragma.
 Both variants have their advantages and disadvantages.\\
@@ -197,7 +196,7 @@ Both variants have their advantages and disadvantages.\\
 Examples for such directives are optimization strategies for throughput and dataflow optimization, such as pipelining or loop unrolling.
 Also the implementation of the required interface types, such as various AXI interfaces, is controlled with directives.\\
 
-Since this topic is very comprehensive, it cannot be covered into more detail here.
+Since the topic of optimization is very comprehensive, it cannot be covered into more detail here.
 For further information, refer to the user guide \cite{VivadoUgHLS}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -211,21 +210,30 @@ For further information, refer to the user guide \cite{VivadoUgHLS}.
 \label{sec:hls:coding:interfaces}
 
 Interfaces are an important asset to any IP design, since this is where they communicate with their surroundings.
-This may be another IP that processes data, but may also be a CPU that reads status information or configures the IPs' settings.\\
+This may be another IP that processes data, but may also be a CPU that reads status information or configures the IP's settings.\\
 
 Xilinx HLS implements two different types of interfaces: block-level, and port-level interfaces.
 The block-level interface is a general interface to the IP, that can provide a handshaking functionality for when it is idle and ready to start a new operation, or when the operation is completed.
-The port-level interfaces on the other hand are specific to input and output ports.
+The port-level interfaces on the other hand are specific to input and output (IO) ports.
 They can also provide handshaking functionality, such as data-valid indicators, acknowledge signals, or implement a FIFO for the IOs.
 However, port-level interfaces can also be implemented as AXI interfaces, such as AXI4-Stream, AXI4-Lite Slave or an AXI4 Master.
-This is an especially useful function, since the implementation of the actual interface logic is abstracted from the user.
+This is an especially useful function, since the implementation of the actual interface logic is abstracted from the developer.
 Additionally, software drivers are automatically generated along with the respective interfaces, which provides a fast and simple integration into a larger system.\\
 
-The code example in Program~\ref{prog:axi4_lite} shows the specification of an AXI4-Lite memory-mapped slave interface.
+The code example in Program~\ref{prog:axi4_lite} shows the specification of an AXI4-Lite memory-mapped slave interface, by using pre-processor pragma definitions.
 The provided registers are separated into configuration registers and status registers.
-The configuration is readable and writeable, while the status registers are implemented as read-only, which requires less logic in the RTL implementation.\\
+The configuration is readable and writeable, while the status registers are implemented as read-only, which requires less logic in the RTL implementation.
+Within the code, the interface is used like regular \cplusplus\ variables.\\
 
-\begin{program}
+The second code example, Program~\ref{prog:axi4_stream}, demonstrates the equally simple definition of an AXI4-Stream interface.
+HLS stream interface variables can be accessed via read- and write-functions.
+One very important property of these functions is, that they are blocking calls.
+The HLS streams are implemented with an underlying FIFO.
+Thus, values can only be written into it when there is an empty spot, and can only be read if there is at least one value available.
+If the respective condition is not satisfied, the functions block the execution, until the FIFO state changes.
+During simulation in the testbench, this may result in an endlessly blocking behaviour.
+
+\begin{program}[H]
   \caption{Implementation of an AXI4-Lite memory-mapped slave with a separation of read-only status registers and read-write configuration registers.}
   \label{prog:axi4_lite}
 \begin{CppCode}
@@ -253,10 +261,8 @@ The configuration is readable and writeable, while the status registers are impl
 \end{CppCode}
 \end{program}
 
-The second code example, Program~\ref{prog:axi4_stream}, demonstrates the equally simple definition of an AXI4-Stream interface.
-
 \begin{program}
-  \caption{Implementation of an AXI4-Stream interface.}
+  \caption{Implementation of an AXI4-Stream interface. The stream is accessed with read- and write-functions.}
   \label{prog:axi4_stream}
 \begin{CppCode}
  #include <hls_stream.h>
@@ -272,13 +278,6 @@ The second code example, Program~\ref{prog:axi4_stream}, demonstrates the equall
  }
 \end{CppCode}
 \end{program}
-
-HLS stream interface variables can be accessed via read- and write-functions.
-One very important property of these functions is, that they are blocking calls.
-The HLS streams are implemented with an underlying FIFO.
-Thus, values can only be written into it when there is an empty spot, and can only be read if there is a at least one value available.
-If the respective condition is not satisfied, the functions block the execution, until the FIFO state changes.
-During simulation in the testbench, this may result in an endlessly blocking behaviour.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Testbench}

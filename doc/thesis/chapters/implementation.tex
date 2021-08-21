@@ -552,7 +552,7 @@ void fm_receiver_hls(hls::stream<iq_sample_t>& iq_in,
 \end{CppCode}
 \end{program}
 
-The streams use the types \texttt{iq\_sample\_t} and \texttt{audio\_sample\_t}, which are structs of two 16-bit fixed-point variables and thus represent a width of 32 bit.
+The streams use the types \texttt{iq\_sample\_t} and \texttt{audio\_sample\_t}, which are structs of two 16-bit fixed point variables and thus represent a width of 32 bit.
 The configuration and status registers are also implemented as structs, that contain multiple variables to represent the separate registers.
 For the registers, a special detail is the distinction between the register types read-write and read-only.
 This difference is made by using a value-by-reference or a pointer value, for configuration and status interface, respectively.
