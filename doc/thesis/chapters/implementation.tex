@@ -103,13 +103,12 @@ Thus, the expected output of the receiver model is this raw data, that was previ
 In the case of a recording, the original data is not known, which does not allow to actually verify the receiver.\\
 
 In the implemented version, an audio file is modulated into the FM channel.
-The audio file contains data that represents speech with the words \textit{Left channel... Right channel...}.
-In terms of audio channels, the words exactly match the respective channels' output -- the first part is modulated on the left audio channel only, while the second part only targets the right audio channel.
-This is particulary useful for verification, especially to verify the functionality of channel separation.
+The audio file contains data that represents speech with the words \textit{Left channel... Right channel...} of a male voice.
+In terms of audio channels, the words exactly match the respective channel's output -- the first part is modulated on the left audio channel only, while the second part only targets the right audio channel.
+This is particulary useful for verification, especially to verify the functionality of the stereo channel separation.
 From the experience during development, the channel separation is a good indicator of whether the system is functioning correctly.
 This left-right indication also simplifies the verification process, because a developer can recognize it with their visual and acoustic senses.
-It is possible to audibly verify it by listening to the output.
-It is also possible to just visually inspect the output data, where a clear separation is visible between the channels.\\
+It is possible to audibly verify it by listening to the output, and also to just visually inspect the output data, where a clear separation is visible between the channels.\\
 
 The transmitter is implemented according to the structure that is depicted as a block diagram in Figure~\ref{fig:bd_matlab_transmitter}.
 To facilitate an easy understanding of the block diagram, it is of advantage to keep in mind that it exactly resembles the frequency spectrum that is previously shown in Figure~\ref{fig:fm_channel_baseband_freqs}.\\
@@ -120,9 +119,9 @@ The transmitter reads an audio file, including a left and a right channel in the
 The audio file contains data in a sample rate of 48~kHz.
 Next, the sample rate is increased by an oversampling factor of 20, to achieve a sufficient sample rate for the subsequent DSP procedures.\\
 
-The achieved sample rate of 960~kHz could actually be chosen much lower, since an FM channels' maximum frequency is 75~kHz (see Section~\ref{sec:FrequencySpectrumOfABroadcastFmChannel}), and according to the Nyquist theorem the sample rate thus only needs to have 150~kHz (see Section~\ref{sec:SamplingTheorem}).
-However, the higher rate was chosen, mainly because a higher number of signal samples beautify any plots that are created during analysis.
-Since a thorough optimization of the DSP chain is not the focus of this thesis, this was an acceptable trade-off.\\
+The achieved sample rate of 960~kHz could actually be chosen much lower, since an FM channel's maximum frequency is 75~kHz (see Section~\ref{sec:FrequencySpectrumOfABroadcastFmChannel}), and according to the Nyquist theorem the sample rate thus only needs to have 150~kHz (see Section~\ref{sec:SamplingTheorem}).
+However, the higher rate is chosen, mainly because a higher number of signal samples beautify any plots that are created during analysis.
+Since a thorough optimization of the DSP chain is not the focus of this thesis, this is an acceptable trade-off.\\
 
 The next step is the pre-emphasis filter, which is implemented, but is disabled in the receiver.
 This is done to reduce some complexity in the hardware implementation.
@@ -130,18 +129,18 @@ The following stage generates the Mono and LR Diff signals, by simply calculatin
 
 The next section in the block diagram represents multiple processes in parallel.
 The LR Diff part is shifted to 38~kHz in the spectrum.
-This is done by modulating the signal with its sub-carrier of 38~kHz.
+This is done by modulating the signal with the 38~kHz sub-carrier.
 A subsequent BP filter serves to remove the artifacts of the modulation, such as the image replica.
-It band-limits the spectrum of the LR Diff part between 23 and 53~kHz.
+It band-limits the spectrum of the LR~Diff part between 23 and 53~kHz.
 The BP filter introduces a constant group delay of the signal.
 In order to maintain the alignment of all signals, this side-effect needs to be accounted for and be compensated in the other signal branches.
-Thus, the Mono signal, as well as the Pilot Tone need to be delayed by the amount of samples defined by the BP filters' group delay.
+Thus, the Mono signal, as well as the Pilot Tone need to be delayed by the amount of samples defined by the BP filter's group delay.
 The subsequent amplifier blocks create the defined proportions of the sub-band, such as 90\% for the audio parts, and 10\% for the Pilot Tone \cite{FmMultiplexingForStereo}.\\
 
 One part in this block diagram is the so-called Hinz Triller, which was part of the Autofahrer-Rundfunk-Information service (ARI, German for Automotive-Driver's-Broadcasting-Information).
-It was used as an indicator for traffic announcements.
+It was historically used as an indicator for traffic announcements.
 It is now obsolete and is replaced by the more modern Radio Data System (RDS).
-However, the Hinz Triller is still transmitted in many radio stations and can often be heard before and after the traffic announcements \cite{HinzTriller}.
+However, the Hinz Triller is still transmitted in many radio stations and can often be heard before and after the traffic announcements, as a distinctive beep tone \cite{HinzTriller}.
 In the implemented transmitter, the Hinz Triller is implemented, but is disabled, since it only represents a temporarily transmitted signal.\\
 
 The Radio Data System (RDS) signal is not implemented in the transmitter, since it consists of a comprehensive protocol and multiple steps of modulation, such as differentially-coded BPSK \cite{IntroFmStereoRdsModulation} and is therefor too time-consuming to implement.
@@ -152,7 +151,7 @@ At this point in the DSP chain, the signal resembles the frequency spectrum that
 In the final chain of DSP blocks, the sample rate is increased again, to be able to frequency-modulate the signal.
 The resulting frequency modulated signal represents the signal that is received by an antenna -- the RF signal of an FM channel.
 This signal is then processed by a complex baseband mixer, which results in inphase-, and quadrature components in the baseband.
-An LP filter band-limits the signal and removes artifacts of the mixer.
+A lowpass filter band-limits the signal and removes artifacts of the mixer.
 As a final step, the sample rate is decreased again, back to the chosen sampling rate of 960~kHz.
 This signal can now be processed in a digital FM receiver.
 
