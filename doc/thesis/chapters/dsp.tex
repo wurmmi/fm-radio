@@ -346,7 +346,7 @@ Even though the carrier is suppressed, it can still be recovered, because it is 
 
 The bandwidth for this difference-signal spans 15~kHz on either side of the subcarrier.
 It is used to generate a stereo audio signal, in combination with the mono signal.
-This process is explained into more detail in Chapter~\ref{sec:demodulation-of-broadcast-fm}.
+This process is explained into more detail in Chapter~\ref{sec:demodulation-of-a-broadcast-fm-channel}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Additional Services}
@@ -476,8 +476,8 @@ The output of the PLL directly delivers an AM signal, which corresponds to the t
 FM demodulation with a PLL is not described into more detail, since this thesis is focussing on the concept of an entire system architecture.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Demodulation of Broadcast FM}
-\label{sec:demodulation-of-broadcast-fm}
+\section{Demodulation of a Broadcast FM Channel}
+\label{sec:demodulation-of-a-broadcast-fm-channel}
 
 This section describes the demodulation of the information content of an FM broadcast channel, as it is used in commercial FM radio broadcasting.
 The assumption here is, that the actual FM demodulation, as described in Chapter~\ref{sec:algorithms-for-digital-fm-demodulation} is already done correctly.
@@ -504,6 +504,7 @@ Sufficient attenutation must be available before 19~kHz, in order to suppress th
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Stereo Audio}
+\label{subsec:demod_stereo_audio}
 
 The demodulation of an FM channel to recover a stereo audio signal, requires a more sophisticated approach and multiple steps in signal processing.
 Two parts need to be combined in order to achieve stereo.

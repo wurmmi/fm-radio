@@ -57,12 +57,12 @@ For this thesis, the decision was made to implement the FM radio receiver by usi
   \item \textbf{Matlab}\\
       Matlab is a software platform that can work with matrices and compute numerical solutions.
       Matlab also includes various toolboxes, that support developers in complex calculations and tasks on datasets.
-      This includes a range of toolboxes for signal processing, such as filter designers or FFT functions, as well as convenient ways to visualize data \cite{SoftwareMatlab}.
+      This includes a range of toolboxes for signal processing, such as filter designers or FFT functions, as well as convenient ways to visualize data \cite{SoftwareMatlab}.\\
   \item \textbf{FPGA: \cplusplus\ High-Level Synthesis}\\
       In order to use an FPGA, a hardware design needs to be developed for it.
       This can be done using high-level synthesis.
       This thesis focuses on \cplusplus\ HLS and does not implement a SystemC variant, because Xilinx has deprecated SystemC support for synthesis in their latest HLS tools.
-      This, and the details of High-level synthesis (HLS) are explained in Chapter~\ref{cha:HLS}.
+      This, and the details of High-level synthesis (HLS) are explained in Chapter~\ref{cha:HLS}.\\
 
   \item \textbf{FPGA: VHDL}\\
       Similar to the HLS approach, this is a variant to write a hardware design for an FPGA.
@@ -114,8 +114,8 @@ A major point in this system concept is, that it works independently of the resp
 This is especially important, since there is no possible way to run all these different variants in a single verification environment.
 Instead, each methodology takes an input file and writes an output file, which is a supported functionality that is available anywhere.
 
-\includepicture [1.0] [0] {Block diagram of the overall system concept. A common input source is used for the multiple implementations. The generated output files, including the used parameters, are verified in a common entity.} {bd_system_overview_detailed} {img/draw.io/bd_system_overview_detailed}
-
+\includepicture [0.95] [0, trim=14 0 0 4,clip] {Block diagram of the overall system concept, with common input source, multiple receiver implementations, and a common verification entity.} {bd_system_overview_detailed} {img/draw.io/bd_system_overview_detailed}
+%Block diagram of the overall system concept. A common input source is used for the multiple implementations. The generated output files, including the used parameters, are verified in a common entity.
 
 %%%%%%%%%%%%%%%%%%%%%
 %\section{Test Environment}

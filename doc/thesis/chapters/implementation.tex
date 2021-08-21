@@ -2,7 +2,7 @@
 \chapter{Implementation}
 \label{cha:Implementation}
 
-This chapter describes the most important details of each implementation variant.
+This chapter describes the most important details of each implementation variant, as they are developed in the FM receiver project in this thesis.
 The implementation variants in High-Level Synthesis and VHDL are highlighted especially, since they are the main focus of this thesis.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -10,73 +10,73 @@ The implementation variants in High-Level Synthesis and VHDL are highlighted esp
 \label{sec:impl:dsp-chain}
 
 The theory behind the demodulation of an FM signal is already explained in Chapter~\ref{cha:SignalProcessingTheory}.
-The demodulation of an FM broadcast channel specifically, is described in Section~\ref{sec:demodulation-of-broadcast-fm}.
-In this section however, the DSP chain is described into more detail and with more information, as it is implemented in the various methods.\\
+The demodulation of an FM broadcast channel specifically, is described in Section~\ref{sec:demodulation-of-a-broadcast-fm-channel}.
+In this section, the implementation details of the DSP chain are described, as they are implemented in the various methods.\\
 
 \noindent
-Figure~\ref{fig:bd_dsp_detailed} displays the detailed DSP chain as a block diagram.\\
+Figure~\ref{fig:bd_dsp_detailed} displays the detailed DSP chain as a block diagram.
+The following list explains implementation details about the respective DSP blocks.\\
 
 %see duplicate below
 %\includepicture [1.02] [0] [H] {Detailed block diagram of the digital signal processing chain.} {bd_dsp_detailed} {img/draw.io/bd_dsp_detailed}
 
-\noindent
-The following list explains implementation details about the respective DSP blocks.
+
 \begin{itemize}
   \item \textbf{Data Source}\\
       Matlab is used to generate the data source file, which is used as an input to the system.
-      An audio file is read and modulated as an FM channel signal.
+      An audio file is read and modulated as an FM channel signal.\\
 
   \item \textbf{FM Demodulator}\\
-       TODO\\
-       % TODO
-      The FM demodulator is implemented as a Baseband Delay Modulator, as described in Section~\ref{sec:BasebandDelayDemodulator}.
+      The FM demodulator is implemented according to the explanations in Section~\ref{sec:algorithms-for-digital-fm-demodulation}, with a frequency discriminator and a subsequent envelope detector.\\
 
   \item \textbf{De-Emphasis Filter}\\
-      The above described Matlab source generation does not include an Emphasis filter.
-      Thus, a de-emphasis filter is not implemented as it is not required.
+      Pre-emphasis in the transmitter and its counterpart, the de-emphasis in the receiver, is a strategy to minimize the noise that is induced due to effects in the transmission, by attenuating and amplifying certain frequency parts of the signal.
+      Both processes can be implemented, by using filters in the transmitter, as well as the receiver, respectively.
+      The processes are implemented in the Matlab model, but are disabled in the generation of the input file that is used for the system.
+      Thus, a de-emphasis filter is not implemented in the hardware, as it is not required for the show-case of this thesis.\\
 
-  \item \textbf{Downsample}\\
+  \item \textbf{Downsampling}\\
       Downsampling is implemented in a simplified version, without an anti-aliasing filter.
       It is not required, because of the following explanation.
       At this point the sampling frequency is set to 960~kHz.
       The input is band-limited at 75~kHz, which is the maximum frequency in an FM channel, as explained in Section \ref{sec:FrequencySpectrumOfABroadcastFmChannel}.
-      Thus, the input has an oversampling rate of 12.8, while downsampling is only performed with a factor of 8.
+      Thus, the input has an oversampling rate of 12.8, while downsampling is only performed with a factor of 8.\\
 
   \item \textbf{Filters}\\
       Several filters are implemented as FIR filters.
       The 15~kHz lowpass (LP) filter is instantiated twice, with the exact same coefficients.
+      The two bandpass (BP) filters have different coefficients.\\
 
   \item \textbf{Filter Group Delay Compensation}\\
       FIR filters introduce a delay on the output signal, with respect to the input.
-      The group delay in number of samples can be computed with the following formula.
+      The group delay, in number of samples, depends on the filter order, which is directly related to the number of coefficients N, and can be computed with the following formula.
       \begin{equation}
-        group\ delay = \frac{filter\ order}{2} = \frac{(N\ coefficients - 1)}{2}
+        group\ delay = \frac{filter\ order}{2} = \frac{(N_{coefficients} - 1)}{2}
       \end{equation}
-      This is due to the property of the FIR filters' linear phase response \cite{GaziOrhan2018UDSP}.
+      This is due to the property of the FIR filter's linear phase response \cite{GaziOrhan2018UDSP}.
       Since phase is directly proportional to time, the term \textit{group delay} is often used.
       This delay needs to be accounted for, depending on where the signal is used subsequently.
+      Looking at the block diagram in Figure~\ref{fig:bd_dsp_detailed}, the group delay needs to be compensated at two places.
 
-      Looking at the block diagram, the group delay needs to be compensated at two places.
       \begin{itemize}
-        \item \textbf{Between the branches \textit{Recover LR diff} and \textit{Recover Mono}:}\\
-          The \textit{Mono} branch only contains a single LP filter, while the \textit{LR diff} branch contains two filters, namely a BP and an LP filter.
-          The latter branches' signal is therefore delayed, with respect to the \textit{Mono} branch.\\
+        \item \textbf{Between the branches \textit{Recover LR Diff} and \textit{Recover Mono}:}\\
+          The \textit{Mono} branch only contains a single LP filter, while the \textit{LR Diff} branch contains two filters, namely a BP and an LP filter.
+          The latter branch's signal is therefore delayed, with respect to the \textit{Mono} branch.\\
           The issue here is, that both signals are added and substracted at the end of the processing chain, to compute the left and right channel signals, respectively.
           Thus, they need to be aligned in time at that point.
-          Consequently, a delay block needs to be inserted in the \textit{Mono} branch, to compensate the group delay of the BP.
+          Consequently, a delay block needs to be inserted in the \textit{Mono} branch, to compensate the group delay of the BP in the \textit{LR Diff} branch.
 
-        \item \textbf{Between the branches \textit{Recover LR diff} and \textit{Recover Carriers}:}\\
+        \item \textbf{Between the branches \textit{Recover LR Diff} and \textit{Recover Carriers}:}\\
           Both branches only contain a single BP filter.
-          However, they have properties, like the transition bandwidth and the passband.
+          However, they have different properties, like the transition bandwidth and the passband.
           Thus, their filter order may be different as well, which leads to a non-matching group delay.
-          Since the two signals are multiplicated in the subsequent mixer, and an important factor is the phase-coherency of the recovered carrier (as explained in Section~\ref{sec:demodulation-of-broadcast-fm}), the group delay compensation becomes necessary here.\\
-
-          To overcome the issue at this point in the actual hardware implementation, the filters are manually adapted to have a matching order.
+          Since the two signals are multiplicated in the subsequent mixer, and an important factor is the phase-coherency of the recovered carrier, the group delay compensation becomes necessary here.\\
       \end{itemize}
 
+      To overcome the group delay issue at this point in the actual hardware implementation, the filters are manually adapted to have a matching order.\\
   \item \textbf{Carrier Recovery}\\
       The 38~kHz carrier can be recovered from the 19~kHz pilot tone.
-      It is important that the recovered carrier is phase-coherent with the received input, as described in Section~\ref{sec:demodulation-of-broadcast-fm}.
+      It is important that the recovered carrier is phase-coherent with the received input, as described in Section~\ref{subsec:demod_stereo_audio}.
       This can be achieved, by simply multiplying the pilot tone with itself, which is the way it is implemented here.\\
 \end{itemize}
 
@@ -89,9 +89,9 @@ Several of the listed details are implemented, in order to achieve a successful 
 \section{Matlab Model}
 
 Matlab is used to create a model of the receiver, which is used as a reference for the other implementation variants.
-Here, DSP algorithms are tested and evaluated, to find a method that is suitable to implement in hardware, specifically in an FPGA.\\
+Here, the DSP algorithms are tested and evaluated, to find a method that is suitable to implement in hardware, specifically in an FPGA.\\
 
-The Matlab script consists of a transmitter, the receiver model, and additional code for analysis.
+The Matlab script consists of a transmitter model, the receiver model, and additional code for analysis.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Transmitter}
