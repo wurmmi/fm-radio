@@ -1,5 +1,19 @@
 \chapter{Abstract}
 
 
-This should be a 1-page (maximum) summary of your work in English.
+This thesis is elaborated as the final project in the master's degree program Embedded Systems Design, at the University of Applied Sciences, Campus Hagenberg.
+A comprehensive practical project is developed accompanying to the theoretical topics, which are elaborated in this thesis.\\
 
+The main topic of this thesis is the development of a system design for an embedded system, which combines all the knowledge of different disciplines and topics, that are accumulated over the course of the entire university program.
+A system-level design approach is taken to develop an FM radio receiver in multiple implementation variants, targeting a system-on-chip hardware, including an FPGA and a CPU.\\
+
+Specifically, high-level synthesis and manual VHDL implementation is used, to develop two versions of the FPGA design.
+This includes the digital signal processing chain, as well as multiple interfaces to communicate with the design.
+The two variants are compared, based on specific metrics, such as implementation time, lines of code, hardware utilization, and the general usability experience during the development process.
+At the end, a productive system is deployed on actual hardware, including a firmware application to provide a basic user interface.\\
+
+The entire development process is determined by the general point of view of system design.
+Therefore, a system model is developed in the first stage, by using Matlab.
+Furthermore, a prototype, which can be deployed on actual hardware, is established with GNU Radio.
+The entire system, with its two main implementation methods and the Matlab system model, is using a common verification environment, which guarantees a correctly functioning design.
+This verification is performed in software and hardware, which closes the loop of the system design approach.
