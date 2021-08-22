@@ -2,22 +2,22 @@
 
 \begin{german}
 
-Diese Masterarbeit wurde als Abschlussarbeit im Rahmen des Master Studiengangs Embedded Systems Design an der Fachhochschule Oberösterreich, Campus Hagenberg ausgearbeitet.
+Diese Masterarbeit wurde als Abschlussarbeit im Rahmen des Masterstudiengangs Embedded Systems Design an der Fachhochschule Oberösterreich, Campus Hagenberg ausgearbeitet.
 Begleitend zu den theoretischen Themen dieser Arbeit wurde ein umfangreiches, praktisches Projekt entwickelt.\\
 
-Das Hauptthema dieser Arbeit ist es, ein System-Design für ein Embedded System zu entwickeln, welches alles Wissen über sämtliche Disziplinen und Themen umfasst, die im Rahmen des Studiums behandelt wurden.
+Das Hauptthema dieser Arbeit ist es, ein System-Design für ein Embedded System zu entwickeln, welches sämtliches Wissen über alle Disziplinen und Themen umfasst, die im Rahmen des Studiums behandelt wurden.
 Mit einem Entwurfsansatz auf System-Ebene wird in mehreren Implementierungsvarianten ein FM Radio Empfänger entwickelt.
-Zielarchitekture ist ein System-on-Chip, das aus FPGA und CPU besteht.\\
+Zielarchitektur ist ein System-on-Chip, das aus FPGA und CPU besteht.\\
 
-Im Speziellen werden zwei Varianten für die Implementierung eingesetzt -- High-Level Synthese und die manuelle Implementierung von VHDL code.
-Das betrifft hauptsächlich die digitale Signalverarbeitungskette, sowie mehrere Schnittstellen, anhand welcher der Hardware Entwurf mit seiner Umgebung kommunizieren kann.
+Im Speziellen werden zwei Varianten für die Implementierung eingesetzt -- High-Level Synthese und die manuelle Implementierung von VHDL Code.
+Dies betrifft hauptsächlich die digitale Signalverarbeitungskette, sowie mehrere Schnittstellen, anhand welcher der Hardwareentwurf mit seiner Umgebung kommunizieren kann.
 Die beiden Varianten werden anhand verschiedener Kennzahlen verglichen.
 Beispielsweise werden hierfür die Zeitdauer der Implementierung, die Anzahl der Programmzeilen, die Effizienz in der Nutzung der Hardware, sowie der generelle Eindruck bezüglich der Benutzbarkeit während der Entwicklung, herangezogen.
 Am Ende wird ein produktives System auf echter Hardware erstellt, inklusive einer Firmware Anwendung, um die Interaktion mit einem Benutzer zu ermöglichen.\\
 
 Der gesamte Entwickungsprozess wird immer in dem Gesichtspunkt des Systementwurfs betrachtet.
 Deshalb wird im ersten Schritt ein Systemmodell mit Matlab entwickelt.
-Dieses erlaubt es, Algorithmen für die digitale Signalverarbeitung, und generell ein System zu erarbeiten, welches später in Hardware implementiert werden kann.
+Dieses erlaubt es, Algorithmen für die digitale Signalverarbeitung, und generell ein Gesamtsystem, zu erarbeiten, welches später in Hardware implementiert werden kann.
 Weiters wird GNU Radio dazu verwendet, um einen Prototypen zu entwickeln, der bereits auf echter Hardware lauffähig ist.
 Das gesamte System, inklusive der beiden Implementierungsvarianten und dem Matlab Systemmodell, verwendet eine gemeinsame Strategie und Umgebung zur Verifikation der einwandfreien Funktion des Hardwareentwurfs.
 Diese Verifikation wird in Simulation, als auch direkt in der Hardware durchgeführt, wodurch sich der Kreis des Ansatzes als Systementwurf schließt.
