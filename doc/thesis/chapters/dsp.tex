@@ -310,7 +310,7 @@ Figure~\ref{fig:fm_channel_baseband_freqs} shows the frequency spectrum of a sin
 For a better overview, only the positive spectum part is shown.
 The negative part is an exact mirror, because the transmitted and received signals from the antenna are real signals -- they do not have an imaginary part.
 The spectrum consists of multiple parts.
-Therefore, it is also referred to as `multiplex signal' in the literature.
+Therefore, it is also referred to as \textit{multiplex signal} in the literature.
 Several of these parts are described in the following paragraphs, according to \cite{EbuFmRegulators},\cite{EtsiFmSoundBroadcastingServiceHarmonizedStandard} and \cite{ElectronicsNotesFmTutorial}.
 
 \includepicture [1.0] {Allocation of frequencies in an FM channel \cite{FigFmChannelFreqSpectrum}.} {fm_channel_baseband_freqs} {img/draw.io/fm-channel-baseband-freqs}
@@ -444,14 +444,14 @@ The differentiated signal still consists of a FM part, as explained earlier, usi
 In order to remove this high-frequeny part and extract the low-frequency envelope, the signal needs to be fed into an envelope detector.
 A block diagram is shown in Figure~\ref{fig:bd_freq_discriminator}.\\
 
-The method implemented in Figure~\ref{fig:time_domain_envelope_detect} is one of the most simple ones and is usually referred to as `Asynchronous Half-Wave Envelope Detector' \cite{DSPRelatedEnvelopeDetection}.
+The method implemented in Figure~\ref{fig:time_domain_envelope_detect} is one of the most simple ones and is usually referred to as \textit{Asynchronous Half-Wave Envelope Detector} \cite{DSPRelatedEnvelopeDetection}.
 It consists of a thresholding unit to remove negative values and a conventional lowpass filter.
 In analog implementations, the thresholding unit is a diode.
 The cutoff frequency of the lowpass needs to be adapted to the envelope signals' maximum frequency.
 It needs to be able to follow the signal, but also sufficiently smooth out the rectified signal.\\
 
 Different methods may be implemented for the envelope detector.
-For example, an `Asynchronous Full-Wave Envelope Detector' can be used.
+For example, an \textit{Asynchronous Full-Wave Envelope Detector} can be used.
 Therefor, the previous method only needs to swap the thresholding unit with an unit that calculates the absolut value.
 In that architecture, a full-wave rectification is performed on the signal, which significantly improves the envelope detection accuracy \cite{DSPRelatedEnvelopeDetection}.
 The envelope is followed more exactly, because of the higher power that is available in the signal, since the entire signal is taken into account, and not only the positive half, as in the previous half-wave method.

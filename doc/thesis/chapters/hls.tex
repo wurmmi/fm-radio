@@ -342,16 +342,18 @@ This is done in three steps.\\
 \begin{itemize}
   \item \textbf{Create input vectors}\\
   In this first step, the above explained, regular C simulation is executed.
-  Hereby, the inputs that are sent to the DUT are stored as \textit{input vectors}.
+  Hereby, the inputs that are sent to the DUT are stored as \textit{input vectors}.\\
+
   \item \textbf{Perform RTL simulation}\\
   Next, the previously generated input vectors are applied to the DUT.
   At this point, the DUT is already translated into RTL code, so the code that is used here is either VHDL or Verilog code.
   The default simulator is the Vivado Simulator (XSim).
   However, various other simulators like ModelSim are supported.
-  The generated outputs of this step are stored as \textit{output vectors}.
+  The generated outputs of this step are stored as \textit{output vectors}.\\
+
   \item \textbf{Verify the results}\\
   The final verification step sources the output vectors back to the C testbench, which compares the outputs with the expected results.\\
 \end{itemize}
 
 \noindent
-This type of simulation takes a significantly longer time to execute, because timing information now actually needs to be considered for the RTL code, which is done by using an HDL simulator.
+The execution of this type of simulation takes significantly longer, because timing information now actually needs to be considered for the RTL code, which is done by using an HDL simulator.

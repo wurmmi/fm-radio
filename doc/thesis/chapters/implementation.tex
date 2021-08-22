@@ -33,7 +33,7 @@ The following list explains implementation details about the respective DSP bloc
       Pre-emphasis in the transmitter and its counterpart, the de-emphasis in the receiver, is a strategy to minimize the noise that is induced due to effects in the transmission, by attenuating and amplifying certain frequency parts of the signal.
       Both processes can be implemented, by using filters in the transmitter, as well as the receiver, respectively.
       The processes are implemented in the Matlab model, but are disabled in the generation of the input file that is used for the system.
-      Thus, a de-emphasis filter is not implemented in the hardware, as it is not required for the show-case of this thesis.\\
+      Thus, a de-emphasis filter is not implemented in the hardware, as it is not required for the show-case of this thesis.
 
   \item \textbf{Downsampling}\\
       Downsampling is implemented in a simplified version, without an anti-aliasing filter.
@@ -64,7 +64,7 @@ The following list explains implementation details about the respective DSP bloc
           The latter branch's signal is therefore delayed, with respect to the \textit{Mono} branch.\\
           The issue here is, that both signals are added and substracted at the end of the processing chain, to compute the left and right channel signals, respectively.
           Thus, they need to be aligned in time at that point.
-          Consequently, a delay block needs to be inserted in the \textit{Mono} branch, to compensate the group delay of the BP in the \textit{LR Diff} branch.
+          Consequently, a delay block needs to be inserted in the \textit{Mono} branch, to compensate the group delay of the BP in the \textit{LR Diff} branch.\\
 
         \item \textbf{Between the branches \textit{Recover LR Diff} and \textit{Recover Carriers}:}\\
           Both branches only contain a single BP filter.
@@ -73,11 +73,12 @@ The following list explains implementation details about the respective DSP bloc
           Since the two signals are multiplicated in the subsequent mixer, and an important factor is the phase-coherency of the recovered carrier, the group delay compensation becomes necessary here.\\
       \end{itemize}
 
-      To overcome the group delay issue at this point in the actual hardware implementation, the filters are manually adapted to have a matching order.\\
+      To overcome the group delay issue at this point in the actual hardware implementation, the filters are manually adapted to have a matching order.
+
   \item \textbf{Carrier Recovery}\\
       The 38~kHz carrier can be recovered from the 19~kHz pilot tone.
       It is important that the recovered carrier is phase-coherent with the received input, as described in Section~\ref{subsec:demod_stereo_audio}.
-      This can be achieved, by simply multiplying the pilot tone with itself, which is the way it is implemented here.\\
+      This can be achieved, by simply multiplying the pilot tone with itself, which is the way it is implemented here.
 \end{itemize}
 
 \includepicture [1.02] [0] [H] {Detailed block diagram of the digital signal processing chain.} {bd_dsp_detailed} {img/draw.io/bd_dsp_detailed}
@@ -133,7 +134,7 @@ It band-limits the spectrum of the LR~Diff part between 23 and 53~kHz.
 The BP filter introduces a constant group delay of the signal.
 In order to maintain the alignment of all signals, this side-effect needs to be accounted for and be compensated in the other signal branches.
 Thus, the Mono signal, as well as the Pilot Tone need to be delayed by the amount of samples defined by the BP filter's group delay.
-The subsequent amplifier blocks create the defined proportions of the sub-band, such as 90\% for the audio parts, and 10\% for the Pilot Tone \cite{FmMultiplexingForStereo}.\\
+The subsequent amplifier blocks create the defined proportions of the sub-band, such as 90\% for the audio parts, and 10\% for the Pilot Tone \cite{FmMultiplexingForStereo}.
 
 One part in this block diagram is the so-called Hinz Triller, which was part of the Autofahrer-Rundfunk-Information service (ARI, German for Automotive-Driver's-Broadcasting-Information).
 It was historically used as an indicator for traffic announcements.
@@ -180,7 +181,7 @@ This is sufficient for the FM receiver and could potentially be lowered to a low
 Again, an optimization of the DSP chain is not the focus of this thesis.\\
 
 Summing up, the Matlab model is not implemented in fixed point arithmetic, but is implemented in a way, that is close enough to the hardware implementation.
-Therefore, it can serve as a reference for the hardware implementation.
+Therefore, it can serve as a reference for the hardware implementation.\\
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -193,8 +194,7 @@ Further assumptions and simplifications, such as the fixed point arithmetic and 
 \subsection{Analysis}
 
 The Matlab implementation also includes a comprehensive range of analysis functionalities, especially in terms of visual plots.
-These plots are useful during the development of new DSP algorithms, in order to verify the correct functionality thereof.\\
-
+These plots are useful during the development of new DSP algorithms, in order to verify the correct functionality thereof.
 An example of a plot that is created by the analysis is depicted in Figure~\ref{fig:matlab_analysis_time_domain}.
 The diagram shows the respective signals in the time domain.
 Above two timelines display the input data, as it is read from the input audio file.
@@ -202,9 +202,6 @@ The two diagrams in the center plot the Mono and LR Diff signals.
 The bottom diagrams then represent the result after the entire signal processing chain.
 It can be seen that the DSP chain is not able to demodulate the signal without any error, as the output signal does not exactly match the original input signal.
 However, the result shows a clear separation of the left and right channels, and resembles the original input very closely, which is good enough for this case study.\\
-
-\includepicture [1.0] [0] {Matlab analysis in the time domain. The stereo audio signal of the voice saying \textit{Left channel, Right channel} can be recognized in the signal, which allows an audible and visual verification of the receiver's functionality.} {matlab_analysis_time_domain} {img/matlab/matlab_analysis_time_domain}
-%TODO: latex font for this diagram!
 
 Further analysis is done in the frequency domain, especially in order to better understand the modulation of the different spectral parts in the FM channel.
 An example thereof is shown in Figure~\ref{fig:matlab_analysis_freq_domain}.
@@ -214,6 +211,9 @@ Spectral parts, such as the pilot tone at 19~kHz, or the LR Diff part around 38~
 The demodulated spectrum shows an artifact at 57~kHz, which does not exist in the original transmitter spectrum.
 This is an artifact of the demodulation process, specifically the frequency-shift of the LR Diff part to baseband.
 The artifact is very low in energy, because it is attenuated by a BP filter in the down-conversion process, and can thus be ignored for further processing, even though it can still be seen in the spectral analysis.
+
+\includepicture [1.0] [0] {Matlab analysis in the time domain. The stereo audio signal of the voice saying \textit{Left channel, Right channel} can be recognized in the signal, which allows an audible and visual verification of the receiver's functionality.} {matlab_analysis_time_domain} {img/matlab/matlab_analysis_time_domain}
+%TODO: latex font for this diagram!
 
 \includepicture [1.0] [0] {Matlab analysis in the frequency domain. Spectral parts, like the mono audio, the pilot tone, or the LR difference signal around the 38~kHz subcarrier can clearly be seen.} {matlab_analysis_freq_domain} {img/matlab/matlab_analysis_freq_domain}
 %TODO: latex font for this diagram!
