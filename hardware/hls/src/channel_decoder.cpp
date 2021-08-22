@@ -26,9 +26,9 @@ audio_sample_t channel_decoder(hls::stream<sample_t>& in_sample) {
   sample_t audio_lrdiff;
 
   /** NOTE:
-   *  This loop performs decimation by N.
-   *  --> Processing N samples. Only the last sample is passed on
-   *      to the next processing steps.
+   *  This loop performs decimation by OSR_AUDIO.
+   *  --> Processing OSR_AUDIO samples. Only the last respective
+   *      sample is passed on to the next processing step.
    */
   for (uint32_t i = 0; i < OSR_AUDIO; i++) {
     sample_t sample = in_sample.read();

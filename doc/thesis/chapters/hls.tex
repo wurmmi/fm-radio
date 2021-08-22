@@ -1,28 +1,359 @@
-%%%%%%%%%%%%%%%%%%%%
-\chapter[HLS]{High-Level Synthesis}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{High-Level Synthesis}
 \label{cha:HLS}
 
-\section{Introduction / State of the Art}
+This chapter covers the High-Level Synthesis of \cplusplus\ in general, but also describes details that specifically apply to HLS tools that are provided by Xilinx.
+An overview of the most important steps in the development workflow, as well as main features and possibilities of the code implementation and testbench are given.
+The main sources of information for this chapter are found in \cite{VivadoUgHLSIntro} and \cite{VivadoUgHLS}.
 
-\section{Functionality (transform high-level code to HDL)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
 
-\section{Language Support}
+In software development, engineers are used to writing code in a high-level language, such as C or \cplusplus.
+With these languages, specific hardware details are abstracted and thus, very little knowledge of the target hardware is required.
+The compiler takes over these details as it transforms the code by using the underlying, supported instruction set of the target hardware.
+This has been the standard for many years by now.
+In the earlier times however, it was common practise to develop programs in the low-level assembly language.
+The software engineer had to implement the software by directly using the supported instruction set of the target CPU.\\
 
-  \subsection{C++}
+A direct comparison can be drawn to FPGA design.
+An FPGA engineer historically develops code in the register-transfer level (RTL), which is common practise until today.
+This can be compared to the development of software in the assembly language.
+However, the recent efforts towards automation and code generation brought up High-Level Synthesis (HLS).
+There, the FPGA design can be described in a high-level language, such as C or \cplusplus, which is convenient and allows to focus on the algorithm, rather than hardware details.
+This high-level code is then transformed into the low-level RTL automatically by the HLS tool.\\
 
-  \subsection{SystemC}
+The usage of HLS tries to bring software- and hardware development closer together and tries to make these two worlds more similar.
+In software development, there are different compilers for multiple processor architectures, which can be used to port a program to another target hardware.
+The idea of HLS is to create the same level of abstraction -- write code in a high-level language, which is agnostic of its target hardware architecture.\\
 
+A major achievement in the usage of HLS is the shorter development time.
+The time that it takes to develop a first working version of the intended design can be significantly reduced, compared to the development of RTL code directly.
+This is especially important if an FPGA design is combined with a software part, like in a System On Chip, because software development is comparably fast and thus, it is important to also be fast on the hardware design side, to be able to bring the two parts together as soon as possible.\\
+
+Figure~\ref{fig:timeline_performance_first_prototype} schematically displays the difference in development time, over performance and degree of optimization, when the same functionality of a prototype is implemented in different methods for various targets.
+The compared targets are an x86 processor CPU, a digital signal processor (DSP), a graphics processing unit (GPU) and the FPGA design in RTL and HLS implementation.
+It is clearly visible, that the FPGA design with the HLS design approach achieves a first working prototype much earlier than the direct RTL approach.
+Even the optimized HLS version can be achieved within comparably short time, while both RTL versions, the first working version and the optimization, are beyond the typical design time limit in a software project.
+
+\includepicture [1.0] [0] {Design Time vs. Application Performance, if the same functionality is implemented in different methods for various targets \cite[Figure 1-1]{VivadoUgHLSIntro}.} {timeline_performance_first_prototype} {img/draw.io/timeline_performance_first_prototype}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{State Of The Art}
+
+Information for this section is found in \cite{EvolutionOfHLS}, \cite{XilinxVivisHLSOpenSource} and \cite{CompareHlsVHDLArticle}.\\
+
+HLS has been developed over 20 years ago in a first version, but has not yet been able to replace the manual, traditional implementation of RTL, by using the languages VHDL or Verilog.
+Unfortunately, no published numbers about the market share of HLS in relation to traditional implementations could be found during the research in this thesis.
+However, according to the given sources it is becoming more and more popular in recent years.
+This is mainly based on the fact that the HLS tools keep producing results of better quality as they evolve.
+This especially regards the efficiency of the produced RTL code, the useability of the tools, as well as the better understandable correlation between the high-level code and the generated RTL code.\\
+
+Xilinx is the largest manufacturer of FPGAs globally and therefore its tool called \textit{Vivado HLS} is widely used.
+Intel, the second largest FPGA manufacturer, also has its HLS tool called \textit{Intel oneAPI} \cite{IntelHLSOneAPI}.
+Both companies are conducting serious effort to push the HLS implementation method.
+Xilinx recently open-sourced the code for the front-end of their HLS compiler.
+The front-end processes the HLS code, specifically \cplusplus, and creates an intermediate representation from it.
+The company expects to expand the community engagement and the encouragement of innovation, driven by users, with this step.
+Also Intel with its oneAPI toolkit is trying to introduce a wider usage of HLS to the community.\\
+
+In terms of language support, several tools settle for \cplusplus.
+Intel oneAPI uses library APIs and Data-Parallel \cplusplus\ (DP\cplusplus), which is an extension to the ISO \cplusplus\ standard.
+Xilinx also decided in favor of the \cplusplus\ language for their tools \textit{Vivado HLS} and the latest tool \textit{Vitis HLS}.
+In older versions, SystemC was supported for synthesis as well, but is now deprecated in the respective latest versions \cite{VivadoHlsDeprecatesSystemC}.\\
+
+Another feature of HLS is the support of libraries for complex functionalities, such as video processing.
+Xilinx HLS for example provides a port of the OpenCV image- and video processing library, that enables the development of complex functions in this area, inclusively the verification in the testbench.
+Also, other libraries are built-in, which feature commonly used functions, such as an FIR filter, for example.\\
+
+Summing up, HLS is gaining more and more attention as it becomes more efficient.
+Its usage is being promoted and pushed forward with serious effort by the major FPGA chip manufacturers and tool vendors.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\section{Functionality}
+%
+%transform high-level code to HDL.\\
+%-analysis\\
+%-scheduling\\
+%-pipelining\\
+%
+%- Limitations\\
+%dynamic memory allocation, etc.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Workflow}
+\label{sec:hls:workflow}
+
+This section describes the workflow for Xilinx HLS, as it is recommended in the user guide \textit{Introduction to FPGA Design with Vivado High-Level Synthesis} \cite{VivadoUgHLSIntro}.\\
+
+Generally, as the user guide states, the quality and the correctness of the generated output can only be as good as its input.
+Consequently, it is very important to follow the design recommendations and adhere to specific coding rules in order to produce a high-quality input software.\\
+
+The following list presents the main steps that are required in the implementation workflow of an HLS IP core project.\\
+
+\begin{itemize}
+  \item \textbf{Software Testbench}\\
+      The developed HLS IP code needs to be verified and checked for correct functionality in a software testbench, before it gets processed to RTL code.
+      This can be done by using conventional software development tools.
+      Xilinx specifically recommends dynamic code checker tools like \textit{valgrind} and \textit{Coverity}.
+      They support a developer in finding memory leaks, out-of-bounds memory access, uninitialized variables and similar issues.
+      Furthermore, the application of code coverage tools like \textit{gcov} is recommended as well.
+      In that way, the percentage of executed code lines of testbench and HLS code can be measured, to ensure a sufficient level of testing.
+      The software testbench is also called \textit{C Simulation}.\\
+
+      The implementation of the HLS IP code is subject to restrictions.
+      As an example, dynamic memory allocation is not supported, since the entire code must be analyzable at runtime to be processed into RTL code.
+      %For further details, please read the user guides regarding Xilinx HLS.
+      In contrast, the testbench code does not have any restrictions.
+      Anything that is supported in C/\cplusplus\ may be used here.\\
+
+  \item \textbf{Co-Simulation}\\
+      Co-Simulation serves the purpose to verify the correct functionality of the generated RTL code.
+      It is not the goal to verify the algorithm, though.
+      This is already done in the previous C simulation step.
+      However, the issue is that the C simulation is executed like a regular program, which means it is executed sequentially, instruction by instruction and thus parallelism can not be represented.\\
+
+      This is where the Co-Simulation becomes neccessary.
+      The RTL code is simulated with an HDL simulator software, which can actually simulate the parallelism as it exists in the FPGA hardware.
+      In that way it can be ensured, that the user did not break the functional correctness of the algorithm, by giving wrong parallelization guidance to the HLS tool.\\
+
+      The external simulator software has to run the complex HDL simulation and return data results, which is a time-consuming task.
+      Therefore, the execution time of this simulation type is expected to be approximately 10.000 times slower, compared to the C simulation.\\
+
+  \item \textbf{Integration of the generated IP}\\
+      At this point, the developed HLS code is fully verified and can successfully be transformed into working RTL code.
+      Xilinx HLS exports the generated RTL code in an IP file- and folder structure that is supported by its IP integrator tool, that is used in Vivado or Vitis.
+      Therefore, the developed IP core can be imported to the block design as another processing block, get connected with other IPs, and in that way get integrated into a larger design.\\
+
+  \item \textbf{Synthesize FPGA bitstream}\\
+      Like in any other FPGA development cycle, the created block design can now be synthesized.
+      This generates a bitstream file, which can be programmed into the actual FPGA hardware.
+      Depending on the architecture of the system, the developed IP may now interface with the on-chip CPU, in the example of a System-On-Chip.\\
+\end{itemize}
+
+These steps represent the standard workflow for the development of an integrated HLS IP.
+The successful deployment of hardware can be achieved if they are completed accurately.
+There may be more and deeper knowledge necessary, in order to use this design approach.
+This thesis however focuses on system design, not on HLS specifically, and thus a comprehensive study of the referenced literature is recommended.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Coding}
+%continue here
 
-  \subsection{Compiler Directives (\#pragma's)}
+This section gives a brief overview of some HLS-specific \cplusplus\ features that are supported with Xilinx tools.
+More detailed information can be found in the respective Xilinx user guide \cite{VivadoUgHLS}.
 
-  \subsection{Data types}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Data Types}
 
-  \subsection{Functions}
+HLS supports special data types, which are not available in standard \cplusplus.
+The focus of these data types is mainly to support an optimized translation into RTL, to achieve the least amount of logic cells in the FPGA.\\
 
-  \subsection{Loops}
+Standard \cplusplus\ only supports variables in the bitwidth of byte-boundaries, so in multiples of 8~bit.
+However, this may be inefficient to fit into the available FPGA target hardware.
+One example therefor is the DSP48 macro cell that Xilinx FPGAs have built-in.
+They support the direct multiplication of two vectors, with a bitwidth of up to 18~bit each.
+In an example application, the achievable maximum value of a variable might be limited, and thus, able to fit into a range of 17~bit for the multiplication.
+However, in order to represent that, using a 32~bit data type would be necessary in standard \cplusplus.
+The HLS compiler does not have this prior knowledge of the number range limit and would thus implement a 32~bit multiplication, which is a waste of resources in this case.
+Because of this reason, a major feature of HLS is the possibility to define data types with arbitrary bitwidths.
+In that way, the above example can be optimized to use a data type that actually has a bitwidth of 17~bit, which is exactly the bitwidth that is required for the application.
+This results in a lower logic utilization, which in turn results in a higher maximum clock frequency that can be used.
+Consequently, more functionality can be implemented and packed into the FPGA device.
+The referenced user guide shows a design example where an area reduction of 75\% is achieved by just reducing the bitwidths.\\
 
-  \subsection{Conditional statements}
+The argumentation is equally valid for integer data types, as well as fixed point data types.
+In calculations it is often necessary to represent fractional numbers.
+In standard \cplusplus, floating point data types are used therefor.
+However, floating point operations require a large amount of logic to implement and thus, HLS provides fixed point data types.
+These can be instantiated in arbitrary bitwidths, where integer and fractional bitwidths can be specified separately.
+The fixed point format is often described in the format \textit{integer.fractional}, like \textit{2.14}, which represents a 16~bit fixed point data type that has 2 integer bits and 14 fractional bits.\\
 
-\section{Advantages / Disadvantages}
-    easy and much faster to get complex HDL code, such as image/video processing, through libraries like OpenCV. However, it is less optimized, and a developer still needs to have a strong hardware background, to be able to understand what is being generated in hardware from x lines of code in HLS/Cpp.
+An example for the usage of integer and fixed point data types is given in the following code section.\\
+
+\begin{CppCode}
+  #include <ap_int.h>
+  #include <ap_fixed.h>
+
+  ap_int<9>   custom_integer_var1;         //  9 bit integer, signed
+  ap_uint<17> custom_integer_var2;         // 17 bit integer, unsigned
+
+  ap_fixed<16,2>  custom_fixedpoint_var1;  // 16 bit fixed point, 2.14 format, signed
+  ap_ufixed<14,4> custom_fixedpoint_var2;  // 12 bit fixed point, 4.10 format, unsigned
+\end{CppCode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Optimization Directives}
+
+The HLS code can be instumented with optimization directives.
+This is used to provide additional information to the HLS compiler, to assist and instruct it on how to implement certain parts of the code in RTL.
+Directives can be applied to interfaces, functions, loops, arrays or code regions.
+They can be written in a Tcl file that is provided to the HLS project, or in the design code directly, in the form of a pre-processor pragma.
+Both variants have their advantages and disadvantages.\\
+
+Examples for such directives are optimization strategies for throughput and dataflow optimization, such as pipelining or loop unrolling.
+Also the implementation of the required interface types, such as various AXI interfaces, is controlled with directives.\\
+
+Since the topic of optimization is very comprehensive, it cannot be covered into more detail here.
+For further information, refer to the user guide \cite{VivadoUgHLS}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%\subsection{Optimization}
+%\subsection{Functions}
+%\subsection{Loops}
+%\subsection{Conditional Statements}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Interfaces}
+\label{sec:hls:coding:interfaces}
+
+Interfaces are an important asset to any IP design, since this is where they communicate with their surroundings.
+This may be another IP that processes data, but may also be a CPU that reads status information or configures the IP's settings.\\
+
+Xilinx HLS implements two different types of interfaces: block-level, and port-level interfaces.
+The block-level interface is a general interface to the IP, that can provide a handshaking functionality for when it is idle and ready to start a new operation, or when the operation is completed.
+The port-level interfaces on the other hand are specific to input and output (IO) ports.
+They can also provide handshaking functionality, such as data-valid indicators, acknowledge signals, or implement a FIFO for the IOs.
+However, port-level interfaces can also be implemented as AXI interfaces, such as AXI4-Stream, AXI4-Lite Slave or an AXI4 Master.
+This is an especially useful function, since the implementation of the actual interface logic is abstracted from the developer.
+Additionally, software drivers are automatically generated along with the respective interfaces, which provides a fast and simple integration into a larger system.\\
+
+The code example in Program~\ref{prog:axi4_lite} shows the specification of an AXI4-Lite memory-mapped slave interface, by using pre-processor pragma definitions.
+The provided registers are separated into configuration registers and status registers.
+The configuration is readable and writeable, while the status registers are implemented as read-only, which requires less logic in the RTL implementation.
+Within the code, the interface is used like regular \cplusplus\ variables.\\
+
+The second code example, Program~\ref{prog:axi4_stream}, demonstrates the equally simple definition of an AXI4-Stream interface.
+HLS stream interface variables can be accessed via read- and write-functions.
+One very important property of these functions is, that they are blocking calls.
+The HLS streams are implemented with an underlying FIFO.
+Thus, values can only be written into it when there is an empty spot, and can only be read if there is at least one value available.
+If the respective condition is not satisfied, the functions block the execution, until the FIFO state changes.
+During simulation in the testbench, this may result in an endlessly blocking behaviour.
+
+\begin{program}[H]
+  \caption{Implementation of an AXI4-Lite memory-mapped slave with a separation of read-only status registers and read-write configuration registers.}
+  \label{prog:axi4_lite}
+\begin{CppCode}
+ typedef struct {
+   ap_int<NUM_LEDS> led_ctrl;
+   uint8_t code;
+ } config_t;
+
+ typedef struct {
+   uint32_t uptime;
+   uint32_t result;
+ } status_t;
+
+ void hls_ip_top_level(config_t& config,
+                       status_t* status) {
+     #pragma HLS INTERFACE s_axilite port = status bundle = API
+     #pragma HLS INTERFACE s_axilite port = config bundle = API
+
+     if (config.code == 0xFF) {
+       status->result = 0;
+       ...
+     }
+     ...
+ }
+\end{CppCode}
+\end{program}
+
+\begin{program}
+  \caption{Implementation of an AXI4-Stream interface. The stream is accessed with read- and write-functions.}
+  \label{prog:axi4_stream}
+\begin{CppCode}
+ #include <hls_stream.h>
+
+ void hls_ip_top_level(hls::stream<uint32_t>& sample_in,
+                       hls::stream<uint32_t>& audio_out) {
+     #pragma HLS INTERFACE axis port = sample_in
+     #pragma HLS INTERFACE axis port = audio_out
+
+     auto input = sample_in.read();
+     ...
+     audio_out.write(audio);
+ }
+\end{CppCode}
+\end{program}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Testbench}
+
+The general significance of the simulation testbench for an HDL design is explained here, as well as the different levels of abstraction in which an HLS testbench can be executed.
+These different levels of abstraction in the testbench execution are a major difference between a VHDL testbench and an HLS testbench.
+The most important impact thereof is the execution speed -- the time it takes to simulate a number of test cases on the DUT.\\
+
+Section~\ref{sec:hls:workflow} already mentioned the topics of testbenches and simulation types briefly, in the context of workflow.
+The following descriptions are a comprehensive extension around these topics.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{General}
+\label{sub:hls:testbench:general}
+
+In the development of software that runs on a CPU, the tool of step-by-step debugging is commonly used during the development process.
+Various verification and testing libraries exist, in order to create unit tests, for example.
+The advantage is, that the code that is developed there, can be compiled and run on the target CPU directly, while maintaining the direct instruction-by-instruction representation of the code.\\
+
+However, in the development of hardware with any HDL, this is not possible.
+HDL languages provide a syntax and semantic representation that allow to create parallel structures and a dependency on timing, such as a system clock.
+The design is based on signals that perform logic operations and transfer values into registers.
+Thus, HDL code is often called register-transfer level, or short, RTL code.
+Before this code can be run on the target hardware, i.e. an FPGA, it needs to run through a process called synthesis.
+In synthesis, the HDL code is translated into a netlist and is consequently mapped into hardware logic cells that are available in the target device.
+Various optimizations are done during this process, so that the direct connection to the code representation is lost.
+Additionally, it is impossible to access every single signal within the design during debugging on the hardware, which is probably also one of the main issues.
+Synthesis tools like Xilinx Vivado provide support to make debugging possible in hardware, but require a large effort to implement them, especially in terms of synthesis time.
+Another big factor that speaks against debugging in hardware generally, is that the process of synthesis takes a comparably large amount of time to transform code into the target technology.
+Each time the code is adapted, the entire synthesis process needs to be started over again.
+Because of all of these reasons, debugging HDL code step-by-step as in software is not possible.\\
+
+Thus, in order to allow debugging and verification of HDL design code, the technology of simulation was invented.
+Here, the time-consuming step of synthesis is not taken.
+Instead, the HDL simulator software is able to simulate the code in a way, that can represent parallel processes, just like they exist in hardware.
+Therefore, simulation comes to a result much faster.
+Since HDL designs actually only consist of electrical wires and some basic block primitives, like flipflops or lookup tables, it is difficult to verify correct values.
+They would need to be compared in their binary bit-pattern format, at the correct point in time.
+Of course the HDL language provides support with different data types, that abstract the binary number representation and make the numbers human-readable.
+However, it remains an enormous effort to manually write testing code to verify bus interfaces, for example, because they consist of a large number of signals.
+In order to simplify such complex verification operations, various testbench frameworks and libraries are available to developers.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{C Simulation}
+
+In C Simulation, the HLS compiler is used to create an executable binary that includes the testbench code, as well as the IP design of the DUT.
+This binary can be run just like any other program.
+The most important note here is, that the HLS code is \textit{not} transformed into RTL at this point.
+Instead, the HLS code is treated as a regular \cplusplus\ code, that uses some libraries, like the fixed point library.
+This means, that the HLS IP core's top-level function is used as a regular function call in the testbench.\\
+
+The main advantage of this type of simulation is the major increase of execution speed.
+The reason for this speed-up is the abstraction of timing, such as clock cycles or similar constraints.
+In fact, there is absolutely no timing information that needs to be taken into account in this simulation.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{C/RTL Co-Simulation}
+
+This type of simulation actually transforms the HLS IP code into RTL code, such as Verilog or VHDL, for the testbench.
+This is done in three steps.\\
+
+\begin{itemize}
+  \item \textbf{Create input vectors}\\
+  In this first step, the above explained, regular C simulation is executed.
+  Hereby, the inputs that are sent to the DUT are stored as \textit{input vectors}.\\
+
+  \item \textbf{Perform RTL simulation}\\
+  Next, the previously generated input vectors are applied to the DUT.
+  At this point, the DUT is already translated into RTL code, so the code that is used here is either VHDL or Verilog code.
+  The default simulator is the Vivado Simulator (XSim).
+  However, various other simulators like ModelSim are supported.
+  The generated outputs of this step are stored as \textit{output vectors}.\\
+
+  \item \textbf{Verify the results}\\
+  The final verification step sources the output vectors back to the C testbench, which compares the outputs with the expected results.\\
+\end{itemize}
+
+\noindent
+The execution of this type of simulation takes significantly longer, because timing information now actually needs to be considered for the RTL code, which is done by using an HDL simulator.

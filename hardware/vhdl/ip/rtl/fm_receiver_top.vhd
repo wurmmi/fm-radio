@@ -20,7 +20,7 @@
 --                                             But took a long time to bring it into Vivado. (create IF in IP Packager, figure out Address Range error, etc.)
 --
 -- (4) LED control
---       06/19/2021  13:30 - 15:30    2:00 h
+--       06/19/2021  13:30 - 15:30    2:00 h   Register engine is fast, but driver has to be implemented manually..
 --
 -- (5) Mode
 --       06/22/2021  16:00 - 17:00    1:00 h

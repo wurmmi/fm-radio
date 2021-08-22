@@ -12,7 +12,11 @@ close all;
 clc;
 
 %% Settings
-EnableZoomToBegin = false;
+dir_output_doc = "../../../doc/thesis/img/matlab";
+
+EnableSaveToFile                = true;
+EnableZoomToVhdlTimeRange       = true;
+EnableZoomToComparisonTimeRange = false;
 
 %=========================================================================
 %% Read data
@@ -61,7 +65,9 @@ audioDataLeft_VHDL_FPGA  = circshift(audioDataLeft_VHDL_FPGA, 3);
 audioDataRight_VHDL_FPGA = circshift(audioDataRight_VHDL_FPGA,3);
 
 % Plot
-fig_title = 'Audio Output';
+set(0,'defaulttextinterpreter','latex')
+
+fig_title = 'Audio Output Comparison';
 fig_audio_time = figure('Name',fig_title);
 sgtitle(fig_title);
 
@@ -78,8 +84,10 @@ h4 = plot(audioDataLeft_HLS_SIM,  'r--','DisplayName', 'HLS SIM');
 xline(length(audioDataLeft_HLS_FPGA),'k--','FPGA');
 xline(length(audioDataLeft_HLS_SIM), 'k--','HLS SIM');
 xline(length(audioDataLeft_VHDL_SIM),'k--','VHDL SIM');
-grid on; legend([h0,h1,h2,h3,h4],'Location','east');
+grid on; legend([h0,h1,h2,h3,h4],'Location','southeast');
 ylim([ymin,ymax]);
+xlabel('time [sample]');
+ylabel('amplitude');
 
 ax2 = subplot(2,1,2); hold on;
 title('Right channel');
@@ -91,13 +99,32 @@ h4 = plot(audioDataRight_HLS_SIM,  'r--','DisplayName', 'HLS SIM');
 xline(length(audioDataRight_HLS_FPGA),'k--','FPGA');
 xline(length(audioDataRight_HLS_SIM), 'k--','HLS SIM');
 xline(length(audioDataRight_VHDL_SIM),'k--','VHDL SIM');
-grid on; legend([h0,h1,h2,h3,h4],'Location','east');
+grid on; legend([h0,h1,h2,h3,h4],'Location','southeast');
 ylim([ymin,ymax]);
 
 xlabel('time [sample]');
+ylabel('amplitude');
 linkaxes([ax1,ax2],'xy');
-if EnableZoomToBegin
+
+% Adapt figure size
+fig_audio_time.Position(3:4) = [900 550];
+
+% Zoom area of interest, and save
+if EnableZoomToVhdlTimeRange
     xlim([0,length(audioDataLeft_VHDL_SIM)]);
-    ylim([-0.035,0.035]);
+    xlim([2800,3950]);
+    exportgraphics(fig_audio_time,sprintf("%s/%s",dir_output_doc, "audio_output_compare_tb_vs_hw.pdf"),'ContentType','vector')
+    ylim([-0.45,0.6]);
 end
-saveas(fig_audio_time, "./audio_output.png");
+if EnableZoomToComparisonTimeRange
+    xlim([3450,4250]);
+    ylim([-0.45,0.65]);
+end
+
+if EnableSaveToFile
+    %exportgraphics(fig_audio_time,sprintf("%s/%s",dir_output_doc, "audio_output_compare_ips_vs_matlab.pdf"),'ContentType','vector')
+    
+%    xlim auto
+%    ylim auto
+%    exportgraphics(fig_audio_time,sprintf("%s/%s",dir_output_doc, "audio_output_compare_all_ips.pdf"),'ContentType','vector')
+end

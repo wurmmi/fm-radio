@@ -4,81 +4,151 @@
 %%%%%%%%%%%%%%%%%%%%%%%
 \section{Motivation}
 
-In the master's degree program Embedded Systems Design a wide range of topics relate to digital signal processing, chip design and software development.
+In the master's degree program Embedded Systems Design, a wide range of topics relate to digital signal processing, chip design and software development.
 All of these disciplines find their application in an embedded system.
 Multiple different methods of implementation are introduced for each topic and their usage is tested in practical sessions.
 However, in the setting of a university course it is not always possible to look at the currently handled topic as a part of a larger, integrated system.
 Instead, it is often treated as a standalone part that fulfills its own, specific functionality.
-
-Therefore, one of the main motivation points of this thesis is to combine several disciplines and multiple implementation methods in a common context of a single project.\\
+Therefore, one of the main motivation points for this thesis is to combine several disciplines and multiple implementation methods into a single system design, to find a universal workflow for design and verification, and treat them in this common project context.\\
 
 In a more general perspective, the current electronics market situation is a huge motivational factor as well.
-Smart devices, smart sensors, Internet of Things (IoT) and many similar terms are well-known and are becoming more and more present in the publics' daily lives.
-In some degree, all of these devices represent embedded systems, since they all consist of processing units, combined with sensors and interfaces to communicate with their outside world.
-In the future, the number of devices and the range of applications in this area is going to grow from todays' point of view.
-This will require a lot of engineering work to advance the state of technology we have today and explore new areas of application.\\
+Smart devices, smart sensors, Internet of Things (IoT) and many similar terms are well-known and are becoming more and more present in the public's daily lives.
+To some degree, all of these devices represent embedded systems, since they all consist of processing units, combined with sensors and interfaces to communicate with their surrounding world.
+In the future, the number of devices and the range of applications in this area is going to grow from today's point of view.
+This will require a lot of engineering work to advance the state of technology we have today, to push the limits and explore new areas of applications.\\
 
 Since the development of an embedded system combines so many displines, it is of advantage to have knowledge of as many as possible of them.
 However, not only understanding single parts, but to have an overview and understanding of the entire, integrated system and the interaction between those single parts is important in an embedded system.\\
+%This further creates the motivation to find a solution for a universal design flow, that enables to combine the different implementation methods into a single system design.\\
 
-Those major reasons lead to the choice of topic for this thesis - understanding all the single parts by themselves, while maintaining the understanding over an integrated embedded system that fulfills a task as a whole.
+Those major reasons lead to the choice of topic for this thesis -- having the competence for all the single parts by themselves, while maintaining the understanding over the integrated embedded system that fulfills a task as a whole.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \section{Choice of Application}
 
 In order to elaborate on the theoretical topics of this thesis, a comprehensive practical project is developed along with it.
 The project of choice is a digital FM broadcast radio receiver.
-It combines several disciplines that appear in the master's program Embedded Systems Design, such as digital signal processing (DSP), software development and system design and thus is a perfect candidate for this project.\\
+It combines several disciplines that appear in the master's program Embedded Systems Design, such as digital signal processing, software and hardware development, as well as system design and therefore is a perfect candidate for this project.\\
 
 FM broadcast radio is chosen as the input signal, because it is a common radio frequency signal that is available almost everywhere.
 Furthermore, the demodulated signal is an audio signal, usually music or speech, that can be listened to.
 This is subjectively more attractive than a generic data stream.
-Additionally, it is a comparably simple signal to demodulate, but still requires several techniques of signal processing to decode it.
+Additionally, it is a comparably simple signal to demodulate, but still requires several techniques of signal processing to achieve that.
 
-\section{Goals}
+%%%%%%%%%%%%%%%%%%%%%%%
+\section{Objective}
 
-The main goal of this thesis is to elaborate a system design for an embedded system, that combines all the knowledge of different disciplines and topics which are accumulated over the time of the university program, in a single project.
-
-This includes the development of a system model in a tool like Matlab, the practical usage and implementation of DSP in an FPGA, the development of a digital receiver and the deployment on actual hardware.\\
+The main objective of this thesis is to elaborate a system design for an embedded system, that combines all the knowledge of different disciplines and topics which are accumulated over the time of the university program, in a single project.
+This includes the development of a system model in a tool like Matlab, the practical usage and implementation of a digital signal processing (DSP) chain in an FPGA, the development of a digital receiver and the deployment on actual hardware.\\
 
 The receiver implementation on the FPGA is to be done in two variants.
-The first variant is traditional, manually written hardware description language (HDL) in the programming language VHDL, as it has been done for years.
-For the second variant, high-level synthesis (HLS) is employed, to generate the low-level HDL from high-level \cplusplus code.
-These two methods are implemented and compared on the basis of usability and some metrics.
+The first variant is traditional, manually written hardware description language (HDL) in the programming language VHDL.
+For the second variant, high-level synthesis (HLS) is employed, which generates the low-level HDL from high-level \cplusplus\ code.
+These two methods are implemented and compared on the basis of usability and some metrics.\\
 
 In the view of a system design approach, another focus is put on a sustainable testing and development strategy for the entire system.
-Above mentioned implementation variants should optimally share as much as possible of testing and verification code, in order to save time and effort in implementation.
+Above mentioned implementation variants should ideally share as much as possible of testing and verification code, in order to save time and effort in implementation.
 Also, as many tasks as possible should be automated by scripts, to save time in manual labor for the engineers working on the development.
 All that enables an efficient development cycle of the product.\\
 
 By the end of this thesis, the implementation of an FM radio receiver in multiple methods and abstraction levels should be achieved, as well as a good understanding of the overall system level design.
-Knowledge of each methods' preferred field of application, efficiency and application should be gained.
+Knowledge of each method's advantages and disadvantages, as well as efficiency and useability should be gained.
 
-%develop an FM receiver and explain it, so that it can be followed in a tutorial with an affordable budget in hardware.\\
 
 %%%%%%%%%%%%%%%%%%%%%%%
+\section{Outline}
+
+Chapter~\ref{cha:SignalProcessingTheory} describes the signal processing theory that is required to demodulate an FM broadcast radio signal.
+This includes an introduction to receiver types, the description of an FM signal generally and also specifically as it is used in FM audio broadcasting, as well as various general topics of signal processing.
+Chapter~\ref{cha:SystemDesignProcess} covers the topic of a certain system design process, as well as system design tools that specifically target FPGAs.
+Chapter~\ref{cha:HLS} is about high-level synthesis, which includes a general introduction to the state of the art, as well as a description of the workflow, inclusively the coding and testbench features and characteristics.
+Chapter~\ref{cha:SystemArchitectureAndConcept} describes the chosen system architecture and concept for the project.
+The actual implementation, with a detailed explanation of some selected components, is covered in Chapter~\ref{cha:Implementation}.
+Chapter~\ref{cha:DeploymentOnHardware} gives an overview of the required parts of development that are necessary to deploy the deeloped system on actual hardware.
+The comparison and achieved results are covered in Chapter~\ref{cha:ComparisonAndResults}.
+Chapter~\ref{cha:ConclusionAndProspect} concludes this thesis with a retrospective and gives an outlook of potential future extensions to the project.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % NOTES:
-%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FEEDBACK, Meeting 07-16-2021
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-%Thesis Design Decisions: \\
-%\\
-%Main focus on system design. \\
-%\\
-%How to achieve the same result in 3 (4?) different levels of abstraction?
+%formatting:
+%- absätze überall gleich (mit oder ohne leerzeile)
+%references:
+%- hauptsache überall gleich (Fig.2.3 oder Sec.7.1 oder Eq.3 oder Chpt.4)
+%- literature refs at the beginning of a chapter/section
+%  like "this chapter is based on [1][4][5]."
+%  or at the end of the last sentence like "...the end of this sentence. [7]"
 %
-%\begin{enumerate}
-%  \item GnuRadio (?)
-%  \item Matlab/Python
-%  \item HLS\\
-%      Implementation targeting Xilinx' ZedBoard.\\
-%      Optionally: \\
-%      Intel as a comparison (synth only, no HW) - "How platform-independent is HLS?"
-%  \item VHDL
-%\end{enumerate}
-%\vspace{.5 cm}
+%Allgemeiner Teil / Theorie:
+% zusätzliches kapitel:
+%   system design ansätze
+%   - from algo to VHDL (book: vom algorithmus zur hardware)
+%   - matlab to VHDL
+%   - systementwuf richtung test driven design
+%   --> design space exploration
 %
-%Compare:
-%- Implementation effort (difficulty)
-%- Implementation time
-%- Usefulness on Target Systems (uC, SoC, RasPi, etc)
-%- others?
+%
+% ganze Arbeit aufhängen an:
+%   main objective: fit all the aspects (algorithm, impl, testing) into
+%                   a single project
+%                  --> design space exploration
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FEEDBACK, Meeting 07-29-2021
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% ## Absätze
+%   -- hab jetzt alle MIT Leerzeile
+%
+% ## Outline?
+%   -- 1-2 Sätze Zusammenfassung zu jedem Chapter
+%
+% ## TITEL ändern
+%   -- design of an fm receiver at system level using different methods
+%
+%   -- different approaches designing an fm receiver at system level
+%
+%   -- without the "fm receiver" part?
+%
+% ## maximale Länge der Arbeit?
+%
+% ## PRÜFUNG
+%   -- H.G. nicht da --> 2 Möglichkeiten:  1. Oktober
+%                                          2. Zweitfach PFA (AMV?)
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TODO General
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% ## unify all graphs and diagrams
+%       - all gray; use exact same gray tone; eliminate the yellow?
+%
+% ## unify all references (use format like in caption)
+%       - Figure 7.10
+%       - Chapter 7.3
+%       - Section 7.8
+%       - Program 3.5
+%       - etc.
+%
+% ## check all abbreviations and where they are introduced the first time
+%       - introduce only once, like "device under test (DUT)",
+%         then use the abbreviation only
+%
+% ## unify highlighted text ("Betonungen")
+%       - use 'asdf' or \textit{asdf}
+%
+% ## fix the usage of apastrophes everywhere...
+%       - see https://englishlive.ef.com/de-de/blog/grammatik-und-vokabeln/englischen-apostroph/
+%
+%
+% ## print a few pages to check whether to use 1pt or 2pt lines for diagrams
+%       - e.g. page 17 (Figure 2.10)
+%       - e.g. page 25 (Figure 3.3)

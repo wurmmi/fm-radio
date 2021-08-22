@@ -25,16 +25,18 @@
 %%%----------------------------------------------------------
 
 %%% Entries for ALL types of work: --------------------------
-\title{Comparing HLS with VHDL at the example of an FM Radio Receiver}
+%\title{Comparing HLS with VHDL at the example of an FM Radio Receiver}
+%\title{System-Level Design Exploration \\of an FM Radio Receiver}
+\title{FM Radio Receiver - System Design Exploration and Implementation in Multiple Methods}
 \author{Michael Wurm}
 
 \programtype{Fachhochschul-Masterstudiengang}
 
 \programname{Embedded Systems Design}
 \placeofstudy{Hagenberg}
-\dateofsubmission{2021}{07}{15}	% {YYYY}{MM}{DD}
+\dateofsubmission{2021}{08}{23}	% {YYYY}{MM}{DD}
 
-\advisor{DI (FH) Dr. Florian Eibensteiner}	% optional
+\advisor{DI(FH) Dr. Florian Eibensteiner}	% optional
 
 %\strictlicense		%%% restrictive license instead of Creative Commons (discouraged!)
 
@@ -49,7 +51,6 @@
 \maketitle
 \tableofcontents
 
-\include{front/preface} 	% preface is optional
 \include{front/abstract}
 \include{front/kurzfassung}
 
@@ -57,24 +58,28 @@
 \mainmatter          			% main part (arabic page numbers)
 %%%----------------------------------------------------------
 
-%TODO: add List of Abbreviations ??
 \include{chapters/introduction}
 \include{chapters/dsp}
+\include{chapters/system-design-process}
 \include{chapters/hls}
 \include{chapters/system-architecture-and-concept}
 \include{chapters/implementation}
 \include{chapters/deployment-on-hardware}
 \include{chapters/results}
-\include{chapters/literature}
+\include{chapters/conclusion-and-prospect}
+
 
 %%%----------------------------------------------------------
 \appendix                                         % appendix
 %%%----------------------------------------------------------
 
-\include{back/appendix_a}	% technical supplements
-\include{back/appendix_b}	% contents of the CD-ROM/DVD
-\include{back/appendix_c}	% chronological list of changes
-\include{back/appendix_d}	% source text of this document
+\include{back/supplementary-materials}	% contents of the CD-ROM/DVD
+
+\backmatter
+\include{back/listabbrev}
+
+%\addcontentsline{toc}{chapter}{\listfigurename}
+%\listoffigures
 
 %%%----------------------------------------------------------
 \MakeBibliography                        				% references

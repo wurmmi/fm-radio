@@ -26,13 +26,15 @@ end
 %% Settings
 
 % Paths
-dir_filters = "./filters/stored/";
-dir_output  = "./matlab_output/";
+dir_filters    = "./filters/stored/";
+dir_output     = "./matlab_output/";
+dir_output_doc = "../../doc/thesis/img/matlab/";
 
 % Simulation options
 EnableWriteDataFiles = true;
 EnablePlots          = true;
 EnableSavePlotsToPng = true;
+EnableSavePlotsToPDF = false;
 
 EnableSenderSourceRecordedFile = false;
 EnableSenderSourceCreateSim    = true;
@@ -82,7 +84,12 @@ fm_sender();
 %% Receiver
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+tic;
+
 fm_receiver();
+
+elapsed_time = toc;
+fprintf('fm_receiver() took %f seconds\n',elapsed_time);
 
 % TODO: implement a version that is actually using 16 bit fixed_point like hardware
 % fm_receiver_fixed_point();

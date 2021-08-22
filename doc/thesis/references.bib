@@ -58,6 +58,28 @@ author = {Alessio, Silvia Maria},
 keywords = {Signal processing},
 }
 
+@book{2016FfSP,
+abstract = {This book makes powerful Field Programmable Gate Array (FPGA) and reconfigurable technology accessible to software engineers by covering different state-of-the-art high-level synthesis approaches (e.g., OpenCL and several C-to-gates compilers). It introduces FPGA technology, its programming model, and how various applications can be implemented on FPGAs without going through low-level hardware design phases. Readers will get a realistic sense for problems that are suited for FPGAs and how to implement them from a software designer’s point of view. The authors demonstrate that FPGAs and their programming model reflect the needs of stream processing problems much better than traditional CPU or GPU architectures, making them well-suited for a wide variety of systems, from embedded systems performing sensor processing to large setups for Big Data number crunching. This book serves as an invaluable tool for software designers and FPGA design engineers who are interested in high design productivity through behavioural synthesis, domain-specific compilation, and FPGA overlays. Introduces FPGA technology to software developers by giving an overview of FPGA programming models and design tools, as well as various application examples; Provides a holistic analysis of the topic and enables developers to tackle the architectural needs for Big Data processing with FPGAs; Explains the reasons for the energy efficiency and performance benefits of FPGA processing; Provides a user-oriented approach and a sense for where and how to apply FPGA technology.},
+isbn = {3-319-26408-7},
+year = {2016},
+title = {FPGAs for Software Programmers},
+edition = {1st ed. 2016..},
+language = {eng},
+keywords = {Electronic circuits},
+}
+
+@book{GaziOrhan2018UDSP,
+series = {Springer Topics in Signal Processing},
+abstract = {This book explains digital signal processing topics in detail, with a particular focus on ease of understanding. Accordingly, it includes a wealth of examples to aid in comprehension, and stresses simplicity. The book is divided into four chapters, which respectively address the topics sampling of continuous time signals; multirate signal processing; the discrete Fourier transform; and filter design concepts. It provides original practical techniques to draw the spectrum of aliased signals, together with well-designed numerical examples to illustrate the operation of the fast transforms, filter algorithms, and circuit designs. Readers of this book should already have some basic understanding of signals and transforms. They will learn fundamental concepts for signals and systems, as the focus is more on digital signal processing concepts rather than continuous time signal processing topics.},
+isbn = {981-10-4962-9},
+year = {2018},
+title = {Understanding Digital Signal Processing},
+edition = {1st ed. 2018..},
+language = {eng},
+author = {Gazi, Orhan},
+keywords = {Signal processing},
+}
+
 @book{ItuRadioRegulations,
 	author = {International Telecommunication Union (ITU)},
 	isbn = {978-92-61-30301-3},
@@ -65,6 +87,62 @@ keywords = {Signal processing},
 	volume = {I-EA5},
 	language = {eng},
 	year = {2020}
+}
+
+@book{FmMultiplexingForStereo,
+	author = {Feldman, Leonard},
+	title  = {FM Multiplexing for Stereo},
+	volume = {FMS-1},
+	number = {62-13498},
+}
+
+@book{BahillA.Terry2017TDiS,
+abstract = {This textbook is about three key aspects of system design: decision making under uncertainty, trade-off studies and formal risk analyses. Recognizing that the mathematical treatment of these topics is similar, the authors generalize existing mathematical techniques to cover all three areas. Common to these topics are importance weights, combining functions, scoring functions, quantitative metrics, prioritization and sensitivity analyses. Furthermore, human decision-making activities and problems use these same tools. Therefore, these problems are also treated uniformly and modeled using prospect theory. Aimed at both engineering and business practitioners and students interested in systems engineering, risk analysis, operational management, and business process modeling, Tradeoff Decisions in System Design explains how humans can overcome cognitive biases and avoid mental errors when conducting trade-off studies and risk analyses in a wide range of domains. With generous use of examples as a common thread across chapters this book. <employs uml="" and="" sysml="" models="" in="" sections="" for="" added="" perspective.},
+isbn = {3-319-43712-7},
+year = {2017},
+title = {Tradeoff Decisions in System Design},
+edition = {1st ed. 2017..},
+language = {eng},
+author = {Bahill, A. Terry},
+keywords = {Operations research},
+}
+
+@book{GesslerRalf2014EES,
+isbn = {9783834820808},
+year = {2014},
+title = {Entwicklung Eingebetteter Systeme : Vergleich von Entwicklungsprozessen für FPGA- und Mikroprozessor-Systeme Entwurf auf Systemebene},
+language = {ger},
+author = {Gessler, Ralf},
+keywords = {Engineering},
+}
+
+@manual{VivadoUgHLSIntro,
+	author  = {Xilinx Inc.},
+	title   = {Introduction to FPGA Design with Vivado High-Level Synthesis},
+	number  = {UG998},
+	date    = {2019-01-22},
+	version = {v1.1},
+	url     = {https://www.xilinx.com/support/documentation/sw_manuals/ug998-vivado-intro-fpga-design-hls.pdf},
+}
+
+@manual{VivadoUgHLS,
+	author  = {Xilinx Inc.},
+	title   = {Vivado Design Suite User Guide - High-Level Synthesis},
+	number  = {UG902},
+	date    = {2018-07-02},
+	version = {v2018.2},
+	url     = {https://www.xilinx.com/support/documentation/sw_manuals/xilinx2018_2/ug902-vivado-high-level-synthesis.pdf},
+}
+
+@article{CompareHlsVHDLArticle,
+author = {Millón, Roberto and Frati, Fernando and Rucci, Enzo},
+year = {2020},
+month = {12},
+pages = {100-106},
+title = {A Comparative Study between HLS and HDL on SoC for Image Processing Applications},
+volume = {4},
+journal = {Elektron},
+doi = {10.37537/rev.elektron.4.2.117.2020}
 }
 
 @article{AustriaRundfunkgesetz2014,
@@ -83,7 +161,7 @@ keywords = {Signal processing},
 	number          = {2006/771/EC},
 	url             = {https://eur-lex.europa.eu/eli/dec/2006/771(2)/2019-08-13},
 	pages           = {11},
-	date            = {08/13/2019}
+	date            = {2019-08-13},
 }
 
 @article{EbuFmRegulators,
@@ -106,9 +184,43 @@ keywords = {Signal processing},
 @article{RohdeSchwarzFM,
 	author          = {Rohde \& Schwarz},
 	title           = {Messungen an FM-Sendern für Abnahme, Inbetriebnahme oder Wartung},
-	number          = {Sep-13 - 7BM105\_0D},
+	number          = {7BM105\_0D},
+	year            = {Sep-13},
 	url             = {https://cdn.rohde-schwarz.com/pws/dl_downloads/dl_application/application_notes/7bm105/7BM105_0D.pdf},
 	urldate         = {2021-07-05}
+}
+
+@article{IntroFmStereoRdsModulation,
+	author          = {Ge, Liang and Tan, EK and Kelly, Joe},
+	title           = {Introduction to FM-Stereo-RDS Modulation},
+	year            = {2016},
+	url             = {https://www3.advantest.com/documents/11348/7898f05e-0a52-4e68-9221-3b8b75595436},
+	urldate         = {2021-07-14}
+}
+
+@article{EvolutionOfHLS,
+	title   = {The Evolution Of High-Level Synthesis},
+	author  = {Brian Bailey},
+	journal = {Semiconductor Engineering},
+	date    = {2020-08-27},
+	url     = {https://semiengineering.com/the-evolution-of-high-level-synthesis/},
+	urldate = {2021-07-21}
+}
+
+@article{XilinxVivisHLSOpenSource,
+	title   = {Xilinx Opens Up Vitis HLS Tool for FPGAs},
+	author  = {Kevin Krewell},
+	journal = {EE Times},
+	date    = {2021-03-10},
+	url     = {https://www.eetimes.com/xilinx-opens-up-vitis-hls-tool-for-fpgas/},
+	urldate = {2021-07-21}
+}
+
+@online{VivadoHlsDeprecatesSystemC,
+	author={Xilinx Inc.},
+	title={SystemC Design Entry for HLS is deprecated in 2020.2},
+	url={https://www.xilinx.com/support/answers/73613.html},
+	urldate={2021-07-20},
 }
 
 @online{ElectronicsNotesFmTutorial,
@@ -135,9 +247,75 @@ keywords = {Signal processing},
 	urldate={2021-07-06},
 }
 
+@online{SoftwareGnuRadio,
+	title   = {About GNU Radio},
+	author  = {GNU Radio project},
+	url     = {https://www.gnuradio.org/about/},
+	urldate = {2021-07-09}
+}
+
+@online{SoftwareMatlab,
+	title   = {MATLAB Overview},
+	author  = {The MathWorks Inc.},
+	url     = {https://www.mathworks.com/products/matlab.html},
+	urldate = {2021-07-09}
+}
+
+@online{HinzTriller,
+	title   = {Autofahrer-Runkfunk-Information: Hinz Triller},
+	author  = {Wikipedia},
+	url     = {https://en.wikipedia.org/wiki/Autofahrer-Rundfunk-Informationssystem, https://de.wikipedia.org/wiki/Autofahrer-Rundfunk-Information},
+	urldate = {2021-07-09}
+}
+
+@online{USRPb200Mini,
+	title   = {Product USRP B200mini-i},
+	author  = {Ettus Research},
+	url     = {https://www.ettus.com/all-products/usrp-b200mini-i-2/},
+	urldate = {2021-07-14}
+}
+
+@online{RTLSDR,
+	title   = {About RTL-SDR},
+	author  = {RTL-SDR},
+	url     = {https://www.rtl-sdr.com/about-rtl-sdr/},
+	urldate = {2021-07-14}
+}
+
+@online{cocotbDoc,
+	title   = {Welcome to cocotb's documentation!},
+	author  = {cocotb contributors},
+	version = {ec99a877},
+	url     = {https://docs.cocotb.org/en/v1.5.2/},
+	urldate = {2021-07-15}
+}
+
+@online{GHDLDoc,
+	title   = {About GHDL},
+	author  = {Tristan Gingold and contributors},
+	version = {18104277},
+	url     = {https://ghdl.readthedocs.io/en/latest/about.html#what-is-ghdl},
+	urldate = {2021-07-15}
+}
+
+@online{IntelHLSOneAPI,
+	title   = {Intel oneAPI Overview},
+	author  = {Intel Corporation},
+	url     = {https://software.intel.com/content/www/us/en/develop/tools/oneapi.html},
+	urldate = {2021-07-21}
+}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % images
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@image{ZedBoard,
+	title   = {Xilinx ZedBoard Product},
+	author  = {Xilinx Inc.},
+	url     = {https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html},
+	urldate = {2021-07-20}
+}
 
 @image{FigFmChannelFreqSpectrum,
 	title   = {Basisbandsignal eines UKW-Rundfunkprogrammes},

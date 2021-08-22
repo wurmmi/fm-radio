@@ -43,9 +43,14 @@ audio_sample_t fm_receiver(hls::stream<iq_sample_t>& iq_in) {
 #pragma HLS STREAM depth = OSR_AUDIO variable = fm_channel_data
 
   /** NOTE:
-   *  This loop performs decimation by N.
-   *  --> Processing N samples. Only the last sample is passed on
-   *      to the next processing steps.
+   *  This loop performs decimation by OSR_RX.
+   *  --> Processing OSR_RX samples, where only the last sample
+   *      is passed on to the next processing step.
+   *  This is done OSR_AUDIO times, in order to fill the
+   *  FIFO of fm_channel_data.
+   *
+   *  At the end of this nested loop, the fm_channel_data FIFO
+   *  contains OSR_AUDIO number of samples.
    */
   sample_t fm_demod;
   for (uint32_t i = 0; i < OSR_AUDIO; i++) {

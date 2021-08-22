@@ -122,43 +122,49 @@ end
 
 %% Plots
 
+set(0,'defaulttextinterpreter','latex');
+
 disp('-- Plots');
 
 fig_title = 'Time domain signal';
 fig_audio_time = figure('Name',fig_title);
-title(fig_title);
 ax1='';
 ax2='';
 if EnableSenderSourceCreateSim
     ax1 = subplot(6,1,1);
     plot(tn/fs, audioDataL, 'r', 'DisplayName', 'audioDataL');
-    grid on; legend();
+    grid on; legend('Interpreter','latex');
     ax2 = subplot(6,1,2);
     plot(tn/fs, audioDataR, 'g', 'DisplayName', 'audioDataR');
-    grid on; legend();
+    grid on; legend('Interpreter','latex');
 end
 ax3 = subplot(6,1,3);
 hold on;
 plot(tnAudio/fs_audio, rx_audio_lrdiff, 'b', 'DisplayName', 'rx\_audio\_lrdiff');
 plot(tnAudio/fs_audio, rx_audio_mono, 'r', 'DisplayName', 'rx\_audio\_mono');
 ylabel('amplitude');
-grid on; legend();
+grid on; legend('Interpreter','latex');
 ax4 = subplot(6,1,4);
 plot(tnAudio/fs_audio, rx_audio_mono, 'b', 'DisplayName', 'rx\_audio\_mono');
-grid on; legend();
+grid on; legend('Interpreter','latex');
 ax5 = subplot(6,1,5);
 plot(tnAudio/fs_audio, rx_audio_L, 'r', 'DisplayName', 'rx\_audio\_L');
 ymax = max(rx_audio_L);
 ylim([-ymax,ymax]);
-grid on; legend();
+grid on; legend('Interpreter','latex');
 ax6 = subplot(6,1,6);
 plot(tnAudio/fs_audio, rx_audio_R, 'g', 'DisplayName', 'rx\_audio\_R');
 ylim([-ymax,ymax]);
 xlabel('time [s]');
-grid on; legend();
+grid on; legend('Interpreter','latex');
 linkaxes([ax1,ax2,ax3,ax4,ax5,ax6],'x');
+title(ax1,fig_title);
 if EnableSavePlotsToPng
     saveas(fig_audio_time, sprintf("%s%s",dir_output, "time_audio.png"));
+end
+if EnableSavePlotsToPDF
+    fig_audio_time.Position(3:4) = [900 600];
+    exportgraphics(fig_audio_time,sprintf("%s%s",dir_output_doc, "matlab_analysis_time_domain.pdf"),'ContentType','vector')
 end
 
 if EnableSenderSourceCreateSim
@@ -250,26 +256,38 @@ end
 
 fig_title = 'FM channel spectrum';
 fig_tx_spec = figure('Name',fig_title);
-hold on;
-xline(19e3,'k--','19 kHz');
-xline(38e3,'k--','38 kHz');
-xline(57e3,'k--','57 kHz');
+ax1 = subplot(2,1,1);
+title(fig_title);
+hold on; grid on;
+xline(19e3,'k--','19 kHz','Interpreter','latex');
+xline(38e3,'k--','38 kHz','Interpreter','latex');
+xline(57e3,'k--','57 kHz','Interpreter','latex');
 h0 ='';
 if EnableSenderSourceCreateSim
-    h0 = plot(psxx_tx_fmChannelData_f, psxx_tx_fmChannelData, 'b','DisplayName', 'Tx (pre-mod)');
+    h0 = plot(psxx_tx_fmChannelData_f, psxx_tx_fmChannelData, 'b','DisplayName', 'Tx (pre-mod.)');
+    xlim([0 62e3]);
+    legend([h0],'Location','northeast','Interpreter','latex');
 end
-h1 = plot(psxx_rxChannelData_f, psxx_rx_fmChannelData,  'r','DisplayName', 'Rx Demod');
+ax2 = subplot(2,1,2);
+hold on; grid on;
+xline(19e3,'k--','19 kHz','Interpreter','latex');
+xline(38e3,'k--','38 kHz','Interpreter','latex');
+xline(57e3,'k--','57 kHz','Interpreter','latex');
+h1 = plot(psxx_rxChannelData_f, psxx_rx_fmChannelData,  'r','DisplayName', 'Rx (demod.)');
+legend([h1],'Location','northeast','Interpreter','latex');
 %h2 = plot(fft_freqs, fmChannelSpec, 'k--', 'DisplayName', 'FFT');
 h2 = '';
-grid on;
-title(fig_title);
 xlabel('frequency [Hz]');
-ylabel('magnitude');
-legend([h0,h1,h2],'Location','east');
+ylabel('magnitude [dB]');
+%legend([h0,h1,h2],'Location','east');
 xlim([0 62e3]);
 ylimits = ylim();
 if EnableSavePlotsToPng
     saveas(fig_tx_spec, sprintf("%s%s",dir_output, "psd_rx_tx.png"));
+end
+if EnableSavePlotsToPDF
+    fig_tx_spec.Position(3:4) = [900 400];
+    exportgraphics(fig_tx_spec,sprintf("%s%s",dir_output_doc, "matlab_analysis_freq_domain.pdf"),'ContentType','vector')
 end
 
 fig_title = 'Rx spectrum parts';

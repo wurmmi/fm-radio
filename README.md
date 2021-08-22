@@ -2,7 +2,10 @@
 
 A master thesis project.
 
-The main focus is to compare key metrics of an FM radio receiver implementation in VHDL versus high-level synthesis (HLS).
+<!--The main focus is to compare key metrics of an FM radio receiver implementation in VHDL versus high-level synthesis (HLS).-->
+The aim of this thesis is develop a system architecture and concept, that allows the implementation of an FM radio receiver in multiple different ways, while providing an elegant way to compare the different solutions.
+
+An FM radio receiver is developed in GNU Radio, Matlab, and as an FPGA design, using Vivado C++ High-Level Synthesis, as well as manually written VHDL.
 
 This thesis and the accompanying project is being elaborated by Michael Wurm, in the Master's degree programme "Embedded Systems Design" at the University of Applied Sciences Upper Austria, Campus Hagenberg.
 
