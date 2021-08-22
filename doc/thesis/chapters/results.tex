@@ -2,19 +2,19 @@
 \chapter{Comparison and Results}
 \label{cha:ComparisonAndResults}
 
-This chapter presents the results that are achieved in the development of the FM Radio Receiver project, with the chosen different methods.
-However, the main focus is to compare the results that are achieved with HLS and VHDL, since these are the major implementation variants of the project.
+This chapter presents the results that are achieved in the development of the FM radio receiver project, with the chosen implementation methods.
+The main focus is to compare the results that are achieved specifically with HLS and VHDL, since these are the major implementation variants of the project.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{General}
 
-A main objective of this thesis is to implement an FM radio receiver in multiple different methods.
+The main objective of this thesis is to implement an FM radio receiver in multiple different methods, within a common system design.
 This includes GNU Radio, Matlab, VHDL and HLS, which all have their advantages and disadvantages and surface different challenges to the developer.
 The target functionality is to listen to the audio broadcast signal of an FM radio station.\\
 
 All of the listed methods are implemented and the target functionality is achieved with all of them.
 However, the level of detail that is required in the implementation, and the resulting effort and time it takes to implement the respective variant, differs by a large factor.
-This is mainly due to the different levels of abstraction, so that the low-level algorithms do not need to be known.\\
+This is mainly due to the different levels of abstraction, so that the low-level algorithms do not always need to be known into detail.\\
 
 In the following sections, especially the HLS and VHDL implementations are compared on the basis of metrics, but also based on the experience during development.
 
@@ -23,23 +23,20 @@ In the following sections, especially the HLS and VHDL implementations are compa
 \section{Functionality}
 
 Generally, both tools -- HLS and VHDL -- provide the capabilities to implement any functionality in one or the other method.
+In other words, anything that is implemented in HLS, can also be implemented in VHDL directly.
 However, the implementation is done in a different level.
 VHDL uses an approach that is very close to the hardware, such as clock cycles and flipflops, while HLS describes the logic on an algorithmic level.\\
 
-The implementation is split into two main parts, the communication interfaces and the DSP.
+The implementation of the FM receiver is split into two main parts, the communication interfaces and the DSP chain.
 The results are presented in the following sections.
-
-% Functionality same?
-% DSP yes, AXI no (FSM of axi-stream)
-% unit tests
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Interfaces}
 
 The AXI4-Lite memory-mapped bus is implemented to have an exactly equal behaviour in both variants.
-There are read-only and read-writeable registers, which are all mapped onto a single base address.\\
+There are read-only and read-writeable registers, which are all mapped into a common register-map, that starts from a single base address, as they are accessible through this bus interface.\\
 
-The AXI stream interface however does not show the exact same behaviour.
+The AXI stream interface, however, does not show the exact same behaviour.
 Here, the HLS variant is using the AXI stream according to its protocol, while the VHDL variant is implemented differently.
 It uses a simplified logic for the ready-flag, which reduces the effort in implementation.
 However, from the perspective of the communicating blocks, the interface is usable like a regular AXI stream.
@@ -52,49 +49,49 @@ Status and configuration data can be read and written through the AXI4-Lite inte
 \subsection{Audio Output}
 
 The audio output of the HLS and VHDL variants is compared with the Matlab model, which serves as the reference.
-Additionally, the results of the testbench are compared with their respective result in the actual hardware.
-In summary, it can be stated that the DSP chain produces a very similar audio output in all the compared data sets.
+This includes the comparison with the testbench simulation, as well as the results from the execution on actual hardware.
+In summary it can be stated, that the DSP chain produces a very similar audio output in all the compared data sets.
 However, differences remain, which are presented in the following paragraphs and diagrams.
 
 \includepicture [1.0] [0] {Comparison of the IP audio output signals, in simulation and hardware, against the Matlab model. The HLS variant matches the model, while the VHDL output diverts by a certain amount. Also, VHDL differs between simulation- and hardware results.} {audio_output_compare_tb_vs_hw} {img/matlab/audio_output_compare_tb_vs_hw}
 
 %%%%%
-\subsubsection{Comparing against the Matlab reference}
+\subsubsection{Comparison against the Matlab reference}
 
 In the comparison against the Matlab model, the HLS variant achieves a very exact match of the output signal.
 However, the VHDL implementation differs by a certain amount.
 There seems to be an issue in the signal separation between the left and right audio channels.
-This is visible in the analysis of the audio signal, as shown is Figure~\ref{fig:audio_output_compare_tb_vs_hw}.
+This is visible in the analysis of the audio signal, as shown in Figure~\ref{fig:audio_output_compare_tb_vs_hw}.
 The signal strength of the left channel in the upper diagram is weaker than expected, while the right channel in the lower diagram is stronger.
 This imbalance can also be observed by listening to the audio output via speakers.\\
 
 The cause for this issue may be located in several components in the design.
-This includes the FM demodulator, the carrier recovery, i.e. the 38~kHz carrier, as well as a sample timing shift in the final summation and substraction to recover the left and right channels.
+This includes the carrier recovery, i.e. the 38~kHz subcarrier, as well as a sample time-shift in the final summation and substraction to recover the left and right channels.
 The FIR filter has a successfully passing unit test and is thus assumed to be correct.
 Also the fixed point data type with its overflow- and rounding behaviour is suspected to be a potential issue.
 Due to the time limitation in the elaboration of this thesis, this issue can not be traced down to the root cause and thus still persists in the current implementation.
-However, from the system-level point of view of this thesis, the IP works and can be integrated into the final system.
+However, from the system-level point of view of this thesis, the IP works and can be integrated into the final system successfully.
 
 %\includepicture [1.0] [0] {Comparison of the IP audio output signals against the Matlab model. The HLS variant matches the model, while the VHDL output diverts by a certain amount.} {audio_output_compare_ips_vs_matlab} {img/matlab/audio_output_compare_ips_vs_matlab}
 
 %%%%%
-\subsubsection{Comparing simulation- against hardware results}
+\subsubsection{Comparison of simulation- against hardware results}
 
-Here, the results of the simulation testbenches are compared against the values that are read from the FPGA directly.
+The results of the simulation testbenches are compared against the values that are read from the FPGA directly.
 Ideally, the values should be exactly the same.
-However, Figure~\ref{fig:audio_output_compare_tb_vs_hw} shows that this is not always the case.
-Again, the HLS implementation does have a matching result, whereas the VHDL variant has deviating values.
-The explanation here may be linked with above suspicions, but may also be linked to the initial reset values that exist in the hardware.
+However, this is not always the case, as Figure~\ref{fig:audio_output_compare_tb_vs_hw} demonstrates.
+The HLS implementation does have a matching result between simulation and hardware, whereas the VHDL variant has deviating values.
+The explanation here may be linked with the previously mentioned suspicions, but may also be linked to the initial reset values that exist in the hardware.
 In the HLS implementation, the reset logic of several registers is implemented automatically, whereas in VHDL these conditions need to be implemented manually.
-Therefore, the IPs internal state, i.e. the register values, may be different at the beginning, which leads to an error propagation throughout the design.
+Therefore, the IPs' internal state, i.e. the register values, may be different at the beginning, which leads to an error propagation throughout the design.
 The entire DSP chain is built like a pipeline and therefor it takes a number of samples to process, before the wrong, intermediate values are flushed out.
 All that may be the cause for the deviating values in the VHDL design.\\
 
 Again, the time limitation in the elaboration of this thesis does not allow a deeper analysis and investigation of this issue.
 However, the end-to-end system design enables the developer to analyze an issue like this in a convenient way, in quick iterations.
-Any adaptions in the VHDL design can be simulated and integrated into the FPGA with automated scripts.
-Both results can then be analyzed and compared, which may lead to further adaptions.\\
-
+Any adaptions in the VHDL design can be simulated in the comprehensive testbench, and subsequently be integrated into the FPGA.
+All these processes are automated with scripts, so that, besides the actual work of interest in the HDL design, no manual actions are necessary.
+The new results can then be analyzed and compared again, which may lead to further adaptions and eventually resolve any existing issue.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Code Development}
@@ -102,19 +99,19 @@ Both results can then be analyzed and compared, which may lead to further adapti
 In the development of a software project, the metric for the lines of code can be used to give an idea of the scale, or volume of the project.
 The time it takes to implement a certain set of features can also give such an insight and a hint of the project's complexity.
 It is a subjective metric though, since it is heavily influenced by the respective developer's experience in the specific application.
-However, both metrics are applied to the FM Radio Receiver project.\\
+However, both metrics are applied to the FM radio receiver project.\\
 
 At this point, it is important to note that the results that are presented in this section are very specific to the chosen architecture, testbench framework, and the implementation style generally.
 Therefore, the numbers that are presented here may vary widely by modifying any of these factors, i.e. using a different testbench framework for VHDL.
-Thus, a generalization in the art of \textit{HLS always requires less code than VHDL} can not be stated.
-However, the results in this section can give an idea and overview of this topic and provide a detailed comparison for this specific project.
+Thus, a generalization in a manner of \textit{HLS always requires less code than VHDL} can not be stated.
+However, the results in this section can give an idea and overview of this topic and provide a detailed and valid comparison for this specific project.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Lines of Code}
 
-Several parts of the system design are taken into account to analyze the lines of code, to give an impression over the largest code parts in the project.
+Several parts of the system design are taken into account for the analysis of the lines of code, to give an impression over the largest code parts in the project.
 Figure~\ref{fig:lines_of_code_pie_charts} shows multiple pie charts, which represent the proportions of the lines of code in the respective system design parts.
-Table~\ref{tab:lines_of_code} displays the actual numbers of code lines, to quantify the size of the respective parts.\\
+Table~\ref{tab:lines_of_code} displays the actual numbers of code lines, to quantify the size of these respective parts.\\
 
 Interesting details can be found by analyzing these charts.
 The upper chart shows that the implementation of the hardware support, in the form of Vivado project scripts and the \cplusplus\ application software, takes a large part of the code with 27\%.
@@ -124,22 +121,22 @@ The chart also reveals that the VHDL implementation with its accompanying testbe
 
 The lower charts highlight several differences between HLS and VHDL.
 Specifically, the code proportions between IP design and testbench are pointed out.
-The charts show that HLS requires about the same amount of code for IP design and testbench.
-VHDL requires the largest part of code in the IP design, while the testbench code amount is relatively small.
+The charts show, that HLS requires about the same amount of code for IP design and testbench.
+VHDL on the other hand, requires the largest part of code in the IP design, while the testbench code amount is relatively small.
 It is to be noted, that the common testbench consists of 4\%, which equals 630 lines of Python code.
 Therefor, the testbench code of both IPs is relatively small, because the entire analysis part is shared.
 
 \begin{figure}%
   \centering
-  \subfloat[\centering Overview of the proportions between all the implemented code parts of the entire project.]{{\includegraphics[trim=10 40 10 10,clip, width=0.65\textwidth]{img/matlab/lines_of_code_pie_chart_py_all} }}%
+  \subfloat[\centering Overview of the proportions between all the implemented code parts of the entire project.]{{\includegraphics[trim=10 40 10 10,clip, width=0.68\textwidth]{img/matlab/lines_of_code_pie_chart_py_all} }}%
   \\
   %\hspace{\fill}
-  \subfloat[\centering HLS in detail.]{{\includegraphics[trim=10 10 10 10,clip, width=0.49\textwidth]{img/matlab/lines_of_code_pie_chart_py_hls} }}%
+  \subfloat[\centering HLS in detail.]{{\includegraphics[trim=50 10 15 10,clip, width=0.49\textwidth]{img/matlab/lines_of_code_pie_chart_py_hls} }}%
   %\hspace{\fill}
   %\vspace{3cm}
-  \subfloat[\centering VHDL in detail.]{{\includegraphics[trim=10 10 10 10,clip, width=0.49\textwidth]{img/matlab/lines_of_code_pie_chart_py_vhdl} }}%
+  \subfloat[\centering VHDL in detail.]{{\includegraphics[trim=50 10 15 10,clip, width=0.49\textwidth]{img/matlab/lines_of_code_pie_chart_py_vhdl} }}%
 
-  \caption{Lines of code of the respective code parts in the entire project, presented in multiple pie charts. The percentages of code in IP design and testbench for the HLS and VHDL implementations are shown in detail in the lower diagrams.}%
+  \caption{Lines of code of the respective parts in the entire project, presented in multiple pie charts. The percentages of code in IP design and testbench for the HLS and VHDL implementations are presented in detail in the lower diagrams, where the legends show the respective implementation languages of the sub-parts in the inner circles.}%
   \label{fig:lines_of_code_pie_charts}%
 \end{figure}
 
@@ -164,11 +161,14 @@ Therefor, the testbench code of both IPs is relatively small, because the entire
 \subsection{Implementation Time}
 
 The metric of implementation time -- the time it takes to implement a specific feature -- is a subjective measure, since it heavily depends on the respective developer's experience, as already noted above.
-In the present case, there is a strong background of knowledge and practical experience in VHDL design, while there is only very little of such in HLS design.
-However, this metric is used in this section to specifically compare HLS with VHDL in this project.
-Certain features are chosen for this comparison and their implementation times were logged during the actual implementation process.
-The implementation is always considered as the HDL description, including the corresponding testbench code, to verify the respective correct functionality.
-Table~\ref{tab:implementation_time_logging} shows the direct comparison between HLS and VHDL implementation times for these features.\\
+In the present case, there is a strong background of knowledge and practical experience in VHDL design, while there is only very little thereof in HLS design.
+Thus, the logged HLS times also include the time that is spent in research, which is required to implement a specific feature.
+However, this metric is used in this section to specifically compare HLS with VHDL for this project.
+Certain features are chosen for this comparison and their implementation times are logged during the actual implementation process.
+The implementation is always considered as the HDL description, including the corresponding testbench code, to verify the respective correct functionality.\\
+
+Table~\ref{tab:implementation_time_logging} shows the direct comparison between HLS and VHDL implementation times for these features.
+The following paragraphs present an insight into how these implementation times of the listed code parts arise.
 
 \begin{table}[]
   \centering
@@ -189,8 +189,6 @@ Table~\ref{tab:implementation_time_logging} shows the direct comparison between 
   \caption{Implementation time logging for a specific set of features, for the direct comparison between HLS and VHDL.}
   \label{tab:implementation_time_logging}
 \end{table}
-
-The following paragraphs present an insight into how the implementation times of the listed code parts arise.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{AXI Stream Inferface}
@@ -448,3 +446,7 @@ Instead, the testbench of the integration test is executed, which produces a sig
 The latency is measured from this wave form and results in a number of 2470 clock cycles.
 With regards to latency, the two implementation variants appear to have a similar behaviour.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{GNU Radio}
+
+This section is specifically (TODO)
