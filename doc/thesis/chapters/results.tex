@@ -366,12 +366,12 @@ Consequently, Matlab runs very efficiently and achieves the highest simulation s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{System Design}
 
-The system design architecture that is chosen in this project covers several parts of the system.
+The system design architecture, that is chosen in this project, covers several parts of the system.
 This includes a reference model, the development of the IP itself, including the simulation testbench, as well as the final integration into the productive system.
-Because of this modular and structured approach, that is given by this system design, it can be applied to almost any DSP project.
+Because of this modular and structured approach, given by this system design, it can be applied to almost any DSP project.
 The main processing IP can simply be replaced with another implementation, while the environment does not need to be modified.
 The reason therefor is, that DSP projects almost always use streaming interfaces for their inputs and outputs.
-Also a configuration interface is commonly used, to adapt certain parameters of the IP during runtime.
+Also, a configuration interface is commonly used, to adapt certain parameters of the IP during runtime.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -384,12 +384,12 @@ Important parts of this end-to-end integration are presented here.
 \subsection{Integration}
 
 The aim is to create IP blocks, that can be integrated into a block design in the Xilinx Vivado software.
-The IP blocks should be able to be connected with their AXI interfaces, in order to successfully communicate and interact with the embedded hard-processor, the ARM CPU.
+These IP blocks should be able to be connected with their AXI interfaces, in order to successfully communicate and interact with the embedded hard-processor, the ARM CPU, as well as other IPs that exist in the design.
 In the case of HLS, several files that are required for this integration are generated automatically.
 The files are already placed into the specific folder structure, that Vivado requires to recognize it as an IP block.
 In the case of VHDL on the other hand, this needs to be done manually.
 There is an assistant, the IP Packager, which helps the developer to create the IP.
-However, at this point the folder structure already needs to be in place, so that the assistant works correctly, which again requires manual action.
+However, at this point, the folder structure already needs to be in place, so that the assistant works correctly, which again requires manual action.
 Regarding the top-level interfaces, the IP Packager supports an auto-detection of the signals that belong to the respective interface types, as long as they follow the expected naming guidelines.
 However, the interface itself needs to be defined and updated manually in the IP Packager.
 This is especially important, if the interfaces change in the VHDL code.\\
@@ -397,43 +397,44 @@ This is especially important, if the interfaces change in the VHDL code.\\
 However, also the auto-generation of the HLS IP has characteristics that require special attention.
 One issue during the implementation was, that the auto-generated software driver did not get imported into the Vivado SDK.
 The reason therefor was, that the top-level function of the IP did not have the exact same naming as the Vivado HLS project.
-For issues like that, the Eclipse-based SDK does not give any error output or any kind of information.
+This is a non-documented requirement, and furthermore, for issues like that, the Eclipse-based SDK does not give any error output or any kind of meaningful information.
 This however is a general issue with the SDK, where error handling is poor and error log outputs are not existent, or at least not useful to the developer, so that the SDK sometimes crashes without an obvious reason.
 It is to note, that version v2018.2 is used for the entire Vivado toolchain, which is not the latest version that is currently available.
 Thus, some of the occuring issues may already be fixed in the newer versions.\\
 
-However, both IPs could successfully be integrated into the Vivado block design, and the tests on the hardware show that they function correctly within the system.
+However, both IPs could successfully be integrated into the Vivado block design in the end, and the tests on the hardware show that they function correctly within the system.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Hardware Utilization}
 
-The hardware utilization of the HLS and VHDL implementations are compared in detail in this section.
-The numbers are taken from the final utilization report, that is created by Vivado at the end of the bitstream creation, since this is assumed to be the most accurate report that shows the actual utilization.\\
+The hardware utilization of the HLS and VHDL implementation is compared in detail in this section.
+The numbers are taken from the final utilization report, that is created by Vivado at the end of the bitstream creation, i.e. post-synthesis, since this is assumed to be the most accurate report, which shows the actual utilization, as it is being deployed to hardware.
 
 Figure~\ref{fig:hardware_utilization} shows the utilization numbers of the different FPGA resources.
-It reveals that the manual VHDL implementation clearly requires more resources in the FPGA.
-The study of the detailed utilization report however does not enable a deeper direct comparison of the respective single blocks, such as VHDL FIR filter against HLS FIR filter.
-This is because the HLS compiler automatically applies optimizations, so that the direct connection between code and resource report is partially lost.
+It reveals, that the manual VHDL implementation clearly requires more resources in the FPGA.
+The study of the detailed utilization report, however, does not enable a deeper direct comparison of the respective single blocks, such as VHDL FIR filter versus HLS FIR filter.
+This is because the HLS compiler performs some kind of name mangling, which re-names functions, and automatically applies optimizations, so that the direct connection between code and resource report is partially lost.
 Examples for optimizations are inlining of functions, re-ordering of operations and time-sharing.
 The latter has an especially large impact on the resource utilization.
-Generally, in hardware design there is a trade-off between resource utilization and throughput, which leads to time-sharing.
+Generally in hardware design, there is always a trade-off between resource utilization and throughput, which ultimately leads to time-sharing.
 For example, an entirely parallel-duplicated pipeline can process the double amount of data, but also requires the double amount of resources.
 On the other hand, time-sharing a resource may take the double amount of time, thus only processes half of the data, but also only requires half of the resource utilization.
-In HLS, this trade-off can be influenced and determined by the developer.
-Depending on the requirements of the design, the optimization may either be set towards a lower resource utilization, or towards a high throughput.
+In HLS, this trade-off can be influenced and determined by the developer, by the usage of optimization directives.
+Depending on the requirements of the design, the optimization may either be set towards a low resource utilization, or towards a high throughput.
 In the current HLS implementation, no measures are taken towards any optimization and thus, the compiler is free to decide.
 However, the only requirement is the correct functionality within the given situation, of course.
 This specifically means that the throughput needs to be high enough, in order to process the audio signal output accordingly.\\
 
-Nevertheless, the resource report allows the comparison of the configuration interface, which is the AXI4-Lite interface.
-In VHDL, it requires 44 LUTs and 54 FFs, while HLS consumes only 36 LUTs and 37 FFs.
-So it seems that the manual VHDL implementation requires more resources in all the comparable parts.
+\includepicture [0.75] [0, trim=10 10 10 10, clip] {A comparison of the resource utilization of the VHDL and HLS implementations. The VHDL variant requires significantly more resources.} {hardware_utilization} {img/matlab/hardware_utilization}
+
+Nevertheless, the resource report allows the direct comparison of one specific unit, the configuration interface, which is the AXI4-Lite interface.
+In VHDL, it requires 44~LUTs and 54~FFs, while HLS only consumes 36~LUTs and 37~FFs.
+It seems, that the manual VHDL implementation requires more resources in all the comparable parts.
 By further investigating the report, the VHDL version apparently utilizes a large amount of LUTs for the delays, which are used to clock-align the FIR output signals.
 For an optimization of the VHDL design, this would be a good point to start at.
 However, for this project, both implementation variants are compared without any optimizations from the developer's side.
 
 
-\includepicture [0.75] [0, trim=10 10 10 10, clip] {A comparison of the resource utilization of the VHDL and HLS implementations. The VHDL variant requires significantly more resources.} {hardware_utilization} {img/matlab/hardware_utilization}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Latency}
@@ -441,13 +442,15 @@ However, for this project, both implementation variants are compared without any
 Latency is the time it takes for the design to produce an output sample.
 The latency of the HLS version is taken from the report that is produced after the C-synthesis of the HLS compiler.
 The report shows an estimated resource utilization, as well as the latency as a number of clock cycles.
-The latency is given with 2712 clock cycles.
+The latency is given with 2712~clock~cycles.
 For the VHDL version, a similar report is not available.
 Instead, the testbench of the integration test is executed, which produces a signal wave form.
-The latency is measured from this wave form and results in a number of 2470 clock cycles.
+The latency is measured from this wave form and results in a number of 2470~clock~cycles.
 With regards to latency, the two implementation variants appear to have a similar behaviour.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{GNU Radio}
+%\subsection{GNU Radio}
 
-This section is specifically (TODO)
+%This section is specifically (TODO)
+% - show that the transmitter works (show photo of radio display in my car)
+% - show that the receiver works (screenshot of decoded RDS data, etc.)
